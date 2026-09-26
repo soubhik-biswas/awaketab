@@ -1,3 +1,5 @@
+> **Superseded** by `design/canvas/PRIMITIVES.md` (O-77 merge). Kept for history.
+
 # Fix batch 1b: shared primitives (copy VERBATIM, byte-identical)
 
 Source of numbers: /home/user/awaketab/DESIGN.md §2.1, §3, §11. Every file in batch 1b that shows one of
