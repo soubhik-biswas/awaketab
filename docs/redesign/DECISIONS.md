@@ -281,3 +281,12 @@ The final design handoff (`awaketab-handoff.zip`, spec copied to `docs/redesign/
 - **Ad slot (decided).** The board's placeholder box is drawn only when ads are enabled; the live site never shows an empty "Advertisement" box.
 - **No pointer tilt (decided).** Hub and home cards no longer lean toward the pointer; the boards draw them still, and the motion rules keep movement for the clock and hero scenes.
 
+
+## Next.js build (30 Oct 2026)
+
+- **Clock faces in React.** `apps/site/components/face/` ports `Face.dc.html` as one `<Face>` with the prototype's props. Ring ships with the page; the other 32 faces are one module each, loaded on first draw (`FACE_LOADERS`, React `use()`), and the face on screen stays until the next one has loaded, so a swap never flashes an empty dial.
+- **Face theme scoping.** The face root carries its own theme class (`light`, `dark`, `oled`) and every face colour is a token, so a light face on a dark page (the faces board's bands) draws in light tokens. `globals.css` gives the light tokens to `.light` as well as `:root`. The Departure board's panel and the Moon's phase tag, which the prototype always draws in the dark theme's status colours, sit in a `.dark` box on a light page.
+- **Motion.** `motion="off"` and the system's reduced-motion setting (read live) both stop every animation and transition; sweeps, halos and flaps then hide instead of freezing mid-turn, and the digits still change. The green, sky and violet layers and the heat scale follow the state (awake or starting), not the motion setting: the prototype dropped them with `motion="off"`, which the spec does not ask for.
+- **Face accessibility.** As in the Astro port, the `aria-label` speaks whole minutes rounded up (it changes at most once a minute) and the drawing with its seconds is `aria-hidden`; Bold and LCD with no end at rest show ∞ without the stray colon.
+- **Face fonts.** IBM Plex Serif (300, roman and italic) and DotGothic16 come from `next/font/google` with `preload: false`, in a module only Analog luxe, Words and LED import, so no other page or face downloads them.
+- **Faces sheet.** `<FaceGrid>` is a Radix radio group: Left and Right step through the faces, Up and Down move by a row, and the thumbnails (compact live faces of the board session) are hidden from assistive tech so each radio is named by its face name. The night tile ground is the board's `#070B16`, also in OLED.
