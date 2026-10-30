@@ -165,7 +165,9 @@
 }
 
 :root {
-  --at-font: "Geist", "Geist Fallback", system-ui, -apple-system, "Segoe UI", "Roboto", "Noto Sans", "Ubuntu", "Cantarell", "Noto Sans JP", "Noto Sans SC", "Noto Sans Devanagari", sans-serif;
+  --at-font:
+    "Geist", "Geist Fallback", system-ui, -apple-system, "Segoe UI", "Roboto", "Noto Sans", "Ubuntu", "Cantarell",
+    "Noto Sans JP", "Noto Sans SC", "Noto Sans Devanagari", sans-serif;
   --at-font-display: "Archivo", "Archivo Fallback", var(--at-font);
   --at-stretch-display: 112%;
   --at-font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, "SF Mono", menlo, consolas, monospace;

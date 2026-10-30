@@ -15,7 +15,6 @@
   --at-type-ext-intro: 400 1.1875rem/1.55 var(--at-font);
   --at-type-ext-kick: 400 0.875rem/1.4 var(--at-font-mono);
   --at-s-ext-18: 18px;
-  --at-s-ext-22: 22px;
   --at-s-ext-56: 56px;
   --at-s-ext-72: 72px;
   --at-ext-lead-max: 34em;
@@ -240,10 +239,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--at-s-ext-10);
-}
-
-.wl-hero-actions .at-btn {
-  padding-inline: var(--at-s-ext-22);
 }
 
 .wl-note {
