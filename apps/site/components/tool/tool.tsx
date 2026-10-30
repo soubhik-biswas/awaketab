@@ -420,7 +420,7 @@ function ToolApp({
           type="button"
           variant="outline"
           onClick={close}
-          className="absolute top-4 right-4 z-[7] h-11 gap-2 rounded-[10px] border-border bg-(--tool-exit) px-4 text-[14px] font-semibold text-foreground [&_svg]:size-[18px]"
+          className="absolute top-4 right-4 z-[7] h-11 gap-2 rounded-[10px] border-border bg-(--tool-exit) px-4 text-[14px] font-semibold text-foreground [&_svg]:size-[18px]!"
         >
           <X strokeWidth={2} aria-hidden="true" />
           {m.c.exitFull} <Kbd className={KBD}>Esc</Kbd>

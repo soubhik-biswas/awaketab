@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Archivo, Geist, Geist_Mono } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
+import messages from '@/messages/en.json';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -20,17 +22,19 @@ export const metadata: Metadata = {
   icons: { icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }] },
 };
 
-// The dev galleries sit outside the locale routes, so they keep their own minimal root layout.
+// The dev galleries sit outside the locale routes, so they keep their own minimal root layout with the English copy.
 export default function DevLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${geist.variable} ${archivo.variable} ${geistMono.variable}`}>
       <body>
-        <ThemeProvider>
-          <TooltipProvider>
-            {children}
-            <Toaster />
-          </TooltipProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
+          <ThemeProvider>
+            <TooltipProvider>
+              {children}
+              <Toaster />
+            </TooltipProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import type { TLocale } from '@/i18n/locales';
-import { STAGE_ID } from '@/lib/tool/ui';
+import { STAGE_ID } from '@/lib/tool/stage-id';
 import { Consent } from './consent';
 import { SiteFooter } from './site-footer';
 import { SiteHeader } from './site-header';

@@ -47,11 +47,11 @@ export function ToolHeader() {
         aria-haspopup="dialog"
         aria-expanded={ui.view === 'more'}
         className={cn(
-          'h-11 shrink-0 gap-2 rounded-[14px] border-border bg-(--tool-ghost) text-[16px] font-semibold text-foreground [&_svg]:size-5',
+          'h-11 shrink-0 gap-2 rounded-[14px] border-border bg-(--tool-ghost) text-[16px] font-semibold text-foreground [&_svg]:size-5!',
           phone ? 'px-3' : 'px-4',
         )}
       >
-        <MenuGlyph strokeWidth={2} aria-hidden="true" />
+        <MenuGlyph strokeWidth={2} className="size-5" aria-hidden="true" />
         {!phone ? <span>{m.c.menu}</span> : null}
       </Button>
     </header>
