@@ -2,6 +2,7 @@
 import type { TLockState } from '@awaketab/wake';
 import StatusPill from '../shell/StatusPill.astro';
 import { inline } from '../../lib/article';
+import { LOCK_PILL } from '../../lib/page-glyphs';
 
 interface Props {
   pills: Array<{ state: TLockState; text: string }>;
@@ -16,9 +17,8 @@ const { pills, t } = Astro.props;
       <div>
         <dt>
           <StatusPill
-            as="span"
-            size="S"
-            state={row.state}
+            size="sm"
+            state={LOCK_PILL[row.state]}
             label={t(`tool.pill.${row.state}`)}
           />
         </dt>
