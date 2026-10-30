@@ -14,7 +14,7 @@ export const LOCK_GLYPH: Record<TPageLockState, string> = {
     'M6 3.4a2.6 2.6 0 1 1 0 5.2a2.6 2.6 0 1 1 0-5.2zM6 .6a5.4 5.4 0 1 1 0 10.8a5.4 5.4 0 1 1 0-10.8zm0 1.4a4 4 0 1 0 0 8a4 4 0 1 0 0-8z',
 };
 
-export type TPillState =
+type TPillState =
   'idle' | 'starting' | 'awake' | 'needsyou' | 'fallback' | 'paused' | 'blocked' | 'ended' | 'unsupported';
 
 // The engine's seven lock states drawn with the Solar Green status pill (docs/04, docs/05).

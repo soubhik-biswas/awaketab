@@ -1,8 +1,8 @@
 ---
 import Lucide from '../icons/Lucide.astro';
 
-export type TCellTone = 'head' | 'text' | 'yes' | 'fallback' | 'no';
-export interface ICell {
+type TCellTone = 'head' | 'text' | 'yes' | 'fallback' | 'no';
+interface ICell {
   t: string;
   tone?: TCellTone;
 }
