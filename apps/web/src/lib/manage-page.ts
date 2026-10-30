@@ -99,7 +99,6 @@ export function bootManagePage(root: HTMLElement, now = Date.now()): void {
     return;
   }
 
-  const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   const hereHash = record.deviceId ? sha256Hex(record.deviceId).catch(() => '') : Promise.resolve('');
   let lapse: 'grace' | 'lapsed' | null = null;
 
@@ -164,7 +163,7 @@ export function bootManagePage(root: HTMLElement, now = Date.now()): void {
       const offTag = tr.querySelector<HTMLElement>('[data-device-off]');
       if (offTag) offTag.hidden = lapse !== 'lapsed';
       if (at && Number.isFinite(row.at)) {
-        at.textContent = dateFmt.format(row.at);
+        at.textContent = longDate(row.at);
         at.setAttribute('datetime', new Date(row.at).toISOString());
       }
       if (!btn) {

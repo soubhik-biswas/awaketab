@@ -2,13 +2,6 @@ import { PRO_LAUNCH_END } from './license';
 
 declare const __AT_POLAR_SERVER__: string | undefined;
 
-export const LAMPS = [
-  { id: 'aqua', pro: false },
-  { id: 'violet', pro: false },
-  { id: 'mint', pro: true },
-  { id: 'sky', pro: true },
-] as const;
-
 export function usd(amount: number): string {
   return `$${String(amount)}`;
 }
@@ -82,8 +75,16 @@ export const POLAR_PORTAL_URL =
     ? 'https://polar.sh/awaketab/portal'
     : 'https://sandbox.polar.sh/awaketab/portal';
 
-export function longDate(ms: number): string {
-  return new Date(ms).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+// Full dates everywhere in English: "Saturday, 31 October 2026".
+export function longDate(ms: number, timeZone?: string): string {
+  const d = new Date(ms);
+  const day = d.toLocaleDateString('en-GB', { weekday: 'long', timeZone });
+  return `${day}, ${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone })}`;
+}
+
+// PRO_LAUNCH_END is midnight UTC, so the last launch-price day is the one before it.
+export function launchDay(end = PRO_LAUNCH_END): string {
+  return longDate(end - 1, 'UTC');
 }
 
 export function fill(template: string, vars: Record<string, string | number>): string {

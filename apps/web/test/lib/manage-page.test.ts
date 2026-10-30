@@ -271,7 +271,7 @@ describe('manage page', () => {
     bootManagePage(root, NOW);
     await flush();
     expect(root.dataset.state).toBe('grace');
-    expect(root.querySelector('#grace-title')?.textContent).toBe('Pro stays on until 3 October 2026');
+    expect(root.querySelector('#grace-title')?.textContent).toBe('Pro stays on until Saturday, 3 October 2026');
     expect(rowsOf(root)[0]?.querySelector<HTMLElement>('[data-device-off]')?.hidden).toBe(true);
   });
 
