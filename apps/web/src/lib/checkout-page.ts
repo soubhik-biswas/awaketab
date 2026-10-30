@@ -98,7 +98,8 @@ export function bootCheckoutPage(root: HTMLElement, now = Date.now()): void {
     root.dataset.step = target;
     for (const main of root.querySelectorAll<HTMLElement>('main[data-for]')) main.hidden = main.dataset.for !== target;
     setFlowStep(root, STEP_INDEX[target]);
-    if (location.hash.slice(1) !== target) history.replaceState(null, '', `${location.pathname}${location.search}#${target}`);
+    if (location.hash.slice(1) !== target)
+      history.replaceState(null, '', `${location.pathname}${location.search}#${target}`);
     if (focus) root.querySelector<HTMLElement>(`main[data-for="${target}"] h1`)?.focus();
   };
 

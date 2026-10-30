@@ -77,7 +77,7 @@
     --at-gap-70: 70px;
     --at-gap-72: 72px;
     --at-gap-96: 96px;
-    --at-pro-pad: 96px;
+    --at-gutter-pro: 96px;
     --at-pro-form: 520px;
     --at-pro-lead-max: 640px;
     --at-pro-block-max: 900px;
@@ -87,6 +87,17 @@
     --at-pro-glow-w: 1100px;
     --at-pro-glow-h: 900px;
     --at-pro-step-n: 40px;
+    --at-pro-flow-glow-w: 900px;
+    --at-pro-flow-glow-h: 760px;
+    --at-pro-head: 72px;
+    --at-pro-check: 12px;
+    --at-pro-man-max: 1180px;
+    --at-pro-man-aside: 340px;
+    --at-pro-meter-min: 260px;
+    --at-pro-meter-h: 10px;
+    --at-pro-px: 1px;
+    --at-pro-skel: 14px;
+    --at-pro-skel-w: 80px;
     --at-pro-dot: 24px;
     --at-pro-avatar: 48px;
     --at-pro-spin: 56px;
@@ -157,7 +168,7 @@
     display: flex;
     align-items: center;
     gap: var(--at-s-12);
-    padding-inline: var(--at-pro-pad);
+    padding-inline: var(--at-gutter-pro);
   }
 
   .at-pro-hero-text {
@@ -219,7 +230,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--at-s-5);
-    padding-inline: var(--at-pro-pad);
+    padding-inline: var(--at-gutter-pro);
   }
 
   .at-pro-h2 {
@@ -271,7 +282,8 @@
   .at-pro-chip {
     display: inline-flex;
     align-items: center;
-    padding: var(--at-gap-2) var(--at-s-2);
+    padding-block: var(--at-gap-2);
+    padding-inline: var(--at-s-2);
     border-radius: var(--at-r-pill);
     background: var(--at-primary-soft);
     color: var(--at-primary);
@@ -280,7 +292,8 @@
   }
 
   .at-pro-chip-lg {
-    padding: var(--at-gap-3) var(--at-gap-10);
+    padding-block: var(--at-gap-3);
+    padding-inline: var(--at-gap-10);
     font: var(--at-type-pro-chip);
   }
 
@@ -377,7 +390,8 @@
   }
 
   .at-pro-table :is(th, td) {
-    padding: var(--at-gap-14) var(--at-s-5);
+    padding-block: var(--at-gap-14);
+    padding-inline: var(--at-s-5);
     border-block-start: var(--at-border) solid var(--at-line);
     font: var(--at-type-pro-feat);
     text-align: start;
@@ -519,7 +533,8 @@
   }
 
   .at-pro-refund-card {
-    padding: var(--at-gap-18) var(--at-s-5);
+    padding-block: var(--at-gap-18);
+    padding-inline: var(--at-s-5);
     border: var(--at-border) solid var(--at-line);
     border-radius: var(--at-r-18);
     background: var(--at-surface);
@@ -536,7 +551,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--at-s-2);
-    padding: var(--at-gap-18) var(--at-s-5) var(--at-s-5);
+    padding-block: var(--at-gap-18) var(--at-s-5);
+    padding-inline: var(--at-s-5);
     border: var(--at-border) solid var(--at-line);
     border-radius: var(--at-r-24);
     background: var(--at-surface);
@@ -563,7 +579,8 @@
     gap: var(--at-gap-14);
     max-inline-size: var(--at-pro-block-max);
     margin: 0;
-    padding: var(--at-gap-18) var(--at-s-5);
+    padding-block: var(--at-gap-18);
+    padding-inline: var(--at-s-5);
     border: var(--at-border) solid color-mix(in srgb, var(--at-pro-tone) 20%, transparent);
     border-radius: var(--at-r-18);
     background: var(--at-pro-tone-soft);
@@ -717,7 +734,8 @@
 
   .at-pro-link-btn {
     min-block-size: var(--at-h-control);
-    padding: 0 var(--at-s-1);
+    padding-block: 0;
+    padding-inline: var(--at-s-1);
     border: 0;
     background: transparent;
     color: var(--at-link);
@@ -832,8 +850,8 @@
 
   .at-pro-flow-glow {
     position: absolute;
-    inline-size: 900px;
-    block-size: 760px;
+    inline-size: var(--at-pro-flow-glow-w);
+    block-size: var(--at-pro-flow-glow-h);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -855,7 +873,7 @@
     display: flex;
     align-items: center;
     gap: var(--at-s-4);
-    block-size: 72px;
+    block-size: var(--at-pro-head);
     padding-inline: var(--at-s-10);
     border-block-end: var(--at-border) solid var(--at-line);
   }
@@ -896,7 +914,8 @@
     align-items: center;
     gap: var(--at-s-2);
     block-size: var(--at-h-sm);
-    padding: 0 var(--at-s-3) 0 var(--at-gap-6);
+    padding-block: 0;
+    padding-inline: var(--at-gap-6) var(--at-s-3);
     border: var(--at-border) solid transparent;
     border-radius: var(--at-r-pill);
     color: var(--at-ink-2);
@@ -934,8 +953,8 @@
 
   .at-pro-flow-check {
     display: none;
-    inline-size: 12px;
-    block-size: 12px;
+    inline-size: var(--at-pro-check);
+    block-size: var(--at-pro-check);
     stroke-width: 3.5;
   }
 
@@ -954,7 +973,8 @@
     flex-direction: column;
     align-items: center;
     gap: var(--at-gap-26);
-    padding: var(--at-gap-44) var(--at-s-30) var(--at-s-12);
+    padding-block: var(--at-gap-44) var(--at-s-12);
+    padding-inline: var(--at-s-30);
   }
 
   .at-pro-flow-kicker {
@@ -993,7 +1013,8 @@
   .at-pro-seg-btn {
     flex: 1;
     min-block-size: var(--at-h-control);
-    padding: 0 var(--at-s-5);
+    padding-block: 0;
+    padding-inline: var(--at-s-5);
     border: 0;
     border-radius: var(--at-r-sm);
     background: transparent;
@@ -1137,7 +1158,8 @@
     display: flex;
     align-items: flex-start;
     gap: var(--at-gap-10);
-    padding: var(--at-s-3) var(--at-gap-14);
+    padding-block: var(--at-s-3);
+    padding-inline: var(--at-gap-14);
     border-radius: var(--at-r-12);
     background: var(--at-info-soft);
     color: var(--at-ink);
@@ -1169,7 +1191,8 @@
     display: flex;
     justify-content: space-between;
     gap: var(--at-s-4);
-    padding: var(--at-s-4) var(--at-s-5);
+    padding-block: var(--at-s-4);
+    padding-inline: var(--at-s-5);
     border-block-start: var(--at-border) solid var(--at-surface-2);
     font: var(--at-type-pro-row);
     text-align: start;
@@ -1343,7 +1366,8 @@
   .at-pro-key-out {
     flex: 1;
     min-inline-size: 0;
-    padding: var(--at-s-3) var(--at-gap-14);
+    padding-block: var(--at-s-3);
+    padding-inline: var(--at-gap-14);
     border: var(--at-border) solid var(--at-line);
     border-radius: var(--at-r-12);
     background: var(--at-surface-2);
@@ -1352,17 +1376,18 @@
   }
 
   .at-pro-err {
+    --at-pro-tone: var(--at-bad);
+    --at-pro-tone-soft: var(--at-bad-soft);
+
     display: flex;
     flex-direction: column;
     gap: var(--at-s-2);
-    padding: var(--at-s-4) var(--at-gap-18);
+    padding-block: var(--at-s-4);
+    padding-inline: var(--at-gap-18);
     border: var(--at-border) solid color-mix(in srgb, var(--at-pro-tone) 30%, transparent);
     border-radius: var(--at-r-16);
     background: var(--at-pro-tone-soft);
     text-align: start;
-
-    --at-pro-tone: var(--at-bad);
-    --at-pro-tone-soft: var(--at-bad-soft);
   }
 
   .at-pro-err[hidden] {
@@ -1432,7 +1457,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--at-gap-2);
-    padding: var(--at-s-3) var(--at-s-4);
+    padding-block: var(--at-s-3);
+    padding-inline: var(--at-s-4);
     border-block-start: var(--at-border) solid var(--at-surface-2);
     font: var(--at-type-pro-help);
   }
@@ -1453,11 +1479,12 @@
   .at-pro-man-main {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--at-pro-man-aside));
     gap: var(--at-s-12);
-    max-inline-size: 1180px;
+    max-inline-size: var(--at-pro-man-max);
     margin-inline: auto;
-    padding: var(--at-gap-72) var(--at-s-6) var(--at-gap-96);
+    padding-block: var(--at-gap-72) var(--at-gap-96);
+    padding-inline: var(--at-s-6);
   }
 
   .at-pro-man-col {
@@ -1538,7 +1565,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--at-s-2);
-    min-inline-size: 260px;
+    min-inline-size: var(--at-pro-meter-min);
   }
 
   .at-pro-meter-head {
@@ -1555,7 +1582,7 @@
   }
 
   .at-pro-meter > span {
-    block-size: 10px;
+    block-size: var(--at-pro-meter-h);
     border-radius: var(--at-r-pill);
     background: var(--at-surface-3);
   }
@@ -1568,7 +1595,8 @@
     display: none;
     flex-direction: column;
     gap: var(--at-s-3);
-    padding: var(--at-s-5) var(--at-s-6);
+    padding-block: var(--at-s-5);
+    padding-inline: var(--at-s-6);
     border: var(--at-border) solid color-mix(in srgb, var(--at-warn) 30%, transparent);
     border-radius: var(--at-r-lg);
     background: var(--at-warn-soft);
@@ -1601,8 +1629,8 @@
   }
 
   .at-pro-dot {
-    inline-size: 10px;
-    block-size: 10px;
+    inline-size: var(--at-pro-meter-h);
+    block-size: var(--at-pro-meter-h);
     border-radius: var(--at-r-pill);
     background: currentcolor;
   }
@@ -1675,7 +1703,8 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 240px) auto;
     align-items: center;
     gap: var(--at-s-3);
-    padding: var(--at-s-3) var(--at-s-5);
+    padding-block: var(--at-s-3);
+    padding-inline: var(--at-s-5);
   }
 
   .at-pro-dev-head {
@@ -1759,8 +1788,8 @@
 
   .at-pro-dev-at-label {
     position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
+    inline-size: var(--at-pro-px);
+    block-size: var(--at-pro-px);
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
@@ -1773,7 +1802,8 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--at-s-2);
-    padding: var(--at-s-3) var(--at-s-4);
+    padding-block: var(--at-s-3);
+    padding-inline: var(--at-s-4);
     border-radius: var(--at-r-12);
     background: var(--at-bad-soft);
     font: var(--at-type-pro-help);
@@ -1794,13 +1824,13 @@
 
   .at-pro-skel {
     display: block;
-    block-size: 14px;
+    block-size: var(--at-pro-skel);
     border-radius: var(--at-r-pill);
     background: var(--at-surface-2);
   }
 
   .at-pro-dev-act .at-pro-skel {
-    inline-size: 80px;
+    inline-size: var(--at-pro-skel-w);
   }
 
   .at-pro-empty {
@@ -1839,7 +1869,7 @@
 
   @media (width < 1100px) {
     .at-pro {
-      --at-pro-pad: 48px;
+      --at-gutter-pro: 48px;
     }
 
     .at-pro-flow-plans {
@@ -1874,8 +1904,8 @@
     .at-pro-flow-step:not([aria-current="step"]) .at-pro-flow-label,
     .at-pro-flow-back-label {
       position: absolute;
-      inline-size: 1px;
-      block-size: 1px;
+      inline-size: var(--at-pro-px);
+      block-size: var(--at-pro-px);
       overflow: hidden;
       clip-path: inset(50%);
       white-space: nowrap;
@@ -1888,7 +1918,7 @@
 
   @media (width < 700px) {
     .at-pro {
-      --at-pro-pad: 20px;
+      --at-gutter-pro: 20px;
     }
 
     .at-pro-page-main {

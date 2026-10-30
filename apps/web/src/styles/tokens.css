@@ -619,7 +619,7 @@
   transform: scaleX(-1);
 }
 
-:root {
+html {
   --at-id-cobalt: #3d5ef5;
   --at-on-id-cobalt: #fff;
   --at-id-grape: #7c4deb;

@@ -58,6 +58,7 @@ export async function consumeToken(
   } catch {
     return { ok: false, reason: 'expired' };
   }
-  if (record.v !== 1 || typeof record.email !== 'string' || !(record.exp > now)) return { ok: false, reason: 'expired' };
+  if (record.v !== 1 || typeof record.email !== 'string' || !(record.exp > now))
+    return { ok: false, reason: 'expired' };
   return { ok: true, email: record.email };
 }
