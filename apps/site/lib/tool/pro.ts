@@ -2,10 +2,10 @@ import { useSyncExternalStore } from 'react';
 import { DEFAULT_SETTINGS } from '@awaketab/core';
 import { SETTINGS_KEY } from '@/lib/tool/settings';
 import { isRecord } from '@/lib/tool/store';
+import type { TDeviceKind, TDeviceStatus, TIdentity } from '@/components/product/device-presence';
 
-export type TDeviceKind = 'laptop' | 'desktop' | 'tablet' | 'phone';
-export type TIdentity = 'cobalt' | 'grape' | 'plum' | 'bubblegum' | 'denim' | 'sand' | 'slate' | 'mauve';
-export type TDeviceState = 'awake' | 'paused' | 'idle' | 'offline';
+
+export type { TDeviceKind, TDeviceStatus, TIdentity };
 export type TMixKey = 'rain' | 'cafe' | 'fire' | 'brown';
 export type TProPlan = 'monthly' | 'yearly' | 'lifetime';
 
@@ -14,7 +14,7 @@ export interface IProDevice {
   name: string;
   kind: TDeviceKind;
   identity: TIdentity;
-  state: TDeviceState;
+  status: TDeviceStatus;
   detail: string;
   current: boolean;
 }
@@ -64,9 +64,9 @@ const DEFAULT_STUDIO: IStudioSettings = { lamp: '', glow: 70 };
 const DEFAULT_MIX: ISoundMix = { rain: 40, cafe: 0, fire: 25, brown: 0 };
 
 const PLACEHOLDER_DEVICES: IProDevice[] = [
-  { id: 'this', name: 'Work laptop', kind: 'laptop', identity: 'cobalt', state: 'awake', detail: '', current: true },
-  { id: 'ipad', name: 'Kitchen iPad', kind: 'tablet', identity: 'bubblegum', state: 'awake', detail: 'Cooking · until 6:00 PM', current: false },
-  { id: 'phone', name: 'Phone', kind: 'phone', identity: 'denim', state: 'paused', detail: 'Tab hidden since 10:58 AM', current: false },
+  { id: 'this', name: 'Work laptop', kind: 'laptop', identity: 'cobalt', status: 'awake', detail: '', current: true },
+  { id: 'ipad', name: 'Kitchen iPad', kind: 'tablet', identity: 'bubblegum', status: 'awake', detail: 'Cooking · until 6:00 PM', current: false },
+  { id: 'phone', name: 'Phone', kind: 'phone', identity: 'denim', status: 'paused', detail: 'Tab hidden since 10:58 AM', current: false },
 ];
 
 const PLACEHOLDER_ACCOUNT: IProAccount = { name: '[YOUR NAME]', email: '[YOUR EMAIL]', plan: 'monthly', renewsOn: '[DATE]' };

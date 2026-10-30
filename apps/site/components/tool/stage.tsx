@@ -1,10 +1,8 @@
 'use client';
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef } from 'react';
 import dynamic from 'next/dynamic';
 import {
-  BatteryWarning,
-  BellRing,
   LifeBuoy,
   LoaderCircle,
   Maximize,
@@ -12,11 +10,10 @@ import {
   Play,
   Plus,
   RotateCcw,
-  TriangleAlert,
-  WifiOff,
   X,
   type LucideIcon,
 } from 'lucide-react';
+import { Banner } from '@/components/product/banner';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { faceRemain } from '@/lib/tool/model';
@@ -27,121 +24,21 @@ import { LengthChips } from '@/components/tool/length-chips';
 
 const Face = dynamic(() => import('@/components/face').then((mod) => mod.Face), { ssr: false });
 
-type TTone = 'info' | 'warning' | 'danger';
-
-const TONE: Record<TTone, { box: string; fg: string; btn: string }> = {
-  info: { box: 'border-info/25 bg-info-soft', fg: 'text-info', btn: 'border-info text-info hover:bg-info/10' },
-  warning: {
-    box: 'border-warning/25 bg-warning-soft',
-    fg: 'text-warning',
-    btn: 'border-warning text-warning hover:bg-warning/10',
-  },
-  danger: {
-    box: 'border-destructive/25 bg-destructive-soft',
-    fg: 'text-destructive',
-    btn: 'border-destructive text-destructive hover:bg-destructive/10',
-  },
-};
-
-function StageBanner({
-  tone,
-  icon: Icon,
-  title,
-  body,
-  action,
-  onAction,
-  alert,
-}: {
-  tone: TTone;
-  icon: LucideIcon;
-  title: string;
-  body: string;
-  action?: string;
-  onAction?: () => void;
-  alert?: boolean;
-}) {
-  const { device } = useTool();
-  const t = TONE[tone];
-  return (
-    <div
-      role={alert ? 'alert' : 'status'}
-      className={cn(
-        'box-border flex w-full max-w-[640px] shrink-0 animate-rise gap-3 rounded-[14px] border px-3.5 py-3 text-foreground',
-        device === 'phone' ? 'items-start' : 'items-center',
-        t.box,
-      )}
-    >
-      <Icon className={cn('size-5 shrink-0', t.fg)} strokeWidth={1.75} aria-hidden="true" />
-      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <strong className={cn('text-[14px]', t.fg)}>{title}</strong>
-        <span className="text-[13px] leading-[1.45]">{body}</span>
-      </span>
-      {action && onAction ? (
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onAction}
-          className={cn('h-11 shrink-0 rounded-[10px] bg-transparent px-3 text-[14px] font-semibold', t.btn)}
-        >
-          {action}
-        </Button>
-      ) : null}
-    </div>
-  );
-}
-
 function Banners() {
   const { snap, ui, online, m, a } = useTool();
   const banner = ui.qa.banner;
-  const list: ReactNode[] = [];
-  if (banner === 'offline' || (banner === undefined && !online))
-    list.push(
-      <StageBanner
-        key="offline"
-        tone="info"
-        icon={WifiOff}
-        title="You’re offline"
-        body="AwakeTab keeps working. Sync resumes when you reconnect."
-      />,
-    );
-  if (banner === 'conflict' || (banner === undefined && snap.peerHolds))
-    list.push(
-      <StageBanner
-        key="conflict"
-        tone="warning"
-        icon={TriangleAlert}
-        title="Another tab is keeping this screen awake"
-        body="Only one tab holds the lamp at a time."
-        action="Take over"
-        onAction={a.takeOver}
-      />,
-    );
-  if (m.state === 'needsyou')
-    list.push(
-      <StageBanner
-        key="needs"
-        tone="info"
-        icon={BellRing}
-        title="Tap to resume"
-        body="The browser let go of the wake lock while you were in another app."
-        action={m.s.resume}
-        onAction={a.resume}
-      />,
-    );
-  if (m.state === 'blocked' && ui.view !== 'fix')
-    list.push(
-      <StageBanner
-        key="blocked"
-        tone="danger"
-        icon={BatteryWarning}
-        title="Your screen may still sleep"
-        body="Battery saver is on, so the browser refused the wake lock."
-        action="Fix it"
-        onAction={() => a.go('fix')}
-        alert
-      />,
-    );
-  return <>{list}</>;
+  return (
+    <>
+      {banner === 'offline' || (banner === undefined && !online) ? <Banner kind="offline" /> : null}
+      {banner === 'conflict' || (banner === undefined && snap.peerHolds) ? (
+        <Banner kind="conflict" onAction={a.takeOver} />
+      ) : null}
+      {m.state === 'needsyou' ? <Banner kind="needsyou" actionLabel={m.s.resume} onAction={a.resume} /> : null}
+      {m.state === 'blocked' && ui.view !== 'fix' ? (
+        <Banner kind="blocked" role="alert" onAction={() => a.go('fix')} />
+      ) : null}
+    </>
+  );
 }
 
 type TCtrl = {
@@ -271,6 +168,9 @@ export function Controls({ focus = false }: { focus?: boolean }) {
 export function StageFace({ size }: { size: number }) {
   const { m, theme, settings, pro } = useTool();
   const minute = Math.ceil(m.remain / 60);
+  const hour = new Date(m.now).getHours();
+  // "Dim the clock at night": after 10:00 PM and until 6:00 AM.
+  const dim = settings.dim && (hour >= 22 || hour < 6);
   const label = m.indef
     ? `${Math.floor(m.elapsed / 60)} minutes awake, no end`
     : m.state === 'ended'
@@ -280,7 +180,7 @@ export function StageFace({ size }: { size: number }) {
     <div
       role="timer"
       aria-label={label}
-      className="shrink-0 overflow-visible"
+      className={cn('shrink-0 overflow-visible transition-opacity duration-arrive', dim && 'opacity-60')}
       style={{ width: size, height: Math.round(size * 0.875) }}
     >
       <div aria-hidden="true">
@@ -314,14 +214,17 @@ export const Stage = forwardRef<HTMLElement, { faceSize: number; left: number; r
     return (
       <main
         ref={ref}
-        tabIndex={-1}
+        tabIndex={0}
         aria-label="Timer"
         aria-keyshortcuts="Space + Shift++ U F Shift+D ? 1 2 3 4 5 6 7 8 9"
         className={cn(
-          'absolute z-[1] box-border flex flex-col items-center overflow-x-hidden overflow-y-auto outline-none',
+          'absolute z-[1] box-border flex flex-col items-center overflow-x-hidden overflow-y-auto outline-none focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-ring',
           phone ? 'justify-start gap-3 px-4 py-3.5' : 'justify-center gap-4 px-8 py-6',
         )}
         style={{ left, right, top, bottom }}
+        onMouseDown={(e) => {
+          if (e.target === e.currentTarget) e.currentTarget.focus({ preventScroll: true });
+        }}
       >
         {!focus ? <Banners /> : null}
         {phone || focus ? <ToolPill /> : null}

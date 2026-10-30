@@ -595,7 +595,13 @@ class WakeController {
   // Dev-only: the QA tray jumps straight to a drawn state without asking the browser.
   qaJump(patch: Partial<IWakeSnapshot>) {
     this.boot();
+    void this.releaseAll();
+    this.awakeSec = 0;
     this.set({ now: Date.now(), ...patch });
+  }
+
+  qaEnded() {
+    this.emit('ended', { endedAt: this.snap.endedAt ?? Date.now() });
   }
 }
 
