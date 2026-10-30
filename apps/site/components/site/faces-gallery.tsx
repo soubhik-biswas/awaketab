@@ -35,10 +35,7 @@ const UNFRAMED = new Set([
 // two to a row until tablet landscape, then three.
 export function FacesGallery({ items }: { items: readonly IFaceCard[] }) {
   return (
-    <ul
-      role="list"
-      className="m-0 grid list-none grid-cols-2 gap-3 p-0 min-[700px]:gap-5 min-[1100px]:grid-cols-3"
-    >
+    <ul role="list" className="m-0 grid list-none grid-cols-2 gap-3 p-0 min-[700px]:gap-5 min-[1100px]:grid-cols-3">
       {items.map((f) => (
         <li key={f.id} className="flex flex-col gap-3">
           <span className="flex justify-center">

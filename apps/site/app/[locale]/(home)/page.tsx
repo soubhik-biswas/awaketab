@@ -28,7 +28,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     path: localePath(locale, '/'),
     locale,
     noindex: !LOCALE_META[locale].reviewed,
-    og: { kicker: ts('home.og.kicker'), title: ts('home.og.title'), sub: ts('home.og.sub'), scene: 'hero', tone: 'dark' },
+    og: {
+      kicker: ts('home.og.kicker'),
+      title: ts('home.og.title'),
+      sub: ts('home.og.sub'),
+      scene: 'hero',
+      tone: 'dark',
+    },
   });
 }
 
