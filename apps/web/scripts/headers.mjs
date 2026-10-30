@@ -152,6 +152,7 @@ export function generateRedirects() {
 /support-matrix /learn/browser-support-matrix 301
 /how-we-tested /learn/how-we-tested 301
 /pro/buy /pro 302
+/s/* /s 200
 ${CONTENT_REDIRECTS.map(([from, to]) => `${from} ${to} 301`).join('\n')}
 `;
 }
