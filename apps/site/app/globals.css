@@ -3,7 +3,8 @@
 
 @custom-variant dark (&:where(.dark, .dark *, .oled, .oled *));
 
-:root {
+:root,
+.light {
   --background: #f6f4ef;
   --foreground: #0b1020;
   --card: #ffffff;
