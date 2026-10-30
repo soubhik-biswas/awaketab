@@ -8,11 +8,12 @@ import { elapsedSec, remainSec, type IWakeSnapshot, type TWakeState } from '@/li
 export type TFaceTheme = 'light' | 'dark' | 'oled';
 export type TFaceStateName = 'idle' | 'starting' | 'running' | 'fallback' | 'paused' | 'blocked' | 'unsupported' | 'up';
 
-export const DEVICE_SIZES: Record<TDevice, { face: number; top: number; side: number; panel: number; bnav: number }> = {
-  desktop: { face: 440, top: 64, side: 232, panel: 380, bnav: 0 },
-  tabletL: { face: 380, top: 64, side: 84, panel: 352, bnav: 0 },
-  tabletP: { face: 420, top: 64, side: 0, panel: 0, bnav: 76 },
-  phone: { face: 296, top: 56, side: 0, panel: 0, bnav: 76 },
+// Face, header and control-bar sizes per device; the stage sits between the header and the bar.
+export const DEVICE_SIZES: Record<TDevice, { face: number; top: number; bar: number }> = {
+  desktop: { face: 480, top: 64, bar: 112 },
+  tabletL: { face: 440, top: 64, bar: 112 },
+  tabletP: { face: 600, top: 64, bar: 112 },
+  phone: { face: 336, top: 56, bar: 168 },
 };
 
 const FACE_STATE: Record<TWakeState, TFaceStateName> = {

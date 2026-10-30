@@ -7,7 +7,7 @@ export type TEndReason = 'completed' | 'user' | 'lost_timeout' | 'denied' | 'bat
 export type TPresetId = 'p15' | 'p30' | 'p45' | 'p60' | 'p120' | 'p240' | 'pinf' | 'custom' | 'until';
 export type TAmbientMode = 'standard' | 'clock' | 'focus' | 'minimal' | 'night' | 'message' | 'cook' | 'breathe';
 export type TTheme = 'auto' | 'light' | 'dark' | 'oled';
-// The 33 Solar Green clock faces, in the order the faces sheet, the C key and a swipe step through them.
+// The 49 Volt clock faces, in the order the faces sheet, the C key and a swipe step through them.
 export const FACE_IDS = [
   'ring',
   'bold',
@@ -42,6 +42,22 @@ export const FACE_IDS = [
   'wordgrid',
   'tape',
   'moon',
+  'aurora',
+  'glass',
+  'neon',
+  'liquid',
+  'eclipse',
+  'skeleton',
+  'bauhaus',
+  'poster',
+  'eink',
+  'terminal',
+  'pulse',
+  'waveform',
+  'blob',
+  'hud',
+  'constellation',
+  'halo',
 ] as const;
 export type TFace = (typeof FACE_IDS)[number];
 export type TPalette =

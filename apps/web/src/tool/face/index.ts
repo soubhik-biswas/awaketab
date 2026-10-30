@@ -99,7 +99,8 @@ const GROUPS = {
 } satisfies Record<string, () => Promise<{ default: TGroup }>>;
 type TGroupId = keyof typeof GROUPS;
 
-const GROUP_OF: Record<Exclude<FaceId, 'ring'>, TGroupId> = {
+// The Volt faces exist only in apps/site; this site draws Ring for them.
+const GROUP_OF: Partial<Record<Exclude<FaceId, 'ring'>, TGroupId>> = {
   bold: 'classic',
   horizon: 'classic',
   tide: 'classic',
@@ -172,6 +173,7 @@ export function faceSheet(): Promise<void> {
 export function loadFace(id: FaceId): Promise<void> {
   if (id === 'ring') return Promise.resolve();
   const g = GROUP_OF[id];
+  if (!g) return Promise.resolve();
   let p = loading.get(g);
   if (!p) {
     p = Promise.all([GROUPS[g](), faceSheet()]).then(([m]) => {

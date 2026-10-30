@@ -15,13 +15,13 @@ const Face = dynamic(() => import('@/components/face').then((mod) => mod.Face), 
 // Face studio accents are art colours, the same in every theme; status colours never change.
 const SWATCHES: ReadonlyArray<['' | `#${string}`, string]> = [
   ['', 'Default green'],
-  ['#3BE47F', 'Signal green'],
+  ['#3DF58E', 'Volt'],
   ['#B8F25A', 'Lime'],
   ['#FFB547', 'Amber'],
   ['#7CBBFF', 'Sky'],
   ['#C1B1FE', 'Violet'],
   ['#FF7DB8', 'Rose'],
-  ['#FF6B2C', 'Ember'],
+  ['#FF6A3D', 'Ember'],
 ];
 const CHECK_INK = '#0B1020';
 

@@ -1,32 +1,30 @@
-
-
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *, .oled, .oled *));
 
 :root {
 
-  --background: #F6F4EF;
+  --background: #F5F5FA;
   --foreground: #0B1020;
   --card: #FFFFFF;
   --card-foreground: #0B1020;
   --popover: #FFFFFF;
   --popover-foreground: #0B1020;
-  --primary: #B93D0B;
+  --primary: #6633F5;
   --primary-foreground: #FFFFFF;
-  --primary-soft: #FDECE3;
-  --secondary: #EFECE5;
+  --primary-soft: #EFEAFF;
+  --secondary: #ECECF4;
   --secondary-foreground: #0B1020;
-  --muted: #EFECE5;
+  --muted: #ECECF4;
   --muted-foreground: #626777;
   --muted-foreground-strong: #4B5165;
-  --surface-3: #E6E2D9;
+  --surface-3: #E3E3EE;
   --accent: #E2F6E8;
   --accent-foreground: #117A3B;
   --destructive: #C21D3E;
   --destructive-soft: #FCE3E7;
-  --border: #DCD7CC;
-  --input: #8F887A;
+  --border: #D9D9E5;
+  --input: #878AA0;
   --ring: #1C64B8;
   --link: #117A3B;
   --lamp: #117A3B;
@@ -35,8 +33,8 @@
   --warning-soft: #FCEFD2;
   --info: #1C64B8;
   --info-soft: #E1ECFA;
-  --ended: #6D4AD0;
-  --ended-soft: #ECE6FC;
+  --ended: #4B5165;
+  --ended-soft: #E3E3EE;
   --radius: 14px;
 
   --face-sky: #1D5FB8;
@@ -60,9 +58,9 @@
   --card-foreground: #EEF2FA;
   --popover: #0E1424;
   --popover-foreground: #EEF2FA;
-  --primary: #FF6B2C;
+  --primary: #9F7BFF;
   --primary-foreground: #0B0F1A;
-  --primary-soft: #3A1A0C;
+  --primary-soft: #241A4D;
   --secondary: #151D31;
   --secondary-foreground: #EEF2FA;
   --muted: #151D31;
@@ -70,32 +68,32 @@
   --muted-foreground-strong: #A9B3C7;
   --surface-3: #1D273F;
   --accent: #0D3B22;
-  --accent-foreground: #3BE47F;
+  --accent-foreground: #3DF58E;
   --destructive: #FF6B81;
   --destructive-soft: #3D1220;
   --border: #26314A;
   --input: #6B7894;
   --ring: #7CBBFF;
   --link: #7CF0AE;
-  --lamp: #3BE47F;
+  --lamp: #3DF58E;
   --lamp-foreground: #052812;
   --warning: #FFC53D;
   --warning-soft: #3A2C08;
   --info: #7CBBFF;
   --info-soft: #0F2645;
-  --ended: #C1B1FE;
-  --ended-soft: #271C4A;
+  --ended: #C9D1E0;
+  --ended-soft: #1D273F;
 
   --face-sky: #7CBBFF;
   --face-violet: #C1B1FE;
   --face-lime: #B8F25A;
   --face-amber: #FFB547;
-  --face-ember: #FF6B2C;
+  --face-ember: #FF6A3D;
   --face-fill-sky: #7CBBFF;
   --face-fill-violet: #C1B1FE;
   --face-fill-lime: #B8F25A;
   --face-fill-amber: #FFB547;
-  --face-fill-ember: #FF6B2C;
+  --face-fill-ember: #FF6A3D;
 }
 
 .oled {
@@ -143,6 +141,7 @@
   --color-face-ember: var(--face-ember);
 
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo", "Geist", ui-sans-serif, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
 
   --radius-xs: 6px;

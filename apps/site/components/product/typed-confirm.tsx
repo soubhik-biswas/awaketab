@@ -56,7 +56,9 @@ export function TypedConfirm({
         id={`${id}-t`}
         className={cn(
           'font-sans text-foreground',
-          compact ? 'text-[17px] font-bold' : 'text-[20px] font-extrabold tracking-[-0.02em]',
+          compact
+            ? 'text-[17px] font-bold'
+            : 'font-display text-[20px] font-extrabold tracking-[-0.02em] [font-stretch:112%]',
         )}
       >
         {title}
