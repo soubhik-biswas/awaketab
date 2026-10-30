@@ -38,10 +38,7 @@ function LanguageField() {
         {m.c.language}
       </label>
       <span
-        className={cn(
-          FIELD,
-          'relative focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring',
-        )}
+        className={cn(FIELD, 'relative focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring')}
       >
         <Globe className="size-4 shrink-0 text-muted-foreground-strong" strokeWidth={2} aria-hidden="true" />
         <select

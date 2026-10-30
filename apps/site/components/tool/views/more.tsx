@@ -54,7 +54,12 @@ export default function MoreView() {
     { n: s.presets, icon: ListChecks, view: 'presets' },
     { n: s.history, icon: History, view: 'history' },
     { n: `${c.searchCmds}  ⌘K`, icon: Search, view: 'palette', keys: 'Meta+K Control+K' },
-    { n: fill(c.themeIs, { name: c[theme] }), icon: theme === 'light' ? Sun : Moon, run: a.cycleTheme, keys: 'Shift+D' },
+    {
+      n: fill(c.themeIs, { name: c[theme] }),
+      icon: theme === 'light' ? Sun : Moon,
+      run: a.cycleTheme,
+      keys: 'Shift+D',
+    },
     { n: s.settings, icon: Settings, view: 'settings' },
     { n: s.help, icon: LifeBuoy, view: 'fix', keys: '?' },
     { n: c.share, icon: Share2, view: 'share' },

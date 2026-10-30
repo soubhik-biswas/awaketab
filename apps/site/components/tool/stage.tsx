@@ -31,7 +31,9 @@ function Banners() {
   const kind = useBannerKind();
   return (
     <>
-      {kind === 'offline' ? <Banner kind="offline" title={c.bOfflineT} body={c.bOfflineB} className="shrink-0" /> : null}
+      {kind === 'offline' ? (
+        <Banner kind="offline" title={c.bOfflineT} body={c.bOfflineB} className="shrink-0" />
+      ) : null}
       {kind === 'conflict' ? (
         <Banner
           kind="conflict"

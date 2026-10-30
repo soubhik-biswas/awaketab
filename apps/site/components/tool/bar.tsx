@@ -67,7 +67,12 @@ function useBarModel() {
     chips = LENGTHS.map(([sec, full, short]) => ({
       id: `len-${sec}`,
       label: compact ? short : full,
-      aria: compact || sec === 0 || m.lang !== 'en' ? (sec % 3600 === 0 ? lengthText(sec, s, c) : fill(c.minutes, { n: sec / 60 })) : undefined,
+      aria:
+        compact || sec === 0 || m.lang !== 'en'
+          ? sec % 3600 === 0
+            ? lengthText(sec, s, c)
+            : fill(c.minutes, { n: sec / 60 })
+          : undefined,
       on: sec === m.total,
       go: () => a.setLength(sec),
     }));

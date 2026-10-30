@@ -110,11 +110,7 @@ export function deriveModel(snap: IWakeSnapshot, settings: IToolSettings, lang: 
             ? s.until + endT
             : `${endT} ${s.until.trim()}`;
   const lenText = total === 3600 ? s.hour : `${Math.round(total / 60)}${s.min}`;
-  const idleNote = indef
-    ? c.noEndNote
-    : lang === 'en'
-      ? `${lenText}${s.forLen}${endT}`
-      : s.wouldEnd + endT;
+  const idleNote = indef ? c.noEndNote : lang === 'en' ? `${lenText}${s.forLen}${endT}` : s.wouldEnd + endT;
   const notes: Partial<Record<TWakeState, string>> = {
     idle: idleNote,
     fallback: snap.supported
