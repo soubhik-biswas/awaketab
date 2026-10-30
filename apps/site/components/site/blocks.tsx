@@ -326,9 +326,7 @@ export function Callout({
         >
           {title}
         </strong>
-        <span
-          className="site-prose text-[16px] leading-[1.55] text-muted-foreground-strong min-[700px]:text-[18px]"
-        >
+        <span className="site-prose text-[16px] leading-[1.55] text-muted-foreground-strong min-[700px]:text-[18px]">
           {children}
         </span>
       </span>
@@ -503,9 +501,7 @@ export function Plans({ items }: { items: readonly IPlan[] }) {
               </span>
             )}
           </span>
-          <span
-            className={cn(s.display, 'text-[34px] font-extrabold tracking-[-0.03em] min-[700px]:text-[44px]')}
-          >
+          <span className={cn(s.display, 'text-[34px] font-extrabold tracking-[-0.03em] min-[700px]:text-[44px]')}>
             {p.price}
           </span>
           <span className={s.body}>{p.desc}</span>

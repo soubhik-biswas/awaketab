@@ -113,7 +113,9 @@ function OgScene({ scene, tone }: { scene: TSceneKey; tone: 'light' | 'dark' }) 
       {def.layers.map(([key, d], i) => (
         <path key={i} d={d} fill={fill[key]} stroke={c.ink} strokeWidth={3} strokeLinejoin="round" />
       ))}
-      {def.ring ? <path d={def.ring} fill="none" stroke={SCENE_FIXED.ring} strokeWidth={8} strokeLinecap="round" /> : null}
+      {def.ring ? (
+        <path d={def.ring} fill="none" stroke={SCENE_FIXED.ring} strokeWidth={8} strokeLinecap="round" />
+      ) : null}
       {def.ln ? <path d={def.ln} stroke={c.ink} {...line} /> : null}
       {def.lnLight ? <path d={def.lnLight} stroke={SCENE_FIXED.lamp} {...line} /> : null}
       {def.sp ? <path d={def.sp} fill="none" stroke={c.spark} strokeWidth={3.5} strokeLinecap="round" /> : null}
