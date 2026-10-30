@@ -105,17 +105,19 @@ export function FaceFrame({
   m,
   bare,
   framed,
+  drawn = true,
   className,
   children,
 }: {
   m: TFaceModel;
   bare?: boolean | undefined;
   framed?: boolean | undefined;
+  drawn?: boolean;
   className?: string | undefined;
   children?: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  useFaceMotion(ref, m.live, `${m.face}|${m.live}`);
+  useFaceMotion(ref, m.live && drawn, `${m.face}|${m.live}`);
   const root: TStyle = {
     width: m.size,
     height: m.size,
