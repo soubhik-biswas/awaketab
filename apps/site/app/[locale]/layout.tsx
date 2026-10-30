@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Archivo, Geist, Geist_Mono, Noto_Sans_Devanagari, Noto_Sans_JP, Noto_Sans_SC } from 'next/font/google';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -78,10 +79,10 @@ export default async function LocaleLayout({
   const fonts = [geist.variable, archivo.variable, geistMono.variable, SCRIPT_FONT[locale]].filter(Boolean).join(' ');
   return (
     <html lang={LOCALE_META[locale].htmlLang} dir="ltr" suppressHydrationWarning className={fonts}>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: CONSENT_BOOT }} />
-      </head>
       <body>
+        <Script id="consent-boot" strategy="beforeInteractive">
+          {CONSENT_BOOT}
+        </Script>
         <NextIntlClientProvider locale={locale} messages={client}>
           <ThemeProvider>
             <TooltipProvider>

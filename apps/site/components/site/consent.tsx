@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { btn } from './styles';
@@ -36,6 +36,12 @@ function answer(allow: boolean): void {
   }
 }
 
+function answered(): boolean {
+  const onboarding = readJson(ONBOARDING);
+  const tips = onboarding && Array.isArray(onboarding.dismissedTips) ? (onboarding.dismissedTips as unknown[]) : [];
+  return tips.includes(TIP) || readJson(SETTINGS)?.telemetry === false;
+}
+
 const choice = cn(btn, 'min-w-[110px] flex-1 border-input min-[700px]:flex-none');
 
 export function Consent({
@@ -50,6 +56,10 @@ export function Consent({
   allow: string;
 }) {
   const [done, setDone] = useState(false);
+  // A page React renders on the client (the 404) loses the boot script's mark on <html>, so the box checks too.
+  useEffect(() => {
+    if (answered()) setDone(true);
+  }, []);
   if (done) return null;
   const pick = (yes: boolean) => () => {
     answer(yes);
