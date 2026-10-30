@@ -1,16 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { SerwistProvider } from '@serwist/turbopack/react';
 
-// Registers /sw.js (offline fallback, widget updates) once the page has loaded; development builds skip it so a
-// cached page never hides a code change.
+// The offline fallback and the widgets' worker; development builds skip it so a cached page never hides a change.
 export function ServiceWorker() {
-  useEffect(() => {
-    if (process.env.NODE_ENV !== 'production' || !('serviceWorker' in navigator)) return;
-    const register = () => void navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => undefined);
-    if (document.readyState === 'complete') register();
-    else window.addEventListener('load', register, { once: true });
-    return () => window.removeEventListener('load', register);
-  }, []);
-  return null;
+  return (
+    <SerwistProvider
+      swUrl="/serwist/sw.js"
+      disable={process.env.NODE_ENV !== 'production'}
+      reloadOnOnline={false}
+      options={{ scope: '/', type: 'classic' }}
+    />
+  );
 }
