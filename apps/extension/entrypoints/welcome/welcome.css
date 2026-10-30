@@ -520,6 +520,28 @@
   background: var(--at-ext-app-icon);
 }
 
+.wl-menu-icon .at-mark {
+  color: var(--at-app-ink);
+}
+
+.wl-menu-icon .at-mark-lamp {
+  fill: var(--at-app-lamp);
+  stroke: var(--at-app-lamp);
+}
+
+.wl-menu-icon.wl-notif-icon {
+  background: none;
+}
+
+.wl-notif-icon .at-mark {
+  color: var(--at-ink);
+}
+
+.wl-notif-icon .at-mark-lamp {
+  fill: var(--at-ended);
+  stroke: var(--at-ended);
+}
+
 .wl-menu-name {
   flex-grow: 1;
   font: var(--at-type-small);
