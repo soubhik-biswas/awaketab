@@ -195,7 +195,7 @@ export function faceModel(p: IFaceProps, opts: IFaceOptions = {}) {
   const nowSec = Number(p.nowSec ?? FACE_DEFAULTS.nowSec);
   const t0 = opts.t0 ?? nowSec;
   const fmt = p.fmt === 24 ? 24 : 12;
-  // 240 px and up keep every label at 12 px or more on screen; below 170 px the face is compact.
+  // 240 px and up keep every label at 12 px or more on screen; below 200 px the face is compact, as the boards draw it.
   const LMIN = size >= 240 && size < 360 ? (12 * 360) / size : 0;
   const night = theme !== 'light';
   const t = palette(theme);

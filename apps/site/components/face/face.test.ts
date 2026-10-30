@@ -71,7 +71,7 @@ describe('faceModel', () => {
     expect(ring({ state: 'up' }).aria).toBe("Time's up, Ended 10:47 AM");
   });
 
-  it('scales labels to 12 px on screen from 240 px and goes compact below 170 px', () => {
+  it('scales labels to 12 px on screen from 240 px and goes compact below 200 px', () => {
     expect(ring({ size: 250 }).LMIN).toBeCloseTo(17.28, 2);
     expect(ring({ size: 240 }).LMIN).toBe(18);
     expect(ring({ size: 360 }).LMIN).toBe(0);
