@@ -38,12 +38,12 @@ export const DASH_BTN = cn(BTN, 'h-13 w-full rounded-[16px] border-dashed');
 export const HELP = 'text-[12px] leading-[1.45] text-muted-foreground-strong';
 export const GROUP = 'flex flex-col gap-2';
 export const SEC_LABEL = 'font-mono text-[12px] tracking-[.08em] text-muted-foreground-strong uppercase';
-export const H3 = 'font-sans text-[20px] font-extrabold tracking-[-0.02em]';
+export const H3 = 'font-display text-[20px] font-extrabold tracking-[-0.02em] [font-stretch:112%]';
 export const FIELD =
   'flex h-11 min-w-0 items-center gap-2 rounded-[10px] border border-input bg-field px-3 text-[15px] text-foreground';
 export const LINK_BTN =
   'min-h-11 cursor-pointer border-0 bg-transparent px-0.5 text-[14px] font-semibold text-lamp underline underline-offset-3';
-export const ROW = 'flex min-h-[52px] items-center gap-2.5 border-b border-border';
+export const ROW = 'flex min-h-[52px] items-center gap-3 border-b border-border';
 export const ROW_BTN = cn(
   ROW,
   'w-full cursor-pointer border-x-0 border-t-0 bg-transparent p-0 text-left text-foreground',

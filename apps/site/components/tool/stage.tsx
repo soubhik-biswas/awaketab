@@ -1,31 +1,44 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import dynamic from 'next/dynamic';
-import { LifeBuoy, LoaderCircle, Maximize, Pause, Play, Plus, RotateCcw, X, type LucideIcon } from 'lucide-react';
+import { LifeBuoy, LoaderCircle, Pause, Play, Plus, RotateCcw, X, type LucideIcon } from 'lucide-react';
 import { Banner } from '@/components/product/banner';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { faceRemain } from '@/lib/tool/model';
+import type { TBanner } from '@/lib/tool/ui';
 import { useTool } from '@/components/tool/context';
 import { ToolPill } from '@/components/tool/header';
-import { SecLabel } from '@/components/tool/kit';
-import { LengthChips } from '@/components/tool/length-chips';
 
 const Face = dynamic(() => import('@/components/face').then((mod) => mod.Face), { ssr: false });
 
+// The banner the conditions call for: offline, another tab holding the lamp, or a new version.
+export function useBannerKind(): Exclude<TBanner, 'none'> | null {
+  const { snap, ui, online } = useTool();
+  const qa = ui.qa.banner;
+  if (qa !== undefined) return qa === 'none' ? null : qa;
+  if (!online) return 'offline';
+  if (snap.peerHolds) return 'conflict';
+  if (ui.update) return 'update';
+  return null;
+}
+
 function Banners() {
-  const { snap, ui, online, m, a } = useTool();
-  const banner = ui.qa.banner;
+  const { ui, m, a } = useTool();
+  const kind = useBannerKind();
   return (
     <>
-      {banner === 'offline' || (banner === undefined && !online) ? <Banner kind="offline" /> : null}
-      {banner === 'conflict' || (banner === undefined && snap.peerHolds) ? (
-        <Banner kind="conflict" onAction={a.takeOver} />
+      {kind === 'offline' ? <Banner kind="offline" className="shrink-0" /> : null}
+      {kind === 'conflict' ? <Banner kind="conflict" className="shrink-0" onAction={a.takeOver} /> : null}
+      {kind === 'update' ? (
+        <Banner kind="update" className="shrink-0" onAction={() => window.location.reload()} />
       ) : null}
-      {m.state === 'needsyou' ? <Banner kind="needsyou" actionLabel={m.s.resume} onAction={a.resume} /> : null}
+      {m.state === 'needsyou' ? (
+        <Banner kind="needsyou" className="shrink-0" actionLabel={m.s.resume} onAction={a.resume} />
+      ) : null}
       {m.state === 'blocked' && ui.view !== 'fix' ? (
-        <Banner kind="blocked" role="alert" onAction={() => a.go('fix')} />
+        <Banner kind="blocked" role="alert" className="shrink-0" onAction={() => a.go('fix')} />
       ) : null}
     </>
   );
@@ -38,14 +51,14 @@ type TCtrl = {
   onClick: () => void;
   className: string;
   variant: 'default' | 'secondary' | 'outline';
-  aria?: string;
   spin?: boolean;
   disabled?: boolean;
   primary?: boolean;
   keys?: string;
 };
 
-function useControls(focus: boolean): TCtrl[] {
+// Fullscreen keeps the session's buttons under the face, in the drawn sizes.
+function useFocusControls(): TCtrl[] {
   const { device, m, a } = useTool();
   const phone = device === 'phone';
   const s = m.s;
@@ -59,11 +72,12 @@ function useControls(focus: boolean): TCtrl[] {
     'h-13 gap-2 rounded-[16px] px-4 text-[15px] font-semibold [&_svg:not([class*=size-])]:size-[18px]',
     phone && 'min-w-0 flex-1 gap-1.5 px-2',
   );
-  const tall = phone ? 'h-14 rounded-[18px]' : 'h-16 rounded-[20px]';
-  const quiet = 'h-11 gap-2 rounded-[10px] px-4 text-[15px] font-semibold [&_svg:not([class*=size-])]:size-[18px]';
-  let list: TCtrl[] = [];
+  const tall = cn(
+    'gap-2 px-4 text-[15px] font-semibold [&_svg:not([class*=size-])]:size-[18px]',
+    phone ? 'h-14 rounded-[18px]' : 'h-16 rounded-[20px]',
+  );
   if (st === 'idle')
-    list = [
+    return [
       {
         key: 'start',
         label: s.keep,
@@ -75,8 +89,8 @@ function useControls(focus: boolean): TCtrl[] {
         keys: 'Space',
       },
     ];
-  else if (st === 'starting')
-    list = [
+  if (st === 'starting')
+    return [
       {
         key: 'starting',
         label: s.starting,
@@ -92,8 +106,8 @@ function useControls(focus: boolean): TCtrl[] {
         primary: true,
       },
     ];
-  else if (st === 'running' || st === 'fallback')
-    list = [
+  if (st === 'running' || st === 'fallback')
+    return [
       {
         key: 'pause',
         label: s.pause,
@@ -115,8 +129,8 @@ function useControls(focus: boolean): TCtrl[] {
       },
       { key: 'stop', label: s.stop, icon: X, onClick: a.stop, className: mid, variant: 'outline' },
     ];
-  else if (st === 'paused' || st === 'needsyou')
-    list = [
+  if (st === 'paused' || st === 'needsyou')
+    return [
       {
         key: 'resume',
         label: s.resume,
@@ -127,10 +141,10 @@ function useControls(focus: boolean): TCtrl[] {
         primary: true,
         keys: 'Space',
       },
-      { key: 'stop', label: s.stop, icon: X, onClick: a.stop, className: cn(quiet, tall), variant: 'outline' },
+      { key: 'stop', label: s.stop, icon: X, onClick: a.stop, className: tall, variant: 'outline' },
     ];
-  else if (st === 'blocked')
-    list = [
+  if (st === 'blocked')
+    return [
       {
         key: 'fix',
         label: s.fix,
@@ -145,15 +159,12 @@ function useControls(focus: boolean): TCtrl[] {
         label: s.fallback,
         icon: Play,
         onClick: a.useFallback,
-        className: cn(
-          'h-13 gap-2 rounded-[16px] px-4 text-[15px] font-semibold [&_svg:not([class*=size-])]:size-[18px]',
-          phone && 'w-full',
-        ),
+        className: cn(mid, phone && 'w-full flex-none'),
         variant: 'outline',
       },
     ];
-  else if (st === 'unsupported')
-    list = [
+  if (st === 'unsupported')
+    return [
       {
         key: 'fallback',
         label: s.fallback,
@@ -164,46 +175,32 @@ function useControls(focus: boolean): TCtrl[] {
         primary: true,
       },
     ];
-  else if (st === 'ended')
-    list = [
-      {
-        key: 'again',
-        label: s.again,
-        icon: RotateCcw,
-        onClick: () => a.setLength(m.total),
-        className: cn(xl, glow, phone && 'flex-1'),
-        variant: 'default',
-        primary: true,
-      },
-      {
-        key: 'ext',
-        label: s.ext15,
-        icon: Plus,
-        onClick: () => a.extend(900),
-        className: cn(quiet, tall, 'border-border'),
-        variant: 'secondary',
-        keys: '+',
-      },
-    ];
-  if (focus) return list.slice(0, 3);
-  if (!phone && (st === 'idle' || st === 'running' || st === 'fallback'))
-    list.push({
-      key: 'full',
-      label: '',
-      aria: 'Fullscreen',
-      icon: Maximize,
-      onClick: () => a.go('focus'),
-      className: 'size-13 rounded-[16px] p-0 [&_svg:not([class*=size-])]:size-5',
-      variant: 'outline',
-      keys: 'F',
-    });
-  return list;
+  return [
+    {
+      key: 'again',
+      label: s.again,
+      icon: RotateCcw,
+      onClick: () => a.setLength(m.total),
+      className: cn(xl, glow, phone && 'flex-1'),
+      variant: 'default',
+      primary: true,
+    },
+    {
+      key: 'ext',
+      label: s.ext15,
+      icon: Plus,
+      onClick: () => a.extend(900),
+      className: cn(tall, 'border-border'),
+      variant: 'secondary',
+      keys: '+',
+    },
+  ];
 }
 
-export function Controls({ focus = false }: { focus?: boolean }) {
+function FocusControls() {
   const { device, m } = useTool();
   const phone = device === 'phone';
-  const list = useControls(focus);
+  const list = useFocusControls();
   return (
     <div
       className={cn(
@@ -220,7 +217,6 @@ export function Controls({ focus = false }: { focus?: boolean }) {
             type="button"
             variant={c.variant}
             onClick={c.disabled ? undefined : c.onClick}
-            aria-label={c.aria}
             aria-disabled={c.disabled || undefined}
             aria-keyshortcuts={c.keys}
             data-primary={c.primary || undefined}
@@ -230,7 +226,7 @@ export function Controls({ focus = false }: { focus?: boolean }) {
               <LoaderCircle className="size-[18px] animate-spinner" strokeWidth={2.25} aria-hidden="true" />
             ) : null}
             {Icon ? <Icon strokeWidth={2} aria-hidden="true" /> : null}
-            {c.label ? <span>{c.label}</span> : null}
+            <span>{c.label}</span>
           </Button>
         );
       })}
@@ -253,7 +249,11 @@ export function StageFace({ size }: { size: number }) {
     <div
       role="timer"
       aria-label={label}
-      className={cn('shrink-0 overflow-visible transition-opacity duration-arrive', dim && 'opacity-60')}
+      data-stage-face=""
+      className={cn(
+        'pointer-events-none shrink-0 overflow-visible transition-opacity duration-arrive',
+        dim && 'opacity-60',
+      )}
       style={{ width: size, height: Math.round(size * 0.875) }}
     >
       <div aria-hidden="true">
@@ -277,57 +277,128 @@ export function StageFace({ size }: { size: number }) {
   );
 }
 
-export const Stage = forwardRef<
-  HTMLElement,
-  { faceSize: number; left: number; right: number; top: number; bottom: number }
->(function Stage({ faceSize, left, right, top, bottom }, ref) {
-  const { device, ui, m, settings, a } = useTool();
+const MIN_FACE = 140;
+
+// Between the drawn viewports the face shrinks to whatever the stage leaves, never past its drawn size.
+function useFittedFace(stage: RefObject<HTMLElement | null>, want: number): number {
+  const [size, setSize] = useState(want);
+  const measure = useRef<() => void>(() => undefined);
+  measure.current = () => {
+    const el = stage.current;
+    if (!el) return;
+    const cs = getComputedStyle(el);
+    const gap = parseFloat(cs.rowGap) || 0;
+    const innerH = el.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    const innerW = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    let others = 0;
+    let count = 0;
+    for (const child of Array.from(el.children)) {
+      if (!(child instanceof HTMLElement) || child.offsetParent === null) continue;
+      count += 1;
+      if (child.hasAttribute('data-stage-face')) continue;
+      others += child.offsetHeight;
+    }
+    const room = innerH - others - gap * Math.max(0, count - 1);
+    const next = Math.max(MIN_FACE, Math.min(want, Math.floor(room / 0.875), Math.floor(innerW)));
+    setSize((prev) => (prev === next ? prev : next));
+  };
+  useLayoutEffect(() => measure.current());
+  useLayoutEffect(() => {
+    const el = stage.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => measure.current());
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [stage]);
+  return size;
+}
+
+export const Stage = forwardRef<HTMLElement, { faceSize: number; top: number; bottom: number }>(function Stage(
+  { faceSize, top, bottom },
+  ref,
+) {
+  const { device, ui, m, settings } = useTool();
   const phone = device === 'phone';
   const focus = ui.view === 'focus';
-  const sheets = device === 'phone' || device === 'tabletP';
-  const inline = sheets && !focus && ui.view === 'timer' && (m.state === 'idle' || m.state === 'ended');
+  const banner = useBannerKind();
+  const local = useRef<HTMLElement | null>(null);
+  const size = useFittedFace(local, faceSize);
+  const s = m.s;
+  const hero = !focus && m.state === 'idle' && (ui.view === 'timer' || ui.view === 'palette') && banner === null;
   return (
     <main
-      ref={ref}
+      ref={(el) => {
+        local.current = el;
+        if (typeof ref === 'function') ref(el);
+        else if (ref) ref.current = el;
+      }}
       tabIndex={0}
       aria-label="Timer"
       aria-keyshortcuts="Space + Shift++ U F Shift+D ? 1 2 3 4 5 6 7 8 9"
       className={cn(
-        'absolute z-[1] box-border flex flex-col items-center overflow-x-hidden overflow-y-auto outline-none focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-ring',
-        phone ? 'justify-start gap-3 px-4 py-3.5' : 'justify-center gap-4 px-8 py-6',
+        'absolute inset-x-0 z-[1] box-border flex flex-col items-center justify-center-safe overflow-x-hidden overflow-y-auto outline-none [scrollbar-width:none] focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-ring',
+        phone ? 'gap-2.5 px-4 py-3.5' : 'gap-3.5 px-8 py-6',
       )}
-      style={{ left, right, top, bottom }}
+      style={{ top, bottom }}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) e.currentTarget.focus({ preventScroll: true });
       }}
     >
       {!focus ? <Banners /> : null}
-      {phone || focus ? <ToolPill /> : null}
+      {phone || focus ? <ToolPill className="shrink-0" /> : null}
+      {hero ? (
+        <div
+          className={cn(
+            'flex shrink-0 flex-col items-center text-center',
+            phone ? 'max-w-[350px] gap-2' : 'max-w-[820px] gap-3.5',
+          )}
+        >
+          <h1
+            className={cn(
+              'm-0 font-display leading-[.98] font-extrabold tracking-[-0.035em] text-balance text-foreground [font-stretch:112%]',
+              phone
+                ? 'text-[34px]'
+                : device === 'tabletL'
+                  ? 'text-[56px]'
+                  : device === 'tabletP'
+                    ? 'text-[60px]'
+                    : 'text-[68px]',
+            )}
+          >
+            {s.hero}
+          </h1>
+          <span
+            className={cn(
+              'leading-[1.45] text-balance text-muted-foreground-strong',
+              phone ? 'text-[16px]' : 'text-[19px]',
+            )}
+          >
+            {phone ? s.heroSubPhone : s.heroSub}
+          </span>
+        </div>
+      ) : null}
       {!focus ? (
         <span
-          className={cn('shrink-0 text-center text-muted-foreground-strong', phone ? 'text-[13px]' : 'text-[14px]')}
+          className={cn(
+            'shrink-0 text-center font-mono tracking-[.02em] text-muted-foreground-strong',
+            phone ? 'text-[13px]' : 'text-[14px]',
+          )}
         >
           {m.dateText}
         </span>
       ) : null}
-      <StageFace size={faceSize} />
+      <StageFace size={size} />
       {!focus && m.state !== 'idle' && m.state !== 'starting' && settings.label ? (
-        <span className="max-w-full shrink-0 truncate text-center text-[15px] font-semibold text-muted-foreground-strong">
+        <span
+          className={cn(
+            'max-w-full shrink-0 truncate text-center font-semibold tracking-[-0.01em] text-muted-foreground-strong',
+            phone ? 'text-[16px]' : 'text-[18px]',
+          )}
+        >
           {settings.label}
         </span>
       ) : null}
-      <Controls focus={focus} />
-      {m.note && !focus ? (
-        <span className="max-w-[520px] shrink-0 text-center text-[13px] leading-[1.45] text-muted-foreground-strong">
-          {m.note}
-        </span>
-      ) : null}
-      {inline ? (
-        <div className="flex w-full max-w-[560px] flex-col gap-2">
-          <SecLabel>{m.s.length}</SecLabel>
-          <LengthChips columns={device === 'tabletP' ? 6 : 3} onUntil={() => a.go('extend')} />
-        </div>
-      ) : null}
+      {focus ? <FocusControls /> : null}
     </main>
   );
 });
