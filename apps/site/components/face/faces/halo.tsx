@@ -14,7 +14,9 @@ export default function Halo({ m }: IDrawProps) {
   const deg = 360 * m.ringFrac;
   const d = deg.toFixed(1);
   const grad = `conic-gradient(from 0deg, ${
-    m.multi ? `${m.lamp} 0deg, ${CYAN} ${(deg * 0.6).toFixed(1)}deg, ${VIOLET} ${d}deg` : `${m.accent} 0deg, ${m.accent} ${d}deg`
+    m.multi
+      ? `${m.lamp} 0deg, ${CYAN} ${(deg * 0.6).toFixed(1)}deg, ${VIOLET} ${d}deg`
+      : `${m.accent} 0deg, ${m.accent} ${d}deg`
   }, transparent ${d}deg 360deg)`;
   const [x, y] = P(117, deg, 130, 130);
   return (

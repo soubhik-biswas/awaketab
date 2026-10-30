@@ -219,10 +219,10 @@ export function FacesBoard() {
             </h1>
           </div>
           <p className="m-0 max-w-[640px] text-base leading-[1.55] text-muted-foreground-strong">
-            Forty-nine faces, all free, built like premium watch and OS widgets: dimensional dials, precise ticks,
-            live motion. Every tile shows the same session — 42:18 left, ending at 11:30 AM — and moves exactly as it
-            will in the product: sweeping seconds, blinking colons, flipping cards, rolling drums, waves and needles.
-            Status is always words plus an icon, never colour alone.
+            Forty-nine faces, all free, built like premium watch and OS widgets: dimensional dials, precise ticks, live
+            motion. Every tile shows the same session — 42:18 left, ending at 11:30 AM — and moves exactly as it will in
+            the product: sweeping seconds, blinking colons, flipping cards, rolling drums, waves and needles. Status is
+            always words plus an icon, never colour alone.
           </p>
         </header>
 
@@ -256,14 +256,18 @@ export function FacesBoard() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">States × themes · Ring</h2>
+          <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">
+            States × themes · Ring
+          </h2>
           {BANDS.map((b) => (
             <Band key={b.id} band={b} states={BAND_STATES} session={session} />
           ))}
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">Every state · Ring (dev)</h2>
+          <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">
+            Every state · Ring (dev)
+          </h2>
           {BANDS.map((b) => (
             <Band key={b.id} band={b} states={FACE_STATES.map((s) => ({ id: s, label: s }))} session={session} />
           ))}
@@ -315,7 +319,9 @@ export function FacesBoard() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">Sizes · {faceName(picked)}</h2>
+          <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">
+            Sizes · {faceName(picked)}
+          </h2>
           <p className="m-0 text-sm text-muted-foreground-strong">
             Below 170 px the face is compact (digits and graphics only); from 240 px every label stays at 12 px or more
             on screen.

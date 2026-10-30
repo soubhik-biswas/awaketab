@@ -45,7 +45,13 @@ export default function Glass({ m }: IDrawProps) {
       >
         <span
           className={L}
-          style={{ fontFamily: MONO, fontSize: lmin(12), letterSpacing: '.2em', textTransform: 'uppercase', opacity: 0.75 }}
+          style={{
+            fontFamily: MONO,
+            fontSize: lmin(12),
+            letterSpacing: '.2em',
+            textTransform: 'uppercase',
+            opacity: 0.75,
+          }}
         >
           {m.topWord}
         </span>

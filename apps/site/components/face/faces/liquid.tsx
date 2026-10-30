@@ -107,7 +107,13 @@ export default function Liquid({ m }: IDrawProps) {
       >
         <span
           className={L}
-          style={{ fontFamily: MONO, fontSize: lmin(12), letterSpacing: '.2em', textTransform: 'uppercase', opacity: 0.85 }}
+          style={{
+            fontFamily: MONO,
+            fontSize: lmin(12),
+            letterSpacing: '.2em',
+            textTransform: 'uppercase',
+            opacity: 0.85,
+          }}
         >
           {m.topWord}
         </span>

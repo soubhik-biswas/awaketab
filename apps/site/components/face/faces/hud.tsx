@@ -87,7 +87,15 @@ export default function Hud({ m }: IDrawProps) {
       </div>
       <div
         className={m.theme}
-        style={{ position: 'absolute', left: 0, width: 332, bottom: 22, display: 'flex', justifyContent: 'center', gap: 8 }}
+        style={{
+          position: 'absolute',
+          left: 0,
+          width: 332,
+          bottom: 22,
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 8,
+        }}
       >
         <Lamp on={m.awake} color={m.lampValue}>
           SCREEN
