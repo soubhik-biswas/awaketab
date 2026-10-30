@@ -29,7 +29,7 @@ type TRow = { n: string; icon: LucideIcon; pro?: boolean; keys?: string; lang?: 
 );
 
 const ROW =
-  'box-border flex min-h-12 w-full cursor-pointer items-center gap-3 rounded-[12px] border-0 bg-transparent p-0 text-left text-foreground no-underline outline-none transition-colors duration-glide ease-glide hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+  'box-border flex min-h-12 w-full cursor-pointer items-center gap-3 rounded-[12px] border-0 border-b border-solid border-b-transparent bg-transparent p-0 text-left text-foreground no-underline outline-none transition-colors duration-glide ease-glide hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
 
 function RowInner({ r }: { r: TRow }) {
   const Icon = r.icon;

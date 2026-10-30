@@ -15,6 +15,7 @@ import {
   CommandShortcut,
 } from '@/components/ui/command';
 import { Kbd } from '@/components/ui/kbd';
+import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export interface ICommandAction {
@@ -65,6 +66,8 @@ export interface ICommandPaletteProps {
   emptyHint?: string;
   title?: string;
   labels?: ICommandPaletteLabels;
+  // "tool" takes the tool board's palette sizes; the default follows the palette board.
+  fit?: 'board' | 'tool';
 }
 
 function matches(action: ICommandAction, q: string): boolean {
@@ -111,7 +114,9 @@ export function CommandPalette({
   emptyHint,
   title = 'Command palette',
   labels = LABELS,
+  fit = 'board',
 }: ICommandPaletteProps) {
+  const tool = fit === 'tool';
   const [ownQuery, setOwnQuery] = React.useState('');
   const query = queryProp ?? ownQuery;
   const setQuery = (next: string) => {
@@ -146,7 +151,12 @@ export function CommandPalette({
       title={title}
       commandProps={{ shouldFilter: false, loop: true, value: selected, onValueChange: setSelected, label: title }}
     >
-      <CommandInput value={query} onValueChange={setQuery} placeholder={placeholder}>
+      <CommandInput
+        value={query}
+        onValueChange={setQuery}
+        placeholder={placeholder}
+        {...(tool ? { wrapperClassName: 'h-[59px]' } : {})}
+      >
         {loading ? (
           <LoaderCircle
             className="size-[18px] shrink-0 animate-spinner text-lamp"
@@ -158,18 +168,36 @@ export function CommandPalette({
           type="button"
           onClick={() => onOpenChange(false)}
           aria-label={labels.closePalette}
-          className="relative shrink-0 cursor-pointer rounded-xs border-0 bg-transparent p-0 outline-none after:absolute after:-inset-[11px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className={cn(
+            'relative shrink-0 cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+            tool
+              ? 'h-11 min-w-11 rounded-[8px] border border-border bg-background px-2.5 font-mono text-[12px] text-muted-foreground-strong'
+              : 'rounded-xs border-0 bg-transparent p-0 after:absolute after:-inset-[11px]',
+          )}
         >
-          <Kbd>esc</Kbd>
+          {tool ? 'esc' : <Kbd>esc</Kbd>}
         </button>
       </CommandInput>
       <CommandList className="min-h-[300px] max-sm:min-h-0">
         {shown.map((group) => (
-          <CommandGroup key={group.heading} heading={group.heading}>
+          <CommandGroup
+            key={group.heading}
+            heading={group.heading}
+            {...(tool ? { className: '[&_[cmdk-group-heading]]:mb-0.5' } : {})}
+          >
             {group.items.map((action) => {
               const Icon = action.icon;
               return (
-                <CommandItem key={action.id} value={action.id} onSelect={() => run(action)}>
+                <CommandItem
+                  key={action.id}
+                  value={action.id}
+                  onSelect={() => run(action)}
+                  {...(tool
+                    ? {
+                        className: 'min-h-[46px] rounded-[10px] data-[selected=true]:shadow-[0_0_0_1px_var(--border)]',
+                      }
+                    : {})}
+                >
                   <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-[9px] border bg-secondary text-foreground">
                     <Icon className="size-4" aria-hidden="true" />
                   </span>
@@ -230,7 +258,12 @@ export function CommandPalette({
           </CommandEmpty>
         ) : null}
       </CommandList>
-      <div className="flex h-11 shrink-0 items-center gap-3.5 border-t px-4 text-[12px] text-muted-foreground-strong">
+      <div
+        className={cn(
+          'flex shrink-0 items-center gap-3.5 border-t px-4 text-[12px] text-muted-foreground-strong',
+          tool ? 'h-[45px]' : 'h-11',
+        )}
+      >
         <span className="inline-flex items-center gap-1.5">
           <FooterKey>↑</FooterKey>
           <FooterKey>↓</FooterKey>

@@ -34,12 +34,12 @@ export default function SoundView() {
       <span className="text-[14px] leading-[1.5] text-muted-foreground-strong">
         Mix a soundscape that plays only while the screen is awake. It fades out the moment the session ends.
       </span>
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-4">
         {MIX_KEYS.map((k) => {
           const v = data.mix[k];
           const { n, icon: Icon } = MIX[k];
           return (
-            <div key={k} className="flex min-h-14 items-center gap-3 border-b border-border">
+            <div key={k} className="flex min-h-[57px] items-center gap-3 border-b border-border">
               <span
                 className={cn(
                   'inline-flex size-10 shrink-0 items-center justify-center rounded-[12px] border',

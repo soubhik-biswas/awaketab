@@ -29,7 +29,7 @@ export default function ShareView() {
         {ui.copied ? 'Copied' : 'Copy link'}
       </Button>
       <Group label="Included">
-        <ul className="m-0 flex list-none flex-col p-0">
+        <ul className="m-0 flex list-none flex-col gap-2 p-0">
           {rows.map(([n, v, on]) => (
             <li key={n} className="flex min-h-10 items-center gap-2.5 text-[14px]">
               <span
