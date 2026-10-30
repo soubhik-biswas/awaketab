@@ -48,10 +48,10 @@ export function readingMinutes(body: string, data: Readonly<Record<string, unkno
   return words === 0 ? 0 : Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
 
-export const escapeHtml = (text: string): string =>
+const escapeHtml = (text: string): string =>
   text.replace(/&/gu, '&amp;').replace(/</gu, '&lt;').replace(/>/gu, '&gt;').replace(/"/gu, '&quot;');
 
-export const stripTags = (html: string): string =>
+const stripTags = (html: string): string =>
   html
     .replace(/<[^>]+>/gu, '')
     .replace(/&#x([0-9a-f]+);/giu, (_, hex: string) => String.fromCodePoint(Number.parseInt(hex, 16)))
@@ -63,7 +63,7 @@ export const stripTags = (html: string): string =>
     .trim();
 
 // Inline code may break after a dot (`navigator.wakeLock.request()`), never mid-identifier.
-export const breakCode = (html: string): string =>
+const breakCode = (html: string): string =>
   html.replace(/<code>([^<]*)<\/code>/gu, (_, code: string) => `<code>${code.replace(/\.(?=\w)/gu, '.<wbr>')}</code>`);
 
 export function inline(text: string): string {
@@ -85,14 +85,14 @@ export function inline(text: string): string {
   return out.join('');
 }
 
-export const plain = (text: string): string =>
+const plain = (text: string): string =>
   text
     .replace(/`([^`]+)`/gu, '$1')
     .replace(/\*\*([^*]+)\*\*/gu, '$1')
     .replace(/\[([^\]]+)\]\([^)]+\)/gu, '$1');
 
 // The same ids GitHub and Astro give headings, so existing #anchors and frontmatter `toc` keys keep working.
-export function slugify(text: string): string {
+function slugify(text: string): string {
   return text
     .toLowerCase()
     .trim()
@@ -163,9 +163,9 @@ const BLOCKS = [
   'note',
   'lifecycle',
 ] as const;
-export type TBlockName = (typeof BLOCKS)[number];
+type TBlockName = (typeof BLOCKS)[number];
 
-export type TSectionPart = { kind: 'html'; html: string } | { kind: 'block'; name: TBlockName; arg: string };
+type TSectionPart = { kind: 'html'; html: string } | { kind: 'block'; name: TBlockName; arg: string };
 export interface ISection {
   id?: string;
   title?: string;

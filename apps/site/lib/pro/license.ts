@@ -1,7 +1,7 @@
 import type { TPlanId } from '@awaketab/core';
 
 export const LICENSE_KEY = 'at.v1.license';
-export const LICENSE_KEY_RE = /^[A-Z0-9-]{20,80}$/u;
+const LICENSE_KEY_RE = /^[A-Z0-9-]{20,80}$/u;
 const DAY_S = 86_400;
 
 export interface IActivation {

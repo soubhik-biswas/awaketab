@@ -1,7 +1,7 @@
 import { readAccount, requestSignin, validEmail } from './account';
 import { applyLaunch, fill, longDate, trackPro } from './pro-common';
 
-export type TCheckoutStep = 'plans' | 'account' | 'check' | 'pay';
+type TCheckoutStep = 'plans' | 'account' | 'check' | 'pay';
 type TPlan = 'pro_yearly' | 'pro_lifetime';
 
 const STEPS: readonly TCheckoutStep[] = ['plans', 'account', 'check', 'pay'];

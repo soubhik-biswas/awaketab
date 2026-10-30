@@ -5,7 +5,7 @@ import { cn } from 'cn';
 import type { LucideIcon } from 'lucide-react';
 import { RadioGroup as RadioGroupPrimitive } from 'radix-ui';
 
-export interface ISegmentOption {
+interface ISegmentOption {
   value: string;
   label: React.ReactNode;
   icon?: LucideIcon;

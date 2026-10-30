@@ -1,8 +1,8 @@
 import type { IKv } from './env';
 import type { ILicenseRecord, TLicenseStatus, TPlanId } from './license';
 
-export const LINK_TTL_S = 3 * 365 * 86_400;
-export const ORDER_TTL_S = 2 * 365 * 86_400;
+const LINK_TTL_S = 3 * 365 * 86_400;
+const ORDER_TTL_S = 2 * 365 * 86_400;
 
 export const SUBSCRIPTION_PLANS: ReadonlySet<TPlanId> = new Set<TPlanId>(['pro_yearly', 'biz_embed_site_yearly']);
 
@@ -76,7 +76,7 @@ export async function readLink(kv: IKv, licenseKeyId: string): Promise<ILicenseL
   }
 }
 
-export async function readOrder(kv: IKv, orderId: string): Promise<IOrderRecord | null> {
+async function readOrder(kv: IKv, orderId: string): Promise<IOrderRecord | null> {
   const raw = await kv.get(`ord:${orderId}`);
   if (!raw) return null;
   try {

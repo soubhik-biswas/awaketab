@@ -31,14 +31,14 @@
         "functions/**/*.ts",
         "test/**/*.ts"
       ],
-      "ignore": ["src/components/icons/BrandIcon.astro"],
+      "ignore": ["src/components/brand/Wordmark.astro", "src/tool/packs/pro/**"],
       "ignoreDependencies": [
-        "@iconify-json/logos",
-        "@phosphor-icons/core",
         "@fontsource/inter",
         "@fontsource/noto-sans-devanagari",
         "@fontsource/noto-sans-jp",
-        "@fontsource/noto-sans-sc"
+        "@fontsource/noto-sans-sc",
+        "@fontsource/dotgothic16",
+        "@fontsource/ibm-plex-serif"
       ],
       "ignoreIssues": {
         "src/components/ui/*.tsx": ["exports"],
@@ -57,6 +57,36 @@
     "packages/core": {
       "entry": ["test/**/*.test.ts"],
       "project": ["src/**/*.ts", "test/**/*.ts"]
+    },
+    "apps/site": {
+      "entry": [
+        "content-collections.ts",
+        "open-next.config.ts",
+        "worker/sw.ts",
+        "scripts/*.{mjs,mts}",
+        "emails/**/*.tsx",
+        "**/*.test.{ts,tsx}"
+      ],
+      "project": ["**/*.{ts,tsx,mjs,mts}"],
+      "ignore": ["components/ui/**", "hooks/use-mobile.ts"],
+      "ignoreDependencies": [
+        "@base-ui/react",
+        "@hookform/resolvers",
+        "@shadcn/react",
+        "date-fns",
+        "embla-carousel-react",
+        "input-otp",
+        "react-day-picker",
+        "react-hook-form",
+        "react-resizable-panels",
+        "recharts",
+        "@react-email/ui",
+        "tailwindcss",
+        "tw-animate-css"
+      ],
+      "ignoreIssues": {
+        "components/ui/*.tsx": ["exports", "types"]
+      }
     }
   }
 }

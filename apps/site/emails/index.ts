@@ -17,7 +17,7 @@ async function build(to: string, subject: string, element: ReactElement): Promis
   return { to, subject, html, text };
 }
 
-export const SIGNIN_MINUTES = 15;
+const SIGNIN_MINUTES = 15;
 
 export function signinEmail(to: string, url: string, minutes = SIGNIN_MINUTES): Promise<IEmail> {
   return build(to, SIGNIN_SUBJECT, createElement(SignInEmail, { url, minutes }));

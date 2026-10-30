@@ -17,7 +17,7 @@ export interface ITypedConfirmProps extends Omit<React.ComponentProps<'div'>, 't
   size?: 'compact' | 'panel';
 }
 
-export function matchedLetters(text: string, word: string): number {
+function matchedLetters(text: string, word: string): number {
   let matched = 0;
   for (let i = 0; i < Math.min(text.length, word.length); i++) {
     if (text[i] !== word[i]) break;

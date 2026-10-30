@@ -62,7 +62,7 @@ export class PolarError extends Error {
   }
 }
 
-export const POLAR_API_BASES = {
+const POLAR_API_BASES = {
   sandbox: 'https://sandbox-api.polar.sh',
   production: 'https://api.polar.sh',
 } as const;
@@ -73,7 +73,7 @@ export function polarServer(env: Pick<IEnv, 'PUBLIC_POLAR_SERVER'>): TPolarServe
   return env.PUBLIC_POLAR_SERVER?.trim() === 'production' ? 'production' : 'sandbox';
 }
 
-export function apiBase(env: Pick<IEnv, 'PUBLIC_POLAR_SERVER'>): string {
+function apiBase(env: Pick<IEnv, 'PUBLIC_POLAR_SERVER'>): string {
   return POLAR_API_BASES[polarServer(env)];
 }
 

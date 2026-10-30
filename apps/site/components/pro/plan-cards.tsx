@@ -9,7 +9,7 @@ import { launchDay, launchOn, PLAN_PRICES, usd } from '@/lib/pro/plans';
 import { cn } from '@/lib/utils';
 
 // The launch price ends on a fixed day; a page built before it corrects itself in the browser.
-export function useLaunch(initial: boolean): boolean {
+function useLaunch(initial: boolean): boolean {
   const [on, setOn] = useState(initial);
   useEffect(() => {
     setOn(launchOn());

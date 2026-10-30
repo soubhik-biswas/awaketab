@@ -7,7 +7,7 @@ import type { TDevice } from '@/lib/tool/ui';
 import { elapsedSec, remainSec, type IWakeSnapshot, type TWakeState } from '@/lib/wake';
 
 export type TFaceTheme = 'light' | 'dark' | 'oled';
-export type TFaceStateName = 'idle' | 'starting' | 'running' | 'fallback' | 'paused' | 'blocked' | 'unsupported' | 'up';
+type TFaceStateName = 'idle' | 'starting' | 'running' | 'fallback' | 'paused' | 'blocked' | 'unsupported' | 'up';
 
 // Face, header and control-bar sizes per device; the stage sits between the header and the bar.
 export const DEVICE_SIZES: Record<TDevice, { face: number; top: number; bar: number }> = {

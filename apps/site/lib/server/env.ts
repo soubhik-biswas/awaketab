@@ -1,7 +1,7 @@
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import type { D1Database } from 'better-auth';
 
-export interface IKvPutOptions {
+interface IKvPutOptions {
   expirationTtl?: number;
 }
 
@@ -12,13 +12,13 @@ export interface IKv {
   delete(key: string): Promise<void>;
 }
 
-export interface IAePointInput {
+interface IAePointInput {
   indexes?: string[];
   blobs?: string[];
   doubles?: number[];
 }
 
-export interface IAnalytics {
+interface IAnalytics {
   writeDataPoint(point: IAePointInput): void;
 }
 
@@ -108,7 +108,7 @@ export async function serverContext(): Promise<IServerContext> {
   };
 }
 
-export const EVENT_NAMES = [
+const EVENT_NAMES = [
   'page_view',
   'session_start',
   'session_end',

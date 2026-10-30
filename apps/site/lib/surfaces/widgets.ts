@@ -2,8 +2,8 @@ import type { TPresetId } from '@awaketab/core';
 import { digits, type ISurfaceView } from '@/lib/surfaces/session';
 import { WIDGET_ACTION, WIDGET_SYNC } from '@/lib/surfaces/widget-protocol';
 
-export type TWidgetPresetKey = 'presenting' | 'cooking' | 'reading';
-export type TWidgetLengthKey = 'hour' | 'min45' | 'min30';
+type TWidgetPresetKey = 'presenting' | 'cooking' | 'reading';
+type TWidgetLengthKey = 'hour' | 'min45' | 'min30';
 
 export interface IWidgetPreset {
   key: TWidgetPresetKey;

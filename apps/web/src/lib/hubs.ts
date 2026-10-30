@@ -61,7 +61,7 @@ const PRESET_ROUTE: Record<string, string> = {
   until: '/',
 };
 
-export function startHref(preset: string, mode: string): string {
+function startHref(preset: string, mode: string): string {
   const route = PRESET_ROUTE[preset] ?? '/';
   return mode === 'standard' ? route : `${route}?mode=${mode}`;
 }

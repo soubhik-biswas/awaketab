@@ -190,7 +190,7 @@ export function articleSchema(input: IArticleSchemaInput): TSchemaNode {
   return { '@context': 'https://schema.org', '@graph': [article, breadcrumbList(input.breadcrumbs)] };
 }
 
-export function itemListSchema(name: string, items: Array<{ name: string; url: string }>): TSchemaNode {
+function itemListSchema(name: string, items: Array<{ name: string; url: string }>): TSchemaNode {
   return {
     '@type': 'ItemList',
     name,

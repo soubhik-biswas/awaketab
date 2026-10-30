@@ -1,6 +1,6 @@
 import { validEmail } from '@/lib/auth/shared';
 
-export const ACCOUNT_KEY = 'at.v1.account';
+const ACCOUNT_KEY = 'at.v1.account';
 
 export type TSignInMethod = 'email' | 'google' | 'github';
 

@@ -21,7 +21,7 @@ export interface ICrumb {
   label: string;
 }
 
-export function Crumbs({ items, label }: { items: readonly ICrumb[]; label: string }) {
+function Crumbs({ items, label }: { items: readonly ICrumb[]; label: string }) {
   return (
     <Breadcrumb aria-label={label}>
       <BreadcrumbList className="gap-2 text-[14px] text-muted-foreground-strong sm:gap-2">

@@ -25,7 +25,7 @@ const BY_KIND: Record<TContentKind, readonly TArticle[]> = {
 
 export const articles = (kind: TContentKind): readonly TArticle[] => BY_KIND[kind];
 
-export function publicSlug(kind: TContentKind, enSlug: string, locale: TLocale): string {
+function publicSlug(kind: TContentKind, enSlug: string, locale: TLocale): string {
   if (!TRANSLATED_SLUG_LOCALES.includes(locale)) return enSlug;
   return SLUGS[kind]?.[enSlug]?.[locale] ?? enSlug;
 }
@@ -87,7 +87,7 @@ export interface IHubItem {
   meta?: readonly [string, string];
 }
 
-export interface IHubGroup {
+interface IHubGroup {
   id: string;
   title: string;
   line: string;

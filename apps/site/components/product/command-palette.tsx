@@ -72,7 +72,7 @@ function matches(action: ICommandAction, q: string): boolean {
   return (action.keywords ?? []).some((k) => k.toLowerCase().includes(q));
 }
 
-export function filterCommandGroups(groups: ICommandGroup[], query: string): ICommandGroup[] {
+function filterCommandGroups(groups: ICommandGroup[], query: string): ICommandGroup[] {
   const q = query.trim().toLowerCase();
   if (!q) return groups;
   return groups

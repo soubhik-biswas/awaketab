@@ -182,7 +182,7 @@ const CELL_TONE: Record<TStatusKind, string> = {
 };
 
 export const yes = (text: string): TCell => ({ kind: 'yes', text });
-export const fallbackCell = (text: string): TCell => ({ kind: 'fallback', text });
+const fallbackCell = (text: string): TCell => ({ kind: 'fallback', text });
 export const no = (text: string): TCell => ({ kind: 'no', text });
 export const tx = (text: ReactNode, bold = false): TCell => ({ kind: 'text', text, bold });
 export const status = (kind: TStatusKind, text: string): TCell => ({ kind, text });
@@ -473,7 +473,7 @@ export function Releases({ items }: { items: readonly IRelease[] }) {
   );
 }
 
-export interface IPlan {
+interface IPlan {
   title: string;
   price: string;
   desc: string;
@@ -484,7 +484,7 @@ export interface IPlan {
 }
 
 // The plan cards of the Pro page: the featured one has the act-coloured 2 px border and its glow.
-export function Plans({ items }: { items: readonly IPlan[] }) {
+function Plans({ items }: { items: readonly IPlan[] }) {
   return (
     <div className={s.grid[2]}>
       {items.map((p) => (

@@ -52,7 +52,7 @@ export function renewalDate(now = Date.now()): string {
   return longDate(next.getTime());
 }
 
-export const POLAR_PORTAL = {
+const POLAR_PORTAL = {
   sandbox: 'https://sandbox.polar.sh/awaketab/portal',
   production: 'https://polar.sh/awaketab/portal',
 } as const;

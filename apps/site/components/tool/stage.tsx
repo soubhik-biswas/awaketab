@@ -15,7 +15,7 @@ import { ToolPill } from '@/components/tool/header';
 const Face = dynamic(() => import('@/components/face').then((mod) => mod.Face), { ssr: false });
 
 // The banner the conditions call for: offline, another tab holding the lamp, or a new version.
-export function useBannerKind(): Exclude<TBanner, 'none'> | null {
+function useBannerKind(): Exclude<TBanner, 'none'> | null {
   const { snap, ui, online } = useTool();
   const qa = ui.qa.banner;
   if (qa !== undefined) return qa === 'none' ? null : qa;
@@ -270,7 +270,7 @@ function FocusControls() {
   );
 }
 
-export function StageFace({ size }: { size: number }) {
+function StageFace({ size }: { size: number }) {
   const { m, theme, settings, pro } = useTool();
   const minute = Math.ceil(m.remain / 60);
   const hour = new Date(m.now).getHours();

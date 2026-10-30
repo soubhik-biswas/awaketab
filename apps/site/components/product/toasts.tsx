@@ -5,7 +5,7 @@ import { cn } from 'cn';
 import { AlarmClock, CircleAlert, CircleCheck, History, X, type LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
-export type TToastTone = 'success' | 'warning' | 'error' | 'ended' | 'info';
+type TToastTone = 'success' | 'warning' | 'error' | 'ended' | 'info';
 
 export interface IProductToastOptions {
   id?: string | number;
@@ -188,7 +188,7 @@ export function showEndedToast({ endedAt, onStartAgain }: { endedAt: string; onS
   });
 }
 
-export function showCopiedToast() {
+function showCopiedToast() {
   return showToast({
     id: 'copied',
     tone: 'success',

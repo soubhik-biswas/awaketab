@@ -85,7 +85,7 @@ export function DeviceStatusBadge({ status, label }: { status: TDeviceStatus; la
   );
 }
 
-export function DeviceRow({ device, divider = 'top' }: { device: IDevice; divider?: 'top' | 'bottom' }) {
+function DeviceRow({ device, divider = 'top' }: { device: IDevice; divider?: 'top' | 'bottom' }) {
   const Icon = KIND_ICON[device.kind];
   return (
     <div
@@ -153,7 +153,7 @@ export function DevicePresenceSkeleton({
   );
 }
 
-export type TPresenceMarkerKind = 'awake' | 'paused' | 'device';
+type TPresenceMarkerKind = 'awake' | 'paused' | 'device';
 
 export interface IPresenceMarkerProps extends React.ComponentProps<'span'> {
   kind: TPresenceMarkerKind;

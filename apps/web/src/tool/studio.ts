@@ -1,6 +1,6 @@
-export const STUDIO_KEY = 'at.v1.studio';
+const STUDIO_KEY = 'at.v1.studio';
 export const STUDIO_EVENT = 'at:studio';
-export const DEFAULT_GLOW = 70;
+const DEFAULT_GLOW = 70;
 
 export interface IStudio {
   v: 1;
@@ -47,7 +47,7 @@ export function applyStudio(studio: IStudio, pro: boolean, html: HTMLElement = d
   return used;
 }
 
-export function saveStudio(studio: IStudio): void {
+function saveStudio(studio: IStudio): void {
   try {
     localStorage.setItem(STUDIO_KEY, JSON.stringify(studio));
   } catch {

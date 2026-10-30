@@ -2,7 +2,7 @@ import type { ILicenseRecord, ILicenseState, TFeatureGate, TPlanId } from '@awak
 import type { TFaceId } from '@/components/face';
 
 export type TKioskScreen = 'dark' | 'oled';
-export type TKioskDays = 'weekdays' | 'everyday';
+type TKioskDays = 'weekdays' | 'everyday';
 
 export interface IKioskSchedule {
   days: TKioskDays;
@@ -30,12 +30,12 @@ export const KIOSK_FACES = [
   'clocks',
   'moon',
 ] as const satisfies readonly TFaceId[];
-export type TKioskFace = (typeof KIOSK_FACES)[number];
+type TKioskFace = (typeof KIOSK_FACES)[number];
 
 export const KIOSK_SCREENS: readonly TKioskScreen[] = ['dark', 'oled'];
 
 // Burn-in care: the layout steps through these offsets, one a minute.
-export const DRIFT: ReadonlyArray<readonly [number, number]> = [
+const DRIFT: ReadonlyArray<readonly [number, number]> = [
   [0, 0],
   [6, -4],
   [-5, 5],
@@ -64,7 +64,7 @@ export function cleanText(raw: string | null | undefined): string {
   return Array.from(clean).slice(0, TEXT_MAX).join('');
 }
 
-export function parseWall(raw: string | null | undefined): string | null {
+function parseWall(raw: string | null | undefined): string | null {
   const m = WALL_RE.exec(raw ?? '');
   return m ? `${m[1] ?? '00'}:${m[2] ?? '00'}` : null;
 }

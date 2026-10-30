@@ -55,7 +55,7 @@ function RowBody({
   );
 }
 
-export function ListRow({
+function ListRow({
   icon,
   tile,
   title,

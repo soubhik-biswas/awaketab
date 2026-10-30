@@ -7,12 +7,12 @@ import { AlarmClock, Pause, Play, X } from 'lucide-react';
 import { Chip } from '@/components/product/chip';
 import { Button } from '@/components/ui/button';
 
-export interface IExtendOption {
+interface IExtendOption {
   seconds: number;
   label: string;
 }
 
-export const EXTEND_OPTIONS: IExtendOption[] = [
+const EXTEND_OPTIONS: IExtendOption[] = [
   { seconds: 300, label: '+5 min' },
   { seconds: 900, label: '+15 min' },
   { seconds: 1800, label: '+30 min' },

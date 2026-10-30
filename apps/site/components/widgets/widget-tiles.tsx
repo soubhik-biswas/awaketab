@@ -11,7 +11,7 @@ import { WIDGET_PRESETS } from '@/lib/surfaces/widgets';
 
 const TILE = 'rounded-[26px] bg-card/85 shadow-[0_0_0_1px_var(--border)]';
 
-export function useWidgetLines() {
+function useWidgetLines() {
   const t = useTranslations('surfaces.widgets');
   const line = useSurfaceLine();
   return {

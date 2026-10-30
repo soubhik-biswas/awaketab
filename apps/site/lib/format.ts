@@ -70,7 +70,7 @@ export function formatFullDateTime(value: Date | number, locale = 'en', fmt?: TC
   return `${formatFullDate(value, locale)} · ${formatTime(value, locale, fmt)}`;
 }
 
-export function daysBetween(from: Date | number, to: Date | number): number {
+function daysBetween(from: Date | number, to: Date | number): number {
   const a = toDate(from);
   const b = toDate(to);
   const start = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());

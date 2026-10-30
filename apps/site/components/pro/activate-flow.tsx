@@ -43,7 +43,7 @@ const ERR_CODE: Record<string, string> = {
   bad_token: 'bad_token',
 };
 
-export const CHECKOUT_RETRY_MS: readonly number[] = [3000, 6000, 12000];
+const CHECKOUT_RETRY_MS: readonly number[] = [3000, 6000, 12000];
 
 async function whileSyncing<T extends { ok: boolean; error?: string }>(attempt: () => Promise<T>): Promise<T> {
   let result = await attempt();

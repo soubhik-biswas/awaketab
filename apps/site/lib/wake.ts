@@ -11,8 +11,8 @@ import {
 export type TWakeState =
   'idle' | 'starting' | 'running' | 'fallback' | 'paused' | 'needsyou' | 'blocked' | 'unsupported' | 'ended';
 export type TPauseReason = 'user' | 'hidden';
-export type TAnnounceKind = 'start' | 'extend' | 'lowtime' | 'hidden' | 'refused' | 'ended';
-export type TFinishReason = 'completed' | 'user';
+type TAnnounceKind = 'start' | 'extend' | 'lowtime' | 'hidden' | 'refused' | 'ended';
+type TFinishReason = 'completed' | 'user';
 
 export interface IAnnounce {
   id: number;
@@ -39,7 +39,7 @@ export interface IWakeSnapshot {
   announce: IAnnounce | null;
 }
 
-export interface IFinished {
+interface IFinished {
   startedAt: number;
   endedAt: number;
   totalSec: number;

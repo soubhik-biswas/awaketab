@@ -18,7 +18,7 @@ export interface IToolSettings {
 export const SETTINGS_KEY = 'at.v1.settings';
 
 // A first visit starts on one hour, the length every board draws.
-export const TOOL_DEFAULTS: IToolSettings = {
+const TOOL_DEFAULTS: IToolSettings = {
   face: 'ring',
   totalSec: 3600,
   label: '',
@@ -39,7 +39,7 @@ const PRESET_SEC: Record<Exclude<TPresetId, 'custom' | 'until'>, number> = {
   pinf: 0,
 };
 
-export function presetIdFor(sec: number): TPresetId {
+function presetIdFor(sec: number): TPresetId {
   const hit = (Object.entries(PRESET_SEC) as [TPresetId, number][]).find(([, v]) => v === sec);
   return hit ? hit[0] : 'custom';
 }
@@ -103,7 +103,7 @@ function toStored(tool: IToolSettings): TStored {
   };
 }
 
-export const settingsStore = createLocalStore<IToolSettings>(SETTINGS_KEY, (raw) => fromStored(raw).tool, toStored);
+const settingsStore = createLocalStore<IToolSettings>(SETTINGS_KEY, (raw) => fromStored(raw).tool, toStored);
 
 export function updateSettings(patch: Partial<IToolSettings>) {
   settingsStore.set((prev) => ({ ...prev, ...patch }));

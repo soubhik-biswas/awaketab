@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import type { TEmbedMode, TEmbedSize } from '@/lib/embed/protocol';
 import { COOK_MAX_TIMERS, COOK_QUICK_MIN, type ICookTimer } from '@/lib/embed/timers';
 
-export const EMBED_FIX_URL = 'https://awaketab.com/embed#allow';
+const EMBED_FIX_URL = 'https://awaketab.com/embed#allow';
 
 const PILL: Record<TLockState, TStatusState> = {
   idle: 'idle',

@@ -5,9 +5,9 @@ import { CircleCheck, EyeOff, Info, TriangleAlert, type LucideIcon } from 'lucid
 import { Alert, AlertAction, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 
-export type TStatusAlertVariant = 'info' | 'success' | 'paused' | 'refused';
+type TStatusAlertVariant = 'info' | 'success' | 'paused' | 'refused';
 
-export interface IStatusAlertAction {
+interface IStatusAlertAction {
   label: React.ReactNode;
   onClick: () => void;
 }

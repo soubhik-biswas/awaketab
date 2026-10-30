@@ -4,7 +4,7 @@ import { X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
-export function SectionLabel({ className, ...props }: React.ComponentProps<'span'>) {
+function SectionLabel({ className, ...props }: React.ComponentProps<'span'>) {
   return (
     <span
       data-slot="section-label"

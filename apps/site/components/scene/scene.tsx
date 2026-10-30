@@ -3,8 +3,6 @@ import { cn } from 'cn';
 
 import { SCENE_FILL, SCENES, type TSceneKey } from '@/components/scene/scene-data';
 
-export type { TSceneKey };
-
 export type TSceneTheme = 'auto' | 'light' | 'dark';
 
 export interface ISceneProps extends Omit<React.SVGProps<SVGSVGElement>, 'width' | 'height' | 'viewBox'> {
