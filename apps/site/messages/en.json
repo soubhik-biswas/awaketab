@@ -3092,11 +3092,20 @@
     },
     "article": {
       "open": "Open AwakeTab",
-      "read": "Read the guide"
+      "read": "Read the guide",
+      "eyebrow": {
+        "for": "For {crumb}",
+        "on": "Device guide",
+        "vs": "Compare",
+        "guides": "Guide · {n}-minute read",
+        "learn": "Learn"
+      }
     },
     "hub": {
       "for": {
-        "eyebrow": "Use cases"
+        "eyebrow": "Use cases",
+        "h1": "What people keep awake",
+        "lead": "Pick a moment. Each page has a ready-made session you can start right there."
       },
       "on": {
         "eyebrow": "Device guides"
@@ -3112,7 +3121,9 @@
         "start": "Start here",
         "more": "More help",
         "read": "Read it"
-      }
+      },
+      "all": "All",
+      "honest": "How support is checked"
     },
     "sys": {
       "retry": "Try again",
@@ -3277,7 +3288,18 @@
           "a": "Keeping awake is free. Pro adds device sync, full history and the sound mixer."
         }
       },
-      "cta": "Keep awake now"
+      "cta": "Keep awake now",
+      "hero": {
+        "eyebrow": "Free · no install · no account",
+        "h1": "Keep your screen awake. Right in the browser.",
+        "lead": "AwakeTab asks your browser to keep the display on for as long as you choose — then lets it sleep again. Nothing to install, nothing to sign up for.",
+        "how": "How it works",
+        "scene": "A browser window with the AwakeTab ring and its lit lamp"
+      },
+      "tool": {
+        "title": "Keep this screen awake",
+        "body": "Pick a length and press start. The pill says Screen awake only once the browser confirms the lock."
+      }
     }
   }
 }

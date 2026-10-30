@@ -132,11 +132,19 @@ export function pipeTables(markdown: string): string {
     const rows: string[][] = [];
     let j = i + 2;
     while (j < lines.length && (lines[j] ?? '').trim().startsWith('|')) rows.push(cells(lines[j++] ?? ''));
+    const labels = cells(head).map((c) => escapeHtml(plain(c)));
     const th = cells(head)
       .map((c) => `<th>${inline(c)}</th>`)
       .join('');
-    const body = rows.map((r) => `<tr>${r.map((c) => `<td>${inline(c)}</td>`).join('')}</tr>`).join('');
-    out.push('', `<table><thead><tr>${th}</tr></thead><tbody>${body}</tbody></table>`, '');
+    const body = rows
+      .map((r) => `<tr>${r.map((c, k) => `<td data-label="${labels[k] ?? ''}">${inline(c)}</td>`).join('')}</tr>`)
+      .join('');
+    // A table scrolls inside a named, focusable region (WCAG 2.1.1); phones restack each row.
+    out.push(
+      '',
+      `<div class="site-table" role="region" tabindex="0" aria-label="${labels.join(', ')}"><table><thead><tr>${th}</tr></thead><tbody>${body}</tbody></table></div>`,
+      '',
+    );
     i = j - 1;
   }
   return out.join('\n');
