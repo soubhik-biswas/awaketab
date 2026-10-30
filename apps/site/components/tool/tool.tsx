@@ -163,6 +163,10 @@ function ToolApp({
   const settings = useToolSettings();
   const ui = useToolUi();
   const pro = usePro();
+  useEffect(() => {
+    // Loaded after the first paint so the sign-in client never weighs on the tool's start.
+    void import('@/lib/pro/client').then((m) => m.connectPro());
+  }, []);
   const presets = usePresets();
   const history = useHistory();
   const online = useOnline();
