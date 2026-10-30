@@ -1,6 +1,6 @@
 # AwakeTab — design handoff
 
-**Direction:** Solar Green · **Version:** final design, 30 October 2026 · **Status:** ready to build. The values in `[BRACKETS]` are placeholders, listed in §12.
+**Direction:** Volt · **Version:** product-first rebuild, 31 October 2026 · **Status:** ready to build. The values in `[BRACKETS]` are placeholders, listed in §12.
 
 AwakeTab keeps a screen awake from the browser, shows exactly when it will sleep again, and then lets it sleep. This document is the build spec; `README.md` is the build brief.
 
@@ -17,7 +17,7 @@ AwakeTab keeps a screen awake from the browser, shows exactly when it will sleep
 | `html/` | A static snapshot of every board; no server needed. Open `html/index.html`. |
 | `../awaketab-app.html` | The main tool screen as one self-contained clickable file. |
 
-**Shared components:** `App` (the tool on every device), `Page` (the website and system pages), `Face` (all 33 clock faces), `Mark` (the logo) and `Scene` (the illustrations). Every screen board is built from these, so a fix in a component fixes every board that uses it.
+**Shared components:** `App` (the tool on every device), `Page` (the website and system pages), `Face` (all 49 clock faces), `Mark` (the logo) and `Scene` (the illustrations). Every screen board is built from these, so a fix in a component fixes every board that uses it.
 
 ---
 
@@ -28,18 +28,18 @@ AwakeTab keeps a screen awake from the browser, shows exactly when it will sleep
   - The gap is 70°, running from 12 o'clock back to 10:40.
   - The lamp is Ø 11.2 and sits at −125°. Its highlight is Ø 3.2. Its halo is Ø 22 at 28% opacity, on dark grounds only.
   - 16 px optical cut: the gap opens to 84°, stroke 10, lamp Ø 12.4.
-- **Wordmark:** Geist 800 + 500 ("Awake" + "Tab"), tracking −3.5%. Minimum lockup height 24 px.
-- **Mark rules:** the lamp is never removed, never orange, and never rotated away from 11 o'clock.
+- **Wordmark:** Archivo Expanded 800 + 500 ("Awake" + "Tab"), width 112%, tracking −2%. Minimum lockup height 24 px.
+- **Mark rules:** the lamp is never removed, never violet, and never rotated away from 11 o'clock.
 - **Colour roles, one job each:**
   - Green = awake / live.
-  - Orange = act (Start, Pro, share, extend).
-  - Midnight / paper = the stage.
+  - Electric violet = act (Keep awake, extend, share, Pro).
+  - Midnight / porcelain = the stage.
   - Amber = paused.
   - Red = blocked.
   - Sky = needs you, info and the focus ring.
-  - Violet = ended.
+  - Neutral pearl = ended (calm, done — never a warning).
 - **Loud vs quiet:**
-  - Glow and the green → orange aurora appear only behind display type, the mark, hero scenes and the clock.
+  - Glow and the volt → violet aurora appear only behind display type, the mark, hero scenes and the clock.
   - Once a session runs, the chrome goes quiet.
 
 ---
@@ -47,23 +47,23 @@ AwakeTab keeps a screen awake from the browser, shows exactly when it will sleep
 ## 3. Tokens (Tailwind v4 + shadcn/ui names)
 
 ```css
-:root {            /* light · paper */
-  --background:#F6F4EF; --foreground:#0B1020; --card:#FFFFFF;
-  --primary:#B93D0B; --primary-foreground:#FFFFFF;
-  --secondary:#EFECE5; --muted:#EFECE5; --muted-foreground:#626777; --accent:#E2F6E8;
-  --destructive:#C21D3E; --border:#DCD7CC; --input:#8F887A; --ring:#1C64B8;
-  --lamp:#117A3B; --warning:#8A5A00; --info:#1C64B8; --ended:#6D4AD0; --radius:14px;
+:root {            /* light · porcelain */
+  --background:#F5F5FA; --foreground:#0B1020; --card:#FFFFFF;
+  --primary:#6633F5; --primary-foreground:#FFFFFF;          /* electric violet = act, 6.3:1 */
+  --secondary:#ECECF4; --muted:#ECECF4; --muted-foreground:#626777; --accent:#E2F6E8;
+  --destructive:#C21D3E; --border:#D9D9E5; --input:#878AA0; --ring:#1C64B8;
+  --lamp:#117A3B; --warning:#8A5A00; --info:#1C64B8; --ended:#4B5165; --radius:14px;
   /* clock faces only, only while awake */
   --face-sky:#1D5FB8; --face-violet:#6D4AD0; --face-lime:#4D7C0F; --face-amber:#A15C00; --face-ember:#C2410C;
   --face-fill-sky:#3B7DD8; --face-fill-lime:#4F9A1F; --face-fill-amber:#C47A00; --face-fill-ember:#E0531F;
 }
 .dark {            /* midnight */
   --background:#070B16; --foreground:#EEF2FA; --card:#0E1424;
-  --primary:#FF6B2C; --primary-foreground:#0B0F1A;
+  --primary:#9F7BFF; --primary-foreground:#0B0F1A;          /* 6.2:1 */
   --secondary:#151D31; --muted:#151D31; --muted-foreground:#8E99AE; --accent:#0D3B22;
   --destructive:#FF6B81; --border:#26314A; --input:#6B7894; --ring:#7CBBFF;
-  --lamp:#3BE47F; --warning:#FFC53D; --info:#7CBBFF; --ended:#C1B1FE;
-  --face-sky:#7CBBFF; --face-violet:#C1B1FE; --face-lime:#B8F25A; --face-amber:#FFB547; --face-ember:#FF6B2C;
+  --lamp:#3DF58E; --warning:#FFC53D; --info:#7CBBFF; --ended:#C9D1E0;   /* volt = awake */
+  --face-sky:#7CBBFF; --face-violet:#C1B1FE; --face-lime:#B8F25A; --face-amber:#FFB547; --face-ember:#FF6A3D;
 }
 .oled { --background:#000000; --card:#05070C; }   /* dark tokens on true black */
 ```
@@ -72,11 +72,11 @@ AwakeTab keeps a screen awake from the browser, shows exactly when it will sleep
 
 | Group | Light | Dark |
 |---|---|---|
-| Surface 3 | `#E6E2D9` | `#1D273F` |
+| Surface 3 | `#E3E3EE` | `#1D273F` |
 | Text 2 | `#4B5165` | `#A9B3C7` |
 | Link | `#117A3B` | `#7CF0AE` |
 | On lamp | `#FFFFFF` | `#052812` |
-| Soft fills | primary-soft `#FDECE3`, warning-soft `#FCEFD2`, danger-soft `#FCE3E7`, info-soft `#E1ECFA`, ended-soft `#ECE6FC` | primary-soft `#3A1A0C`, warning-soft `#3A2C08`, danger-soft `#3D1220`, info-soft `#0F2645`, ended-soft `#271C4A` |
+| Soft fills | primary-soft `#EFEAFF`, warning-soft `#FCEFD2`, danger-soft `#FCE3E7`, info-soft `#E1ECFA`, ended-soft `#E3E3EE` | primary-soft `#241A4D`, warning-soft `#3A2C08`, danger-soft `#3D1220`, info-soft `#0F2645`, ended-soft `#1D273F` |
 
 **Contrast:**
 
@@ -85,7 +85,7 @@ AwakeTab keeps a screen awake from the browser, shows exactly when it will sleep
 
 **Face spectrum** (boards 06 and 14):
 
-- While the screen is awake, faces may use green · sky · violet for layered information (session / minutes / seconds).
+- While the screen is awake, faces may use volt · sky · lilac for layered information (session / minutes / seconds).
 - They may also use a heat scale for time left: more than 50% green, 25–50% lime, 8–25% amber, the last 8% ember.
 - Every other state falls back to its single status colour.
 
@@ -93,17 +93,18 @@ AwakeTab keeps a screen awake from the browser, shows exactly when it will sleep
 
 ## 4. Type, space, shape, motion
 
-**Fonts:** Geist for everything and Geist Mono for labels, keys and code, both from Google Fonts. Japanese, Chinese and Hindi fall back to Noto Sans JP, SC and Devanagari. The faces also use IBM Plex Serif (Luxe, Words) and DotGothic16 (LED).
+**Fonts:** Archivo (variable width, set at 112–118%) for display only — headings, the wordmark, arrival moments. Geist for every word of UI and the clock digits, Geist Mono for labels, keys and code. All Google Fonts. Japanese, Chinese and Hindi fall back to Noto Sans JP, SC and Devanagari. The faces also use IBM Plex Serif (Luxe, Words) and DotGothic16 (LED).
 
 | Token | Spec |
 |---|---|
-| display-2xl | Geist 104 / .92 / −4% / 800 |
-| display-xl | Geist 72 / 1.0 / −3.5% / 800 |
-| display-lg | Geist 56 / 1.05 / −3% / 700 |
-| h1 | Geist 40 / 1.1 / −2% / 700 |
-| count-xl | Geist 96 / 1 / −3% / 300, tabular figures |
-| h2 · h3 | Geist 28 / 1.2 / 600 · 20 / 1.3 / 600 |
-| body-lg · body · small | 18 / 1.6 · 16 / 1.55 · 14 / 1.5 |
+| display-2xl | Archivo 112% · 96 / .96 / −4% / 800 — page hero (tablet 68–80, phone 46) |
+| display-xl | Archivo 112% · 68 / .98 / −3.5% / 800 — the tool hero (tablet 56–60, phone 34) |
+| display-lg | Archivo 112% · 52 / 1.04 / −3.5% / 800 — section heads (tablet 42, phone 32) |
+| display-md | Archivo 112% · 28 / 1.1 / −2.5% / 800 — sheet and dialog titles (phone 24) |
+| count-xl | Geist 96 / 1 / −3% / 300, tabular figures (inside faces) |
+| lead | Geist 22 / 1.5 (phone 18); tool subline 19 / 16 |
+| h3 | Archivo 112% · 24 / 1.15 / −2% / 800 — card titles (phone 21) |
+| body-lg · body · small | 18 / 1.6 · 17 / 1.55 (phone 16) · 14 / 1.5; controls and chips 16 |
 | meta | Geist Mono 12 / 1.4 / +8% / 500 |
 | code | Geist Mono 14 / 1.6 |
 
@@ -163,7 +164,7 @@ Every icon sits next to a word or has an `aria-label`.
 | `StatusPill` | 9 states, always icon + words: Not keeping awake · Starting… · Awake · until 11:42 AM · Needs you · tap to resume · Awake · video fallback (dashed) · Paused · tab hidden · Blocked · battery saver · Ended at 11:42 AM · Not supported here |
 | `Countdown` + `ExtendBar` | +5 / +15 / +30 / +1 hour / Until…; Pause, Stop |
 | `PresetGroup` | Presenting 1 h · Cooking 45 min · Reading 30 min · Break 15 min · Until I stop · New preset |
-| `FaceSwitcher` / faces sheet | All 33 faces; selected = 2 px lamp border plus a label |
+| `FaceSwitcher` / faces sheet | All 49 faces; selected = 2 px lamp border plus a label |
 | `FixPanel` | Blocked: 3 numbered steps, primary "Use video fallback", "Open the battery guide", "Check again" |
 | `Alert` | Inline, never auto-dismissed: info / success / paused / refused |
 | Toasts | Extended (Undo for 6 s) · 5 minutes left (+15 min) · Couldn't sync (Retry). Bottom-centre on phone, bottom-right on desktop; they pause on hover and focus; errors stay |
@@ -179,7 +180,7 @@ Every icon sits next to a word or has an `aria-label`.
 
 | Prop | Values | Notes |
 |---|---|---|
-| `face` | one of 33 ids (below) | |
+| `face` | one of 49 ids (below) | |
 | `theme` | `light` / `dark` / `oled` | |
 | `state` | `idle` / `starting` / `running` / `fallback` / `paused` / `blocked` / `unsupported` / `up` | |
 | `remain`, `total` | seconds | |
@@ -201,15 +202,17 @@ Every icon sits next to a word or has an `aria-label`.
 
 | Device | Face size |
 |---|---|
-| Desktop | 440 |
-| Tablet landscape | 380 |
-| Tablet portrait | 420 |
-| Phone | 296 |
+| Desktop | 480 |
+| Tablet landscape | 440 |
+| Tablet portrait | 600 |
+| Phone | 336 |
 | Fullscreen | 72% (86% on phone) of the short side |
 
 **Motion** runs only while the state is `running` or `fallback`. Under reduced motion every animation stops and the digits still change once a second.
 
-**The 33 faces:** ring · bold · horizon · tide · flip · rolling · analog · luxe · rings · words · nixie · lcd · led · dive (Diver) · chrono (Chronograph) · gauge · type · bars · timeline · pilot · dual (Dual time) · radar · dots · hourglass · battery · stack · board (Departure board) · orbit · disc (Time disc) · clocks (Clock of clocks) · wordgrid (Word grid) · tape · moon (Moon phase).
+**Picker:** a sheet of big framed previews grouped as New · Signature · Digital · Analog · Ambient · All 49. In galleries every face sits in the same watch-glass case (`framed`), and time left takes one heat colour at a time (volt → lime → amber → ember) rather than a rainbow.
+
+**The 49 faces:** ring · bold · horizon · tide · flip · rolling · analog · luxe · rings · words · nixie · lcd · led · dive (Diver) · chrono (Chronograph) · gauge · type · bars · timeline · pilot · dual (Dual time) · radar · dots · hourglass · battery · stack · board (Departure board) · orbit · disc (Time disc) · clocks (Clock of clocks) · wordgrid (Word grid) · tape · moon (Moon phase) · aurora · glass · neon · liquid · eclipse · skeleton · bauhaus · poster · eink (E-ink) · terminal · pulse · waveform · blob (Fluid) · hud (HUD) · constellation · halo.
 
 Each face's description, plus Ring in every state × theme, is on board 14. All faces are free; Face studio (your own accent colour and glow) is Pro.
 
@@ -221,10 +224,12 @@ Each face's description, plus Ring in every state × theme, is on board 14. All 
 
 | Device | Viewport | Layout |
 |---|---|---|
-| Desktop | 1440 × 900 | side nav 232, tool panel 380 on the right |
-| Tablet landscape | 1194 × 834 | icon rail 84, panel 352 |
-| Tablet portrait | 834 × 1194 | bottom tab bar 76; tools open as inset bottom sheets with 60 px side margins |
-| Phone | 390 × 844 | header 56, 5-item tab bar 76 with 60 px targets, all tools as bottom sheets |
+| Desktop | 1440 × 900 | Header 64: logo · status pill · **Menu**. The clock fills the stage. **One floating control bar** at the bottom: Length (or Extend while running) · main action · Face · Fullscreen. Tools rise as one floating sheet above the bar (600 wide; faces 860). Menu opens as a 400-wide list under the header. |
+| Tablet landscape | 1194 × 834 | Same as desktop. |
+| Tablet portrait | 834 × 1194 | Same bar with compact chips (15m · 30m · 1h · 2h · ∞) and the face as a thumbnail. |
+| Phone | 390 × 844 | Header 56: logo · Menu; the status pill sits above the clock. The bar docks in the thumb zone in two rows: chips on top, main action + face below. Tools are classic bottom sheets. |
+
+**Product-first home.** `/` *is* the tool. A visitor lands on the live clock with a one-hour session ready and the headline "Keep this screen awake." — one tap on **Keep awake** starts it. There is no other navigation: the bar holds length, the main action and the face; **Menu** (top right) holds Presets, History, Search ⌘K, Theme, Settings, Help, Share, the Pro tools and Account. The marketing story (faces gallery, use cases, how it works, FAQ) sits below the fold. While a session runs, the bar's Length chips become **Extend** (+5 / +15 / +30 / +1 hour / Until… / ∞), so the commonest second action is one tap too.
 
 **Session states:** idle · starting · awake · video fallback · paused · needs you · blocked · unsupported · ended.
 
@@ -245,9 +250,11 @@ Each face's description, plus Ring in every state × theme, is on board 14. All 
 | 20 / 20b | Desktop, every state and view |
 | 21 / 22 | Phone |
 | 25 / 26 / 27 | Tablet |
+| 27b | Coverage: menu, extend, update, copied on desktop; every state, banner and toast on both tablet orientations; phone feedback states |
+| 30 / 31 / 32 | Every website page at 1440, 834 and 1194 |
 | 24 | German, Japanese, Chinese and Hindi |
 
-**Website and system pages** (`Page` component; boards 19, 23 and 23b):
+**Website and system pages** (`Page` component; boards 19, 23, 23b, 30, 31 and 32). Layout tiers: phone < 700 (one column, 20 px margins), tablet portrait 700–1099 (40 px margins, two-column grids, stacked hero, links in the menu, home opens on the 834 × 1194 tool), tablet landscape 1100–1299 (64 px margins, home opens on the 1194 × 834 tool), desktop ≥ 1300 (96 px margins).
 
 | Group | Pages |
 |---|---|
@@ -268,7 +275,7 @@ Each face's description, plus Ring in every state × theme, is on board 14. All 
 | 16 | Pro purchase: plan → account → inbox → pay → processing → success / declined |
 | 17 | Extension: install → pin → popup → badge |
 | 18 | Picture-in-picture mini clock, home-screen widgets and kiosk mode |
-| 19 | Content pages |
+| 19 | Content pages — the home page opens on the working tool |
 | 19b | Shared link, sign-in, help search, Face studio and sound |
 
 ---

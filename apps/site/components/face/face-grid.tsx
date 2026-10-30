@@ -19,6 +19,8 @@ export interface IFaceGridProps {
   columns?: number;
   // Off for the setup panel's minis: no names under the tiles, each tile named by its aria-label.
   labels?: boolean;
+  // Draws each thumbnail in the gallery's watch-glass case.
+  framed?: boolean;
   label?: string;
   className?: string;
 }
@@ -34,6 +36,7 @@ export function FaceGrid({
   size = 92,
   columns = 3,
   labels = true,
+  framed = false,
   label = 'Clock face',
   className,
 }: IFaceGridProps) {
@@ -67,7 +70,7 @@ export function FaceGrid({
     >
       {ids.map((id) => {
         const on = id === selected;
-        const thumb = <Face face={id} theme={theme} state="running" size={size} bare />;
+        const thumb = <Face face={id} theme={theme} state="running" size={size} bare framed={framed} />;
         if (!labels)
           return (
             <RadioGroup.Item

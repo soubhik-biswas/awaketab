@@ -3,20 +3,17 @@ import { BLACK, WHITE, themed } from '../art';
 import { alpha, f1, P, ticks } from '../geometry';
 import { DialLabel, type IDrawProps, L, MONO, lmin, Svg } from '../kit';
 
-const WELL = { light: '#ECE8DF', dark: '#0A0F1C', oled: '#0A0E18' };
-const KNOB = { light: 'linear-gradient(180deg, #FFFFFF, #E6E2D9)', night: 'linear-gradient(180deg, #2A3550, #141B2E)' };
+const WELL = { light: '#E9E9F1', dark: '#0A0F1C', oled: '#0A0E18' };
 const PILL = { light: 'rgba(255,255,255,.94)', night: 'rgba(10,15,28,.9)' };
 const MINOR = ticks(110, 115, 60, (i) => i % 5 !== 0);
 const MAJOR = ticks(108, 117, 12);
 
-// A solid disc that shrinks toward 12, warming from green to ember in the last minutes.
+// A solid disc that shrinks toward 12, in one heat colour: green, then lime, amber and ember.
 export default function Disc({ m }: IDrawProps) {
-  const { t, accent, fill } = m;
+  const { t } = m;
   const deg = 360 * m.ringFrac;
-  const at = (sec: number) => Math.min(359, (360 * sec) / Math.max(1, m.total)).toFixed(1);
-  const discFill = m.multi
-    ? `conic-gradient(from 0deg, ${fill.ember} 0deg, ${fill.amber} ${at(300)}deg, ${fill.lime} ${at(900)}deg, ${m.lamp} ${at(1800)}deg, ${m.lamp} 360deg)`
-    : `radial-gradient(circle, ${accent}, ${alpha(accent, 0xcc)})`;
+  const hc = m.heat(m.frac);
+  const discFill = `radial-gradient(circle at 50% 30%, ${alpha(hc, 0xf2)}, ${hc} 70%, ${alpha(hc, 0xcc)} 100%)`;
   const mask = `conic-gradient(#000 0deg ${deg.toFixed(2)}deg, transparent ${deg.toFixed(2)}deg 360deg)`;
   const [ex, ey] = P(105, deg);
   const edge = deg > 1 && deg < 359 ? 1 : 0;
@@ -76,43 +73,26 @@ export default function Disc({ m }: IDrawProps) {
       <div
         style={{
           position: 'absolute',
-          left: 162,
-          top: 137,
-          width: 36,
-          height: 36,
+          left: 122,
+          top: 97,
+          width: 116,
+          height: 116,
           borderRadius: '50%',
-          background: m.night ? KNOB.night : KNOB.light,
-          boxShadow: `0 4px 12px ${BLACK(0.35)}, inset 0 1px 0 ${WHITE(0.25)}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <span style={{ width: 10, height: 10, borderRadius: '50%', background: m.mc1 }} />
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          left: 110,
-          top: 190,
-          width: 140,
-          height: 56,
-          borderRadius: 18,
           background: m.night ? PILL.night : PILL.light,
           border: `1px solid ${t.line}`,
-          boxShadow: `0 10px 24px ${BLACK(0.25)}`,
+          boxShadow: `0 14px 30px ${BLACK(0.35)}, inset 0 1px 0 ${WHITE(0.1)}`,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 2,
+          gap: 4,
         }}
       >
         <span
           style={{
-            fontSize: m.long ? 22 : 28,
+            fontSize: m.long ? 22 : 30,
             fontWeight: 600,
-            letterSpacing: '-0.03em',
+            letterSpacing: '-0.035em',
             lineHeight: 1,
             fontVariantNumeric: 'tabular-nums',
             color: t.ink,
@@ -121,7 +101,7 @@ export default function Disc({ m }: IDrawProps) {
           {m.digits}
         </span>
         <span className={L} style={{ fontFamily: MONO, fontSize: lmin(12), color: t.ink2 }}>
-          {m.endLine}
+          {m.endShort}
         </span>
       </div>
     </>

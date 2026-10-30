@@ -1,10 +1,9 @@
-import '../face-art.css';
 import { alpha, f1, P } from '../geometry';
 import { big, column, EndLine, type IDrawProps, Kicker } from '../kit';
 
 const D60 = 60;
 
-// Sixty dots around the dial; each minute left keeps one lit, warming toward the end.
+// Sixty dots around the dial; each minute left keeps one lit, in one heat colour.
 export default function Dots({ m }: IDrawProps) {
   const litN = m.st === 'idle' ? D60 : Math.round(m.frac * D60);
   return (
@@ -14,7 +13,7 @@ export default function Dots({ m }: IDrawProps) {
         const on = i < litN;
         const bigDot = i % 5 === 0;
         const sz = bigDot ? 9 : 6;
-        const c = m.heat((i + 1) / D60);
+        const c = m.heat(m.frac);
         return (
           <span
             key={i}
@@ -27,7 +26,7 @@ export default function Dots({ m }: IDrawProps) {
               height: sz,
               borderRadius: '50%',
               background: on ? c : m.t.track,
-              boxShadow: on && bigDot ? `0 0 8px ${alpha(c, 0x66)}` : undefined,
+              boxShadow: on && bigDot ? `0 0 10px ${alpha(c, 0x88)}` : undefined,
             }}
           />
         );

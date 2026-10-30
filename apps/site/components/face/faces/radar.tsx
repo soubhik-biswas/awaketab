@@ -1,5 +1,4 @@
 import { CARD_SHADOW } from '../art';
-import '../face-art.css';
 import { alpha, f1, P, ticks } from '../geometry';
 import { type IDrawProps, L, mono, Svg } from '../kit';
 

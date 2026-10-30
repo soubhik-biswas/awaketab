@@ -4,7 +4,7 @@ import { big, EndLine, type IDrawProps, Kicker, L, lmin, MONO } from '../kit';
 
 const PX = 14;
 const GROUND = {
-  light: 'linear-gradient(180deg, #FFFFFF, #F1EEE7)',
+  light: 'linear-gradient(180deg, #FFFFFF, #EFEFF6)',
   dark: 'linear-gradient(180deg, #131B30, #0A0F1C)',
   oled: '#05070C',
 };
@@ -13,13 +13,11 @@ const EDGE_MASK = 'linear-gradient(90deg, transparent, #000 16%, #000 84%, trans
 
 // A minute ruler glides under a fixed needle; the heat strip shows the final stretch.
 export default function Tape({ m }: IDrawProps) {
-  const { t, fill } = m;
+  const { t } = m;
   const tm = Math.max(5, Math.min(180, Math.ceil(m.total / 60)));
   const tw = tm * PX;
-  const tp = (min: number) => `${Math.min(100, (100 * min * PX) / tw).toFixed(1)}%`;
-  const heat = m.multi
-    ? `linear-gradient(90deg, ${fill.ember} 0%, ${fill.amber} ${tp(5)}, ${fill.lime} ${tp(15)}, ${m.lamp} ${tp(30)}, ${m.lamp} 100%)`
-    : m.accent;
+  const hc = m.heat(m.frac);
+  const heat = `linear-gradient(90deg, ${alpha(hc, 0x55)}, ${hc})`;
   return (
     <>
       <div

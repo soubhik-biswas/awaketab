@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import { BLACK, FLIP_CARD, SNOW, WHITE } from '../art';
-import '../face-art.css';
 import { alpha } from '../geometry';
 import { EndLine, type IDrawProps } from '../kit';
 

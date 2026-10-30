@@ -19,7 +19,8 @@ export type TToolView =
   | 'studio'
   | 'account';
 
-export type TBanner = 'none' | 'offline' | 'conflict';
+export type TBanner = 'none' | 'offline' | 'conflict' | 'update';
+export type TFaceCol = 'fresh' | 'signature' | 'digital' | 'analog' | 'ambient' | 'all';
 export type TDevice = 'desktop' | 'tabletL' | 'tabletP' | 'phone';
 
 export interface IQaOverrides {
@@ -34,10 +35,20 @@ export interface IToolUi {
   palQuery: string;
   clearText: string;
   copied: boolean;
+  faceCol: TFaceCol;
+  update: boolean;
   qa: IQaOverrides;
 }
 
-const INITIAL: IToolUi = { view: 'timer', palQuery: '', clearText: '', copied: false, qa: {} };
+const INITIAL: IToolUi = {
+  view: 'timer',
+  palQuery: '',
+  clearText: '',
+  copied: false,
+  faceCol: 'signature',
+  update: false,
+  qa: {},
+};
 
 let state: IToolUi = INITIAL;
 const subs = new Set<() => void>();
@@ -68,15 +79,3 @@ export const toolUi = {
 export function useToolUi(): IToolUi {
   return useSyncExternalStore(toolUi.subscribe, toolUi.get, () => INITIAL);
 }
-
-// Views that belong to the "More" tab on phone and tablet portrait.
-export const MORE_VIEWS: readonly TToolView[] = [
-  'more',
-  'settings',
-  'devices',
-  'fix',
-  'share',
-  'sound',
-  'studio',
-  'account',
-];

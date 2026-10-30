@@ -1,5 +1,4 @@
 import { SNOW } from '../art';
-import '../face-art.css';
 import { arc, ticks } from '../geometry';
 import { DialLabel, hand, type IDrawProps, L, mono, MONO, Svg } from '../kit';
 

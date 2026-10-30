@@ -5,7 +5,7 @@ import { FACE_IDS } from '../src/types.js';
 
 describe('face id migration', () => {
   it('keeps every Solar Green face id', () => {
-    expect(FACE_IDS).toHaveLength(33);
+    expect(FACE_IDS).toHaveLength(49);
     for (const id of FACE_IDS) expect(migrateFace(id)).toBe(id);
   });
 

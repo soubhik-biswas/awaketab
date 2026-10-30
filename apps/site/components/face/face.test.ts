@@ -5,6 +5,8 @@ import { Face } from './face';
 import { FaceGrid } from './face-grid';
 import { FACE_IDS, faceModel, type IFaceProps } from './model';
 import { FACE_LOADERS, FACES } from './registry';
+import { bauhausPie } from './faces/bauhaus';
+import { digitHands } from './faces/clocks';
 import { gridWords } from './faces/wordgrid';
 import { moonPath } from './faces/moon';
 import { sentence } from './faces/words';
@@ -20,6 +22,13 @@ describe('face list', () => {
     expect([...FACE_IDS]).toEqual([...core.FACE_IDS]);
     expect(FACES.map((f) => f.id)).toEqual([...FACE_IDS]);
     expect(Object.keys(FACE_LOADERS).sort()).toEqual(FACE_IDS.filter((id) => id !== 'ring').sort());
+    expect(FACE_IDS).toHaveLength(49);
+  });
+
+  it('gives every face its own drawing, not Ring', async () => {
+    const ring = (await import('./faces/ring')).default;
+    const drawings = await Promise.all(Object.values(FACE_LOADERS).map((load) => load()));
+    for (const d of drawings) expect(d.default).not.toBe(ring);
   });
 });
 
@@ -118,6 +127,18 @@ describe('face words', () => {
     expect(gridWords(ring({ face: 'wordgrid', state: 'up' }))).toEqual([]);
   });
 
+  it('spells the Clock of clocks digits with blank clocks where no segment runs', () => {
+    expect(digitHands(1)[0]).toEqual([225, 225]);
+    expect(digitHands(8)[2]).toEqual([0, 180, 90]);
+    expect(digitHands(0)[0]).toEqual([90, 180]);
+  });
+
+  it('cuts the Bauhaus pie from 12 o’clock', () => {
+    expect(bauhausPie(0)).toBe('');
+    expect(bauhausPie(360)).toBe('M112 44 A88 88 0 1 1 111.9 44 Z');
+    expect(bauhausPie(90)).toBe('M112 132 L112 44 A88 88 0 0 1 200.0 132.0 Z');
+  });
+
   it('draws a full moon at the start and none at the end', () => {
     expect(moonPath(1)).toContain('A56 56 0 1 1');
     expect(moonPath(0)).toBe('');
@@ -144,6 +165,14 @@ describe('<Face>', () => {
     expect(html({ size: 250 })).not.toContain('af-compact');
   });
 
+  it('sits in the watch-glass case when framed, except faces with their own card', () => {
+    const framed = (face: IFaceProps['face']) => html({ face, framed: true }).includes('border-radius:72px');
+    expect(framed('ring')).toBe(true);
+    expect(html({ face: 'ring' })).not.toContain('border-radius:72px');
+    expect(framed('tide')).toBe(false);
+    expect(html({ face: 'ring', framed: true, bare: true })).toContain('height:348px');
+  });
+
   it('shows the status caption unless bare', () => {
     expect(html()).toContain('Screen awake</span>');
     expect(html({ bare: true })).not.toContain('Screen awake</span>');
@@ -156,7 +185,7 @@ describe('<FaceGrid>', () => {
       createElement(FaceGrid, { selected: 'flip', onSelect: () => undefined, theme: 'dark' }),
     );
     expect(out).toContain('role="radiogroup"');
-    expect(out.match(/role="radio"/gu)).toHaveLength(33);
+    expect(out.match(/role="radio"/gu)).toHaveLength(49);
     expect(out).toMatch(/aria-checked="true"[^>]*data-face="flip"|data-face="flip"[^>]*aria-checked="true"/u);
     expect(out).toContain('Departure board');
   });
