@@ -7,8 +7,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { deflateSync } from 'node:zlib';
 
-const requireWeb = createRequire(new URL('../../web/package.json', import.meta.url));
-const { Resvg } = requireWeb('@resvg/resvg-js');
+const require = createRequire(import.meta.url);
+const { Resvg } = require('@resvg/resvg-js');
 export const ICON_SVG = readFileSync(new URL('../public/icon.svg', import.meta.url), 'utf8');
 
 function crc32(buf) {

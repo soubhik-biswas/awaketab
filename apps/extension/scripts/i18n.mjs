@@ -1,15 +1,14 @@
-// Extension strings come from the web catalogs in apps/web/src/i18n (docs/07 §2) plus the extension's own
-// catalog in apps/extension/locales/<locale>.json, which holds only copy that exists nowhere on the web
-// (the Clear Night popup states, options help and the welcome page; `ext.*` keys, never a web key). This
-// module chooses which keys ship, per locale, merges the two, and writes the `_locales/<lang>/messages.json`
-// files Chrome needs for the manifest name, description and command.
+// Extension strings come from two catalogs per locale: locales/shared/<locale>.json holds the strings the
+// extension shares with the website's tool (pill copy, presets, settings, Pro; copied once from the retiring
+// Astro catalogs, docs/07 §2), and locales/<locale>.json the extension's own copy (`ext.*` keys, never a shared
+// key). This module chooses which keys ship, per locale, merges the two, and writes the
+// `_locales/<lang>/messages.json` files Chrome needs for the manifest name, description and command.
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-export const WEB_I18N = path.resolve(HERE, '../../web/src/i18n');
-export const WEB_TOKENS = path.resolve(HERE, '../../web/src/styles/tokens.css');
+export const SHARED_I18N = path.resolve(HERE, '../locales/shared');
 export const EXT_I18N = path.resolve(HERE, '../locales');
 
 export const LOCALES = ['en', 'es', 'pt-br', 'de', 'fr', 'ja', 'zh', 'hi'];
@@ -88,7 +87,7 @@ export const MANIFEST_MESSAGES = {
 };
 
 export function readCatalog(locale) {
-  return JSON.parse(readFileSync(path.join(WEB_I18N, `${locale}.json`), 'utf8'));
+  return JSON.parse(readFileSync(path.join(SHARED_I18N, `${locale}.json`), 'utf8'));
 }
 
 export function readExtCatalog(locale) {
@@ -100,12 +99,12 @@ function pick(catalog, keep) {
 }
 
 export function pageCatalog(locale) {
-  const web = pick(
+  const shared = pick(
     readCatalog(locale),
     (key) => PAGE_KEYS.includes(key) || PAGE_PREFIXES.some((prefix) => key.startsWith(prefix)),
   );
-  // Web keys win: the extension catalog may only add keys (a unit test keeps the two disjoint).
-  return { ...readExtCatalog(locale), ...web };
+  // Shared keys win: the extension catalog may only add keys (a unit test keeps the two disjoint).
+  return { ...readExtCatalog(locale), ...shared };
 }
 
 export function bgCatalogs() {
@@ -133,44 +132,26 @@ export function localeMessages() {
   });
 }
 
-export function tokensCss() {
-  const css = readFileSync(WEB_TOKENS, 'utf8');
-  const start = css.indexOf(':root,\n[data-theme="light"]');
-  if (start < 0) throw new Error('tokens.css: the `:root, [data-theme="light"]` block moved; update scripts/i18n.mjs');
-  const out = css.slice(start);
-  if (!out.includes('--at-accent') || out.includes('@apply') || out.includes('@theme')) {
-    throw new Error('tokens.css: unexpected Tailwind syntax after the token blocks');
-  }
-  return out;
-}
-
 export function awaketabExtension() {
   const CATALOG = 'virtual:at-catalog/';
   const BG = 'virtual:at-catalogs-bg';
-  const TOKENS = 'virtual:at-tokens.css';
-  const TOKENS_ID = '/__at-tokens.css';
   return {
     name: 'awaketab-extension',
     resolveId(id) {
       if (id.startsWith(CATALOG) || id === BG) return `\0${id}`;
-      if (id === TOKENS) return TOKENS_ID;
       return null;
     },
     load(id) {
       if (id.startsWith(`\0${CATALOG}`)) {
         const locale = id.slice(CATALOG.length + 1);
         if (!LOCALES.includes(locale)) throw new Error(`Unknown locale ${locale}`);
-        this.addWatchFile(path.join(WEB_I18N, `${locale}.json`));
+        this.addWatchFile(path.join(SHARED_I18N, `${locale}.json`));
         this.addWatchFile(path.join(EXT_I18N, `${locale}.json`));
         return `export default ${JSON.stringify(pageCatalog(locale))};`;
       }
       if (id === `\0${BG}`) {
-        for (const locale of LOCALES) this.addWatchFile(path.join(WEB_I18N, `${locale}.json`));
+        for (const locale of LOCALES) this.addWatchFile(path.join(SHARED_I18N, `${locale}.json`));
         return `export default ${JSON.stringify(bgCatalogs())};`;
-      }
-      if (id === TOKENS_ID) {
-        this.addWatchFile(WEB_TOKENS);
-        return tokensCss();
       }
       return null;
     },

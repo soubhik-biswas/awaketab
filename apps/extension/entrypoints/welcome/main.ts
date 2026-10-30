@@ -1,4 +1,4 @@
-import 'virtual:at-tokens.css';
+import '../../src/styles/tokens.css';
 import '../../src/styles/base.css';
 import './welcome.css';
 import { STORAGE_KEYS } from '@awaketab/core';

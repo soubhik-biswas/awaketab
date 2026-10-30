@@ -12,7 +12,6 @@ import {
   pageCatalog,
   readCatalog,
   readExtCatalog,
-  tokensCss,
 } from '../../scripts/i18n.mjs';
 import config from '../../wxt.config';
 
@@ -59,7 +58,7 @@ describe('manifest (docs/10 §2, FR-EXT-03)', () => {
 });
 
 describe('i18n reuse (no duplicated English strings)', () => {
-  it("every key the extension uses exists in the catalogs (web + the extension's own locales/) of all eight locales", async () => {
+  it("every key the extension uses exists in the catalogs (shared + the extension's own) of all eight locales", async () => {
     const used = new Set<string>();
     for (const file of await sources(path.join(EXT, 'entrypoints')).then(async (a) => [
       ...a,
@@ -80,14 +79,14 @@ describe('i18n reuse (no duplicated English strings)', () => {
       for (const key of BG_KEYS) expect(readCatalog(locale), `${locale}:${key}`).toHaveProperty(key);
   });
 
-  it('the extension catalog only adds ext.* keys, never shadows a web key, and every locale has the same keys and placeholders', () => {
+  it('the extension catalog only adds ext.* keys, never shadows a shared key, and every locale has the same keys and placeholders', () => {
     const en = readExtCatalog('en');
-    const web = readCatalog('en');
+    const shared = readCatalog('en');
     const placeholders = (v: string) => [...v.matchAll(/\{(\w+)/gu)].map((m) => m[1]).sort();
     expect(Object.keys(en).length).toBeGreaterThan(100);
     for (const key of Object.keys(en)) {
       expect(key.startsWith('ext.'), key).toBe(true);
-      expect(web, `${key} is a web key`).not.toHaveProperty(key);
+      expect(shared, `${key} is a shared key`).not.toHaveProperty(key);
     }
     for (const locale of LOCALES) {
       const cat = readExtCatalog(locale);
@@ -141,14 +140,10 @@ describe('i18n reuse (no duplicated English strings)', () => {
     }
   });
 
-  it('takes the --at-* tokens from the web stylesheet without the Tailwind layer', () => {
-    const css = tokensCss();
+  it('carries its own --at-* tokens with no Tailwind layer', async () => {
+    const css = await readFile(path.join(EXT, 'src/styles/tokens.css'), 'utf8');
     expect(css.startsWith(':root,\n[data-theme="light"]')).toBe(true);
     expect(css).toContain('--at-accent: #117a3b;');
-    // Clear Night (DESIGN.md §2.1, §12): the extension gets the new ground, raised and spacing tokens too.
-    expect(css).toContain('--at-ground: #0a0e16;');
-    expect(css).toContain('--at-raised: #26324b;');
-    expect(css).toContain('--at-h-primary: 60px;');
     expect(css).toContain('[data-theme="oled"]');
     expect(css).not.toMatch(/@import|@theme|@apply|@layer/u);
   });

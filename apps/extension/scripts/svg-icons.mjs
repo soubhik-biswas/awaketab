@@ -1,12 +1,11 @@
 // Build-time inlining (MV3 loads no remote code): `<svg data-icon="settings" …></svg>` becomes the Lucide icon
-// (lucide-static 0.460, the web app's copy) and `<svg data-logo="chrome" …></svg>` the full-colour SVG Logos mark.
+// (lucide-static 0.460) and `<svg data-logo="chrome" …></svg>` the full-colour SVG Logos mark.
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
 const require = createRequire(import.meta.url);
-const requireWeb = createRequire(new URL('../../web/package.json', import.meta.url));
-const LUCIDE = path.join(path.dirname(requireWeb.resolve('lucide-static/package.json')), 'icons');
+const LUCIDE = path.join(path.dirname(require.resolve('lucide-static/package.json')), 'icons');
 const PLACEHOLDER = /<svg data-(icon|logo)="([a-z0-9-]+)"([^>]*)><\/svg>/gu;
 // The Solar Green icon scale: 16 and 18 px draw at stroke 2, 20 px at 1.75, 24 px at 1.5; 14 px status glyphs at 2.25.
 const STROKE = { 12: '2.25', 14: '2.25', 16: '2', 18: '2', 20: '1.75', 24: '1.5' };
