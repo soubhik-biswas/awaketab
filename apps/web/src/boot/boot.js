@@ -86,6 +86,9 @@
     if (at > 0 && at < 4 && document.querySelector('link[href="#at-tool-parsed"]'))
       document.write(`<link rel="stylesheet" href="${FACES_CSS}" data-at-faces>`);
     if (saved && saved.keyboardHints === false) root.dataset.hints = 'off';
+    // An answered analytics question (lib/consent.ts) never paints its inline panel.
+    const tips = JSON.parse(localStorage.getItem('at.v1.onboarding') ?? 'null')?.dismissedTips;
+    if ((Array.isArray(tips) && tips.includes('analytics')) || saved?.telemetry === false) root.dataset.consent = '';
     if (saved && saved.reduceMotion === 'on') root.dataset.motion = 'reduce';
     const clock = /** @type {{ clock24h?: unknown; showSeconds?: unknown } | undefined} */ (saved?.ambient);
     const h24 = clock?.clock24h;
