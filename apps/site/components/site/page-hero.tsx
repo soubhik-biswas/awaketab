@@ -30,12 +30,14 @@ export function Crumbs({ items, label }: { items: readonly ICrumb[]; label: stri
                 <span>/</span>
               </BreadcrumbSeparator>
             )}
-            {c.href ? (
+            {i === items.length - 1 ? (
+              <BreadcrumbPage className="text-foreground">{c.label}</BreadcrumbPage>
+            ) : c.href ? (
               <BreadcrumbLink href={c.href} className="text-muted-foreground-strong underline-offset-2 hover:underline">
                 {c.label}
               </BreadcrumbLink>
             ) : (
-              <BreadcrumbPage className="text-foreground">{c.label}</BreadcrumbPage>
+              <span>{c.label}</span>
             )}
           </BreadcrumbItem>
         ))}
