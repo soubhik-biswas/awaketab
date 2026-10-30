@@ -42,7 +42,10 @@ export function initHelpSearch(): void {
     list.hidden = hits.length === 0;
     if (!q) count.textContent = idle;
     else if (hits.length === 0) count.textContent = (d.none ?? '').replace('{q}', q);
-    else count.textContent = (hits.length === 1 ? (d.one ?? '') : (d.many ?? '')).replace('{n}', String(hits.length)).replace('{q}', q);
+    else
+      count.textContent = (hits.length === 1 ? (d.one ?? '') : (d.many ?? ''))
+        .replace('{n}', String(hits.length))
+        .replace('{q}', q);
   };
   input.addEventListener('input', render);
   box.querySelector('form')?.addEventListener('submit', (e) => {

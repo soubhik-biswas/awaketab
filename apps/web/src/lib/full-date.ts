@@ -3,7 +3,13 @@ export function fullDate(date: Date, lang = 'en'): string {
   if (lang !== 'en')
     return new Intl.DateTimeFormat(lang, { dateStyle: 'full', timeZone: 'UTC', numberingSystem: 'latn' }).format(date);
   const part = Object.fromEntries(
-    new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+    new Intl.DateTimeFormat('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    })
       .formatToParts(date)
       .map((p) => [p.type, p.value]),
   );

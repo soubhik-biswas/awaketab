@@ -3227,7 +3227,6 @@
   }
 
   @media (width >= 1024px) {
-
     .at-ext-hero {
       grid-template-columns: minmax(0, 1fr) var(--at-pg-hero-side);
       min-block-size: calc(var(--at-pg-popup-h) + 2 * var(--at-s-4));

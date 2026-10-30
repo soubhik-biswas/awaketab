@@ -28,7 +28,8 @@
   display: grid;
   grid-template-columns: var(--at-icon-md) minmax(0, 1fr);
   column-gap: var(--at-s-3);
-  padding: var(--at-s-4) var(--at-s-5);
+  padding-block: var(--at-s-4);
+  padding-inline: var(--at-s-5);
   border: var(--at-border) solid color-mix(in srgb, var(--at-info) 20%, transparent);
   border-radius: var(--at-r-tp18);
   background: var(--at-info-soft);
@@ -156,7 +157,8 @@
   justify-content: space-between;
   gap: var(--at-s-4);
   min-block-size: var(--at-h-row);
-  padding: var(--at-s-4) var(--at-s-5);
+  padding-block: var(--at-s-4);
+  padding-inline: var(--at-s-5);
   border: var(--at-border) solid var(--at-line);
   border-radius: var(--at-r-tp24);
   background: var(--at-surface);
