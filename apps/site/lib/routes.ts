@@ -5,10 +5,9 @@ export const SITE = 'https://awaketab.com';
 export const CONTACT_EMAIL = 'support@awaketab.com';
 export const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}`;
 
-// Where "Open the timer" goes. The home page carries the tool under its hero until the tool owns the whole page.
+// Where "Open the timer" goes: the home page is the tool. The anchor marks a page's own tool card.
 export const TOOL_ANCHOR = 'tool';
-export const TIMER_PATH = '/timer';
-export const toolHref = (locale: TLocale = 'en'): string => localePath(locale, TIMER_PATH);
+export const toolHref = (locale: TLocale = 'en'): string => localePath(locale, '/');
 
 export type TContentKind = 'for' | 'on' | 'vs' | 'guides' | 'learn';
 export const CONTENT_KINDS: readonly TContentKind[] = ['for', 'on', 'vs', 'guides', 'learn'];
@@ -16,11 +15,11 @@ export const CONTENT_KINDS: readonly TContentKind[] = ['for', 'on', 'vs', 'guide
 export const PRESET_ROUTES = ['15m', '30m', '45m', '1h', '2h', '4h', '8h'] as const;
 export type TPresetRoute = (typeof PRESET_ROUTES)[number];
 
-// A content page's start button opens the full tool at /timer with the documented query params (docs/00 §7).
+// A content page's start button opens the tool on the home page with the documented query params (docs/00 §7).
 export function startHref(preset: string, mode: string, locale: TLocale = 'en'): string {
   const q = new URLSearchParams({ preset, autostart: '1' });
   if (mode !== 'standard') q.set('mode', mode);
-  return `${localePath(locale, TIMER_PATH)}?${q.toString()}`;
+  return `${toolHref(locale)}?${q.toString()}`;
 }
 
 // The board's sample addresses, kept as permanent aliases of the pages that already own those slugs.

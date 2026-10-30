@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import ratings from '../../../../../data/ratings.json';
-import { Block, Callout, Cards, Cta, Faq, Steps, type ICard } from '@/components/site/blocks';
+import { Block, Callout, Cards, Cta, Faq, Note, Steps, type ICard } from '@/components/site/blocks';
+import { FacesGallery } from '@/components/site/faces-gallery';
 import { JsonLd } from '@/components/site/json-ld';
-import { HeroButtons, PageHero } from '@/components/site/page-hero';
 import { LOCALE_META, localePath, type TLocale } from '@/i18n/locales';
 import { articleIn, articlePath, type TSceneKey } from '@/lib/content';
 import { startHref } from '@/lib/routes';
@@ -16,6 +16,8 @@ const USES: ReadonlyArray<readonly [slug: string, key: string, scene: TSceneKey]
   ['reading', 'nightdesk', 'nightdesk'],
 ];
 
+const FACES = ['aurora', 'liquid', 'eclipse', 'skeleton', 'neon', 'halo'] as const;
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const locale = await localeParam(params);
   const tp = await getTranslations({ locale, namespace: 'page' });
@@ -26,10 +28,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     path: localePath(locale, '/'),
     locale,
     noindex: !LOCALE_META[locale].reviewed,
-    og: { kicker: ts('home.hero.eyebrow'), title: ts('home.hero.h1'), scene: 'hero', tone: 'dark' },
+    og: { kicker: ts('home.og.kicker'), title: ts('home.og.title'), sub: ts('home.og.sub'), scene: 'hero', tone: 'dark' },
   });
 }
 
+// The story below the tool (home board): faces, use cases, how it works, the honest limit, questions, closing call.
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const locale: TLocale = await localeParam(params);
   const english = locale === 'en';
@@ -46,36 +49,31 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       link: t(`home.uses.${key}.link`),
     };
   });
+  const faces = FACES.map((id) => ({
+    id,
+    name: t(`home.faces.items.${id}.name`),
+    desc: t(`home.faces.items.${id}.body`),
+  }));
   const steps = [1, 2, 3].map((n) => ({ title: t(`home.how.${String(n)}._`), body: t(`home.how.${String(n)}.body`) }));
   const faq = [1, 2, 3, 4].map((n) => ({ q: t(`home.faq.${String(n)}._`), a: t(`home.faq.${String(n)}.a`) }));
   return (
     <>
       <JsonLd schema={homeSchema(locale, ratings)} />
-      <PageHero
-        eyebrow={t('home.hero.eyebrow')}
-        h1={t('home.hero.h1')}
-        lead={t('home.hero.lead')}
-        scene="hero"
-        sceneLabel={t('home.hero.scene')}
-        actions={
-          <HeroButtons
-            primary={{ href: startHref('p60', 'standard', locale), label: t('home.cta') }}
-            secondary={{ href: '#home-how', label: t('home.hero.how') }}
-          />
-        }
-        {...(!english && !LOCALE_META[locale].reviewed
-          ? {
-              meta: (
-                <span role="note" data-translation-pending="">
-                  {tc('translation.pending')}{' '}
-                  <a href="/" hrefLang="en" className="text-link underline underline-offset-2">
-                    {tc('translation.original')}
-                  </a>
-                </span>
-              ),
-            }
-          : {})}
-      />
+      {!english && !LOCALE_META[locale].reviewed && (
+        <Block label={tc('translation.pending')}>
+          <Note>
+            <span role="note" data-translation-pending="">
+              {tc('translation.pending')}{' '}
+              <a href="/" hrefLang="en" className="text-link underline underline-offset-2">
+                {tc('translation.original')}
+              </a>
+            </span>
+          </Note>
+        </Block>
+      )}
+      <Block id="home-faces" h={t('home.faces.title')} sub={t('home.faces.sub')}>
+        <FacesGallery items={faces} />
+      </Block>
       <Block id="home-uses" h={t('home.uses.title')}>
         <Cards items={cards} cols={4} />
       </Block>
