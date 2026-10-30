@@ -133,8 +133,11 @@ export function ControlBar() {
   const press =
     'cursor-pointer outline-none transition-[background-color,color,box-shadow,transform] duration-glide ease-glide focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-px';
   const tall = phone ? 'h-13' : 'h-14';
-  // A long primary label (Japanese) wraps to a second line on the phone instead of being cut off.
-  const primaryLabel = phone ? 'min-w-0 text-center leading-[1.1] text-balance whitespace-normal' : 'truncate';
+  // On the phone the label keeps one line and the icon gives way first, as drawn; only a label wider than the
+  // whole button (Japanese) wraps to a second line instead of being cut off.
+  const primaryLabel = phone
+    ? 'max-w-full shrink-0 text-center leading-[1.1] text-balance whitespace-normal'
+    : 'truncate';
   return (
     <RovingFocus.Root
       ref={ref}
@@ -231,7 +234,13 @@ export function ControlBar() {
                 {x.spin ? (
                   <LoaderCircle className="size-[18px] animate-spinner" strokeWidth={2.25} aria-hidden="true" />
                 ) : null}
-                {Icon ? <Icon className="size-5" strokeWidth={2} aria-hidden="true" /> : null}
+                {Icon ? (
+                  <Icon
+                    className={cn('size-5', primary && phone && 'min-w-0 shrink!')}
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  />
+                ) : null}
                 <span className={cn(primary && primaryLabel)}>{x.label}</span>
               </button>
             </Item>
