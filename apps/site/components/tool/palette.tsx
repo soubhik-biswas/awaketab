@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import {
+  AlarmClock,
   Contrast,
   History,
   Infinity as InfinityGlyph,
@@ -25,13 +26,20 @@ import {
 } from 'lucide-react';
 import type { TFace } from '@awaketab/core';
 import { faceName } from '@/components/face';
-import { CommandPalette, type ICommandAction, type ICommandGroup } from '@/components/product/command-palette';
+import {
+  CommandPalette,
+  type ICommandAction,
+  type ICommandGroup,
+  type ICommandPaletteLabels,
+} from '@/components/product/command-palette';
+import { fill } from '@/lib/tool/chrome';
 import { returnFocus } from '@/lib/tool/focus';
 import { toolUi } from '@/lib/tool/ui';
 import { useTool, type IToolContext } from '@/components/tool/context';
 
 interface ICmd extends ICommandAction {
   group: string;
+  kind: string;
 }
 
 const PALETTE_FACES: TFace[] = [
@@ -57,34 +65,41 @@ const PALETTE_FACES: TFace[] = [
   'moon',
 ];
 
-function commands({ m, a }: IToolContext): ICmd[] {
+function commands({ m, a, presets }: IToolContext): ICmd[] {
+  const { s, c } = m;
   const list: ICmd[] = [];
-  const add = (group: string, label: string, icon: LucideIcon, keys: string[], run: () => void) =>
-    list.push({ id: `cmd-${list.length}`, group, label, icon, keys, onSelect: run });
+  const add = (group: string, label: string, icon: LucideIcon, keys: string[], run: () => void, kind = '') =>
+    list.push({ id: `cmd-${list.length}`, group, label, icon, keys, onSelect: run, kind });
   const st = m.state;
   if (st === 'running' || st === 'fallback') {
-    add('Session', 'Pause', Pause, ['Space'], a.pause);
-    add('Session', 'Stop keeping awake', X, [], a.stop);
-  } else if (st === 'paused' || st === 'needsyou') add('Session', 'Resume', Play, ['Space'], a.resume);
-  else add('Session', 'Keep awake', Play, ['Space'], () => a.start());
-  add('Session', 'Extend 15 minutes', Plus, ['+'], () => a.extend(900));
-  add('Session', 'Extend 1 hour', Plus, ['⇧', '+'], () => a.extend(3600));
-  add('Session', 'Set length: 30 minutes', Timer, [], () => a.setLength(1800));
-  add('Session', 'Set length: 2 hours', Timer, [], () => a.setLength(7200));
-  add('Session', 'Set length: until I stop it', InfinityGlyph, [], () => a.setLength(0));
-  for (const f of PALETTE_FACES) add('Faces', `Face: ${faceName(f)}`, LayoutGrid, [], () => a.setFace(f));
-  add('Go to', 'Open presets', ListChecks, [], () => a.go('presets'));
-  add('Go to', 'Open history', History, [], () => a.go('history'));
-  add('Go to', 'Open settings', Settings, [], () => a.go('settings'));
-  add('Go to', 'Help & fixes', LifeBuoy, ['?'], () => a.go('fix'));
-  add('Go to', 'Share this setup', Share2, [], () => a.go('share'));
-  add('Go to', 'Face studio', Palette, [], () => a.go('studio'));
-  add('Go to', 'Ambient sound', Volume2, [], () => a.go('sound'));
-  add('Go to', 'Account', User, [], () => a.go('account'));
-  add('Appearance', 'Fullscreen', Maximize, ['F'], () => a.go('focus'));
-  add('Appearance', 'Theme: light', Sun, [], () => a.setTheme('light'));
-  add('Appearance', 'Theme: dark', Moon, [], () => a.setTheme('dark'));
-  add('Appearance', 'Theme: OLED black', Contrast, [], () => a.setTheme('oled'));
+    add(s.session, s.pause, Pause, ['Space'], a.pause);
+    add(s.session, c.cStopAwake, X, [], a.stop);
+  } else if (st === 'paused' || st === 'needsyou') add(s.session, s.resume, Play, ['Space'], a.resume);
+  else add(s.session, s.keep, Play, ['Space'], () => a.start());
+  add(s.session, c.cExt15, Plus, ['+'], () => a.extend(900));
+  add(s.session, c.cExt60, Plus, ['⇧', '+'], () => a.extend(3600));
+  // Searchable only: the idle list keeps the drawn commands, and U is listed here so every key has a home.
+  add(s.session, c.cUntil, AlarmClock, ['U'], () => a.go('extend'), 'extra');
+  add(s.session, fill(c.cLen, { len: fill(c.minutes, { n: 30 }) }), Timer, [], () => a.setLength(1800));
+  add(s.session, fill(c.cLen, { len: s.hours2 }), Timer, [], () => a.setLength(7200));
+  add(s.session, fill(c.cLen, { len: c.cLenOpen }), InfinityGlyph, [], () => a.setLength(0));
+  presets.slice(0, 9).forEach((p, i) =>
+    add(s.presets, fill(c.cPreset, { name: p.label }), ListChecks, [String(i + 1)], () => a.applyPreset(p, true)),
+  );
+  for (const f of PALETTE_FACES) add(s.faces, fill(c.cFace, { name: faceName(f) }), LayoutGrid, [], () => a.setFace(f));
+  add(c.gGo, c.cOpenPresets, ListChecks, [], () => a.go('presets'));
+  add(c.gGo, c.cOpenHistory, History, [], () => a.go('history'));
+  add(c.gGo, c.cOpenSettings, Settings, [], () => a.go('settings'));
+  add(c.gGo, s.help, LifeBuoy, ['?'], () => a.go('fix'), 'help');
+  add(c.gGo, c.share, Share2, [], () => a.go('share'));
+  add(c.gGo, s.studio, Palette, [], () => a.go('studio'));
+  add(c.gGo, c.ambient, Volume2, [], () => a.go('sound'));
+  add(c.gGo, c.account, User, [], () => a.go('account'));
+  add(c.gLook, c.fullscreen, Maximize, ['F'], () => a.go('focus'), 'full');
+  add(c.gLook, c.cToggleTheme, Contrast, ['⇧', 'D'], a.cycleTheme);
+  add(c.gLook, fill(c.themeIs, { name: c.light }), Sun, [], () => a.setTheme('light'));
+  add(c.gLook, fill(c.themeIs, { name: c.dark }), Moon, [], () => a.setTheme('dark'));
+  add(c.gLook, fill(c.themeIs, { name: c.oled }), Contrast, [], () => a.setTheme('oled'));
   return list;
 }
 
@@ -100,15 +115,36 @@ function grouped(list: ICmd[]): ICommandGroup[] {
 
 export function ToolPalette() {
   const ctx = useTool();
-  const { ui, a } = ctx;
+  const { ui, m, a } = ctx;
+  const c = m.c;
   const all = useMemo(() => commands(ctx), [ctx]);
   const groups = useMemo(() => grouped(all), [all]);
   const idle = useMemo(
     () =>
       grouped(
-        all.filter((c) => c.group === 'Session' || c.label === 'Fullscreen' || c.label === 'Help & fixes').slice(0, 7),
+        all
+          .filter((x) => (x.group === m.s.session && x.kind === '') || x.kind === 'help' || x.kind === 'full')
+          .slice(0, 7),
       ),
-    [all],
+    [all, m.s.session],
+  );
+  const labels = useMemo<ICommandPaletteLabels>(
+    () => ({
+      move: c.palMove,
+      run: c.palRun,
+      close: c.palClose,
+      closePalette: c.palClosePalette,
+      noMatch: (q) => fill(c.palEmpty, { q }),
+      count: (n, searching) =>
+        searching
+          ? n === 1
+            ? c.palResult1
+            : fill(c.palResults, { n })
+          : n === 1
+            ? c.palCommand1
+            : fill(c.palCommands, { n }),
+    }),
+    [c],
   );
   return (
     <CommandPalette
@@ -124,7 +160,10 @@ export function ToolPalette() {
       groups={groups}
       query={ui.palQuery}
       onQueryChange={(palQuery) => toolUi.set({ palQuery })}
-      emptyHint="Try “extend”, “face” or “theme”."
+      emptyHint={c.palHint}
+      placeholder={c.palPlaceholder}
+      title={c.palTitle}
+      labels={labels}
     />
   );
 }
