@@ -3716,7 +3716,7 @@
       "allow": "Why the allow attribute matters",
       "allowBody": "Browsers let an embedded page keep the screen awake only when the site allows it with allow=\"screen-wake-lock\". The loader always adds it. If your platform strips script tags, paste this iframe instead and keep the allow attribute.",
       "api": "JavaScript API",
-      "apiBody": "The loader exposes window.AwakeTabEmbed with on(\"state\", callback), start({ preset, ms, until }), stop() and setTheme(theme). Call start() from a click: the video fallback needs a tap.",
+      "apiBody": "The loader exposes window.AwakeTabEmbed with on(\"state\", callback), start('{ preset, ms, until }'), stop() and setTheme(theme). Call start() from a click: the video fallback needs a tap.",
       "licence": "Licences open soon",
       "licenceBody": "A Business licence will remove the credit line and give the Start button your brand colour. Keeping the screen awake is the same either way."
     },

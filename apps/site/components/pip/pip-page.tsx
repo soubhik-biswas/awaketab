@@ -21,6 +21,7 @@ const IDLE = {
 } as const;
 
 // The popup fallback at /pip: the mini clock mirrors the AwakeTab tab that opened it and holds its own wake lock.
+// It draws only in the browser, since its clock and session come from the opening tab.
 export function PipPage() {
   const t = useTranslations('surfaces.pip');
   const locale = useLocale();
@@ -55,13 +56,15 @@ export function PipPage() {
   return (
     <>
       <h1 className="sr-only">{t('title')}</h1>
-      <MiniClock
-        view={view}
-        theme={theme}
-        windowed
-        onExtend={() => mirror?.send('add', EXTEND_SEC * 1000)}
-        onClose={close}
-      />
+      {mounted ? (
+        <MiniClock
+          view={view}
+          theme={theme}
+          windowed
+          onExtend={() => mirror?.send('add', EXTEND_SEC * 1000)}
+          onClose={close}
+        />
+      ) : null}
     </>
   );
 }
