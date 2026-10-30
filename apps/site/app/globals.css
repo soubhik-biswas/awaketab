@@ -308,11 +308,8 @@
   --shadow-e2: var(--shadow-e2);
   --shadow-e3: var(--shadow-e3);
 
-  --font-sans:
-    var(--font-geist), "Noto Sans JP", "Noto Sans SC", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
-  --font-display:
-    var(--font-archivo), var(--font-geist), "Noto Sans JP", "Noto Sans SC", "Noto Sans Devanagari", ui-sans-serif,
-    sans-serif;
+  --font-sans: var(--font-geist), var(--font-script, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), var(--font-geist), var(--font-script, ui-sans-serif), ui-sans-serif, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --radius-xs: 6px;
@@ -435,6 +432,36 @@
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
+
+  :lang(ja) {
+    --font-script: var(--font-noto-jp, "Noto Sans JP");
+  }
+
+  :lang(zh) {
+    --font-script: var(--font-noto-sc, "Noto Sans SC");
+  }
+
+  :lang(hi) {
+    --font-script: var(--font-noto-deva, "Noto Sans Devanagari");
+  }
+}
+
+@keyframes at-calm-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes at-calm-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -443,5 +470,29 @@
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  :is(
+    [data-slot$="-overlay"],
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"],
+    [data-slot="sheet-content"],
+    [data-slot="drawer-content"]
+  )[data-state="open"] {
+    animation: at-calm-in 180ms ease-out both !important;
+  }
+
+  :is(
+    [data-slot$="-overlay"],
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"],
+    [data-slot="sheet-content"],
+    [data-slot="drawer-content"]
+  )[data-state="closed"] {
+    animation: at-calm-out 120ms ease-in both !important;
+  }
+
+  [data-slot="drawer-content"][data-state="closed"] {
+    transform: none !important;
   }
 }

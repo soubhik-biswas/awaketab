@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
 import { cn } from '@/lib/utils';
 import { formatDuration } from '@/lib/format';
-import { clockTime, lengthWords } from '@/lib/tool/clock';
+import { CHROME, fill, lengthText } from '@/lib/tool/chrome';
+import { clockTime } from '@/lib/tool/clock';
 import { rememberOpener, returnFocus } from '@/lib/tool/focus';
 import { addHistory, clearHistory, useHistory } from '@/lib/tool/history';
 import { deriveModel, DEVICE_SIZES, type TFaceTheme } from '@/lib/tool/model';
@@ -89,20 +90,21 @@ function useOrigin(): string {
 }
 
 function announceText(an: IAnnounce, lang: TToolLang, fmt: 12 | 24): string {
-  const at = an.endsAt === null ? '' : clockTime(an.endsAt, lang, fmt);
+  const c = CHROME[lang];
+  const time = an.endsAt === null ? '' : clockTime(an.endsAt, lang, fmt);
   switch (an.kind) {
     case 'start':
-      return at ? `Screen awake until ${at}.` : 'Screen awake, no end.';
+      return time ? fill(c.anStart, { time }) : c.anStartOpen;
     case 'extend':
-      return `Extended by ${Math.round(an.extendSec / 60)} minutes. Now until ${at}.`;
+      return fill(c.anExtend, { n: Math.round(an.extendSec / 60), time });
     case 'lowtime':
-      return '5 minutes left. Extend with plus.';
+      return c.anLow;
     case 'hidden':
-      return 'Paused — come back to this tab to continue.';
+      return c.anHidden;
     case 'refused':
-      return 'Not awake. The browser refused the lock. See the fix.';
+      return c.anRefused;
     case 'ended':
-      return `Time’s up. Ended at ${clockTime(Date.now(), lang, fmt)}; the screen can sleep again.`;
+      return fill(c.anEnded, { time: clockTime(Date.now(), lang, fmt) });
   }
 }
 
@@ -257,17 +259,18 @@ function ToolApp({
           face: cur.settings.face,
           chime: cur.settings.chime !== 'off',
         });
+        const { s, c } = cur.m;
         toolToast.show({
           id: 'preset-saved',
           tone: 'success',
-          title: `Saved “${p.label}”`,
-          description: `${p.totalSec === 0 ? 'No end' : lengthWords(p.totalSec)} · press ${Math.min(9, presets.length + 1)} to start it.`,
+          title: fill(c.savedPreset, { label: p.label }),
+          description: fill(c.savedPresetD, { len: lengthText(p.totalSec, s, c), n: Math.min(9, presets.length + 1) }),
         });
       },
       copyLink: () => {
         void navigator.clipboard?.writeText(shareUrlRef.current).catch(() => undefined);
         toolUi.set({ copied: true });
-        toolToast.copied();
+        toolToast.copied(latest.current.m.c);
       },
       clearHistory: () => {
         clearHistory();
@@ -298,7 +301,7 @@ function ToolApp({
     const offs = [
       wake.on('extended', ({ sec, endsAt }) => {
         const l = latest.current.m;
-        toolToast.extended({
+        toolToast.extended(l.c, {
           until: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt),
           minutes: Math.round(sec / 60),
           onUndo: () => wake.undoExtend(),
@@ -306,16 +309,18 @@ function ToolApp({
       }),
       wake.on('lowtime', ({ endsAt }) => {
         const l = latest.current.m;
-        toolToast.lowTime({
+        toolToast.lowTime(l.c, {
           endsAt: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt),
+          extendLabel: l.s.ext15,
           onExtend: () => wake.extend(900),
         });
       }),
       wake.on('ended', ({ endedAt }) => {
         const l = latest.current;
         playChime(l.settings.chime);
-        toolToast.ended({
+        toolToast.ended(l.m.c, {
           endedAt: clockTime(endedAt + (toolUi.get().qa.offsetMs ?? 0), l.m.lang, l.m.fmt),
+          againLabel: l.m.s.again,
           onStartAgain: () => setLength(l.m.total),
         });
       }),
@@ -346,15 +351,16 @@ function ToolApp({
   // The tab title carries the countdown, so a glance at the tab bar is enough.
   useEffect(() => {
     const base = 'AwakeTab';
+    const { s, c } = m;
     let title = base;
     if (awake && !m.indef)
-      title = `${settings.secs ? formatDuration(m.remain) : `${Math.ceil(m.remain / 60)} min`} left · ${base}`;
-    else if (awake) title = `Awake · ${base}`;
-    else if (m.state === 'paused') title = `Paused · ${base}`;
-    else if (m.state === 'blocked') title = `Blocked · ${base}`;
-    else if (m.state === 'ended') title = `Time’s up · ${base}`;
+      title = `${fill(c.tabLeft, { t: settings.secs ? formatDuration(m.remain) : `${Math.ceil(m.remain / 60)}${s.min}` })} · ${base}`;
+    else if (awake) title = `${c.tabAwake} · ${base}`;
+    else if (m.state === 'paused') title = `${s.paused} · ${base}`;
+    else if (m.state === 'blocked') title = `${c.tabBlocked} · ${base}`;
+    else if (m.state === 'ended') title = `${c.tabUp} · ${base}`;
     document.title = title;
-  }, [awake, m.indef, m.remain, m.state, settings.secs]);
+  }, [awake, m, settings.secs]);
 
   const sizes = DEVICE_SIZES[device];
   const focus = ui.view === 'focus';
@@ -417,7 +423,7 @@ function ToolApp({
           className="absolute top-4 right-4 z-[7] h-11 gap-2 rounded-[10px] border-border bg-(--tool-exit) px-4 text-[14px] font-semibold text-foreground [&_svg]:size-[18px]"
         >
           <X strokeWidth={2} aria-hidden="true" />
-          Exit fullscreen <Kbd className={KBD}>Esc</Kbd>
+          {m.c.exitFull} <Kbd className={KBD}>Esc</Kbd>
         </Button>
       ) : null}
       <ToolToaster bottom={focus ? 24 : sizes.bar + 12} phoneBottom={focus ? 24 : sizes.bar + 12} />

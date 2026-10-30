@@ -6,8 +6,9 @@ import { LifeBuoy, LoaderCircle, Pause, Play, Plus, RotateCcw, X, type LucideIco
 import { Banner } from '@/components/product/banner';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { fill } from '@/lib/tool/chrome';
 import { faceRemain } from '@/lib/tool/model';
-import type { TBanner } from '@/lib/tool/ui';
+import { STAGE_ID, type TBanner } from '@/lib/tool/ui';
 import { useTool } from '@/components/tool/context';
 import { ToolPill } from '@/components/tool/header';
 
@@ -26,19 +27,54 @@ export function useBannerKind(): Exclude<TBanner, 'none'> | null {
 
 function Banners() {
   const { ui, m, a } = useTool();
+  const c = m.c;
   const kind = useBannerKind();
   return (
     <>
-      {kind === 'offline' ? <Banner kind="offline" className="shrink-0" /> : null}
-      {kind === 'conflict' ? <Banner kind="conflict" className="shrink-0" onAction={a.takeOver} /> : null}
+      {kind === 'offline' ? (
+        <Banner kind="offline" title={c.bOfflineT} body={c.bOfflineB} className="shrink-0" />
+      ) : null}
+      {kind === 'conflict' ? (
+        <Banner
+          kind="conflict"
+          title={c.bConflictT}
+          body={c.bConflictB}
+          actionLabel={c.bConflictA}
+          className="shrink-0"
+          onAction={a.takeOver}
+        />
+      ) : null}
       {kind === 'update' ? (
-        <Banner kind="update" className="shrink-0" onAction={() => window.location.reload()} />
+        <Banner
+          kind="update"
+          title={c.bUpdateT}
+          body={c.bUpdateB}
+          actionLabel={c.bUpdateA}
+          className="shrink-0"
+          onAction={() => window.location.reload()}
+        />
       ) : null}
       {m.state === 'needsyou' ? (
-        <Banner kind="needsyou" className="shrink-0" actionLabel={m.s.resume} onAction={a.resume} />
+        <Banner
+          kind="needsyou"
+          title={c.bNeedsT}
+          body={c.bNeedsB}
+          className="shrink-0"
+          actionLabel={m.s.resume}
+          onAction={a.resume}
+        />
       ) : null}
       {m.state === 'blocked' && ui.view !== 'fix' ? (
-        <Banner kind="blocked" role="alert" className="shrink-0" onAction={() => a.go('fix')} />
+        // The refusal is already announced once, assertively, so the banner itself stays quiet.
+        <Banner
+          kind="blocked"
+          role="note"
+          title={c.bBlockedT}
+          body={c.bBlockedB}
+          actionLabel={c.bBlockedA}
+          className="shrink-0"
+          onAction={() => a.go('fix')}
+        />
       ) : null}
     </>
   );
@@ -240,11 +276,15 @@ export function StageFace({ size }: { size: number }) {
   const hour = new Date(m.now).getHours();
   // "Dim the clock at night": after 10:00 PM and until 6:00 AM.
   const dim = settings.dim && (hour >= 22 || hour < 6);
+  const c = m.c;
+  // Whole minutes only, so the label changes once a minute and the countdown is never read every second.
   const label = m.indef
-    ? `${Math.floor(m.elapsed / 60)} minutes awake, no end`
+    ? fill(c.faceOpen, { n: Math.floor(m.elapsed / 60) })
     : m.state === 'ended'
-      ? `Time’s up, ended at ${m.endedT}`
-      : `${minute} ${minute === 1 ? 'minute' : 'minutes'} left, until ${m.endT}`;
+      ? fill(c.faceUp, { time: m.endedT })
+      : minute === 1
+        ? fill(c.faceLeft1, { time: m.endT })
+        : fill(c.faceLeft, { n: minute, time: m.endT });
   return (
     <div
       role="timer"
@@ -332,8 +372,9 @@ export const Stage = forwardRef<HTMLElement, { faceSize: number; top: number; bo
         if (typeof ref === 'function') ref(el);
         else if (ref) ref.current = el;
       }}
+      id={STAGE_ID}
       tabIndex={0}
-      aria-label="Timer"
+      aria-label={s.timer}
       aria-keyshortcuts="Space + Shift++ U F Shift+D ? 1 2 3 4 5 6 7 8 9"
       className={cn(
         'absolute inset-x-0 z-[1] box-border flex flex-col items-center justify-center-safe overflow-x-hidden overflow-y-auto outline-none [scrollbar-width:none] focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-ring',

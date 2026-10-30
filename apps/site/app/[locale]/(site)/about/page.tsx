@@ -58,6 +58,20 @@ const PRINCIPLES = [
   ],
 ] as const;
 
+// The keyboard map from the accessibility board, in its order and words.
+const KEYS = [
+  ['Space', 'Keep awake · pause · resume'],
+  ['+', 'Extend 15 minutes'],
+  ['⇧ +', 'Extend 1 hour'],
+  ['U', 'Keep awake until…'],
+  ['F', 'Fullscreen'],
+  ['⇧ D', 'Toggle theme'],
+  ['?', 'Help & fixes'],
+  ['1 … 9', 'Start a saved preset'],
+  ['⌘ K', 'Command palette'],
+  ['Esc', 'Close sheet, dialog or palette'],
+] as const;
+
 const link = 'text-link underline underline-offset-2';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -157,6 +171,48 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       </Block>
       <Block id="ab-claims" h="What AwakeTab will not claim">
         <Steps items={PRINCIPLES.map(([title, body]) => ({ title, body }))} />
+      </Block>
+      <Block
+        id="accessibility"
+        h="Accessibility"
+        sub="The target is WCAG 2.2 AA, in light, dark and OLED and in every supported language."
+      >
+        <Prose
+          items={[
+            {
+              p: 'Everything works by keyboard, by touch and with a screen reader. Single-key shortcuts only fire while the timer has focus — never while you type in a field or the palette — and the palette shows each one next to its command.',
+            },
+          ]}
+        />
+        <DataTable
+          label="Keyboard shortcuts"
+          cols={['Key', 'Action']}
+          template="0.7fr 2fr"
+          rows={KEYS.map(([key, action]) => [tx(<kbd className="font-mono">{key}</kbd>, true), tx(action)])}
+        />
+        <Prose
+          items={[
+            {
+              list: [
+                'Status is always an icon and words, plus a solid or hollow dot — never colour alone.',
+                'The countdown is never read out every second. The clock is a timer whose label changes once a minute; start, extend, five minutes left, a hidden tab and the end are announced politely, and only a refused wake lock interrupts.',
+                'With reduced motion on, the faces stop sweeping, flipping and glowing and sheets fade instead of sliding; the digits still change once a second.',
+                'Every control is at least 44 px with a focus ring you can always see, no text is smaller than 12 px, and pages reflow to one column at 200 % zoom.',
+              ],
+            },
+            {
+              p: (
+                <>
+                  Found something that gets in your way? Email{' '}
+                  <a href={CONTACT_MAILTO} className={link}>
+                    {CONTACT_EMAIL}
+                  </a>{' '}
+                  with the page, your browser and any assistive technology you use.
+                </>
+              ),
+            },
+          ]}
+        />
       </Block>
       <Block
         id="credits"

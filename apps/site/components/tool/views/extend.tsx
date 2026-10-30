@@ -6,16 +6,12 @@ import { Chip } from '@/components/product/chip';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { fill } from '@/lib/tool/chrome';
 import { clockTime } from '@/lib/tool/clock';
 import { useTool } from '@/components/tool/context';
 import { BTN_PRIMARY_FULL, FIELD, Group } from '@/components/tool/kit';
 
-const CHIPS: Array<[number, string]> = [
-  [300, '+5 min'],
-  [900, '+15 min'],
-  [1800, '+30 min'],
-  [3600, '+1 hour'],
-];
+const CHIPS = [300, 900, 1800, 3600] as const;
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -39,11 +35,12 @@ export default function ExtendView() {
   const base = live && !m.indef ? m.endsAt : m.now;
   const [value, setValue] = useState(() => toInput(base + 900_000));
   const target = fromInput(value, m.now);
-  const label = target === null ? '' : clockTime(target, m.lang, m.fmt);
+  const time = target === null ? '' : clockTime(target, m.lang, m.fmt);
+  const { s, c } = m;
   return (
     <>
       <div className="grid grid-cols-4 gap-2">
-        {CHIPS.map(([sec, text]) => (
+        {CHIPS.map((sec) => (
           <Chip
             key={sec}
             shape="tile"
@@ -54,14 +51,14 @@ export default function ExtendView() {
               a.close();
             }}
           >
-            {text}
+            {sec === 3600 ? `+${s.hour}` : `+${sec / 60}${s.min}`}
           </Chip>
         ))}
       </div>
-      <Group label="Or until a time">
+      <Group label={c.orUntil}>
         <label className={cn(FIELD, 'focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring')}>
           <AlarmClock className="size-4 shrink-0 text-muted-foreground-strong" strokeWidth={2} aria-hidden="true" />
-          <span className="sr-only">Keep awake until</span>
+          <span className="sr-only">{c.keepUntilLabel}</span>
           <Input
             type="time"
             value={value}
@@ -80,7 +77,7 @@ export default function ExtendView() {
         }}
         className={BTN_PRIMARY_FULL}
       >
-        {live ? `Extend to ${label}` : `Keep awake until ${label}`}
+        {fill(live ? c.extendTo : c.keepUntil, { time })}
       </Button>
     </>
   );

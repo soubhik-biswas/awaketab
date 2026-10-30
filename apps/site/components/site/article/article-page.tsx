@@ -176,7 +176,7 @@ export async function ArticlePage({
     href: r.href,
     title: r.label,
     link: ts('article.read'),
-    ...(r.lang ? { lang: r.lang } : {}),
+    ...(r.lang ? { lang: r.lang, titleLang: r.lang } : {}),
   }));
   const toolCopy = kind === 'guides' ? 'skip' : 'try';
   const toolFirst = kind === 'for';

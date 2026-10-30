@@ -16,6 +16,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { faceName } from '@/components/face';
+import { fill, lengthText } from '@/lib/tool/chrome';
 import { cn } from '@/lib/utils';
 import { useTool } from '@/components/tool/context';
 import { useArrive } from '@/components/tool/motion';
@@ -33,40 +34,45 @@ type TAct = {
   keys?: string;
 };
 
-const EXTEND: Array<[number, string, string]> = [
-  [300, '+5', 'Add 5 minutes'],
-  [900, '+15', 'Add 15 minutes'],
-  [1800, '+30', 'Add 30 minutes'],
-  [3600, '+1 h', 'Add 1 hour'],
+const EXTEND: Array<[number, string]> = [
+  [300, '+5'],
+  [900, '+15'],
+  [1800, '+30'],
+  [3600, '+1 h'],
 ];
 
-const LENGTHS: Array<[number, string, string, string]> = [
-  [900, '15 min', '15m', '15 minutes'],
-  [1800, '30 min', '30m', '30 minutes'],
-  [3600, '1 hour', '1h', '1 hour'],
-  [7200, '2 hours', '2h', '2 hours'],
-  [0, '∞', '∞', 'No end'],
+const LENGTHS: Array<[number, string, string]> = [
+  [900, '15 min', '15m'],
+  [1800, '30 min', '30m'],
+  [3600, '1 hour', '1h'],
+  [7200, '2 hours', '2h'],
+  [0, '∞', '∞'],
 ];
 
 function useBarModel() {
   const { device, m, a } = useTool();
-  const s = m.s;
+  const { s, c } = m;
   const st = m.state;
   const compact = device === 'phone' || device === 'tabletP';
   const running = st === 'running' || st === 'fallback';
   let chips: TChip[] = [];
   if (running && !m.indef)
-    chips = EXTEND.map(([sec, label, aria]) => ({
+    chips = EXTEND.map(([sec, label]) => ({
       id: `ext-${sec}`,
       label: label + (compact || sec === 3600 ? '' : ' min'),
-      aria,
+      aria: sec === 3600 ? c.addHour : fill(c.addMin, { n: sec / 60 }),
       go: () => a.extend(sec),
     }));
   else if (st === 'idle' || st === 'ended' || st === 'unsupported')
-    chips = LENGTHS.map(([sec, full, short, aria]) => ({
+    chips = LENGTHS.map(([sec, full, short]) => ({
       id: `len-${sec}`,
       label: compact ? short : full,
-      aria: compact || sec === 0 ? aria : undefined,
+      aria:
+        compact || sec === 0 || m.lang !== 'en'
+          ? sec % 3600 === 0
+            ? lengthText(sec, s, c)
+            : fill(c.minutes, { n: sec / 60 })
+          : undefined,
       on: sec === m.total,
       go: () => a.setLength(sec),
     }));
@@ -127,11 +133,13 @@ export function ControlBar() {
   const press =
     'cursor-pointer outline-none transition-[background-color,color,box-shadow,transform] duration-glide ease-glide focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-px';
   const tall = phone ? 'h-13' : 'h-14';
+  // A long primary label (Japanese) wraps to a second line on the phone instead of being cut off.
+  const primaryLabel = phone ? 'min-w-0 text-center leading-[1.1] text-balance whitespace-normal' : 'truncate';
   return (
     <RovingFocus.Root
       ref={ref}
       role="toolbar"
-      aria-label="Session controls"
+      aria-label={m.c.controls}
       aria-orientation="horizontal"
       orientation="horizontal"
       loop
@@ -224,7 +232,7 @@ export function ControlBar() {
                   <LoaderCircle className="size-[18px] animate-spinner" strokeWidth={2.25} aria-hidden="true" />
                 ) : null}
                 {Icon ? <Icon className="size-5" strokeWidth={2} aria-hidden="true" /> : null}
-                <span className={cn(primary && 'truncate')}>{x.label}</span>
+                <span className={cn(primary && primaryLabel)}>{x.label}</span>
               </button>
             </Item>
           );
@@ -235,7 +243,7 @@ export function ControlBar() {
         <button
           type="button"
           onClick={() => a.go('faces')}
-          aria-label={`Clock face: ${name}. Change face`}
+          aria-label={fill(m.c.faceBtn, { name })}
           aria-haspopup="dialog"
           className={cn(
             press,
@@ -275,7 +283,7 @@ export function ControlBar() {
           <button
             type="button"
             onClick={() => a.go('focus')}
-            aria-label="Fullscreen"
+            aria-label={m.c.fullscreen}
             aria-keyshortcuts="F"
             className={cn(
               press,
