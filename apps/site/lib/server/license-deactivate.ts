@@ -6,7 +6,7 @@ import { PolarError, createPolar } from './polar';
 import { clientIp, rateLimit } from './ratelimit';
 
 export async function deactivateRoute(request: Request, env: IEnv): Promise<Response> {
-  if (!(await rateLimit(env, 'license', await clientIp(request), 10))) return rateLimited();
+  if (!(await rateLimit(env, 'license', clientIp(request), 10))) return rateLimited();
   let token: string;
   let deviceId: string;
   try {

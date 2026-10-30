@@ -1,6 +1,6 @@
 import { RATE_MAX, RATE_WINDOW_S, type IEnv } from './env';
 
-export async function clientIp(request: Request): Promise<string> {
+export function clientIp(request: Request): string {
   return (
     request.headers.get('cf-connecting-ip') ??
     request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??

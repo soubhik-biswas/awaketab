@@ -2,7 +2,7 @@ import type { IEnv } from './env';
 import type { TPlanId } from './license';
 
 export interface IPolarLicense {
-  status: 'granted' | 'revoked' | string;
+  status: string;
   benefit_id: string;
   limit_activations: number | null;
   expires_at: string | null;
