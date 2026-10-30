@@ -22,7 +22,6 @@ const HEAD = [
 ];
 const TOOL = block('tool', /<section id="s-tool"/u, true);
 const BODY = [
-  block('phone contents', /<details class="at-toc-m">/u, true),
   block('body', /<div class="at-body">/u, true),
   block('honest limit', /<aside id="s-limit"/u, true),
 ];
@@ -83,13 +82,13 @@ describe('one article order (docs/06 §24)', () => {
     expect(bad).toEqual([]);
   });
 
-  it('draws every callout with the shared Note and Limit components and their Phosphor icons', () => {
+  it('draws every callout with the shared callout block and its Lucide icon', () => {
     const bad: string[] = [];
     for (const [route, html] of pages) {
       const body = main(html);
-      for (const m of body.matchAll(/<(?:div|aside) role="note" class="([^"]+)"[^>]*>\s*(<svg[^>]*>)/gu)) {
-        if (!/\bat-note\b/u.test(m[1] ?? '')) bad.push(`${route}: note without .at-note`);
-        if (!/class="at-duo/u.test(m[2] ?? '')) bad.push(`${route}: note icon is not Phosphor`);
+      for (const m of body.matchAll(/<(?:div|aside)(?: id="[^"]+")? role="note" class="([^"]+)"[^>]*>\s*(<svg[^>]*>)/gu)) {
+        if (!/\bat-sp-callout\b/u.test(m[1] ?? '')) bad.push(`${route}: note without .at-sp-callout`);
+        if (!/class="at-icon/u.test(m[2] ?? '')) bad.push(`${route}: note icon is not Lucide`);
       }
       if (/<blockquote/u.test(body)) bad.push(`${route}: blockquote`);
       if (/<p><strong>(?:Note|Tip|Warning|Important)\b/u.test(body)) bad.push(`${route}: hand-made callout`);

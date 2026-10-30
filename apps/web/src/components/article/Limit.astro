@@ -1,5 +1,5 @@
 ---
-import Icon from '../icons/Icon.astro';
+import Lucide from '../icons/Lucide.astro';
 
 interface Props {
   text: string;
@@ -11,14 +11,13 @@ const { text, label, inline = false } = Astro.props;
 
 <aside
   id={inline ? undefined : 's-limit'}
-  class="at-limit-note"
+  class="at-sp-callout at-limit-note"
+  data-tone="info"
   aria-labelledby={inline ? 'h-limit-in' : 'h-limit'}
 >
-  <div role="note" class="at-note">
-    <Icon name="info" size={20} />
-    <div>
-      <h2 id={inline ? 'h-limit-in' : 'h-limit'} class="at-kicker">{label}</h2>
-      <p>{text}</p>
-    </div>
-  </div>
+  <Lucide name="info" size={20} />
+  <span class="at-sp-callout-text">
+    <h2 id={inline ? 'h-limit-in' : 'h-limit'} class="at-sp-callout-t">{label}</h2>
+    <span class="at-sp-body">{text}</span>
+  </span>
 </aside>

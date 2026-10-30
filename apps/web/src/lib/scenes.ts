@@ -359,3 +359,25 @@ export function sceneSvg(key: TSceneKey, opts: ISceneOptions = {}): string {
     `</svg>`
   );
 }
+
+// Which scene a use case shows on its card and hero; anything unlisted falls back to the hero scene.
+const USE_CASE_SCENE: Record<string, TSceneKey> = {
+  cooking: 'cooking',
+  presentations: 'presenting',
+  teleprompter: 'presenting',
+  classroom: 'presenting',
+  'sheet-music': 'presenting',
+  'video-calls': 'presenting',
+  dashboards: 'dashboard',
+  kiosk: 'success',
+  downloads: 'history',
+  'ai-agents': 'nightdesk',
+  'night-clock': 'nightdesk',
+  reading: 'nightdesk',
+  'work-laptop': 'nightdesk',
+  workouts: 'firstaction',
+};
+
+export function useCaseScene(slug: string): TSceneKey {
+  return USE_CASE_SCENE[slug] ?? 'hero';
+}
