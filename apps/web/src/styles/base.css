@@ -200,3 +200,28 @@
     transition: none !important;
   }
 }
+
+.at-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--at-gap-wordmark);
+  color: var(--at-ink);
+}
+
+.at-wordmark-stacked {
+  flex-direction: column;
+}
+
+.at-wordmark-text {
+  font: var(--at-type-wordmark);
+  letter-spacing: var(--at-trk-wordmark);
+  white-space: nowrap;
+}
+
+.at-wordmark-tab {
+  font-weight: 500;
+}
+
+.at-icon {
+  flex: none;
+}

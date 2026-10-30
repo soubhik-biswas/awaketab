@@ -1,0 +1,35 @@
+---
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+
+interface Props {
+  name: string;
+  size?: 16 | 18 | 20 | 24;
+  class?: string;
+  label?: string;
+}
+
+const STROKE = { 16: 2, 18: 2, 20: 1.75, 24: 1.5 } as const;
+const { name, size = 20, class: className, label } = Astro.props;
+// Lucide (ISC), read at build time; the page ships only the inline paths.
+const require = createRequire(`${process.cwd()}/package.json`);
+const file = readFileSync(require.resolve(`lucide-static/icons/${name}.svg`), 'utf8');
+const body = /<svg[^>]*>([\s\S]*)<\/svg>/u.exec(file)?.[1] ?? '';
+---
+
+<svg
+  class:list={['at-icon', className]}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={STROKE[size]}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  focusable="false"
+  set:html={body}
+/>

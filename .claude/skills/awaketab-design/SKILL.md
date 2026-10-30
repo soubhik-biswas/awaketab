@@ -1,9 +1,14 @@
 ---
 name: awaketab-design
-description: Use for any AwakeTab UI or UX work (tool page, clock faces, states, settings, content pages, /pro, extension popup, embed). Applies the "Clear Night" design system from DESIGN.md and the product rules from PRODUCT.md.
+description: Use for any AwakeTab UI or UX work (tool page, clock faces, states, settings, content pages, /pro, extension popup, embed). Applies the "Solar Green" design system from DESIGN.md and the product rules from PRODUCT.md.
 ---
 
 # AwakeTab design skill
+
+Solar Green (30 Oct 2026) replaced Clear Night. Read `DESIGN.md`, then `docs/redesign/solar-green/HANDOFF.md`, then the Solar Green section of `docs/redesign/DECISIONS.md`. Match the handoff boards pixel for pixel: take every number and string from the board source (`prototype/*.dc.html`, `renderVals()`), and use only `--at-*` tokens from `apps/web/src/styles/tokens.css`. Colour roles: green awake, orange act, amber paused, red blocked, sky needs-you/info/focus, violet ended. Status is always icon + words + dot. Astro, zero hydration, self-hosted fonts.
+
+The notes below describe the older Clear Night rules; where they disagree with Solar Green, Solar Green wins.
+
 
 Before designing or changing any user-facing UI in this repo:
 

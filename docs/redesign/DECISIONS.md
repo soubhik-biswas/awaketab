@@ -240,3 +240,18 @@ The owner delegated all open questions to the lead ("you take the decision"). Pr
 
 - **One article pattern.** Every content page follows one order (docs/06 §24). Decided (coordinator, 29 Sep 2026): on `/for` and `/on` the tool comes right after the lead and meta row, before the contents and body, because people land there to start it; on `/vs`, `/guides` and `/learn` it follows the body and honest limit, where the reading is the point and the side rail's tool card links down to it.
 - **Brand logos.** Real full-colour SVG Logos wherever a browser or system is named. Decided: the macOS and iOS entries are wordmarks that would repeat the text beside them and shrink to 4 px tall at tag size, so Apple systems use the Apple mark; Samsung Internet has no logo in the set and uses the Phosphor `browser` icon; ChromeOS uses the Chrome logo.
+
+## Solar Green (30 Oct 2026)
+
+The final design handoff (`awaketab-handoff.zip`, spec copied to `docs/redesign/solar-green/`) replaces Clear Night everywhere: tool, faces, content site, Pro, extension, embed, kiosk, PiP, emails and brand.
+
+- **Stack (owner).** Astro 5 with zero hydration stays; the handoff's Next.js, shadcn and `lucide-react` become Astro components, vanilla-TS islands, build-time shadcn styling through the tokens, and inlined Lucide SVG.
+- **Fidelity (owner).** Pixel-for-pixel match with the boards in light, dark and OLED, every state reachable. The board source (`prototype/*.dc.html`, `renderVals()`) is the measure; when docs and boards disagree, the boards win.
+- **Tokens.** Solar Green values sit on the existing `--at-*` names (the contract), with new roles added: `--at-primary` (orange, act), `--at-info`, `--at-ended`, `--at-link`, `--at-surface-2/3`, the soft fills, `--at-elev-2/3`, `--at-pop`, `--at-sheet`, `--at-field`, `--at-face-*`. `--at-accent` is the green lamp; shadcn `--primary` is now orange. Radii become 6 · 10 · 14 · 20 · 28 · 999; control heights 36 · 44 · 52 · 64; weights 300 to 800 allowed by the type tokens.
+- **Lamp colour choice retired.** Aqua, violet, mint and sky lamps (`data-accent`) are removed: green always means awake. Face studio (Pro) changes only the face accent and glow.
+- **States.** The nine Solar Green pill strings replace the seven Clear Night strings; docs/04 and docs/05 change with the tool.
+- **Fonts.** Self-hosted only (D-R26 holds). IBM Plex Serif and DotGothic16 are added for the Luxe, Words and LED faces and load only with them. Noto fallbacks are system fonts, never downloaded.
+- **Languages.** All nine locales stay. DE, JA, ZH and HI follow board 24; ES, FR and PT-BR follow the English layout with their own strings.
+- **Routes.** Added `/help`, `/signin`, `/s/[setup]`, `/status` and the system pages offline, link expired, setup removed and 500. Existing routes and slugs stay.
+- **Accounts and payment.** The existing licence backend and checkout stay wired; the Solar Green Pro flow, sign-in states and emails are built on top. Values the design leaves open stay as visible `[PLACEHOLDERS]` (HANDOFF §12).
+- **Existing features outside the handoff** (ambient modes, notes, sound, embed, library, kiosk, `/until`, presets pages) are kept and restyled in Solar Green, never dropped.

@@ -1,0 +1,16 @@
+---
+import { markSvg, type MarkState } from '../../lib/mark';
+
+interface Props {
+  size?: number;
+  state?: MarkState;
+  glow?: boolean;
+  small?: boolean;
+  label?: string;
+  class?: string;
+}
+
+const { size = 32, state = 'awake', glow, small, label, class: className } = Astro.props;
+---
+
+<Fragment set:html={markSvg({ size, state, glow, small, label, className })} />
