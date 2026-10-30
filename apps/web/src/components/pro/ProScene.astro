@@ -1,0 +1,16 @@
+---
+// The shared Scene illustration lives with the site pages; looked up softly so this area builds on its own.
+const found = import.meta.glob<{ default: (props: Record<string, unknown>) => unknown }>('../site/Scene.astro', {
+  eager: true,
+});
+const Scene = Object.values(found)[0]?.default;
+
+interface Props {
+  scene: 'firstaction' | 'success' | 'error' | 'expired';
+  width: number;
+  class?: string;
+}
+const { scene, width, class: className } = Astro.props;
+---
+
+{Scene ? <Scene scene={scene} width={width} decorative class={className} /> : <span class:list={['at-pro-scene-gap', className]} style={`--at-pro-scene-w: ${String(width)}px`} aria-hidden="true" />}

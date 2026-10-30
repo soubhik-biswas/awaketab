@@ -1,425 +1,197 @@
 ---
-// Zero hydration: CSS reads the lamp radios; lib/pro-page.ts runs the launch-price switch and analytics.
+// Zero hydration: lib/pro-page.ts flips the launch price after its end date and sends the Pro analytics.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Button from '../components/shell/Button.astro';
+import Lucide from '../components/icons/Lucide.astro';
+import ProScene from '../components/pro/ProScene.astro';
 import ProRefund from '../components/pro/ProRefund.astro';
-import ProLampRing from '../components/pro/ProLampRing.astro';
 import { t } from '../i18n/load';
 import { articleSchema } from '../lib/seo';
-import { CHECKOUT_LINKS, PAYMENTS_ENABLED, POLAR_SERVER } from '../lib/checkout';
+import { PAYMENTS_ENABLED, POLAR_SERVER } from '../lib/checkout';
 import { PLAN_PRICES, PRO_LAUNCH_END } from '../lib/license';
-import { LAMPS, usd } from '../lib/pro-common';
+import { launchDay, usd } from '../lib/pro-common';
 import '../styles/pro.css';
-import BrandIcon from '../components/icons/BrandIcon.astro';
-import Icon from '../components/icons/Icon.astro';
 
-const p = (key: string, vars?: Record<string, string | number>) => t(`page.pro.${key}`, vars);
+const p = (key: string, vars?: Record<string, string | number>) => t(`proflow.page.${key}`, vars);
 const site = Astro.site?.toString().replace(/\/$/u, '') ?? 'https://awaketab.com';
 const ogImage = '/og/pro-en.png';
 const canonical = `${site}/pro`;
-const title = t('page.pro.title');
-const description = t('page.pro.description');
-
-// The launch price is a runtime switch, never a strike-through: pro-page.ts flips `data-launch` after the end.
 const launch = Date.now() < PRO_LAUNCH_END;
 const yearly = usd(PLAN_PRICES.pro_yearly);
 const lifeLaunch = usd(PLAN_PRICES.pro_lifetime_launch);
 const lifeFull = usd(PLAN_PRICES.pro_lifetime);
-// PRO_LAUNCH_END is midnight UTC, so the last launch-price day is the one before it.
-const lastDay = new Date(PRO_LAUNCH_END - 1);
-const launchDate = `${lastDay.toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' })}, ${lastDay.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}`;
+const date = launchDay();
+
+const free = [1, 2, 3, 4, 5].map((n) => p(`free.f${n}`));
+const pro = [1, 2, 3, 4, 5, 6].map((n) => p(`pro.f${n}`));
 
 type TCell = boolean | string;
-type TRow = { label: string; free: TCell; pro: TCell };
-const groups: Array<{ id: string; title: string; rows: TRow[] }> = [
-  {
-    id: 'web',
-    title: p('cmp.g.web'),
-    rows: [
-      { label: p('cmp.r.awake'), free: true, pro: true },
-      { label: p('cmp.r.lengths'), free: true, pro: true },
-      { label: p('cmp.r.faces'), free: true, pro: true },
-      { label: p('cmp.r.offline'), free: true, pro: true },
-      { label: p('cmp.r.stats'), free: p('cmp.v.stats.free'), pro: p('cmp.v.stats.pro') },
-      { label: p('cmp.r.pip'), free: true, pro: p('cmp.v.pip.pro') },
-    ],
-  },
-  {
-    id: 'looks',
-    title: p('cmp.g.looks'),
-    rows: [
-      { label: p('cmp.r.themes'), free: p('cmp.v.themes.free'), pro: p('cmp.v.themes.pro') },
-      { label: p('cmp.r.lamps'), free: p('cmp.v.lamps.free'), pro: p('cmp.v.lamps.pro') },
-      { label: p('cmp.r.patterns'), free: p('cmp.v.patterns.free'), pro: p('cmp.v.patterns.pro') },
-      { label: p('cmp.r.presets'), free: p('cmp.v.presets.free'), pro: p('cmp.v.presets.pro') },
-      { label: p('cmp.r.msg'), free: p('cmp.v.msg.free'), pro: true },
-      { label: p('cmp.r.preview'), free: true, pro: p('cmp.v.preview.pro') },
-    ],
-  },
-  {
-    id: 'focus',
-    title: p('cmp.g.focus'),
-    rows: [
-      { label: p('cmp.r.sounds'), free: true, pro: true },
-      { label: p('cmp.r.mixer'), free: p('cmp.v.mixer.free'), pro: true },
-      { label: p('cmp.r.library'), free: p('cmp.v.library.free'), pro: p('cmp.v.library.pro') },
-      { label: p('cmp.r.notes'), free: p('cmp.v.notes.free'), pro: p('cmp.v.notes.pro') },
-      { label: p('cmp.r.tools'), free: true, pro: true },
-      { label: p('cmp.r.pomo'), free: p('cmp.v.pomo.free'), pro: p('cmp.v.pomo.pro') },
-    ],
-  },
-  {
-    id: 'ext',
-    title: p('cmp.g.ext'),
-    rows: [
-      { label: p('cmp.r.ext'), free: true, pro: true },
-      { label: p('cmp.r.sched'), free: false, pro: true },
-      { label: p('cmp.r.auto'), free: false, pro: true },
-    ],
-  },
-  {
-    id: 'ads',
-    title: p('cmp.g.ads'),
-    rows: [
-      { label: p('cmp.r.adsawake'), free: p('cmp.v.never'), pro: p('cmp.v.never') },
-      { label: p('cmp.r.adsguides'), free: p('cmp.v.ads.free'), pro: p('cmp.v.ads.pro') },
-    ],
-  },
+const rows: Array<{ label: string; free: TCell; pro: TCell }> = [
+  { label: p('cmp.awake'), free: true, pro: true },
+  { label: p('cmp.lengths'), free: true, pro: true },
+  { label: p('cmp.faces'), free: true, pro: true },
+  { label: p('cmp.presets'), free: true, pro: true },
+  { label: p('cmp.devices'), free: p('cmp.devices.free'), pro: p('cmp.devices.pro') },
+  { label: p('cmp.history'), free: p('cmp.history.free'), pro: p('cmp.history.pro') },
+  { label: p('cmp.sound'), free: p('cmp.sound.free'), pro: p('cmp.sound.pro') },
+  { label: p('cmp.studio'), free: false, pro: true },
+  { label: p('cmp.notes'), free: p('cmp.notes.free'), pro: p('cmp.notes.pro') },
+  { label: p('cmp.ext'), free: p('cmp.ext.free'), pro: p('cmp.ext.pro') },
+  { label: p('cmp.ads'), free: p('cmp.ads.free'), pro: p('cmp.ads.pro') },
 ];
-
-const gets = [
-  { id: 'looks', icon: 'palette' },
-  { id: 'sound', icon: 'waveform' },
-  { id: 'notes', icon: 'note-pencil' },
-  { id: 'pomo', icon: 'timer' },
-  { id: 'msg', icon: 'chat-centered-text' },
-  { id: 'stats', icon: 'chart-bar' },
-  { id: 'pip', icon: 'picture-in-picture' },
-  { id: 'sched', icon: 'calendar-check' },
-  { id: 'ads', icon: 'prohibit' },
-].map((g) => ({ ...g, h: p(`get.${g.id}.h`), text: p(`get.${g.id}.p`) }));
-
-const steps = [1, 2, 3, 4].map((n) => ({ n, h: p(`how.s${n}.h`), text: p(`how.s${n}.p`) }));
-
-const trust = [
-  { id: 'polar', icon: 'credit-card' },
-  { id: 'cancel', icon: 'calendar-x' },
-  { id: 'privacy', icon: 'shield-check' },
-].map((x) => ({ ...x, h: p(`trust.${x.id}.h`), text: p(`trust.${x.id}.p`) }));
-
-const faq = [1, 5, 2, 3, 6, 7].map((n, i) => ({ i, q: p(`faq.q${n}`), a: p(`faq.a${n}`, { yearly }) }));
-
+const steps = [1, 2, 3].map((n) => ({ n, h: p(`how.s${n}.h`), text: p(`how.s${n}.p`) }));
+const faq = [1, 2, 3, 4, 5, 6].map((n) => ({ q: p(`faq.q${n}`), a: p(`faq.a${n}`, { yearly, once: lifeFull }) }));
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
+  title={p('title')}
+  description={p('description', { yearly })}
   canonical={canonical}
   ogImage={ogImage}
   schema={articleSchema({
     canonical,
-    title: t('page.pro.h1'),
-    description,
+    title: p('h1'),
+    description: p('description', { yearly }),
     locale: 'en',
     image: `${site}${ogImage}`,
     published: '2026-09-09',
     breadcrumbs: [
       { name: 'AwakeTab', url: site },
-      { name: t('page.pro.h1'), url: canonical },
+      { name: 'Pro', url: canonical },
     ],
   })}
 >
-  <div class="at-pro at-pro-page" data-pro-root data-polar-server={POLAR_SERVER} data-payments={PAYMENTS_ENABLED ? "on" : "off"} data-launch={launch ? 'on' : 'off'} data-launch-end={String(PRO_LAUNCH_END)}>
-    <div class="at-pro-aura" aria-hidden="true"></div>
-    <main id="top" class="at-pro-main">
+  <div class="at-pro at-pro-page" data-pro-root data-polar-server={POLAR_SERVER} data-payments={PAYMENTS_ENABLED ? 'on' : 'off'} data-launch={launch ? 'on' : 'off'} data-launch-end={String(PRO_LAUNCH_END)}>
+    <div class="at-pro-glow" aria-hidden="true"></div>
+    <main class="at-pro-page-main">
       <section class="at-pro-hero" aria-labelledby="pro-h1">
         <div class="at-pro-hero-text">
-          <p class="at-pro-kicker">{p('kicker')}</p>
-          <h1 id="pro-h1" class="at-pro-h1">{p('hero.title')}</h1>
-          <p class="at-pro-lead at-pro-hero-lead">{p('hero.value')}</p>
-          {!PAYMENTS_ENABLED && <p class="at-pro-body" role="status">Purchases open soon. You can use the free tool now.</p>}
-          <p class="at-pro-hero-price at-pro-num">
-            <span data-launch-only>{p('hero.price.launch', { yearly, once: lifeLaunch })}</span>
-            <span data-after-only>{p('hero.price', { yearly, once: lifeFull })}</span>
-          </p>
-          <div class="at-pro-hero-actions">
-            <Button variant="primary" href="#plans">{t('pro.cta')}</Button>
-            <a class="at-pro-link" href="#compare">{p('hero.compare')}</a>
-          </div>
-          <ul class="at-pro-glance" aria-label={p('hero.glance')}>
-            <li>{p('hero.devices')}</li>
-            <li>{p('hero.account')}</li>
-            <li>{p('hero.refund')}</li>
-          </ul>
+          <p class="at-pro-eyebrow">{p('eyebrow')}</p>
+          <h1 id="pro-h1" class="at-pro-hero-h1 at-pro-hero-h1-art">{p('h1')}</h1>
+          <p class="at-pro-hero-lead">{p('lead')}</p>
+          {!PAYMENTS_ENABLED && <p class="at-pro-body-txt" role="status">{p('soon')}</p>}
         </div>
-
-        <figure class="at-pro-lamp" aria-labelledby="lamp-cap">
-          <ProLampRing>
-            <p class="at-pro-kicker">{p('lamp.kicker')}</p>
-            <p class="at-pro-lamp-name">
-              {LAMPS.map((l) => <span data-for-lamp={l.id}>{p(`lamp.${l.id}`)}</span>)}
-            </p>
-            <span class="at-tag at-pro-tag-lamp" data-for-lamp="pro">{p('lamp.pro')}</span>
-            <span class="at-tag at-pro-tag-plain" data-for-lamp="free">{p('lamp.free')}</span>
-          </ProLampRing>
-          <div class="at-pro-swatches" role="radiogroup" aria-label={p('lamp.group')}>
-            {
-              LAMPS.map((l) => (
-                <label class="at-pro-swatch" data-lamp-id={l.id}>
-                  <input
-                    class="sr-only"
-                    type="radio"
-                    name="pro-lamp"
-                    id={`pro-lamp-${l.id}`}
-                    value={l.id}
-                    checked={l.id === 'mint'}
-                    aria-label={p(l.pro ? 'lamp.aria.pro' : 'lamp.aria.free', { name: p(`lamp.${l.id}`) })}
-                  />
-                  <span class="at-pro-swatch-dot" aria-hidden="true" />
-                  <span aria-hidden="true">{p(`lamp.${l.id}`)}</span>
-                </label>
-              ))
-            }
-          </div>
-          <figcaption id="lamp-cap" class="at-pro-lamp-cap">{p('lamp.caption')}</figcaption>
-        </figure>
+        <div class="at-pro-hero-art at-pro-float"><ProScene scene="success" width={520} /></div>
       </section>
 
-      <section id="compare" class="at-pro-cmp" aria-labelledby="cmp-h">
-        <div class="at-pro-head at-pro-head-narrow">
-          <h2 id="cmp-h" class="at-pro-h2">{p('cmp.h2')}</h2>
-          <p class="at-pro-body">{p('cmp.lead')}</p>
-        </div>
-        <div class="at-pro-cmp-wrap" role="region" aria-label={p('cmp.caption')} tabindex="0">
-          <div class="at-pro-cmp-cols" aria-hidden="true">
-            <span></span>
-            <span>
-              <span class="at-pro-cmp-plan">{p('cmp.col.free')}</span>
-              <span class="at-pro-cmp-sub">{p('cmp.col.free.sub')}</span>
-            </span>
-            <span class="at-pro-cmp-pro">
-              <span class="at-pro-cmp-plan">{p('cmp.col.pro')}</span>
-              <span class="at-pro-cmp-sub at-pro-num">{p('cmp.col.pro.sub', { price: yearly })}</span>
-            </span>
-          </div>
-          {
-            groups.map((g) => (
-              <table class="at-pro-cmp-table">
-                <caption>
-                  {g.id === 'ext' && (
-                    <span class="at-pro-cmp-logos">
-                      <BrandIcon name="chrome" size={20} />
-                      <BrandIcon name="microsoft-edge" size={20} />
-                    </span>
-                  )}
-                  {g.title}
-                </caption>
-                <colgroup>
-                  <col class="at-pro-cmp-col-feature" />
-                  <col />
-                  <col />
-                </colgroup>
-                <thead>
-                  <tr>
-                    <th scope="col">
-                      <span class="sr-only">{p('cmp.col.feature')}</span>
-                    </th>
-                    <th scope="col">
-                      <span class="sr-only">{p('cmp.col.free')}</span>
-                    </th>
-                    <th scope="col" class="at-pro-cmp-pro">
-                      <span class="sr-only">{p('cmp.col.pro')}</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {g.rows.map((r) => (
-                    <tr>
-                      <th scope="row">{r.label}</th>
-                      {[r.free, r.pro].map((v, i) => (
-                        <td class:list={[i === 1 && 'at-pro-cmp-pro', v === false && 'at-pro-cmp-no', v === true && 'at-pro-cmp-yes']}>
-                          {typeof v === 'string' ? (
-                            v
-                          ) : (
-                            <>
-                              <Icon name={v ? 'check-circle' : 'minus'} size={20} tone={v ? 'accent' : 'ink'} />
-                              <span class="sr-only">{p(v ? 'cmp.yes' : 'cmp.no')}</span>
-                            </>
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ))
-          }
-        </div>
-      </section>
-
-      <section class="at-pro-get" aria-labelledby="get-h">
-        <div class="at-pro-head at-pro-head-narrow">
-          <h2 id="get-h" class="at-pro-h2">{p('get.h2')}</h2>
-          <p class="at-pro-body">{p('get.lead')}</p>
-        </div>
-        <ul class="at-pro-get-grid">
-          {
-            gets.map((g) => (
-              <li class="at-pro-get-item">
-                <span class="at-pro-icon" aria-hidden="true">
-                  <Icon name={g.icon} size={24} />
-                </span>
-                <h3 class="at-pro-h3">{g.h}</h3>
-                <p class="at-pro-small at-pro-ink2">{g.text}</p>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
-
-      <section id="plans" class="at-pro-plans" aria-labelledby="plans-h">
-        <div class="at-pro-head at-pro-head-narrow">
-          <h2 id="plans-h" class="at-pro-h2">{p('plans.h2')}</h2>
-          <p class="at-pro-body">{p('plans.lead.all')}</p>
-        </div>
+      <section id="plans" class="at-pro-block" aria-label={p('plans.label')}>
         <div class="at-pro-plan-grid">
-          <article class="at-card at-pro-plan" aria-labelledby="plan-yearly">
-            <div class="at-pro-plan-top">
-              <p class="at-pro-kicker">{p('plans.yearly')}</p>
-              <span class="at-tag">{t('page.pro.devices')}</span>
-            </div>
-            <h3 id="plan-yearly" class="at-pro-price at-pro-num">
-              <span>{yearly}</span><span class="at-pro-per">{p('plans.per.year')}</span>
-            </h3>
-            <ul class="at-pro-plan-list at-pro-grow">
-              <li>{p('plans.all')}</li>
-              <li>{p('plans.renew')}</li>
-              <li>{p('plans.cancel')}</li>
+          <article class="at-pro-plan" aria-labelledby="plan-free">
+            <span class="at-pro-plan-top"><h2 id="plan-free" class="at-pro-card-h3">{p('free.name')}</h2></span>
+            <span class="at-pro-plan-price">{p('free.price')}</span>
+            <p class="at-pro-body-txt">{p('free.d')}</p>
+            <ul class="at-pro-feats">
+              {free.map((f) => <li><Lucide name="check" size={18} class="at-pro-feat-icon" />{f}</li>)}
             </ul>
-            <Button variant="secondary" href={CHECKOUT_LINKS.pro_yearly || undefined} disabled={!PAYMENTS_ENABLED} data-plan="pro_yearly" aria-describedby="plan-yearly" class="at-pro-wide">
-              {p('plans.cta.yearly')}
-            </Button>
+            <a class="at-button at-button-outline at-button-lg at-pro-plan-btn" href="/">{p('free.btn')}</a>
           </article>
-          <article class="at-card at-pro-plan at-pro-plan-lamp" aria-labelledby="plan-lifetime">
-            <div class="at-pro-plan-top">
-              <span class="at-pro-plan-name">
-                <span class="at-pro-kicker">{p('plans.lifetime')}</span>
-                <span class="at-tag at-pro-tag-lamp">{p('plans.once')}</span>
-              </span>
-              <span class="at-tag">{t('page.pro.devices')}</span>
-            </div>
-            <h3 id="plan-lifetime" class="at-pro-price at-pro-num">
-              <span data-launch-only>{lifeLaunch}</span><span data-after-only>{lifeFull}</span><span class="at-pro-per">{p('plans.per.once')}</span>
-            </h3>
-            <ul class="at-pro-plan-list at-pro-grow">
-              <li>{p('plans.all')}</li>
-              <li>{p('plans.norenewal')}</li>
-              <li data-launch-only>{p('plans.launch.date', { date: launchDate, price: lifeFull })}</li>
-              <li data-launch-only>{p('plans.launch.value')}</li>
-              <li data-after-only>{p('plans.after.value')}</li>
+          <article class="at-pro-plan at-pro-plan-pro" aria-labelledby="plan-pro">
+            <span class="at-pro-plan-top"><h2 id="plan-pro" class="at-pro-card-h3">{p('pro.name')}</h2><span class="at-pro-chip">{p('pro.badge')}</span></span>
+            <span class="at-pro-plan-price">{p('pro.price', { yearly })}</span>
+            <p class="at-pro-body-txt">
+              <span data-launch-only>{p('pro.d.launch', { once: lifeLaunch, after: lifeFull, date })}</span>
+              <span data-after-only>{p('pro.d', { once: lifeFull })}</span>
+            </p>
+            <ul class="at-pro-feats">
+              {pro.map((f) => <li><Lucide name="check" size={18} class="at-pro-feat-icon" />{f}</li>)}
             </ul>
-            <Button variant="primary" href={CHECKOUT_LINKS.pro_lifetime || undefined} disabled={!PAYMENTS_ENABLED} data-plan="pro_lifetime" aria-describedby="plan-lifetime" class="at-pro-wide">
-              {p('plans.cta.lifetime')}
-            </Button>
+            {
+              PAYMENTS_ENABLED ? (
+                <a class="at-button at-button-primary at-button-lg at-pro-plan-btn" href="/pro/checkout" data-plan="pro_yearly">{p('pro.btn')}</a>
+              ) : (
+                <button type="button" class="at-button at-button-primary at-button-lg at-pro-plan-btn" disabled aria-describedby="plan-pro">{p('pro.btn')}</button>
+              )
+            }
           </article>
         </div>
-        <div class="at-pro-plan-notes">
-          <p class="at-pro-caption">{p('plans.tax')}</p>
-          <p class="at-pro-caption">{p('plans.shutdown')}</p>
+        <p class="at-pro-note">{t('page.pro.tax')} {t('page.pro.plans.shutdown')}</p>
+      </section>
+
+      <section class="at-pro-block" aria-labelledby="cmp-h">
+        <h2 id="cmp-h" class="at-pro-h2">{p('cmp.h2')}</h2>
+        <div class="at-pro-table" role="region" aria-labelledby="cmp-h" tabindex="0">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">{p('cmp.col.feature')}</th>
+                <th scope="col">{p('free.name')}</th>
+                <th scope="col">{p('pro.name')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                rows.map((r) => (
+                  <tr>
+                    <th scope="row">{r.label}</th>
+                    {[r.free, r.pro].map((v) => (
+                      <td>
+                        {typeof v === 'string' ? (
+                          v
+                        ) : v ? (
+                          <span class="at-pro-yes"><Lucide name="check" size={16} />{p('cmp.yes')}</span>
+                        ) : (
+                          <span class="at-pro-no"><Lucide name="minus" size={16} />{p('cmp.no')}</span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
         </div>
       </section>
 
-      <section class="at-pro-how" aria-labelledby="how-h">
-        <div class="at-pro-head at-pro-head-narrow">
-          <h2 id="how-h" class="at-pro-h2">{p('how.h2')}</h2>
-          <p class="at-pro-body">{p('how.lead')}</p>
-        </div>
+      <section class="at-pro-block" aria-labelledby="how-h">
+        <h2 id="how-h" class="at-pro-h2">{p('how.h2')}</h2>
+        <p class="at-pro-sub">{p('how.lead')}</p>
         <ol class="at-pro-steps">
           {
             steps.map((s) => (
               <li class="at-pro-step">
-                <span class="at-pro-step-n at-pro-num" aria-hidden="true">
-                  {s.n}
-                </span>
-                <h3 class="at-pro-h3">{s.h}</h3>
-                <p class="at-pro-small at-pro-ink2">{s.text}</p>
+                <span class="at-pro-step-n" aria-hidden="true">{s.n}</span>
+                <h3 class="at-pro-card-h3">{s.h}</h3>
+                <p class="at-pro-body-txt">{s.text}</p>
               </li>
             ))
           }
         </ol>
-        <div class="at-pro-how-links">
-          <a class="at-pro-link" href="/pro/activate">{t('pro.activate')}</a>
-          <a class="at-pro-link" href="/pro/manage">{t('page.pro.activate.manage')}</a>
-        </div>
+        <p class="at-pro-links">
+          <a class="at-pro-inline-link" href="/pro/activate">{t('pro.activate')}</a>
+          <a class="at-pro-inline-link" href="/pro/manage">{t('page.pro.activate.manage')}</a>
+          <a class="at-pro-inline-link" href="/signin">{p('how.signin')}</a>
+        </p>
       </section>
 
-      <section class="at-pro-trust" aria-labelledby="trust-h">
-        <h2 id="trust-h" class="at-pro-h2">{p('trust.h2')}</h2>
-        <ul class="at-pro-trust-list">
-          <li class="at-pro-trust-item">
-            <ProRefund />
-          </li>
-          {
-            trust.map((x) => (
-              <li class="at-pro-trust-item">
-                <p class="at-pro-refund">
-                  <Icon name={x.icon} size={20} />
-                  <span>
-                    <strong>{x.h}</strong> {x.text}
-                  </span>
-                </p>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
-
-      <section class="at-pro-faq" aria-labelledby="faq-h">
+      <section class="at-pro-block" aria-labelledby="faq-h">
         <h2 id="faq-h" class="at-pro-h2">{p('faq.h2')}</h2>
-        <div class="at-pro-faq-list">
+        <div class="at-pro-faq">
           {
-            faq.map((q) => (
-              <details name="pro-faq" open={q.i === 0}>
+            faq.map((q, i) => (
+              <details name="pro-faq" open={i === 0}>
                 <summary>
-                  <h3>{q.q}</h3>
-                  <span class="at-pro-faq-icon" aria-hidden="true">
-                    <Icon name="plus-circle" size={20} />
-                  </span>
+                  <span class="at-pro-faq-q">{q.q}</span>
+                  <Lucide name="chevron-down" size={20} class="at-pro-faq-icon" />
                 </summary>
-                <p>{q.a}</p>
+                <p class="at-pro-body-txt">{q.a}</p>
               </details>
             ))
           }
         </div>
+        <ProRefund />
       </section>
 
-      <section class="at-pro-biz" aria-labelledby="biz-h">
-        <h2 id="biz-h" class="at-pro-kicker">{p('biz.h2')}</h2>
-        <div class="at-pro-biz-grid">
-          <a href="/embed">
-            <span class="at-pro-biz-top"><span>{p('biz.embed')}</span><span class="at-pro-num">{p('biz.embed.price', { price: usd(PLAN_PRICES.biz_embed_site_yearly) })}</span></span>
-            <span>{p('biz.embed.text')}</span>
+      <section class="at-pro-block" aria-labelledby="biz-h">
+        <h2 id="biz-h" class="at-pro-h2">{t('page.pro.biz.h2')}</h2>
+        <div class="at-pro-biz">
+          <a class="at-pro-biz-card" href="/embed">
+            <span class="at-pro-biz-top"><strong class="at-pro-card-h3">{t('page.pro.biz.embed')}</strong><span class="at-pro-help-txt">{t('page.pro.biz.embed.price', { price: usd(PLAN_PRICES.biz_embed_site_yearly) })}</span></span>
+            <span class="at-pro-body-txt">{t('page.pro.biz.embed.text')}</span>
           </a>
-          <a href="/kiosk">
-            <span class="at-pro-biz-top"><span>{p('biz.kiosk')}</span><span class="at-pro-num">{p('biz.kiosk.price', { one: usd(PLAN_PRICES.biz_kiosk_site), five: usd(PLAN_PRICES.biz_kiosk_5) })}</span></span>
-            <span>{p('biz.kiosk.text')}</span>
+          <a class="at-pro-biz-card" href="/kiosk">
+            <span class="at-pro-biz-top"><strong class="at-pro-card-h3">{t('page.pro.biz.kiosk')}</strong><span class="at-pro-help-txt">{t('page.pro.biz.kiosk.price', { one: usd(PLAN_PRICES.biz_kiosk_site), five: usd(PLAN_PRICES.biz_kiosk_5) })}</span></span>
+            <span class="at-pro-body-txt">{t('page.pro.biz.kiosk.text')}</span>
           </a>
         </div>
-      </section>
-
-      <section class="at-card at-pro-end" aria-labelledby="end-h">
-        <div class="at-pro-head">
-          <h2 id="end-h" class="at-pro-h2">{p('end.h2')}</h2>
-          <p class="at-pro-body">
-            <span data-launch-only>{p('end.lead', { yearly, once: lifeLaunch })}</span>
-            <span data-after-only>{p('end.lead', { yearly, once: lifeFull })}</span>
-          </p>
-        </div>
-        <div class="at-pro-end-actions">
-          <Button variant="primary" href={CHECKOUT_LINKS.pro_lifetime || undefined} disabled={!PAYMENTS_ENABLED} data-plan="pro_lifetime">{p('plans.cta.lifetime')}</Button>
-          <Button variant="secondary" href={CHECKOUT_LINKS.pro_yearly || undefined} disabled={!PAYMENTS_ENABLED} data-plan="pro_yearly">{p('plans.cta.yearly')}</Button>
-        </div>
-        <p class="at-pro-caption">{p('end.note')} <a class="at-pro-inline-link" href="/pro/activate">{t('pro.activate')}</a></p>
       </section>
     </main>
   </div>

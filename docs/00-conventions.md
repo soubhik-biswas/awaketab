@@ -158,7 +158,11 @@ Timing rules: ticks every 1000 ms aligned to the wall clock; all arithmetic uses
 | `at.v1.license` | `{ token, plan, exp, features[], lastValidatedAt, deviceId }` | Token = ES256 JWT signed by our Worker |
 | `at.v1.meta` | `{ installedAt, sessionCount, ratingPrompt: { shownAt, action, stars?, rearmAt? }, lastSeenVersion }` | `rearmAt` since v1.3 (§13.8) |
 | `at.v1.onboarding` | `{ dismissedTips: [] }` | |
+| `at.v1.account` | `{ v: 1, email, signedInAt }` | Written by `/signin` after a magic link is verified; removed by Sign out or Delete account. Never sent anywhere (§13.30) |
+| `at.v1.studio` | `{ v: 1, lamp, glow }` | Face studio (Pro): `lamp` `''` or `#RRGGBB`, `glow` 0–100 in steps of 5 (default 70) (§13.30) |
 | `at.v1.notes` | IndexedDB, not localStorage: database `awaketab`, store `notes`, this key. `{ v: 1, notes: [{ id, title, doc, createdAt, updatedAt, pinned? }], current?, voiceOk? }` | Never leaves the device; schema in `08-data-storage.md` §2.1a |
+
+sessionStorage also holds `at.v1.checkout` (`{ plan, email }`, the Pro checkout flow for this tab; cleared when Pro turns on) beside `at.tabId`.
 
 `BroadcastChannel('awaketab')` coordinates multiple tabs (second-tab warning, single active lock). Migrations: `migrate(fromVersion)` in `@awaketab/core/storage`; bump prefix to `at.v2.` only for breaking changes.
 
@@ -178,6 +182,8 @@ Timing rules: ticks every 1000 ms aligned to the wall clock; all arithmetic uses
 | `/learn/{slug}` | 8 docs pages: how AwakeTab works, honest limits, FAQ, reference and developer pages (§13.24) |
 | Retired content URLs (OD-3, §13.20) | `/for/second-monitor` → `/guides/second-monitor-turns-off`, `/on/windows-10` → `/on/windows-11`, `/guides/modern-standby` → `/guides/lock-screen-vs-sleep`, `/learn/nosleep-js-vs-wake-lock` → `/vs/nosleep-js` (all 301, `_redirects`). Cut, no redirect (404): `/for/navigation`, `/for/live-streams`, `/for/exams-proctoring`, `/for/baby-monitor` |
 | `/pro` · `/pro/activate` · `/pro/manage` | Pricing, key entry, device list |
+| `/pro/checkout` | Pro purchase flow before Polar: `#plans` · `#account` · `#check` · `#pay`, `?plan=lifetime` (noindex) |
+| `/signin` · `/auth/{token}` | Magic-link sign-in (noindex). `/auth/{token}` is a Pages Function that answers 303 to `/signin#token=…` (or `/signin?link=expired`) and spends nothing |
 | `/extension` · `/embed` · `/kiosk` · `/library` | Product landing pages |
 | `/embed/cook` | Iframe app for the Cook Mode widget (noindex) |
 | `/pip` · `/{lang}/pip` | Popup fallback for Document Picture-in-Picture, in the opener's language (noindex, `Disallow`ed, not in any sitemap, no cards or ads) |
@@ -240,7 +246,9 @@ Ad rules (non-negotiable): Google ads never on the awake screen, `/pip`, `/embed
 | `POST /api/license/activate` | `{ key, deviceId, deviceLabel }` → `{ token, plan, features, exp, activations }` | licence key |
 | `POST /api/license/validate` | `{ token }` → fresh token or `{ revoked: true }` | token |
 | `POST /api/license/deactivate` | `{ token, deviceId }` | token |
-| `POST /api/webhooks/polar` | Polar events (`order.created`, `subscription.*`, `benefit_grant.*`) → KV | HMAC signature |
+| `POST /api/webhooks/polar` | Polar events (`order.created`, `subscription.*`, `benefit_grant.*`) → KV; `order.paid` (first purchase) and `subscription.past_due` also queue the receipt and renewal-failed emails | HMAC signature |
+| `POST /api/auth/signin` | `{ email }` → 202 `{ sent, minutes }`; 400 `bad_email`; 429 `rate_limited` (5/min/IP hash, one per address per minute); 503 `email_unavailable` while no email provider is configured | none |
+| `POST /api/auth/verify` | `{ token }` → `{ ok, email }` once; 410 `expired` for unknown, used or expired links | single-use token |
 | `GET /api/embed/config?domain=` | `{ licensed, attribution, theme, expiresAt }` for the widget | none (public, cached 5 min) |
 | `GET /api/health` | `{ ok, version, polar }` (`polar`: `sandbox` \| `production`, §13.14) | none |
 | `POST /api/csp` | CSP violation reports (Reporting API or legacy `report-uri` body, ≤ 8 KB) → `client_error {code:'csp'}` | none; rate-limited by IP hash (§13.14) |
@@ -1054,6 +1062,20 @@ Accepted on 2026-09-29. Spec: `05-frontend-spec.md` §3.18. The seven lock state
 | Reset | `details.at-sg-reset` with `summary[data-settings-reset]`, `.at-sg-confirm`, `[data-reset="yes"]` · `[data-reset="no"]` and a `p[data-reset-done][role=status]` |
 | Reduce motion | switch `name="reduceMotion"` (`on` or `system`); `<html data-motion="reduce">` painted by `boot.js` and set by `settings.ts`; `tool.css` turns every transition and animation off under it, as under `prefers-reduced-motion` |
 | i18n keys | `settings.lead` · `settings.looks` · `settings.looks.help` · `settings.g.timer` · `settings.g.clock` · `settings.g.focus` · `settings.g.device` · `settings.sum.*` (`soundHelp`, `soundOpen`, `soundNow`, `untilStop`, `ends`, `endsTomorrow`, `endsDay`, `silent`, `notifyOn`, `notifyOff`, `secondsOn`, `secondsOff`, `focus`, `autoOn`, `autoOff`, `focusIdle`, `battOn`, `battOff`, `keysOn`, `keysOff`, `usageOn`, `usageOff`) · `settings.hints.help` · `settings.motion` · `settings.motion.help` · `settings.pro.help` · `settings.reset.ask` · `settings.reset.yes` · `settings.reset.no` · `settings.reset.done`. Removed: `settings.reset.confirm`, `settings.time`, `settings.privacy` |
+
+### 13.30 Solar Green Pro, sign-in and emails
+
+Accepted on 2026-10-30 (Solar Green redesign).
+
+| Identifier | Decision |
+|---|---|
+| KV `auth:{sha256(token)}` | `{ v: 1, email, exp }`, `expirationTtl` 900 s (`SIGNIN_TTL_S`, 15 minutes). The raw token (32 random bytes, base64url, 43 chars) exists only in the email; deleted on first verify |
+| KV `authmail:{sha256(email)}` | `'1'`, `expirationTtl` 60 s: one sign-in email per address per minute |
+| Rate-limit buckets | `auth` (sign-in, 5/min/IP hash) · `auth-verify` (10/min/IP hash) |
+| Email | `functions/_lib/email/send.ts` `sendEmail()` (the only sender; answers `not_configured` until a provider is chosen) · `templates.ts` (`signinEmail`, `receiptEmail`, `renewalFailedEmail`: HTML + plain text, 600 px, 16 px body, one action also written as a link, no images or redirects) · `billing.ts` (`billingEmail()` from Polar events) |
+| Client modules | `src/lib/account.ts` · `signin-page.ts` · `checkout-page.ts` (`checkoutUrl()` adds only `customer_email` to the Polar link) · `src/tool/studio.ts` (`readStudio`, `applyStudio`, `STUDIO_EVENT` `at:studio`, `--at-room-glow` on `<html>`, `<html data-studio-lamp>`) · `src/tool/packs/pro/` (`mountProView(ctx, host, 'studio' \| 'sound' \| 'devices' \| 'account', go?)`, `exportMyData`, `exportHistoryCsv`) |
+| Tokens | `--at-id-{cobalt,grape,plum,bubblegum,denim,sand,slate,mauve}` and `--at-on-id-*`: device identity colours, never green, amber or red |
+| i18n keys | `account.signin.*` · `proflow.*` (`steps`, `checkout`, `page`, `done`) · `pro.view.*` (island) |
 
 ## 14. Writing conventions for these docs
 
