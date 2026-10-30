@@ -14,16 +14,12 @@ const THEMES = readFileSync(path.join(WEB, 'public/assets/themes.css'), 'utf8');
 // The content, marketing and extension stylesheets this audit owns (the tool island has its own).
 export const WEB_SHEETS = [
   'content.css',
+  'site.css',
   'article/*.css',
-  'hub.css',
-  'hub-gallery.css',
-  'pick-gallery.css',
-  'docs-hub.css',
   'pages.css',
   'pro.css',
   'extension-page.css',
   'home*.css',
-  'tilt.css',
   'icon-motion.css',
   'page-404.css',
   'embed.css',

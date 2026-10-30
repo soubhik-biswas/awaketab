@@ -11,7 +11,6 @@ export interface IDocsTile {
   title: string;
   line: string;
   unit: readonly [string, string];
-  icon: string;
 }
 
 // Featured pages render only once they exist, in this order.
@@ -51,7 +50,6 @@ export const DOCS_TILES: readonly IDocsTile[] = [
     title: 'Fix a problem',
     line: 'Step-by-step fixes for timeouts, greyed-out settings and screens that go dark.',
     unit: ['guide', 'guides'],
-    icon: 'wrench',
   },
   {
     href: '/vs',
@@ -59,25 +57,8 @@ export const DOCS_TILES: readonly IDocsTile[] = [
     title: 'Compare tools',
     line: 'When an app, a command or another tab is the better pick, and why.',
     unit: ['comparison', 'comparisons'],
-    icon: 'scales',
   },
 ];
-
-// Phosphor duotone names, one per article.
-const ICONS: Record<string, string> = {
-  'how-awaketab-works': 'lightbulb',
-  'honest-limits': 'gauge',
-  faq: 'question',
-  'browser-support-matrix': 'table',
-  'screen-wake-lock-api-guide': 'code',
-  'low-power-mode-and-wake-locks': 'battery-low',
-  'does-a-wake-lock-keep-teams-green': 'user-check',
-  'how-we-tested': 'clipboard-text',
-};
-
-export function docsIcon(slug: string): string {
-  return ICONS[slug] ?? 'file-text';
-}
 
 const READ_KEYS = [
   'lead',

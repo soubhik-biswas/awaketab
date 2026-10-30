@@ -1,6 +1,4 @@
 ---
-import Icon from '../icons/Icon.astro';
-
 interface Props {
   id: string;
   title: string;
@@ -10,10 +8,7 @@ const { id, title, summary } = Astro.props;
 ---
 
 <section id={id} aria-labelledby={`${id}-h`} class="at-legal-section">
-  <h2 id={`${id}-h`} class="at-pg-h2">{title}</h2>
-  <div class="at-legal-short">
-    <Icon name="text-align-left" size={20} />
-    <p><strong>In short: </strong>{summary}</p>
-  </div>
+  <h2 id={`${id}-h`}>{title}</h2>
+  <p class="at-legal-short"><strong>In short: </strong>{summary}</p>
   <slot />
 </section>

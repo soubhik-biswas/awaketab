@@ -1,0 +1,62 @@
+---
+import type { TSceneKey } from '../../lib/scenes';
+import Scene from './Scene.astro';
+
+interface ICrumb {
+  href?: string | undefined;
+  label: string;
+}
+
+interface Props {
+  crumbs?: readonly ICrumb[] | undefined;
+  crumbLabel?: string;
+  eyebrow?: string | undefined;
+  h1: string;
+  lead?: string | undefined;
+  leadHtml?: string | undefined;
+  scene?: TSceneKey | undefined;
+}
+
+const { crumbs, crumbLabel = 'Breadcrumb', eyebrow, h1, lead, leadHtml, scene } = Astro.props;
+const hasMeta = Astro.slots.has('meta');
+const hasActions = Astro.slots.has('actions');
+const hasFace = Astro.slots.has('face');
+---
+
+<section class="at-sp-hero" data-art={scene ? '' : undefined}>
+  <div class="at-sp-hero-text">
+    {
+      crumbs && crumbs.length > 0 && (
+        <nav class="at-crumbs" aria-label={crumbLabel}>
+          <ol>
+            {crumbs.map((crumb) => (
+              <li aria-current={crumb.href ? undefined : 'page'}>
+                {crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span>{crumb.label}</span>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+    <slot name="kicker">{eyebrow && <span class="at-sp-eyebrow">{eyebrow}</span>}</slot>
+    <h1 class="at-sp-h1">{h1}</h1>
+    {leadHtml ? <p class="at-lead" set:html={leadHtml} /> : lead && <p class="at-lead">{lead}</p>}
+    {hasMeta && <slot name="meta" />}
+    {
+      hasActions && (
+        <div class="at-sp-acts">
+          <slot name="actions" />
+        </div>
+      )
+    }
+    <slot />
+  </div>
+  {
+    hasFace && (
+      <div class="at-sp-face">
+        <slot name="face" />
+      </div>
+    )
+  }
+  {scene && <Scene scene={scene} width={520} float decorative class="at-sp-art" />}
+</section>

@@ -6,7 +6,7 @@ import { LAMPS, PALETTES, PATTERNS } from '../../tool/packs/themes/looks';
 import { GENS } from '../../tool/packs/sound/catalog';
 // Linked, not scoped: inline styles on / count against the tool CSS budget.
 import sheet from '../../styles/home-yours.css?url';
-import Icon from '../icons/Icon.astro';
+import Lucide from '../icons/Lucide.astro';
 
 declare const __AT_FACES__: string;
 
@@ -44,7 +44,7 @@ const mix = [
     </div>
     <a class="at-hb-more" href="/pro#compare" hreflang={locale === 'en' ? undefined : 'en'}>
       <span>{y('compare')}</span>
-      <Icon name="arrow-right" size={20} class="at-hb-arrow" />
+      <Lucide name="arrow-right" size={20} class="at-hb-arrow" />
     </a>
   </div>
 
@@ -162,7 +162,7 @@ const mix = [
               <li class:list={[n === 1 && 'at-hy-done']}>
                 <span class="at-hy-box">
                   {n === 1 && (
-                    <Icon name="check" size={14} tone="ink" />
+                    <Lucide name="check" size={16} />
                   )}
                 </span>
                 {y(`notes.sample.${n}`)}
@@ -172,7 +172,7 @@ const mix = [
           }
         </ul>
         <p class="at-hy-mic">
-          <Icon name="microphone" size={16} />
+          <Lucide name="mic" size={16} />
           {y('notes.listening')}
         </p>
       </div>

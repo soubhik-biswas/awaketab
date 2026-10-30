@@ -7,7 +7,7 @@ import { usd } from '../../lib/pro-common';
 import matrix from '../../data/support-matrix.json';
 // Linked, not scoped: inline styles on / count against the tool CSS budget.
 import sheet from '../../styles/home-levels.css?url';
-import Icon from '../icons/Icon.astro';
+import Lucide from '../icons/Lucide.astro';
 import BrandIcon from '../icons/BrandIcon.astro';
 
 interface Props {
@@ -79,7 +79,7 @@ const levels: ILevel[] = [
   <ul class="at-hl-grid">
     {
       levels.map((level) => (
-        <li class:list={['at-card', 'at-hl-card', level.rec && 'at-hl-rec']} data-tilt>
+        <li class:list={['at-card', 'at-hl-card', level.rec && 'at-hl-rec']}>
           <div class="at-hl-top">
             <h3 id={`home-level-${level.id}`}>{t(`page.home.levels.${level.id}.name`)}</h3>
             {level.rec && <span class="at-tag at-tag-tone">{t('page.home.levels.ext.tag')}</span>}
@@ -102,7 +102,7 @@ const levels: ILevel[] = [
           <ul class="at-hl-gains">
             {level.gains.map((gain) => (
               <li>
-                <Icon name="check-circle" size={20} />
+                <Lucide name="circle-check" size={20} />
                 {typeof gain === 'string' ? (
                   <span>{gain}</span>
                 ) : (
@@ -116,7 +116,7 @@ const levels: ILevel[] = [
             ))}
           </ul>
           <div class="at-hl-act">
-            <Button variant={level.rec ? 'primary' : 'secondary'} size="md" href={level.href} aria-describedby={`home-level-${level.id}`}>
+            <Button variant={level.rec ? 'primary' : 'secondary'} size="default" href={level.href} aria-describedby={`home-level-${level.id}`}>
               {level.cta}
             </Button>
           </div>

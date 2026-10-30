@@ -1,6 +1,6 @@
 ---
 import Button from '../shell/Button.astro';
-import Icon from '../icons/Icon.astro';
+import Lucide from '../icons/Lucide.astro';
 import { inline } from '../../lib/article';
 
 interface Props {
@@ -96,7 +96,7 @@ const { steps, variant, t, done } = Astro.props;
                   aria-label={t('content.stepLink', { n: i + 1 })}
                   title={t('content.stepLink', { n: i + 1 })}
                 >
-                  <Icon name="link-simple" size={16} />
+                  <Lucide name="link" size={16} />
                 </a>
               </div>
               <span class="at-kicker at-next" hidden={i !== 0}>
@@ -105,6 +105,7 @@ const { steps, variant, t, done } = Astro.props;
               {step.path && <span class="at-path">{step.path}</span>}
               <p set:html={inline(step.text)} />
               <Button
+                variant="outline"
                 size="sm"
                 class="at-done"
                 role="checkbox"
@@ -114,7 +115,7 @@ const { steps, variant, t, done } = Astro.props;
                 hidden
               >
                 <span class="at-box" aria-hidden="true">
-                  <Icon name="check" size={16} tone="ink" />
+                  <Lucide name="check" size={16} />
                 </span>
                 <span>{t('content.markDone')}</span>
               </Button>
@@ -124,7 +125,7 @@ const { steps, variant, t, done } = Astro.props;
       </ol>
       {done && (
         <div class="at-alldone" role="status" data-all-done hidden>
-          <Icon name="check-circle" size={20} />
+          <Lucide name="circle-check" size={20} />
           <span>{done}</span>
         </div>
       )}

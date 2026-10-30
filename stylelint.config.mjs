@@ -32,6 +32,7 @@ const COLOUR_FILES = [
 // reads alpha only, so it may name #000; drawings that keep fixed colours opt out in marked blocks.
 const COLOUR_SHEETS = [
   '**/styles/content.css',
+  '**/styles/site.css',
   '**/styles/article/*.css',
   '**/styles/hub.css',
   '**/styles/hub-gallery.css',
@@ -105,6 +106,7 @@ export default {
         '**/styles/footer.css',
         '**/styles/header-menus.css',
         '**/styles/content.css',
+        '**/styles/site.css',
         '**/styles/article/*.css',
         '**/styles/hub.css',
         '**/styles/docs-hub.css',

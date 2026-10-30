@@ -11,7 +11,7 @@ import { softwareSchema } from '../lib/seo';
 import { EXTENSION_LISTED, EXTENSION_STORE_URLS } from '../lib/extension';
 import matrix from '../data/support-matrix.json';
 import BrandIcon from '../components/icons/BrandIcon.astro';
-import Icon from '../components/icons/Icon.astro';
+import Lucide from '../components/icons/Lucide.astro';
 
 const site = Astro.site?.toString().replace(/\/$/u, '') ?? 'https://awaketab.com';
 const canonical = `${site}/extension`;
@@ -88,7 +88,7 @@ const P = 2658 / 3600;
           {
             facts.map((key) => (
               <li>
-                <Icon name="check-circle" size={16} />
+                <Lucide name="circle-check" size={16} />
                 {t(key)}
               </li>
             ))
@@ -99,7 +99,7 @@ const P = 2658 / 3600;
             <BrandIcon name="chrome" size={20} />
             {chromeLabel}
           </a>
-          <a class="at-button at-ext-edge" href={EXTENSION_STORE_URLS.edge} rel="noopener" target="_blank" data-store="edge" aria-describedby="ext-store-note">
+          <a class="at-button at-button-secondary at-button-lg at-ext-edge" href={EXTENSION_STORE_URLS.edge} rel="noopener" target="_blank" data-store="edge" aria-describedby="ext-store-note">
             <BrandIcon name="microsoft-edge" size={20} />
             {edgeLabel}
           </a>
@@ -123,7 +123,7 @@ const P = 2658 / 3600;
               <svg viewBox="0 0 48 48" width="26" height="26"><path d="M32.8 11.4A16 16 0 1 1 15.2 11.4" class="at-xp-ring"></path><circle cx="24" cy="9" r="7.5" class="at-xp-halo"></circle><circle cx="24" cy="9" r="4.2" class="at-xp-bead"></circle></svg>
               AwakeTab
             </span>
-            <span class="at-xp-icon"><Icon name="gear-six" size={20} /></span>
+            <span class="at-xp-icon"><Lucide name="settings" size={20} /></span>
           </div>
           <div class="at-xp-status">
             <div class="at-xp-face">
@@ -152,7 +152,7 @@ const P = 2658 / 3600;
               </span>
               <span class="at-xp-meta at-xp-screen">Started 9:30 PM</span>
               <span class="at-xp-meta at-xp-system at-xp-caveat">
-                <Icon name="moon" size={12} />
+                <Lucide name="moon" size={16} />
                 Screen may dim or lock
               </span>
             </div>
@@ -163,8 +163,8 @@ const P = 2658 / 3600;
             <span>Keep awake</span>
             <div class="at-xp-seg">
               <span class="at-xp-ind"></span>
-              <span class="at-xp-opt at-xp-opt-screen"><Icon name="monitor" size={16} />Screen</span>
-              <span class="at-xp-opt at-xp-opt-system"><Icon name="cpu" size={16} />System</span>
+              <span class="at-xp-opt at-xp-opt-screen"><Lucide name="monitor" size={16} />Screen</span>
+              <span class="at-xp-opt at-xp-opt-system"><Lucide name="cpu" size={16} />System</span>
             </div>
           </div>
           <div class="at-xp-chips">
@@ -172,7 +172,7 @@ const P = 2658 / 3600;
             <span class="at-xp-until">Until…</span>
           </div>
           <div class="at-xp-foot">
-            Open AwakeTab<Icon name="arrow-up-right" size={16} />
+            Open AwakeTab<Lucide name="arrow-up-right" size={16} />
           </div>
         </div>
       </div>
@@ -187,12 +187,12 @@ const P = 2658 / 3600;
         <li class="at-ext-reveal">
           <span class="at-ext-vs-name">The web app</span>
           <span class="at-ext-vs-when">{t('page.extension.compare.hidden')}</span>
-          <StatusPill as="span" size="S" state="lost" label={t('tool.pill.lost')} />
+          <StatusPill size="sm" state="paused" label={t('tool.pill.lost')} />
         </li>
         <li class="at-ext-vs-ext at-ext-reveal">
           <span class="at-ext-vs-name"><BrandIcon name="chrome" size={16} />AwakeTab for Chrome</span>
           <span class="at-ext-vs-when">{t('page.extension.compare.hidden')}</span>
-          <StatusPill as="span" size="S" state="held" label={t('tool.pill.held')} />
+          <StatusPill size="sm" state="awake" label={t('tool.pill.held')} />
         </li>
       </ul>
       <div class="at-pg-panel at-pg-table at-pg-wide at-ext-table" role="table" aria-label="The web app compared with AwakeTab for Chrome" style="--at-pg-cols: minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1fr)">
@@ -357,7 +357,7 @@ const P = 2658 / 3600;
           {
             limits.map((key) => (
               <li>
-                <Icon name="minus-circle" size={20} tone="ink" class="at-pg-icon" />
+                <Lucide name="circle-minus" size={20} class="at-pg-icon" />
                 {t(key)}
               </li>
             ))
@@ -384,7 +384,7 @@ const P = 2658 / 3600;
               <summary>
                 <h3>{q.q}</h3>
                 <span class="at-ext-faq-icon" aria-hidden="true">
-                  <Icon name="plus-circle" size={20} />
+                  <Lucide name="circle-plus" size={20} />
                 </span>
               </summary>
               <p>
@@ -405,7 +405,7 @@ const P = 2658 / 3600;
             <BrandIcon name="chrome" size={20} />
             {chromeLabel}
           </a>
-          <a class="at-button at-ext-edge" href={EXTENSION_STORE_URLS.edge} rel="noopener" target="_blank" data-store="edge" aria-describedby="ext-band-note">
+          <a class="at-button at-button-secondary at-button-lg at-ext-edge" href={EXTENSION_STORE_URLS.edge} rel="noopener" target="_blank" data-store="edge" aria-describedby="ext-band-note">
             <BrandIcon name="microsoft-edge" size={20} />
             {edgeLabel}
           </a>
@@ -414,7 +414,7 @@ const P = 2658 / 3600;
       </div>
       <div class="at-ext-band-web">
         <p class="at-pg-body at-pg-ink">{t('page.extension.web')}</p>
-        <Button href="/" glyph>{t('ext.popup.open')}</Button>
+        <Button href="/" variant="primary" icon="play">{t('ext.popup.open')}</Button>
       </div>
     </section>
   </main>

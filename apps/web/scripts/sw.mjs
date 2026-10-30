@@ -21,6 +21,7 @@ const SHELL_MARKER = 'self.__AT_SHELL';
 export const SHELL_PAGES = [
   ['en', '/', true],
   ['en', '/pip', true],
+  ['en', '/offline', true],
   ...PRESET_ROUTES.map((r) => ['en', `/${r}`, false]),
   ...LOCALES.flatMap((l) => [
     [l, `/${l}/`, true],

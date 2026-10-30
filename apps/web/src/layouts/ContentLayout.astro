@@ -1,8 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-// After BaseLayout on purpose: tokens.css (Tailwind + layer order), tool.css and shell.css must precede this sheet.
 import '../styles/content.css';
-import AdSlot from '../components/AdSlot.astro';
 import type { TLocale } from '../i18n/locales';
 import type { TSchemaNode } from '../lib/seo';
 import { shouldRenderAdSlots } from '../lib/ads';
@@ -21,7 +19,6 @@ interface Props {
   alternates?: Array<{ locale: TLocale; href: string }> | undefined;
   localeLinks?: Partial<Record<TLocale, string>> | undefined;
   family: string;
-  toolFirst?: boolean;
 }
 
 const {
@@ -36,9 +33,8 @@ const {
   alternates,
   localeLinks,
   family,
-  toolFirst = false,
 } = Astro.props;
-// Ads render only here, gated by PUBLIC_ADS_ENABLED (docs/00 §8.3, docs/09 §3.1).
+// The page itself places its one AdSlot below the tool; the sheet ships only when ads can render.
 const showAds = shouldRenderAdSlots();
 ---
 
@@ -54,36 +50,24 @@ const showAds = shouldRenderAdSlots();
   alternates={alternates}
   localeLinks={localeLinks}
   contentPage
+  site
 >
   <slot name="styles" slot="head" />
   {showAds && <style is:inline slot="head" set:html={minifyCss(adSheet)} />}
   <main class="at-cp">
-    <article class="at-art" data-family={family} data-tool={toolFirst ? 'first' : 'after'}>
-      <div class="at-head"><slot name="head" /></div>
-      <slot name="toc" />
-      {toolFirst && <slot name="tool" />}
-      <slot name="contents" />
-      <div class="at-body">
-        <div class="at-prose">
-          <slot name="intro" />
-          {showAds && <AdSlot kind="inline" />}
-          <slot />
-        </div>
-        <slot name="after" />
-        <div class="at-prose"><slot name="limit" /></div>
-      </div>
-      {!toolFirst && <slot name="tool" />}
-      <div class="at-prose at-tail"><slot name="tail" /></div>
-      {showAds && <AdSlot kind="rail" />}
+    <article class="at-sp at-art" data-family={family}>
+      <slot />
     </article>
   </main>
   <script>
     import { initContentNav } from '../lib/content-nav';
     import { bootAds } from '../lib/ads';
+    import { telemetryOn } from '../lib/pro-common';
 
     initContentNav();
     void bootAds({
       onSlot: (page) => {
+        if (!telemetryOn()) return;
         void import('../lib/analytics.js').then((mod) => {
           mod.track('ad_slot_loaded', { page }, { telemetry: true, source: 'web', locale: document.documentElement.lang || 'en' });
         });
