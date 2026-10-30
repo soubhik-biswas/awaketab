@@ -26,7 +26,7 @@ function Drawing({ id, m }: { id: TFaceId; m: TFaceModel }) {
   return Draw ? <Draw m={m} /> : null;
 }
 
-// One clock face: any of the 33 drawings on the 360 × 360 artboard, scaled to size, with the status caption.
+// One clock face: any of the 49 drawings on the 360 × 360 artboard, scaled to size, with the status caption.
 export function Face(props: IFaceProps) {
   const want: TFaceId = isFaceId(props.face) ? props.face : 'ring';
   const reduced = useReducedMotion();
@@ -54,7 +54,7 @@ export function Face(props: IFaceProps) {
   const m = t0 === probe.nowSec ? probe : faceModel({ ...props, face: shown }, { reduced, t0 });
 
   return (
-    <FaceFrame m={m} bare={props.bare} className={props.className}>
+    <FaceFrame m={m} bare={props.bare} framed={props.framed} className={props.className}>
       <Suspense fallback={null}>
         <Drawing id={shown} m={m} />
       </Suspense>

@@ -19,6 +19,8 @@ export interface IFaceProps {
   lblTop?: string;
   lblEnd?: string;
   fmt?: 12 | 24;
+  // Draws the gallery's watch-glass case behind the face (faces with their own card keep it).
+  framed?: boolean;
   className?: string;
 }
 

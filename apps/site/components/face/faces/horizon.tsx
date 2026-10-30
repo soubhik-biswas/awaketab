@@ -15,7 +15,7 @@ const STARS: readonly TStar[] = [
 ];
 const SUN_HIGHLIGHT = { light: '#FFFFFF', night: '#E9FFF1' };
 const SEA = {
-  light: 'linear-gradient(180deg, #E9E4DA, #F3F0E9)',
+  light: 'linear-gradient(180deg, #E6E6EF, #F1F1F7)',
   dark: 'linear-gradient(180deg, #0B1222, #0E1424)',
   oled: '#000000',
 };
