@@ -233,12 +233,18 @@ export function bootManagePage(root: HTMLElement, now = Date.now()): void {
           setState('empty');
           return;
         }
+        // An error answer (502 while Polar is down, 429) has no device list: that is "try again", not "no devices".
+        if (!Array.isArray(data.activations)) {
+          setState('offline');
+          if (retry) offline?.focus();
+          return;
+        }
         // The validate answer carries the fresh plan and exp (docs/09 §2.5); fall back to the stored record.
         const fresh = data as { plan?: string; exp?: number };
         const expSec = typeof fresh.exp === 'number' ? fresh.exp : record.exp;
         lapse = lapseState(fresh.plan ?? record.plan, expSec, now);
         if (lapse && typeof expSec === 'number') paintLapse(lapse, expSec);
-        void paint(Array.isArray(data.activations) ? data.activations : []).then(() => {
+        void paint(data.activations).then(() => {
           if (retry) focusAfter(0);
         });
       },
