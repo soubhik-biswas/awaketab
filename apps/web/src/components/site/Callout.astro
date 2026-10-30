@@ -1,0 +1,32 @@
+---
+import Lucide from '../icons/Lucide.astro';
+
+interface Props {
+  tone?: 'info' | 'warning' | 'lamp';
+  title: string;
+  body?: string | undefined;
+  html?: string | undefined;
+  id?: string | undefined;
+  as?: 'div' | 'aside';
+  label?: string | undefined;
+  class?: string;
+}
+
+const { tone = 'info', title, body, html, id, as: Tag = 'div', label, class: className } = Astro.props;
+const ICON = { info: 'info', warning: 'triangle-alert', lamp: 'circle-check' } as const;
+---
+
+<Tag
+  id={id}
+  role={Tag === 'div' ? 'note' : undefined}
+  class:list={['at-sp-callout', className]}
+  data-tone={tone}
+  aria-label={label}
+>
+  <Lucide name={ICON[tone]} size={20} />
+  <span class="at-sp-callout-text">
+    <strong class="at-sp-callout-t">{title}</strong>
+    {html ? <span class="at-sp-body" set:html={html} /> : body && <span class="at-sp-body">{body}</span>}
+    <slot />
+  </span>
+</Tag>

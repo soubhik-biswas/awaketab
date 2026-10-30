@@ -1,0 +1,30 @@
+---
+import Button from '../shell/Button.astro';
+
+interface Props {
+  id?: string;
+  eyebrow: string;
+  title: string;
+  desc?: string | undefined;
+  descHtml?: string | undefined;
+  href: string;
+  label: string;
+  lang?: string | undefined;
+}
+
+const { id = 's-tool', eyebrow, title, desc, descHtml, href, label, lang } = Astro.props;
+---
+
+<section id={id} class="at-sp-block at-tool-area" aria-labelledby="h-tool">
+  <div class="at-sp-tool">
+    <div class="at-sp-tool-face" id="tool">
+      <slot />
+    </div>
+    <div class="at-sp-tool-text">
+      <span class="at-sp-eyebrow">{eyebrow}</span>
+      <h2 id="h-tool" class="at-sp-h3">{title}</h2>
+      {descHtml ? <p class="at-sp-body" set:html={descHtml} /> : desc && <p class="at-sp-body">{desc}</p>}
+      <Button variant="primary" size="xl" href={href} icon="play" class="at-start" hreflang={lang}>{label}</Button>
+    </div>
+  </div>
+</section>

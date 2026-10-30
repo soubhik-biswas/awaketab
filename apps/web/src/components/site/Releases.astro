@@ -1,0 +1,44 @@
+---
+export interface IRelease {
+  tag: 'New' | 'Fixed' | 'Changed';
+  version: string;
+  date: string;
+  dateIso?: string | undefined;
+  title: string;
+  items: readonly string[];
+  id?: string | undefined;
+}
+
+interface Props {
+  items: readonly IRelease[];
+  level?: 2 | 3;
+}
+
+const { items, level = 2 } = Astro.props;
+const Tag = level === 2 ? 'h2' : 'h3';
+---
+
+<ol class="at-sp-releases" role="list">
+  {
+    items.map((rel) => (
+      <li>
+        <article class="at-sp-rel" id={rel.id}>
+          <span class="at-sp-rel-top">
+            <span class="at-sp-tag" data-tone={rel.tag.toLowerCase()}>
+              {rel.tag}
+            </span>
+            <span class="at-sp-ver">
+              {rel.version} · {rel.dateIso ? <time datetime={rel.dateIso}>{rel.date}</time> : rel.date}
+            </span>
+          </span>
+          <Tag class="at-sp-h3">{rel.title}</Tag>
+          <ul>
+            {rel.items.map((line) => (
+              <li set:html={line} />
+            ))}
+          </ul>
+        </article>
+      </li>
+    ))
+  }
+</ol>
