@@ -15,6 +15,7 @@ import {
   type ISoundMix,
   type IStudioSettings,
   type TMixKey,
+  setProSource,
 } from '@/lib/tool/pro';
 import { forgetAccount, readAccount, writeAccount, type TSignInMethod } from './account';
 import { deviceKind } from './device';
@@ -78,7 +79,7 @@ function accountFrom(): IProAccount | null {
     name: acct.name || acct.email,
     email: acct.email,
     plan: lic?.plan === 'pro_lifetime' ? 'lifetime' : 'yearly',
-    renewsOn: renews ? longDate(renews) : lic ? 'never — paid once' : '',
+    renewsOn: renews ? longDate(renews) : '',
   };
 }
 
@@ -236,9 +237,8 @@ export function createProSource(): IProSource {
 let connected = false;
 
 // Call once on the client (the tool does it on mount) to swap the tool's placeholder for the real data.
-export async function connectPro(): Promise<void> {
+export function connectPro(): void {
   if (connected || typeof window === 'undefined') return;
   connected = true;
-  const { setProSource } = await import('@/lib/tool/pro');
   setProSource(createProSource());
 }
