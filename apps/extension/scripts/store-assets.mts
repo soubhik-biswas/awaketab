@@ -117,7 +117,7 @@ function rgba(hex: string, alpha: number): string {
 type TMeasure = (text: string, size: number, weight: number) => number;
 
 async function palette(measure: TMeasure) {
-  const css = await readFile(path.join(WEB, 'src/styles/tokens.css'), 'utf8');
+  const css = await readFile(path.join(ROOT, 'src/styles/tokens.css'), 'utf8');
   const dark = tokenBlock(css, '[data-theme="dark"]');
   const tok = (name: string): string => {
     const value = dark[name];
@@ -1193,7 +1193,7 @@ async function loadFonts(satoriEntry: string) {
     ['Geist Mono', 'geist-mono-latin-wght-normal.woff2', [400]],
   ];
   for (const [name, file, weights] of families) {
-    const ttf = woff2ToTtf(await readFile(path.join(WEB, 'public/fonts', file)));
+    const ttf = woff2ToTtf(await readFile(path.join(ROOT, 'public/fonts', file)));
     for (const weight of weights)
       fonts.push({ name, data: await staticInstance(ttf, weight, satoriEntry), weight, style: 'normal' });
   }

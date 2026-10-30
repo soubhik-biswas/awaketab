@@ -1,9 +1,9 @@
 import { STORAGE_KEYS, type ISettings } from '@awaketab/core';
-import { LOCALE_META } from '../../web/src/i18n/locales';
-import { markSvg, type MarkState } from '../../web/src/lib/mark';
+import { LOCALE_META } from '../../site/i18n/locales';
 import type { IExtApi } from './api';
 import { createTimeFormat, type TTimeFormat } from './format';
 import { createTranslator, resolveLocale, type TCatalog, type TLocale, type TTranslate } from './i18n';
+import { markSvg, type MarkState } from './mark';
 import type { IExtState, TExtRequest } from './messages';
 import { readSettings } from './settings';
 
@@ -87,7 +87,7 @@ export function show(el: Element, on: boolean): boolean {
   return on;
 }
 
-// The brand mark (the shared web geometry) into every `[data-mark-slot]`: data-size, data-state, data-glow="0".
+// The brand mark into every `[data-mark-slot]`: data-size, data-state, data-glow="0".
 export function paintMark(slot: HTMLElement, state?: MarkState): void {
   const next = state ?? (slot.dataset.state as MarkState | undefined) ?? 'awake';
   if (slot.dataset.drawn === next) return;

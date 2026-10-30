@@ -1,7 +1,7 @@
-import 'virtual:at-tokens.css';
+import '../../src/styles/tokens.css';
 import '../../src/styles/base.css';
 import './popup.css';
-import { PLAN_PRICES, lifetimePrice } from '../../../web/src/lib/license';
+import { PLAN_PRICES, launchOn, lifetimePrice, usd } from '../../../site/lib/pro/plans';
 import { DEFAULT_META, DEFAULT_ONBOARDING, STORAGE_KEYS, type IMeta, type IOnboarding } from '@awaketab/core';
 import { browser } from 'wxt/browser';
 import type { IExtApi, TPowerLevel } from '../../src/api';
@@ -123,12 +123,10 @@ async function boot(): Promise<void> {
   el.newLabel.textContent = t('ext.update.chip', { version: release });
   el.newChip.setAttribute('aria-label', t('ext.update.aria', { version: release }));
   // The same launch-price switch as /pro: the lifetime price drops to its full price when the launch ends.
-  const lifetime = lifetimePrice();
-  const usd = (amount: number) => `$${String(amount)}`;
-  q(root, '[data-pro-price]').textContent = t(lifetime.strike ? 'ext.pro.price.launch' : 'ext.pro.price', {
+  q(root, '[data-pro-price]').textContent = t(launchOn() ? 'ext.pro.price.launch' : 'ext.pro.price', {
     yearly: usd(PLAN_PRICES.pro_yearly),
-    price: usd(lifetime.current),
-    after: usd(lifetime.strike ?? lifetime.current),
+    price: usd(lifetimePrice()),
+    after: usd(PLAN_PRICES.pro_lifetime),
   });
   void api.commands.getAll().then((commands) => {
     const shortcut = commands.find((command) => command.name === 'toggle')?.shortcut || 'Alt+Shift+A';
