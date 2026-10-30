@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Face, type TFaceTheme } from '@/components/face';
 import { cn } from '@/lib/utils';
 import { formatDurationWords } from '@/lib/format';
+import { usePop } from '@/lib/surfaces/motion';
 import { TONE_TEXT, type ISurfaceView } from '@/lib/surfaces/session';
 
 export interface IMiniClockProps {
@@ -57,8 +58,10 @@ export function SurfaceStatus({ view, className }: { view: ISurfaceView; classNa
 export function MiniClock({ view, theme, onExtend, onClose, windowed = false, className }: IMiniClockProps) {
   const t = useTranslations('surfaces');
   const line = useSurfaceLine();
+  const pop = usePop<HTMLDivElement>(windowed);
   return (
     <div
+      ref={windowed ? undefined : pop}
       role="region"
       aria-label={t('pip.region')}
       data-slot="mini-clock"
@@ -67,7 +70,7 @@ export function MiniClock({ view, theme, onExtend, onClose, windowed = false, cl
         'box-border flex items-center gap-1 bg-background px-[14px] text-foreground',
         windowed
           ? 'h-dvh w-full'
-          : 'h-[180px] w-[320px] animate-in rounded-[16px] shadow-[0_0_0_1px_var(--border),0_24px_60px_rgba(0,0,0,.6)] duration-[240ms] ease-[cubic-bezier(.2,.9,.25,1.15)] fade-in-0 zoom-in-92',
+          : 'h-[180px] w-[320px] rounded-[16px] shadow-[0_0_0_1px_var(--border),0_24px_60px_rgba(0,0,0,.6)]',
         className,
       )}
     >
