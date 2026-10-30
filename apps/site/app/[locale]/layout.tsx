@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { AxeCheck } from '@/components/dev/axe-check';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -85,6 +86,7 @@ export default async function LocaleLayout({
             <TooltipProvider>
               <LocaleLinksProvider>{children}</LocaleLinksProvider>
               <Toaster />
+              {process.env.NEXT_PUBLIC_AXE === '1' ? <AxeCheck /> : null}
             </TooltipProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
