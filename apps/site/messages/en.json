@@ -3132,14 +3132,17 @@
       "notfound": {
         "h1": "This page fell asleep",
         "lead": "The link may be old or mistyped. The timer is still right here.",
-        "guides": "Popular guides"
+        "guides": "Popular guides",
+        "title": "Page not found — AwakeTab",
+        "eyebrow": "404"
       },
       "offline": {
         "title": "You’re offline — AwakeTab",
         "eyebrow": "Offline",
         "h1": "You’re offline. The timer isn’t.",
         "lead": "Keeping the screen awake doesn’t need the internet. Sync and shared links wait until you reconnect.",
-        "timer": "Keep using the timer"
+        "timer": "Keep using the timer",
+        "description": "Keeping the screen awake doesn’t need the internet. Sync and shared links wait until you reconnect."
       },
       "status": {
         "title": "Service status — AwakeTab",
@@ -3149,7 +3152,8 @@
         "lead": "Sign-in and sync are paused until about {time}. The timer works as normal on every device.",
         "okEyebrow": "Status",
         "okH1": "Everything is running.",
-        "okLead": "The timer, sign-in and sync are working. When maintenance is planned, it is announced here first."
+        "okLead": "The timer, sign-in and sync are working. When maintenance is planned, it is announced here first.",
+        "see": "See status"
       },
       "expired": {
         "title": "Link expired — AwakeTab",

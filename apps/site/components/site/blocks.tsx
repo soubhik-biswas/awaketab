@@ -307,15 +307,18 @@ export interface IProseItem {
   p?: ReactNode;
   list?: readonly ReactNode[];
   html?: string;
+  children?: ReactNode;
 }
 
-export function Prose({ items }: { items: readonly IProseItem[] }) {
+export function Prose({ items, level = 3 }: { items: readonly IProseItem[]; level?: 2 | 3 }) {
+  const H = level === 2 ? 'h2' : 'h3';
   return (
     <div className="site-prose flex max-w-[760px] flex-col gap-[26px]">
       {items.map((item, i) => (
         <div key={i} className="flex flex-col gap-2" id={item.id}>
-          {item.h && <h3 className={s.h3Prose}>{item.h}</h3>}
+          {item.h && <H className={s.h3Prose}>{item.h}</H>}
           {item.p && <p className="m-0 text-[17px] leading-[1.65]">{item.p}</p>}
+          {item.children}
           {item.list && (
             <ul className="m-0 flex flex-col gap-2 pl-[22px] text-[17px] leading-[1.6]">
               {item.list.map((li, k) => (
