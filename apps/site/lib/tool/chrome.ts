@@ -49,6 +49,7 @@ export interface IToolChrome {
   copied: string;
   copiedD: string;
   done: string;
+  dismiss: string;
   savedPreset: string;
   savedPresetD: string;
   noEndNote: string;
@@ -99,6 +100,19 @@ export interface IToolChrome {
   keepUntilLabel: string;
   extendTo: string;
   keepUntil: string;
+  bOfflineT: string;
+  bOfflineB: string;
+  bConflictT: string;
+  bConflictB: string;
+  bConflictA: string;
+  bUpdateT: string;
+  bUpdateB: string;
+  bUpdateA: string;
+  bNeedsT: string;
+  bNeedsB: string;
+  bBlockedT: string;
+  bBlockedB: string;
+  bBlockedA: string;
 }
 
 export const CHROME: Record<TToolLang, IToolChrome> = {
@@ -150,6 +164,7 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     copied: 'Link copied',
     copiedD: 'Paste it anywhere. Your label is not included.',
     done: 'Done',
+    dismiss: 'Dismiss',
     savedPreset: 'Saved “{label}”',
     savedPresetD: '{len} · press {n} to start it.',
     noEndNote: 'No end — runs until you stop it.',
@@ -200,6 +215,19 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     keepUntilLabel: 'Keep awake until',
     extendTo: 'Extend to {time}',
     keepUntil: 'Keep awake until {time}',
+    bOfflineT: 'You’re offline',
+    bOfflineB: 'AwakeTab keeps working. Sync resumes when you reconnect.',
+    bConflictT: 'Another tab is keeping this screen awake',
+    bConflictB: 'Only one tab holds the lamp at a time.',
+    bConflictA: 'Take over',
+    bUpdateT: 'A new version is ready',
+    bUpdateB: 'Reload when it suits you — your session continues.',
+    bUpdateA: 'Reload',
+    bNeedsT: 'Tap to resume',
+    bNeedsB: 'The browser let go of the wake lock while you were in another app.',
+    bBlockedT: 'Your screen may still sleep',
+    bBlockedB: 'Battery saver is on, so the browser refused the wake lock.',
+    bBlockedA: 'Fix it',
   },
   de: {
     menu: 'Menü',
@@ -249,6 +277,7 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     copied: 'Link kopiert',
     copiedD: 'Fügen Sie ihn überall ein. Ihre Bezeichnung ist nicht enthalten.',
     done: 'Fertig',
+    dismiss: 'Schließen',
     savedPreset: '„{label}“ gespeichert',
     savedPresetD: '{len} · zum Starten {n} drücken.',
     noEndNote: 'Ohne Ende — läuft, bis Sie es beenden.',
@@ -300,6 +329,19 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     keepUntilLabel: 'Wach halten bis',
     extendTo: 'Verlängern bis {time}',
     keepUntil: 'Wach halten bis {time}',
+    bOfflineT: 'Sie sind offline',
+    bOfflineB: 'AwakeTab funktioniert weiter. Die Synchronisierung läuft wieder, sobald Sie online sind.',
+    bConflictT: 'Ein anderer Tab hält diesen Bildschirm wach',
+    bConflictB: 'Nur ein Tab kann die Lampe gleichzeitig halten.',
+    bConflictA: 'Übernehmen',
+    bUpdateT: 'Eine neue Version ist bereit',
+    bUpdateB: 'Neu laden, wann es Ihnen passt — Ihre Sitzung läuft weiter.',
+    bUpdateA: 'Neu laden',
+    bNeedsT: 'Zum Fortsetzen antippen',
+    bNeedsB: 'Der Browser hat die Wach-Sperre freigegeben, während Sie in einer anderen App waren.',
+    bBlockedT: 'Ihr Bildschirm kann trotzdem ausgehen',
+    bBlockedB: 'Der Energiesparmodus ist an, deshalb hat der Browser die Wach-Sperre abgelehnt.',
+    bBlockedA: 'Beheben',
   },
   ja: {
     menu: 'メニュー',
@@ -349,6 +391,7 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     copied: 'リンクをコピーしました',
     copiedD: 'どこにでも貼り付けられます。ラベルは含まれません。',
     done: '完了',
+    dismiss: '閉じる',
     savedPreset: '「{label}」を保存しました',
     savedPresetD: '{len} · {n}キーで開始します。',
     noEndNote: '終了なし — 停止するまで続きます。',
@@ -400,6 +443,19 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     keepUntilLabel: 'この時刻までつけたままにする',
     extendTo: '{time}まで延長',
     keepUntil: '{time}までつけたままにする',
+    bOfflineT: 'オフラインです',
+    bOfflineB: 'AwakeTab はそのまま動作します。再接続すると同期が再開します。',
+    bConflictT: '別のタブがこの画面をつけたままにしています',
+    bConflictB: 'ランプを保持できるのは一度に1つのタブだけです。',
+    bConflictA: '引き継ぐ',
+    bUpdateT: '新しいバージョンがあります',
+    bUpdateB: '都合のよいときに再読み込みしてください。セッションは続きます。',
+    bUpdateA: '再読み込み',
+    bNeedsT: 'タップして再開',
+    bNeedsB: '別のアプリを使っている間に、ブラウザーがスリープ防止を解除しました。',
+    bBlockedT: '画面がスリープする可能性があります',
+    bBlockedB: '省電力モードがオンのため、ブラウザーがスリープ防止を拒否しました。',
+    bBlockedA: '解決する',
   },
   zh: {
     menu: '菜单',
@@ -449,6 +505,7 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     copied: '链接已复制',
     copiedD: '可粘贴到任何地方。不包含你的标签。',
     done: '完成',
+    dismiss: '关闭',
     savedPreset: '已保存“{label}”',
     savedPresetD: '{len} · 按 {n} 键开始。',
     noEndNote: '不限时 — 运行到你停止为止。',
@@ -499,6 +556,19 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     keepUntilLabel: '保持常亮直到',
     extendTo: '延长至{time}',
     keepUntil: '保持常亮至{time}',
+    bOfflineT: '你已离线',
+    bOfflineB: 'AwakeTab 仍可正常使用。重新联网后会继续同步。',
+    bConflictT: '另一个标签页正在让此屏幕保持常亮',
+    bConflictB: '同一时间只有一个标签页能点亮指示灯。',
+    bConflictA: '接管',
+    bUpdateT: '新版本已就绪',
+    bUpdateB: '方便时重新加载即可，你的会话会继续。',
+    bUpdateA: '重新加载',
+    bNeedsT: '轻触以继续',
+    bNeedsB: '你在使用其他应用时，浏览器释放了唤醒锁。',
+    bBlockedT: '你的屏幕仍可能休眠',
+    bBlockedB: '省电模式已开启，因此浏览器拒绝了唤醒锁。',
+    bBlockedA: '去解决',
   },
   hi: {
     menu: 'मेनू',
@@ -548,6 +618,7 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     copied: 'लिंक कॉपी हो गया',
     copiedD: 'इसे कहीं भी पेस्ट करें। आपका लेबल शामिल नहीं है।',
     done: 'हो गया',
+    dismiss: 'हटाएँ',
     savedPreset: '“{label}” सहेजा गया',
     savedPresetD: '{len} · शुरू करने के लिए {n} दबाएँ।',
     noEndNote: 'बिना अंत — जब तक आप बंद न करें, चलता रहेगा।',
@@ -598,6 +669,19 @@ export const CHROME: Record<TToolLang, IToolChrome> = {
     keepUntilLabel: 'इस समय तक जगाए रखें',
     extendTo: '{time} तक बढ़ाएँ',
     keepUntil: '{time} तक जगाए रखें',
+    bOfflineT: 'आप ऑफ़लाइन हैं',
+    bOfflineB: 'AwakeTab काम करता रहेगा। दोबारा जुड़ने पर सिंक फिर शुरू होगा।',
+    bConflictT: 'कोई दूसरा टैब इस स्क्रीन को जगाए रख रहा है',
+    bConflictB: 'एक समय में सिर्फ़ एक टैब लैंप थाम सकता है।',
+    bConflictA: 'अपने हाथ में लें',
+    bUpdateT: 'नया वर्ज़न तैयार है',
+    bUpdateB: 'जब सुविधा हो, रीलोड करें — आपका सत्र जारी रहेगा।',
+    bUpdateA: 'रीलोड करें',
+    bNeedsT: 'फिर शुरू करने के लिए टैप करें',
+    bNeedsB: 'जब आप किसी दूसरे ऐप में थे, ब्राउज़र ने वेक लॉक छोड़ दिया।',
+    bBlockedT: 'आपकी स्क्रीन फिर भी सो सकती है',
+    bBlockedB: 'बैटरी सेवर चालू है, इसलिए ब्राउज़र ने वेक लॉक अस्वीकार कर दिया।',
+    bBlockedA: 'ठीक करें',
   },
 };
 
