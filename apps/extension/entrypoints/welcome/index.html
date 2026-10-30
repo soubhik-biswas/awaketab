@@ -7,31 +7,47 @@
   </head>
   <body>
     <div class="wl" data-root hidden>
-      <div class="wl-aura" aria-hidden="true"></div>
       <header class="wl-head">
         <div class="at-logo">
-          <img src="/icon.svg" width="26" height="26" alt="" aria-hidden="true" />
+          <span data-mark-slot data-size="26"></span>
           <span data-i18n="app.name"></span><span class="at-logo-sub"><svg data-logo="chrome" width="16" height="16"></svg><span data-i18n="ext.options.forChrome"></span></span>
         </div>
         <div class="wl-head-end">
           <nav class="wl-nav" data-i18n-aria="ext.welcome.navLabel">
             <a class="at-link at-link-ink" href="options.html" data-i18n="settings.title"></a>
-            <a class="at-link" href="https://awaketab.com/?source=ext" target="_blank" rel="noopener"><span data-i18n="ext.popup.open"></span><svg data-icon="arrow-square-out" width="16" height="16"></svg></a>
+            <a class="at-link" href="https://awaketab.com/?source=ext" target="_blank" rel="noopener"><span data-i18n="ext.popup.open"></span><svg data-icon="external-link" width="16" height="16"></svg></a>
           </nav>
           <div class="at-seg wl-theme" role="radiogroup" data-i18n-aria="settings.theme" style="--n: 3">
             <span class="at-seg-ind" aria-hidden="true"></span>
             <label class="at-seg-item" data-i18n-title="settings.theme.light"><input class="at-sr" type="radio" name="theme" value="light" data-i18n-aria="settings.theme.light" /><svg data-icon="sun" width="20" height="20"></svg></label>
             <label class="at-seg-item" data-i18n-title="settings.theme.dark"><input class="at-sr" type="radio" name="theme" value="dark" data-i18n-aria="settings.theme.dark" /><svg data-icon="moon" width="20" height="20"></svg></label>
-            <label class="at-seg-item" data-i18n-title="ext.theme.autoAria"><input class="at-sr" type="radio" name="theme" value="auto" data-i18n-aria="ext.theme.autoAria" /><svg data-icon="circle-half" width="20" height="20"></svg></label>
+            <label class="at-seg-item" data-i18n-title="ext.theme.autoAria"><input class="at-sr" type="radio" name="theme" value="auto" data-i18n-aria="ext.theme.autoAria" /><svg data-icon="contrast" width="20" height="20"></svg></label>
           </div>
         </div>
       </header>
 
       <main class="wl-main">
-        <section class="wl-hero" aria-labelledby="w-h1">
+        <section class="wl-hero" aria-labelledby="w-h1" data-hero data-step="1">
           <div class="wl-hero-text at-in">
-            <p class="wl-kicker at-kick"><span class="wl-kicker-dot" aria-hidden="true"></span><span data-installed></span></p>
-            <h1 id="w-h1" data-i18n="ext.welcome.title"></h1>
+            <p class="wl-kicker" data-kicker></p>
+            <h1 id="w-h1" tabindex="-1" data-hero-title></h1>
+            <p class="wl-intro" aria-live="polite" data-hero-lead></p>
+            <div class="wl-hero-actions">
+              <button class="at-btn at-btn-primary" type="button" data-finish data-i18n="ext.welcome.pinnedIt"></button>
+              <button class="at-btn at-btn-stop" type="button" data-finish data-i18n="ext.welcome.skip"></button>
+            </div>
+            <p class="wl-note" data-i18n="ext.welcome.noSite"></p>
+          </div>
+          <figure class="wl-hero-art at-rise" role="img" data-i18n-aria="ext.welcome.scene">
+            <svg class="wl-scene wl-scene-light" width="440" height="330" viewBox="0 0 320 240" aria-hidden="true" focusable="false"><path d="M56 120a104 104 0 1 0 208 0a104 104 0 1 0 -208 0Z " fill="#E2F6E8"/><path d="M38 60a22 22 0 1 0 44 0a22 22 0 1 0 -44 0Z " fill="#FDECE3"/><path d="M52 50h216a16 16 0 0 1 16 16v118a16 16 0 0 1 -16 16h-216a16 16 0 0 1 -16 -16v-118a16 16 0 0 1 16 -16Z  M52 50h216a16 16 0 0 1 16 16v2a16 16 0 0 1 -16 16h-216a16 16 0 0 1 -16 -16v-2a16 16 0 0 1 16 -16Z  M221 58h18a9 9 0 0 1 9 9v0a9 9 0 0 1 -9 9h-18a9 9 0 0 1 -9 -9v0a9 9 0 0 1 9 -9Z  M58 30h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2Z M278 30h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z M30 196h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z  M256 210h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2Z M102 22h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z  M62 100h76a10 10 0 0 1 10 10v52a10 10 0 0 1 -10 10h-76a10 10 0 0 1 -10 -10v-52a10 10 0 0 1 10 -10Z " fill="#0B1020" transform="translate(6 6)"/><path d="M52 50h216a16 16 0 0 1 16 16v118a16 16 0 0 1 -16 16h-216a16 16 0 0 1 -16 -16v-118a16 16 0 0 1 16 -16Z " fill="#FFFFFF" stroke="#0B1020" stroke-width="3" stroke-linejoin="round"/><path d="M52 50h216a16 16 0 0 1 16 16v2a16 16 0 0 1 -16 16h-216a16 16 0 0 1 -16 -16v-2a16 16 0 0 1 16 -16Z " fill="#E6E2D9" stroke="#0B1020" stroke-width="3" stroke-linejoin="round"/><path d="M221 58h18a9 9 0 0 1 9 9v0a9 9 0 0 1 -9 9h-18a9 9 0 0 1 -9 -9v0a9 9 0 0 1 9 -9Z " fill="#1D273F" stroke="#0B1020" stroke-width="3" stroke-linejoin="round"/><path d="M58 30h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2Z M278 30h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z M30 196h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z " fill="#FF6B2C" stroke="#0B1020" stroke-width="3" stroke-linejoin="round"/><path d="M256 210h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2Z M102 22h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z " fill="#D8CFFE" stroke="#0B1020" stroke-width="3" stroke-linejoin="round"/><path d="M62 100h76a10 10 0 0 1 10 10v52a10 10 0 0 1 -10 10h-76a10 10 0 0 1 -10 -10v-52a10 10 0 0 1 10 -10Z " fill="#3BE47F" stroke="#0B1020" stroke-width="3" stroke-linejoin="round"/><path d="M164 108 H262 M164 126 H244 M164 144 H254 M164 162 H226 M52 67 h0 M66 67 h0" fill="none" stroke="#0B1020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M294 120h12M300 114v12 M15 120h10M20 115v10 " fill="none" stroke="#FF6B2C" stroke-width="3.5" stroke-linecap="round"/><circle cx="230" cy="67" r="13.8" fill="#3BE47F" opacity="0.35"/><circle cx="230" cy="67" r="6" fill="#3BE47F" stroke="#0B1020" stroke-width="3"/><circle cx="228.2" cy="65.2" r="1.6800000000000002" fill="#FFFFFF" opacity="0.85"/></svg>
+            <svg class="wl-scene wl-scene-dark" width="440" height="330" viewBox="0 0 320 240" aria-hidden="true" focusable="false"><path d="M56 120a104 104 0 1 0 208 0a104 104 0 1 0 -208 0Z " fill="#151D31"/><path d="M38 60a22 22 0 1 0 44 0a22 22 0 1 0 -44 0Z " fill="#3A1A0C"/><path d="M52 50h216a16 16 0 0 1 16 16v118a16 16 0 0 1 -16 16h-216a16 16 0 0 1 -16 -16v-118a16 16 0 0 1 16 -16Z  M52 50h216a16 16 0 0 1 16 16v2a16 16 0 0 1 -16 16h-216a16 16 0 0 1 -16 -16v-2a16 16 0 0 1 16 -16Z  M221 58h18a9 9 0 0 1 9 9v0a9 9 0 0 1 -9 9h-18a9 9 0 0 1 -9 -9v0a9 9 0 0 1 9 -9Z  M58 30h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2Z M278 30h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z M30 196h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z  M256 210h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2Z M102 22h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z  M62 100h76a10 10 0 0 1 10 10v52a10 10 0 0 1 -10 10h-76a10 10 0 0 1 -10 -10v-52a10 10 0 0 1 10 -10Z " fill="#000000" transform="translate(6 6)"/><path d="M52 50h216a16 16 0 0 1 16 16v118a16 16 0 0 1 -16 16h-216a16 16 0 0 1 -16 -16v-118a16 16 0 0 1 16 -16Z " fill="#E7EAF0" stroke="#04060C" stroke-width="3" stroke-linejoin="round"/><path d="M52 50h216a16 16 0 0 1 16 16v2a16 16 0 0 1 -16 16h-216a16 16 0 0 1 -16 -16v-2a16 16 0 0 1 16 -16Z " fill="#B0BCD3" stroke="#04060C" stroke-width="3" stroke-linejoin="round"/><path d="M221 58h18a9 9 0 0 1 9 9v0a9 9 0 0 1 -9 9h-18a9 9 0 0 1 -9 -9v0a9 9 0 0 1 9 -9Z " fill="#151D31" stroke="#04060C" stroke-width="3" stroke-linejoin="round"/><path d="M58 30h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2Z M278 30h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z M30 196h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z " fill="#FF6B2C" stroke="#04060C" stroke-width="3" stroke-linejoin="round"/><path d="M256 210h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2Z M102 22h6a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2Z " fill="#C1B1FE" stroke="#04060C" stroke-width="3" stroke-linejoin="round"/><path d="M62 100h76a10 10 0 0 1 10 10v52a10 10 0 0 1 -10 10h-76a10 10 0 0 1 -10 -10v-52a10 10 0 0 1 10 -10Z " fill="#3BE47F" stroke="#04060C" stroke-width="3" stroke-linejoin="round"/><path d="M164 108 H262 M164 126 H244 M164 144 H254 M164 162 H226 M52 67 h0 M66 67 h0" fill="none" stroke="#04060C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M294 120h12M300 114v12 M15 120h10M20 115v10 " fill="none" stroke="#FFC53D" stroke-width="3.5" stroke-linecap="round"/><circle cx="230" cy="67" r="13.8" fill="#3BE47F" opacity="0.35"/><circle cx="230" cy="67" r="6" fill="#3BE47F" stroke="#04060C" stroke-width="3"/><circle cx="228.2" cy="65.2" r="1.6800000000000002" fill="#FFFFFF" opacity="0.85"/></svg>
+          </figure>
+        </section>
+
+        <section class="wl-section wl-pinsec" aria-labelledby="w-pin" id="pin">
+          <div class="wl-pin-text">
+            <p class="wl-kicker"><span class="wl-kicker-dot" aria-hidden="true"></span><span data-installed></span></p>
+            <h2 id="w-pin" data-i18n="ext.welcome.pin.title"></h2>
             <p class="wl-lead" data-i18n="ext.welcome.lead"></p>
             <ol class="wl-steps" data-pin-steps>
               <li><span class="wl-step" aria-hidden="true">1</span><span data-i18n="ext.welcome.step1"></span></li>
@@ -45,12 +61,12 @@
                 <span class="wl-dots" aria-hidden="true"><span></span><span></span><span></span></span>
                 <div class="wl-url" aria-hidden="true">awaketab.com</div>
                 <span class="wl-pinned at-in" data-pinned hidden>
-                  <img src="/icon.svg" width="22" height="22" alt="" aria-hidden="true" />
+                  <span data-mark-slot data-size="22" data-glow="0"></span>
                   <span class="wl-badge" aria-hidden="true">25m</span>
                 </span>
                 <span class="wl-slot" aria-hidden="true" data-slot></span>
                 <span class="wl-puzzle" data-puzzle aria-hidden="true">
-                  <svg data-icon="puzzle-piece" width="20" height="20"></svg>
+                  <svg data-icon="puzzle" width="20" height="20"></svg>
                   <span class="wl-mark" data-mark>1</span>
                 </span>
                 <span class="wl-avatar" aria-hidden="true"></span>
@@ -59,10 +75,10 @@
               <div class="wl-menu" data-placeholder="Chrome extensions menu">
                 <div class="wl-menu-title" aria-hidden="true" data-i18n="ext.welcome.menu"></div>
                 <div class="wl-menu-row">
-                  <span class="wl-menu-icon" aria-hidden="true"><img width="20" height="20" src="/icon.svg" alt="" /></span>
+                  <span class="wl-menu-icon" aria-hidden="true"><span data-mark-slot data-size="20"></span></span>
                   <span class="wl-menu-name" data-store-name></span>
                   <button class="wl-pin" type="button" aria-pressed="false" data-pin>
-                    <svg data-icon="push-pin" width="20" height="20"></svg>
+                    <svg data-icon="pin" width="20" height="20"></svg>
                     <span class="wl-mark" data-mark aria-hidden="true">2</span>
                   </button>
                 </div>
@@ -105,11 +121,11 @@
                 <span class="wl-num" aria-hidden="true">2</span>
                 <div class="wl-art wl-art-row" aria-hidden="true">
                   <span class="wl-art-toolbar" data-placeholder="Chrome toolbar">
-                    <img src="/icon.svg" width="34" height="34" alt="" aria-hidden="true" />
+                    <span data-mark-slot data-size="34" data-glow="0"></span>
                     <span class="wl-art-badge" data-placeholder="Chrome badge">25m</span>
                   </span>
                   <span class="wl-art-state">
-                    <span class="at-pill" data-lock="held"><svg class="at-pill-glyph" viewBox="0 0 12 12" width="12" height="12"><path d="M6 1.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 1 1 0-9z"></path></svg><span data-i18n="tool.pill.held"></span></span>
+                    <span class="at-pill" data-lock="held"><span class="at-pill-dot"></span><span data-i18n="tool.pill.held"></span></span>
                     <span class="wl-muted-sm" data-i18n="ext.welcome.how2.art"></span>
                   </span>
                 </div>
@@ -120,10 +136,10 @@
                 <span class="wl-num" aria-hidden="true">3</span>
                 <div class="wl-art wl-art-row" aria-hidden="true">
                   <div class="wl-notif" data-placeholder="system notification">
-                    <span class="wl-menu-icon wl-notif-icon"><img width="20" height="20" src="/icon.svg" alt="" /></span>
-                    <span class="wl-notif-title" data-i18n="end.notify.title"></span>
+                    <span class="wl-menu-icon wl-notif-icon"><span data-mark-slot data-size="16" data-state="ended"></span></span>
+                    <span class="wl-notif-title" data-i18n="tool.kicker.timesup"></span>
                     <span class="wl-notif-body" data-notify-body></span>
-                    <span class="wl-notif-actions"><span data-i18n="tool.extend.add30"></span><span data-i18n="tool.extend.stop"></span></span>
+                    <span class="wl-notif-actions"><span data-i18n="tool.extend.add15"></span><span data-i18n="tool.toast.dismiss"></span></span>
                   </div>
                 </div>
                 <h3 data-i18n="ext.welcome.how3.title"></h3>
@@ -141,7 +157,7 @@
           <div class="wl-levels">
             <article class="wl-levelcard" aria-labelledby="lv-screen" data-level="display">
               <div class="wl-laptop" aria-hidden="true" data-placeholder="laptop illustration">
-                <div class="wl-screen"><img width="46" height="46" src="/icon.svg" alt="" /></div>
+                <div class="wl-screen"><span data-mark-slot data-size="46"></span></div>
                 <div class="wl-base"></div>
                 <span class="wl-cpu"></span>
               </div>
@@ -149,12 +165,12 @@
                 <div class="wl-levelcard-title"><h3 id="lv-screen" data-i18n="ext.level.display"></h3><span class="wl-badgetag wl-badgetag-screen">ON</span></div>
                 <p class="wl-ink" data-i18n="ext.level.display.help"></p>
                 <p class="wl-ink2" data-i18n="ext.welcome.level.screenGood"></p>
-                <p class="wl-reads"><span data-i18n="ext.welcome.level.reads"></span> <span class="wl-minipill"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 1 1 0-9z"></path></svg><span data-i18n="tool.pill.held"></span></span></p>
+                <p class="wl-reads"><span data-i18n="ext.welcome.level.reads"></span> <span class="at-pill" data-lock="held"><span class="at-pill-dot" aria-hidden="true"></span><span data-i18n="tool.pill.held"></span></span></p>
               </div>
             </article>
             <article class="wl-levelcard" aria-labelledby="lv-system" data-level="system">
               <div class="wl-laptop" aria-hidden="true" data-placeholder="laptop illustration">
-                <div class="wl-screen"><img width="46" height="46" src="/icon.svg" alt="" /></div>
+                <div class="wl-screen"><span data-mark-slot data-size="46"></span></div>
                 <div class="wl-base"></div>
                 <span class="wl-cpu"></span>
               </div>
@@ -162,7 +178,7 @@
                 <div class="wl-levelcard-title"><h3 id="lv-system" data-i18n="ext.level.system"></h3><span class="wl-badgetag wl-badgetag-system">SYS</span></div>
                 <p class="wl-ink" data-i18n="ext.level.system.help"></p>
                 <p class="wl-ink2" data-i18n="ext.welcome.level.systemGood"></p>
-                <p class="wl-reads"><span data-i18n="ext.welcome.level.reads"></span> <span class="wl-minipill"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path fill-rule="evenodd" d="M6 .8a5.2 5.2 0 1 1 0 10.4a5.2 5.2 0 1 1 0-10.4zM6 2.3a3.7 3.7 0 1 1 0 7.4a3.7 3.7 0 1 1 0-7.4zM6 2.3a3.7 3.7 0 0 0 0 7.4z"></path></svg><span data-i18n="ext.pill.systemHeld"></span></span></p>
+                <p class="wl-reads"><span data-i18n="ext.welcome.level.reads"></span> <span class="at-pill" data-lock="held" data-level="system"><span class="at-pill-dot" aria-hidden="true"></span><span data-i18n="ext.pill.systemHeld"></span></span></p>
               </div>
             </article>
           </div>
@@ -182,16 +198,16 @@
             <h2 data-i18n="ext.welcome.cant.title"></h2>
             <ul class="wl-list">
               <li><svg data-icon="laptop" width="20" height="20"></svg><span data-i18n="ext.welcome.cant.lid"></span></li>
-              <li><svg data-icon="prohibit" width="20" height="20"></svg><span data-i18n="ext.welcome.cant.presence"></span></li>
-              <li><svg data-icon="browser" width="20" height="20"></svg><span data-i18n="ext.welcome.cant.closed"></span></li>
+              <li><svg data-icon="ban" width="20" height="20"></svg><span data-i18n="ext.welcome.cant.presence"></span></li>
+              <li><svg data-icon="app-window" width="20" height="20"></svg><span data-i18n="ext.welcome.cant.closed"></span></li>
             </ul>
           </div>
           <div class="wl-col">
             <h2 data-i18n="ext.welcome.see.title"></h2>
             <ul class="wl-list wl-list-ok">
-              <li><svg data-icon="check-circle" width="20" height="20" class="at-duo-good"></svg><span data-i18n="ext.welcome.see.account"></span></li>
-              <li><svg data-icon="check-circle" width="20" height="20" class="at-duo-good"></svg><span data-i18n="ext.welcome.see.permissions"></span></li>
-              <li><svg data-icon="check-circle" width="20" height="20" class="at-duo-good"></svg><span data-i18n="ext.welcome.see.data"></span></li>
+              <li><svg data-icon="circle-check" width="20" height="20" class="at-tone-good"></svg><span data-i18n="ext.welcome.see.account"></span></li>
+              <li><svg data-icon="circle-check" width="20" height="20" class="at-tone-good"></svg><span data-i18n="ext.welcome.see.permissions"></span></li>
+              <li><svg data-icon="circle-check" width="20" height="20" class="at-tone-good"></svg><span data-i18n="ext.welcome.see.data"></span></li>
             </ul>
             <a class="at-link at-link-underline" href="https://awaketab.com/privacy#extension" target="_blank" rel="noopener" data-i18n="ext.privacy.policy"></a>
           </div>
@@ -203,8 +219,8 @@
             <p data-i18n="ext.welcome.next.body"></p>
           </div>
           <div class="wl-next-actions">
-            <a class="at-btn at-btn-stop at-btn-medium" href="options.html" data-i18n="ext.welcome.openSettings"></a>
-            <a class="at-btn at-btn-sec at-btn-medium" href="https://awaketab.com/?source=ext" target="_blank" rel="noopener"><span data-i18n="ext.popup.open"></span><svg data-icon="arrow-square-out" width="16" height="16"></svg></a>
+            <a class="at-btn at-btn-primary" href="options.html" data-i18n="ext.welcome.openSettings"></a>
+            <a class="at-btn at-btn-stop" href="https://awaketab.com/?source=ext" target="_blank" rel="noopener"><span data-i18n="ext.popup.open"></span><svg data-icon="external-link" width="16" height="16"></svg></a>
           </div>
         </section>
       </main>
