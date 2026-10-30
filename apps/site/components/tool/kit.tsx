@@ -44,7 +44,10 @@ export const FIELD =
 export const LINK_BTN =
   'min-h-11 cursor-pointer border-0 bg-transparent px-0.5 text-[14px] font-semibold text-lamp underline underline-offset-3';
 export const ROW = 'flex min-h-[52px] items-center gap-2.5 border-b border-border';
-export const ROW_BTN = cn(ROW, 'w-full cursor-pointer border-x-0 border-t-0 bg-transparent p-0 text-left text-foreground');
+export const ROW_BTN = cn(
+  ROW,
+  'w-full cursor-pointer border-x-0 border-t-0 bg-transparent p-0 text-left text-foreground',
+);
 export const TILE =
   'inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary';
 export const KBD =

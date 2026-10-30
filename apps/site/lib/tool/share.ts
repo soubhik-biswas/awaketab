@@ -31,7 +31,15 @@ export interface IToolQuery {
   untilAt?: number;
 }
 
-const PRESET_SEC: Record<string, number> = { p15: 900, p30: 1800, p45: 2700, p60: 3600, p120: 7200, p240: 14400, pinf: 0 };
+const PRESET_SEC: Record<string, number> = {
+  p15: 900,
+  p30: 1800,
+  p45: 2700,
+  p60: 3600,
+  p120: 7200,
+  p240: 14400,
+  pinf: 0,
+};
 
 // The tool's address options: ?preset=p45&face=flip&chime=on&autostart=0&until=HH-MM.
 export function readToolQuery(search: string, now = Date.now()): IToolQuery {

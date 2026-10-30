@@ -93,7 +93,11 @@ function toStored(tool: IToolSettings): TStored {
     lastCustomMs: preset === 'custom' ? tool.totalSec * 1000 : rest.lastCustomMs,
     intention: tool.label.slice(0, 80),
     ambient: { ...DEFAULT_SETTINGS.ambient, ...rest.ambient, clock24h: !tool.h12, showSeconds: tool.secs },
-    sound: { ...DEFAULT_SETTINGS.sound, ...rest.sound, id: tool.chime === 'off' ? 'none' : tool.chime === 'bell' ? 'bell' : 'chime' },
+    sound: {
+      ...DEFAULT_SETTINGS.sound,
+      ...rest.sound,
+      id: tool.chime === 'off' ? 'none' : tool.chime === 'bell' ? 'bell' : 'chime',
+    },
     dimAtNight: tool.dim,
     theme: tool.theme,
   };

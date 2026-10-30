@@ -67,7 +67,9 @@ function useFrameSize(ref: React.RefObject<HTMLDivElement | null>) {
     const read = () => {
       const r = el.getBoundingClientRect();
       setSize((prev) =>
-        prev && prev.w === Math.round(r.width) && prev.h === Math.round(r.height) ? prev : { w: Math.round(r.width), h: Math.round(r.height) },
+        prev && prev.w === Math.round(r.width) && prev.h === Math.round(r.height)
+          ? prev
+          : { w: Math.round(r.width), h: Math.round(r.height) },
       );
     };
     read();
@@ -110,7 +112,8 @@ function markWelcomed() {
   try {
     const store = createStorage();
     const ob = store.onboarding();
-    if (!ob.dismissedTips.includes(WELCOME_TIP)) store.writeOnboarding({ ...ob, dismissedTips: [...ob.dismissedTips, WELCOME_TIP] });
+    if (!ob.dismissedTips.includes(WELCOME_TIP))
+      store.writeOnboarding({ ...ob, dismissedTips: [...ob.dismissedTips, WELCOME_TIP] });
   } catch {
     // Storage blocked: the welcome may show again next visit.
   }
@@ -124,7 +127,14 @@ function welcomed(): boolean {
   }
 }
 
-export function Tool({ lang = 'en', initialView, welcome = true, readQuery = true, qa = false, className }: IToolProps) {
+export function Tool({
+  lang = 'en',
+  initialView,
+  welcome = true,
+  readQuery = true,
+  qa = false,
+  className,
+}: IToolProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const size = useFrameSize(frameRef);
   return (
@@ -135,14 +145,7 @@ export function Tool({ lang = 'en', initialView, welcome = true, readQuery = tru
       className={cn('relative h-dvh w-full overflow-hidden bg-background font-sans text-foreground', className)}
     >
       {size ? (
-        <ToolApp
-          lang={lang}
-          frame={size}
-          initialView={initialView}
-          welcome={welcome}
-          readQuery={readQuery}
-          qa={qa}
-        />
+        <ToolApp lang={lang} frame={size} initialView={initialView} welcome={welcome} readQuery={readQuery} qa={qa} />
       ) : null}
     </div>
   );
@@ -174,7 +177,10 @@ function ToolApp({
   const night = theme !== 'light';
   const themeChoice: TThemeChoice =
     themeSetting === 'light' || themeSetting === 'dark' || themeSetting === 'oled' ? themeSetting : 'auto';
-  const m = useMemo(() => deriveModel(snap, settings, lang, ui.qa.offsetMs ?? 0), [snap, settings, lang, ui.qa.offsetMs]);
+  const m = useMemo(
+    () => deriveModel(snap, settings, lang, ui.qa.offsetMs ?? 0),
+    [snap, settings, lang, ui.qa.offsetMs],
+  );
   const latest = useRef({ m, settings });
   latest.current = { m, settings };
 
@@ -243,7 +249,12 @@ function ToolApp({
       },
       savePreset: () => {
         const cur = latest.current;
-        const p = savePreset({ label: cur.settings.label, totalSec: cur.m.total, face: cur.settings.face, chime: cur.settings.chime !== 'off' });
+        const p = savePreset({
+          label: cur.settings.label,
+          totalSec: cur.m.total,
+          face: cur.settings.face,
+          chime: cur.settings.chime !== 'off',
+        });
         showToast({
           id: 'preset-saved',
           tone: 'success',
@@ -285,11 +296,18 @@ function ToolApp({
     const offs = [
       wake.on('extended', ({ sec, endsAt }) => {
         const l = latest.current.m;
-        showExtendedToast({ until: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt), minutes: Math.round(sec / 60), onUndo: () => wake.undoExtend() });
+        showExtendedToast({
+          until: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt),
+          minutes: Math.round(sec / 60),
+          onUndo: () => wake.undoExtend(),
+        });
       }),
       wake.on('lowtime', ({ endsAt }) => {
         const l = latest.current.m;
-        showLowTimeToast({ endsAt: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt), onExtend: () => wake.extend(900) });
+        showLowTimeToast({
+          endsAt: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt),
+          onExtend: () => wake.extend(900),
+        });
       }),
       wake.on('ended', ({ endedAt }) => {
         const l = latest.current;
@@ -327,7 +345,8 @@ function ToolApp({
   useEffect(() => {
     const base = 'AwakeTab';
     let title = base;
-    if (awake && !m.indef) title = `${settings.secs ? formatDuration(m.remain) : `${Math.ceil(m.remain / 60)} min`} left · ${base}`;
+    if (awake && !m.indef)
+      title = `${settings.secs ? formatDuration(m.remain) : `${Math.ceil(m.remain / 60)} min`} left · ${base}`;
     else if (awake) title = `Awake · ${base}`;
     else if (m.state === 'paused') title = `Paused · ${base}`;
     else if (m.state === 'blocked') title = `Blocked · ${base}`;
@@ -390,7 +409,11 @@ function ToolApp({
   return (
     <ToolContext.Provider value={ctx}>
       {!focus || night ? (
-        <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ left: sideW, right: panelW, opacity: glowAmt }}>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0"
+          style={{ left: sideW, right: panelW, opacity: glowAmt }}
+        >
           <div
             className={cn(
               'absolute h-[640px] w-[760px] rounded-full',

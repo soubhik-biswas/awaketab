@@ -34,7 +34,11 @@ export default function PresetsView() {
       {list.map((p, i) => {
         const on = p.totalSec === m.total;
         const Icon = PRESET_ICONS[p.icon];
-        const meta = [p.totalSec === 0 ? 'No end' : lengthWords(p.totalSec), faceName(p.face), p.totalSec === 0 ? null : p.chime ? 'chime' : 'silent']
+        const meta = [
+          p.totalSec === 0 ? 'No end' : lengthWords(p.totalSec),
+          faceName(p.face),
+          p.totalSec === 0 ? null : p.chime ? 'chime' : 'silent',
+        ]
           .filter(Boolean)
           .join(' · ');
         return (
@@ -61,7 +65,11 @@ export default function PresetsView() {
               <span className="text-[15px] font-semibold">{p.label}</span>
               <span className={HELP}>{meta}</span>
             </span>
-            <ChevronRight className="size-[18px] shrink-0 text-muted-foreground-strong" strokeWidth={2} aria-hidden="true" />
+            <ChevronRight
+              className="size-[18px] shrink-0 text-muted-foreground-strong"
+              strokeWidth={2}
+              aria-hidden="true"
+            />
           </button>
         );
       })}

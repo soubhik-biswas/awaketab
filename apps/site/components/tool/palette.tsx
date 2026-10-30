@@ -35,8 +35,26 @@ interface ICmd extends ICommandAction {
 }
 
 const PALETTE_FACES: TFace[] = [
-  'ring', 'bold', 'flip', 'luxe', 'dive', 'gauge', 'timeline', 'nixie', 'led', 'pilot',
-  'dual', 'radar', 'board', 'hourglass', 'orbit', 'disc', 'clocks', 'wordgrid', 'tape', 'moon',
+  'ring',
+  'bold',
+  'flip',
+  'luxe',
+  'dive',
+  'gauge',
+  'timeline',
+  'nixie',
+  'led',
+  'pilot',
+  'dual',
+  'radar',
+  'board',
+  'hourglass',
+  'orbit',
+  'disc',
+  'clocks',
+  'wordgrid',
+  'tape',
+  'moon',
 ];
 
 function commands({ m, a }: IToolContext): ICmd[] {
@@ -86,7 +104,10 @@ export function ToolPalette() {
   const all = useMemo(() => commands(ctx), [ctx]);
   const groups = useMemo(() => grouped(all), [all]);
   const idle = useMemo(
-    () => grouped(all.filter((c) => c.group === 'Session' || c.label === 'Fullscreen' || c.label === 'Help & fixes').slice(0, 7)),
+    () =>
+      grouped(
+        all.filter((c) => c.group === 'Session' || c.label === 'Fullscreen' || c.label === 'Help & fixes').slice(0, 7),
+      ),
     [all],
   );
   return (

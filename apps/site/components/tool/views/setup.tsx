@@ -58,8 +58,18 @@ export function SetupView() {
           on={settings.chime !== 'off'}
           onToggle={() => a.updateSettings({ chime: settings.chime === 'off' ? 'two' : 'off' })}
         />
-        <SwitchLine label={s.dim} desc={s.dimD} on={settings.dim} onToggle={() => a.updateSettings({ dim: !settings.dim })} />
-        <SwitchLine label={s.secs} desc={s.secsD} on={settings.secs} onToggle={() => a.updateSettings({ secs: !settings.secs })} />
+        <SwitchLine
+          label={s.dim}
+          desc={s.dimD}
+          on={settings.dim}
+          onToggle={() => a.updateSettings({ dim: !settings.dim })}
+        />
+        <SwitchLine
+          label={s.secs}
+          desc={s.secsD}
+          on={settings.secs}
+          onToggle={() => a.updateSettings({ secs: !settings.secs })}
+        />
       </Group>
       <Group label={s.level}>
         <SegmentedControl
@@ -70,7 +80,9 @@ export function SetupView() {
             { value: 'system', label: s.system, icon: Lock, disabled: true },
           ]}
         />
-        <span className={HELP}>Blocking system sleep needs the desktop app. The browser can only keep the screen on.</span>
+        <span className={HELP}>
+          Blocking system sleep needs the desktop app. The browser can only keep the screen on.
+        </span>
       </Group>
     </>
   );

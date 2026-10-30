@@ -115,9 +115,7 @@ export function ToolHost({ panelTop, panelWidth }: { panelTop: number; panelWidt
 
   if (!view) return null;
   const modal = view === 'welcome' || view === 'clear';
-  const close = (
-    <CloseButton label={`Close ${title}`} onClick={a.close} />
-  );
+  const close = <CloseButton label={`Close ${title}`} onClick={a.close} />;
 
   if (sheets) {
     return (
@@ -183,7 +181,11 @@ export function ToolHost({ panelTop, panelWidth }: { panelTop: number; panelWidt
       style={{ top: panelTop, width: panelWidth }}
     >
       <div className="flex shrink-0 items-center justify-between gap-3">
-        <h2 ref={headRef} tabIndex={-1} className={cn(H2, 'outline-none', view === 'setup' ? 'text-[20px]' : 'text-[22px]')}>
+        <h2
+          ref={headRef}
+          tabIndex={-1}
+          className={cn(H2, 'outline-none', view === 'setup' ? 'text-[20px]' : 'text-[22px]')}
+        >
           {title}
         </h2>
         {view !== 'setup' ? close : null}
