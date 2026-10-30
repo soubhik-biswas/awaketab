@@ -23,6 +23,27 @@
 }
 
 @font-face {
+  font-family: Archivo;
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url("/fonts/archivo-latin-wdth-wght-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial"), local("Helvetica"), local("Liberation Sans");
+  size-adjust: 98.7%;
+  ascent-override: 88.96%;
+  descent-override: 21.28%;
+  line-gap-override: 0%;
+}
+
+@font-face {
   font-family: "Geist Fallback";
   src: local("Arial"), local("Helvetica"), local("Liberation Sans");
   size-adjust: 105.8%;
@@ -58,7 +79,8 @@
   --at-type-ext-chip: 500 0.875rem/1.25rem var(--at-font);
   --at-type-ext-note: 400 0.8125rem/1.45 var(--at-font);
   --at-type-ext-meta: 500 0.75rem/1.4 var(--at-font-mono);
-  --at-type-ext-word: 800 0.9375rem/1.25rem var(--at-font);
+  --at-type-ext-word: 800 0.9375rem/1.25rem var(--at-font-display);
+  --at-trk-ext-word: -0.02em;
   --at-r-btn: 12px;
   --at-s-ext-2: 2px;
   --at-s-ext-6: 6px;
@@ -129,12 +151,12 @@ button {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition:
-    background-color 0.45s var(--ext-ease),
-    color 0.45s var(--ext-ease),
-    border-color 0.45s var(--ext-ease),
-    box-shadow 0.45s var(--ext-ease),
-    transform 0.18s var(--ext-ease),
-    opacity 0.45s var(--ext-ease);
+    background-color var(--at-d-fast) var(--at-ease-glide),
+    color var(--at-d-fast) var(--at-ease-glide),
+    border-color var(--at-d-fast) var(--at-ease-glide),
+    box-shadow var(--at-d-fast) var(--at-ease-glide),
+    transform var(--at-d-glide) var(--at-ease-glide),
+    opacity var(--at-d-fast) var(--at-ease-glide);
 }
 
 button:active:not(:disabled) {
@@ -193,7 +215,8 @@ svg {
   gap: var(--at-s-ext-10);
   min-block-size: var(--at-h-control);
   font: var(--at-type-ext-word);
-  letter-spacing: var(--at-trk-wordmark);
+  font-stretch: var(--at-stretch-display);
+  letter-spacing: var(--at-trk-ext-word);
   color: var(--at-ink);
 }
 
@@ -217,6 +240,9 @@ svg {
   display: inline-flex;
   align-items: center;
   gap: var(--at-s-1);
+  font-family: var(--at-font);
+  font-stretch: normal;
+  letter-spacing: normal;
   font-weight: 500;
   color: var(--at-muted);
 }
@@ -496,8 +522,8 @@ svg {
   background: var(--at-track);
   content: "";
   transition:
-    background-color 0.5s var(--ext-ease),
-    border-color 0.5s var(--ext-ease);
+    background-color var(--at-d-fast) var(--at-ease-glide),
+    border-color var(--at-d-fast) var(--at-ease-glide);
 }
 
 .at-switch::after {
@@ -511,8 +537,8 @@ svg {
   box-shadow: var(--at-ext-thumb-shadow);
   content: "";
   transition:
-    transform 0.6s var(--ext-ease),
-    background-color 0.5s var(--ext-ease);
+    transform var(--at-d-fast) var(--at-ease-glide),
+    background-color var(--at-d-fast) var(--at-ease-glide);
 }
 
 .at-switch:checked::before {

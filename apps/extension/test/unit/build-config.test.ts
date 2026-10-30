@@ -144,21 +144,27 @@ describe('i18n reuse (no duplicated English strings)', () => {
     const css = await readFile(path.join(EXT, 'src/styles/tokens.css'), 'utf8');
     expect(css.startsWith(':root,\n[data-theme="light"]')).toBe(true);
     expect(css).toContain('--at-accent: #117a3b;');
+    expect(css).toContain('--at-primary: #6633f5;');
+    expect(css).toContain('--at-primary: #9f7bff;');
+    expect(css).toContain('--at-ground: #f5f5fa;');
     expect(css).toContain('[data-theme="oled"]');
     expect(css).not.toMatch(/@import|@theme|@apply|@layer/u);
   });
 });
 
 describe('fonts (DESIGN.md §3, D-R26)', () => {
-  it('bundles Geist and Geist Mono with the OFL licence and requests no remote font', async () => {
+  it('bundles Archivo, Geist and Geist Mono with their OFL licences and requests no remote font', async () => {
     const files = await readdir(path.join(EXT, 'public/fonts'));
     expect(files.sort()).toEqual([
+      'OFL-Archivo.txt',
       'OFL-Geist.txt',
+      'archivo-latin-wdth-wght-normal.woff2',
       'geist-latin-wght-normal.woff2',
       'geist-mono-latin-wght-normal.woff2',
     ]);
     const base = await readFile(path.join(EXT, 'src/styles/base.css'), 'utf8');
     expect(base).toContain('url("/fonts/geist-latin-wght-normal.woff2")');
+    expect(base).toContain('url("/fonts/archivo-latin-wdth-wght-normal.woff2")');
     expect(base).toContain('font-family: "Geist Fallback"');
     for (const file of await sources(path.join(EXT, 'entrypoints'))) {
       expect(await readFile(file, 'utf8'), file).not.toMatch(/fonts\.(googleapis|gstatic)\.com/u);

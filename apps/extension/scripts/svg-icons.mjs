@@ -7,7 +7,7 @@ import path from 'node:path';
 const require = createRequire(import.meta.url);
 const LUCIDE = path.join(path.dirname(require.resolve('lucide-static/package.json')), 'icons');
 const PLACEHOLDER = /<svg data-(icon|logo)="([a-z0-9-]+)"([^>]*)><\/svg>/gu;
-// The Solar Green icon scale: 16 and 18 px draw at stroke 2, 20 px at 1.75, 24 px at 1.5; 14 px status glyphs at 2.25.
+// The icon scale: 16 and 18 px draw at stroke 2, 20 px at 1.75, 24 px at 1.5; 14 px status glyphs at 2.25.
 const STROKE = { 12: '2.25', 14: '2.25', 16: '2', 18: '2', 20: '1.75', 24: '1.5' };
 
 let logos;

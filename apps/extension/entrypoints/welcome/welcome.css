@@ -10,10 +10,12 @@
   --at-ext-hero-mock: 540px;
   --at-ext-hero-art: 440px;
   --at-ext-intro-max: 560px;
-  --at-type-ext-hero: 800 clamp(2.5rem, 5.4vw, 3.75rem)/1.02 var(--at-font);
+  --at-type-ext-hero: 800 clamp(2.5rem, 5.4vw, 3.75rem)/1.02 var(--at-font-display);
+  --at-type-ext-h2: 800 1.75rem/1.1 var(--at-font-display);
   --at-type-ext-intro: 400 1.1875rem/1.55 var(--at-font);
-  --at-type-ext-kick: 500 0.875rem/1.4 var(--at-font-mono);
+  --at-type-ext-kick: 400 0.875rem/1.4 var(--at-font-mono);
   --at-s-ext-18: 18px;
+  --at-s-ext-22: 22px;
   --at-s-ext-56: 56px;
   --at-s-ext-72: 72px;
   --at-ext-lead-max: 34em;
@@ -39,8 +41,7 @@
   --at-ext-lines-top: 92px;
   --at-ext-menu-end: 18px;
   --at-ext-menu-w: 330px;
-  /* stylelint-disable-next-line declaration-property-value-disallowed-list -- the app icon's own art */
-  --at-ext-app-icon: linear-gradient(160deg, #16213a 0%, #0b0f17 100%);
+  --at-ext-app-icon: var(--at-app-tile);
   --at-ext-app-icon-size: 28px;
   --at-ext-ghost-w: 120px;
   --at-ext-ghost-h: 10px;
@@ -165,8 +166,9 @@
 }
 
 .wl-main h2 {
-  font: var(--at-type-h2);
-  letter-spacing: -0.01em;
+  font: var(--at-type-ext-h2);
+  font-stretch: var(--at-stretch-display);
+  letter-spacing: var(--at-trk-display-lg);
   text-wrap: balance;
 }
 
@@ -215,6 +217,7 @@
 
 .wl-hero-text h1 {
   font: var(--at-type-ext-hero);
+  font-stretch: var(--at-stretch-display);
   letter-spacing: var(--at-trk-display-2xl);
   text-wrap: balance;
 }
@@ -239,6 +242,10 @@
   gap: var(--at-s-ext-10);
 }
 
+.wl-hero-actions .at-btn {
+  padding-inline: var(--at-s-ext-22);
+}
+
 .wl-note {
   font: var(--at-type-small);
   color: var(--at-ink-2);
@@ -253,28 +260,6 @@
   inline-size: 100%;
   max-inline-size: var(--at-ext-hero-art);
   block-size: auto;
-}
-
-.wl-scene-dark {
-  display: none;
-}
-
-:is([data-theme="dark"], [data-theme="oled"]) .wl-scene-light {
-  display: none;
-}
-
-:is([data-theme="dark"], [data-theme="oled"]) .wl-scene-dark {
-  display: block;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .wl-scene-light {
-    display: none;
-  }
-
-  :root:not([data-theme]) .wl-scene-dark {
-    display: block;
-  }
 }
 
 .wl-pinsec {
@@ -335,9 +320,9 @@
   font: var(--at-type-small);
   font-weight: 600;
   transition:
-    background-color 0.6s var(--ext-ease),
-    border-color 0.6s var(--ext-ease),
-    color 0.6s var(--ext-ease);
+    background-color var(--at-d-fast) var(--at-ease-glide),
+    border-color var(--at-d-fast) var(--at-ease-glide),
+    color var(--at-d-fast) var(--at-ease-glide);
 }
 
 [data-pinned-state] .wl-step {

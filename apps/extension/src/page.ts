@@ -87,12 +87,18 @@ export function show(el: Element, on: boolean): boolean {
   return on;
 }
 
-// The brand mark into every `[data-mark-slot]`: data-size, data-state, data-glow="0".
+// The brand mark into every `[data-mark-slot]`: data-size, data-state, data-glow="0", data-small (the 84° cut).
 export function paintMark(slot: HTMLElement, state?: MarkState): void {
   const next = state ?? (slot.dataset.state as MarkState | undefined) ?? 'awake';
   if (slot.dataset.drawn === next) return;
   slot.dataset.drawn = next;
-  slot.innerHTML = markSvg({ size: Number(slot.dataset.size ?? 26), state: next, glow: slot.dataset.glow !== '0' });
+  const size = Number(slot.dataset.size ?? 26);
+  slot.innerHTML = markSvg({
+    size,
+    state: next,
+    glow: slot.dataset.glow !== '0',
+    small: slot.dataset.small !== undefined || size <= 20,
+  });
 }
 
 export function paintMarks(root: ParentNode): void {

@@ -16,7 +16,7 @@ const LAMP_VAR: Record<MarkState, string> = {
   blocked: 'var(--at-bad)',
   ended: 'var(--at-ended)',
   info: 'var(--at-info)',
-  off: 'var(--at-muted)',
+  off: 'var(--at-input-border)',
 };
 
 const ARC = 'M32 11 A21 21 0 1 1 12.27 24.82';
@@ -27,7 +27,7 @@ export function markSvg(opts: MarkOptions = {}): string {
   const size = opts.size ?? 32;
   const state = opts.state ?? 'awake';
   const small = opts.small ?? size <= 20;
-  const hollow = opts.hollow ?? (state === 'off' || state === 'paused' || state === 'blocked');
+  const hollow = opts.hollow ?? (state === 'paused' || state === 'blocked');
   const glow = (opts.glow ?? true) && !small && !hollow && state !== 'off';
   const lx = small ? 17.9 : 19.95;
   const ly = small ? 16.4 : 14.8;
