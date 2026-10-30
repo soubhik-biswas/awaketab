@@ -116,10 +116,10 @@ export function mountLate(ctx: IToolCtx): () => void {
   void moreCss().then(() => {
     mountLangSuggest(root, ctx.storage);
   });
-  // A touch or a sideways trackpad swipe on the clock loads the faces pack's swipe, so the next swipe changes the face.
+  // A touch or a sideways trackpad swipe on the clock loads the face swipe, so the next swipe changes the face.
   const wake = (e: Event) => {
     if (!(e instanceof WheelEvent) || Math.abs(e.deltaX) > Math.abs(e.deltaY))
-      void import('./packs/faces/index.js').then((m) => {
+      void import('./face/stage.js').then((m) => {
         m.armSwipe(ctx);
       });
   };

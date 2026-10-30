@@ -388,6 +388,15 @@
   --at-badge-screen: #117a3b;
   --at-badge-system: #2b3a67;
   --at-badge-ink: #fff;
+  --at-fc-plate-l: radial-gradient(circle at 50% 28%, #fff 0%, #f5f2eb 62%, #ece8df 100%);
+  --at-fc-plate-shadow-l:
+    inset 0 1px 0 #fff, inset 0 -10px 24px rgb(11 16 32 / 6%), 0 18px 36px rgb(11 16 32 / 12%), 0 0 0 1px #dcd7cc;
+  --at-fc-plate-d: radial-gradient(circle at 50% 28%, #1b2540 0%, #0e1424 58%, #0a0f1c 100%);
+  --at-fc-plate-shadow-d:
+    inset 0 1px 0 rgb(255 255 255 / 7%), inset 0 -14px 34px rgb(0 0 0 / 45%), 0 22px 44px rgb(0 0 0 / 50%),
+    0 0 0 1px #26314a;
+  --at-fc-plate-o: #000;
+  --at-fc-plate-shadow-o: 0 0 0 1px #151d31;
   --at-type-display-2xl: 800 6.5rem/0.92 var(--at-font);
   --at-type-display-xl: 800 4.5rem/1 var(--at-font);
   --at-type-display-lg: 700 3.5rem/1.05 var(--at-font);

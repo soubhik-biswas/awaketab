@@ -1,10 +1,15 @@
 import type { TFace } from '@awaketab/core';
 import EmblaCarousel from 'embla-carousel';
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
-import type { IToolCtx } from '../../ctx.js';
-import { t } from '../../i18n.js';
-import { el } from './kit.js';
-import { stepFace } from './order.js';
+import type { IToolCtx } from '../ctx.js';
+import { faceName, stepFace } from './stage.js';
+
+const el = (tag: 'div' | 'span', cls = '', text = ''): HTMLElement => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text) n.textContent = text;
+  return n;
+};
 
 // A sideways swipe (touch, pen, mouse drag or a two-finger trackpad swipe) on the clock steps to the next face.
 // Embla drives a transparent three-slide strip over the dial: the neighbours' names ride in from the edges while
@@ -39,9 +44,7 @@ export function mountSwipe(ctx: IToolCtx, step: (by: number) => Promise<void>): 
       const id: TFace = stepFace(face, by);
       if (card.dataset.id === id) continue;
       card.dataset.id = id;
-      const icon = root.querySelector(`[data-pick="${id}"] .at-fg-name svg`)?.cloneNode(true);
-      if (icon instanceof SVGElement) for (const a of ['width', 'height']) icon.setAttribute(a, '32');
-      card.replaceChildren(...(icon ? [icon] : []), el('span', '', t(`tool.face.${id}`)));
+      card.replaceChildren(el('span', '', faceName(id)));
     }
   };
   label();

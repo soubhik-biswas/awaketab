@@ -167,7 +167,7 @@ export function act(ctx: IToolCtx, name: string, el: HTMLElement): void {
         el,
       );
     else if (name.startsWith('face'))
-      void import('../packs/faces/index.js').then((m) => {
+      void import('../face/stage.js').then((m) => {
         m.faceAct(ctx, name);
       });
     else if (name === 'intention')
