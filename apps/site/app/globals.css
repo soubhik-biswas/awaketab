@@ -1,0 +1,236 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *, .oled, .oled *));
+
+:root {
+  --background: #f6f4ef;
+  --foreground: #0b1020;
+  --card: #ffffff;
+  --card-foreground: #0b1020;
+  --popover: #ffffff;
+  --popover-foreground: #0b1020;
+  --primary: #b93d0b;
+  --primary-foreground: #ffffff;
+  --primary-soft: #fdece3;
+  --secondary: #efece5;
+  --secondary-foreground: #0b1020;
+  --muted: #efece5;
+  --muted-foreground: #626777;
+  --muted-foreground-strong: #4b5165;
+  --surface-3: #e6e2d9;
+  --accent: #e2f6e8;
+  --accent-foreground: #117a3b;
+  --destructive: #c21d3e;
+  --destructive-soft: #fce3e7;
+  --border: #dcd7cc;
+  --input: #8f887a;
+  --ring: #1c64b8;
+  --link: #117a3b;
+  --lamp: #117a3b;
+  --lamp-foreground: #ffffff;
+  --warning: #8a5a00;
+  --warning-soft: #fcefd2;
+  --info: #1c64b8;
+  --info-soft: #e1ecfa;
+  --ended: #6d4ad0;
+  --ended-soft: #ece6fc;
+  --field: #ffffff;
+  --pop: #ffffff;
+  --sheet: #ffffff;
+  --on-danger: #ffffff;
+  --halo: rgba(17, 122, 59, 0.22);
+  --primary-glow: rgba(185, 61, 11, 0.28);
+  --scrim: rgba(11, 16, 32, 0.42);
+  --shadow-e1: 0 1px 2px rgba(11, 16, 32, 0.06);
+  --shadow-e2: 0 1px 2px rgba(11, 16, 32, 0.06), 0 8px 20px rgba(11, 16, 32, 0.08);
+  --shadow-e3: 0 2px 6px rgba(11, 16, 32, 0.1), 0 28px 60px rgba(11, 16, 32, 0.2);
+  --radius: 14px;
+
+  --face-sky: #1d5fb8;
+  --face-violet: #6d4ad0;
+  --face-lime: #4d7c0f;
+  --face-amber: #a15c00;
+  --face-ember: #c2410c;
+
+  --face-fill-sky: #3b7dd8;
+  --face-fill-violet: #7c5ce0;
+  --face-fill-lime: #4f9a1f;
+  --face-fill-amber: #c47a00;
+  --face-fill-ember: #e0531f;
+}
+
+.dark,
+.oled {
+  --background: #070b16;
+  --foreground: #eef2fa;
+  --card: #0e1424;
+  --card-foreground: #eef2fa;
+  --popover: #0e1424;
+  --popover-foreground: #eef2fa;
+  --primary: #ff6b2c;
+  --primary-foreground: #0b0f1a;
+  --primary-soft: #3a1a0c;
+  --secondary: #151d31;
+  --secondary-foreground: #eef2fa;
+  --muted: #151d31;
+  --muted-foreground: #8e99ae;
+  --muted-foreground-strong: #a9b3c7;
+  --surface-3: #1d273f;
+  --accent: #0d3b22;
+  --accent-foreground: #3be47f;
+  --destructive: #ff6b81;
+  --destructive-soft: #3d1220;
+  --border: #26314a;
+  --input: #6b7894;
+  --ring: #7cbbff;
+  --link: #7cf0ae;
+  --lamp: #3be47f;
+  --lamp-foreground: #052812;
+  --warning: #ffc53d;
+  --warning-soft: #3a2c08;
+  --info: #7cbbff;
+  --info-soft: #0f2645;
+  --ended: #c1b1fe;
+  --ended-soft: #271c4a;
+
+  --field: #070b16;
+  --pop: #151d31;
+  --sheet: #151d31;
+  --on-danger: #1a0509;
+  --halo: rgba(59, 228, 127, 0.28);
+  --primary-glow: rgba(255, 107, 44, 0.38);
+  --scrim: rgba(0, 0, 0, 0.6);
+  --shadow-e1: 0 0 0 1px #26314a;
+  --shadow-e2: 0 0 0 1px #26314a, 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-e3: 0 0 0 1px #4a587a, 0 30px 70px rgba(0, 0, 0, 0.6);
+  --face-sky: #7cbbff;
+  --face-violet: #c1b1fe;
+  --face-lime: #b8f25a;
+  --face-amber: #ffb547;
+  --face-ember: #ff6b2c;
+  --face-fill-sky: #7cbbff;
+  --face-fill-violet: #c1b1fe;
+  --face-fill-lime: #b8f25a;
+  --face-fill-amber: #ffb547;
+  --face-fill-ember: #ff6b2c;
+}
+
+.oled {
+  --background: #000000;
+  --card: #05070c;
+  --popover: #0e1424;
+  --secondary: #0e1424;
+  --muted: #0e1424;
+  --surface-3: #151d31;
+  --border: #1d273f;
+  --field: #000000;
+  --pop: #0e1424;
+  --sheet: #0e1424;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted-foreground-strong: var(--muted-foreground-strong);
+  --color-surface-3: var(--surface-3);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-soft: var(--destructive-soft);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+  --color-lamp: var(--lamp);
+  --color-lamp-foreground: var(--lamp-foreground);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-ended: var(--ended);
+  --color-ended-soft: var(--ended-soft);
+  --color-face-sky: var(--face-sky);
+  --color-face-violet: var(--face-violet);
+  --color-face-lime: var(--face-lime);
+  --color-face-amber: var(--face-amber);
+  --color-face-ember: var(--face-ember);
+  --color-face-fill-sky: var(--face-fill-sky);
+  --color-face-fill-violet: var(--face-fill-violet);
+  --color-face-fill-lime: var(--face-fill-lime);
+  --color-face-fill-amber: var(--face-fill-amber);
+  --color-face-fill-ember: var(--face-fill-ember);
+  --color-field: var(--field);
+  --color-pop: var(--pop);
+  --color-sheet: var(--sheet);
+  --color-on-danger: var(--on-danger);
+  --color-halo: var(--halo);
+  --color-scrim: var(--scrim);
+  --shadow-e1: var(--shadow-e1);
+  --shadow-e2: var(--shadow-e2);
+  --shadow-e3: var(--shadow-e3);
+
+  --font-sans:
+    var(--font-geist), "Noto Sans JP", "Noto Sans SC", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --ease-glide: cubic-bezier(0.2, 0, 0, 1);
+  --ease-base: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-arrive: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-glide: 80ms;
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-panel: 240ms;
+  --duration-arrive: 520ms;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    background: var(--background);
+    color: var(--foreground);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
