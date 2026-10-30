@@ -1,0 +1,74 @@
+---
+title: "Bloqueio Automático Nunca em cinza no iPhone — AwakeTab"
+description: "A opção Nunca do Bloqueio Automático fica em cinza com o Modo de Pouca Energia ativo. Desative-o primeiro; depois o Safari 16.4+ pode segurar a tela."
+h1: "Bloqueio Automático do iPhone com Nunca em cinza: como resolver"
+ogTitle: "Bloqueio Automático em cinza no iPhone"
+intent: "bloqueio automático nunca cinza iphone"
+secondaryQueries: ["não consigo colocar bloqueio automático em nunca", "bloqueio automático travado em 30 segundos", "iphone tela apaga em 30 segundos", "modo de pouca energia bloqueio automático", "opção nunca não aparece iphone"]
+preset: p30
+mode: standard
+locale: pt-br
+reviewed: false
+translationOf: "iphone-auto-lock-never-greyed-out"
+lastVerified: 2026-09-09
+browsers: []
+os: []
+lead: "Se você abre Ajustes → Tela e Brilho → Bloqueio Automático e a opção Nunca está apagada, sem responder ao toque, a causa quase sempre é o Modo de Pouca Energia. Ele é ativado por você ou sugerido pelo iPhone quando a bateria cai bastante, e enquanto estiver ligado trava o Bloqueio Automático em 30 segundos. A solução é desativar o Modo de Pouca Energia primeiro. Depois disso, você pode escolher Nunca — ou deixar o sistema como está e usar o Safari 16.4+ com o AwakeTab, que segura a tela até você sair da aba."
+crumb: "Bloqueio Automático em cinza"
+toc:
+  passo-a-passo-para-liberar-a-opção-nunca: "Liberar a opção Nunca"
+steps:
+  - title: "Desative o Modo de Pouca Energia"
+    short: "Desative o Modo de Pouca Energia"
+    path: "Ajustes › Bateria"
+    text: "O ícone da bateria deixa de ficar amarelo."
+  - title: "Volte para o Bloqueio Automático"
+    short: "Volte ao Bloqueio Automático"
+    path: "Ajustes › Tela e Brilho › Bloqueio Automático"
+    text: "Agora a opção **Nunca** deve responder ao toque."
+  - title: "Escolha Nunca"
+    short: "Escolha Nunca"
+    text: "Escolha essa opção se quiser que a tela nunca apague sozinha."
+stepsDone: "Pronto. Se o Nunca continuar em cinza, veja a próxima seção."
+toolNote: "Mudar o Bloqueio Automático para Nunca vale para o iPhone inteiro, e é fácil esquecer de voltar. Se você só precisa da tela acesa durante uma receita, uma partitura ou um treino, abra o AwakeTab no Safari, toque em iniciar e confira o indicador: com “Tela ligada”, o Safari confirmou o bloqueio, e a tela fica acesa enquanto a aba estiver na frente."
+faq:
+  - q: "Por que o Bloqueio Automático volta sozinho para 30 segundos?"
+    a: "Porque o Modo de Pouca Energia está ativo. Enquanto ele estiver ligado, o iOS trava o Bloqueio Automático em 30 segundos e deixa Nunca em cinza. Desative o modo em Ajustes → Bateria e o menu volta ao normal. Se ele estiver desligado e o Nunca continuar em cinza, um perfil do trabalho ou da escola (MDM) pode estar limitando o ajuste."
+  - q: "O AwakeTab funciona com o Modo de Pouca Energia ligado?"
+    a: "Ainda não sabemos com certeza. O Safari não tem nenhuma regra que recuse o Wake Lock por causa desse modo, mas ainda não registramos um teste em aparelho que confirme se a tela fica acesa além dos 30 segundos. Se o iPhone bloquear mesmo assim, desative o modo e inicie a sessão de novo."
+  - q: "Com o AwakeTab ativo, posso ir para outro app e a tela continua acesa?"
+    a: "Não. Trocar de app ou de aba libera o bloqueio na hora. O indicador muda para “Pausado — aba oculta” e só volta a “Tela ligada” quando você retorna para a aba do AwakeTab no Safari."
+  - q: "Vale mais a pena deixar o Bloqueio Automático em Nunca ou usar o AwakeTab?"
+    a: "Nunca vale para o iPhone inteiro até você lembrar de mudar de volta, e esquecer isso gasta bateria. O AwakeTab segura a tela só durante a sessão que você escolheu e depois devolve o controle ao iOS."
+honestLimit: "O Modo de Pouca Energia deixa Nunca em cinza e define o Bloqueio Automático em 30 segundos. Ainda não registramos um teste que confirme se o Wake Lock do Safari mantém a tela acesa com esse modo ligado."
+related:
+  - "/on/iphone-safari"
+  - "/on/ios-home-screen"
+  - "/learn/low-power-mode-and-wake-locks"
+  - "/for/cooking"
+  - "/for/downloads"
+author: soubhik
+published: 2026-09-26
+updated: 2026-09-27
+---
+
+## Passo a passo para liberar a opção Nunca
+
+::steps
+
+Se a bateria estiver muito baixa, o iPhone pode sugerir o Modo de Pouca Energia de novo. Ligue o aparelho no carregador para não cair no mesmo ciclo.
+
+## Se continuar em cinza
+
+- **O Modo de Pouca Energia voltou**: confira outra vez em Ajustes → Bateria. Ele pode ter sido reativado por um atalho ou pela Central de Controle.
+- **Bateria quase no fim**: carregue um pouco antes de insistir.
+- **Perfil do trabalho ou da escola**: um perfil de gerenciamento (MDM) pode limitar o Bloqueio Automático. Veja em Ajustes → Geral → VPN e Gerenciamento de Dispositivos; só o administrador pode mudar isso.
+- **O problema é só o tempo, não o Nunca**: talvez você não precise mudar nada no sistema.
+
+::ad
+
+## Um aviso sobre bateria
+
+Tela acesa por horas esquenta o iPhone e acaba com a carga. O Modo de Pouca Energia existe justamente para isso, então só desative-o quando o aparelho estiver no carregador ou com carga de sobra. No Safari não há parada automática por bateria fraca — ela só existe em navegadores Chromium —, então fique de olho na porcentagem você mesmo.
+
+O Wake Lock no Safari existe desde o iOS 16.4. Como app adicionado à Tela de Início, ele precisa do iOS 18.4 ou posterior. Em versões mais antigas, o AwakeTab oferece o vídeo alternativo, que depende de um toque seu e consome mais bateria. O guia completo do navegador está em [manter a tela do iPhone ligada no Safari](/pt-br/on/iphone-safari). Versões conferidas na documentação da Apple e do WebKit em 26 de setembro de 2026.
