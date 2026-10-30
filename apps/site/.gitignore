@@ -1,0 +1,7 @@
+.next/
+out/
+.open-next/
+.wrangler/
+next-env.d.ts
+*.tsbuildinfo
+AGENTS.md

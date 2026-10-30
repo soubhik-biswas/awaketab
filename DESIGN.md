@@ -4,7 +4,7 @@ Status: **approved final design (30 October 2026), being implemented.** It repla
 
 **Match the boards pixel for pixel.** Every size, gap, radius, weight, colour and string comes from the board source. When the board and this file disagree, the board wins and this file is fixed.
 
-The stack stays Astro 5 with zero hydration (owner decision, 30 Oct 2026). The handoff names Next.js, shadcn components and `lucide-react`; here they become Astro components and vanilla-TS islands that render the same markup, shadcn styling through the tokens at build time, and Lucide icons inlined as SVG.
+The stack follows the handoff exactly (owner decision, 30 Oct 2026, 9:00 PM): **Next.js 16 (App Router) + Tailwind CSS 4 + shadcn/ui + TypeScript** in `apps/site`, `next-themes` with `light`, `dark`, `oled` and system, Geist via `next/font/google`, `lucide-react` 0.460. `apps/web` (Astro) stays live until `apps/site` reaches parity, then retires.
 
 ---
 
