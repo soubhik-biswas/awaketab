@@ -1,0 +1,77 @@
+.af {
+  position: relative;
+  overflow: hidden;
+  direction: ltr;
+  font-family: var(--at-font);
+  color: var(--at-ink);
+}
+
+.af * {
+  box-sizing: border-box;
+}
+
+.af-a {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 360px;
+  height: 360px;
+  transform-origin: 0 0;
+}
+
+.af-live .afx-s {
+  animation: af-sweep 60s linear infinite;
+}
+
+.af-live .afx-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: af-pulse 2.4s ease-out infinite;
+}
+
+.af-tr {
+  transition:
+    stroke-dasharray 0.95s linear,
+    width 0.95s linear,
+    height 0.95s linear,
+    top 0.95s linear,
+    left 0.95s linear,
+    transform 0.95s linear;
+}
+
+.af-still * {
+  animation: none !important;
+}
+
+.af-compact [style*="var(--lmin)"] {
+  visibility: hidden;
+}
+
+@keyframes af-sweep {
+  from {
+    transform: rotate(var(--a));
+  }
+
+  to {
+    transform: rotate(calc(var(--a) + 360deg));
+  }
+}
+
+@keyframes af-pulse {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.7);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .af * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
