@@ -1,5 +1,7 @@
 ---
+import type { TBrand } from '../../lib/brands';
 import type { TSceneKey } from '../../lib/scenes';
+import Brand from '../icons/Brand.astro';
 import Lucide from '../icons/Lucide.astro';
 import Scene from './Scene.astro';
 
@@ -10,7 +12,9 @@ export interface ICard {
   link: string;
   scene?: TSceneKey | undefined;
   tags?: readonly string[] | undefined;
+  brands?: ReadonlyArray<TBrand | null> | undefined;
   lang?: string | undefined;
+  label?: string | undefined;
 }
 
 interface Props {
@@ -27,13 +31,20 @@ const Tag = level === 2 ? 'h2' : 'h3';
   {
     items.map((item) => (
       <li class="at-sp-li">
-        <a class="at-sp-card" href={item.href} hreflang={item.lang}>
+        <a class="at-sp-card" href={item.href} hreflang={item.lang} aria-label={item.label}>
           {item.scene && (
             <span class="at-sp-card-art">
               <Scene scene={item.scene} width={260} decorative />
             </span>
           )}
           <span class="at-sp-card-body">
+            {item.brands && item.brands.length > 0 && (
+              <span class="at-sp-card-brands" aria-hidden="true">
+                {item.brands.map((logo) => (
+                  <Brand logo={logo} size={24} />
+                ))}
+              </span>
+            )}
             <Tag class="at-sp-h3">{item.title}</Tag>
             {item.tags && item.tags.length > 0 && (
               <span class="at-sp-card-tags">

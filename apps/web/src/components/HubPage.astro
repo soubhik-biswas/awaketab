@@ -1,15 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import '../styles/content.css';
-import '../styles/hub.css';
-import '../styles/tilt.css';
-import Button from './shell/Button.astro';
-import StatusPill from './shell/StatusPill.astro';
-import Icon from './icons/Icon.astro';
-import DeviceGallery from './hub/DeviceGallery.astro';
-import UseCaseGallery from './hub/UseCaseGallery.astro';
+import PageHero from './site/PageHero.astro';
+import Block from './site/Block.astro';
+import Cards, { type ICard } from './site/Cards.astro';
+import Cta from './site/Cta.astro';
 import { t } from '../i18n/load';
+import { deviceLogos } from '../lib/brands';
+import { supportTags } from '../lib/device-support';
+import { useCaseScene } from '../lib/scenes';
 import { articleSchema } from '../lib/seo';
 import { EXTRA, HUBS, MODE_LABEL, PRESET_LABEL, type IHubItem } from '../lib/hubs';
 import { CONTENT_KINDS, type TContentKind } from '../lib/content-i18n';
@@ -82,6 +81,18 @@ const groups = hub.groups
     return { ...group, rows };
   })
   .filter((group) => group.rows.length > 0);
+// Use cases carry their scene and suggested length (use-case hub board); devices carry their logos and support.
+const toCard = (row: IRow): ICard =>
+  kind === 'for'
+    ? { href: row.href, title: row.title, desc: row.line, tags: row.meta, scene: useCaseScene(row.slug), link: t('page.hub.readGuide') }
+    : {
+        href: row.href,
+        title: row.name,
+        desc: row.line,
+        tags: supportTags(row.slug, row.browsers, row.os).map((tag) => tag.label),
+        brands: deviceLogos(row.slug, row.browsers, row.os),
+        link: t('page.hub.readGuide'),
+      };
 ---
 
 <BaseLayout
@@ -89,6 +100,7 @@ const groups = hub.groups
   description={description}
   canonical={canonical}
   ogImage={ogImage}
+  site
   schema={articleSchema({
     canonical,
     title: h1,
@@ -102,102 +114,28 @@ const groups = hub.groups
     ],
   })}
 >
-  <main class="at-cp at-hub">
-    <div class="at-hub-intro">
-      <nav class="at-crumbs" aria-label="Breadcrumb">
-        <ol>
-          <li><a href="/">{t('app.name')}</a></li>
-          <li aria-current="page">
-            <span class="at-crumb-sep" data-slot="breadcrumb-separator" aria-hidden="true">
-              <Icon name="caret-right" size={16} tone="ink" />
-            </span>
-            <span>{hub.crumb}</span>
-          </li>
-        </ol>
+  <main class="at-sp at-hub" data-hub={kind}>
+    <PageHero crumbs={[{ href: '/', label: t('app.name') }, { label: hub.crumb }]} eyebrow={t(`site.hub.${kind}.eyebrow`)} h1={h1} lead={hub.lead}>
+      {hub.note && <p class="at-sp-small">{hub.note}</p>}
+      <nav class="at-sp-jump" aria-label={hub.jumpAria}>
+        <ul class="at-sp-chips" role="list">
+          {groups.map((group) => (
+            <li>
+              <a class="at-sp-chip" href={`#${group.id}`}>{group.short}</a>
+            </li>
+          ))}
+        </ul>
       </nav>
-      <h1 class="at-h1-page">{h1}</h1>
-      <p class="at-lead">{hub.lead}</p>
-      {hub.note && <p class="at-hub-note">{hub.note}</p>}
-
-      <section class="at-try" aria-label="Try it now">
-        <div class="at-try-top">
-          <StatusPill as="span" state="idle" label={t('tool.pill.idle')} />
-          <span class="at-try-digits" aria-hidden="true">00<span>:00</span></span>
-        </div>
-        <Button variant="primary" href="/?preset=pinf&autostart=1" class="at-try-cta" aria-label="Keep awake until I stop">
-          Keep awake · ∞
-        </Button>
-        <p class="at-try-note">
-          Opens the tool and keeps the screen awake until you stop. Keep that tab visible and watch its pill: a hidden tab
-          releases the wake lock, and Safari needs a tap before it grants one.
-        </p>
-        <a class="at-try-link" href="/">Open the full tool <Icon name="arrow-right" size={16} /></a>
-      </section>
-
-      <nav class="at-jump" aria-label={hub.jumpAria} data-spy style={`--at-n: ${String(groups.length)}; --at-i: 0`}>
-        <span class="at-jump-ind" aria-hidden="true"></span>
-        {
-          groups.map((group, i) => (
-            <a href={`#${group.id}`} aria-current={i === 0 ? 'location' : undefined}>
-              {group.short}
-            </a>
-          ))
-        }
-      </nav>
-    </div>
-
-    <div class="at-hub-groups">
-      {
-        groups.map((group) => (
-          <section id={group.id} class="at-hub-group" aria-labelledby={`${group.id}-h`}>
-            <div class="at-hub-group-head">
-              <div>
-                <h2 id={`${group.id}-h`}>{group.title}</h2>
-                <span class="at-hub-count">
-                  {group.rows.length} {hub.unit[group.rows.length === 1 ? 0 : 1]}
-                </span>
-              </div>
-              <p>{group.line}</p>
-            </div>
-            {kind === 'for' ? (
-              <UseCaseGallery cards={group.rows} />
-            ) : kind === 'on' ? (
-              <DeviceGallery cards={group.rows} />
-            ) : (
-              <ul class="at-hub-list">
-                {group.rows.map((row) => (
-                  <li>
-                    <a href={row.href}>
-                      <span class="at-hub-item">
-                        <span class="at-hub-title">{row.title}</span>
-                        <span class="at-hub-line">{row.line}</span>
-                        {row.meta.length > 0 && (
-                          <span class="at-hub-meta">
-                            {row.meta.map((m, i) => (
-                              <>
-                                {i > 0 && <span aria-hidden="true">·</span>}
-                                <span>{m}</span>
-                              </>
-                            ))}
-                          </span>
-                        )}
-                      </span>
-                      <Icon name="arrow-right" size={20} class="at-go" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        ))
-      }
-    </div>
+    </PageHero>
+    {
+      groups.map((group) => (
+        <Block id={group.id} h={group.title} sub={`${group.line} · ${String(group.rows.length)} ${hub.unit[group.rows.length === 1 ? 0 : 1]}`}>
+          <Cards items={group.rows.map(toCard)} cols={3} />
+        </Block>
+      ))
+    }
+    <Block label={t('site.cta.label')}>
+      <Cta title={t('site.cta.title')} desc={t('site.cta.desc')} href="/?preset=pinf&autostart=1" />
+    </Block>
   </main>
-  <script>
-    import { initContentNav } from '../lib/content-nav';
-    import { initTilt } from '../lib/tilt';
-
-    initContentNav();
-    initTilt();
-  </script>
 </BaseLayout>
