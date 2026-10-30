@@ -22,16 +22,19 @@ export function SwitchRow({ label, description, className, disabled, ...props }:
       className={cn('flex min-h-[46px] w-full items-center gap-3', className)}
     >
       <Switch id={id} aria-describedby={description ? `${id}-d` : undefined} disabled={disabled} {...props} />
-      <label htmlFor={id} className="flex min-w-0 cursor-pointer flex-col gap-px">
-        <span className={cn('text-[14px] font-semibold', disabled ? 'text-muted-foreground' : 'text-foreground')}>
+      <span className="flex min-w-0 flex-col gap-px">
+        <label
+          htmlFor={id}
+          className={cn('cursor-pointer text-[14px] font-semibold', disabled ? 'text-muted-foreground' : 'text-foreground')}
+        >
           {label}
-        </span>
+        </label>
         {description ? (
           <span id={`${id}-d`} className="text-[12px] leading-[1.45] text-muted-foreground-strong">
             {description}
           </span>
         ) : null}
-      </label>
+      </span>
     </div>
   );
 }
