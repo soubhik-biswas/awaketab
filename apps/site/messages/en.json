@@ -3269,7 +3269,8 @@
         "3": {
           "_": "Get on with it",
           "body": "A soft chime when time’s up; the screen sleeps normally again."
-        }
+        },
+        "title": "How it works"
       },
       "limits": {
         "title": "Honest about limits",
@@ -3305,6 +3306,12 @@
         "title": "Keep this screen awake",
         "body": "Pick a length and press start. The pill says Screen awake only once the browser confirms the lock."
       }
+    },
+    "changelog": {
+      "crumb": "Changelog",
+      "eyebrow": "CHANGELOG",
+      "h1": "What’s new",
+      "lead": "Every release, newest first. Version numbers and dates are placeholders until release."
     }
   }
 }
