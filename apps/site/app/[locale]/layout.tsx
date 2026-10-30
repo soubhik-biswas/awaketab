@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { LocaleLinksProvider } from '@/components/site/locale-links';
+import { ServiceWorker } from '@/components/widgets/service-worker';
 import { LOCALE_META, type TLocale } from '@/i18n/locales';
 import { routing } from '@/i18n/routing';
 import { SITE } from '@/lib/routes';
@@ -87,6 +88,7 @@ export default async function LocaleLayout({
             </TooltipProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
+        <ServiceWorker />
       </body>
     </html>
   );
