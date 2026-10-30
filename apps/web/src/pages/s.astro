@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import Block from '../components/site/Block.astro';
+import Callout from '../components/site/Callout.astro';
+import Button from '../components/shell/Button.astro';
+import Lucide from '../components/icons/Lucide.astro';
+import { t } from '../i18n/load';
+
+// Served for every /s/<code> link (a 200 rewrite in _redirects); the script reads the code from the address and
+// shows the setup, or the "setup removed" board when the code is turned off or unreadable. Never indexed.
+const strings = {
+  'data-minutes': t('site.share.minutes'),
+  'data-hour': t('site.share.hour'),
+  'data-hours': t('site.share.hours'),
+  'data-no-end': t('site.share.noEnd'),
+  'data-chime-on': t('site.share.chimeOn'),
+  'data-chime-off': t('site.share.chimeOff'),
+  'data-lead-chime': t('site.share.leadChime'),
+  'data-lead-quiet': t('site.share.leadQuiet'),
+  'data-lead-open': t('site.share.leadOpen'),
+  'data-start-min': t('site.share.startMin'),
+  'data-start-hour': t('site.share.startHour'),
+  'data-start-hours': t('site.share.startHours'),
+  'data-start-open': t('site.share.startOpen'),
+  'data-tomorrow': t('tool.when.tomorrow'),
+  'data-title-shared': t('site.share.title'),
+  'data-title-removed': t('site.sys.removed.title'),
+};
+const rows = [
+  [t('site.share.row.length'), 'length'],
+  [t('site.share.row.face'), 'face'],
+  [t('site.share.row.chime'), 'chime'],
+] as const;
+---
+
+<BaseLayout title={t('site.share.title')} description={t('site.share.description')} noindex site>
+  <main class="at-sp" data-setup {...strings}>
+    <div class="at-sp-view" data-view="loading">
+      <PageHero eyebrow={t('site.share.eyebrow')} h1={t('site.share.loading')} lead={t('site.share.loadingLead')} />
+    </div>
+    <div class="at-sp-view" data-view="shared" hidden>
+      <PageHero eyebrow={t('site.share.eyebrow')} h1={t('site.share.h1')}>
+        <p slot="meta" class="at-lead" data-fill="lead"></p>
+        <Button slot="actions" variant="primary" size="xl" icon="play" href="/" data-start>
+          <span data-fill="start">{t('site.share.startOpen')}</span>
+        </Button>
+        <Button slot="actions" variant="outline" size="xl" href="/?autostart=0" data-change>
+          {t('site.share.change')}
+        </Button>
+        <div slot="face" class="at-sp-face-host" data-face></div>
+      </PageHero>
+      <Block id="s-contains" h={t('site.share.contains')} sub={t('site.share.containsSub')}>
+        <div class="at-sp-table" role="table" aria-labelledby="s-contains-h" style="--at-sp-tmpl: 1fr 1.4fr">
+          <div class="at-sp-tr at-sp-thead" role="row">
+            <span class="at-sp-th" role="columnheader">{t('site.share.col.setting')}</span>
+            <span class="at-sp-th" role="columnheader">{t('site.share.col.value')}</span>
+          </div>
+          {
+            rows.map(([label, name]) => (
+              <div class="at-sp-tr" role="row">
+                <span class="at-sp-td" role="rowheader" data-tone="head">
+                  {label}
+                </span>
+                <span class="at-sp-td" role="cell">
+                  <span data-fill={name}>—</span>
+                </span>
+              </div>
+            ))
+          }
+          <div class="at-sp-tr" role="row">
+            <span class="at-sp-td" role="rowheader" data-tone="head">{t('site.share.row.private')}</span>
+            <span class="at-sp-td" role="cell" data-tone="no">
+              <Lucide name="minus" size={16} />
+              {t('site.share.never')}
+            </span>
+          </div>
+        </div>
+      </Block>
+      <Block label={t('site.share.install')}>
+        <Callout tone="lamp" title={t('site.share.install')} body={t('site.share.installBody')} />
+      </Block>
+    </div>
+    <div class="at-sp-view" data-view="removed" hidden>
+      <PageHero
+        eyebrow={t('site.sys.removed.eyebrow')}
+        h1={t('site.sys.removed.h1')}
+        lead={t('site.sys.removed.lead')}
+        scene="removed"
+      >
+        <Button slot="actions" variant="primary" size="xl" icon="play" href="/">{t('site.sys.removed.start')}</Button>
+        <Button slot="actions" variant="outline" size="xl" icon="house" href="/">{t('site.sys.home')}</Button>
+      </PageHero>
+    </div>
+  </main>
+  <script>
+    import { initSharedPage } from '../lib/shared-page';
+
+    initSharedPage();
+  </script>
+</BaseLayout>

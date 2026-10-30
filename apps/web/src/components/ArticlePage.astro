@@ -14,6 +14,7 @@ import Faq from './site/Faq.astro';
 import Cards from './site/Cards.astro';
 import { shouldRenderAdSlots } from '../lib/ads';
 import { useCaseScene, type TSceneKey } from '../lib/scenes';
+import { fullDate as formatFullDate } from '../lib/full-date';
 import { createT, t as tEn } from '../i18n/load';
 import '../styles/tool-embed.css';
 import { LOCALE_META } from '../i18n/locales';
@@ -87,19 +88,7 @@ const hubCrumb = HUBS[kind].crumb;
 // Locale homes are the one page URL with a trailing slash, `/es/` (`es/index.html`, docs/14 §2.1).
 const homeHref = english ? '/' : `/${locale}/`;
 const published = data.published.toISOString().slice(0, 10);
-// Full dates everywhere ("Saturday, 26 September 2026"); other locales use their own full style.
-const fullDate = (date: Date): string => {
-  if (!english)
-    return new Intl.DateTimeFormat(meta.htmlLang, { dateStyle: 'full', timeZone: 'UTC', numberingSystem: 'latn' }).format(
-      date,
-    );
-  const part = Object.fromEntries(
-    new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
-      .formatToParts(date)
-      .map((p) => [p.type, p.value]),
-  );
-  return `${part.weekday ?? ''}, ${part.day ?? ''} ${part.month ?? ''} ${part.year ?? ''}`;
-};
+const fullDate = (date: Date): string => formatFullDate(date, english ? 'en' : meta.htmlLang);
 const verified = data.lastVerified ? fullDate(data.lastVerified) : null;
 const updated = verified ? null : fullDate(data.updated ?? data.published);
 const minutes = readingMinutes(entry.body, data);

@@ -1,0 +1,15 @@
+---
+import SystemPage from '../../components/site/SystemPage.astro';
+import { t } from '../../i18n/load';
+---
+
+<SystemPage
+  title={t('site.sys.expired.title')}
+  description={t('site.sys.expired.lead')}
+  eyebrow={t('site.sys.expired.eyebrow')}
+  h1={t('site.sys.expired.h1')}
+  lead={t('site.sys.expired.lead')}
+  scene="expired"
+  primary={{ href: '/signin', label: t('site.sys.expired.send'), icon: 'mail' }}
+  secondary={{ href: '/', label: t('site.sys.home'), icon: 'house' }}
+/>

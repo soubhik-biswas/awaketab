@@ -27,6 +27,7 @@ beforeAll(async () => {
   dist = await mkdtemp(path.join(tmpdir(), 'awaketab-sw-'));
   await put('index.html', `<!doctype html><title>home</title>${tool}`);
   await put('pip.html', `<!doctype html><title>pip</title>${pip}`);
+  await put('offline.html', '<!doctype html><title>offline</title>');
   for (const p of PRESETS) await put(`${p}.html`, `<!doctype html><title>${p}</title>${tool}`);
   for (const l of LOCALES) {
     await put(`${l}/index.html`, `<!doctype html><title>${l}</title>${tool}`);
@@ -111,7 +112,7 @@ describe('shellManifest: pages cached per language by src/sw.ts', () => {
         .filter((e) => e.lang === lang && e.install)
         .map((e) => e.url)
         .sort();
-    expect(install('en')).toEqual(['/', '/manifest.webmanifest', '/pip']);
+    expect(install('en')).toEqual(['/', '/manifest.webmanifest', '/offline', '/pip']);
     expect(install('es')).toEqual(['/es/', '/es/manifest.webmanifest', '/es/pip']);
     for (const l of LOCALES) expect(install(l)).toHaveLength(3);
     for (const e of shell) expect(e.revision, e.url).toMatch(/^[0-9a-f]{12}$/u);
@@ -139,11 +140,11 @@ describe('shellManifest: pages cached per language by src/sw.ts', () => {
     expect(rev('/15m')).not.toBe(rev('/30m'));
   });
 
-  it('is sorted and free of duplicates: 23 pages and 8 manifests', async () => {
+  it('is sorted and free of duplicates: 24 pages and 8 manifests', async () => {
     const urls = (await shellManifest(dist)).map((e) => e.url);
     expect(urls).toEqual([...urls].sort((a, b) => a.localeCompare(b)));
     expect(new Set(urls).size).toBe(urls.length);
-    expect(urls).toHaveLength(23 + 8);
+    expect(urls).toHaveLength(24 + 8);
   });
 
   it('fails loudly when a shell page is missing', async () => {
@@ -178,6 +179,14 @@ describe('offline fallback in src/sw.ts (docs/05 §8.2, §9)', () => {
     expect(offlinePages('/until/17-30')[0]).toBe('/');
     expect(offlinePages('/es/30m').slice(0, 2)).toEqual(['/es/', '/']);
     expect(offlinePages('/hi/')[0]).toBe('/hi/');
+  });
+
+  it('shows the offline page first for any page that is not the tool', () => {
+    expect(offlinePages('/for/cooking')).toEqual(['/offline', ...homes]);
+    expect(offlinePages('/help')[0]).toBe('/offline');
+    expect(offlinePages('/es/for/cocinar').slice(0, 3)).toEqual(['/offline', '/es/', '/']);
+    expect(offlinePages('/30m')[0]).toBe('/');
+    expect(offlinePages('/es/')[0]).toBe('/es/');
   });
 
   it('never falls back for the API or the embed', () => {

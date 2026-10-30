@@ -799,6 +799,16 @@
     font: var(--at-pg-type-site-small);
   }
 
+  .at-sp-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-s-site-main);
+  }
+
+  .at-sp-view[hidden] {
+    display: none;
+  }
+
   .at-sp-system {
     min-block-size: 60vh;
   }
