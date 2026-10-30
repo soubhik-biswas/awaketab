@@ -50,6 +50,17 @@ export interface IToolProps {
 
 const WELCOME_TIP = 'welcome';
 
+// iPhone Safari has no element fullscreen and insecure origins have no clipboard, whatever the DOM types say.
+function enterFullscreen(): void {
+  const root: Partial<Pick<HTMLElement, 'requestFullscreen'>> = document.documentElement;
+  void root.requestFullscreen?.().catch(() => undefined);
+}
+
+function copyText(text: string): void {
+  const nav: Partial<Pick<Navigator, 'clipboard'>> = navigator;
+  void nav.clipboard?.writeText(text).catch(() => undefined);
+}
+
 // The handoff's layout tiers: desktop from 1300, tablet landscape from 1100, tablet portrait from 700.
 function deviceFor(w: number): TDevice {
   if (w >= 1300) return 'desktop';
@@ -190,7 +201,7 @@ function ToolApp({
 
   const go = useCallback((view: TToolView) => {
     rememberOpener();
-    if (view === 'focus') void document.documentElement.requestFullscreen?.().catch(() => undefined);
+    if (view === 'focus') enterFullscreen();
     toolUi.go(view);
   }, []);
 
@@ -268,7 +279,7 @@ function ToolApp({
         });
       },
       copyLink: () => {
-        void navigator.clipboard?.writeText(shareUrlRef.current).catch(() => undefined);
+        copyText(shareUrlRef.current);
         toolUi.set({ copied: true });
         toolToast.copied(latest.current.m.c);
       },

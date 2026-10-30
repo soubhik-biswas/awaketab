@@ -99,7 +99,7 @@ export function QaTray() {
   }, []);
 
   useEffect(() => {
-    const onMsg = (e: MessageEvent<{ type?: string }>) => {
+    const onMsg = (e: MessageEvent<{ type?: string } | null>) => {
       if (e.origin === window.location.origin && e.data?.type === 'at-qa-ready') setReady((n) => n + 1);
     };
     window.addEventListener('message', onMsg);
@@ -175,7 +175,7 @@ export function QaTray() {
           <Row label="THEME">
             {(['system', 'light', 'dark', 'oled'] as const).map((k) => (
               <Pill key={k} on={on.theme === k} onClick={() => pick('theme', k, { action: 'theme', theme: k })}>
-                {k === 'system' ? 'Auto' : k === 'oled' ? 'OLED' : k[0]?.toUpperCase() + k.slice(1)}
+                {k === 'system' ? 'Auto' : k === 'oled' ? 'OLED' : k.charAt(0).toUpperCase() + k.slice(1)}
               </Pill>
             ))}
           </Row>

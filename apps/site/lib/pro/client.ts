@@ -12,7 +12,7 @@ import {
   type IProDevice,
   type IProSnapshot,
   type IProSource,
-  type ISoundMix,
+  type TSoundMix,
   type IStudioSettings,
   type TMixKey,
   setProSource,
@@ -31,7 +31,7 @@ import {
 import { longDate, MAX_DEVICES, portalUrl } from './plans';
 
 const DEFAULT_STUDIO: IStudioSettings = { lamp: '', glow: 70 };
-const DEFAULT_MIX: ISoundMix = { rain: 40, cafe: 0, fire: 25, brown: 0 };
+const DEFAULT_MIX: TSoundMix = { rain: 40, cafe: 0, fire: 25, brown: 0 };
 
 function readJson(key: string): unknown {
   try {
@@ -57,7 +57,7 @@ function readStudio(): IStudioSettings {
   return { lamp, glow: Number.isFinite(glow) ? Math.min(100, Math.max(0, Math.round(glow / 5) * 5)) : 70 };
 }
 
-function readMix(): ISoundMix {
+function readMix(): TSoundMix {
   const raw = readJson(SETTINGS_KEY);
   const fs = isRecord(raw) && isRecord(raw.focusSound) ? raw.focusSound : null;
   if (!fs || !isRecord(fs.mix)) return { ...DEFAULT_MIX };
@@ -69,7 +69,7 @@ function readMix(): ISoundMix {
   return out;
 }
 
-function writeMix(mix: ISoundMix): void {
+function writeMix(mix: TSoundMix): void {
   const raw = readJson(SETTINGS_KEY);
   const base = isRecord(raw) ? raw : { ...DEFAULT_SETTINGS };
   const fs = isRecord(base.focusSound) ? base.focusSound : DEFAULT_SETTINGS.focusSound;
@@ -145,7 +145,7 @@ export function createProSource(): IProSource {
   const refreshSession = async () => {
     try {
       const { data } = await authClient.getSession();
-      if (data?.user?.email) {
+      if (data?.user.email) {
         const current = readAccount();
         if (current?.email !== data.user.email) {
           const accounts = await authClient.listAccounts().catch(() => null);

@@ -581,7 +581,7 @@ class WakeController {
   private openChannel() {
     if (typeof BroadcastChannel === 'undefined') return;
     this.channel = new BroadcastChannel(CHANNEL);
-    this.channel.addEventListener('message', (ev: MessageEvent<TTabMessage>) => {
+    this.channel.addEventListener('message', (ev: MessageEvent<TTabMessage | null>) => {
       const msg = ev.data;
       if (!msg || msg.tabId === this.tabId) return;
       if (msg.type === 'hello') {

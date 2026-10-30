@@ -187,14 +187,3 @@ export function showEndedToast({ endedAt, onStartAgain }: { endedAt: string; onS
     duration: Infinity,
   });
 }
-
-function showCopiedToast() {
-  return showToast({
-    id: 'copied',
-    tone: 'success',
-    title: 'Link copied',
-    description: 'Paste it anywhere. Your label is not included.',
-    actionLabel: 'Done',
-    onAction: () => undefined,
-  });
-}

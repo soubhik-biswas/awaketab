@@ -30,6 +30,6 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale;
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   const load = LOADERS[locale];
-  const messages = load ? (merge(en as TTree, (await load()).default) as TMessages) : en;
+  const messages = load ? (merge(en, (await load()).default) as TMessages) : en;
   return { locale, messages };
 });
