@@ -2,7 +2,7 @@ import './face.css';
 import { type Draw, type FaceId, type FaceProps, frame, isFace, vals } from './base.js';
 import { ring } from './ring.js';
 
-export type { Draw, FaceId, FaceProps, FaceState, FaceTheme } from './base.js';
+export type { FaceId, FaceProps, FaceState, FaceTheme } from './base.js';
 export { setFaceText } from './base.js';
 
 declare const __AT_FACES__: string | undefined;
@@ -143,8 +143,8 @@ export function registerFaces(group: TGroup): void {
   Object.assign(DRAW, group);
 }
 
-// The faces sheet (public/assets/faces.css): art palette, keyframes and the Luxe, Words and LED fonts.
-function sheet(): Promise<void> {
+// The faces sheet (public/assets/faces.css): art palette, keyframes, the picker grid and the Luxe, Words and LED fonts.
+export function faceSheet(): Promise<void> {
   if (css) return css;
   const href = typeof __AT_FACES__ === 'string' ? __AT_FACES__ : '';
   if (!href || typeof document === 'undefined') return (css = Promise.resolve());
@@ -158,6 +158,8 @@ function sheet(): Promise<void> {
     link.onload = link.onerror = () => {
       resolve();
     };
+    // A sheet that never answers must not hold a face back for good.
+    setTimeout(resolve, 3000);
     if (!have) {
       link.rel = 'stylesheet';
       link.href = href;
@@ -172,7 +174,7 @@ export function loadFace(id: FaceId): Promise<void> {
   const g = GROUP_OF[id];
   let p = loading.get(g);
   if (!p) {
-    p = Promise.all([GROUPS[g](), sheet()]).then(([m]) => {
+    p = Promise.all([GROUPS[g](), faceSheet()]).then(([m]) => {
       registerFaces(m.default);
     });
     p.catch(() => loading.delete(g));
@@ -227,9 +229,12 @@ export function mountFace(el: HTMLElement, p: FaceProps): { update(p: Partial<Fa
     const draw = DRAW[id];
     if (!draw || (id !== 'ring' && !css)) {
       const mine = ++turn;
-      void loadFace(id).then(() => {
-        if (mine === turn) paint();
-      });
+      loadFace(id).then(
+        () => {
+          if (mine === turn) paint();
+        },
+        () => undefined,
+      );
       // The previous face stays until the next one is ready; a first mount holds an empty box of the right size.
       if (drawn) return;
     }

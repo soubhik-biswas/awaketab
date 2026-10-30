@@ -3,6 +3,7 @@ import type { IToolCtx } from '../ctx.js';
 import { dateLong, dayDiff, hm, nextWall, remainingOf, since, splitDigits, when, words } from '../format.js';
 import { t } from '../i18n.js';
 import type { IToolState } from '../store.js';
+import type * as TStage from '../face/stage.js';
 import type * as TMore from './view-more.js';
 
 export type TStatus =
@@ -47,7 +48,6 @@ export function plannedSec(s: IToolState, routeUntil: string | null, now = Date.
 
 export function mountView(ctx: IToolCtx): () => void {
   const { root, store, params } = ctx;
-  const html = document.documentElement;
   // Static lists: the PiP window takes the pill and timer out of the page and they must keep updating.
   const slots = [...root.querySelectorAll<HTMLElement>('[data-t]')];
   const labels = [...root.querySelectorAll<HTMLElement>('[data-l]')];
@@ -62,6 +62,7 @@ export function mountView(ctx: IToolCtx): () => void {
   let spoken = -1;
   let lazy = 0;
   let extra: typeof TMore | undefined;
+  let stage: typeof TStage | undefined;
   const load = (bit: number, fn: () => void) => {
     if (!(lazy & bit)) {
       lazy |= bit;
@@ -170,7 +171,6 @@ export function mountView(ctx: IToolCtx): () => void {
       cta,
       of: inf ? t('tool.noLimit') : t('tool.ofTotal', { length: len }),
       hz: `${t(`tool.sky.${phase}`)} · ${nowT}`,
-      fn: t(`tool.face.${settings.face}`),
       date: dateLong(now),
       now: nowT,
       announce,
@@ -221,15 +221,17 @@ export function mountView(ctx: IToolCtx): () => void {
     set('[data-preset]', 'aria-pressed', (n) => n.dataset.preset === pre);
     set('[data-act="more"]', 'aria-pressed', () => pre === 'until' || pre === 'custom');
     set('[data-act="why"]', 'aria-expanded', () => ui.why);
-    // The faces pack puts a face on screen once it is ready: any change from the face boot.js painted, or a newer one.
-    if (face !== (html.dataset.face ?? 'ring') || !/^(?:ring|bold|horizon|tide)$/u.test(face))
+    // Every face but the dial's own Ring draws through the Face module, loaded the first time one is chosen.
+    if (face !== 'ring' || stage || document.documentElement.dataset.face)
       load(
         8,
         () =>
-          void import('../packs/faces/index.js').then((m) => {
-            m.mountFaces(ctx);
+          void import('../face/stage.js').then((m) => {
+            stage = m;
+            render();
           }),
       );
+    stage?.paintStage(ctx, { st, left, total, inf, el, now });
     if (pill) {
       const lk = st === 'ready' ? 'idle' : s.lock;
       pill.dataset.lock = lk;

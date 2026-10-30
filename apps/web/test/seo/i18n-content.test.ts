@@ -239,19 +239,20 @@ describe('localized chrome (E6-T05)', () => {
     const fonts = all
       .filter((file) => /\.(?:woff2?|ttf|otf)$/u.test(file))
       .map((file) => path.relative(distPath, file).split(path.sep).join('/'));
-    // The UI fonts plus the two clock-face fonts, which load only with their face; woff2 only, all under /fonts.
+    // The UI fonts plus the clock-face fonts (Luxe and Words, LED), which load only with their face; woff2 only.
     expect(fonts.sort()).toEqual([
-      'fonts/dseg7-classic-italic.woff2',
+      'fonts/dotgothic16-latin-400-normal.woff2',
       'fonts/geist-latin-wght-normal.woff2',
       'fonts/geist-mono-latin-wght-normal.woff2',
-      'fonts/nixie-one-latin-400-normal.woff2',
+      'fonts/ibm-plex-serif-latin-300-italic.woff2',
+      'fonts/ibm-plex-serif-latin-300-normal.woff2',
       'fonts/space-grotesk-digits-600.woff2',
     ]);
     const rel = all.map((file) => path.relative(distPath, file).split(path.sep).join('/'));
     expect(rel).toContain('fonts/OFL-Geist.txt');
     expect(rel).toContain('fonts/OFL-SpaceGrotesk.txt');
-    expect(rel).toContain('fonts/OFL-NixieOne.txt');
-    expect(rel).toContain('fonts/OFL-DSEG.txt');
+    expect(rel).toContain('fonts/OFL-IBMPlexSerif.txt');
+    expect(rel).toContain('fonts/OFL-DotGothic16.txt');
   });
 });
 

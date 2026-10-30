@@ -1,9 +1,8 @@
 ---
 import { createT } from '../../i18n/load';
 import type { TLocale } from '../../i18n/locales';
-import { FACE_GROUPS } from '../../tool/packs/faces/order';
-import { dotLayout, MATRIX_ROWS } from '../../tool/packs/faces/matrix-font';
-import { litCells, WORD_CLOCKS } from '../../tool/packs/faces/word-table';
+import { FACES, faceSvg } from '../../tool/face/all';
+import { facesHref } from '../../../scripts/boot-inline.mjs';
 import { LAMPS, PALETTES, PATTERNS } from '../../tool/packs/themes/looks';
 import { GENS } from '../../tool/packs/sound/catalog';
 // Linked, not scoped: inline styles on / count against the tool CSS budget.
@@ -17,25 +16,11 @@ const { locale = 'en' } = Astro.props;
 const t = createT(locale);
 const y = (key: string, vars?: Record<string, string | number>) => t(`page.home.yours.${key}`, vars);
 
-const faces = FACE_GROUPS.flatMap(([group, ids]) => ids.map((id) => ({ id, group })));
-
-// The art is drawn from the faces' own tables: the LED panel's font and the word clock's letter grid.
-const led = dotLayout('25:00', '', 25);
-const words = WORD_CLOCKS.en;
-const lit = words ? litCells(words, 10, 30) : new Set<number>();
-const letters = words ? words.grid.flatMap((row) => Array.from(row)) : [];
-const wordCols = words?.grid[0]?.length ?? 11;
-
-const C = 2 * Math.PI * 40;
-const ring = `${(C * 0.62).toFixed(1)} ${C.toFixed(1)}`;
-const rings = [
-  [34, 0.7],
-  [26, 0.45],
-  [18, 0.85],
-].map(([r = 0, part = 0]) => {
-  const c = 2 * Math.PI * r;
-  return { r, dash: `${(c * part).toFixed(1)} ${c.toFixed(1)}` };
-});
+// Every face drawn at build time from the Face module, as a live compact preview of the same session.
+const faces = FACES.map(({ id }) => ({
+  id,
+  art: faceSvg({ face: id, theme: 'dark', state: 'running', remain: 1500, total: 3600, nowSec: 38_862, size: 120, bare: true }),
+}));
 
 const palettes = PALETTES.map(([id, free]) => ({ id, free }));
 const lamps = LAMPS.map(([id, , free]) => ({ id, free }));
@@ -50,6 +35,7 @@ const mix = [
 
 <section id="home-yours" class="at-hy" aria-labelledby="h-yours">
   <link rel="stylesheet" href={sheet} />
+  <link rel="stylesheet" href={facesHref()} />
   <div class="at-hb-head">
     <div class="at-hb-intro">
       <h2 id="h-yours">{y('title')}</h2>
@@ -71,121 +57,9 @@ const mix = [
       {
         faces.map((f) => (
           <li class="at-hy-face" data-face={f.id}>
-            <div class="at-hy-art" aria-hidden="true">
-              {f.id === 'ring' && (
-                <svg viewBox="0 0 100 100" class="at-hy-ring">
-                  <circle class="at-hy-track" cx="50" cy="50" r="40" />
-                  <g transform="rotate(-90 50 50)">
-                    <circle class="at-hy-arc" cx="50" cy="50" r="40" stroke-dasharray={ring} />
-                  </g>
-                  <circle class="at-hy-bead" cx="50" cy="10" r="3.5" transform="rotate(223 50 50)" />
-                  <text x="50" y="55" class="at-hy-num" font-size="15">25:00</text>
-                </svg>
-              )}
-              {f.id === 'bold' && (
-                <span class="at-hy-bold">
-                  <span class="at-hy-bold-n">25<small>00</small></span>
-                  <span class="at-hy-bar"><span /></span>
-                </span>
-              )}
-              {f.id === 'horizon' && (
-                <svg viewBox="0 0 100 100" class="at-hy-horizon" preserveAspectRatio="xMidYMid slice">
-                  <defs>
-                    <linearGradient id="hy-sky" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0" stop-color="#1b2450" />
-                      <stop offset="0.55" stop-color="#b8577a" />
-                      <stop offset="1" stop-color="#f2a36b" />
-                    </linearGradient>
-                  </defs>
-                  <rect width="100" height="100" fill="url(#hy-sky)" />
-                  <path class="at-hy-path" d="M14 70 Q50 18 86 70" />
-                  <circle cx="68" cy="47" r="7" fill="#ffe2b0" />
-                  <path d="M0 74 Q22 60 44 70 T100 66 V100 H0z" fill="#3b2a4d" />
-                  <path d="M0 82 Q30 72 60 80 T100 78 V100 H0z" fill="#221a36" />
-                  <text x="50" y="94" class="at-hy-num at-hy-num-light" font-size="11">25:00</text>
-                </svg>
-              )}
-              {f.id === 'tide' && (
-                <span class="at-hy-tide">
-                  <svg viewBox="0 0 200 40" preserveAspectRatio="none" class="at-hy-wave"><path d="M0 20 Q25 8 50 20 T100 20 T150 20 T200 20 V40 H0z" /></svg>
-                  <span class="at-hy-tide-n">25:00</span>
-                </span>
-              )}
-              {f.id === 'flip' && (
-                <span class="at-hy-flip">
-                  <span class="at-hy-card">25</span>
-                  <span class="at-hy-card">00</span>
-                </span>
-              )}
-              {f.id === 'nixie' && (
-                <span class="at-hy-nixie">
-                  {Array.from('2500').map((d) => (
-                    <span class="at-hy-tube">{d}</span>
-                  ))}
-                </span>
-              )}
-              {f.id === 'lcd' && (
-                <span class="at-hy-lcd">
-                  <span class="at-hy-lcd-ghost">88:88</span>
-                  <span class="at-hy-lcd-on">25:00</span>
-                </span>
-              )}
-              {f.id === 'matrix' && (
-                <svg viewBox={`0 0 ${led.cols * 4} ${MATRIX_ROWS * 4}`} class="at-hy-led">
-                  <defs>
-                    <pattern id="hy-led" width="4" height="4" patternUnits="userSpaceOnUse">
-                      <circle cx="2" cy="2" r="1.1" class="at-hy-led-off" />
-                    </pattern>
-                  </defs>
-                  <rect width={led.cols * 4} height={MATRIX_ROWS * 4} fill="url(#hy-led)" />
-                  {led.on.map(([x, yy]) => (
-                    <circle cx={x * 4 + 2} cy={yy * 4 + 2} r="1.5" class="at-hy-led-on" />
-                  ))}
-                </svg>
-              )}
-              {f.id === 'rolling' && (
-                <span class="at-hy-roll">
-                  <span>2</span>
-                  <span class="at-hy-roll-col">
-                    <span>5</span>
-                    <span>4</span>
-                  </span>
-                  <span class="at-hy-roll-c">:</span>
-                  <span>0</span>
-                  <span>0</span>
-                </span>
-              )}
-              {f.id === 'analog' && (
-                <span class="at-hy-dial">
-                  <span class="at-hy-hand at-hy-hand-h" />
-                  <span class="at-hy-hand at-hy-hand-m" />
-                  <span class="at-hy-hand at-hy-hand-s" />
-                  <span class="at-hy-pin" />
-                </span>
-              )}
-              {f.id === 'rings' && (
-                <svg viewBox="0 0 100 100" class="at-hy-rings">
-                  {rings.map((r, i) => (
-                    <>
-                      <circle class="at-hy-track" cx="50" cy="50" r={r.r} />
-                      <g transform="rotate(-90 50 50)">
-                        <circle class={`at-hy-arc at-hy-arc-${i}`} cx="50" cy="50" r={r.r} stroke-dasharray={r.dash} />
-                      </g>
-                    </>
-                  ))}
-                </svg>
-              )}
-              {f.id === 'word' && (
-                <span class="at-hy-word" style={`--at-hy-cols:${wordCols}`}>
-                  {letters.map((ch, i) => (
-                    <span class:list={[lit.has(i) && 'at-hy-lit']}>{ch}</span>
-                  ))}
-                </span>
-              )}
-            </div>
+            <div class="at-hy-art" aria-hidden="true" set:html={f.art} />
             <p class="at-hy-name">
-              <span>{t(`tool.face.${f.id}`)}</span>
-              <span class="at-hy-group">{t(`tool.gallery.${f.group}`)}</span>
+              <span>{t(`face.name.${f.id}`)}</span>
             </p>
           </li>
         ))

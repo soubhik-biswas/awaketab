@@ -1,6 +1,6 @@
 import { type FaceId, type FaceTheme, FACES, faceSvg, loadAllFaces } from './index.js';
 
-export interface FaceGridOptions {
+interface FaceGridOptions {
   selected: FaceId;
   theme: FaceTheme;
   onPick(id: FaceId): void;
