@@ -18,7 +18,7 @@ import { useWake, wake } from '@/lib/wake';
 import { useSurfaceLine } from '@/components/pip/mini-clock';
 import { WidgetPresets, WidgetScreen, WidgetSmall, WidgetWide } from './widget-tiles';
 
-export function runWidgetAction(a: TWidgetAction): void {
+function runWidgetAction(a: TWidgetAction): void {
   if (a.action === 'extend') wake.extend(EXTEND_SEC);
   else if (a.action === 'stop') wake.stop();
   else if (a.action === 'preset') {

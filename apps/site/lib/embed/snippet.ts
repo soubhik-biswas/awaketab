@@ -37,7 +37,7 @@ export function loaderSnippet(opts: ISnippetOptions, origin = SITE_ORIGIN): stri
 
 const escapeHtml = (text: string) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
 
-export function creditSnippet(text = 'Keep awake by AwakeTab'): string {
+function creditSnippet(text = 'Keep awake by AwakeTab'): string {
   return `<div class="${EMBED_CREDIT_CLASS}" style="${EMBED_CREDIT_STYLE}"><a href="${EMBED_CREDIT_URL}" rel="nofollow" style="${EMBED_CREDIT_LINK_STYLE}">${escapeHtml(text)}</a></div>`;
 }
 

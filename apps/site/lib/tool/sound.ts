@@ -145,7 +145,7 @@ export function previewAmbient(mix: ISoundMix, seconds = 5) {
   }, seconds * 1000);
 }
 
-export function stopAmbient() {
+function stopAmbient() {
   for (const layer of layers.values()) layer.stop();
   layers.clear();
 }

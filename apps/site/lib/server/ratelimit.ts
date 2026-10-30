@@ -8,7 +8,7 @@ export async function clientIp(request: Request): Promise<string> {
   );
 }
 
-export async function ipHash(env: IEnv, ip: string): Promise<string> {
+async function ipHash(env: IEnv, ip: string): Promise<string> {
   const salt = env.RATE_LIMIT_SALT ?? 'dev';
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${salt}${ip}`));
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');

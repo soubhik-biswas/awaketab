@@ -1,5 +1,5 @@
 export const ACCOUNT_KEY = 'at.v1.account';
-export const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/u;
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/u;
 export const SIGNIN_MINUTES = 15;
 
 export interface IAccount {

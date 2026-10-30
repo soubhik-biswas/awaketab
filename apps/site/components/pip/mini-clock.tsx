@@ -39,7 +39,7 @@ export function useSurfaceLine() {
   };
 }
 
-export function SurfaceStatus({ view, className }: { view: ISurfaceView; className?: string }) {
+function SurfaceStatus({ view, className }: { view: ISurfaceView; className?: string }) {
   const t = useTranslations('surfaces');
   return (
     <span className={cn('inline-flex items-center gap-1.5 text-[13px] font-semibold', TONE_TEXT[view.tone], className)}>

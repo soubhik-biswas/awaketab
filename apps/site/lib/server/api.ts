@@ -2,7 +2,7 @@ import { serverContext, type IServerContext } from './env';
 
 const EXTENSION_ORIGIN = /^chrome-extension:\/\/[a-p]{32}$/u;
 
-export const EXTENSION_CORS_ROUTES = [
+const EXTENSION_CORS_ROUTES = [
   '/api/e',
   '/api/license/activate',
   '/api/license/validate',

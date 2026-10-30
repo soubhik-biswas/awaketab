@@ -1,6 +1,6 @@
 import { FACE_IDS, type TFace } from '@awaketab/core';
 
-export const SHARE_LENGTHS = [15, 30, 45, 60, 120, 240, 0] as const;
+const SHARE_LENGTHS = [15, 30, 45, 60, 120, 240, 0] as const;
 
 export interface IShareSetup {
   face: TFace;
@@ -13,7 +13,7 @@ export function sharePath(s: IShareSetup): string {
   return `/s/${s.face}-${Math.max(0, Math.round(s.minutes))}-${s.chime ? 'chime' : 'quiet'}`;
 }
 
-export function parseShareCode(code: string): IShareSetup | null {
+function parseShareCode(code: string): IShareSetup | null {
   const m = /^([a-z]+)-(\d{1,4})-(chime|quiet)$/u.exec(code);
   if (!m) return null;
   const [, face, min, chime] = m;

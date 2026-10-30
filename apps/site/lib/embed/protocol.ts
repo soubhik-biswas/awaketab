@@ -9,7 +9,7 @@ export const EMBED_LOCALES = ['en', 'es', 'pt-br', 'de', 'fr', 'ja', 'zh', 'hi']
 export type TEmbedMode = (typeof EMBED_MODES)[number];
 export type TEmbedTheme = (typeof EMBED_THEMES)[number];
 export type TEmbedSize = (typeof EMBED_SIZES)[number];
-export type TEmbedPreset = (typeof EMBED_PRESETS)[number];
+type TEmbedPreset = (typeof EMBED_PRESETS)[number];
 export type TEmbedLocale = (typeof EMBED_LOCALES)[number];
 
 export const EMBED_BOX: Record<TEmbedSize, { width: string; height: number; radius: number }> = {
@@ -44,7 +44,7 @@ export function embedPath(lang: TEmbedLocale): string {
 const HOST_RE = /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
 const WALL_RE = /^([01]\d|2[0-3])[:-]([0-5]\d)$/;
 
-export function pick<T extends string>(list: readonly T[], value: unknown, fallback: T): T {
+function pick<T extends string>(list: readonly T[], value: unknown, fallback: T): T {
   return typeof value === 'string' && (list as readonly string[]).includes(value) ? (value as T) : fallback;
 }
 
@@ -52,13 +52,13 @@ export function isHostname(value: unknown): value is string {
   return typeof value === 'string' && HOST_RE.test(value);
 }
 
-export function parseWall(value: unknown): string | null {
+function parseWall(value: unknown): string | null {
   if (typeof value !== 'string') return null;
   const m = WALL_RE.exec(value);
   return m ? `${m[1] ?? '00'}:${m[2] ?? '00'}` : null;
 }
 
-export function embedLocale(raw: unknown): TEmbedLocale {
+function embedLocale(raw: unknown): TEmbedLocale {
   if (typeof raw !== 'string') return 'en';
   const tag = raw.trim().toLowerCase();
   if ((EMBED_LOCALES as readonly string[]).includes(tag)) return tag as TEmbedLocale;
@@ -80,7 +80,7 @@ export interface IEmbedParams extends IEmbedOptions {
   host: string | null;
 }
 
-export function optionsFromDataset(data: Record<string, string | undefined>, pageLang: string): IEmbedOptions {
+function optionsFromDataset(data: Record<string, string | undefined>, pageLang: string): IEmbedOptions {
   const until = parseWall(data.until);
   const preset = pick(EMBED_PRESETS, data.preset, 'pinf');
   return {
@@ -128,7 +128,7 @@ export type TPageMessage =
   | { type: 'awaketab:stop' }
   | { type: 'awaketab:theme'; theme: TEmbedTheme };
 
-export interface IEmbedState {
+interface IEmbedState {
   lock: string;
   status: string;
   endsAt: number | null;

@@ -15,7 +15,7 @@ export interface IHistoryItem {
   reason: 'completed' | 'user';
 }
 
-export const HISTORY_KEY = 'at.v1.history';
+const HISTORY_KEY = 'at.v1.history';
 const MAX_ITEMS = 200;
 const KEEP_DAYS = 365;
 
@@ -47,7 +47,7 @@ function parse(raw: unknown): IHistoryItem[] {
     .slice(0, MAX_ITEMS);
 }
 
-export const historyStore = createLocalStore<IHistoryItem[]>(HISTORY_KEY, parse, (items) => ({ v: 1, items }));
+const historyStore = createLocalStore<IHistoryItem[]>(HISTORY_KEY, parse, (items) => ({ v: 1, items }));
 
 const EMPTY: IHistoryItem[] = [];
 

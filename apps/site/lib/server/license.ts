@@ -1,5 +1,5 @@
 import type { IKv } from './env';
-export interface ILicenseActivation {
+interface ILicenseActivation {
   devHash: string;
   label: string;
   at: number;
@@ -42,7 +42,7 @@ export interface ILicenseRecord {
   updatedAt: number;
 }
 
-export const PRO_GATES: TFeatureId[] = [
+const PRO_GATES: TFeatureId[] = [
   'ambient.packs',
   'ambient.message',
   'ambient.logo',

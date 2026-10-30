@@ -1,6 +1,6 @@
 import * as s from './styles';
 
-export const adsEnabled = (): boolean => process.env.NEXT_PUBLIC_ADS_ENABLED === '1';
+const adsEnabled = (): boolean => process.env.NEXT_PUBLIC_ADS_ENABLED === '1';
 
 // One slot per content page, below the tool, never beside a button and never animated; drawn only when ads are on.
 export function AdSlot({ label, note }: { label: string; note: string }) {

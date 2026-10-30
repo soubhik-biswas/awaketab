@@ -52,7 +52,7 @@ const SHEET_H: Record<THostView, number> = {
   account: 0.8,
 };
 
-export function hostViewOf(view: TToolView): THostView | null {
+function hostViewOf(view: TToolView): THostView | null {
   return view === 'timer' || view === 'palette' || view === 'focus' ? null : view;
 }
 

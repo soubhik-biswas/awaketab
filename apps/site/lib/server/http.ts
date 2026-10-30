@@ -16,7 +16,7 @@ export function rateLimited(now = Date.now()): Response {
   );
 }
 
-export const SYNCING_RETRY_S = 5;
+const SYNCING_RETRY_S = 5;
 
 export function syncing(): Response {
   return Response.json(

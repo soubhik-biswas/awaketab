@@ -20,7 +20,7 @@ export function clockTime(ms: number, lang: TToolLang = 'en', fmt: TClockFmt = 1
   return `${h12}:${pad(m)} ${h < 12 ? 'पूर्वाह्न' : 'अपराह्न'}`;
 }
 
-export function fullDate(ms: number, lang: TToolLang = 'en'): string {
+function fullDate(ms: number, lang: TToolLang = 'en'): string {
   const d = new Date(ms);
   if (lang === 'en') return formatFullDate(d, 'en');
   if (lang === 'de') {

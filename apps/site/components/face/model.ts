@@ -169,7 +169,7 @@ const FILL = {
   ember: 'var(--face-fill-ember)',
 } as const;
 
-export const isHexColour = (c: unknown): c is string => typeof c === 'string' && /^#[0-9a-f]{6}$/iu.test(c);
+const isHexColour = (c: unknown): c is string => typeof c === 'string' && /^#[0-9a-f]{6}$/iu.test(c);
 
 export function clock(sec: number, fmt: 12 | 24): string {
   const x = ((sec % 86_400) + 86_400) % 86_400;

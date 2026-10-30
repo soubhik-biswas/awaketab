@@ -12,8 +12,8 @@ export const H1 = 'm-0 text-[34px] leading-[1.05] font-extrabold tracking-[-0.03
 export const LEAD = 'm-0 text-[17px] leading-[1.55] text-muted-foreground-strong';
 export const PRIMARY =
   'h-13 rounded-md px-[22px] text-[16px] font-bold shadow-[0_12px_30px_var(--site-act-glow)] [&_svg:not([class*=size-])]:size-[18px]';
-export const PRIMARY_FLAT = 'h-13 rounded-md px-[22px] text-[16px] font-bold';
-export const OUTLINE = 'h-13 rounded-md px-[22px] text-[16px] font-bold';
+const PRIMARY_FLAT = 'h-13 rounded-md px-[22px] text-[16px] font-bold';
+const OUTLINE = 'h-13 rounded-md px-[22px] text-[16px] font-bold';
 export const LINK =
   'min-h-11 border-0 bg-transparent px-1 text-[15px] font-semibold text-lamp underline underline-offset-[3px] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
 

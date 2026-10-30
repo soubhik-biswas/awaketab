@@ -1,6 +1,6 @@
 import { localePath, type TLocale } from '@/i18n/locales';
 
-export const PIP_SIZE = { width: 320, height: 180 } as const;
+const PIP_SIZE = { width: 320, height: 180 } as const;
 const PIP_POPUP_NAME = 'awaketab-pip';
 
 export type TPipSupport = 'document' | 'popup' | 'none';
@@ -24,7 +24,7 @@ export function pipSupport(win: Window | undefined = typeof window === 'undefine
   return coarse || mobile ? 'none' : 'popup';
 }
 
-export function pipPath(locale: TLocale = 'en'): string {
+function pipPath(locale: TLocale = 'en'): string {
   return localePath(locale, '/pip');
 }
 

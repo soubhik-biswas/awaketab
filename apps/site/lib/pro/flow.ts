@@ -3,7 +3,7 @@ import type { TProPlan } from './plans';
 export type TCheckoutStep = 'plans' | 'account' | 'check' | 'pay';
 export const CHECKOUT_STEPS: readonly TCheckoutStep[] = ['plans', 'account', 'check', 'pay'];
 export const STEP_INDEX: Record<TCheckoutStep, number> = { plans: 0, account: 1, check: 1, pay: 2 };
-export const FLOW_KEY = 'at.v1.checkout';
+const FLOW_KEY = 'at.v1.checkout';
 
 export interface IFlow {
   plan: TProPlan;

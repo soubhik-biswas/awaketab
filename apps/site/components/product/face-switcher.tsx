@@ -5,7 +5,7 @@ import { cn } from 'cn';
 import { Check } from 'lucide-react';
 import { RadioGroup as RadioGroupPrimitive } from 'radix-ui';
 
-export interface IFaceOption {
+interface IFaceOption {
   id: string;
   name: string;
 }

@@ -17,7 +17,7 @@ import { RadioGroup as RadioGroupPrimitive } from 'radix-ui';
 import { EmptyState } from '@/components/product/empty-state';
 import { Button } from '@/components/ui/button';
 
-export interface IPreset {
+interface IPreset {
   id: string;
   label: string;
   meta: string;
@@ -25,7 +25,7 @@ export interface IPreset {
   seconds?: number;
 }
 
-export const DEFAULT_PRESETS: IPreset[] = [
+const DEFAULT_PRESETS: IPreset[] = [
   { id: 'presenting', label: 'Presenting', meta: '1 h', icon: Presentation, seconds: 3600 },
   { id: 'cooking', label: 'Cooking', meta: '45 min', icon: ChefHat, seconds: 2700 },
   { id: 'reading', label: 'Reading', meta: '30 min', icon: NotebookPen, seconds: 1800 },

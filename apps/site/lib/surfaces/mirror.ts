@@ -1,7 +1,7 @@
 import type { IWakeSnapshot, TPauseReason, TWakeState } from '@/lib/wake';
 
-export const MIRROR_CHANNEL = 'awaketab';
-export const MIRROR_STALE_MS = 4000;
+const MIRROR_CHANNEL = 'awaketab';
+const MIRROR_STALE_MS = 4000;
 const HEARTBEAT_MS = 1500;
 
 export type TMirrorSnap = Pick<

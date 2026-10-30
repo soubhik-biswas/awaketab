@@ -12,7 +12,7 @@ export interface IPreset {
   chime: boolean;
 }
 
-export const PRESETS_KEY = 'at.v1.presets';
+const PRESETS_KEY = 'at.v1.presets';
 const MAX_PRESETS = 20;
 const ICONS: readonly TPresetIcon[] = ['presentation', 'chef', 'reading', 'coffee', 'infinity', 'night', 'timer'];
 
@@ -53,7 +53,7 @@ function parse(raw: unknown): IPreset[] {
   return out.slice(0, MAX_PRESETS);
 }
 
-export const presetsStore = createLocalStore<IPreset[]>(PRESETS_KEY, parse, (items) => ({ v: 1, items }));
+const presetsStore = createLocalStore<IPreset[]>(PRESETS_KEY, parse, (items) => ({ v: 1, items }));
 
 const EMPTY: IPreset[] = [];
 

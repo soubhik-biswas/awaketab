@@ -1,6 +1,6 @@
 import { isHostname, parsePageMessage, type TPageMessage, type TWidgetMessage } from './protocol';
 
-export function parentOrigin(win: Window): string | null {
+function parentOrigin(win: Window): string | null {
   if (win.parent === win) return null;
   // Firefox has no ancestorOrigins, although lib.dom types it as always present.
   const ancestors = (win.location as { ancestorOrigins?: DOMStringList }).ancestorOrigins;

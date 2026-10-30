@@ -1,4 +1,4 @@
-export type TEmbedScheme = 'auto' | 'light' | 'dark';
+type TEmbedScheme = 'auto' | 'light' | 'dark';
 
 export interface IEmbedConfig {
   licensed: boolean;
@@ -7,13 +7,13 @@ export interface IEmbedConfig {
   scheme: TEmbedScheme | null;
 }
 
-export const FREE_CONFIG: IEmbedConfig = { licensed: false, attribution: true, accent: null, scheme: null };
+const FREE_CONFIG: IEmbedConfig = { licensed: false, attribution: true, accent: null, scheme: null };
 
 const EMBED_CONFIG_TIMEOUT_MS = 4000;
 
 const HEX = /^#[0-9a-f]{6}$/iu;
 
-export function parseEmbedConfig(data: unknown): IEmbedConfig {
+function parseEmbedConfig(data: unknown): IEmbedConfig {
   if (!data || typeof data !== 'object') return FREE_CONFIG;
   const d = data as Record<string, unknown>;
   const licensed = d.licensed === true;
@@ -48,7 +48,7 @@ export async function fetchEmbedConfig(
   }
 }
 
-export function luminance(hex: string): number {
+function luminance(hex: string): number {
   const ch = (i: number) => {
     const c = parseInt(hex.slice(i, i + 2), 16) / 255;
     return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;

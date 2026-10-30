@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { useTool } from '@/components/tool/context';
 
 // The design's menu glyph: two full lines over a short one, drawn on Lucide's grid.
-export const MenuGlyph = createLucideIcon('MenuGlyph', [
+const MenuGlyph = createLucideIcon('MenuGlyph', [
   ['path', { d: 'M4 7h16', key: 'top' }],
   ['path', { d: 'M4 12h16', key: 'mid' }],
   ['path', { d: 'M4 17h10', key: 'low' }],

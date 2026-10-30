@@ -5,7 +5,7 @@ import { ProductToast, TOAST_DURATION, type IProductToastOptions } from '@/compo
 import { Toaster } from '@/components/ui/sonner';
 import { fill, type IToolChrome } from '@/lib/tool/chrome';
 
-export const TOOL_TOASTER = 'tool';
+const TOOL_TOASTER = 'tool';
 
 // The tool's toasts sit centred just above the control bar on every device, as the boards draw them.
 export function ToolToaster({ bottom, phoneBottom }: { bottom: number; phoneBottom: number }) {

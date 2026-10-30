@@ -28,7 +28,7 @@ const LOOK: Record<Exclude<TStatusState, 'running'>, TPillLook> = {
   unsupported: { tone: 'border-border bg-secondary text-muted-foreground-strong', icon: ZapOff },
 };
 
-export function statusPillLabel(state: TStatusState, time?: string, reason?: string): string {
+function statusPillLabel(state: TStatusState, time?: string, reason?: string): string {
   switch (state) {
     case 'idle':
       return 'Not keeping awake';

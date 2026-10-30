@@ -12,7 +12,7 @@ export function tokenExp(plan: TPlanId, periodEnd: number | null, nowSec: number
   return nowSec + 365 * DAY_S;
 }
 
-export function currentExp(record: ILicenseRecord, nowSec: number): number {
+function currentExp(record: ILicenseRecord, nowSec: number): number {
   if (record.plan === 'pro_yearly' || record.plan === 'biz_embed_site_yearly') return record.exp;
   return tokenExp(record.plan, null, nowSec);
 }
