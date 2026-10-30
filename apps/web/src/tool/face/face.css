@@ -30,6 +30,7 @@
 }
 
 .af-tr {
+  /* stylelint-disable-next-line liberty/use-logical-spec -- face drawings move by physical left and top (the face is always ltr) */
   transition:
     stroke-dasharray 0.95s linear,
     width 0.95s linear,
