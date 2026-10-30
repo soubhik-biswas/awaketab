@@ -23,7 +23,7 @@ import {
   NO_LICENSE,
   osLabel,
 } from '../../src/license';
-import { applyTheme, loadPage, q, switchLocale, translateTree } from '../../src/page';
+import { applyTheme, loadPage, paintMarks, q, switchLocale, translateTree } from '../../src/page';
 import { minutesOf } from '../../src/schedules';
 import {
   AUTOSTART_SITES_MAX,
@@ -760,6 +760,7 @@ async function boot(): Promise<void> {
   });
 
   translateTree(root, ctx.t);
+  paintMarks(root);
   render();
   root.hidden = false;
   if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
