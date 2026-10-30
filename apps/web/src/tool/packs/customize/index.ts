@@ -25,7 +25,7 @@ const sheet = () =>
 function mount(ctx: IToolCtx, d: HTMLDialogElement, tab: TTab): Promise<void> {
   const pane = d.querySelector<HTMLElement>(`[data-cz-pane="${tab}"]`);
   if (!pane) return Promise.resolve();
-  if (tab === 'face') return import('../faces/index.js').then((m) => m.showGallery(ctx, pane));
+  if (tab === 'face') return import('../../face/stage.js').then((m) => m.showFaceGrid(ctx, pane));
   if (tab === 'sound') return import('../sound/index.js').then((m) => m.showSound(ctx));
   const pref = ctx.store.get().settings.theme;
   for (const r of pane.querySelectorAll<HTMLInputElement>('input[name="cz-theme"]')) r.checked = r.value === pref;

@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { makeCtx } from './ctx-helper.js';
 
-const showGallery = vi.fn(async () => undefined);
+const showFaceGrid = vi.fn(async () => undefined);
 const showSound = vi.fn(async () => undefined);
 const mountAppearance = vi.fn(async () => undefined);
-vi.mock('../../src/tool/packs/faces/index.js', () => ({ showGallery }));
+vi.mock('../../src/tool/face/stage.js', () => ({ showFaceGrid }));
 vi.mock('../../src/tool/packs/sound/index.js', () => ({ showSound }));
 vi.mock('../../src/tool/packs/themes/appearance.js', () => ({ mountAppearance }));
 vi.mock('../../src/tool/ui/dialog.js', () => ({
@@ -61,7 +61,7 @@ describe('Customize sheet (Face · Look · Sound)', () => {
     expect(tab('face').getAttribute('aria-selected')).toBe('true');
     expect(document.activeElement).toBe(tab('face'));
     await flush();
-    expect(showGallery).toHaveBeenCalledTimes(1);
+    expect(showFaceGrid).toHaveBeenCalledTimes(1);
     tab('face').dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
     expect(tab('sound').getAttribute('aria-selected')).toBe('true');
 

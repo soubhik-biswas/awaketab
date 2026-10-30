@@ -84,7 +84,7 @@ export const ticks = (r1: number, r2: number, n: number, keep: (i: number) => bo
   return d;
 };
 
-export interface Pal {
+interface Pal {
   ink: string;
   ink2: string;
   line: string;
@@ -328,15 +328,21 @@ const ICON: Record<FaceState, (c: string) => string> = {
   idle: (c) => ic(`<circle cx="8" cy="8" r="5.5" fill="none" stroke="${c}" stroke-width="1.8"></circle>`),
 };
 
-// SVG presentation attributes may not take var() or color-mix() in every engine, so colours move into style.
+// SVG presentation attributes may not take var() or color-mix() in every engine, so colours move into style; an
+// <svg>'s size goes there too, so no page rule for svg (inline-size: 100%) can stretch a face's drawing.
 const PAINT = /\s(fill|stroke|stop-color)="([^"]*\b(?:var|color-mix)\([^"]*)"/gu;
 const svgPaint = (html: string): string =>
-  html.replace(/<(circle|path|line|rect|stop)\b([^>]*)>/gu, (tag, name: string, attrs: string) => {
+  html.replace(/<(svg|circle|path|line|rect|stop)\b([^>]*)>/gu, (tag, name: string, attrs: string) => {
     let decl = '';
     const rest = attrs.replace(PAINT, (_m, k: string, val: string) => {
       decl += `${k}: ${val}; `;
       return '';
     });
+    if (name === 'svg') {
+      const w = /\swidth="(\d+)"/u.exec(attrs)?.[1];
+      const h = /\sheight="(\d+)"/u.exec(attrs)?.[1];
+      if (w && h) decl += `width: ${w}px; height: ${h}px; `;
+    }
     if (!decl) return tag;
     return rest.includes(' style="')
       ? `<${name}${rest.replace(' style="', ` style="${decl}`)}>`

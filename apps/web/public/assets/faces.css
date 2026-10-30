@@ -476,3 +476,76 @@
     transition: none;
   }
 }
+
+:root[data-face] .at-face-x {
+  display: grid;
+  place-items: center;
+}
+
+.at-fsw {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+  user-select: none;
+}
+
+.at-fsw:active {
+  cursor: grabbing;
+}
+
+.at-fsw-strip {
+  display: flex;
+  block-size: 100%;
+}
+
+.at-fsw-slide {
+  display: grid;
+  flex: 0 0 100%;
+  place-items: center;
+  min-inline-size: 0;
+}
+
+.at-fsw-ghost {
+  display: flex;
+  flex-direction: column;
+  gap: var(--at-s-2);
+  align-items: center;
+  font: var(--at-type-kicker);
+  color: var(--at-ink-2);
+  text-transform: uppercase;
+  letter-spacing: var(--at-trk-k, 0.14em);
+  opacity: var(--at-swa, 0);
+}
+
+.at-dial > .at-face {
+  opacity: calc(1 - var(--at-swa, 0));
+  transform: translateX(calc(var(--at-sw, 0) * -30%));
+}
+
+.at-dial[data-swap=""] > .at-face {
+  opacity: 0;
+}
+
+.at-dial[data-swap="in"] > .at-face {
+  animation: at-fsw-in 0.6s var(--at-ease) both;
+}
+
+.at-am-top .at-fsw {
+  display: none;
+}
+
+@keyframes at-fsw-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-dial[data-swap="in"] > .at-face {
+    animation: none;
+  }
+}
