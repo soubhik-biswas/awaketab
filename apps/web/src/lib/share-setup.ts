@@ -1,5 +1,5 @@
 // A shared setup link carries the length, the face and the chime only (handoff §11): /s/<face>-<minutes>-<chime|quiet>.
-export const SETUP_FACES = [
+const SETUP_FACES = [
   'ring',
   'bold',
   'horizon',
@@ -34,7 +34,7 @@ export const SETUP_FACES = [
   'tape',
   'moon',
 ] as const;
-export type TSetupFace = (typeof SETUP_FACES)[number];
+type TSetupFace = (typeof SETUP_FACES)[number];
 
 // Lengths a link may carry, each with the tool's preset id (docs/00 §7 `preset=`); 0 means "until I stop".
 const LENGTHS: Record<number, string> = {

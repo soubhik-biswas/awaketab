@@ -1,4 +1,4 @@
-export const SCENE_KEYS = [
+const SCENE_KEYS = [
   'hero',
   'firstaction',
   'welcome',
@@ -321,10 +321,6 @@ const SCENES: Record<TSceneKey, IScene> = {
     sp: SPARK(40, 50, 5) + SPARK(120, 40, 4),
   },
 };
-
-export function sceneAlt(key: TSceneKey): string {
-  return SCENES[key].alt;
-}
 
 export interface ISceneOptions {
   width?: number | undefined;

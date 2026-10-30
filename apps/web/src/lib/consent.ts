@@ -1,7 +1,7 @@
 const SETTINGS = 'at.v1.settings';
 const ONBOARDING = 'at.v1.onboarding';
 // The analytics question is one more dismissed tip (docs/08 §2.6); the answer is the telemetry switch (§2.1).
-export const CONSENT_TIP = 'analytics';
+const CONSENT_TIP = 'analytics';
 
 function readJson(key: string): Record<string, unknown> | null {
   try {
@@ -13,12 +13,12 @@ function readJson(key: string): Record<string, unknown> | null {
   }
 }
 
-export function consentAnswered(): boolean {
+function consentAnswered(): boolean {
   const tips = readJson(ONBOARDING)?.dismissedTips;
   return (Array.isArray(tips) && tips.includes(CONSENT_TIP)) || readJson(SETTINGS)?.telemetry === false;
 }
 
-export function answerConsent(allow: boolean): void {
+function answerConsent(allow: boolean): void {
   try {
     const settings = readJson(SETTINGS) ?? { v: 1 };
     settings.telemetry = allow;
