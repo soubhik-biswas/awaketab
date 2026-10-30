@@ -206,13 +206,10 @@ export function vals(p: FaceProps, t0: number) {
   const capText = tx(`cap.${st}`);
   const mins = Math.ceil(r / 60);
   const left =
-    st === 'up' || (indef && st === 'idle')
+    st === 'up' || indef
       ? ''
       : tx('aria.left', {
-          time:
-            mins >= 60
-              ? tx('aria.h', { h: Math.floor(mins / 60), m: mins % 60 })
-              : tx('aria.m', { m: mins }),
+          time: mins >= 60 ? tx('aria.h', { h: Math.floor(mins / 60), m: mins % 60 }) : tx('aria.m', { m: mins }),
         });
   const aria = [capText, left, endLine].filter(Boolean).join(', ');
 
@@ -302,7 +299,9 @@ const ic = (body: string) => `<svg width="16" height="16" viewBox="0 0 16 16" ar
 
 const ICON: Record<FaceState, (c: string) => string> = {
   running: (c) =>
-    ic(`<circle class="afx-pulse" cx="8" cy="8" r="5" fill="${c}" opacity=".5"></circle><circle cx="8" cy="8" r="4" fill="${c}"></circle>`),
+    ic(
+      `<circle class="afx-pulse" cx="8" cy="8" r="5" fill="${c}" opacity=".5"></circle><circle cx="8" cy="8" r="4" fill="${c}"></circle>`,
+    ),
   starting: (c) =>
     ic(`<circle cx="8" cy="8" r="6" fill="none" stroke="${c}" stroke-width="2" stroke-dasharray="3 3"></circle>`),
   fallback: (c) =>
