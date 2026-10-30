@@ -5,6 +5,7 @@ import { articleSchema } from '@/lib/seo';
 import { Block, Note, Prose } from './blocks';
 import { JsonLd } from './json-ld';
 import { PageHero } from './page-hero';
+import * as s from './styles';
 
 export interface ILegalSection {
   id: string;
@@ -78,11 +79,11 @@ export function LegalPage({
             h: sec.title,
             children: (
               <>
-                <p className="m-0 text-[17px] leading-[1.65]">
+                <p className={s.proseP}>
                   <strong>In short: </strong>
                   {sec.summary}
                 </p>
-                <div className="flex flex-col gap-4 text-[17px] leading-[1.65]">{sec.body}</div>
+                <div className="flex flex-col gap-4 text-[17px] leading-[1.7] min-[700px]:text-[18px]">{sec.body}</div>
               </>
             ),
           }))}

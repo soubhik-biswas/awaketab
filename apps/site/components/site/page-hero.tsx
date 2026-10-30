@@ -12,6 +12,7 @@ import {
 import type { TSceneKey } from '@/lib/content';
 import { cn } from '@/lib/utils';
 import { Scene } from '@/components/scene/scene';
+import { Arrive } from './arrive';
 import * as s from './styles';
 
 export interface ICrumb {
@@ -72,7 +73,8 @@ export function HeroButtons({ primary, secondary }: { primary?: IHeroAction; sec
   );
 }
 
-// The hero of every content and system page: crumbs, eyebrow, h1, lead, meta, buttons, then a scene or a face.
+// The hero of every content and system page: crumbs, eyebrow, h1, lead, meta, buttons, then a scene or a face. It is
+// a row from tablet landscape up; below that it stacks, with the art centred on tablet portrait.
 export function PageHero({
   crumbs,
   crumbLabel = 'Breadcrumb',
@@ -101,35 +103,35 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <section className={cn('flex flex-col items-center gap-5 lg:flex-row lg:gap-12', s.pad)}>
-      <div className="flex min-w-0 flex-1 flex-col items-start gap-[14px] self-stretch min-[700px]:gap-5 lg:self-auto">
+    <section
+      className={cn(
+        'flex flex-col items-center gap-5 min-[700px]:items-start min-[700px]:gap-9 min-[1100px]:flex-row min-[1100px]:items-center min-[1100px]:gap-14',
+        s.pad,
+      )}
+    >
+      <div className="flex min-w-0 flex-1 flex-col items-start gap-[14px] self-stretch min-[700px]:gap-5 min-[1100px]:self-auto">
         {crumbs && crumbs.length > 0 && <Crumbs items={crumbs} label={crumbLabel} />}
         {kicker ?? (eyebrow && <span className={s.eyebrow}>{eyebrow}</span>)}
         <h1 className={cn(s.h1, scene && s.h1Art)}>{h1}</h1>
         {lead && <p className={cn(s.lead, 'site-prose')}>{lead}</p>}
-        {meta && (
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-muted-foreground-strong">
-            {meta}
-          </div>
-        )}
+        {meta && <div className={cn('flex flex-wrap items-center gap-x-4 gap-y-1', s.meta)}>{meta}</div>}
         {actions}
         {children}
       </div>
       {face && (
-        <div className="flex flex-none justify-center rounded-[36px] border border-border bg-card p-3 shadow-[0_24px_60px_var(--site-lift)]">
+        <Arrive className="flex flex-none justify-center rounded-[36px] border border-border bg-card p-3 shadow-[0_24px_60px_var(--site-lift)] min-[700px]:self-center min-[1100px]:self-auto">
           {face}
-        </div>
+        </Arrive>
       )}
       {scene && (
-        <div className="flex-none">
+        <Arrive className="flex-none min-[700px]:self-center min-[1100px]:self-auto">
           <Scene
             scene={scene}
-            width={520}
-            float
+            width={600}
             {...(sceneLabel ? { label: sceneLabel } : { decorative: true })}
-            className="h-auto w-[350px] max-w-full min-[700px]:w-[520px]"
+            className="site-float h-auto w-[350px] max-w-full min-[700px]:w-[600px] min-[1100px]:w-[440px] min-[1300px]:w-[520px]"
           />
-        </div>
+        </Arrive>
       )}
     </section>
   );

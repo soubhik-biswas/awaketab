@@ -5,7 +5,7 @@ import { localePath, type TLocale } from '@/i18n/locales';
 import { ROUTES, toolHref } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { LangMenu, MobileMenu, NavLinks, type INavLink } from './header-client';
-import { btn } from './styles';
+import { btn, display } from './styles';
 
 export async function SiteHeader({ locale }: { locale: TLocale }) {
   const t = await getTranslations({ locale, namespace: 'site' });
@@ -29,13 +29,13 @@ export async function SiteHeader({ locale }: { locale: TLocale }) {
         <span aria-hidden="true" className="inline-flex">
           <Mark size={30} small glow={false} tone="auto" />
         </span>
-        <span className="text-[21px] font-extrabold tracking-[-0.03em]">AwakeTab</span>
+        <span className={cn(display, 'text-[21px] font-extrabold tracking-[-0.03em]')}>AwakeTab</span>
       </a>
-      <div className="hidden min-[700px]:flex">
+      <div className="hidden min-[1100px]:flex">
         <NavLinks links={links} label={t('nav.label')} />
       </div>
       <span className="flex-1" />
-      <div className="hidden items-center gap-2 min-[700px]:flex">
+      <div className="hidden items-center gap-2 min-[1100px]:flex">
         <LangMenu locale={locale} label={tf('language._')} />
         <Button asChild variant="ghost" className={btn}>
           <a href={signin.href}>{signin.label}</a>
@@ -47,7 +47,7 @@ export async function SiteHeader({ locale }: { locale: TLocale }) {
           <span className="hidden min-[700px]:inline">{t('cta._')}</span>
         </a>
       </Button>
-      <div className="min-[700px]:hidden">
+      <div className="min-[1100px]:hidden">
         <MobileMenu
           locale={locale}
           links={links}
