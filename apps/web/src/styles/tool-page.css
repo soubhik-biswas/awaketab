@@ -92,7 +92,7 @@
 .at-lengths .at-length-here {
   gap: var(--at-gap-tight);
   padding-inline-start: var(--at-s-3);
-  border-color: var(--at-lamp-line);
+  border-color: var(--at-accent);
   background: var(--at-lamp-soft);
   color: var(--at-ink);
   font-weight: 600;
