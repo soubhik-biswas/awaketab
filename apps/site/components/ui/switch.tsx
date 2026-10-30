@@ -16,7 +16,7 @@ function Switch({
       data-slot="switch"
       data-size={size}
       className={cn(
-        'peer group/switch inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-[1.15rem] data-[size=default]:w-8 data-[size=sm]:h-3.5 data-[size=sm]:w-6 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80',
+        'peer group/switch relative inline-flex h-[26px] w-11 shrink-0 cursor-pointer items-center rounded-full border transition-[background-color,border-color] duration-fast ease-glide outline-none after:absolute after:inset-x-0 after:-inset-y-[9px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed data-[state=checked]:border-lamp data-[state=checked]:bg-lamp data-[state=unchecked]:border-input data-[state=unchecked]:bg-surface-3 disabled:data-[state=checked]:border-border disabled:data-[state=checked]:bg-secondary disabled:data-[state=unchecked]:border-border disabled:data-[state=unchecked]:bg-secondary',
         className,
       )}
       {...props}
@@ -24,7 +24,7 @@ function Switch({
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
         className={cn(
-          'pointer-events-none block rounded-full bg-background ring-0 transition-transform group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground',
+          'pointer-events-none absolute top-[2px] left-[2px] block size-5 rounded-full shadow-[0_1px_2px_rgba(0,0,0,.25)] transition-transform duration-fast ease-glide data-[state=checked]:translate-x-[18px] data-[state=checked]:bg-lamp-foreground data-[state=unchecked]:translate-x-0 data-[state=unchecked]:bg-card data-disabled:bg-border!',
         )}
       />
     </SwitchPrimitive.Root>

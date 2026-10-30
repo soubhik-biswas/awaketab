@@ -15,7 +15,7 @@ function PopoverTrigger({ ...props }: React.ComponentProps<typeof PopoverPrimiti
 function PopoverContent({
   className,
   align = 'center',
-  sideOffset = 4,
+  sideOffset = 6,
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Content>) {
   return (
@@ -25,7 +25,7 @@ function PopoverContent({
         align={align}
         sideOffset={sideOffset}
         className={cn(
-          'z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+          'z-50 flex w-72 origin-(--radix-popover-content-transform-origin) flex-col gap-2 rounded-md border bg-pop p-3.5 text-foreground shadow-e2 outline-hidden duration-fast data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
           className,
         )}
         {...props}
@@ -39,15 +39,23 @@ function PopoverAnchor({ ...props }: React.ComponentProps<typeof PopoverPrimitiv
 }
 
 function PopoverHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="popover-header" className={cn('flex flex-col gap-1 text-sm', className)} {...props} />;
+  return <div data-slot="popover-header" className={cn('flex flex-col gap-1', className)} {...props} />;
 }
 
 function PopoverTitle({ className, ...props }: React.ComponentProps<'h2'>) {
-  return <div data-slot="popover-title" className={cn('font-medium', className)} {...props} />;
+  return (
+    <div data-slot="popover-title" className={cn('text-[15px] leading-[1.4] font-bold', className)} {...props} />
+  );
 }
 
 function PopoverDescription({ className, ...props }: React.ComponentProps<'p'>) {
-  return <p data-slot="popover-description" className={cn('text-muted-foreground', className)} {...props} />;
+  return (
+    <p
+      data-slot="popover-description"
+      className={cn('font-mono text-[12px] font-medium text-muted-foreground-strong', className)}
+      {...props}
+    />
+  );
 }
 
 export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor, PopoverHeader, PopoverTitle, PopoverDescription };
