@@ -77,7 +77,7 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
       state={PILL[p.lock]}
       label={pillLabel}
       live
-      className={full ? 'h-8 px-3 text-[14px]' : 'h-[26px] gap-1.5 px-2.5 text-[13px] [&_svg]:size-3'}
+      className={full ? 'h-8 px-3 text-[14px]' : 'h-[26px] gap-1.5 px-2.5 text-[13px] [&_svg]:size-3!'}
     />
   );
   const button = (

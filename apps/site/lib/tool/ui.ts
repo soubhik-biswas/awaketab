@@ -19,9 +19,6 @@ export type TToolView =
   | 'studio'
   | 'account';
 
-// The stage's id: the home page's skip link lands on it.
-export const STAGE_ID = 'timer';
-
 export type TBanner = 'none' | 'offline' | 'conflict' | 'update';
 export type TFaceCol = 'fresh' | 'signature' | 'digital' | 'analog' | 'ambient' | 'all';
 export type TDevice = 'desktop' | 'tabletL' | 'tabletP' | 'phone';

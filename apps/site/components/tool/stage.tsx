@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { fill } from '@/lib/tool/chrome';
 import { faceRemain } from '@/lib/tool/model';
-import { STAGE_ID, type TBanner } from '@/lib/tool/ui';
+import { type TBanner } from '@/lib/tool/ui';
+import { STAGE_ID } from '@/lib/tool/stage-id';
 import { useTool } from '@/components/tool/context';
 import { ToolPill } from '@/components/tool/header';
 
@@ -439,7 +440,12 @@ export const Stage = forwardRef<HTMLElement, { faceSize: number; top: number; bo
           {settings.label}
         </span>
       ) : null}
-      {focus ? <FocusControls /> : null}
+      {focus ? (
+        <FocusControls />
+      ) : (
+        // The drawn stage keeps its empty control row, whose gap is part of how the stack centres.
+        <div aria-hidden="true" className="h-0 shrink-0" />
+      )}
     </main>
   );
 });

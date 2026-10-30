@@ -80,7 +80,7 @@ export function CloseButton({ label, onClick }: { label: string; onClick: () => 
       type="button"
       variant="ghost"
       size="icon"
-      className="-mr-2 size-11 rounded-[10px] text-muted-foreground-strong [&_svg]:size-5"
+      className="-mr-2 size-11 rounded-[10px] text-muted-foreground-strong [&_svg]:size-5!"
       onClick={onClick}
       aria-label={label}
     >
