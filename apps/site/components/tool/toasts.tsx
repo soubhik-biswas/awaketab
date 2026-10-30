@@ -39,6 +39,8 @@ export const toolToast = {
       description: fill(c.tExtD, { n: minutes }),
       actionLabel: c.undo,
       onAction: onUndo,
+      dismissLabel: c.dismiss,
+      live: false,
     }),
   lowTime: (
     c: IToolChrome,
@@ -51,6 +53,8 @@ export const toolToast = {
       description: fill(c.tLowD, { time: endsAt }),
       actionLabel: extendLabel,
       onAction: onExtend,
+      dismissLabel: c.dismiss,
+      live: false,
     }),
   ended: (
     c: IToolChrome,
@@ -64,6 +68,8 @@ export const toolToast = {
       actionLabel: againLabel,
       onAction: onStartAgain,
       duration: Infinity,
+      dismissLabel: c.dismiss,
+      live: false,
     }),
   copied: (c: IToolChrome) =>
     show({
@@ -73,5 +79,6 @@ export const toolToast = {
       description: c.copiedD,
       actionLabel: c.done,
       onAction: () => undefined,
+      dismissLabel: c.dismiss,
     }),
 };

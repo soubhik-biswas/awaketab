@@ -17,6 +17,8 @@ export interface IProductToastOptions {
   onAction?: () => void;
   duration?: number;
   dismissLabel?: string;
+  // Off when the page announces the same moment itself, so a screen reader hears it once.
+  live?: boolean;
 }
 
 const TONE: Record<TToastTone, { icon: LucideIcon; color: string }> = {
@@ -84,14 +86,15 @@ export function ProductToast({
   onAction,
   duration = TOAST_DURATION,
   dismissLabel = 'Dismiss',
+  live = true,
 }: IProductToastProps) {
   const look = TONE[tone];
   const Icon = icon ?? look.icon;
   const { hold, release } = useDismissTimer(toastId, duration);
   return (
     <div
-      role="status"
-      aria-live="polite"
+      role={live ? 'status' : undefined}
+      aria-live={live ? 'polite' : 'off'}
       data-slot="product-toast"
       data-tone={tone}
       onPointerEnter={hold}

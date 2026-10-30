@@ -27,19 +27,52 @@ export function useBannerKind(): Exclude<TBanner, 'none'> | null {
 
 function Banners() {
   const { ui, m, a } = useTool();
+  const c = m.c;
   const kind = useBannerKind();
   return (
     <>
-      {kind === 'offline' ? <Banner kind="offline" className="shrink-0" /> : null}
-      {kind === 'conflict' ? <Banner kind="conflict" className="shrink-0" onAction={a.takeOver} /> : null}
+      {kind === 'offline' ? <Banner kind="offline" title={c.bOfflineT} body={c.bOfflineB} className="shrink-0" /> : null}
+      {kind === 'conflict' ? (
+        <Banner
+          kind="conflict"
+          title={c.bConflictT}
+          body={c.bConflictB}
+          actionLabel={c.bConflictA}
+          className="shrink-0"
+          onAction={a.takeOver}
+        />
+      ) : null}
       {kind === 'update' ? (
-        <Banner kind="update" className="shrink-0" onAction={() => window.location.reload()} />
+        <Banner
+          kind="update"
+          title={c.bUpdateT}
+          body={c.bUpdateB}
+          actionLabel={c.bUpdateA}
+          className="shrink-0"
+          onAction={() => window.location.reload()}
+        />
       ) : null}
       {m.state === 'needsyou' ? (
-        <Banner kind="needsyou" className="shrink-0" actionLabel={m.s.resume} onAction={a.resume} />
+        <Banner
+          kind="needsyou"
+          title={c.bNeedsT}
+          body={c.bNeedsB}
+          className="shrink-0"
+          actionLabel={m.s.resume}
+          onAction={a.resume}
+        />
       ) : null}
       {m.state === 'blocked' && ui.view !== 'fix' ? (
-        <Banner kind="blocked" role="alert" className="shrink-0" onAction={() => a.go('fix')} />
+        // The refusal is already announced once, assertively, so the banner itself stays quiet.
+        <Banner
+          kind="blocked"
+          role="note"
+          title={c.bBlockedT}
+          body={c.bBlockedB}
+          actionLabel={c.bBlockedA}
+          className="shrink-0"
+          onAction={() => a.go('fix')}
+        />
       ) : null}
     </>
   );
