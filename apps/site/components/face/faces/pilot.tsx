@@ -1,5 +1,4 @@
 import { SUB_DIAL } from '../art';
-import '../face-art.css';
 import { alpha, sectorPath, ticks } from '../geometry';
 import { DialLabel, hand, type IDrawProps, L, lmin, MONO, Svg } from '../kit';
 import { minutesSpan } from './analog-dial';

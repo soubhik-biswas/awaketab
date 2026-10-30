@@ -1,5 +1,4 @@
 import type { CSSProperties } from 'react';
-import '../face-art.css';
 import { pad } from '../geometry';
 import { EndLine, type IDrawProps, L, mono } from '../kit';
 

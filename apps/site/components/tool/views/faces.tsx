@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent } from 'react';
 import { RadioGroup } from 'radix-ui';
-import { Face, FACE_COLLECTIONS, FACE_IDS, faceName, isFaceId, type IFaceProps, type TFaceId } from '@/components/face';
+import { Face, FACE_COLLECTIONS, FACE_IDS, faceName, isFaceId, type TFaceId } from '@/components/face';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { toolUi, type TFaceCol } from '@/lib/tool/ui';
@@ -17,9 +17,6 @@ const TABS: ReadonlyArray<[TFaceCol, string]> = [
   ['ambient', 'Ambient'],
   ['all', `All ${FACE_IDS.length}`],
 ];
-
-// Gallery previews sit in the shared watch-glass case once the face library offers it.
-const FRAMED = { framed: true } as Partial<IFaceProps>;
 
 function idsOf(col: TFaceCol): readonly TFaceId[] {
   return col === 'all' ? FACE_IDS : FACE_COLLECTIONS[col];
@@ -99,7 +96,7 @@ export default function FacesView() {
                   )}
                 >
                   <Face
-                    {...FRAMED}
+                    framed
                     face={id}
                     theme={theme}
                     state="running"

@@ -1,111 +1,65 @@
 import type { CSSProperties } from 'react';
 import { CARD_SHADOW, WHITE } from '../art';
-import '../face-art.css';
 import { EndLine, type IDrawProps, Kicker } from '../kit';
 
-type THands = readonly [number, number];
-// Each digit is six small clocks (two columns, three rows); 225° on both hands leaves a clock blank.
-const DIGIT: Readonly<Record<string, readonly THands[]>> = {
-  '0': [
-    [90, 180],
-    [270, 180],
-    [0, 180],
-    [0, 180],
-    [0, 90],
-    [0, 270],
+// Each digit is six small clocks (two columns, three rows) whose hands trace its seven segments; 225° on every hand leaves a clock blank.
+const SEG7 = ['abcdef', 'bc', 'abged', 'abgcd', 'fgbc', 'afgcd', 'afgedc', 'abc', 'abcdefg', 'abcdfg'] as const;
+const JOIN: readonly (readonly (readonly [string, number])[])[] = [
+  [
+    ['a', 90],
+    ['f', 180],
   ],
-  '1': [
-    [225, 225],
-    [180, 180],
-    [225, 225],
-    [0, 180],
-    [225, 225],
-    [0, 0],
+  [
+    ['a', 270],
+    ['b', 180],
   ],
-  '2': [
-    [90, 90],
-    [270, 180],
-    [90, 180],
-    [0, 270],
-    [0, 90],
-    [270, 270],
+  [
+    ['f', 0],
+    ['e', 180],
+    ['g', 90],
   ],
-  '3': [
-    [90, 90],
-    [270, 180],
-    [90, 90],
-    [0, 180],
-    [90, 90],
-    [0, 270],
+  [
+    ['b', 0],
+    ['c', 180],
+    ['g', 270],
   ],
-  '4': [
-    [180, 180],
-    [180, 180],
-    [0, 90],
-    [0, 180],
-    [225, 225],
-    [0, 0],
+  [
+    ['e', 0],
+    ['d', 90],
   ],
-  '5': [
-    [90, 180],
-    [270, 270],
-    [0, 90],
-    [270, 180],
-    [90, 90],
-    [0, 270],
+  [
+    ['c', 0],
+    ['d', 270],
   ],
-  '6': [
-    [90, 180],
-    [270, 270],
-    [0, 180],
-    [270, 180],
-    [0, 90],
-    [0, 270],
-  ],
-  '7': [
-    [90, 90],
-    [270, 180],
-    [225, 225],
-    [0, 180],
-    [225, 225],
-    [0, 0],
-  ],
-  '8': [
-    [90, 180],
-    [270, 180],
-    [0, 90],
-    [270, 180],
-    [0, 90],
-    [0, 270],
-  ],
-  '9': [
-    [90, 180],
-    [270, 180],
-    [0, 90],
-    [0, 180],
-    [90, 90],
-    [0, 270],
-  ],
+];
+const BLANK = 225;
+
+export const digitHands = (d: number): readonly (readonly number[])[] => {
+  const segs = SEG7[d] ?? SEG7[0];
+  return JOIN.map((js) => {
+    const on = js.filter(([seg]) => segs.includes(seg)).map(([, deg]) => deg);
+    return on.length === 0 ? [BLANK, BLANK] : on.length === 1 ? [on[0] ?? 0, on[0] ?? 0] : on;
+  });
 };
 const BASE_X = [14, 95, 192, 273];
 const GROUND = {
-  light: 'linear-gradient(180deg, #FFFFFF, #F3F0E9)',
+  light: 'linear-gradient(180deg, #FFFFFF, #F1F1F7)',
   dark: 'linear-gradient(180deg, #131B30, #0A0F1C)',
   oled: '#000000',
 };
 const MINI = {
-  light: 'radial-gradient(circle at 50% 30%, #FFFFFF, #ECE8DF)',
+  light: 'radial-gradient(circle at 50% 30%, #FFFFFF, #E9E9F1)',
   dark: 'radial-gradient(circle at 50% 30%, #1E2844, #10172A)',
   oled: '#05070C',
 };
 
 const handStyle = (deg: number, color: string, opacity: number): CSSProperties => ({
   position: 'absolute',
-  left: 16,
-  top: 0,
-  width: 4,
-  height: 18,
-  borderRadius: 2,
+  left: 15.5,
+  top: 1,
+  width: 5,
+  height: 17,
+  borderRadius: 3,
   background: color,
   opacity,
   transformOrigin: '50% 100%',
@@ -115,10 +69,8 @@ const handStyle = (deg: number, color: string, opacity: number): CSSProperties =
 
 // Twenty-four tiny clocks whose hands swing into place to spell the time left.
 export default function Clocks({ m }: IDrawProps) {
-  const { t, mc1, fill } = m;
-  const heatBar = m.multi
-    ? `linear-gradient(90deg, ${fill.ember}, ${fill.amber} 12%, ${fill.lime} 35%, ${m.lamp} 70%)`
-    : m.accent;
+  const { t, mc1 } = m;
+  const heatBar = m.heat(m.frac);
   const colon = (top: number): CSSProperties => ({
     position: 'absolute',
     left: 176,
@@ -144,10 +96,10 @@ export default function Clocks({ m }: IDrawProps) {
       />
       <Kicker m={m} style={{ position: 'absolute', left: 0, top: 52, width: 360, textAlign: 'center' }} />
       {m.four.map((d, di) =>
-        (DIGIT[String(d)] ?? DIGIT['0'] ?? []).map(([h1, h2], ci) => {
-          const blank = h1 === 225 && h2 === 225;
+        digitHands(d).map((hands, ci) => {
+          const blank = hands.every((deg) => deg === BLANK);
           const hc = blank ? t.ink2 : di < 2 ? t.ink : mc1;
-          const op = blank ? 0.28 : 1;
+          const op = blank ? 0.16 : 1;
           return (
             <div
               key={`${di}-${ci}`}
@@ -162,8 +114,14 @@ export default function Clocks({ m }: IDrawProps) {
                 boxShadow: `inset 0 1px 0 ${WHITE(0.06)}, 0 0 0 1px ${t.line}`,
               }}
             >
-              <span style={handStyle(h1, hc, op)} />
-              <span style={handStyle(h2, hc, op)} />
+              <span style={handStyle(hands[0] ?? BLANK, hc, op)} />
+              <span style={handStyle(hands[1] ?? BLANK, hc, op)} />
+              <span
+                style={{
+                  ...handStyle(hands[2] ?? BLANK, hc, op),
+                  display: hands[2] === undefined ? 'none' : undefined,
+                }}
+              />
               <span
                 style={{
                   position: 'absolute',

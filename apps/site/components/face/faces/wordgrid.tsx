@@ -47,7 +47,7 @@ const NUMW: Readonly<Record<number, string>> = {
   50: 'FIFTY',
 };
 const GROUND = {
-  light: 'linear-gradient(160deg, #FFFFFF, #F3F0E9)',
+  light: 'linear-gradient(160deg, #FFFFFF, #F1F1F7)',
   dark: 'linear-gradient(160deg, #131C33, #0A0F1C)',
   oled: '#000000',
 };
