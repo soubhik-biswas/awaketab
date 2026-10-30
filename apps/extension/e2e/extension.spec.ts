@@ -42,8 +42,8 @@ test('popup opens fast in the Ready state with the web copy', async ({ context, 
   await expect(pill(page)).toHaveText('Ready');
   await expect(page.locator('[data-pill]')).toHaveAttribute('data-lock', 'idle');
   // The lamp CTA names the default length (∞, "Until I stop") before anything starts (DESIGN.md §4).
-  await expect(page.locator('[data-toggle]')).toHaveText('Start · ∞');
-  await expect(page.locator('[data-toggle]')).toHaveAttribute('aria-label', 'Start, until I stop');
+  await expect(page.locator('[data-toggle]')).toHaveText('Keep awake · ∞');
+  await expect(page.locator('[data-toggle]')).toHaveAttribute('aria-label', 'Keep awake until I stop');
   await expect(page.locator('[data-chips] [data-preset]')).toHaveCount(7);
   await expect(page.locator('[data-preset="pinf"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('[data-caption]')).toHaveText('until you stop');
@@ -357,7 +357,7 @@ test('install opens the welcome page once, and it has no axe violations', async 
   await expect(page.locator('[data-pin]')).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'I’ve pinned it' }).click();
   await expect(page.locator('[data-kicker]')).toHaveText('Installed · step 2 of 2');
-  await expect(page.locator('h1')).toHaveText('Now click AwakeTab in your toolbar and press Start.');
+  await expect(page.locator('h1')).toHaveText('Now click AwakeTab in your toolbar and press Keep awake.');
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
 
@@ -413,7 +413,7 @@ test('options: telemetry is off by default and free users see honest Pro gates',
     )
     .toBe('p45');
   const popup = await openPopup(context, extensionId);
-  await expect(popup.locator('[data-toggle]')).toHaveText('Start · 45 min');
+  await expect(popup.locator('[data-toggle]')).toHaveText('Keep awake · 45 min');
 });
 
 test('options: the language row stores settings.locale and switches the page in place', async ({

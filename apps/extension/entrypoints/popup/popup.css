@@ -6,6 +6,7 @@
   --at-type-ext-digits-long: 700 1.625rem/1 var(--at-font);
   --at-type-ext-until: 700 1.75rem/2rem var(--at-font);
   --at-type-ext-card-title: 600 0.8125rem/1.45 var(--at-font);
+  --at-type-ext-link: 600 0.875rem/1.25rem var(--at-font);
   --at-ext-popup: 360px;
   --at-ext-popup-h: 600px;
   --at-ext-ring: 72px;
@@ -68,7 +69,8 @@ body {
 .pp-word {
   flex-grow: 1;
   font: var(--at-type-ext-word);
-  letter-spacing: var(--at-trk-wordmark);
+  font-stretch: var(--at-stretch-display);
+  letter-spacing: var(--at-trk-ext-word);
 }
 
 .pp-pill {
@@ -339,7 +341,7 @@ body {
   border: 0;
   border-radius: var(--at-r-sm);
   background: transparent;
-  font: var(--at-type-ext-btn-sm);
+  font: var(--at-type-ext-link);
   color: var(--at-link);
   text-decoration: none;
   white-space: nowrap;
