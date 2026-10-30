@@ -31,7 +31,7 @@ const RULES = [
 ];
 
 const BANDS: readonly { id: TFaceTheme; name: string; hex: string; ground: string; line: string }[] = [
-  { id: 'light', name: 'Light', hex: '#F6F4EF', ground: 'bg-background', line: 'border-border' },
+  { id: 'light', name: 'Light', hex: '#F5F5FA', ground: 'bg-background', line: 'border-border' },
   { id: 'dark', name: 'Dark', hex: '#070B16', ground: 'bg-card', line: 'border-border' },
   { id: 'oled', name: 'OLED', hex: '#000000', ground: 'bg-background', line: 'border-surface-3' },
 ];
@@ -54,7 +54,7 @@ const TOTALS = [
 ] as const;
 
 // Face studio's accent swatches on the boards; empty keeps the lamp.
-const LAMPS = ['', '#3BE47F', '#FFC53D', '#7CBBFF', '#FF6B2C'] as const;
+const LAMPS = ['', '#3DF58E', '#FFC53D', '#7CBBFF', '#9F7BFF'] as const;
 const SIZES = [96, 120, 150, 169, 200, 240, 250, 296, 380, 440];
 // The board's rules text, between the two ink tokens.
 const RULE_INK = '#C9D1E0';

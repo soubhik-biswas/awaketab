@@ -935,7 +935,7 @@ Accepted on 2026-09-28. Spec: `05-frontend-spec.md` §3.33 (Faces) and §5, `DES
 
 ### Solar Green clock faces (30 Oct 2026)
 
-Accepted on 2026-10-30. Spec: `docs/redesign/solar-green/HANDOFF.md` §7 and the faces board (`prototype/Face.dc.html`, `S14-Faces.dc.html`). Replaces the two face sections above wherever they disagree: the twelve Clear Night faces, their pack (`src/tool/packs/faces/`), the face switch and the gallery are gone.
+Accepted on 2026-10-30. Spec: `docs/redesign/volt/HANDOFF.md` §7 (Volt, 31 Oct 2026, grows the set to 49) and the faces board (`prototype/Face.dc.html`, `S14-Faces.dc.html`). Replaces the two face sections above wherever they disagree: the twelve Clear Night faces, their pack (`src/tool/packs/faces/`), the face switch and the gallery are gone.
 
 | Identifier | Decision |
 |---|---|

@@ -35,10 +35,10 @@ const INK: Record<Exclude<TMarkTone, 'auto'>, string> = {
   'mono-white': '#FFFFFF',
 };
 const LAMPS_DARK: Record<TMarkLamp, string> = {
-  awake: '#3BE47F',
+  awake: '#3DF58E',
   paused: '#FFC53D',
   blocked: '#FF6B81',
-  ended: '#C1B1FE',
+  ended: '#C9D1E0',
   info: '#7CBBFF',
   off: '#8E99AE',
 };
@@ -46,7 +46,7 @@ const LAMPS_LIGHT: Record<TMarkLamp, string> = {
   awake: '#117A3B',
   paused: '#8A5A00',
   blocked: '#C21D3E',
-  ended: '#6D4AD0',
+  ended: '#4B5165',
   info: '#1C64B8',
   off: '#626777',
 };
@@ -122,7 +122,7 @@ export function Mark({
       {svg}
       <span
         style={{ fontSize: Math.round(size * (stacked ? 0.42 : 0.62)) }}
-        className="leading-none font-extrabold tracking-[-0.035em] whitespace-nowrap"
+        className="font-display leading-none font-extrabold tracking-[-0.02em] whitespace-nowrap [font-stretch:112%]"
       >
         Awake<span className="font-medium">Tab</span>
       </span>
@@ -164,7 +164,7 @@ export function AppMark({ state = 'idle', size = 32, wordSize = 21, word = true,
       {word ? (
         <span
           style={{ fontSize: wordSize }}
-          className="font-sans font-extrabold tracking-[-0.03em] whitespace-nowrap text-foreground"
+          className="font-display font-extrabold tracking-[-0.02em] whitespace-nowrap text-foreground [font-stretch:112%]"
         >
           AwakeTab
         </span>

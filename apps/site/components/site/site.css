@@ -1,34 +1,34 @@
 :root {
   --site-glow-a: rgba(17, 122, 59, 0.1);
-  --site-glow-b: rgba(185, 61, 11, 0.08);
+  --site-glow-b: rgba(102, 51, 245, 0.08);
   --site-lift: rgba(11, 16, 32, 0.1);
-  --site-act-glow: rgba(185, 61, 11, 0.25);
+  --site-act-glow: rgba(102, 51, 245, 0.25);
   --site-lamp-glow: rgba(17, 122, 59, 0.1);
-  --site-pro-glow: rgba(185, 61, 11, 0.12);
+  --site-pro-glow: rgba(102, 51, 245, 0.12);
   --site-art: var(--secondary);
   --site-well: var(--background);
   --site-night: #070b16;
   --site-night-ink: #eef2fa;
   --site-night-muted: #a9b3c7;
   --site-night-line: #26314a;
-  --site-night-lamp: #3be47f;
+  --site-night-lamp: #3df58e;
   --site-cta: #0b1020;
-  --site-cta-lamp: rgba(59, 228, 127, 0.25);
-  --site-cta-act: rgba(255, 107, 44, 0.25);
-  --site-cta-button: #ff6b2c;
+  --site-cta-lamp: rgba(61, 245, 142, 0.25);
+  --site-cta-act: rgba(159, 123, 255, 0.25);
+  --site-cta-button: #9f7bff;
   --site-cta-button-ink: #0b0f1a;
-  --site-cta-button-glow: rgba(255, 107, 44, 0.4);
+  --site-cta-button-glow: rgba(159, 123, 255, 0.4);
   --site-consent-shadow: rgba(0, 0, 0, 0.3);
 }
 
 .dark,
 .oled {
-  --site-glow-a: rgba(59, 228, 127, 0.2);
-  --site-glow-b: rgba(255, 107, 44, 0.14);
+  --site-glow-a: rgba(61, 245, 142, 0.2);
+  --site-glow-b: rgba(159, 123, 255, 0.14);
   --site-lift: rgba(0, 0, 0, 0.45);
-  --site-act-glow: rgba(255, 107, 44, 0.35);
-  --site-lamp-glow: rgba(59, 228, 127, 0.12);
-  --site-pro-glow: rgba(255, 107, 44, 0.18);
+  --site-act-glow: rgba(159, 123, 255, 0.35);
+  --site-lamp-glow: rgba(61, 245, 142, 0.12);
+  --site-pro-glow: rgba(159, 123, 255, 0.18);
   --site-art: #0a0f1e;
   --site-well: #070b16;
 }
