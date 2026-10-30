@@ -8,9 +8,7 @@ import { polarDefines } from './scripts/polar-server.mjs';
 
 // Libraries each feature pack owns; they never enter the tool's own chunks.
 const PACK_LIBS = [
-  [/\/node_modules\/.*@pqina/u, 'faces'],
   [/\/node_modules\/.*(?:embla-carousel|wheel-gestures)/u, 'faces-swipe'],
-  [/\/node_modules\/.*\/(?:number-flow|esm-env)\//u, 'faces-rolling'],
   [
     /\/node_modules\/(?:.*\/(?:tone|standardized-audio-context|automation-events|tslib)|@babel\/runtime)\//u,
     'sound-tone',
@@ -115,15 +113,17 @@ export default defineConfig({
           // 40 KB total budget than the code itself. It still loads only on first use, never on the boot path.
           manualChunks(id) {
             // Feature packs (src/tool/packs/<name>/ and their libraries) load on first use under their own budgets.
-            // Each clock face is its own chunk (pack-faces-<id>), so picking one never downloads the others.
-            const face = /\/src\/tool\/packs\/faces\/(flip|rolling|analog|rings|word|nixie|lcd|matrix|swipe)[.-]/u.exec(
-              id,
-            )?.[1];
+            // Ring draws with the tool; the other faces load in five small groups (pack-faces-<group>), with the
+            // shared drawing kit, the stage bridge, the picker grid and the swipe each in a chunk of their own.
+            const face =
+              /\/src\/tool\/face\/(?:faces\/)?(classic|retro|dials|orbits|words|kit|stage|sheet|swipe)\./u.exec(
+                id,
+              )?.[1];
             if (face) return `pack-faces-${face}`;
             // The sound pack's synth engine and track player load when something first plays, not with its panel.
             const snd = /\/src\/tool\/packs\/sound\/(engine|player)\./u.exec(id)?.[1];
             if (snd) return snd === 'engine' ? 'pack-sound-tone' : 'pack-sound-howler';
-            const own = /\/src\/tool\/packs\/(faces|sound|notes|themes|extras|customize)\//u.exec(id)?.[1];
+            const own = /\/src\/tool\/packs\/(sound|notes|themes|extras|customize)\//u.exec(id)?.[1];
             if (own) return `pack-${own}`;
             const lib = PACK_LIBS.find(([re]) => re.test(id));
             if (lib) return `pack-${lib[1]}`;

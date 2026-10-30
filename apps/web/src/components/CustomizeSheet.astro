@@ -1,18 +1,15 @@
 ---
-import type { TFace } from '@awaketab/core';
 import { createT } from '../i18n/load';
 import type { TLocale } from '../i18n/locales';
 import Icon from './icons/Icon.astro';
 import Sheet from './ui/Sheet.astro';
-import { FACE_GROUPS } from '../tool/packs/faces/order';
 import { TRACKS } from '../tool/packs/sound/tracks';
 
 interface Props {
   locale: TLocale;
-  faceIcon: Record<TFace, string>;
 }
 
-const { locale, faceIcon } = Astro.props;
+const { locale } = Astro.props;
 const t = createT(locale);
 const TABS = [
   ['face', 'watch'],
@@ -78,48 +75,9 @@ const pro = t('pro.badge');
   </div>
 
   <div class="at-cz-panes">
-    <section class="at-cz-pane at-fg" id="cz-pane-face" role="tabpanel" aria-labelledby="cz-tab-face" data-cz-pane="face">
+    <section class="at-cz-pane" id="cz-pane-face" role="tabpanel" aria-labelledby="cz-tab-face" data-cz-pane="face">
       <p class="at-caption at-cz-lead">{t('tool.gallery.lead')}</p>
-      {
-        FACE_GROUPS.map(([g, ids]) => (
-          <section class="at-fg-group" aria-labelledby={`fg-${g}`}>
-            <h3 class="at-kicker" id={`fg-${g}`}>{t(`tool.gallery.${g}`)}</h3>
-            <ul class="at-fg-list">
-              {ids.map((f) => (
-                <li class="at-fg-card">
-                  <button class="at-fg-pick" type="button" data-pick={f} aria-pressed={f === 'ring' ? 'true' : 'false'}>
-                    <span class="at-fg-thumb" data-thumb={f} aria-hidden="true">
-                      <span class="at-fg-stage">
-                        <svg class="at-fg-ph" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <path d={faceIcon[f]} />
-                        </svg>
-                      </span>
-                    </span>
-                    <span class="at-fg-name">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d={faceIcon[f]} />
-                      </svg>
-                      <span>{t(`tool.face.${f}`)}</span>
-                    </span>
-                    <span class="at-fg-on">{t('tool.gallery.current')}</span>
-                  </button>
-                  {f === 'analog' && (
-                    <div class="at-seg at-sseg at-fg-style" role="radiogroup" aria-label={t('settings.face.analogStyle')} style="--at-seg-n:2">
-                      <span class="at-seg-ind" aria-hidden="true"></span>
-                      {(['minimal', 'luxe'] as const).map((v) => (
-                        <label class="at-seg-item">
-                          <input class="sr-only" type="radio" name="analogStyle" value={v} checked={v === 'minimal'} />
-                          {t(`settings.face.analog.${v}`)}
-                        </label>
-                      ))}
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))
-      }
+      <div data-face-grid></div>
     </section>
 
     <section class="at-cz-pane" id="cz-pane-look" role="tabpanel" aria-labelledby="cz-tab-look" data-cz-pane="look" hidden>

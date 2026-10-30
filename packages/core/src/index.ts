@@ -25,6 +25,7 @@ export {
   localStorageAdapter,
   memoryAdapter,
   migrate,
+  migrateFace,
   readStats,
 } from './storage.js';
 export { createTabProtocol } from './tabs.js';
@@ -52,4 +53,4 @@ export type {
   TPalette,
   TPattern,
 } from './types.js';
-export { DEFAULT_META, DEFAULT_ONBOARDING, DEFAULT_SETTINGS, DEFAULT_STATS, PRESET_MS } from './types.js';
+export { DEFAULT_META, DEFAULT_ONBOARDING, DEFAULT_SETTINGS, DEFAULT_STATS, FACE_IDS, PRESET_MS } from './types.js';
