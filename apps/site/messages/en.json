@@ -3636,6 +3636,8 @@
     },
     "embedPage": {
       "eyebrow": "Website widget",
+      "h1": "Keep your readers' screens awake",
+      "lead": "Add a Cook Mode button that keeps your readers' screens awake: one script tag, an honest status and no third-party requests. Free with a credit link.",
       "builder": "Build your widget",
       "builderSub": "Pick how it looks. The demo and the snippet change as you go.",
       "demo": "Live demo",
@@ -3693,7 +3695,8 @@
         "done": "{name} is done",
         "default": "{minutes}-minute timer",
         "quick": "{minutes} min",
-        "left": "{time} left"
+        "left": "{time} left",
+        "finished": "Done"
       }
     }
   }
