@@ -164,7 +164,7 @@ export function AppMark({ state = 'idle', size = 32, wordSize = 21, word = true,
       {word ? (
         <span
           style={{ fontSize: wordSize }}
-          className="font-display font-extrabold tracking-[-0.02em] whitespace-nowrap text-foreground [font-stretch:112%]"
+          className="font-display font-extrabold tracking-[-0.03em] whitespace-nowrap text-foreground [font-stretch:112%]"
         >
           AwakeTab
         </span>
