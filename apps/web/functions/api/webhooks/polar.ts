@@ -12,6 +12,8 @@ import {
   type IPolarIds,
 } from '../../_lib/links';
 import { verifyStandardWebhook } from '../../_lib/webhook';
+import { billingEmail, portalUrl, type IBillingData } from '../../_lib/email/billing';
+import { sendEmail } from '../../_lib/email/send';
 
 interface IPolarData {
   id?: string;
@@ -308,5 +310,8 @@ export const onRequestPost: PagesFunction<IEnv> = async (context) => {
 
   // Mark the event only after it was handled: if a write above throws, Polar retries and the retry must run.
   await kv.put(`wh:${eventId}`, JSON.stringify({ at: Date.now() }), { expirationTtl: 30 * 86_400 });
+  // After the event is marked, so a retry never sends the same mail twice; a failed send never fails the hook.
+  const mail = billingEmail(type, data as unknown as IBillingData, portalUrl(env.PUBLIC_POLAR_SERVER));
+  if (mail) context.waitUntil(sendEmail(env, mail).catch(() => undefined));
   return jsonOk({ ok: true });
 };
