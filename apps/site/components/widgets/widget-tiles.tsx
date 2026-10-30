@@ -15,10 +15,8 @@ export function useWidgetLines() {
   const t = useTranslations('surfaces.widgets');
   const line = useSurfaceLine();
   return {
-    small: (v: ISurfaceView) =>
-      v.awake ? (v.until ? t('small', { time: v.until }) : t('smallNoEnd')) : line(v),
-    wide: (v: ISurfaceView) =>
-      v.awake ? (v.until ? t('awakeUntil', { time: v.until }) : t('awakeNoEnd')) : line(v),
+    small: (v: ISurfaceView) => (v.awake ? (v.until ? t('small', { time: v.until }) : t('smallNoEnd')) : line(v)),
+    wide: (v: ISurfaceView) => (v.awake ? (v.until ? t('awakeUntil', { time: v.until }) : t('awakeNoEnd')) : line(v)),
   };
 }
 
@@ -135,15 +133,10 @@ export function WidgetWide({
   const t = useTranslations('surfaces.widgets');
   const lines = useWidgetLines();
   return (
-    <div
-      data-slot="widget-wide"
-      className={cn(TILE, 'col-span-2 flex items-center gap-[14px] px-[18px]', className)}
-    >
+    <div data-slot="widget-wide" className={cn(TILE, 'col-span-2 flex items-center gap-[14px] px-[18px]', className)}>
       <span className="flex flex-1 flex-col gap-1">
         <span className="text-[12px] text-muted-foreground-strong">{label || t('session')}</span>
-        <span className="text-[40px] font-bold tracking-[-0.03em]">
-          {view.indef ? '∞' : digits(view.remain)}
-        </span>
+        <span className="text-[40px] font-bold tracking-[-0.03em]">{view.indef ? '∞' : digits(view.remain)}</span>
         <span className={cn('text-[13px] font-semibold', TONE_TEXT[view.tone])}>{lines.wide(view)}</span>
       </span>
       <span className="flex flex-col gap-2">

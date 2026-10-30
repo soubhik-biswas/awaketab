@@ -79,18 +79,18 @@ describe('mirror', () => {
 
   it('follows the opener and sends +15 to it', () => {
     const sent: unknown[] = [];
-    let listener: ((ev: MessageEvent) => void) | null = null;
+    const hub: { listener: ((ev: MessageEvent) => void) | null } = { listener: null };
     const channel = {
       postMessage: (m: unknown) => sent.push(m),
       addEventListener: (_: string, cb: (ev: MessageEvent) => void) => {
-        listener = cb;
+        hub.listener = cb;
       },
       removeEventListener: () => undefined,
       close: () => undefined,
     } as unknown as BroadcastChannel;
     const mirror = joinMirror(() => undefined, channel);
     expect(mirror.snap()).toBeNull();
-    listener?.({ data: stateMessage('opener', snap()) } as MessageEvent);
+    hub.listener?.({ data: stateMessage('opener', snap()) } as MessageEvent);
     expect(mirror.snap()?.state).toBe('running');
     mirror.send('add', 900_000);
     expect(sent.at(-1)).toMatchObject({ type: 'intent', target: 'opener', action: 'add', ms: 900_000 });
@@ -102,7 +102,11 @@ describe('kiosk', () => {
 
   it('defaults to the board: LED, Midnight, weekdays 8 AM to 6 PM', () => {
     const cfg = parseKioskQuery('', defaults);
-    expect(cfg).toMatchObject({ face: 'led', screen: 'dark', schedule: { days: 'weekdays', from: '08:00', to: '18:00' } });
+    expect(cfg).toMatchObject({
+      face: 'led',
+      screen: 'dark',
+      schedule: { days: 'weekdays', from: '08:00', to: '18:00' },
+    });
   });
 
   it('round-trips its link', () => {
@@ -120,7 +124,13 @@ describe('kiosk', () => {
   });
 
   it('drifts through the four offsets', () => {
-    expect([0, 1, 2, 3, 4].map(driftAt)).toEqual([[0, 0], [6, -4], [-5, 5], [4, 6], [0, 0]]);
+    expect([0, 1, 2, 3, 4].map(driftAt)).toEqual([
+      [0, 0],
+      [6, -4],
+      [-5, 5],
+      [4, 6],
+      [0, 0],
+    ]);
   });
 
   it('accepts only https logos and clean text', () => {
@@ -133,7 +143,13 @@ describe('kiosk', () => {
     const stored: unknown[] = [];
     const token = 'aaa.bbb.ccc';
     const ok = () =>
-      Promise.resolve({ valid: true, plan: 'biz_kiosk_site', features: ['ambient.logo' as const], exp: 9e9, grace: false });
+      Promise.resolve({
+        valid: true,
+        plan: 'biz_kiosk_site',
+        features: ['ambient.logo' as const],
+        exp: 9e9,
+        grace: false,
+      });
     expect(await applyKioskHash(`#lic=${token}`, ok, (r) => stored.push(r))).toBe('stored');
     const pro = () => Promise.resolve({ valid: true, plan: 'pro_yearly', features: [], exp: 9e9, grace: false });
     expect(await applyKioskHash(`#lic=${token}`, pro, (r) => stored.push(r))).toBe('invalid');

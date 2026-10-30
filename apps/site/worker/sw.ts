@@ -37,7 +37,10 @@ interface ISwScope {
     matchAll(o: { type: 'window'; includeUncontrolled: boolean }): Promise<IWindowClient[]>;
     openWindow(url: string): Promise<unknown>;
   };
-  addEventListener(type: string, cb: (e: IWidgetEvent & { data?: unknown; notification?: { close(): void } }) => void): void;
+  addEventListener(
+    type: string,
+    cb: (e: IWidgetEvent & { data?: unknown; notification?: { close(): void } }) => void,
+  ): void;
 }
 
 declare const self: ISwScope;
@@ -70,14 +73,18 @@ const serwist = new Serwist({
   clientsClaim: true,
   navigationPreload: true,
   runtimeCaching: [
-    { matcher: ({ url }) => url.pathname.startsWith('/api/') || url.pathname.startsWith('/embed'), handler: new NetworkOnly() },
+    {
+      matcher: ({ url }) => url.pathname.startsWith('/api/') || url.pathname.startsWith('/embed'),
+      handler: new NetworkOnly(),
+    },
     ...defaultCache,
   ],
   fallbacks: {
     entries: [
       {
         url: '/offline',
-        matcher: ({ request }) => request.destination === 'document' && localeOf(new URL(request.url).pathname) === 'en',
+        matcher: ({ request }) =>
+          request.destination === 'document' && localeOf(new URL(request.url).pathname) === 'en',
       },
       ...LOCALES.map((l) => ({
         url: offlineOf(l),

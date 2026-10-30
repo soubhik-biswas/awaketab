@@ -117,7 +117,12 @@ function UnlockPanel({ onBack, onLeave }: { onBack: () => void; onLeave: () => v
         </strong>
         <span className="text-[14px] leading-[1.5] text-muted-foreground-strong">{t('unlockedBody')}</span>
         <span className="flex gap-2">
-          <Button ref={first} type="button" className="h-11 rounded-[12px] border-0 px-4 text-[14px] font-bold" onClick={onBack}>
+          <Button
+            ref={first}
+            type="button"
+            className="h-11 rounded-[12px] border-0 px-4 text-[14px] font-bold"
+            onClick={onBack}
+          >
             {t('back')}
           </Button>
           <Button

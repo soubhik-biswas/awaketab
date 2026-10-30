@@ -138,10 +138,7 @@ export interface IMirror {
 }
 
 // The popup's side: the freshest opener that is keeping a session, or nothing once it has gone quiet.
-export function joinMirror(
-  onChange: () => void,
-  given?: BroadcastChannel,
-): IMirror {
+export function joinMirror(onChange: () => void, given?: BroadcastChannel): IMirror {
   const channel = given ?? openChannel();
   const tabId = newId();
   const peers = new Map<string, TMirrorSnap & { tabId: string; ts: number; heard: number }>();

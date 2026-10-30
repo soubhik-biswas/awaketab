@@ -135,7 +135,8 @@ export function embedLoader(win: Window, current: HTMLScriptElement | null, cfg:
       } else if (m.type === 'awaketab:ready') {
         rec.ready = true;
         for (const q of rec.queue.splice(0)) post(rec, q);
-        for (const cb of listeners.ready) cb({ frame: rec.el, version: typeof m.version === 'string' ? m.version : '' });
+        for (const cb of listeners.ready)
+          cb({ frame: rec.el, version: typeof m.version === 'string' ? m.version : '' });
       } else if (m.type === 'awaketab:state' && typeof m.lock === 'string' && typeof m.status === 'string') {
         const endsAt = typeof m.endsAt === 'number' && Number.isFinite(m.endsAt) ? m.endsAt : null;
         for (const cb of listeners.state)

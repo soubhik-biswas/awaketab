@@ -4,16 +4,7 @@ import { isAwake, isLive, remainSec, type IWakeSnapshot, type TWakeState } from 
 
 export type TSurfaceTone = 'lamp' | 'warning' | 'info' | 'destructive' | 'ended' | 'muted';
 export type TSurfaceLabel =
-  | 'awake'
-  | 'fallback'
-  | 'starting'
-  | 'paused'
-  | 'hidden'
-  | 'needsyou'
-  | 'blocked'
-  | 'unsupported'
-  | 'ended'
-  | 'idle';
+  'awake' | 'fallback' | 'starting' | 'paused' | 'hidden' | 'needsyou' | 'blocked' | 'unsupported' | 'ended' | 'idle';
 
 export interface ISurfaceView {
   wake: TWakeState;

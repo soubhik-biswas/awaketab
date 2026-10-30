@@ -145,7 +145,9 @@ export function PipLauncher({ className, style, label, hideButton = false }: IPi
           {label ?? t('open')}
         </Button>
       )}
-      {open?.kind === 'document' ? createPortal(<FloatingClock win={open.win} onClose={close} />, open.win.document.body) : null}
+      {open?.kind === 'document'
+        ? createPortal(<FloatingClock win={open.win} onClose={close} />, open.win.document.body)
+        : null}
     </>
   );
 }

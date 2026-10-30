@@ -44,7 +44,7 @@ function wallToday(wall: string, now: number): number {
 function previewView(schedule: IKioskSchedule | null, now: number): ISurfaceView {
   const w = kioskWindow(schedule, now);
   const length = schedule
-    ? (((wallToday(schedule.to, now) - wallToday(schedule.from, now)) / 1000 + 86_400) % 86_400 || 86_400)
+    ? ((wallToday(schedule.to, now) - wallToday(schedule.from, now)) / 1000 + 86_400) % 86_400 || 86_400
     : 0;
   const remain = w.inside && w.end !== null ? Math.ceil((w.end - now) / 1000) : length;
   return {
@@ -211,7 +211,11 @@ export function KioskPage() {
               {t('shift')}
             </Button>
           </div>
-          <Button type="button" className="h-11 self-start rounded-[12px] border-0 px-4 text-[14px] font-bold" onClick={start}>
+          <Button
+            type="button"
+            className="h-11 self-start rounded-[12px] border-0 px-4 text-[14px] font-bold"
+            onClick={start}
+          >
             {t('start')}
           </Button>
         </div>

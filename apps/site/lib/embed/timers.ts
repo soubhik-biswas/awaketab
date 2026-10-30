@@ -8,7 +8,6 @@ export interface ICookTimer {
 
 export const COOK_MAX_TIMERS = 3;
 export const COOK_QUICK_MIN = [5, 10, 15, 30, 60] as const;
-export const COOK_FLASH_MS = 3000;
 export const EMBED_SETTINGS_KEY = 'at.v1.embed.settings';
 
 type TStore = Pick<Storage, 'getItem' | 'setItem'>;

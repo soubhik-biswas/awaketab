@@ -8,7 +8,14 @@ import { addTimer, settleTimers } from './timers';
 describe('embed protocol', () => {
   it('validates the iframe query', () => {
     const p = parseEmbedQuery('?mode=clock&theme=oled&lang=de&size=full&preset=p60&host=example.com');
-    expect(p).toMatchObject({ mode: 'clock', theme: 'oled', lang: 'de', size: 'full', preset: 'p60', host: 'example.com' });
+    expect(p).toMatchObject({
+      mode: 'clock',
+      theme: 'oled',
+      lang: 'de',
+      size: 'full',
+      preset: 'p60',
+      host: 'example.com',
+    });
     expect(parseEmbedQuery('?mode=evil&host=bad host')).toMatchObject({ mode: 'cook', host: null });
   });
 
@@ -19,7 +26,10 @@ describe('embed protocol', () => {
 
   it('drops malformed page commands', () => {
     expect(parsePageMessage({ type: 'awaketab:start', ms: 10 })).toBeNull();
-    expect(parsePageMessage({ type: 'awaketab:start', until: '18:30' })).toEqual({ type: 'awaketab:start', until: '18:30' });
+    expect(parsePageMessage({ type: 'awaketab:start', until: '18:30' })).toEqual({
+      type: 'awaketab:start',
+      until: '18:30',
+    });
     expect(parsePageMessage({ type: 'awaketab:theme', theme: 'pink' })).toBeNull();
   });
 
@@ -73,7 +83,11 @@ describe('embed loader', () => {
     document.body.innerHTML = '<p><script data-mode="clock" data-size="full" data-lang="de"></script></p>';
     const tag = document.querySelector('script') as HTMLScriptElement;
     Object.defineProperty(tag, 'src', { value: 'https://awaketab.com/embed.js' });
-    embedLoader(window, tag, loaderConfig({ en: 'Keep screen awake', de: 'Bildschirm wach halten' }, { en: 'Keep awake by AwakeTab' }));
+    embedLoader(
+      window,
+      tag,
+      loaderConfig({ en: 'Keep screen awake', de: 'Bildschirm wach halten' }, { en: 'Keep awake by AwakeTab' }),
+    );
     const frame = document.querySelector('iframe');
     expect(frame?.src).toContain('https://awaketab.com/de/embed/cook?mode=clock');
     expect(frame?.getAttribute('allow')).toBe('screen-wake-lock');

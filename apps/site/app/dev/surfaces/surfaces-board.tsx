@@ -97,7 +97,11 @@ const EMBED_STATES: Array<[string, Partial<IEmbedWidgetProps> & Pick<IEmbedWidge
   ],
   [
     'Needs a tap',
-    { lock: 'unsupported', action: 'start', notice: { tone: 'lamp', text: 'Tap Start to keep the screen awake.', fix: false } },
+    {
+      lock: 'unsupported',
+      action: 'start',
+      notice: { tone: 'lamp', text: 'Tap Start to keep the screen awake.', fix: false },
+    },
   ],
   ['Narrow frame', { lock: 'held', action: 'stop', digits: '38:12', muted: false, long: true }],
 ];
@@ -126,7 +130,13 @@ function EmbedEdges({ now }: { now: number }) {
         muted={false}
         hint="Tap the timer to pause"
         timers={
-          <KitchenTimers timers={timers} now={now} format={formatClock} onAdd={() => undefined} onRemove={() => undefined} />
+          <KitchenTimers
+            timers={timers}
+            now={now}
+            format={formatClock}
+            onAdd={() => undefined}
+            onRemove={() => undefined}
+          />
         }
       />
       <div className="grid gap-6 lg:grid-cols-2">
@@ -207,8 +217,8 @@ export function SurfacesBoard() {
             )}
           </div>
           <Note>
-            The board drawing above; the real button below opens Document Picture-in-Picture (or the /pip popup) on
-            this machine.
+            The board drawing above; the real button below opens Document Picture-in-Picture (or the /pip popup) on this
+            machine.
           </Note>
           <PipLauncher className="self-start" />
           <div className="flex flex-wrap gap-4">

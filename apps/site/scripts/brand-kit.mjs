@@ -31,7 +31,8 @@ const RGBA = [
   [/rgba\(255,\s*107,\s*44,/gu, 'rgba(159,123,255,'],
 ];
 
-const WORD_GROUP = /(<g transform="translate\(([\d.]+) ([\d.]+)\) scale\(([\d.]+)\)" fill="[^"]+">)<path d="M18 855 274 145[^"]*"\/><path d="[^"]*"\/><\/g>/u;
+const WORD_GROUP =
+  /(<g transform="translate\(([\d.]+) ([\d.]+)\) scale\(([\d.]+)\)" fill="[^"]+">)<path d="M18 855 274 145[^"]*"\/><path d="[^"]*"\/><\/g>/u;
 
 function recolour(svg, file) {
   let out = svg;
@@ -53,12 +54,21 @@ function rewordmark(svg, file) {
   const base = path.basename(file);
   if (base.startsWith('lockup-horizontal')) {
     const total = Number(m[2]) + width;
-    out = out.replace(/^<svg([^>]*) width="[\d.]+"([^>]*) viewBox="0 0 [\d.]+ /u, `<svg$1 width="${n(total)}"$2 viewBox="0 0 ${n(total)} `);
+    out = out.replace(
+      /^<svg([^>]*) width="[\d.]+"([^>]*) viewBox="0 0 [\d.]+ /u,
+      `<svg$1 width="${n(total)}"$2 viewBox="0 0 ${n(total)} `,
+    );
   } else if (base.startsWith('lockup-stacked')) {
     const total = Math.max(80, width);
     out = out
-      .replace(/^<svg([^>]*) width="[\d.]+"([^>]*) viewBox="0 0 [\d.]+ /u, `<svg$1 width="${n(total)}"$2 viewBox="0 0 ${n(total)} `)
-      .replace(/<g transform="translate\([\d.]+ 0\) scale\(1\.25\)">/u, `<g transform="translate(${n((total - 80) / 2)} 0) scale(1.25)">`);
+      .replace(
+        /^<svg([^>]*) width="[\d.]+"([^>]*) viewBox="0 0 [\d.]+ /u,
+        `<svg$1 width="${n(total)}"$2 viewBox="0 0 ${n(total)} `,
+      )
+      .replace(
+        /<g transform="translate\([\d.]+ 0\) scale\(1\.25\)">/u,
+        `<g transform="translate(${n((total - 80) / 2)} 0) scale(1.25)">`,
+      );
   }
   return out;
 }
@@ -73,14 +83,19 @@ async function svgFiles(dir) {
   return out;
 }
 
-const files = [path.join(PUB, 'favicon.svg'), ...(await svgFiles(path.join(PUB, 'icons'))), ...(await svgFiles(path.join(PUB, 'brand')))];
+const files = [
+  path.join(PUB, 'favicon.svg'),
+  ...(await svgFiles(path.join(PUB, 'icons'))),
+  ...(await svgFiles(path.join(PUB, 'brand'))),
+];
 for (const file of files) {
   const before = await readFile(file, 'utf8');
   const after = rewordmark(recolour(before, file), file);
   if (after !== before) await writeFile(file, after);
 }
 
-const png = (svg, size) => sharp(Buffer.from(svg), { density: 384 }).resize(size, size).png({ compressionLevel: 9 }).toBuffer();
+const png = (svg, size) =>
+  sharp(Buffer.from(svg), { density: 384 }).resize(size, size).png({ compressionLevel: 9 }).toBuffer();
 const appIcon = await readFile(path.join(PUB, 'brand/icons/app-icon.svg'), 'utf8');
 const maskable = await readFile(path.join(PUB, 'brand/icons/app-icon-maskable.svg'), 'utf8');
 // Apple rounds the corners itself, so its icon is the same art full bleed.
