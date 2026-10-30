@@ -1,4 +1,3 @@
-import '../face-art.css';
 import { alpha, f1, P } from '../geometry';
 import { big, column, EndLine, type IDrawProps, Kicker } from '../kit';
 

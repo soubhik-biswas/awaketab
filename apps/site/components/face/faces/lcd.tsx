@@ -1,5 +1,4 @@
 import { BLACK, CARD_SHADOW, LCD_GROUND } from '../art';
-import '../face-art.css';
 import { alpha } from '../geometry';
 import { type IDrawProps, L, MONO, mono } from '../kit';
 

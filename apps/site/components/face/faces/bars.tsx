@@ -1,4 +1,3 @@
-import '../face-art.css';
 import { big, type IDrawProps, L, mono } from '../kit';
 
 const NBR = 30;

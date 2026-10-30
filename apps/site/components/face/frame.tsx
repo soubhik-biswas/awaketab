@@ -1,8 +1,9 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useRef } from 'react';
 import { cn } from 'cn';
 import { CASE, PLATE } from './art';
 import { L, lmin, type TStyle } from './kit';
 import type { TFaceId, TFaceModel, TFaceState } from './model';
+import { useFaceMotion } from './motion';
 import './face.css';
 
 const PLATED: ReadonlySet<TFaceId> = new Set<TFaceId>([
@@ -113,6 +114,8 @@ export function FaceFrame({
   className?: string | undefined;
   children?: ReactNode;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useFaceMotion(ref, m.live, `${m.face}|${m.live}`);
   const root: TStyle = {
     width: m.size,
     height: m.size,
@@ -122,6 +125,7 @@ export function FaceFrame({
   };
   return (
     <div
+      ref={ref}
       className={cn('af', m.theme, m.live && 'af-live', m.still && 'af-still', m.size < 170 && 'af-compact', className)}
       role="timer"
       aria-label={m.aria}

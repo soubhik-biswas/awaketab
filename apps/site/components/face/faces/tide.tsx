@@ -1,5 +1,4 @@
 import { BLACK, NAVY, WHITE } from '../art';
-import '../face-art.css';
 import { alpha } from '../geometry';
 import { big, EndLine, type IDrawProps, L, lmin, MONO } from '../kit';
 
@@ -78,6 +77,7 @@ export default function Tide({ m }: IDrawProps) {
             <span
               key={b.left}
               className="afx-rise"
+              data-delay={b.delay}
               style={{
                 position: 'absolute',
                 left: b.left,
@@ -86,7 +86,6 @@ export default function Tide({ m }: IDrawProps) {
                 height: b.d,
                 borderRadius: '50%',
                 border: `1.5px solid ${accent}`,
-                animationDelay: b.delay ? `${b.delay}s` : undefined,
               }}
             />
           ))}

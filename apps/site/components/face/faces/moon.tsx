@@ -1,6 +1,5 @@
 import { useId } from 'react';
 import { BLACK, NAVY, SNOW, WHITE } from '../art';
-import '../face-art.css';
 import { dash } from '../geometry';
 import { type IDrawProps, L, lmin, MONO, Stars, type TStar, Svg } from '../kit';
 import type { TFaceModel, TFaceState } from '../model';

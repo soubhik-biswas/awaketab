@@ -1,4 +1,3 @@
-import '../face-art.css';
 import { alpha, arc, dash, f1, P } from '../geometry';
 import { big, column, EndLine, type IDrawProps, Kicker, Stars, type TStar, Svg, sweep } from '../kit';
 

@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import { CARD_SHADOW } from '../art';
-import '../face-art.css';
 import { alpha } from '../geometry';
 import { big, type IDrawProps, Kicker, L, mono } from '../kit';
 

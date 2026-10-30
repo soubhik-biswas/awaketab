@@ -1,4 +1,3 @@
-import '../face-art.css';
 import { column, EndLine, type IDrawProps, Kicker } from '../kit';
 
 const NS = 30;

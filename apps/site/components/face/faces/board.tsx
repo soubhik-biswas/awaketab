@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import { BLACK, CARD_SHADOW, SNOW } from '../art';
-import '../face-art.css';
 import { type IDrawProps, L, lmin, MONO } from '../kit';
 import type { TFaceModel, TFaceState } from '../model';
 

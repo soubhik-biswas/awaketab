@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import '../face-art.css';
 import { alpha, f1, P, sectorPath, ticks } from '../geometry';
 import { hand, type IDrawProps, Svg } from '../kit';
 import type { TFaceModel } from '../model';
