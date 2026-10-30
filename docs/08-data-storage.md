@@ -217,6 +217,15 @@ interface ICheckoutFlow { plan: 'pro_yearly' | 'pro_lifetime'; email: string } /
 
 All three are read defensively (damage reads as signed out, the default look or a fresh flow). The email stays on the device: sign-in proves the address once and nothing syncs yet, so no server keeps an account; Sign out and Delete account remove `at.v1.account`. `at.v1.studio` applies only while the licence has Pro; without it the face keeps the default green. `at.v1.checkout` is cleared when the checkout activates Pro, and its email is passed to Polar's checkout as `customer_email` and nowhere else. Account → Export my data writes every `at.v1.*` localStorage key except `at.v1.license` to a JSON file.
 
+### 2.9b `at.v1.presets` and `at.v1.history` (Next.js tool, 30 October 2026)
+
+```ts
+interface IPresets { v: 1; items: Array<{ id: string; label: string; icon: 'presentation' | 'chef' | 'reading' | 'coffee' | 'infinity' | 'night' | 'timer'; totalSec: number; face: TFace; chime: boolean }> } // ≤ 20, saved from the tool; 0 s = no end
+interface IHistory { v: 1; items: Array<{ id: string; label: string; icon: string; face: TFace; startedAt: number; endedAt: number; totalSec: number; awakeSec: number; reason: 'completed' | 'user' }> } // ≤ 200, 365 days, sessions of a minute or more
+```
+
+Both are read defensively (bad entries are dropped) and live only on this device. Settings → Clear history removes `at.v1.history` only. The tool also stores `dimAtNight: boolean` in `at.v1.settings` (additive, default `false`) and records the first-visit welcome as the `welcome` tip in `at.v1.onboarding`.
+
 ### 2.10 `at.v1.embed.settings` (embed widget, M8)
 
 The `/embed/cook` iframe's only persistent key (`11-embed-spec.md` §7, `00-conventions.md` §13.10). It lives in the awaketab.com origin's storage *as partitioned by the embedding site* in current browsers, so one recipe blog's widget never sees another's.

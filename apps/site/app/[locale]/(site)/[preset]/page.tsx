@@ -5,7 +5,7 @@ import { Chips } from '@/components/site/chips';
 import { JsonLd } from '@/components/site/json-ld';
 import { PageHero } from '@/components/site/page-hero';
 import { ToolSlot } from '@/components/site/tool-slot';
-import { PRESET_ROUTES, SITE, type TPresetRoute } from '@/lib/routes';
+import { PRESET_ROUTES, SITE, startHref, type TPresetRoute } from '@/lib/routes';
 import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
 
 const ROUTES: Record<
@@ -142,7 +142,7 @@ export default async function Page({ params }: { params: TParams }) {
           eyebrow={ts('tool.eyebrow')}
           title={`A ${r.job} session`}
           desc={`Trust the pill, not the button. It reads “${tt('pill.held')}” only after the browser confirms the wake lock, and it changes to “${tt('pill.lost')}” the moment you switch away.`}
-          href={`/?preset=${r.preset}`}
+          href={startHref(r.preset, 'standard')}
           label={`Keep awake · ${r.cta}`}
         />
       </Block>
