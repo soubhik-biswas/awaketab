@@ -1,4 +1,4 @@
-import { defineCollection, defineConfig } from '@content-collections/core';
+import { defineCollection, defineConfig, type Meta } from '@content-collections/core';
 import { compileMarkdown } from '@content-collections/markdown';
 import { z } from 'zod';
 import { LOCALES } from './i18n/locales';
@@ -29,7 +29,10 @@ const row = z
     title: z.string().min(1).max(160),
     text: text.optional(),
     value: z.string().max(80).optional(),
-    link: z.object({ label: z.string().max(80), href: z.string() }).strict().optional(),
+    link: z
+      .object({ label: z.string().max(80), href: z.string() })
+      .strict()
+      .optional(),
   })
   .strict();
 
@@ -121,9 +124,7 @@ const blocks = {
   code: z
     .record(
       z.string(),
-      z
-        .object({ lang: z.enum(['js', 'ts', 'html', 'sh', 'text']), text: z.string().min(1).max(2000) })
-        .strict(),
+      z.object({ lang: z.enum(['js', 'ts', 'html', 'sh', 'text']), text: z.string().min(1).max(2000) }).strict(),
     )
     .optional(),
   notes: z.record(z.string(), z.object({ kicker: z.string().max(40), text }).strict()).optional(),
@@ -174,7 +175,7 @@ const verified = page.refine((entry) => entry.lastVerified !== undefined, { mess
 
 const day = (date: Date | undefined): string | undefined => date?.toISOString().slice(0, 10);
 
-type TPageInput = z.output<typeof page> & { _meta: { path: string } };
+type TPageInput = z.output<typeof page> & { _meta: Meta };
 
 async function articleTransform(
   doc: TPageInput,
@@ -185,7 +186,11 @@ async function articleTransform(
   if (locale !== doc.locale) throw new Error(`${kind}/${doc._meta.path}: frontmatter locale does not match its folder`);
   if (locale !== 'en' && doc.translationOf !== enSlug)
     throw new Error(`${kind}/${doc._meta.path}: translationOf must be "${enSlug}"`);
-  const html = await compileMarkdown(context, { ...doc, content: pipeTables(doc.content) }, { allowDangerousHtml: true });
+  const html = await compileMarkdown(
+    context,
+    { ...doc, content: pipeTables(doc.content) },
+    { allowDangerousHtml: true },
+  );
   const { lastVerified, published, updated, ...rest } = doc;
   return {
     ...rest,

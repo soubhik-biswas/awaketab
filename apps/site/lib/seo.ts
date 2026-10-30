@@ -56,13 +56,20 @@ export interface IPageMeta {
 export function pageMetadata(meta: IPageMeta): Metadata {
   const locale = meta.locale ?? 'en';
   const canonical = `${SITE}${meta.path === '/' ? '/' : meta.path}`;
-  const alternates = meta.alternates && meta.alternates.length > 0 ? meta.alternates : [{ locale, hreflang: LOCALE_META[locale].hreflang, href: canonical }];
+  const alternates =
+    meta.alternates && meta.alternates.length > 0
+      ? meta.alternates
+      : [{ locale, hreflang: LOCALE_META[locale].hreflang, href: canonical }];
   const english = alternates.find((a) => a.locale === 'en');
   const image = ogImageUrl(meta.og, locale);
   return {
     title: { absolute: meta.title },
     description: meta.description,
-    robots: meta.noindex ? { index: false, follow: true } : meta.article ? { 'max-image-preview': 'large' } : { index: true, follow: true },
+    robots: meta.noindex
+      ? { index: false, follow: true }
+      : meta.article
+        ? { 'max-image-preview': 'large' }
+        : { index: true, follow: true },
     alternates: {
       canonical,
       ...(meta.noindex
@@ -158,7 +165,12 @@ export interface IArticleSchemaInput {
 
 const breadcrumbList = (items: Array<{ name: string; url: string }>): TSchemaNode => ({
   '@type': 'BreadcrumbList',
-  itemListElement: items.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, item: item.url })),
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.name,
+    item: item.url,
+  })),
 });
 
 export function articleSchema(input: IArticleSchemaInput): TSchemaNode {
@@ -183,11 +195,20 @@ export function itemListSchema(name: string, items: Array<{ name: string; url: s
     '@type': 'ItemList',
     name,
     numberOfItems: items.length,
-    itemListElement: items.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: item.url })),
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: item.url,
+    })),
   };
 }
 
-export function withItemList(schema: TSchemaNode, name: string, items: Array<{ name: string; url: string }>): TSchemaNode {
+export function withItemList(
+  schema: TSchemaNode,
+  name: string,
+  items: Array<{ name: string; url: string }>,
+): TSchemaNode {
   return { ...schema, '@graph': [...(schema['@graph'] as TSchemaNode[]), itemListSchema(name, items)] };
 }
 

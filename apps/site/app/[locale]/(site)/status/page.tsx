@@ -11,7 +11,14 @@ const down = until !== '';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'site.sys.status' });
-  return systemMetadata(t('title'), t('description'), '/status', t(down ? 'eyebrow' : 'okEyebrow'), t(down ? 'h1' : 'okH1'), down ? 'maintenance' : 'success');
+  return systemMetadata(
+    t('title'),
+    t('description'),
+    '/status',
+    t(down ? 'eyebrow' : 'okEyebrow'),
+    t(down ? 'h1' : 'okH1'),
+    down ? 'maintenance' : 'success',
+  );
 }
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
@@ -24,7 +31,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       lead={down ? t('sys.status.lead', { time: until }) : t('sys.status.okLead')}
       scene={down ? 'maintenance' : 'success'}
       primary={{ href: toolHref(), label: t('cta._') }}
-      secondary={down ? { href: ROUTES.status, label: t('sys.status.see') } : { href: ROUTES.help, label: t('sys.help') }}
+      secondary={
+        down ? { href: ROUTES.status, label: t('sys.status.see') } : { href: ROUTES.help, label: t('sys.help') }
+      }
     />
   );
 }

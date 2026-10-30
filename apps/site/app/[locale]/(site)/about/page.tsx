@@ -8,7 +8,14 @@ import { englishOnly, pageMetadata, personSchema } from '@/lib/seo';
 
 const COFFEE = 'https://buymeacoffee.com/awaketab';
 const LOCK_STATES = ['idle', 'requesting', 'held', 'lost', 'denied', 'unsupported', 'fallback'] as const;
-const JOURNEYS = ['Acquisition', 'Denial', 'Release on hidden tabs', 'Reacquisition', 'Fallback behaviour', 'Multi-tab warnings'];
+const JOURNEYS = [
+  'Acquisition',
+  'Denial',
+  'Release on hidden tabs',
+  'Reacquisition',
+  'Fallback behaviour',
+  'Multi-tab warnings',
+];
 const CREDITS = [
   ['Tone.js', 'https://tonejs.github.io/', 'Focus sounds and end sounds, made live in your browser', 'MIT'],
   ['howler.js', 'https://howlerjs.com/', 'Plays recorded tracks in the lo-fi library', 'MIT'],
@@ -21,15 +28,34 @@ const CREDITS = [
   ['IBM Plex Serif', 'https://github.com/IBM/plex', 'The Analog luxe and Words faces, by IBM', 'SIL OFL 1.1'],
   ['DotGothic16', 'https://github.com/fontworks-fonts/DotGothic16', 'The LED face, by Fontworks', 'SIL OFL 1.1'],
   ['Geist and Geist Mono', 'https://vercel.com/font', 'The interface type, by Vercel', 'SIL OFL 1.1'],
-  ['Space Grotesk', 'https://github.com/floriankarsten/space-grotesk', 'The numerals of the Bold face, by Florian Karsten', 'SIL OFL 1.1'],
+  [
+    'Space Grotesk',
+    'https://github.com/floriankarsten/space-grotesk',
+    'The numerals of the Bold face, by Florian Karsten',
+    'SIL OFL 1.1',
+  ],
   ['Lucide', 'https://lucide.dev/', 'The interface icons, by the Lucide contributors', 'ISC'],
-  ['SVG Logos', 'https://svglogos.dev/', 'The browser and platform logos, by Gil Barbara; logos are trademarks of their owners', 'CC0 1.0'],
+  [
+    'SVG Logos',
+    'https://svglogos.dev/',
+    'The browser and platform logos, by Gil Barbara; logos are trademarks of their owners',
+    'CC0 1.0',
+  ],
 ] as const;
 const PRINCIPLES = [
-  ['A tab is not a system setting', 'A normal browser tab cannot guarantee operation while hidden, prevent system sleep after a laptop lid closes, or override battery-saving policy.'],
-  ['No fake input', 'AwakeTab does not simulate mouse movement or keystrokes and does not claim to keep chat presence indicators available.'],
+  [
+    'A tab is not a system setting',
+    'A normal browser tab cannot guarantee operation while hidden, prevent system sleep after a laptop lid closes, or override battery-saving policy.',
+  ],
+  [
+    'No fake input',
+    'AwakeTab does not simulate mouse movement or keystrokes and does not claim to keep chat presence indicators available.',
+  ],
   ['Nothing else on the awake screen', 'The awake screen carries no advertising or third-party scripts.'],
-  ['Open to inspection', 'The core wake-lock package is developed as open-source software so its state transitions can be inspected independently.'],
+  [
+    'Open to inspection',
+    'The core wake-lock package is developed as open-source software so its state transitions can be inspected independently.',
+  ],
 ] as const;
 
 const link = 'text-link underline underline-offset-2';
@@ -94,16 +120,20 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
           ]}
         />
       </Block>
-      <Block id="ab-test" h="How AwakeTab is checked" sub="Real-device results are pending until the manual run is recorded.">
+      <Block
+        id="ab-test"
+        h="How AwakeTab is checked"
+        sub="Real-device results are pending until the manual run is recorded."
+      >
         <Prose
           items={[
             {
               p: (
                 <>
                   The lock layer is tested as a seven-state transition machine. Browser journeys inject a controllable
-                  Wake Lock implementation and verify acquisition, denial, release on hidden tabs, reacquisition, fallback
-                  behaviour and multi-tab warnings. Device claims are kept in the support matrix and are refreshed
-                  separately from application code.{' '}
+                  Wake Lock implementation and verify acquisition, denial, release on hidden tabs, reacquisition,
+                  fallback behaviour and multi-tab warnings. Device claims are kept in the support matrix and are
+                  refreshed separately from application code.{' '}
                   <a href="/learn/how-we-tested" className={link}>
                     How AwakeTab is checked
                   </a>
@@ -128,7 +158,11 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       <Block id="ab-claims" h="What AwakeTab will not claim">
         <Steps items={PRINCIPLES.map(([title, body]) => ({ title, body }))} />
       </Block>
-      <Block id="credits" h="Credits" sub="AwakeTab stands on open-source work. Each of these loads only with the feature that uses it.">
+      <Block
+        id="credits"
+        h="Credits"
+        sub="AwakeTab stands on open-source work. Each of these loads only with the feature that uses it."
+      >
         <DataTable
           label="Credits"
           cols={['Project', 'Used for', 'Licence']}

@@ -14,7 +14,11 @@ import { SITE } from '@/lib/routes';
 import '../globals.css';
 import '@/components/site/site.css';
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-geist', weight: ['300', '400', '500', '600', '700', '800'] });
+const geist = Geist({
+  subsets: ['latin'],
+  variable: '--font-geist',
+  weight: ['300', '400', '500', '600', '700', '800'],
+});
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono', weight: ['400', '500', '700'] });
 const notoJp = Noto_Sans_JP({ variable: '--font-noto-jp', weight: ['400', '700'], preload: false });
 const notoSc = Noto_Sans_SC({ variable: '--font-noto-sc', weight: ['400', '700'], preload: false });

@@ -8,14 +8,65 @@ import { ToolSlot } from '@/components/site/tool-slot';
 import { PRESET_ROUTES, SITE, type TPresetRoute } from '@/lib/routes';
 import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
 
-const ROUTES: Record<TPresetRoute, { key: string; cta: string; words: string; job: string; preset: string; minutes: number; short: string }> = {
-  '15m': { key: 'p15._', cta: '15 min', words: '15 minutes', job: '15-minute', preset: 'p15', minutes: 15, short: '15 min' },
-  '30m': { key: 'p30._', cta: '30 min', words: '30 minutes', job: '30-minute', preset: 'p30', minutes: 30, short: '30 min' },
-  '45m': { key: 'p45._', cta: '45 min', words: '45 minutes', job: '45-minute', preset: 'p45', minutes: 45, short: '45 min' },
+const ROUTES: Record<
+  TPresetRoute,
+  { key: string; cta: string; words: string; job: string; preset: string; minutes: number; short: string }
+> = {
+  '15m': {
+    key: 'p15._',
+    cta: '15 min',
+    words: '15 minutes',
+    job: '15-minute',
+    preset: 'p15',
+    minutes: 15,
+    short: '15 min',
+  },
+  '30m': {
+    key: 'p30._',
+    cta: '30 min',
+    words: '30 minutes',
+    job: '30-minute',
+    preset: 'p30',
+    minutes: 30,
+    short: '30 min',
+  },
+  '45m': {
+    key: 'p45._',
+    cta: '45 min',
+    words: '45 minutes',
+    job: '45-minute',
+    preset: 'p45',
+    minutes: 45,
+    short: '45 min',
+  },
   '1h': { key: 'p60._', cta: '1 hour', words: '1 hour', job: 'one-hour', preset: 'p60', minutes: 60, short: '1 h' },
-  '2h': { key: 'p120._', cta: '2 hours', words: '2 hours', job: 'two-hour', preset: 'p120', minutes: 120, short: '2 h' },
-  '4h': { key: 'p240._', cta: '4 hours', words: '4 hours', job: 'four-hour', preset: 'p240', minutes: 240, short: '4 h' },
-  '8h': { key: 'eightHour', cta: '8 hours', words: '8 hours', job: 'eight-hour', preset: 'custom', minutes: 480, short: '8 h' },
+  '2h': {
+    key: 'p120._',
+    cta: '2 hours',
+    words: '2 hours',
+    job: 'two-hour',
+    preset: 'p120',
+    minutes: 120,
+    short: '2 h',
+  },
+  '4h': {
+    key: 'p240._',
+    cta: '4 hours',
+    words: '4 hours',
+    job: 'four-hour',
+    preset: 'p240',
+    minutes: 240,
+    short: '4 h',
+  },
+  '8h': {
+    key: 'eightHour',
+    cta: '8 hours',
+    words: '8 hours',
+    job: 'eight-hour',
+    preset: 'custom',
+    minutes: 480,
+    short: '8 h',
+  },
 };
 const GUIDES = [
   ['Keep the screen on during a video call', '/for/video-calls'],
@@ -44,7 +95,12 @@ export async function generateMetadata({ params }: { params: TParams }): Promise
     title: t('title', { label }),
     description: t('description', { label }),
     path: `/${preset}`,
-    og: { kicker: `Keep awake · ${r.cta}`, title: `Keep your screen awake for ${r.words}`, scene: 'firstaction', tone: 'dark' },
+    og: {
+      kicker: `Keep awake · ${r.cta}`,
+      title: `Keep your screen awake for ${r.words}`,
+      scene: 'firstaction',
+      tone: 'dark',
+    },
   });
 }
 
@@ -99,9 +155,9 @@ export default async function Page({ params }: { params: TParams }) {
           ]}
         />
         <Callout tone="info" title="Honest limit">
-          Keep this tab visible and the device open. A hidden tab, a closed laptop lid or a work sign-in policy can still
-          let the display sleep or lock. AwakeTab never simulates input, so it will not keep Teams or Slack showing you
-          as active.
+          Keep this tab visible and the device open. A hidden tab, a closed laptop lid or a work sign-in policy can
+          still let the display sleep or lock. AwakeTab never simulates input, so it will not keep Teams or Slack
+          showing you as active.
         </Callout>
       </Block>
       <Block id="lengths" h="Other lengths">

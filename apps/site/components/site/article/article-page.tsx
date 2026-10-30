@@ -132,7 +132,15 @@ async function relatedLinks(a: TArticle): Promise<IRelated[]> {
 
 // One template for every article family: hero, the tool where the board puts it, the body, the honest limit,
 // questions and related pages (docs/06 §24, content-page board).
-export async function ArticlePage({ kind, locale: rawLocale, slug }: { kind: TContentKind; locale: string; slug: string }) {
+export async function ArticlePage({
+  kind,
+  locale: rawLocale,
+  slug,
+}: {
+  kind: TContentKind;
+  locale: string;
+  slug: string;
+}) {
   const a = resolve(kind, rawLocale, slug);
   const locale = a.locale;
   const english = locale === 'en';
@@ -144,7 +152,9 @@ export async function ArticlePage({ kind, locale: rawLocale, slug }: { kind: TCo
   const hub = HUBS[kind];
   const homeHref = localePath(locale, '/');
   const crumbLabel = a.crumb ?? a.h1;
-  const crumbs: ICrumb[] = english ? [{ href: `/${kind}`, label: hub.crumb }, { label: crumbLabel }] : [{ href: homeHref, label: 'AwakeTab' }, { label: crumbLabel }];
+  const crumbs: ICrumb[] = english
+    ? [{ href: `/${kind}`, label: hub.crumb }, { label: crumbLabel }]
+    : [{ href: homeHref, label: 'AwakeTab' }, { label: crumbLabel }];
   const breadcrumbs = english
     ? [
         { name: 'AwakeTab', url: SITE },
@@ -162,7 +172,12 @@ export async function ArticlePage({ kind, locale: rawLocale, slug }: { kind: TCo
   const scene = heroScene(kind, a.enSlug);
   const translations = translationsOf(kind, a.enSlug);
   const related = await relatedLinks(a);
-  const relatedCards: ICard[] = related.map((r) => ({ href: r.href, title: r.label, link: ts('article.read'), ...(r.lang ? { lang: r.lang } : {}) }));
+  const relatedCards: ICard[] = related.map((r) => ({
+    href: r.href,
+    title: r.label,
+    link: ts('article.read'),
+    ...(r.lang ? { lang: r.lang } : {}),
+  }));
   const toolCopy = kind === 'guides' ? 'skip' : 'try';
   const toolFirst = kind === 'for';
   const verified = a.lastVerified ? fullDate(a.lastVerified, locale) : null;
@@ -174,9 +189,7 @@ export async function ArticlePage({ kind, locale: rawLocale, slug }: { kind: TCo
       : kind === 'guides'
         ? { href, label: startLabel }
         : undefined;
-  const ends = minutes
-    ? ts('tool.ends', { time: '{time}' })
-    : ts('tool.noEnd');
+  const ends = minutes ? ts('tool.ends', { time: '{time}' }) : ts('tool.noEnd');
   const tool = (
     <Block id="s-tool" label={t(`${toolCopy}.title`)}>
       <ToolSlot
@@ -189,7 +202,16 @@ export async function ArticlePage({ kind, locale: rawLocale, slug }: { kind: TCo
         desc={
           <>
             <span dangerouslySetInnerHTML={{ __html: inline(a.toolNote ?? t(`${toolCopy}.body`)) }} />{' '}
-            {minutes ? <EndsLine template={ends} minutes={minutes} locale={locale} tomorrow={tp('when.tomorrow', { time: '{time}' })} /> : ends}
+            {minutes ? (
+              <EndsLine
+                template={ends}
+                minutes={minutes}
+                locale={locale}
+                tomorrow={tp('when.tomorrow', { time: '{time}' })}
+              />
+            ) : (
+              ends
+            )}
           </>
         }
         href={href}
@@ -290,8 +312,17 @@ export async function ArticlePage({ kind, locale: rawLocale, slug }: { kind: TCo
   );
 }
 
-
-function EndsLine({ template, minutes, locale, tomorrow }: { template: string; minutes: number; locale: TLocale; tomorrow: string }) {
+function EndsLine({
+  template,
+  minutes,
+  locale,
+  tomorrow,
+}: {
+  template: string;
+  minutes: number;
+  locale: TLocale;
+  tomorrow: string;
+}) {
   const [before = '', after = ''] = template.split('{time}');
   return (
     <span>

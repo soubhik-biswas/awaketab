@@ -56,7 +56,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
             search: t('searchLabel'),
             placeholder: t('placeholder'),
             chips: t('chips'),
-            idle: updated ? t('count', { n: HELP_TOPICS.length, date: fullDate(updated) }) : t('countPlain', { n: HELP_TOPICS.length }),
+            idle: updated
+              ? t('count', { n: HELP_TOPICS.length, date: fullDate(updated) })
+              : t('countPlain', { n: HELP_TOPICS.length }),
             one: t('one', { q: '{q}' }),
             many: t('many', { n: '{n}', q: '{q}' }),
             none: t('none', { q: '{q}' }),

@@ -26,7 +26,12 @@ export async function hubMetadata(kind: TContentKind): Promise<Metadata> {
     title: tp(`hub.${kind}.title`),
     description: tp(`hub.${kind}.description`),
     path: `/${kind}`,
-    og: { kicker: ts(`hub.${kind}.eyebrow`), title: tp(`hub.${kind}.h1`), tone: kind === 'for' ? 'light' : 'dark', ...(kind === 'for' ? { scene: 'cooking' as const } : {}) },
+    og: {
+      kicker: ts(`hub.${kind}.eyebrow`),
+      title: tp(`hub.${kind}.h1`),
+      tone: kind === 'for' ? 'light' : 'dark',
+      ...(kind === 'for' ? { scene: 'cooking' as const } : {}),
+    },
   });
 }
 
@@ -46,7 +51,9 @@ export async function HubPage({ kind }: { kind: TContentKind }) {
       title: kind === 'for' ? a.h1 : (a.crumb ?? a.h1),
       desc: item.line ?? a.description,
       link: tp('hub.readGuide'),
-      ...(kind === 'for' ? { scene: useCaseScene(item.slug), meta: [PRESET_LABEL[a.preset] ?? ''].filter(Boolean) } : {}),
+      ...(kind === 'for'
+        ? { scene: useCaseScene(item.slug), meta: [PRESET_LABEL[a.preset] ?? ''].filter(Boolean) }
+        : {}),
       ...(item.meta ? { meta: item.meta } : {}),
     };
   };
@@ -86,7 +93,13 @@ export async function HubPage({ kind }: { kind: TContentKind }) {
         lead={lead}
       />
       {groups.map((g) => (
-        <Block key={g.id} id={g.id} h={groups.length > 1 ? g.title : undefined} sub={groups.length > 1 ? g.line : undefined} label={g.title}>
+        <Block
+          key={g.id}
+          id={g.id}
+          h={groups.length > 1 ? g.title : undefined}
+          sub={groups.length > 1 ? g.line : undefined}
+          label={g.title}
+        >
           <Cards items={g.cards} cols={3} />
         </Block>
       ))}

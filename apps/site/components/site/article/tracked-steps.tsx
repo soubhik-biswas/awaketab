@@ -67,7 +67,10 @@ export function TrackedSteps({
                 <span className="font-mono text-[12px] tracking-[0.12em] text-lamp uppercase">{labels.next}</span>
               )}
               {step.path && <span className="font-mono text-[13px] text-muted-foreground-strong">{step.path}</span>}
-              <p className="site-prose m-0 text-[16px] leading-[1.55] text-muted-foreground-strong" dangerouslySetInnerHTML={{ __html: step.text }} />
+              <p
+                className="site-prose m-0 text-[16px] leading-[1.55] text-muted-foreground-strong"
+                dangerouslySetInnerHTML={{ __html: step.text }}
+              />
               <Button
                 variant="outline"
                 role="checkbox"

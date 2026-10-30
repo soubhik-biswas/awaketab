@@ -3,8 +3,21 @@ import type { TSceneKey } from '@/lib/content';
 import { pageMetadata } from '@/lib/seo';
 import { HeroButtons, PageHero, type IHeroAction } from './page-hero';
 
-export function systemMetadata(title: string, description: string, path: string, eyebrow: string, h1: string, scene: TSceneKey): Metadata {
-  return pageMetadata({ title, description, path, noindex: true, og: { kicker: eyebrow, title: h1, scene, tone: 'dark' } });
+export function systemMetadata(
+  title: string,
+  description: string,
+  path: string,
+  eyebrow: string,
+  h1: string,
+  scene: TSceneKey,
+): Metadata {
+  return pageMetadata({
+    title,
+    description,
+    path,
+    noindex: true,
+    og: { kicker: eyebrow, title: h1, scene, tone: 'dark' },
+  });
 }
 
 // A system page says what happened and offers one next step, with its scene (system pages on the content boards).

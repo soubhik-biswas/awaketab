@@ -21,7 +21,18 @@ export interface IToolSlotProps {
 
 // The tool's place on a page, drawn as the content board's tool card. The tool replaces the body of this
 // component; the card keeps its size so nothing shifts when it does.
-export function ToolSlot({ preset, mode = 'standard', face = 'ring', minutes, eyebrow, title, desc, href, label, anchor }: IToolSlotProps) {
+export function ToolSlot({
+  preset,
+  mode = 'standard',
+  face = 'ring',
+  minutes,
+  eyebrow,
+  title,
+  desc,
+  href,
+  label,
+  anchor,
+}: IToolSlotProps) {
   const total = (minutes ?? 60) * 60;
   return (
     <div

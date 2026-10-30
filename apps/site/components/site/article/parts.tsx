@@ -37,14 +37,22 @@ function Rows({ rows }: { rows: NonNullable<TArticle['rows']>[string] }) {
     <ul className="m-0 flex max-w-[900px] list-none flex-col overflow-hidden rounded-[20px] border border-border bg-card p-0">
       {rows.map((row, i) =>
         row.value !== undefined ? (
-          <li key={i} className="flex items-center justify-between gap-4 border-t border-border px-5 py-[14px] first:border-t-0">
-            <span className="site-prose text-[15px] font-bold" dangerouslySetInnerHTML={{ __html: inline(row.title) }} />
+          <li
+            key={i}
+            className="flex items-center justify-between gap-4 border-t border-border px-5 py-[14px] first:border-t-0"
+          >
+            <span
+              className="site-prose text-[15px] font-bold"
+              dangerouslySetInnerHTML={{ __html: inline(row.title) }}
+            />
             <span className="text-[15px] text-muted-foreground-strong">{row.value}</span>
           </li>
         ) : (
           <li key={i} className="flex flex-col gap-1 border-t border-border px-5 py-4 first:border-t-0">
             <strong className="site-prose text-[17px]" dangerouslySetInnerHTML={{ __html: inline(row.title) }} />
-            {row.text && <span className={cn(s.body, 'site-prose')} dangerouslySetInnerHTML={{ __html: inline(row.text) }} />}
+            {row.text && (
+              <span className={cn(s.body, 'site-prose')} dangerouslySetInnerHTML={{ __html: inline(row.text) }} />
+            )}
             {row.link && (
               <a href={row.link.href} className="text-[15px] font-semibold text-lamp underline underline-offset-[3px]">
                 {row.link.label}
@@ -122,7 +130,9 @@ function Lifecycle({ data, t }: { data: NonNullable<TArticle['lifecycle']>; t: T
         {chain(pill('idle'), edge('request()', true), pill('requesting'), edge(data.edges.granted), pill('held'))}
         {chain(pill('held'), edge(data.edges.hidden), pill('lost'), edge(data.edges.visible), pill('requesting'))}
       </ol>
-      <span className="font-mono text-[12px] tracking-[0.1em] text-muted-foreground-strong uppercase">{data.others}</span>
+      <span className="font-mono text-[12px] tracking-[0.1em] text-muted-foreground-strong uppercase">
+        {data.others}
+      </span>
       <ol className="m-0 flex list-none flex-col gap-4 p-0">
         {chain(pill('requesting'), edge('NotAllowedError', true), pill('denied'))}
         {chain(pill('idle'), edge(data.edges.noApi), pill('unsupported'), edge(data.edges.tap), pill('fallback'))}
@@ -200,7 +210,11 @@ function ArticleSteps({ a, t }: { a: TArticle; t: TT }) {
   if (a.kind === 'guides') {
     return (
       <TrackedSteps
-        steps={steps.map((st) => ({ title: inline(st.title), text: inline(st.text), ...(st.path ? { path: st.path } : {}) }))}
+        steps={steps.map((st) => ({
+          title: inline(st.title),
+          text: inline(st.text),
+          ...(st.path ? { path: st.path } : {}),
+        }))}
         {...(a.stepsDone ? { doneText: a.stepsDone } : {})}
         labels={{
           step: t('step', { n: '{n}' }),
@@ -226,7 +240,9 @@ function ArticleSteps({ a, t }: { a: TArticle; t: TT }) {
 
 function Part({ a, name, arg, t, tp }: { a: TArticle; name: string; arg: string; t: TT; tp: TT }) {
   const missing = (): never => {
-    throw new Error(`${a.kind}/${a.locale}/${a.enSlug}: block ::${name}${arg ? ` ${arg}` : ''} has no frontmatter data`);
+    throw new Error(
+      `${a.kind}/${a.locale}/${a.enSlug}: block ::${name}${arg ? ` ${arg}` : ''} has no frontmatter data`,
+    );
   };
   switch (name) {
     case 'steps':
@@ -243,7 +259,11 @@ function Part({ a, name, arg, t, tp }: { a: TArticle; name: string; arg: string;
       );
     case 'matrix': {
       const m = a.matrix ?? missing();
-      const rows: TCell[][] = m.rows.map((r) => [html(inline(r.what), true), status(RESULT[r.result] ?? 'no', r.label), html(inline(r.text))]);
+      const rows: TCell[][] = m.rows.map((r) => [
+        html(inline(r.what), true),
+        status(RESULT[r.result] ?? 'no', r.label),
+        html(inline(r.text)),
+      ]);
       return <DataTable label={m.label} cols={m.cols} rows={rows} template="1.3fr 0.9fr 1.6fr" />;
     }
     case 'rows':
@@ -325,7 +345,11 @@ export function ArticleBody({ a, t, tp }: { a: TArticle; t: TT; tp: TT }) {
   return (
     <>
       {splitArticle(a.html).map((section, i) => (
-        <Block key={section.id ?? i} {...(section.id ? { id: section.id } : {})} {...(section.title ? { h: section.title } : { label: a.h1 })}>
+        <Block
+          key={section.id ?? i}
+          {...(section.id ? { id: section.id } : {})}
+          {...(section.title ? { h: section.title } : { label: a.h1 })}
+        >
           <SectionBody section={section} a={a} t={t} tp={tp} />
         </Block>
       ))}

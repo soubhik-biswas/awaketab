@@ -101,15 +101,17 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <section
-      className={cn('flex flex-col items-center gap-5 lg:flex-row lg:gap-12', s.pad)}
-    >
+    <section className={cn('flex flex-col items-center gap-5 lg:flex-row lg:gap-12', s.pad)}>
       <div className="flex min-w-0 flex-1 flex-col items-start gap-[14px] self-stretch min-[700px]:gap-5 lg:self-auto">
         {crumbs && crumbs.length > 0 && <Crumbs items={crumbs} label={crumbLabel} />}
         {kicker ?? (eyebrow && <span className={s.eyebrow}>{eyebrow}</span>)}
         <h1 className={cn(s.h1, scene && s.h1Art)}>{h1}</h1>
         {lead && <p className={cn(s.lead, 'site-prose')}>{lead}</p>}
-        {meta && <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-muted-foreground-strong">{meta}</div>}
+        {meta && (
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-muted-foreground-strong">
+            {meta}
+          </div>
+        )}
         {actions}
         {children}
       </div>

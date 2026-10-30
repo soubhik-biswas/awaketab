@@ -74,7 +74,12 @@ export function Cards({ items, cols }: { items: readonly ICard[]; cols: 1 | 2 | 
           >
             {card.scene && (
               <span className="flex justify-center bg-[var(--site-art)] pt-[14px]">
-                <Scene scene={card.scene} width={300} decorative className="h-auto w-[300px] max-w-full min-[700px]:w-[260px]" />
+                <Scene
+                  scene={card.scene}
+                  width={300}
+                  decorative
+                  className="h-auto w-[300px] max-w-full min-[700px]:w-[260px]"
+                />
               </span>
             )}
             <span className="flex flex-1 flex-col gap-2 px-5 pt-[18px] pb-5">
@@ -94,7 +99,10 @@ export function Cards({ items, cols }: { items: readonly ICard[]; cols: 1 | 2 | 
               {card.desc && <span className={s.body}>{card.desc}</span>}
               <span className="mt-auto inline-flex min-h-8 items-center gap-1.5 text-[15px] font-semibold text-lamp">
                 {card.link}
-                <ArrowRight className="size-4 transition-transform duration-fast ease-glide group-hover:translate-x-0.5" aria-hidden="true" />
+                <ArrowRight
+                  className="size-4 transition-transform duration-fast ease-glide group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
               </span>
             </span>
           </a>
@@ -127,8 +135,7 @@ export function Steps({ items }: { items: ReadonlyArray<{ title: ReactNode; body
 type TStatusKind = 'yes' | 'fallback' | 'no' | 'paused' | 'blocked' | 'untested';
 
 export type TCell =
-  | { kind: TStatusKind; text: string }
-  | { kind: 'text'; text: ReactNode; bold?: boolean; html?: string };
+  { kind: TStatusKind; text: string } | { kind: 'text'; text: ReactNode; bold?: boolean; html?: string };
 
 const CELL_ICON: Record<TStatusKind, LucideIcon> = {
   yes: CircleCheck,
@@ -203,10 +210,7 @@ export function DataTable({
       style={{ ['--tmpl' as string]: template }}
     >
       <div role="rowgroup" className="hidden min-[700px]:block">
-        <div
-          role="row"
-          className="grid grid-cols-[var(--tmpl)] gap-4 bg-secondary px-5 py-3"
-        >
+        <div role="row" className="grid grid-cols-[var(--tmpl)] gap-4 bg-secondary px-5 py-3">
           {cols.map((col, i) => (
             <span
               key={i}

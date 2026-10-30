@@ -51,46 +51,48 @@ export async function GET(request: NextRequest) {
     font('Geist', 800, text).then((data) => (data ? { name: 'Geist', data, weight: 800 as const } : null)),
     font('Geist', 500, text).then((data) => (data ? { name: 'Geist', data, weight: 500 as const } : null)),
     font('Geist Mono', 500, kicker).then((data) => (data ? { name: 'Geist Mono', data, weight: 500 as const } : null)),
-    script ? font(script, 700, text).then((data) => (data ? { name: script, data, weight: 700 as const } : null)) : null,
+    script
+      ? font(script, 700, text).then((data) => (data ? { name: script, data, weight: 700 as const } : null))
+      : null,
   ]);
   const fonts = loaded.filter((f) => f !== null).map((f) => ({ ...f, style: 'normal' as const }));
   const family = script ? `Geist, '${script}'` : 'Geist';
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          padding: '62px 69px',
-          backgroundColor: c.base,
-          backgroundImage: `radial-gradient(circle at 85% 30%, ${c.lamp}, transparent 42%), radial-gradient(circle at 95% 100%, ${c.act}, transparent 40%)`,
-          color: c.ink,
-          fontFamily: family,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-          <svg width="58" height="58" viewBox="0 0 64 64">
-            <path d="M32 11 A21 21 0 1 1 12.27 24.82" fill="none" stroke={c.ink} strokeWidth="9" strokeLinecap="round" />
-            <circle cx="19.95" cy="14.8" r="5.6" fill={c.mark} />
-          </svg>
-          <span style={{ fontSize: 36, fontWeight: 800, letterSpacing: -1.2 }}>
-            Awake<span style={{ fontWeight: 500 }}>Tab</span>
-          </span>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 17, maxWidth: 640 }}>
-          {kicker && (
-            <span style={{ fontFamily: 'Geist Mono', fontSize: 24, letterSpacing: 2.4, color: c.kicker, fontWeight: 500 }}>
-              {kicker}
-            </span>
-          )}
-          <span style={{ fontSize: 69, fontWeight: 800, lineHeight: 1.02, letterSpacing: -2 }}>{title}</span>
-          {sub && <span style={{ fontSize: 28, lineHeight: 1.45, color: c.sub, fontWeight: 500 }}>{sub}</span>}
-        </div>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: '62px 69px',
+        backgroundColor: c.base,
+        backgroundImage: `radial-gradient(circle at 85% 30%, ${c.lamp}, transparent 42%), radial-gradient(circle at 95% 100%, ${c.act}, transparent 40%)`,
+        color: c.ink,
+        fontFamily: family,
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
+        <svg width="58" height="58" viewBox="0 0 64 64">
+          <path d="M32 11 A21 21 0 1 1 12.27 24.82" fill="none" stroke={c.ink} strokeWidth="9" strokeLinecap="round" />
+          <circle cx="19.95" cy="14.8" r="5.6" fill={c.mark} />
+        </svg>
+        <span style={{ fontSize: 36, fontWeight: 800, letterSpacing: -1.2 }}>
+          Awake<span style={{ fontWeight: 500 }}>Tab</span>
+        </span>
       </div>
-    ),
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 17, maxWidth: 640 }}>
+        {kicker && (
+          <span
+            style={{ fontFamily: 'Geist Mono', fontSize: 24, letterSpacing: 2.4, color: c.kicker, fontWeight: 500 }}
+          >
+            {kicker}
+          </span>
+        )}
+        <span style={{ fontSize: 69, fontWeight: 800, lineHeight: 1.02, letterSpacing: -2 }}>{title}</span>
+        {sub && <span style={{ fontSize: 28, lineHeight: 1.45, color: c.sub, fontWeight: 500 }}>{sub}</span>}
+      </div>
+    </div>,
     {
       width: 1200,
       height: 630,
