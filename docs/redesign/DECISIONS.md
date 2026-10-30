@@ -255,3 +255,13 @@ The final design handoff (`awaketab-handoff.zip`, spec copied to `docs/redesign/
 - **Routes.** Added `/help`, `/signin`, `/s/[setup]`, `/status` and the system pages offline, link expired, setup removed and 500. Existing routes and slugs stay.
 - **Accounts and payment.** The existing licence backend and checkout stay wired; the Solar Green Pro flow, sign-in states and emails are built on top. Values the design leaves open stay as visible `[PLACEHOLDERS]` (HANDOFF §12).
 - **Existing features outside the handoff** (ambient modes, notes, sound, embed, library, kiosk, `/until`, presets pages) are kept and restyled in Solar Green, never dropped.
+- **Content site (decided, 30 Oct).** The home keeps the tool at the top; the board's marketing hero is the tool itself, and the board's cards, steps, limits callout, questions and closing call to action follow it, with the existing make-it-yours, extension and plans sections kept between them.
+- **Routes stay (decided).** The boards draw `/legal/privacy` and `/legal/terms`; the existing `/privacy` and `/terms` stay (routes are a contract) and take the legal board's layout. Link expired is `/signin/expired`, setup removed `/s/removed`, the server error `/500`, offline `/offline`.
+- **Shared setup links (decided).** `/s/<face>-<minutes>-<chime|quiet>`, served by `/s` through a `_redirects` rewrite; the setup lives only in the link, so "removed" is shown for any code the page cannot read. The start button carries `preset`, `face` and `chime` to the tool, which the tool reads.
+- **Status page (decided).** `/status` never claims an outage: it shows the maintenance board only when a build sets `PUBLIC_MAINTENANCE_UNTIL`, and "Everything is running" otherwise.
+- **Analytics question (decided).** Answering writes the existing telemetry switch, so Decline and the Settings switch are the same thing; until it is answered the existing default stays. The boot script hides an answered question before the first paint, so it never shifts the page.
+- **System page buttons (decided).** Where the board's two buttons would both open the home (not found, maintenance), the second opens the help centre instead.
+- **Footer links (decided).** Each column starts with the board's four links and keeps the product and learning pages the site already linked (extension, widget, kiosk, library, devices, guides, compare, docs, shortcuts, source, donate).
+- **Ad slot (decided).** The board's placeholder box is drawn only when ads are enabled; the live site never shows an empty "Advertisement" box.
+- **No pointer tilt (decided).** Hub and home cards no longer lean toward the pointer; the boards draw them still, and the motion rules keep movement for the clock and hero scenes.
+
