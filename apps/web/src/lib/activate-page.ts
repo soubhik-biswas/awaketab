@@ -118,7 +118,8 @@ export function bootActivatePage(root: HTMLElement): void {
       deviceLabel: deviceLabel() || 'This browser',
     };
     if (key) payload.key = key;
-    if (checkoutId) payload.checkoutId = checkoutId;
+    // The server reads a checkout id before a key, so a key typed on a checkout return must travel alone.
+    if (fromCheckout && checkoutId) payload.checkoutId = checkoutId;
     const result = fromCheckout
       ? await whileSyncing(
           () => activateLicense(payload),
