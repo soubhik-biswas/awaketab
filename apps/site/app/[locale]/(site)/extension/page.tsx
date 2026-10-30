@@ -19,7 +19,13 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t('title'),
     description: t('description'),
     path: ROUTES.extension,
-    og: { kicker: 'Chrome & Edge', title: 'Stays awake when the tab isn’t in front.', sub: 'Time left on your toolbar.', scene: 'welcome', tone: 'dark' },
+    og: {
+      kicker: 'Chrome & Edge',
+      title: 'Stays awake when the tab isn’t in front.',
+      sub: 'Time left on your toolbar.',
+      scene: 'welcome',
+      tone: 'dark',
+    },
   });
 }
 
@@ -66,7 +72,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         />
       </Block>
       <Block id="ext-features" h={t('features.title')}>
-        <Prose items={[{ list: [t('features.levels'), t('features.timers'), t('features.badge'), t('features.pro')] }]} />
+        <Prose
+          items={[{ list: [t('features.levels'), t('features.timers'), t('features.badge'), t('features.pro')] }]}
+        />
         <Callout tone="warning" title="What it can’t do">
           {t('limits.running')} {t('limits.lid')} {t('limits.presence')}
         </Callout>

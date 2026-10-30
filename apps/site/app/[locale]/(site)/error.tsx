@@ -32,7 +32,13 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
         </div>
       </div>
       <div className="flex-none">
-        <Scene scene="error" width={520} float decorative className="h-auto w-[350px] max-w-full min-[700px]:w-[520px]" />
+        <Scene
+          scene="error"
+          width={520}
+          float
+          decorative
+          className="h-auto w-[350px] max-w-full min-[700px]:w-[520px]"
+        />
       </div>
     </section>
   );

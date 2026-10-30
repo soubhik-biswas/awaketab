@@ -17,7 +17,8 @@ export const dynamicParams = false;
 // Every /until/HH-MM exists in 5-minute steps, as on the old site.
 export function generateStaticParams() {
   const out: Array<{ locale: string; time: string }> = [];
-  for (let h = 0; h < 24; h += 1) for (let m = 0; m < 60; m += 5) out.push({ locale: 'en', time: `${pad(h)}-${pad(m)}` });
+  for (let h = 0; h < 24; h += 1)
+    for (let m = 0; m < 60; m += 5) out.push({ locale: 'en', time: `${pad(h)}-${pad(m)}` });
   return out;
 }
 

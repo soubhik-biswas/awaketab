@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { englishOnly } from '@/lib/seo';
 
-export const metadata: Metadata = { title: { absolute: 'Cook Mode — AwakeTab' }, robots: { index: false, follow: false } };
+export const metadata: Metadata = {
+  title: { absolute: 'Cook Mode — AwakeTab' },
+  robots: { index: false, follow: false },
+};
 
 // The iframe app behind the Cook Mode widget; the widget fills it.
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {

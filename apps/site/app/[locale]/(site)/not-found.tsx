@@ -4,7 +4,10 @@ import { SystemPage } from '@/components/site/system-page';
 import { localePath, type TLocale } from '@/i18n/locales';
 import { toolHref } from '@/lib/routes';
 
-export const metadata: Metadata = { title: { absolute: 'Page not found — AwakeTab' }, robots: { index: false, follow: true } };
+export const metadata: Metadata = {
+  title: { absolute: 'Page not found — AwakeTab' },
+  robots: { index: false, follow: true },
+};
 
 export default async function NotFound() {
   const locale = (await getLocale()) as TLocale;

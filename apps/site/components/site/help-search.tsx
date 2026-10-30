@@ -22,9 +22,7 @@ export function HelpSearch({
   const [q, setQ] = useState('');
   const id = useId();
   const query = q.trim().toLowerCase();
-  const hits = query
-    ? topics.filter((t) => `${t.title} ${t.words}`.toLowerCase().includes(query))
-    : [];
+  const hits = query ? topics.filter((t) => `${t.title} ${t.words}`.toLowerCase().includes(query)) : [];
   const count = !query
     ? labels.idle
     : (hits.length === 0 ? labels.none : hits.length === 1 ? labels.one : labels.many)

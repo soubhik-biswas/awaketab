@@ -2,7 +2,8 @@
 // split), with a 48 px gutter on tablets so the 96 px desktop gutter only applies from 1280 px.
 export const pad = 'px-5 min-[700px]:px-12 xl:px-24';
 
-export const eyebrow = 'font-mono text-[12px] font-medium tracking-[0.12em] text-lamp uppercase min-[700px]:text-[13px]';
+export const eyebrow =
+  'font-mono text-[12px] font-medium tracking-[0.12em] text-lamp uppercase min-[700px]:text-[13px]';
 
 export const h1 =
   'm-0 text-[40px] leading-[1.02] font-extrabold tracking-[-0.04em] text-balance min-[700px]:text-[80px]';

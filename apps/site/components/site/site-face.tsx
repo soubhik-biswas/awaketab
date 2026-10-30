@@ -44,8 +44,15 @@ export function SiteFace({
     return (
       <span
         aria-hidden="true"
-        className={className ?? (phoneSize ? 'block size-[var(--face-phone)] min-[700px]:size-[var(--face-wide)]' : 'block')}
-        style={{ width: phoneSize ? undefined : size, height: phoneSize ? undefined : size, ['--face-phone' as string]: `${String(phoneSize ?? size)}px`, ['--face-wide' as string]: `${String(size)}px` }}
+        className={
+          className ?? (phoneSize ? 'block size-[var(--face-phone)] min-[700px]:size-[var(--face-wide)]' : 'block')
+        }
+        style={{
+          width: phoneSize ? undefined : size,
+          height: phoneSize ? undefined : size,
+          ['--face-phone' as string]: `${String(phoneSize ?? size)}px`,
+          ['--face-wide' as string]: `${String(size)}px`,
+        }}
       />
     );
   return (

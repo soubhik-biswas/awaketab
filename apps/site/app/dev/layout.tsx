@@ -6,7 +6,11 @@ import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import '../globals.css';
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-geist', weight: ['300', '400', '500', '600', '700', '800'] });
+const geist = Geist({
+  subsets: ['latin'],
+  variable: '--font-geist',
+  weight: ['300', '400', '500', '600', '700', '800'],
+});
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono', weight: ['400', '500', '700'] });
 
 export const metadata: Metadata = {

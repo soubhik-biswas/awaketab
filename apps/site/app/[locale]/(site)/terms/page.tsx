@@ -55,7 +55,8 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         {
           id: 'licences',
           title: 'Software and licences',
-          summary: 'the website is provided as-is, open-source packages keep their own licence, and paid licences have a 14-day refund.',
+          summary:
+            'the website is provided as-is, open-source packages keep their own licence, and paid licences have a 14-day refund.',
           body: (
             <>
               <p className="m-0">
