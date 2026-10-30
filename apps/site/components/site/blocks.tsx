@@ -275,7 +275,7 @@ export function Callout({
     <Tag
       id={id}
       role="note"
-      className={cn('flex max-w-[900px] items-start gap-[14px] rounded-[18px] border px-5 py-[18px]', look.box)}
+      className={cn('flex max-w-[942px] items-start gap-[14px] rounded-[18px] border px-5 py-[18px]', look.box)}
     >
       <Icon className={cn('mt-0.5 size-[22px] flex-none', look.fg)} strokeWidth={1.75} aria-hidden="true" />
       <span className="flex flex-col gap-1">
