@@ -27,7 +27,7 @@ const RULES = [
   'Status = words + icon, never colour alone.',
   'Readable at 120 px in a tab corner and at full screen.',
   'The same accent colour drives every face, set in Face studio.',
-  'Multi-colour only while awake: green · sky · violet for layers, green → ember for the last minutes.',
+  'One family: every face sits in the same watch-glass case; time left takes one colour at a time — volt, then lime, amber and ember in the last minutes.',
 ];
 
 const BANDS: readonly { id: TFaceTheme; name: string; hex: string; ground: string; line: string }[] = [
@@ -55,9 +55,7 @@ const TOTALS = [
 
 // Face studio's accent swatches on the boards; empty keeps the lamp.
 const LAMPS = ['', '#3DF58E', '#FFC53D', '#7CBBFF', '#9F7BFF'] as const;
-const SIZES = [96, 120, 150, 169, 200, 240, 250, 296, 380, 440];
-// The board's rules text, between the two ink tokens.
-const RULE_INK = '#C9D1E0';
+const SIZES = [96, 120, 150, 169, 170, 200, 240, 250, 296, 380, 440];
 
 const meta = 'font-mono text-xs';
 
@@ -74,6 +72,8 @@ export function FacesBoard() {
   const [lamp, setLamp] = useState<string>('');
   const [picked, setPicked] = useState<TFaceId>('ring');
   const [gridTheme, setGridTheme] = useState<TFaceTheme>('dark');
+  const [galleryTheme, setGalleryTheme] = useState<TFaceTheme>('dark');
+  const [framed, setFramed] = useState(true);
 
   useEffect(() => {
     if (!tick) return;
@@ -190,30 +190,50 @@ export function FacesBoard() {
           <Switch id="dev-indef" checked={indef} onCheckedChange={setIndef} />
           <Label htmlFor="dev-indef">No end</Label>
         </div>
+        <div className="flex items-center gap-2 pb-3">
+          <Switch id="dev-framed" checked={framed} onCheckedChange={setFramed} />
+          <Label htmlFor="dev-framed">Framed</Label>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium">Gallery theme</span>
+          <ToggleGroup
+            type="single"
+            variant="outline"
+            value={galleryTheme}
+            onValueChange={(v) => v && setGalleryTheme(v as TFaceTheme)}
+            aria-label="Gallery theme"
+          >
+            <ToggleGroupItem value="light">Light</ToggleGroupItem>
+            <ToggleGroupItem value="dark">Dark</ToggleGroupItem>
+            <ToggleGroupItem value="oled">OLED</ToggleGroupItem>
+          </ToggleGroup>
+        </div>
       </div>
 
       <div className="box-border flex w-[1600px] flex-col gap-10 p-[72px]">
         <header className="flex items-end justify-between gap-10">
           <div className="flex flex-col gap-2">
             <span className="font-mono text-sm tracking-[.12em] text-link">14 · SYSTEM</span>
-            <h1 className="m-0 text-[64px] leading-[normal] font-extrabold tracking-[-0.035em]">Clock faces</h1>
+            <h1 className="m-0 font-display text-[64px] leading-[normal] font-extrabold tracking-[-0.035em] [font-stretch:112%]">
+              Clock faces
+            </h1>
           </div>
           <p className="m-0 max-w-[640px] text-base leading-[1.55] text-muted-foreground-strong">
-            Thirty-three faces, all free, built like premium watch and OS widgets: dimensional dials, precise ticks,
-            live motion. Every tile shows the same session — 42:18 left, ending at 11:30 AM — and moves exactly as it
-            will in the product: sweeping seconds, blinking colons, flipping cards, rolling drums, waves and needles.
-            Status is always words plus an icon, never colour alone.
+            Forty-nine faces, all free, built like premium watch and OS widgets: dimensional dials, precise ticks, live
+            motion. Every tile shows the same session — 42:18 left, ending at 11:30 AM — and moves exactly as it will in
+            the product: sweeping seconds, blinking colons, flipping cards, rolling drums, waves and needles. Status is
+            always words plus an icon, never colour alone.
           </p>
         </header>
 
-        <section className="grid grid-cols-5 gap-[18px]">
+        <section className={cn(galleryTheme, 'grid grid-cols-5 gap-[18px] text-foreground')}>
           {FACES.map((f) => (
             <figure
               key={f.id}
               className="m-0 flex flex-col gap-3 rounded-[24px] border border-border bg-card px-4 pt-4 pb-[18px]"
             >
               <div className="flex justify-center">
-                <Face face={f.id} theme="dark" state={state} size={250} {...session} />
+                <Face face={f.id} theme={galleryTheme} state={state} size={250} framed={framed} {...session} />
               </div>
               <figcaption className="flex flex-col gap-1 px-1.5">
                 <div className="flex items-baseline gap-2.5">
@@ -224,10 +244,10 @@ export function FacesBoard() {
               </figcaption>
             </figure>
           ))}
-          <div className="col-span-2 grid content-center gap-x-8 gap-y-3.5 rounded-[24px] border border-border bg-card px-8 py-7">
+          <div className="col-span-1 grid grid-cols-1 content-center gap-x-8 gap-y-3.5 rounded-[24px] border border-border bg-card px-8 py-7">
             <span className={cn(meta, 'tracking-[.1em] text-muted-foreground uppercase')}>Rules for every face</span>
             {RULES.map((r) => (
-              <span key={r} className="flex gap-2.5 text-sm leading-normal" style={{ color: RULE_INK }}>
+              <span key={r} className="flex gap-2.5 text-sm leading-normal text-ended">
                 <span className="mt-2 size-2 flex-none rounded-full bg-lamp" />
                 {r}
               </span>
@@ -236,14 +256,18 @@ export function FacesBoard() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="m-0 text-[32px] leading-[normal] font-bold">States × themes · Ring</h2>
+          <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">
+            States × themes · Ring
+          </h2>
           {BANDS.map((b) => (
             <Band key={b.id} band={b} states={BAND_STATES} session={session} />
           ))}
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="m-0 text-[32px] leading-[normal] font-bold">Every state · Ring (dev)</h2>
+          <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">
+            Every state · Ring (dev)
+          </h2>
           {BANDS.map((b) => (
             <Band key={b.id} band={b} states={FACE_STATES.map((s) => ({ id: s, label: s }))} session={session} />
           ))}
@@ -251,7 +275,7 @@ export function FacesBoard() {
 
         <section className="flex flex-col gap-4">
           <div className="flex items-end justify-between">
-            <h2 className="m-0 text-[32px] leading-[normal] font-bold">Faces sheet</h2>
+            <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">Faces sheet</h2>
             <ToggleGroup
               type="single"
               variant="outline"
@@ -267,11 +291,18 @@ export function FacesBoard() {
           <div className={cn(gridTheme, 'flex items-start gap-10 rounded-[24px] bg-background p-8 text-foreground')}>
             <div className="flex w-[336px] flex-col gap-2">
               <span className={cn(meta, 'text-muted-foreground uppercase')}>Desktop panel · 92 px · 3 columns</span>
-              <FaceGrid selected={picked} onSelect={setPicked} theme={gridTheme} size={92} />
+              <FaceGrid selected={picked} onSelect={setPicked} theme={gridTheme} size={92} framed={framed} />
             </div>
             <div className="flex w-[680px] flex-col gap-2">
               <span className={cn(meta, 'text-muted-foreground uppercase')}>Tablet portrait · 5 columns</span>
-              <FaceGrid selected={picked} onSelect={setPicked} theme={gridTheme} size={92} columns={5} />
+              <FaceGrid
+                selected={picked}
+                onSelect={setPicked}
+                theme={gridTheme}
+                size={92}
+                columns={5}
+                framed={framed}
+              />
             </div>
             <div className="flex w-[336px] flex-col gap-2">
               <span className={cn(meta, 'text-muted-foreground uppercase')}>Setup minis · 80 px</span>
@@ -288,7 +319,9 @@ export function FacesBoard() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="m-0 text-[32px] leading-[normal] font-bold">Sizes · {faceName(picked)}</h2>
+          <h2 className="m-0 font-display text-[32px] leading-[normal] font-bold [font-stretch:112%]">
+            Sizes · {faceName(picked)}
+          </h2>
           <p className="m-0 text-sm text-muted-foreground-strong">
             Below 170 px the face is compact (digits and graphics only); from 240 px every label stays at 12 px or more
             on screen.
@@ -298,7 +331,7 @@ export function FacesBoard() {
           >
             {SIZES.map((s) => (
               <div key={s} className="flex flex-col items-center gap-2">
-                <Face face={picked} theme={gridTheme} state={state} size={s} {...session} />
+                <Face face={picked} theme={gridTheme} state={state} size={s} framed={framed} {...session} />
                 <span className={cn(meta, 'text-muted-foreground')}>{s} px</span>
               </div>
             ))}

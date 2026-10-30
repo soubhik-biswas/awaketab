@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import { CARD_SHADOW } from '../art';
-import '../face-art.css';
 import { alpha } from '../geometry';
 import { big, EndLine, type IDrawProps, Stars, type TStar } from '../kit';
 
@@ -15,12 +14,12 @@ const STARS: readonly TStar[] = [
 ];
 const SUN_HIGHLIGHT = { light: '#FFFFFF', night: '#E9FFF1' };
 const SEA = {
-  light: 'linear-gradient(180deg, #E9E4DA, #F3F0E9)',
+  light: 'linear-gradient(180deg, #E6E6EF, #F1F1F7)',
   dark: 'linear-gradient(180deg, #0B1222, #0E1424)',
   oled: '#000000',
 };
 
-const shimmer = (left: number, top: number, width: number, delay: number, accent: string): CSSProperties => ({
+const shimmer = (left: number, top: number, width: number, accent: string): CSSProperties => ({
   position: 'absolute',
   left,
   top,
@@ -28,7 +27,6 @@ const shimmer = (left: number, top: number, width: number, delay: number, accent
   height: 3,
   borderRadius: 2,
   background: accent,
-  animationDelay: `${delay}s`,
 });
 
 // A lamp-sun sets toward the horizon as the session runs down.
@@ -73,9 +71,9 @@ export default function Horizon({ m }: IDrawProps) {
         />
       </div>
       <div style={{ position: 'absolute', left: 0, right: 0, top: 183, height: 1, background: accent, opacity: 0.7 }} />
-      <span className="afx-shim" style={shimmer(222, 192, 48, 0, accent)} />
-      <span className="afx-shim" style={shimmer(230, 202, 32, 0.6, accent)} />
-      <span className="afx-shim" style={shimmer(237, 212, 18, 1.2, accent)} />
+      <span className="afx-shim" style={shimmer(222, 192, 48, accent)} />
+      <span className="afx-shim" data-delay="0.6" style={shimmer(230, 202, 32, accent)} />
+      <span className="afx-shim" data-delay="1.2" style={shimmer(237, 212, 18, accent)} />
       <div style={{ position: 'absolute', left: 24, top: 196, display: 'flex', flexDirection: 'column', gap: 4 }}>
         <span style={big(m.long ? 44 : 56)}>{m.digits}</span>
         <EndLine m={m} px={14} />

@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import { BLACK, WHITE } from '../art';
-import '../face-art.css';
 import { alpha } from '../geometry';
 import { EndLine, type IDrawProps } from '../kit';
 
@@ -48,6 +47,7 @@ export default function Nixie({ m }: IDrawProps) {
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div
               className="afx-flick"
+              data-delay={i * 1.3}
               style={{
                 position: 'relative',
                 width: 66,
@@ -57,7 +57,6 @@ export default function Nixie({ m }: IDrawProps) {
                 border: `1px solid ${TUBE_LINE}`,
                 overflow: 'hidden',
                 backgroundImage: `radial-gradient(ellipse at 50% 18%, ${WHITE(0.1)}, transparent 60%), repeating-linear-gradient(60deg, ${WHITE(0.04)} 0 1px, transparent 1px 7px), repeating-linear-gradient(-60deg, ${WHITE(0.04)} 0 1px, transparent 1px 7px)`,
-                animationDelay: `${i * 1.3}s`,
               }}
             >
               <span style={{ ...glyph, color: WHITE(0.05) }}>8</span>

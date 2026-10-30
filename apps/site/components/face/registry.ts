@@ -228,9 +228,6 @@ export const faceName = (id: TFaceId): string => FACES.find((f) => f.id === id)?
 export type TFaceDrawing = ComponentType<IDrawProps>;
 type TLoader = () => Promise<{ default: TFaceDrawing }>;
 
-// The sixteen Volt faces draw Ring until their own modules land.
-const ringUntilDrawn: TLoader = () => Promise.resolve({ default: Ring });
-
 // Ring ships with the page; every other face is its own chunk, loaded the first time it is drawn.
 export const FACE_LOADERS: Readonly<Record<Exclude<TFaceId, 'ring'>, TLoader>> = {
   bold: () => import('./faces/bold'),
@@ -265,22 +262,22 @@ export const FACE_LOADERS: Readonly<Record<Exclude<TFaceId, 'ring'>, TLoader>> =
   wordgrid: () => import('./faces/wordgrid'),
   tape: () => import('./faces/tape'),
   moon: () => import('./faces/moon'),
-  aurora: ringUntilDrawn,
-  glass: ringUntilDrawn,
-  neon: ringUntilDrawn,
-  liquid: ringUntilDrawn,
-  eclipse: ringUntilDrawn,
-  skeleton: ringUntilDrawn,
-  bauhaus: ringUntilDrawn,
-  poster: ringUntilDrawn,
-  eink: ringUntilDrawn,
-  terminal: ringUntilDrawn,
-  pulse: ringUntilDrawn,
-  waveform: ringUntilDrawn,
-  blob: ringUntilDrawn,
-  hud: ringUntilDrawn,
-  constellation: ringUntilDrawn,
-  halo: ringUntilDrawn,
+  aurora: () => import('./faces/aurora'),
+  glass: () => import('./faces/glass'),
+  neon: () => import('./faces/neon'),
+  liquid: () => import('./faces/liquid'),
+  eclipse: () => import('./faces/eclipse'),
+  skeleton: () => import('./faces/skeleton'),
+  bauhaus: () => import('./faces/bauhaus'),
+  poster: () => import('./faces/poster'),
+  eink: () => import('./faces/eink'),
+  terminal: () => import('./faces/terminal'),
+  pulse: () => import('./faces/pulse'),
+  waveform: () => import('./faces/waveform'),
+  blob: () => import('./faces/blob'),
+  hud: () => import('./faces/hud'),
+  constellation: () => import('./faces/constellation'),
+  halo: () => import('./faces/halo'),
 };
 
 const loaded = new Map<TFaceId, TFaceDrawing>([['ring', Ring]]);
