@@ -14,4 +14,14 @@ export {
   type TFaceState,
   type TFaceTheme,
 } from './model';
-export { FACE_LOADERS, FACES, faceName, type IFaceInfo, loadFace, preloadFaces, type TFaceDrawing } from './registry';
+export {
+  FACE_COLLECTIONS,
+  FACE_LOADERS,
+  FACES,
+  faceName,
+  type IFaceInfo,
+  loadFace,
+  preloadFaces,
+  type TFaceCollection,
+  type TFaceDrawing,
+} from './registry';
