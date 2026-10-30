@@ -146,19 +146,14 @@ export function ToolPalette() {
       close: c.palClose,
       closePalette: c.palClosePalette,
       noMatch: (q) => fill(c.palEmpty, { q }),
-      count: (n, searching) =>
-        searching
-          ? n === 1
-            ? c.palResult1
-            : fill(c.palResults, { n })
-          : n === 1
-            ? c.palCommand1
-            : fill(c.palCommands, { n }),
+      // The board counts results whether or not anything is typed.
+      count: (n) => (n === 1 ? c.palResult1 : fill(c.palResults, { n })),
     }),
     [c],
   );
   return (
     <CommandPalette
+      fit="tool"
       open={ui.view === 'palette'}
       onOpenChange={(open) => {
         if (open) return;

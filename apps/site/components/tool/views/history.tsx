@@ -44,7 +44,7 @@ export default function HistoryView() {
             const Icon = PRESET_ICONS[r.icon];
             return (
               <div key={r.id} className={ROW}>
-                <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary">
+                <span className="inline-flex size-[34px] shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary">
                   <Icon className="size-4" strokeWidth={2} aria-hidden="true" />
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col">

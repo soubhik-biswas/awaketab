@@ -43,7 +43,7 @@ export const FIELD =
   'flex h-11 min-w-0 items-center gap-2 rounded-[10px] border border-input bg-field px-3 text-[15px] text-foreground';
 export const LINK_BTN =
   'min-h-11 cursor-pointer border-0 bg-transparent px-0.5 text-[14px] font-semibold text-lamp underline underline-offset-3';
-export const ROW = 'flex min-h-[52px] items-center gap-3 border-b border-border';
+export const ROW = 'flex min-h-[53px] items-center gap-3 border-b border-border';
 export const ROW_BTN = cn(
   ROW,
   'w-full cursor-pointer border-x-0 border-t-0 bg-transparent p-0 text-left text-foreground',
