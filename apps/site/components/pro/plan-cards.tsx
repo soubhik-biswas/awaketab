@@ -28,7 +28,7 @@ function Feature({ children }: { children: string }) {
 
 const CARD = 'flex flex-col gap-[14px] rounded-[24px] bg-card p-[26px]';
 const BADGE = 'rounded-full bg-primary-soft px-2.5 py-[3px] text-[13px] font-bold text-primary';
-const PRICE = 'text-[30px] font-extrabold tracking-[-0.03em] min-[700px]:text-[36px]';
+const PRICE = 'font-display text-[34px] font-extrabold tracking-[-0.03em] [font-stretch:112%] min-[700px]:text-[44px]';
 const CTA = 'h-13 rounded-[12px] px-[18px] text-[15px]';
 
 // The two plan cards of the content page's Pro board, with the real prices.

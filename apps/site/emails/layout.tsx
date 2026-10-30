@@ -3,16 +3,16 @@ import { Body, Button, Container, Head, Heading, Html, Link, Preview, Section, T
 
 // Email clients ignore CSS variables, so the paper theme's values are written out once here.
 export const MAIL = {
-  ground: '#F6F4EF',
+  ground: '#F5F5FA',
   card: '#FFFFFF',
-  line: '#DCD7CC',
-  rule: '#EFECE5',
+  line: '#D9D9E5',
+  rule: '#ECECF4',
   ink: '#0B1020',
   body: '#2A3045',
   ink2: '#4B5165',
   muted: '#626777',
-  note: '#F1EEE7',
-  primary: '#B93D0B',
+  note: '#EFEFF6',
+  primary: '#6633F5',
   onPrimary: '#FFFFFF',
   lamp: '#117A3B',
 } as const;
@@ -23,6 +23,7 @@ export const COMPANY_NAME = '[COMPANY NAME]';
 export const COMPANY_ADDRESS = '[ADDRESS]';
 
 const FONT = "Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+const DISPLAY = `Archivo, ${FONT}`;
 
 export interface IMailProps {
   preview: string;
@@ -115,9 +116,11 @@ export function MailLayout({ preview, heading, body, rows, action, fallback, not
                   <td
                     style={{
                       verticalAlign: 'middle',
+                      fontFamily: DISPLAY,
+                      fontStretch: '112%',
                       fontSize: 18,
                       fontWeight: 800,
-                      letterSpacing: '-0.035em',
+                      letterSpacing: '-0.02em',
                       color: MAIL.ink,
                     }}
                   >
