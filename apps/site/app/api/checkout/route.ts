@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 // GET /api/checkout?plan=yearly|lifetime&email=… opens Polar checkout for one of the two Pro plans.
 // Only the plan and a checked address travel on: the browser can never set Polar metadata, products or customer ids.
 export const GET = api(async (request, { env }) => {
-  if (!(await rateLimit(env, 'checkout', await clientIp(request), 10))) return rateLimited();
+  if (!(await rateLimit(env, 'checkout', clientIp(request), 10))) return rateLimited();
   const url = new URL(request.url);
   const plan = url.searchParams.get('plan') === 'lifetime' ? 'pro_lifetime' : 'pro_yearly';
   const email = normaliseEmail(url.searchParams.get('email'));

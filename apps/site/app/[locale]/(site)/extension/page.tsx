@@ -11,7 +11,7 @@ const STORE = {
   chrome: 'https://chromewebstore.google.com/search/AwakeTab',
   edge: 'https://microsoftedge.microsoft.com/addons/search/AwakeTab',
 } as const;
-const LISTED = false;
+const LISTED = false as boolean;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.extension' });

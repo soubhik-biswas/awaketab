@@ -6,7 +6,7 @@ import { clientIp, rateLimit } from './ratelimit';
 import { mintToken } from './token';
 
 export async function validateRoute(request: Request, env: IEnv): Promise<Response> {
-  if (!(await rateLimit(env, 'license', await clientIp(request), 10))) return rateLimited();
+  if (!(await rateLimit(env, 'license', clientIp(request), 10))) return rateLimited();
   let token: string;
   try {
     const body = (await request.json()) as { token?: string };

@@ -1,21 +1,21 @@
-import { type Draw, f1, P, ticks, type V } from '../base.js';
+import { type TDraw, f1, P, ticks, type TV } from '../base.js';
 import { arc, bk, each, hand, lbl, lx, nv, sectorPath, svg, wh } from '../kit.js';
 
-const span = (v: V) => (v.st === 'idle' ? Math.min(359.9, v.total / 10) : Math.min(359.9, v.r / 10));
+const span = (v: TV) => (v.st === 'idle' ? Math.min(359.9, v.total / 10) : Math.min(359.9, v.r / 10));
 const pin = (l: number, tp: number, sz: number, bg: string, border: string) =>
   `<div style="position: absolute; left: ${l}px; top: ${tp}px; width: ${sz}px; height: ${sz}px; border-radius: 50%; background: ${bg}; border: ${border}"></div>`;
-const subBg = (v: V) => `var(--at-fc-sub-${v.th})`;
+const subBg = (v: TV) => `var(--at-fc-sub-${v.th})`;
 const DAUPHINE = 'clip-path: polygon(50% 0, 100% 82%, 50% 100%, 0 82%);';
 const SWORD = 'clip-path: polygon(50% 0, 100% 10%, 100% 100%, 0 100%, 0 10%);';
-const box = (l: number, tp: number, w: number, h: number, r: number, v: V, extra: string, body: string) =>
+const box = (l: number, tp: number, w: number, h: number, r: number, v: TV, extra: string, body: string) =>
   `<div style="position: absolute; left: ${l}px; top: ${tp}px; width: ${w}px; height: ${h}px; border-radius: ${r}px; background: ${subBg(v)}; border: 1px solid ${v.t.line}; display: flex; align-items: center; justify-content: center; ${extra}">${body}</div>`;
 
-const hands = (v: V, sec: string) =>
+const hands = (v: TV, sec: string) =>
   `<div class="afx-h" style="${hand(70, 14, 8, v.hourDeg, v.hourDeg0, v.t.ink, 'border-radius: 4px;')}"></div><div class="afx-m" style="${hand(110, 16, 6, v.minDeg, v.minDeg0, v.t.ink, 'border-radius: 3px;')}"></div><div class="afx-s" style="${hand(124, 30, 2, v.secDeg, v.secDeg0, v.accent)}">${sec}</div>`;
 
 // Analog (minimal) and Analog luxe share a dial: real time on the hands, the lamp sector running to the end time.
 const dial =
-  (luxe: boolean): Draw =>
+  (luxe: boolean): TDraw =>
   (v) => {
     const { t, accent } = v;
     const sp = span(v);
@@ -56,7 +56,7 @@ const dial =
     return `${sun}${art}${extra}<div class="afx-h" style="${hh}"></div><div class="afx-m" style="${mm}"></div><div class="afx-s" style="${hand(124, 30, 2, v.secDeg, v.secDeg0, accent)}"><span style="position: absolute; left: -4px; bottom: 14px; width: 10px; height: 10px; border-radius: 50%; background: ${accent}"></span></div>${pin(173, 148, 14, accent, `3px solid ${v.capRing}`)}`;
   };
 
-const dive: Draw = (v) => {
+const dive: TDraw = (v) => {
   const { t, accent } = v;
   const mins = v.st === 'idle' ? Math.min(60, v.total / 60) : Math.min(60, v.r / 60);
   const snow = 'var(--at-fc-snow)';
@@ -70,7 +70,7 @@ const dive: Draw = (v) => {
   return `<div style="position: absolute; left: 34px; top: 9px; width: 292px; height: 292px; border-radius: 50%; background: var(--at-fc-dive-${v.th}); -webkit-mask-image: ${mask}; mask-image: ${mask}"></div>${art}${nums}<span style="position: absolute; left: 0; width: 360px; top: 196px; text-align: center; ${v.mono} font-size: max(13px, var(--lmin)); letter-spacing: .08em; color: ${accent}; font-variant-numeric: tabular-nums">${lx('dive.left', '{time} LEFT', { time: v.digits })}</span>${hands(v, `<span style="position: absolute; left: -5px; top: 22px; width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid ${accent}; background: ${t.panel}"></span>`)}${pin(173, 148, 14, t.ink, `3px solid ${accent}`)}`;
 };
 
-const chrono: Draw = (v) => {
+const chrono: TDraw = (v) => {
   const { t, accent } = v;
   const mDeg = Math.min(v.m, 59.9) * 6;
   const sl = P(30, mDeg, 124, 160);
@@ -87,7 +87,7 @@ const chrono: Draw = (v) => {
   return `${art}${nums}${sub(86, lx('chrono.min', 'MIN'))}${sub(198, lx('chrono.sec', 'SEC'))}${sweep(234, 126, 4, 44, '77.3%', 'border-radius: 2px; ')}<div style="position: absolute; left: 232px; top: 156px; width: 8px; height: 8px; border-radius: 50%; background: ${accent}"></div>${box(130, 82, 100, 36, 8, v, 'font-size: 22px; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums', v.digits)}<span style="position: absolute; left: 0; width: 360px; top: 219px; text-align: center; font-size: max(14px, var(--lmin)); color: ${t.ink2}">${v.endLine}</span>${sweep(179, 25, 2, 160, '81.25%', `opacity: ${v.liveOp}; `)}${pin(174, 149, 12, accent, `2px solid ${v.capRing}`)}`;
 };
 
-const pilot: Draw = (v) => {
+const pilot: TDraw = (v) => {
   const { t, accent } = v;
   const sword = `linear-gradient(90deg, ${t.ink} 30%, ${accent} 30% 70%, ${t.ink} 70%)`;
   const art = svg(
@@ -99,7 +99,7 @@ const pilot: Draw = (v) => {
   return `${art}${nums}${box(146, 196, 68, 26, 6, v, `${v.mono} font-size: max(13px, var(--lmin)); color: ${accent}; font-variant-numeric: tabular-nums`, v.digits)}<div class="afx-h" style="${hand(72, 10, 12, v.hourDeg, v.hourDeg0, sword, SWORD)}"></div><div class="afx-m" style="${hand(112, 12, 10, v.minDeg, v.minDeg0, sword, SWORD)}"></div><div class="afx-s" style="${hand(124, 30, 2, v.secDeg, v.secDeg0, accent)}"></div>${pin(172, 147, 16, t.ink, `3px solid ${accent}`)}`;
 };
 
-const dual: Draw = (v) => {
+const dual: TDraw = (v) => {
   const { t, accent } = v;
   const one = (cx: number, cy: number, sec: number, lab: string, hc: string, ring: boolean) => {
     const H = P(36, ((sec / 3600) % 12) * 30, cx, cy);
@@ -124,7 +124,7 @@ const gTicks = (r1: number, r2: number, n: number, every: number) => {
   return d;
 };
 
-const gauge: Draw = (v) => {
+const gauge: TDraw = (v) => {
   const { t, accent } = v;
   const fr = v.st === 'idle' ? 1 : v.frac;
   const warn = v.total > 0 ? Math.min(1, 300 / v.total) : 0;

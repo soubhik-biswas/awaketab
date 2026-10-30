@@ -129,15 +129,12 @@ export async function linkLicenseKey(
   return link;
 }
 
+type TIdField =
+  'polarLicenseKeyId' | 'polarGrantId' | 'polarOrderId' | 'polarSubscriptionId' | 'customerId' | 'benefitId';
+
 export function applyIds(record: ILicenseRecord, found: IPolarIds): boolean {
   let changed = false;
-  const set = <
-    K extends
-      'polarLicenseKeyId' | 'polarGrantId' | 'polarOrderId' | 'polarSubscriptionId' | 'customerId' | 'benefitId',
-  >(
-    field: K,
-    value: string | undefined,
-  ): void => {
+  const set = (field: TIdField, value: string | undefined): void => {
     if (value && record[field] !== value) {
       record[field] = value;
       changed = true;

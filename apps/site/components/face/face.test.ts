@@ -18,6 +18,7 @@ const ring = (p: Partial<IFaceProps> = {}) => faceModel({ face: 'ring', ...p });
 describe('face list', () => {
   it('matches the core ids, the board list and the lazy loaders', async () => {
     // A runtime import, so this check does not need the core package built for types.
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- widening the specifier keeps TypeScript from resolving the package's built types
     const core = (await import('@awaketab/core' as string)) as { FACE_IDS: readonly string[] };
     expect([...FACE_IDS]).toEqual([...core.FACE_IDS]);
     expect(FACES.map((f) => f.id)).toEqual([...FACE_IDS]);

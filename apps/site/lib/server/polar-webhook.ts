@@ -186,7 +186,7 @@ async function byCustomer(kv: IKv, found: IEventIds, legacyOnly = false): Promis
 async function resolveTargets(kv: IKv, found: IEventIds, keyHash: string): Promise<ITargets> {
   if (keyHash && (await kv.get(`lic:${keyHash}`))) return { keyHashes: [keyHash], pending: [] };
   const steps: Array<() => Promise<string[]>> = [
-    async () => (found.licenseKeyId ? [found.licenseKeyId] : []),
+    () => Promise.resolve(found.licenseKeyId ? [found.licenseKeyId] : []),
     async () => (found.grantId ? licenseKeyIdsFor(kv, 'grant', found.grantId) : []),
     async () => (found.subscriptionId ? licenseKeyIdsFor(kv, 'sub', found.subscriptionId) : []),
     async () => (found.orderId ? licenseKeyIdsFor(kv, 'ord', found.orderId) : []),
@@ -256,7 +256,7 @@ export async function polarWebhookRoute(
     env.LICENSE_KEY_ENC_KEY &&
     !(await kv.get(`lic:${keyHash}`))
   ) {
-    const plan = (data.metadata?.plan ?? 'pro_yearly') as TPlanId;
+    const plan = data.metadata?.plan ?? 'pro_yearly';
     const record: ILicenseRecord = {
       plan,
       status: 'active',

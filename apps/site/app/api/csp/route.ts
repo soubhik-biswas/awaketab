@@ -26,7 +26,7 @@ function reportPath(parsed: unknown): string {
 export const dynamic = 'force-dynamic';
 
 export const POST = api(async (request, { env }) => {
-  const ip = await clientIp(request);
+  const ip = clientIp(request);
   if (!(await rateLimit(env, 'csp', ip))) return rateLimited();
   const raw = await readCappedText(request, MAX_BODY_BYTES);
   if (raw === null) return jsonError('too_large', 413);

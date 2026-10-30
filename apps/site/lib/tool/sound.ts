@@ -1,14 +1,15 @@
 import type { TChimeKind } from '@/lib/tool/settings';
-import type { ISoundMix, TMixKey } from '@/lib/tool/pro';
+import type { TSoundMix, TMixKey } from '@/lib/tool/pro';
 
-type TWindowAudio = Window & { webkitAudioContext?: typeof AudioContext };
+type TWindowAudio = { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
 
 let ctx: AudioContext | null = null;
 
 function audio(): AudioContext | null {
   if (typeof window === 'undefined') return null;
   if (!ctx) {
-    const Ctor = window.AudioContext ?? (window as TWindowAudio).webkitAudioContext;
+    const w = window as TWindowAudio;
+    const Ctor = w.AudioContext ?? w.webkitAudioContext;
     if (!Ctor) return null;
     ctx = new Ctor();
   }
@@ -113,7 +114,7 @@ function makeLayer(ac: AudioContext, out: AudioNode, key: TMixKey): ILayer {
 }
 
 // The ambient mix plays only while the screen is awake and fades out the moment it is not.
-export function setAmbient(mix: ISoundMix, playing: boolean) {
+export function setAmbient(mix: TSoundMix, playing: boolean) {
   const ac = playing ? audio() : ctx;
   if (!ac) return;
   if (!bus) {
@@ -136,16 +137,11 @@ export function setAmbient(mix: ISoundMix, playing: boolean) {
 
 let previewTimer: ReturnType<typeof setTimeout> | null = null;
 
-export function previewAmbient(mix: ISoundMix, seconds = 5) {
+export function previewAmbient(mix: TSoundMix, seconds = 5) {
   setAmbient(mix, true);
   if (previewTimer) clearTimeout(previewTimer);
   previewTimer = setTimeout(() => {
     previewTimer = null;
     setAmbient(mix, false);
   }, seconds * 1000);
-}
-
-function stopAmbient() {
-  for (const layer of layers.values()) layer.stop();
-  layers.clear();
 }

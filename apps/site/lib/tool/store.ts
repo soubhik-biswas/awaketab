@@ -1,10 +1,10 @@
 import { useSyncExternalStore } from 'react';
 
 export interface ILocalStore<T> {
-  get(): T;
-  set(next: T | ((prev: T) => T)): void;
-  subscribe(cb: () => void): () => void;
-  reset(): void;
+  get: () => T;
+  set: (next: T | ((prev: T) => T)) => void;
+  subscribe: (cb: () => void) => () => void;
+  reset: () => void;
 }
 
 function readRaw(key: string): unknown {

@@ -55,25 +55,6 @@ function RowBody({
   );
 }
 
-function ListRow({
-  icon,
-  tile,
-  title,
-  meta,
-  trailing,
-  tileSize,
-  titleSize,
-  divider = 'bottom',
-  className,
-  ...props
-}: IListRowProps) {
-  return (
-    <div data-slot="list-row" className={cn(rowClasses(divider), className)} {...props}>
-      <RowBody {...{ icon, tile, title, meta, trailing, tileSize, titleSize }} />
-    </div>
-  );
-}
-
 export interface IListRowButtonProps
   extends
     Omit<React.ComponentProps<'button'>, 'title'>,

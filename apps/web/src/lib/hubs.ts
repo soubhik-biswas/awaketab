@@ -49,23 +49,6 @@ export const MODE_LABEL: Record<string, string> = {
   cook: 'Cook mode',
 };
 
-const PRESET_ROUTE: Record<string, string> = {
-  p15: '/15m',
-  p30: '/30m',
-  p45: '/45m',
-  p60: '/1h',
-  p120: '/2h',
-  p240: '/4h',
-  pinf: '/',
-  custom: '/8h',
-  until: '/',
-};
-
-function startHref(preset: string, mode: string): string {
-  const route = PRESET_ROUTE[preset] ?? '/';
-  return mode === 'standard' ? route : `${route}?mode=${mode}`;
-}
-
 export const HUBS: Record<TContentKind, IHub> = {
   for: {
     crumb: 'Keep your screen awake for a task',

@@ -19,7 +19,8 @@ export function pipSupport(win: Window | undefined = typeof window === 'undefine
   if (!win) return 'none';
   if (docPip(win)) return 'document';
   if (typeof BroadcastChannel === 'undefined') return 'none';
-  const coarse = win.matchMedia?.('(pointer: coarse)').matches ?? false;
+  const media: Partial<Pick<Window, 'matchMedia'>> = win;
+  const coarse = media.matchMedia?.('(pointer: coarse)').matches ?? false;
   const mobile = /Android|iPhone|iPad|iPod|Mobile/u.test(win.navigator.userAgent);
   return coarse || mobile ? 'none' : 'popup';
 }

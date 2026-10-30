@@ -1,11 +1,11 @@
-import { type Draw, f1, P, ticks } from './base.js';
+import { type TDraw, f1, P, ticks } from './base.js';
 
 const C = 2 * Math.PI * 138;
 const MINOR = ticks(124, 129, 60, (i) => i % 5 !== 0);
 const MAJOR = ticks(118, 129, 60, (i) => i % 5 === 0);
 
 // Ring, the signature face: the lamp rides the end of the arc and every other state takes its status colour.
-export const ring: Draw = (v) => {
+export const ring: TDraw = (v) => {
   const { t, accent, ringFrac } = v;
   const dot = P(138, 360 * ringFrac);
   const dash = v.st === 'starting' ? '10 16' : `${(C * Math.max(0.0001, ringFrac)).toFixed(1)} ${C.toFixed(1)}`;

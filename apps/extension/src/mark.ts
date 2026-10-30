@@ -1,8 +1,8 @@
-export type MarkState = 'awake' | 'paused' | 'blocked' | 'ended' | 'info' | 'off';
+export type TMarkState = 'awake' | 'paused' | 'blocked' | 'ended' | 'info' | 'off';
 
-interface MarkOptions {
+interface IMarkOptions {
   size?: number;
-  state?: MarkState;
+  state?: TMarkState;
   glow?: boolean;
   small?: boolean;
   hollow?: boolean;
@@ -10,7 +10,7 @@ interface MarkOptions {
   className?: string;
 }
 
-const LAMP_VAR: Record<MarkState, string> = {
+const LAMP_VAR: Record<TMarkState, string> = {
   awake: 'var(--at-accent)',
   paused: 'var(--at-warn)',
   blocked: 'var(--at-bad)',
@@ -23,7 +23,7 @@ const ARC = 'M32 11 A21 21 0 1 1 12.27 24.82';
 const ARC_SMALL = 'M32 11 A21 21 0 1 1 11.12 29.8';
 
 // The brand mark board's geometry: 64 grid, r 21, 70° gap (84° at the small optical cut), lamp at −125°.
-export function markSvg(opts: MarkOptions = {}): string {
+export function markSvg(opts: IMarkOptions = {}): string {
   const size = opts.size ?? 32;
   const state = opts.state ?? 'awake';
   const small = opts.small ?? size <= 20;

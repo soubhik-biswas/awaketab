@@ -19,7 +19,7 @@ const CHIMES = [
   ['bell', 'bell'],
   ['none', 'off'],
 ] as const;
-export const PREVIEW_MS = 5000;
+const PREVIEW_MS = 5000;
 
 export function mountSound(ctx: IToolCtx, host: HTMLElement): () => void {
   const mixer = soundMixer(ctx);

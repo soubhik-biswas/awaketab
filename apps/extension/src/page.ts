@@ -3,7 +3,7 @@ import { LOCALE_META } from '../../site/i18n/locales';
 import type { IExtApi } from './api';
 import { createTimeFormat, type TTimeFormat } from './format';
 import { createTranslator, resolveLocale, type TCatalog, type TLocale, type TTranslate } from './i18n';
-import { markSvg, type MarkState } from './mark';
+import { markSvg, type TMarkState } from './mark';
 import type { IExtState, TExtRequest } from './messages';
 import { readSettings } from './settings';
 
@@ -88,8 +88,8 @@ export function show(el: Element, on: boolean): boolean {
 }
 
 // The brand mark into every `[data-mark-slot]`: data-size, data-state, data-glow="0", data-small (the 84° cut).
-export function paintMark(slot: HTMLElement, state?: MarkState): void {
-  const next = state ?? (slot.dataset.state as MarkState | undefined) ?? 'awake';
+export function paintMark(slot: HTMLElement, state?: TMarkState): void {
+  const next = state ?? (slot.dataset.state as TMarkState | undefined) ?? 'awake';
   if (slot.dataset.drawn === next) return;
   slot.dataset.drawn = next;
   const size = Number(slot.dataset.size ?? 26);

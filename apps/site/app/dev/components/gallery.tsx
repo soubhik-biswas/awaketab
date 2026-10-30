@@ -46,7 +46,6 @@ import {
   PresenceMarker,
   type IDevice,
 } from '@/components/product/device-presence';
-import { EmptyState } from '@/components/product/empty-state';
 import { ExtendBar } from '@/components/product/extend-bar';
 import { FaceSwitcher } from '@/components/product/face-switcher';
 import { FixPanel } from '@/components/product/fix-panel';
@@ -109,7 +108,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';

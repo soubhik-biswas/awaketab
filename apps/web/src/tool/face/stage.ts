@@ -2,11 +2,19 @@ import type { TFace } from '@awaketab/core';
 import type { IToolCtx } from '../ctx.js';
 import { strings, t } from '../i18n.js';
 import type { TStatus } from '../ui/view.js';
-import { type FaceProps, type FaceState, type FaceTheme, FACES, faceSheet, mountFace, setFaceText } from './index.js';
+import {
+  type IFaceProps,
+  type TFaceState,
+  type TFaceTheme,
+  FACES,
+  faceSheet,
+  mountFace,
+  setFaceText,
+} from './index.js';
 import { renderFaceGrid } from './sheet.js';
 
 // The tool's status as a face state (needs-a-tap reads as "not awake", as on the boards).
-const STATE: Record<TStatus, FaceState> = {
+const STATE: Record<TStatus, TFaceState> = {
   ready: 'idle',
   starting: 'starting',
   awake: 'running',
@@ -46,7 +54,7 @@ export const stepFace = (id: TFace, by: number): TFace => {
   return OWN[(((i + by) % n) + n) % n] ?? 'ring';
 };
 
-const themeOf = (): FaceTheme => {
+const themeOf = (): TFaceTheme => {
   const th = document.documentElement.dataset.theme;
   return th === 'light' || th === 'oled' ? th : 'dark';
 };
@@ -78,7 +86,7 @@ export function paintStage(ctx: IToolCtx, snap: IStageSnap): void {
   }
   html.dataset.face = settings.face;
   const size = Math.round(Math.min(host.clientWidth, host.clientHeight)) || 358;
-  const props: FaceProps = {
+  const props: IFaceProps = {
     face: settings.face,
     theme: themeOf(),
     state: STATE[snap.st],

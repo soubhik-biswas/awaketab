@@ -2,11 +2,11 @@ import { FACE_IDS } from '@awaketab/core';
 import { describe, expect, it, vi } from 'vitest';
 import { vals } from '../../src/tool/face/base.js';
 import { FACES, faceSvg } from '../../src/tool/face/all.js';
-import { type FaceProps, loadFace, mountFace } from '../../src/tool/face/index.js';
+import { type IFaceProps, loadFace, mountFace } from '../../src/tool/face/index.js';
 import { renderFaceGrid } from '../../src/tool/face/sheet.js';
 import { stepFace } from '../../src/tool/face/stage.js';
 
-const base: FaceProps = {
+const base: IFaceProps = {
   face: 'ring',
   theme: 'dark',
   state: 'running',
