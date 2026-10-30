@@ -49,26 +49,6 @@ html[data-consent] .site-consent {
   display: none;
 }
 
-@keyframes site-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-.site-float {
-  animation: site-float 5s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .site-float {
-    animation: none;
-  }
-}
-
 .site-prose a {
   color: var(--link);
   text-decoration: underline;

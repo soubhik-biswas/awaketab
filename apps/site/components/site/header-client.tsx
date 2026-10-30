@@ -16,7 +16,6 @@ import { usePathname } from '@/i18n/navigation';
 import { LOCALE_META, LOCALES, localePath, type TLocale } from '@/i18n/locales';
 import { cn } from '@/lib/utils';
 import { useLocaleLinks } from './locale-links';
-import { btn } from './styles';
 
 export interface INavLink {
   href: string;
@@ -50,10 +49,9 @@ export function LangMenu({ locale, label }: { locale: TLocale; label: string }) 
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant={null}
-          size={null}
+          variant="ghost"
           aria-label={`${label}: ${LOCALE_META[locale].label}`}
-          className="inline-flex h-11 items-center gap-1.5 rounded-[10px] border-0 bg-transparent px-2.5 text-[14px] font-normal text-muted-foreground-strong shadow-none hover:bg-secondary"
+          className="px-2.5 text-[14px] font-normal text-muted-foreground-strong"
         >
           <Globe className="size-4" strokeWidth={2} aria-hidden="true" />
           {LOCALE_META[locale].label}
@@ -101,12 +99,7 @@ export function MobileMenu({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button
-          variant={null}
-          size={null}
-          aria-label={menuLabel}
-          className={cn(btn, 'w-11 border-transparent bg-transparent p-0 text-foreground hover:bg-secondary')}
-        >
+        <Button variant="ghost" size="icon" aria-label={menuLabel} className="rounded-[12px]">
           <Menu className="size-[22px]" strokeWidth={1.75} aria-hidden="true" />
         </Button>
       </SheetTrigger>

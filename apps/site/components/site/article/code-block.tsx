@@ -49,11 +49,10 @@ export function CodeBlock({
       <div className="flex items-center justify-between gap-3 border-b border-border bg-secondary py-1 pr-2 pl-5">
         <code className="font-mono text-[13px] text-muted-foreground-strong">{file}</code>
         <Button
-          variant={null}
-          size={null}
+          variant="ghost"
           onClick={onCopy}
           aria-label={copyLabel}
-          className="h-11 gap-1.5 rounded-[10px] border-0 bg-transparent px-3 text-[14px] font-semibold text-foreground hover:bg-surface-3"
+          className="px-3 hover:border-surface-3 hover:bg-surface-3"
         >
           {done ? <Check className="size-4" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
           <span aria-live="polite">{done ? copied : copy}</span>

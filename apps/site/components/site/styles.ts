@@ -20,17 +20,14 @@ export const h3Prose = 'm-0 text-[22px] font-bold tracking-[-0.02em] min-[700px]
 
 export const body = 'text-left text-[15px] leading-[1.55] text-muted-foreground-strong min-[700px]:text-[16px]';
 
-export const btn =
-  'inline-flex h-11 items-center justify-center gap-2 rounded-[12px] border px-[18px] text-[15px] font-semibold whitespace-nowrap no-underline shadow-none';
+// Use with <Button> (default size): the board's 44 px button has a 12 px radius and 15 px label.
+export const btn = 'rounded-[12px] px-[18px] text-[15px]';
 
-export const btnXl =
-  'h-[54px] w-full gap-2 rounded-[18px] border border-primary bg-primary px-5 text-[17px] font-bold text-primary-foreground shadow-[0_12px_30px_var(--site-act-glow)] hover:bg-primary/90 min-[700px]:h-[60px] min-[700px]:w-auto min-[700px]:px-[26px] [&_svg]:size-5';
+// Use with <Button size="cta">: 54 px and full width on phones, 60 px from 700 px.
+export const btnXl = 'h-[54px] w-full px-5 min-[700px]:h-15 min-[700px]:w-auto min-[700px]:px-[26px]';
 
-export const btnOutXl =
-  'h-[54px] w-full rounded-[18px] border border-input bg-transparent px-[22px] text-[17px] font-semibold text-foreground shadow-none hover:bg-secondary min-[700px]:h-[60px] min-[700px]:w-auto';
-
-export const linkBtn =
-  'min-h-11 bg-transparent px-1 text-[15px] font-bold text-lamp underline underline-offset-[3px] hover:bg-transparent';
+// Use with <Button variant="outline" size="cta">.
+export const btnOutXl = 'h-[54px] w-full px-[22px] font-semibold min-[700px]:h-15 min-[700px]:w-auto';
 
 export const grid: Record<1 | 2 | 3 | 4, string> = {
   1: 'grid grid-cols-1 gap-[14px] min-[700px]:gap-5',

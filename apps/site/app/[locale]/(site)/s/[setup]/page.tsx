@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { Face } from '@/components/site/_pending/face';
+import { SiteFace } from '@/components/site/site-face';
 import { Block, Callout, DataTable, no, tx } from '@/components/site/blocks';
 import { EndsAt } from '@/components/site/ends-at';
 import { HeroButtons, PageHero } from '@/components/site/page-hero';
@@ -91,7 +91,7 @@ export default async function Page({ params }: { params: TParams }) {
             secondary={{ href: setupToolHref(setup, false), label: t('share.change') }}
           />
         }
-        face={<Face face={setup.face} state="idle" size={380} total={total || 3600} remain={total || 3600} className="size-[300px] min-[700px]:size-[380px]" />}
+        face={<SiteFace face={setup.face} size={380} phoneSize={300} total={total || 3600} indef={minutes === 0} />}
       />
       <Block id="s-contains" h={t('share.contains')} sub={t('share.containsSub')}>
         <DataTable

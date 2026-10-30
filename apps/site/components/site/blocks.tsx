@@ -15,7 +15,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Button } from '@/components/ui/button';
 import type { TSceneKey } from '@/lib/content';
 import { cn } from '@/lib/utils';
-import { Scene } from './_pending/scene';
+import { Scene } from '@/components/scene/scene';
 import * as s from './styles';
 
 export function Block({
@@ -73,8 +73,8 @@ export function Cards({ items, cols }: { items: readonly ICard[]; cols: 1 | 2 | 
             className="group flex flex-1 flex-col items-stretch overflow-hidden rounded-[24px] border border-border bg-card text-left text-foreground no-underline transition-shadow duration-fast ease-glide hover:shadow-e2"
           >
             {card.scene && (
-              <span className="flex justify-center bg-[var(--site-art)] pt-[14px]" aria-hidden="true">
-                <Scene sceneKey={card.scene} width={300} className="w-[300px] min-[700px]:w-[260px]" />
+              <span className="flex justify-center bg-[var(--site-art)] pt-[14px]">
+                <Scene scene={card.scene} width={300} decorative className="h-auto w-[300px] max-w-full min-[700px]:w-[260px]" />
               </span>
             )}
             <span className="flex flex-1 flex-col gap-2 px-5 pt-[18px] pb-5">
@@ -357,9 +357,8 @@ export function Cta({ title, desc, href, label }: { title: string; desc: string;
       </span>
       <Button
         asChild
-        variant={null}
-        size={null}
-        className="h-[60px] gap-2 rounded-[18px] border border-[var(--site-cta-button)] bg-[var(--site-cta-button)] px-[26px] text-[17px] font-bold text-[var(--site-cta-button-ink)] shadow-[0_12px_30px_var(--site-cta-button-glow)] hover:opacity-90"
+        size="cta"
+        className="border-[var(--site-cta-button)] bg-[var(--site-cta-button)] text-[var(--site-cta-button-ink)] shadow-[0_12px_30px_var(--site-cta-button-glow)] hover:border-[var(--site-cta-button)] hover:bg-[var(--site-cta-button)] hover:opacity-90"
       >
         <a href={href}>
           <Play className="size-5" aria-hidden="true" />

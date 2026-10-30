@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { TOOL_ANCHOR } from '@/lib/routes';
 import { cn } from '@/lib/utils';
-import { Face } from './_pending/face';
+import { SiteFace } from './site-face';
 import * as s from './styles';
 
 export interface IToolSlotProps {
@@ -34,13 +34,13 @@ export function ToolSlot({ preset, mode = 'standard', face = 'ring', minutes, ey
       )}
     >
       <span className="flex flex-none justify-center rounded-[22px] bg-[var(--site-well)] p-2.5">
-        <Face face={face} state="idle" size={260} total={total} remain={total} bare />
+        <SiteFace face={face} size={260} total={total} bare />
       </span>
       <span className="flex min-w-0 flex-1 flex-col items-start gap-3">
         <span className={s.eyebrow}>{eyebrow}</span>
         <strong className={s.h3}>{title}</strong>
         <span className={cn(s.body, 'site-prose')}>{desc}</span>
-        <Button asChild variant={null} size={null} className={s.btnXl}>
+        <Button asChild size="cta" className={s.btnXl}>
           <a href={href}>
             <Play className="size-5" aria-hidden="true" />
             {label}

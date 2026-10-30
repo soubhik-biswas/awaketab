@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import type { TSceneKey } from '@/lib/content';
 import { cn } from '@/lib/utils';
-import { Scene } from './_pending/scene';
+import { Scene } from '@/components/scene/scene';
 import * as s from './styles';
 
 export interface ICrumb {
@@ -56,7 +56,7 @@ export function HeroButtons({ primary, secondary }: { primary?: IHeroAction; sec
   return (
     <div className="flex w-full flex-wrap gap-2.5 min-[700px]:w-auto">
       {primary && (
-        <Button asChild variant={null} size={null} className={s.btnXl}>
+        <Button asChild size="cta" className={s.btnXl}>
           <a href={primary.href}>
             <Play className="size-5" aria-hidden="true" />
             {primary.label}
@@ -64,7 +64,7 @@ export function HeroButtons({ primary, secondary }: { primary?: IHeroAction; sec
         </Button>
       )}
       {secondary && (
-        <Button asChild variant={null} size={null} className={s.btnOutXl}>
+        <Button asChild variant="outline" size="cta" className={s.btnOutXl}>
           <a href={secondary.href}>{secondary.label}</a>
         </Button>
       )}
@@ -119,8 +119,14 @@ export function PageHero({
         </div>
       )}
       {scene && (
-        <div className="site-float flex-none">
-          <Scene sceneKey={scene} width={520} label={sceneLabel} className="w-[350px] min-[700px]:w-[520px]" />
+        <div className="flex-none">
+          <Scene
+            scene={scene}
+            width={520}
+            float
+            {...(sceneLabel ? { label: sceneLabel } : { decorative: true })}
+            className="h-auto w-[350px] max-w-full min-[700px]:w-[520px]"
+          />
         </div>
       )}
     </section>

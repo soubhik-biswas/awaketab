@@ -36,10 +36,7 @@ function answer(allow: boolean): void {
   }
 }
 
-const choice = cn(
-  btn,
-  'min-w-[110px] flex-1 border-input bg-secondary text-foreground hover:bg-surface-3 min-[700px]:flex-none',
-);
+const choice = cn(btn, 'min-w-[110px] flex-1 border-input min-[700px]:flex-none');
 
 export function Consent({
   title,
@@ -71,10 +68,10 @@ export function Consent({
         <span className="text-[14px] leading-normal text-muted-foreground-strong">{body}</span>
       </span>
       <span className="flex flex-wrap gap-2">
-        <Button variant={null} size={null} className={choice} onClick={pick(false)}>
+        <Button variant="secondary" className={choice} onClick={pick(false)}>
           {decline}
         </Button>
-        <Button variant={null} size={null} className={choice} onClick={pick(true)}>
+        <Button variant="secondary" className={choice} onClick={pick(true)}>
           {allow}
         </Button>
       </span>
