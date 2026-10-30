@@ -1,0 +1,257 @@
+.af-live .afx-m {
+  animation: af-sweep 3600s linear infinite;
+}
+
+.af-live .afx-h {
+  animation: af-sweep 43200s linear infinite;
+}
+
+.af-live .afx-blink {
+  animation: af-blink 1s steps(1) infinite;
+}
+
+.af-live .afx-pulse-d {
+  animation: af-pulse 2.4s ease-out infinite;
+}
+
+.af-live .afx-breath {
+  animation: af-breath 3s ease-in-out infinite;
+}
+
+.af-live .afx-wave {
+  animation: af-wave 6s linear infinite;
+}
+
+.af-live .afx-wave2 {
+  animation: af-wave 9s linear infinite reverse;
+}
+
+.af-live .afx-rise {
+  animation: af-rise 4.5s ease-in infinite;
+}
+
+.af-live .afx-flap {
+  animation: af-flap 1s ease-in infinite;
+}
+
+.af-live .afx-roll {
+  animation: af-roll 1s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.af-live .afx-flick {
+  animation: af-flick 5s steps(1) infinite;
+}
+
+.af-live .afx-marq {
+  animation: af-marq 14s linear infinite;
+}
+
+.af-live .afx-shim {
+  animation: af-shim 3.2s ease-in-out infinite;
+}
+
+.af-live .afx-twinkle {
+  animation: af-twinkle 3.6s ease-in-out infinite;
+}
+
+.af-live .afx-jit {
+  animation: af-jit 2.2s ease-in-out infinite;
+}
+
+.af-live .afx-scan {
+  animation: af-scan 5s linear infinite;
+}
+
+.af-live .afx-radar {
+  animation: af-radar 4s linear infinite;
+}
+
+.af-live .afx-stream {
+  animation: af-stream 0.6s linear infinite;
+}
+
+.af-live .afx-sheen {
+  animation: af-sheen 3.2s ease-in-out infinite;
+}
+
+@keyframes af-blink {
+  0%,
+  55% {
+    opacity: 1;
+  }
+
+  56%,
+  100% {
+    opacity: 0.28;
+  }
+}
+
+@keyframes af-breath {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes af-wave {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-176px);
+  }
+}
+
+@keyframes af-rise {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translateY(-150px);
+    opacity: 0;
+  }
+}
+
+@keyframes af-flap {
+  0% {
+    transform: rotateX(0deg);
+  }
+
+  38% {
+    transform: rotateX(-90deg);
+    opacity: 1;
+  }
+
+  39%,
+  100% {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+}
+
+@keyframes af-roll {
+  0% {
+    transform: translateY(-100px);
+  }
+
+  32%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes af-flick {
+  0%,
+  91%,
+  100% {
+    opacity: 1;
+  }
+
+  92% {
+    opacity: 0.82;
+  }
+
+  94% {
+    opacity: 0.97;
+  }
+
+  96% {
+    opacity: 0.88;
+  }
+}
+
+@keyframes af-marq {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes af-shim {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scaleX(0.85);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scaleX(1.1);
+  }
+}
+
+@keyframes af-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes af-jit {
+  0%,
+  100% {
+    transform: rotate(-0.5deg);
+  }
+
+  50% {
+    transform: rotate(0.6deg);
+  }
+}
+
+@keyframes af-scan {
+  from {
+    transform: translateY(-30px);
+  }
+
+  to {
+    transform: translateY(230px);
+  }
+}
+
+@keyframes af-radar {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes af-stream {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+@keyframes af-sheen {
+  from {
+    transform: translateX(-120%);
+  }
+
+  to {
+    transform: translateX(420%);
+  }
+}
