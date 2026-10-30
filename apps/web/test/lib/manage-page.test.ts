@@ -233,6 +233,17 @@ describe('manage page', () => {
     expect(rowsOf(root)).toHaveLength(2);
   });
 
+  it('an error answer from the licence API (no device list) also says offline, not "no devices"', async () => {
+    store();
+    fetchRows.mockResolvedValueOnce({ error: 'polar_unavailable' } as unknown as Awaited<ReturnType<typeof fetchActivations>>);
+    const root = mount();
+    bootManagePage(root, NOW);
+    await flush();
+    expect(root.dataset.state).toBe('offline');
+    expect(root.querySelector<HTMLElement>('[data-manage-empty]')?.hidden).toBe(true);
+    expect(localStorage.getItem('at.v1.license')).not.toBeNull();
+  });
+
   it('a removal that fails on the network re-enables the row', async () => {
     store();
     fetchRows.mockResolvedValue({ revoked: false, activations: ROWS });
