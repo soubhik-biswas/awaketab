@@ -42,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         })}
       />
       <PageHero
-        crumbs={[{ href: ROUTES.help, label: tc('help') }, { label: 'All topics' }]}
+        crumbs={[{ href: ROUTES.help, label: tc('help') }, { label: t('allTopics') }]}
         eyebrow={t('eyebrow')}
         h1={t('h1')}
         lead={t('lead')}

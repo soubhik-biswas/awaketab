@@ -3230,7 +3230,8 @@
       "popular": "Popular topics",
       "stuck": "Still stuck?",
       "stuckBefore": "Write to",
-      "stuckAfter": "with your browser and device. We read every message."
+      "stuckAfter": "with your browser and device. We read every message.",
+      "allTopics": "All topics"
     },
     "home": {
       "uses": {
