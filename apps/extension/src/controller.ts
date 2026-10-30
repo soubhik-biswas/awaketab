@@ -247,10 +247,10 @@ export function createController(opts: IControllerOptions): IController {
       await notifications.create(NOTIFICATION_ID, {
         type: 'basic',
         iconUrl: api.runtime.getURL('icon-128.png'),
-        title: t('end.notify.title'),
+        title: t('tool.kicker.timesup'),
         message: t('end.notify.body', { label: sessionLabel(session) }),
         ...(s.endBehaviour === 'prompt_extend'
-          ? { buttons: [{ title: t('tool.extend.add30') }, { title: t('tool.extend.stop') }] }
+          ? { buttons: [{ title: t('tool.extend.add15') }, { title: t('tool.toast.dismiss') }] }
           : {}),
         // docs/10 §6 "sound": the extension has no audio of its own; `none` silences the system sound.
         silent: s.sound.id === 'none',
@@ -626,7 +626,7 @@ export function createController(opts: IControllerOptions): IController {
       if (id !== NOTIFICATION_ID) return;
       await ready();
       await api.notifications?.clear(id).catch(() => false);
-      if (index === 0 && settings().endBehaviour === 'prompt_extend') await extend(30 * 60_000);
+      if (index === 0 && settings().endBehaviour === 'prompt_extend') await extend(15 * 60_000);
       else dismiss();
     },
     async onNotificationClicked(id) {
