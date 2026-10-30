@@ -1,0 +1,17 @@
+---
+import '../../styles/scene.css';
+import { sceneSvg, type TSceneKey } from '../../lib/scenes';
+
+interface Props {
+  scene: TSceneKey;
+  width?: number;
+  float?: boolean;
+  decorative?: boolean;
+  class?: string;
+}
+
+const { scene, width = 320, float = false, decorative = false, class: className } = Astro.props;
+const svg = sceneSvg(scene, { width, decorative, className: float ? 'at-scene-float' : undefined });
+---
+
+<span class:list={['at-scene-wrap', className]} set:html={svg} />
