@@ -498,6 +498,12 @@ v1: the extension's options page has a "Licence key" field that calls the same `
 
 ---
 
+### 2.15 Solar Green purchase flow, sign-in and emails (as built, 2026-10-30)
+
+- **Flow.** `/pro` → `/pro/checkout` (`#plans` → `#account` → `#check` → `#pay`) → Polar → `/pro/activate?checkout_id=…` (processing → "Pro is on." / declined / still syncing / closed). The plan toggle offers the two real plans, Yearly and Pay once (there is no monthly plan); prices come from `PLAN_PRICES`. The account step asks `POST /api/auth/signin` for a sign-in link; while no email provider is configured the endpoint answers 503 `email_unavailable`, so the page skips "Check your inbox" and says on the pay step that no link was sent. Pay opens the plan's checkout link in the same tab with `customer_email` prefilled. Licence activation, the key paste form, the extension hand-off and `/pro/manage` are unchanged.
+- **Sign-in.** `POST /api/auth/signin { email }` stores `auth:{sha256(token)}` for 15 minutes and mails `https://awaketab.com/auth/{token}`; `GET /auth/{token}` redirects to `/signin#token=…` without spending it (mail scanners); `/signin` posts it to `POST /api/auth/verify`, which deletes the record and returns the email once. KV is eventually consistent across locations, so a second use within about a minute in another region is refused by the expiry check only; tokens are 256-bit random and live 15 minutes.
+- **Emails.** Only three: the sign-in link, the Pro receipt (`order.paid` with `billing_reason` `purchase` or `subscription_create`, Pro plans only) and renewal failed (`subscription.past_due`, yearly; Pro stays on until period end + 7 days). Subscribe the webhook to `order.paid` and `subscription.past_due` too. Mails are queued after `wh:{id}` is written, so a retried delivery never sends twice, and a send failure never fails the webhook. Polar, as merchant of record, also sends its own receipt; when a provider is chosen, decide whether to keep both.
+
 ## 3. Ads implementation (G1 → G4)
 
 ### 3.1 Placement contract
