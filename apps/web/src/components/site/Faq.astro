@@ -1,0 +1,32 @@
+---
+import Lucide from '../icons/Lucide.astro';
+
+export interface IFaqItem {
+  q: string;
+  a?: string | undefined;
+  html?: string | undefined;
+}
+
+interface Props {
+  items: readonly IFaqItem[];
+  level?: 3 | 4;
+  openFirst?: boolean;
+}
+
+const { items, level = 3, openFirst = false } = Astro.props;
+const Tag = level === 3 ? 'h3' : 'h4';
+---
+
+<div class="at-sp-faq at-faq">
+  {
+    items.map((item, i) => (
+      <details open={openFirst && i === 0}>
+        <summary>
+          <Tag class="at-sp-faq-q at-faq-q">{item.q}</Tag>
+          <Lucide name="chevron-down" size={20} />
+        </summary>
+        {item.html ? <div class="at-sp-body" set:html={item.html} /> : <p class="at-sp-body">{item.a}</p>}
+      </details>
+    ))
+  }
+</div>
