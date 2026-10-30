@@ -56,17 +56,33 @@ export function ToolEmbed({
       data-slot="tool-embed"
       className={cn(
         'flex gap-6 rounded-[28px] border-2 border-lamp bg-card shadow-[0_24px_60px_color-mix(in_srgb,var(--lamp)_10%,transparent)] dark:shadow-[0_24px_60px_color-mix(in_srgb,var(--lamp)_12%,transparent)]',
-        narrow ? 'flex-col items-stretch p-[18px]' : 'flex-col items-stretch p-[18px] min-[700px]:flex-row min-[700px]:items-center min-[700px]:p-7',
+        narrow
+          ? 'flex-col items-stretch p-[18px]'
+          : 'flex-col items-stretch p-[18px] min-[700px]:flex-row min-[700px]:items-center min-[700px]:p-7',
         className,
       )}
     >
-      <span className="flex shrink-0 justify-center rounded-[22px] bg-background p-2.5 dark:bg-face-plate" aria-hidden="true">
+      <span
+        className="flex shrink-0 justify-center rounded-[22px] bg-background p-2.5 dark:bg-face-plate"
+        aria-hidden="true"
+      >
         <span className="block" style={{ width: 260, height: Math.round(260 * 0.875) }}>
-          <Face face={face} theme={theme} state="idle" size={260} total={totalSec || 3600} remain={totalSec} indef={totalSec === 0} bare />
+          <Face
+            face={face}
+            theme={theme}
+            state="idle"
+            size={260}
+            total={totalSec || 3600}
+            remain={totalSec}
+            indef={totalSec === 0}
+            bare
+          />
         </span>
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-3">
-        <span className="font-mono text-[12px] font-medium tracking-[.12em] text-lamp min-[700px]:text-[13px]">{eyebrow}</span>
+        <span className="font-mono text-[12px] font-medium tracking-[.12em] text-lamp min-[700px]:text-[13px]">
+          {eyebrow}
+        </span>
         <strong className="text-left font-sans text-[20px] leading-[1.2] font-bold tracking-[-0.02em] min-[700px]:text-[22px]">
           {title}
         </strong>

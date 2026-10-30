@@ -28,10 +28,15 @@ const CHECK_INK = '#0B1020';
 export default function StudioView() {
   const { pro: data, settings, theme, night, m } = useTool();
   const hue = data.studio.lamp;
-  const name = (SWATCHES.find(([v]) => v === hue) ?? SWATCHES[0])[1];
+  const name = SWATCHES.find(([v]) => v === hue)?.[1] ?? 'Default green';
   return (
     <>
-      <div className={cn('flex shrink-0 justify-center rounded-[20px] border border-border py-1.5', night ? 'bg-face-plate' : 'bg-secondary')}>
+      <div
+        className={cn(
+          'flex shrink-0 justify-center rounded-[20px] border border-border py-1.5',
+          night ? 'bg-face-plate' : 'bg-secondary',
+        )}
+      >
         <Face
           face={settings.face}
           lamp={hue || undefined}
@@ -60,12 +65,16 @@ export default function StudioView() {
                 onClick={() => pro.setStudio({ lamp: v })}
                 className={cn(
                   'box-border inline-flex h-11 cursor-pointer items-center justify-center rounded-full p-0 text-foreground',
-                  v ? 'w-11 border border-black/15' : 'w-[60px] border-[1.5px] border-dashed border-input bg-transparent',
+                  v
+                    ? 'w-11 border border-black/15'
+                    : 'w-[60px] border-[1.5px] border-dashed border-input bg-transparent',
                   on && 'shadow-[0_0_0_3px_var(--background),0_0_0_5px_var(--foreground)]',
                 )}
                 style={v ? { background: v } : undefined}
               >
-                {on && v ? <Check className="size-[18px]" strokeWidth={3} color={CHECK_INK} aria-hidden="true" /> : null}
+                {on && v ? (
+                  <Check className="size-[18px]" strokeWidth={3} color={CHECK_INK} aria-hidden="true" />
+                ) : null}
                 {!v ? <span className="text-[12px] font-bold">Auto</span> : null}
               </button>
             );

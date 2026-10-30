@@ -4,7 +4,11 @@ import { toolUi } from '@/lib/tool/ui';
 
 function typing(el: Element | null): boolean {
   if (!(el instanceof HTMLElement)) return false;
-  return el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName) || el.getAttribute('role') === 'combobox';
+  return (
+    el.isContentEditable ||
+    ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName) ||
+    el.getAttribute('role') === 'combobox'
+  );
 }
 
 // The keyboard map from the accessibility board. ⌘K and Esc work anywhere; single keys only while the
@@ -48,8 +52,7 @@ export function useToolKeys(ctx: IToolContext, stageRef: RefObject<HTMLElement |
       else if (key === 'f' || key === 'F') {
         if (view === 'focus') a.close();
         else a.go('focus');
-      }
-      else if (key === 'D' && e.shiftKey) a.cycleTheme();
+      } else if (key === 'D' && e.shiftKey) a.cycleTheme();
       else if (key === '?') a.go('fix');
       else if (/^[1-9]$/u.test(key)) {
         const p = presets[Number(key) - 1];

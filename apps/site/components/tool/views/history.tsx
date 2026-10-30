@@ -19,7 +19,7 @@ export default function HistoryView() {
           label: settings.label || 'This session',
           icon: iconForLabel(settings.label, m.total),
           face: settings.face,
-          startedAt: snap.startedAt,
+          startedAt: snap.startedAt + (ui.qa.offsetMs ?? 0),
           endedAt: m.now,
           totalSec: m.total,
           awakeSec: 0,

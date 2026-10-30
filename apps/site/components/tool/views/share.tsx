@@ -50,7 +50,9 @@ export default function ShareView() {
           ))}
         </ul>
       </Group>
-      <span className={HELP}>Labels and device names are never in the link. The preview card shows only the length and face.</span>
+      <span className={HELP}>
+        Labels and device names are never in the link. The preview card shows only the length and face.
+      </span>
     </>
   );
 }

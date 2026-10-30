@@ -1,7 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, Laptop, LifeBuoy, Palette, Puzzle, Settings, Share2, Sparkles, User, Volume2, type LucideIcon } from 'lucide-react';
+import {
+  ChevronRight,
+  Laptop,
+  LifeBuoy,
+  Palette,
+  Puzzle,
+  Settings,
+  Share2,
+  Sparkles,
+  User,
+  Volume2,
+  type LucideIcon,
+} from 'lucide-react';
 import type { TToolView } from '@/lib/tool/ui';
 import { useTool } from '@/components/tool/context';
 import { PRO_CHIP, ROW_BTN, TILE } from '@/components/tool/kit';

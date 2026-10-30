@@ -70,4 +70,13 @@ export function useToolUi(): IToolUi {
 }
 
 // Views that belong to the "More" tab on phone and tablet portrait.
-export const MORE_VIEWS: readonly TToolView[] = ['more', 'settings', 'devices', 'fix', 'share', 'sound', 'studio', 'account'];
+export const MORE_VIEWS: readonly TToolView[] = [
+  'more',
+  'settings',
+  'devices',
+  'fix',
+  'share',
+  'sound',
+  'studio',
+  'account',
+];

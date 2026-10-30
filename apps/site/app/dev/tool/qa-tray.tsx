@@ -154,7 +154,13 @@ export function QaTray() {
           </Row>
           <Row label="STATE">
             {STATES.map(([k, label]) => (
-              <Pill key={k} on={on.state === k} onClick={() => pick('state', k, { action: 'state', state: k, total: 3600, remain: k === 'idle' ? 3600 : 2292 })}>
+              <Pill
+                key={k}
+                on={on.state === k}
+                onClick={() =>
+                  pick('state', k, { action: 'state', state: k, total: 3600, remain: k === 'idle' ? 3600 : 2292 })
+                }
+              >
                 {label}
               </Pill>
             ))}

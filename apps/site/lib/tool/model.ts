@@ -58,12 +58,7 @@ export interface IToolModel {
 }
 
 // Everything the screen shows, derived from the wake snapshot, the settings and the display clock.
-export function deriveModel(
-  snap: IWakeSnapshot,
-  settings: IToolSettings,
-  lang: TToolLang,
-  offsetMs = 0,
-): IToolModel {
+export function deriveModel(snap: IWakeSnapshot, settings: IToolSettings, lang: TToolLang, offsetMs = 0): IToolModel {
   const s = STRINGS[lang];
   const fmt: TClockFmt = settings.h12 ? 12 : 24;
   const now = (snap.now || Date.now()) + offsetMs;

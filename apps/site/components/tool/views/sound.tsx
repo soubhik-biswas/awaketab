@@ -51,7 +51,12 @@ export default function SoundView() {
               <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <span className="flex justify-between gap-2 text-[14px] font-semibold">
                   <span>{n}</span>
-                  <span className={cn('font-mono text-[12px] font-medium', v ? 'text-lamp' : 'text-muted-foreground-strong')}>
+                  <span
+                    className={cn(
+                      'font-mono text-[12px] font-medium',
+                      v ? 'text-lamp' : 'text-muted-foreground-strong',
+                    )}
+                  >
                     {v === 0 ? 'Off' : `${v}%`}
                   </span>
                 </span>
@@ -70,7 +75,12 @@ export default function SoundView() {
         })}
       </div>
       <Group label="Chime at the end">
-        <Segments label="Chime" options={CHIMES} value={settings.chime} onChange={(chime) => a.updateSettings({ chime })} />
+        <Segments
+          label="Chime"
+          options={CHIMES}
+          value={settings.chime}
+          onChange={(chime) => a.updateSettings({ chime })}
+        />
       </Group>
       <Button type="button" variant="outline" className={BTN_FULL} onClick={() => previewAmbient(data.mix, 5)}>
         <Play strokeWidth={2} aria-hidden="true" />

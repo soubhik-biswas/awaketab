@@ -1,6 +1,12 @@
 import { useSyncExternalStore } from 'react';
 import { createStorage, creditMinutes, countDay, type ISession, type TEndReason } from '@awaketab/core';
-import { createWakeLock, type IChangeEvent, type IWakeLockHandle, type TAdviceCode, type TLockState } from '@awaketab/wake';
+import {
+  createWakeLock,
+  type IChangeEvent,
+  type IWakeLockHandle,
+  type TAdviceCode,
+  type TLockState,
+} from '@awaketab/wake';
 
 export type TWakeState =
   'idle' | 'starting' | 'running' | 'fallback' | 'paused' | 'needsyou' | 'blocked' | 'unsupported' | 'ended';
@@ -107,7 +113,8 @@ class WakeController {
   private timer: ReturnType<typeof setTimeout> | null = null;
   private channel: BroadcastChannel | null = null;
   private readonly peers = new Set<string>();
-  private readonly tabId = typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : String(Math.random());
+  private readonly tabId =
+    typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : String(Math.random());
   private sessionId = '';
   private awakeSec = 0;
   private announceId = 0;
@@ -533,7 +540,12 @@ class WakeController {
     const cur = this.store?.session();
     if (!cur || !this.store) return;
     const reason: TEndReason = this.snap.state === 'ended' ? 'completed' : 'user';
-    this.store.writeSession({ ...cur, status: reason === 'completed' ? 'completed' : 'aborted', endedAt: Date.now(), endReason: reason });
+    this.store.writeSession({
+      ...cur,
+      status: reason === 'completed' ? 'completed' : 'aborted',
+      endedAt: Date.now(),
+      endReason: reason,
+    });
   }
 
   // A session that was live when the tab closed comes back as "Needs you": the lock needs asking again.
@@ -546,7 +558,12 @@ class WakeController {
     const left = endsAt === null ? null : endsAt - (paused && saved.pausedAt !== null ? saved.pausedAt : now);
     if (left !== null && left <= 0) return;
     if (endsAt === null && now - saved.startedAt > RESUME_NO_END_MS) return;
-    const totalSec = saved.plan.type === 'duration' ? Math.round(saved.plan.ms / 1000) : endsAt === null ? 0 : Math.round((endsAt - saved.startedAt) / 1000);
+    const totalSec =
+      saved.plan.type === 'duration'
+        ? Math.round(saved.plan.ms / 1000)
+        : endsAt === null
+          ? 0
+          : Math.round((endsAt - saved.startedAt) / 1000);
     this.sessionId = saved.id;
     this.awakeSec = saved.awakeSeconds;
     this.snap = {
@@ -617,7 +634,15 @@ function clampSec(sec: number): number {
 }
 
 function presetIdOf(sec: number): ISession['presetId'] {
-  const map: Record<number, ISession['presetId']> = { 0: 'pinf', 900: 'p15', 1800: 'p30', 2700: 'p45', 3600: 'p60', 7200: 'p120', 14400: 'p240' };
+  const map: Record<number, ISession['presetId']> = {
+    0: 'pinf',
+    900: 'p15',
+    1800: 'p30',
+    2700: 'p45',
+    3600: 'p60',
+    7200: 'p120',
+    14400: 'p240',
+  };
   return map[sec] ?? 'custom';
 }
 

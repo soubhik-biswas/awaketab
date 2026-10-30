@@ -10,7 +10,11 @@ export const metadata: Metadata = {
 };
 
 // Development builds only: the tool inside a device-sized frame, driven by the QA tray. Production answers 404.
-export default async function DevToolPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+export default async function DevToolPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   if (process.env.NODE_ENV === 'production') notFound();
   const q = await searchParams;
   const lang = typeof q.lang === 'string' && isToolLang(q.lang) ? q.lang : 'en';

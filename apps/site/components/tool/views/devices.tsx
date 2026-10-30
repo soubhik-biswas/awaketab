@@ -27,7 +27,8 @@ export default function DevicesView() {
         Add a device
       </Button>
       <span className={HELP}>
-        Pro · up to {data.maxDevices} devices. Starting or stopping on one device updates the others within a few seconds when online.
+        Pro · up to {data.maxDevices} devices. Starting or stopping on one device updates the others within a few
+        seconds when online.
       </span>
     </>
   );

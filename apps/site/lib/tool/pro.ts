@@ -4,7 +4,6 @@ import { SETTINGS_KEY } from '@/lib/tool/settings';
 import { isRecord } from '@/lib/tool/store';
 import type { TDeviceKind, TDeviceStatus, TIdentity } from '@/components/product/device-presence';
 
-
 export type { TDeviceKind, TDeviceStatus, TIdentity };
 export type TMixKey = 'rain' | 'cafe' | 'fire' | 'brown';
 export type TProPlan = 'monthly' | 'yearly' | 'lifetime';
@@ -65,11 +64,32 @@ const DEFAULT_MIX: ISoundMix = { rain: 40, cafe: 0, fire: 25, brown: 0 };
 
 const PLACEHOLDER_DEVICES: IProDevice[] = [
   { id: 'this', name: 'Work laptop', kind: 'laptop', identity: 'cobalt', status: 'awake', detail: '', current: true },
-  { id: 'ipad', name: 'Kitchen iPad', kind: 'tablet', identity: 'bubblegum', status: 'awake', detail: 'Cooking · until 6:00 PM', current: false },
-  { id: 'phone', name: 'Phone', kind: 'phone', identity: 'denim', status: 'paused', detail: 'Tab hidden since 10:58 AM', current: false },
+  {
+    id: 'ipad',
+    name: 'Kitchen iPad',
+    kind: 'tablet',
+    identity: 'bubblegum',
+    status: 'awake',
+    detail: 'Cooking · until 6:00 PM',
+    current: false,
+  },
+  {
+    id: 'phone',
+    name: 'Phone',
+    kind: 'phone',
+    identity: 'denim',
+    status: 'paused',
+    detail: 'Tab hidden since 10:58 AM',
+    current: false,
+  },
 ];
 
-const PLACEHOLDER_ACCOUNT: IProAccount = { name: '[YOUR NAME]', email: '[YOUR EMAIL]', plan: 'monthly', renewsOn: '[DATE]' };
+const PLACEHOLDER_ACCOUNT: IProAccount = {
+  name: '[YOUR NAME]',
+  email: '[YOUR EMAIL]',
+  plan: 'monthly',
+  renewsOn: '[DATE]',
+};
 
 function readJson(key: string): unknown {
   try {
@@ -214,5 +234,9 @@ function subscribe(cb: () => void) {
 }
 
 export function usePro(): IProSnapshot {
-  return useSyncExternalStore(subscribe, () => source.getSnapshot(), () => SERVER);
+  return useSyncExternalStore(
+    subscribe,
+    () => source.getSnapshot(),
+    () => SERVER,
+  );
 }

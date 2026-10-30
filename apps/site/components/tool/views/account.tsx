@@ -1,7 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, CreditCard, Download, ExternalLink, Laptop, LogOut, Trash2, User, type LucideIcon } from 'lucide-react';
+import {
+  ChevronRight,
+  CreditCard,
+  Download,
+  ExternalLink,
+  Laptop,
+  LogOut,
+  Trash2,
+  User,
+  type LucideIcon,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { pro } from '@/lib/tool/pro';
 import { useTool } from '@/components/tool/context';
@@ -30,12 +40,17 @@ export default function AccountView() {
   return (
     <>
       <div className="flex items-center gap-3">
-        <span aria-hidden="true" className="inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-lamp bg-accent text-lamp">
+        <span
+          aria-hidden="true"
+          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-lamp bg-accent text-lamp"
+        >
           <User className="size-[22px]" strokeWidth={2} />
         </span>
         <span className="flex min-w-0 flex-col gap-0.5">
           <strong className="text-[16px]">{acct?.name ?? 'Not signed in'}</strong>
-          <span className={HELP}>{acct ? `${acct.email} · signed in with a magic link` : 'Sign in to sync your devices.'}</span>
+          <span className={HELP}>
+            {acct ? `${acct.email} · signed in with a magic link` : 'Sign in to sync your devices.'}
+          </span>
         </span>
       </div>
       <div className="flex flex-col gap-2.5 rounded-[16px] border border-border bg-secondary p-4">
@@ -66,7 +81,11 @@ export default function AccountView() {
                 <span className="text-[15px] font-semibold">{r.n}</span>
                 <span className={HELP}>{r.d}</span>
               </span>
-              <ChevronRight className="size-[18px] shrink-0 text-muted-foreground-strong" strokeWidth={2} aria-hidden="true" />
+              <ChevronRight
+                className="size-[18px] shrink-0 text-muted-foreground-strong"
+                strokeWidth={2}
+                aria-hidden="true"
+              />
             </button>
           );
         })}
@@ -76,7 +95,8 @@ export default function AccountView() {
         Delete account…
       </Button>
       <span className={HELP}>
-        Billing is handled by [PAYMENT PROVIDER]. Without an account, AwakeTab still works — settings simply stay on this device.
+        Billing is handled by [PAYMENT PROVIDER]. Without an account, AwakeTab still works — settings simply stay on
+        this device.
       </span>
     </>
   );

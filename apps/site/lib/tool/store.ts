@@ -76,7 +76,8 @@ export function useLocalStore<T>(store: ILocalStore<T>, serverValue: T): T {
   return useSyncExternalStore(store.subscribe, store.get, () => serverValue);
 }
 
-export const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
+export const isRecord = (v: unknown): v is Record<string, unknown> =>
+  typeof v === 'object' && v !== null && !Array.isArray(v);
 
 export const uid = (): string =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : Math.random().toString(36).slice(2);

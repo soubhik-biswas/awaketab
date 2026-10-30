@@ -70,7 +70,9 @@ export function SideNav() {
               rail
                 ? 'flex min-h-[60px] w-[68px] flex-col items-center justify-center gap-1 rounded-[14px] py-1.5'
                 : 'box-border flex h-11 w-full items-center gap-3 rounded-[12px] px-3 text-[15px]',
-              on ? 'bg-accent text-lamp' : cn('bg-transparent hover:bg-secondary', rail ? 'text-muted-foreground-strong' : 'text-foreground'),
+              on
+                ? 'bg-accent text-lamp'
+                : cn('bg-transparent hover:bg-secondary', rail ? 'text-muted-foreground-strong' : 'text-foreground'),
               !rail && (on ? 'font-bold' : 'font-medium'),
             )}
           >
@@ -78,7 +80,9 @@ export function SideNav() {
             <span
               className={cn(
                 'truncate',
-                rail ? cn('max-w-[68px] text-center text-[12px]', on ? 'font-bold' : 'font-medium') : 'flex-1 text-left',
+                rail
+                  ? cn('max-w-[68px] text-center text-[12px]', on ? 'font-bold' : 'font-medium')
+                  : 'flex-1 text-left',
               )}
             >
               {n.label}
@@ -150,9 +154,7 @@ export function BottomNav() {
             >
               <Icon className="size-[22px]" strokeWidth={1.75} aria-hidden="true" />
             </span>
-            <span className={cn('max-w-[72px] truncate text-[12px]', on ? 'font-bold' : 'font-medium')}>
-              {n.label}
-            </span>
+            <span className={cn('max-w-[72px] truncate text-[12px]', on ? 'font-bold' : 'font-medium')}>{n.label}</span>
           </button>
         );
       })}
