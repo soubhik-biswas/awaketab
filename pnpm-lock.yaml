@@ -84,9 +84,6 @@ importers:
       '@iconify-json/logos':
         specifier: 1.2.15
         version: 1.2.15
-      '@phosphor-icons/core':
-        specifier: 2.1.1
-        version: 2.1.1
       typescript:
         specifier: 5.9.3
         version: 5.9.3
