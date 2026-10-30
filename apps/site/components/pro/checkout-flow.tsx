@@ -20,7 +20,7 @@ import {
   type IFlow,
   type TCheckoutStep,
 } from '@/lib/pro/flow';
-import { planPrice, renewalDate, usd, type TProPlan } from '@/lib/pro/plans';
+import { planPrice, renewalDate, usd } from '@/lib/pro/plans';
 import { cn } from '@/lib/utils';
 import { ContinueIcon, FlowColumn, FlowHeader, H1, LEAD, LINK, PRIMARY, RISE } from './flow';
 

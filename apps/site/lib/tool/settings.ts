@@ -16,6 +16,7 @@ export interface IToolSettings {
 }
 
 export const SETTINGS_KEY = 'at.v1.settings';
+const THEMES: readonly TThemeChoice[] = ['auto', 'light', 'dark', 'oled'];
 
 // A first visit starts on one hour, the length every board draws.
 const TOOL_DEFAULTS: IToolSettings = {
@@ -49,16 +50,18 @@ type TStored = ISettings & { dimAtNight?: boolean; faceStyles?: unknown };
 function fromStored(raw: unknown): { stored: TStored | null; tool: IToolSettings } {
   if (!isRecord(raw)) return { stored: null, tool: { ...TOOL_DEFAULTS } };
   const s = { ...DEFAULT_SETTINGS, ...raw } as TStored;
+  // The record comes from storage, so its fields are read as unknown and checked.
+  const loose: Partial<Record<keyof TStored, unknown>> = s;
   const preset = s.defaultPreset;
   const totalSec =
     preset === 'custom' || preset === 'until'
-      ? Math.max(60, Math.round((Number(s.lastCustomMs) || 3_600_000) / 1000))
-      : (PRESET_SEC[preset] ?? 3600);
+      ? Math.max(60, Math.round((Number(loose.lastCustomMs) || 3_600_000) / 1000))
+      : ((PRESET_SEC as Partial<Record<string, number>>)[preset] ?? 3600);
   const sound = isRecord(s.sound) ? s.sound : DEFAULT_SETTINGS.sound;
-  const ambient = isRecord(s.ambient) ? { ...DEFAULT_SETTINGS.ambient, ...s.ambient } : DEFAULT_SETTINGS.ambient;
-  const theme: TThemeChoice = ['auto', 'light', 'dark', 'oled'].includes(String(s.theme))
-    ? (s.theme as TThemeChoice)
-    : 'auto';
+  const ambient: Partial<Record<keyof ISettings['ambient'], unknown>> = isRecord(s.ambient)
+    ? { ...DEFAULT_SETTINGS.ambient, ...s.ambient }
+    : DEFAULT_SETTINGS.ambient;
+  const theme: TThemeChoice = THEMES.find((choice) => choice === String(loose.theme)) ?? 'auto';
   return {
     stored: s,
     tool: {
@@ -79,7 +82,7 @@ function toStored(tool: IToolSettings): TStored {
   let base: TStored = { ...DEFAULT_SETTINGS };
   try {
     const raw = JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? 'null') as unknown;
-    if (isRecord(raw)) base = { ...DEFAULT_SETTINGS, ...raw } as TStored;
+    if (isRecord(raw)) base = { ...DEFAULT_SETTINGS, ...raw };
   } catch {
     // Unreadable settings are replaced by the defaults below.
   }

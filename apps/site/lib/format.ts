@@ -8,7 +8,7 @@ export interface IEndsLineOptions {
   tomorrow?: string;
 }
 
-const SPACES = /[  ]/g;
+const SPACES = /[\u202f\u00a0]/g;
 const DAY_MS = 86_400_000;
 
 function toDate(value: Date | number): Date {

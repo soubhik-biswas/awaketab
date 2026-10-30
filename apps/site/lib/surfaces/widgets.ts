@@ -80,7 +80,10 @@ export function presetSeconds(preset: TPresetId): number | null {
   return WIDGET_PRESETS.find((p) => p.preset === preset)?.sec ?? null;
 }
 
-export function postWidgetData(data: IWidgetData, nav: Navigator | undefined = globalThis.navigator): void {
+export function postWidgetData(
+  data: IWidgetData,
+  nav: Partial<Pick<Navigator, 'serviceWorker'>> | undefined = typeof navigator === 'undefined' ? undefined : navigator,
+): void {
   const sw = nav?.serviceWorker?.controller;
   sw?.postMessage({ type: WIDGET_SYNC, data });
 }

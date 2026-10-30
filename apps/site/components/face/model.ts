@@ -187,12 +187,12 @@ export function faceModel(p: IFaceProps, opts: IFaceOptions = {}) {
   const face: TFaceId = isFaceId(p.face) ? p.face : 'ring';
   const theme: TFaceTheme = p.theme === 'light' || p.theme === 'oled' ? p.theme : 'dark';
   const st: TFaceState = p.state && p.state in STATUS ? p.state : 'running';
-  const total = Number(p.total ?? FACE_DEFAULTS.total);
-  let remain = Number(p.remain ?? FACE_DEFAULTS.remain);
+  const total = p.total ?? FACE_DEFAULTS.total;
+  let remain = p.remain ?? FACE_DEFAULTS.remain;
   if (st === 'idle') remain = total;
   if (st === 'up') remain = 0;
-  const size = Number(p.size ?? FACE_DEFAULTS.size);
-  const nowSec = Number(p.nowSec ?? FACE_DEFAULTS.nowSec);
+  const size = p.size ?? FACE_DEFAULTS.size;
+  const nowSec = p.nowSec ?? FACE_DEFAULTS.nowSec;
   const t0 = opts.t0 ?? nowSec;
   const fmt = p.fmt === 24 ? 24 : 12;
   // 240 px and up keep every label at 12 px or more on screen; below 170 px the face is compact.

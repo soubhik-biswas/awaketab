@@ -26,7 +26,7 @@ export function Scene({
   className,
   ...props
 }: ISceneProps) {
-  const def = SCENES[scene] ?? SCENES.hero;
+  const def = SCENES[scene];
   const [lx, ly, lr] = def.lamp;
   const shadow = def.layers.map(([, d]) => d).join(' ');
   return (
