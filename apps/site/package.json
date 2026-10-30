@@ -8,7 +8,12 @@
     "dev": "next dev --port 3000",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "db:migrate": "wrangler d1 migrations apply AUTH_DB --remote",
+    "db:migrate:local": "wrangler d1 migrations apply AUTH_DB --local",
+    "email:preview": "email dev --dir emails"
   },
   "dependencies": {
     "@awaketab/core": "workspace:*",
