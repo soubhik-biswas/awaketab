@@ -32,13 +32,15 @@ export async function SiteHeader({ locale }: { locale: TLocale }) {
         <span className={cn(display, 'text-[21px] font-extrabold tracking-[-0.03em]')}>AwakeTab</span>
       </a>
       <div className="hidden min-[1100px]:flex">
-        <NavLinks links={links} label={t('nav.label')} />
+        <NavLinks links={links} label={t('nav.label')} hrefLang={locale === 'en' ? undefined : 'en'} />
       </div>
       <span className="flex-1" />
       <div className="hidden items-center gap-2 min-[1100px]:flex">
         <LangMenu locale={locale} label={tf('language._')} />
         <Button asChild variant="ghost" className={btn}>
-          <a href={signin.href}>{signin.label}</a>
+          <a href={signin.href} hrefLang={locale === 'en' ? undefined : 'en'}>
+            {signin.label}
+          </a>
         </Button>
       </div>
       <Button asChild className={cn(btn, 'px-[14px] text-[14px] min-[700px]:px-[18px] min-[700px]:text-[15px]')}>

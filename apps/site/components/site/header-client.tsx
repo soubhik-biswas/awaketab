@@ -25,12 +25,18 @@ export interface INavLink {
 const navItem =
   'inline-flex h-11 items-center rounded-[10px] px-3 text-[15px] font-medium text-foreground no-underline hover:bg-secondary aria-[current=page]:bg-secondary aria-[current=page]:font-bold';
 
-export function NavLinks({ links, label }: { links: readonly INavLink[]; label: string }) {
+export function NavLinks({ links, label, hrefLang }: { links: readonly INavLink[]; label: string; hrefLang?: string }) {
   const pathname = usePathname();
   return (
     <nav aria-label={label} className="ml-6 flex gap-1">
       {links.map((l) => (
-        <a key={l.href} href={l.href} className={navItem} aria-current={pathname === l.href ? 'page' : undefined}>
+        <a
+          key={l.href}
+          href={l.href}
+          hrefLang={hrefLang}
+          className={navItem}
+          aria-current={pathname === l.href ? 'page' : undefined}
+        >
           {l.label}
         </a>
       ))}
@@ -113,6 +119,7 @@ export function MobileMenu({
             <a
               key={l.href}
               href={l.href}
+              hrefLang={locale === 'en' ? undefined : 'en'}
               onClick={() => setOpen(false)}
               aria-current={pathname === l.href ? 'page' : undefined}
               className={cn(navItem, 'h-12 text-[17px]')}

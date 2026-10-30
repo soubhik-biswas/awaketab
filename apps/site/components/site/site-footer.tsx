@@ -39,6 +39,8 @@ export async function SiteFooter({ locale }: { locale: TLocale }) {
     },
   ] as const;
   const latest = changelog()[0]?.date;
+  // These pages exist in English only, so a translated footer marks where its links lead.
+  const target = locale === 'en' ? undefined : 'en';
   return (
     <footer className="flex flex-col gap-7 bg-[var(--site-night)] px-5 py-8 text-[var(--site-night-ink)] min-[700px]:px-10 min-[700px]:py-14 min-[1100px]:px-16 min-[1300px]:px-24 dark:border-t dark:border-[var(--site-night-line)]">
       <div className="grid grid-cols-2 gap-6 min-[1100px]:grid-cols-[1.4fr_1fr_1fr_1fr]">
@@ -62,6 +64,7 @@ export async function SiteFooter({ locale }: { locale: TLocale }) {
               <a
                 key={href}
                 href={href}
+                hrefLang={href === toolHref(locale) ? undefined : target}
                 className="flex min-h-11 items-center text-left text-[15px] text-[var(--site-night-ink)] no-underline hover:underline"
               >
                 {label}
