@@ -3,7 +3,7 @@
 import { Play } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
-import { Scene } from '@/components/site/_pending/scene';
+import { Scene } from '@/components/scene/scene';
 import { Button } from '@/components/ui/button';
 import * as s from '@/components/site/styles';
 import { cn } from '@/lib/utils';
@@ -22,17 +22,17 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
         <h1 className={cn(s.h1, s.h1Art)}>{t('sys.error.h1')}</h1>
         <p className={s.lead}>{t('sys.error.lead')}</p>
         <div className="flex w-full flex-wrap gap-2.5 min-[700px]:w-auto">
-          <Button variant={null} size={null} className={s.btnXl} onClick={reset}>
+          <Button size="cta" className={s.btnXl} onClick={reset}>
             <Play className="size-5" aria-hidden="true" />
             {t('sys.retry')}
           </Button>
-          <Button asChild variant={null} size={null} className={s.btnOutXl}>
+          <Button asChild variant="outline" size="cta" className={s.btnOutXl}>
             <a href={toolHref()}>{t('cta._')}</a>
           </Button>
         </div>
       </div>
-      <div className="site-float flex-none">
-        <Scene sceneKey="error" width={520} className="w-[350px] min-[700px]:w-[520px]" />
+      <div className="flex-none">
+        <Scene scene="error" width={520} float decorative className="h-auto w-[350px] max-w-full min-[700px]:w-[520px]" />
       </div>
     </section>
   );

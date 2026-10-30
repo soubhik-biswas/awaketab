@@ -1,18 +1,8 @@
+import { formatFullDate } from '@/lib/format';
 import { LOCALE_META, type TLocale } from '@/i18n/locales';
 
-// Full dates everywhere ("Saturday, 26 September 2026"); other locales use their own full style.
+// A calendar day ("2026-09-26") as a full date, built at local midnight so no time zone moves it a day.
 export function fullDate(day: string, locale: TLocale = 'en'): string {
-  const date = new Date(`${day.slice(0, 10)}T00:00:00Z`);
-  if (locale !== 'en')
-    return new Intl.DateTimeFormat(LOCALE_META[locale].htmlLang, {
-      dateStyle: 'full',
-      timeZone: 'UTC',
-      numberingSystem: 'latn',
-    }).format(date);
-  const part = Object.fromEntries(
-    new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
-      .formatToParts(date)
-      .map((p) => [p.type, p.value]),
-  );
-  return `${part.weekday ?? ''}, ${part.day ?? ''} ${part.month ?? ''} ${part.year ?? ''}`;
+  const [y = 1970, m = 1, d = 1] = day.slice(0, 10).split('-').map(Number);
+  return formatFullDate(new Date(y, m - 1, d), LOCALE_META[locale].htmlLang);
 }

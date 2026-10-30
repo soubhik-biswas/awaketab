@@ -1,4 +1,5 @@
 import { allChangelogs, allComparisons, allDevices, allDocs, allGuides, allUseCases } from 'content-collections';
+import type { TSceneKey } from '@/components/scene/scene-data';
 import slugsJson from '@/i18n/slugs.json';
 import { LOCALE_META, LOCALES, TRANSLATED_SLUG_LOCALES, type TLocale } from '@/i18n/locales';
 import { SITE, type TContentKind } from '@/lib/routes';
@@ -444,24 +445,7 @@ export const HUBS: Record<TContentKind, IHub> = {
   },
 };
 
-export type TSceneKey =
-  | 'hero'
-  | 'firstaction'
-  | 'welcome'
-  | 'success'
-  | 'offline'
-  | 'conflict'
-  | 'history'
-  | 'expired'
-  | 'notfound'
-  | 'removed'
-  | 'error'
-  | 'maintenance'
-  | 'noitems'
-  | 'cooking'
-  | 'presenting'
-  | 'dashboard'
-  | 'nightdesk';
+export type { TSceneKey };
 
 const USE_CASE_SCENE: Record<string, TSceneKey> = {
   cooking: 'cooking',

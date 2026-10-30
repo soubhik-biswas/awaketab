@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { TArticle } from '@/lib/content';
 import { inline, splitArticle, tokenize, type ISection } from '@/lib/markdown';
 import { cn } from '@/lib/utils';
-import { StatusPill, type TPillState } from '../_pending/status-pill';
+import { StatusPill, type TStatusState } from '@/components/product/status-pill';
 import { Block, Callout, DataTable, html, Steps, status, tx, type TCell } from '../blocks';
 import * as s from '../styles';
 import { Checklist } from './checklist';
@@ -13,7 +13,7 @@ import { TrackedSteps } from './tracked-steps';
 type TT = (key: string, values?: Record<string, string | number>) => string;
 type TLock = 'idle' | 'requesting' | 'held' | 'lost' | 'denied' | 'unsupported' | 'fallback';
 
-const LOCK_PILL: Record<TLock, TPillState> = {
+const LOCK_PILL: Record<TLock, TStatusState> = {
   idle: 'idle',
   requesting: 'starting',
   held: 'awake',

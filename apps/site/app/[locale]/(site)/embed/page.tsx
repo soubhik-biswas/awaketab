@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { Block } from '@/components/site/blocks';
+import { EmbedPage } from '@/components/embed/embed-page';
 import { JsonLd } from '@/components/site/json-ld';
-import { PageHero } from '@/components/site/page-hero';
 import { ROUTES, SITE } from '@/lib/routes';
 import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
 
@@ -16,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-// The landing page shell; the embed builder fills the slot below the hero.
+// The embed landing page inside the site's header and footer; its owner draws the body.
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   await englishOnly(params);
   const t = await getTranslations({ locale: 'en', namespace: 'page.embed' });
@@ -36,10 +35,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
           ],
         })}
       />
-      <PageHero eyebrow="Website widget" h1={t('h1')} lead={t('description')} scene="cooking" />
-      <Block id="embed-builder" label={t('h1')}>
-        <div data-embed-slot="" className="min-h-[480px] rounded-[28px] border border-dashed border-input bg-secondary" />
-      </Block>
+      <EmbedPage />
     </>
   );
 }

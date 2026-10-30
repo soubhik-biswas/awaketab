@@ -69,12 +69,11 @@ export function TrackedSteps({
               {step.path && <span className="font-mono text-[13px] text-muted-foreground-strong">{step.path}</span>}
               <p className="site-prose m-0 text-[16px] leading-[1.55] text-muted-foreground-strong" dangerouslySetInnerHTML={{ __html: step.text }} />
               <Button
-                variant={null}
-                size={null}
+                variant="outline"
                 role="checkbox"
                 aria-checked={done[i] ?? false}
                 onClick={() => setDone((d) => d.map((v, k) => (k === i ? !v : v)))}
-                className="h-11 w-fit gap-2 rounded-[12px] border border-input bg-transparent px-4 text-[15px] font-semibold text-foreground hover:bg-secondary"
+                className="w-fit gap-2 rounded-[12px] text-[15px]"
               >
                 <span
                   aria-hidden="true"
@@ -99,10 +98,9 @@ export function TrackedSteps({
       )}
       {n > 0 && n < steps.length && (
         <Button
-          variant={null}
-          size={null}
+          variant="link"
           onClick={() => setDone(steps.map(() => false))}
-          className="h-11 w-fit border-0 bg-transparent px-1 text-[15px] font-bold text-lamp underline underline-offset-[3px] hover:bg-transparent"
+          className="w-fit px-1 text-[15px] font-bold underline-offset-[3px]"
         >
           {labels.clear}
         </Button>

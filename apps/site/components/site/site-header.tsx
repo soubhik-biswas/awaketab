@@ -26,11 +26,8 @@ export async function SiteHeader({ locale }: { locale: TLocale }) {
         aria-label={th('home')}
         className="flex min-h-11 items-center gap-2.5 text-foreground no-underline"
       >
-        <span aria-hidden="true" className="inline-flex dark:hidden">
-          <Mark size={30} small glow={false} tone="light" />
-        </span>
-        <span aria-hidden="true" className="hidden dark:inline-flex">
-          <Mark size={30} small glow={false} tone="dark" />
+        <span aria-hidden="true" className="inline-flex">
+          <Mark size={30} small glow={false} tone="auto" />
         </span>
         <span className="text-[21px] font-extrabold tracking-[-0.03em]">AwakeTab</span>
       </a>
@@ -40,21 +37,11 @@ export async function SiteHeader({ locale }: { locale: TLocale }) {
       <span className="flex-1" />
       <div className="hidden items-center gap-2 min-[700px]:flex">
         <LangMenu locale={locale} label={tf('language._')} />
-        <Button
-          asChild
-          variant={null}
-          size={null}
-          className={cn(btn, 'border-transparent bg-transparent text-foreground hover:bg-secondary')}
-        >
+        <Button asChild variant="ghost" className={btn}>
           <a href={signin.href}>{signin.label}</a>
         </Button>
       </div>
-      <Button
-        asChild
-        variant={null}
-        size={null}
-        className={cn(btn, 'border-primary bg-primary px-[14px] text-[14px] text-primary-foreground hover:bg-primary/90 min-[700px]:px-[18px] min-[700px]:text-[15px]')}
-      >
+      <Button asChild className={cn(btn, 'px-[14px] text-[14px] min-[700px]:px-[18px] min-[700px]:text-[15px]')}>
         <a href={toolHref(locale)}>
           <span className="min-[700px]:hidden">{t('ctaShort')}</span>
           <span className="hidden min-[700px]:inline">{t('cta._')}</span>

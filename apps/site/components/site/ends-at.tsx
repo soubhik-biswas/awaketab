@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
-const sameDay = (a: Date, b: Date): boolean => a.toDateString() === b.toDateString();
+import { formatUntil } from '@/lib/format';
 
 // The wall-clock end of a session started now ("11:32 AM", or "11:32 AM tomorrow"), in the visitor's own clock.
 export function EndsAt({
@@ -18,18 +17,10 @@ export function EndsAt({
 }) {
   const [text, setText] = useState<string | null>(null);
   useEffect(() => {
+    const word = tomorrow.replace('{time}', '').trim();
     const tick = (): void => {
-      const now = new Date();
-      const end = new Date(now.getTime() + minutes * 60_000);
-      const time = new Intl.DateTimeFormat(locale, {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: locale.startsWith('en') ? true : undefined,
-        numberingSystem: 'latn',
-      })
-        .format(end)
-        .replace(/ /gu, ' ');
-      setText(sameDay(now, end) ? time : tomorrow.replace('{time}', time));
+      const now = Date.now();
+      setText(formatUntil(now + minutes * 60_000, now, { locale, tomorrow: word }));
     };
     tick();
     const id = window.setInterval(tick, 30_000);
