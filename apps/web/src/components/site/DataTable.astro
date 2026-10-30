@@ -1,0 +1,50 @@
+---
+import Lucide from '../icons/Lucide.astro';
+
+type TCellTone = 'head' | 'text' | 'yes' | 'fallback' | 'no';
+interface ICell {
+  t: string;
+  tone?: TCellTone;
+}
+
+interface Props {
+  label: string;
+  cols: readonly string[];
+  rows: ReadonlyArray<readonly ICell[]>;
+  template: string;
+}
+
+const { label, cols, rows, template } = Astro.props;
+const ICON: Partial<Record<TCellTone, string>> = { yes: 'circle-check', fallback: 'play', no: 'minus' };
+---
+
+<div class="at-sp-table" role="table" aria-label={label} style={`--at-sp-tmpl: ${template}`}>
+  <div class="at-sp-tr at-sp-thead" role="row">
+    {
+      cols.map((col) => (
+        <span class="at-sp-th" role="columnheader">
+          {col}
+        </span>
+      ))
+    }
+  </div>
+  {
+    rows.map((row) => (
+      <div class="at-sp-tr" role="row">
+        {row.map((cell, i) => {
+          const tone = cell.tone ?? (i === 0 ? 'head' : 'text');
+          const icon = ICON[tone];
+          return (
+            <span class="at-sp-td" role={i === 0 ? 'rowheader' : 'cell'} data-tone={tone}>
+              {icon && <Lucide name={icon} size={16} />}
+              <span>
+                {i > 0 && cols[i] && <span class="at-sp-td-label">{cols[i]}: </span>}
+                {cell.t}
+              </span>
+            </span>
+          );
+        })}
+      </div>
+    ))
+  }
+</div>

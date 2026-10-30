@@ -1,5 +1,5 @@
 ---
-import Icon from '../icons/Icon.astro';
+import Callout from '../site/Callout.astro';
 import { inline } from '../../lib/article';
 
 interface Props {
@@ -9,10 +9,4 @@ interface Props {
 const { kicker, text } = Astro.props;
 ---
 
-<div role="note" class="at-note at-note-tip">
-  <Icon name="lightbulb" size={20} />
-  <div>
-    <span class="at-kicker">{kicker}</span>
-    <p set:html={inline(text)} />
-  </div>
-</div>
+<Callout tone="lamp" title={kicker} html={inline(text)} class="at-note" />

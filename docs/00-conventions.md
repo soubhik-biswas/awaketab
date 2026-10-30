@@ -188,7 +188,11 @@ sessionStorage also holds `at.v1.checkout` (`{ plan, email }`, the Pro checkout 
 | `/embed/cook` | Iframe app for the Cook Mode widget (noindex) |
 | `/pip` · `/{lang}/pip` | Popup fallback for Document Picture-in-Picture, in the opener's language (noindex, `Disallow`ed, not in any sitemap, no cards or ads) |
 | `/about` · `/privacy` · `/terms` · `/changelog` · `/support-matrix` · `/how-we-tested` | Trust and freshness pages |
-| `/404` | Offers the tool |
+| `/help` | Help centre: search over its topics and every English article, popular topics, contact (indexable, in the sitemap) |
+| `/s/{face}-{minutes}-{chime\|quiet}` | Shared setup (length, face and chime only, e.g. `/s/flip-45-chime`); every `/s/*` is served by `/s` through a 200 rewrite in `_redirects`, and an unreadable or removed code shows the "setup removed" view. Lengths: 15, 30, 45, 60, 120, 240 or 0 (no end). Its buttons open `/?preset=p45&face=flip&chime=on` (plus `autostart=0` for "Change it first"). noindex |
+| `/status` | Service status: "Everything is running", or the maintenance page when the build sets `PUBLIC_MAINTENANCE_UNTIL`. noindex |
+| `/offline` · `/signin/expired` · `/s/removed` · `/500` | System pages (offline, link expired, setup removed, server error), noindex. The service worker caches `/offline` with the English shell and shows it for an uncached page that is not a tool address (`src/sw-fallback.ts`) |
+| `/404` | The not-found system page: the timer button, the help centre and the popular guides (noindex) |
 | `/api/*` | Pages Functions (see §9) |
 
 Spelling: page URLs have no trailing slash (`/30m`, `/for/cooking`, `/es/for/cocinar`), except `/` and the locale homes `/{lang}/` (`/es/`). Canonicals, hreflang, sitemaps and links use exactly these spellings. The build writes each page where Cloudflare Pages serves it without a redirect (`x.html`, and `{lang}/index.html` for the homes; `14-devops.md` §2.1).

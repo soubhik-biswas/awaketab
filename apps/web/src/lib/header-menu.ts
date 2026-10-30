@@ -8,9 +8,9 @@ export const MENU_ON = ['iphone-safari', 'ipad', 'android-chrome', 'macos', 'win
 
 export const MENU_RES = [
   { id: 'guides', href: '/guides', icon: 'signpost' },
-  { id: 'docs', href: '/learn', icon: 'article' },
-  { id: 'compare', href: '/vs', icon: 'scales' },
-  { id: 'changelog', href: '/changelog', icon: 'list-bullets' },
+  { id: 'docs', href: '/learn', icon: 'file-text' },
+  { id: 'compare', href: '/vs', icon: 'scale' },
+  { id: 'changelog', href: '/changelog', icon: 'list' },
 ] as const;
 
 // Real platform logos beside each device row (SVG Logos names); ChromeOS has none, so Chromebook shows Chrome.
@@ -22,8 +22,6 @@ export const DEVICE_BRAND: Record<string, string> = {
   'windows-11': 'microsoft-windows-icon',
   chromebook: 'chrome',
 };
-
-export const RES_SECTIONS: readonly string[] = ['guides', 'learn', 'vs', 'changelog'];
 
 // Four-hour dial; "until I stop" fills the ring.
 const DIAL: Record<string, number> = { p15: 6.25, p30: 12.5, p45: 18.75, p60: 25, p120: 50, p240: 100, pinf: 100 };

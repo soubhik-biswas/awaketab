@@ -5,7 +5,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LegalDoc from '../components/pages/LegalDoc.astro';
 import LegalSection from '../components/pages/LegalSection.astro';
-import '../styles/pages.css';
 import { t } from '../i18n/load';
 import { CONTACT_EMAIL, CONTACT_MAILTO } from '../lib/contact';
 import { articleSchema } from '../lib/seo';
@@ -44,6 +43,7 @@ const events = [
   description={t('page.privacy.description')}
   canonical={canonical}
   ogImage={ogImage}
+  site
   schema={articleSchema({
     canonical,
     title: t('page.privacy.h1'),
@@ -79,12 +79,12 @@ const events = [
           ))
         }
       </dl>
-      <p class="at-pg-body">
+      <p>
         This data stays in browser storage unless a feature explicitly contacts the first-party API. You can clear it from
         Settings or your browser. <code>BroadcastChannel('awaketab')</code> coordinates open tabs without sending that state to a
         server.
       </p>
-      <p class="at-pg-body">
+      <p>
         Voice typing in the notepad uses your browser's own speech recognition. In Chrome and Edge the browser sends your voice
         to its speech service (Google or Microsoft) to be transcribed, and Safari uses Apple's, under that company's terms.
         AwakeTab receives neither the audio nor the text; only the words you keep are saved, in <code>at.v1.notes</code> on
@@ -92,11 +92,11 @@ const events = [
       </p>
     </LegalSection>
 
-    <LegalSection id="telemetry" title={title('telemetry')} summary="telemetry is on by default and anonymous: AwakeTab sends events to its own server, with no user id, no fingerprint and no persistent identifier. One switch in Settings turns it off everywhere.">
-      <p class="at-pg-body">
+    <LegalSection id="telemetry" title={title('telemetry')} summary="telemetry is on by default and anonymous: AwakeTab sends events to its own server, with no user id, no fingerprint and no persistent identifier. Site pages ask once whether you allow it; Decline, or one switch in Settings, turns it off everywhere.">
+      <p>
         While telemetry is on, AwakeTab may send: {events.map((name, i) => <><code>{name}</code>{i < events.length - 1 ? ', ' : ' '}</>)}and sampled <code>client_error</code> events.
       </p>
-      <p class="at-pg-body">
+      <p>
         Common fields are timestamp, path without query parameters, locale, coarse browser/OS and viewport classes,
         application version and a random per-tab session id held only in memory. AwakeTab does not collect a user id, exact
         user agent, fingerprint, full referrer or persistent analytics identifier.
@@ -104,22 +104,22 @@ const events = [
     </LegalSection>
 
     <LegalSection id="extension" title={title('extension')} summary="the extension keeps the same records on your computer, asks for power, storage and alarms (anything else is optional), and sends no usage data unless you turn it on.">
-      <p class="at-pg-body">
+      <p>
         The extension keeps the same records as the site, in <code>chrome.storage.local</code> on your computer:
         <code>at.v1.settings</code>, <code>at.v1.session</code>, <code>at.v1.stats</code>, <code>at.v1.license</code> (only after you
         activate Pro), <code>at.v1.ext</code> (Screen or System level, schedules and auto-start sites) and <code>at.v1.device</code> (a
         random device id created once per browser profile, used only to count Pro activations).
       </p>
-      <p class="at-pg-body">
+      <p>
         If Chrome sync is on, your settings, schedules and auto-start sites are also copied through <code>chrome.storage.sync</code>
         to your other Chrome profiles. The licence token and the device id never sync.
       </p>
-      <p class="at-pg-body">
+      <p>
         The extension asks for <code>power</code>, <code>storage</code> and <code>alarms</code>. Notifications and access to a website are
         optional and requested only when you turn on end-of-timer notifications or add an auto-start site; the site permission
         covers that one site, and the extension never reads page content. Which sites you add is never sent anywhere.
       </p>
-      <p class="at-pg-body">
+      <p>
         Anonymous usage statistics are off by default in the extension. If you turn them on in its settings, it sends at most
         <code>session_start</code>, <code>session_end</code>, <code>pro_activated</code> and <code>client_error</code> events to
         <code>awaketab.com/api/e</code> with <code>source: ext</code> and the common fields above, never a URL, tab title or site name.
@@ -130,7 +130,7 @@ const events = [
     </LegalSection>
 
     <LegalSection id="server-data" title={title('server-data')} summary="three kinds of records, each with an end date: usage events for 90 days, ratings for up to 2 years, and a licence record until the licence expires plus one year.">
-      <p class="at-pg-body">AwakeTab runs on Cloudflare. It keeps three kinds of records there, and nothing else:</p>
+      <p>AwakeTab runs on Cloudflare. It keeps three kinds of records there, and nothing else:</p>
       <dl class="at-legal-dl">
         <div>
           <dt id="retention-events">Anonymous usage events</dt>
@@ -159,8 +159,8 @@ const events = [
           </dd>
         </div>
       </dl>
-      <p class="at-pg-body" id="delete">
-        <strong>Deleting your licence data.</strong> Email <a class="at-pg-link" href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a> from any
+      <p id="delete">
+        <strong>Deleting your licence data.</strong> Email <a href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a> from any
         address with your licence key or Polar receipt, and ask us to delete your licence data. We delete the licence record and its
         device list within 7 days and confirm by reply. Deleting it ends Pro on every device, and it does not refund the purchase (a
         refund within 14 days does that, see the terms). Usage events and ratings carry no identity, so no one, including us, can
@@ -169,7 +169,7 @@ const events = [
     </LegalSection>
 
     <LegalSection id="network" title={title('network')} summary="your IP address is used briefly, as a salted hash, for rate limiting and is never stored as analytics. Polar handles payment.">
-      <p class="at-pg-body">
+      <p>
         API rate limiting uses a salted hash of the source IP transiently; neither the IP nor its hash is stored as analytics. Pro
         purchases are processed by Polar, whose checkout privacy terms apply. Licence endpoints receive only the licence key or
         token, a random device id and a user-visible device label.
@@ -177,11 +177,11 @@ const events = [
     </LegalSection>
 
     <LegalSection id="ads" title={title('ads')} summary="no page shows ads today. If article ads start, they will never appear on the awake screen, in Picture-in-Picture, in embeds or in the extension.">
-      <p class="at-pg-body">
+      <p>
         <strong>No page shows ads today.</strong> This section describes what will apply once advertising starts on the articles;
         the effective date above will change when it does.
       </p>
-      <p class="at-pg-body">
+      <p>
         AwakeTab's tool pages load no third-party scripts and show no ads. Our articles (pages under /for, /on, /vs, /guides and
         /learn) will show advertisements from Google AdSense. Ad vendors may set cookies and process your IP address and browsing
         information to show and measure ads. If you are in the EEA, the UK or Switzerland we will ask for your consent first
@@ -192,8 +192,8 @@ const events = [
     </LegalSection>
 
     <LegalSection id="contact" title={title('contact')} summary="one address for every question about this policy or your data.">
-      <p class="at-pg-body">
-        Questions about this policy or your data: <a class="at-pg-link" href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a>.
+      <p>
+        Questions about this policy or your data: <a href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a>.
       </p>
     </LegalSection>
   </LegalDoc>

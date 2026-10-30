@@ -1,0 +1,28 @@
+---
+import { createT } from '../../i18n/load';
+import type { TLocale } from '../../i18n/locales';
+import Button from '../shell/Button.astro';
+
+interface Props {
+  locale: TLocale;
+}
+
+const t = createT(Astro.props.locale);
+---
+
+<section class="at-consent" aria-labelledby="at-consent-h" data-consent-box>
+  <span class="at-consent-text">
+    <strong class="at-consent-t" id="at-consent-h">{t('site.consent.title')}</strong>
+    <span class="at-sp-small">{t('site.consent.body')}</span>
+  </span>
+  <span class="at-consent-acts">
+    <Button variant="secondary" data-consent-pick="decline">{t('site.consent.decline')}</Button>
+    <Button variant="secondary" data-consent-pick="allow">{t('site.consent.allow')}</Button>
+  </span>
+</section>
+
+<script>
+  import { initConsent } from '../../lib/consent';
+
+  initConsent();
+</script>

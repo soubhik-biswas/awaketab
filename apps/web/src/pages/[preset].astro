@@ -2,6 +2,7 @@
 import '../styles/tool-page.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ToolIsland from '../components/ToolIsland.astro';
+import Lucide from '../components/icons/Lucide.astro';
 import '../styles/tool-full.css';
 import { t } from '../i18n/load';
 import { articleSchema } from '../lib/seo';
@@ -134,18 +135,7 @@ const h1 = `Keep your screen awake for ${route.words}`;
         }” the moment you switch away.
       </p>
       <div class="at-honest" role="note">
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          aria-hidden="true"
-          ><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7.5v.01"
-          ></path></svg
-        >
+        <Lucide name="info" size={20} />
         <div>
           <span class="at-kicker">Honest limit</span>
           <p>
@@ -198,19 +188,7 @@ const h1 = `Keep your screen awake for ${route.words}`;
                   <span class="at-guide-title">{l}</span>
                   <span class="at-guide-path">{href}</span>
                 </span>
-                <svg
-                  viewBox="0 0 24 24"
-                  width="20"
-                  height="20"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h13M13 6l6 6-6 6" />
-                </svg>
+                <Lucide name="arrow-right" size={20} class="at-flip-rtl" />
               </a>
             </li>
           ))
