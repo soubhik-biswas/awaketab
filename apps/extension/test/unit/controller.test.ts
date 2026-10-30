@@ -31,6 +31,7 @@ describe('background controller — keep-awake and badge', () => {
     expect(fake.badge.text).toBe('ON');
     expect(fake.badge.color).toBe(BADGE_COLORS.display);
     expect(fake.badge.title).toContain('Screen awake');
+    expect(fake.badge.icon).toBe('icon-16.png');
     expect(fake.alarms.get(ALARMS.tick)?.periodInMinutes).toBe(0.5);
     expect(fake.alarms.has(ALARMS.end)).toBe(false);
   });
@@ -45,7 +46,7 @@ describe('background controller — keep-awake and badge', () => {
     );
   });
 
-  it('maps the system level to requestKeepAwake("system"), an indigo SYS badge and the secondary line', async () => {
+  it('maps the system level to requestKeepAwake("system"), a sky SYS badge and the secondary line', async () => {
     const fake = createFakeChrome();
     const ctl = track(wired(fake));
     await ctl.onMessage({ type: 'level', level: 'system' });

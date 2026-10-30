@@ -1,5 +1,5 @@
-// Rasterise the shared screen-and-power mark at each Chrome icon size. The SVG is also used by the
-// extension pages and store artwork, keeping the published identity consistent and reproducible.
+// Rasterise the brand icon at each Chrome size, plus the toolbar's not-awake variant (hollow lamp) and the
+// time's-up notification icon (ended lamp). icon.svg is also the store artwork's icon.
 import { mkdir, writeFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -9,7 +9,10 @@ import { deflateSync } from 'node:zlib';
 
 const require = createRequire(import.meta.url);
 const { Resvg } = require('@resvg/resvg-js');
-export const ICON_SVG = readFileSync(new URL('../public/icon.svg', import.meta.url), 'utf8');
+const svgFile = (name) => readFileSync(new URL(`../public/${name}.svg`, import.meta.url), 'utf8');
+export const ICON_SVG = svgFile('icon');
+const OFF_SVG = svgFile('icon-off');
+const ENDED_SVG = svgFile('icon-ended');
 
 function crc32(buf) {
   let c = ~0;
@@ -48,19 +51,26 @@ export function encodePng(width, height, rgba) {
   ]);
 }
 
-export function iconPixels(size) {
-  const image = new Resvg(ICON_SVG, { fitTo: { mode: 'width', value: size } }).render();
+export function iconPixels(size, svg = ICON_SVG) {
+  const image = new Resvg(svg, { fitTo: { mode: 'width', value: size } }).render();
   return Buffer.from(image.pixels);
 }
 
-export function iconPng(size) {
-  return encodePng(size, size, iconPixels(size));
+export function iconPng(size, svg = ICON_SVG) {
+  return encodePng(size, size, iconPixels(size, svg));
 }
 
 export const ICON_SIZES = [16, 32, 48, 128];
+const TOOLBAR_SIZES = [16, 32];
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const publicDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../public');
   await mkdir(publicDirectory, { recursive: true });
-  await Promise.all(ICON_SIZES.map((size) => writeFile(path.join(publicDirectory, `icon-${size}.png`), iconPng(size))));
+  await Promise.all([
+    ...ICON_SIZES.map((size) => writeFile(path.join(publicDirectory, `icon-${size}.png`), iconPng(size))),
+    ...TOOLBAR_SIZES.map((size) =>
+      writeFile(path.join(publicDirectory, `icon-off-${size}.png`), iconPng(size, OFF_SVG)),
+    ),
+    writeFile(path.join(publicDirectory, 'icon-ended-128.png'), iconPng(128, ENDED_SVG)),
+  ]);
 }

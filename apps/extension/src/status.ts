@@ -1,8 +1,8 @@
 import type { ISession, TLockState } from '@awaketab/core';
 import type { TPowerLevel } from './api';
 
-// The light lamp green (--at-badge-screen) for Screen and night indigo (--at-badge-system) for System, white text.
-export const BADGE_COLORS: Record<TPowerLevel, string> = { display: '#117A3B', system: '#2B3A67' };
+// The light lamp green for Screen and the light sky (System's pill colour) for System, both with white text.
+export const BADGE_COLORS: Record<TPowerLevel, string> = { display: '#117A3B', system: '#1C64B8' };
 export const BADGE_TEXT_COLOR = '#FFFFFF';
 
 export type TOrigin = 'user' | 'command' | 'schedule' | 'autostart' | 'startup';
