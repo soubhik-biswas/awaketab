@@ -235,7 +235,9 @@ describe('manage page', () => {
 
   it('an error answer from the licence API (no device list) also says offline, not "no devices"', async () => {
     store();
-    fetchRows.mockResolvedValueOnce({ error: 'polar_unavailable' } as unknown as Awaited<ReturnType<typeof fetchActivations>>);
+    fetchRows.mockResolvedValueOnce({ error: 'polar_unavailable' } as unknown as Awaited<
+      ReturnType<typeof fetchActivations>
+    >);
     const root = mount();
     bootManagePage(root, NOW);
     await flush();

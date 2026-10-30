@@ -70,7 +70,9 @@ export async function requestSignin(email: string): Promise<TSigninResult> {
   }
 }
 
-export async function verifySignin(token: string): Promise<{ ok: true; email: string } | { ok: false; offline: boolean }> {
+export async function verifySignin(
+  token: string,
+): Promise<{ ok: true; email: string } | { ok: false; offline: boolean }> {
   try {
     const res = await fetch('/api/auth/verify', {
       method: 'POST',

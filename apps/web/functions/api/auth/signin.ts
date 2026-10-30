@@ -1,4 +1,12 @@
-import { cooldownKey, newToken, normaliseEmail, SIGNIN_COOLDOWN_S, SIGNIN_TTL_S, storeToken, tokenKey } from '../../_lib/auth';
+import {
+  cooldownKey,
+  newToken,
+  normaliseEmail,
+  SIGNIN_COOLDOWN_S,
+  SIGNIN_TTL_S,
+  storeToken,
+  tokenKey,
+} from '../../_lib/auth';
 import { sendEmail } from '../../_lib/email/send';
 import { signinEmail } from '../../_lib/email/templates';
 import type { IEnv } from '../../_lib/env';

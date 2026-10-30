@@ -112,7 +112,8 @@ export function mountStudio(ctx: IToolCtx, host: HTMLElement): () => void {
   });
   host.querySelector('[role="radiogroup"]')?.addEventListener('keydown', (event) => {
     const e = event as KeyboardEvent;
-    const step = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+    const step =
+      e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
     if (!step) return;
     e.preventDefault();
     const i = SWATCHES.findIndex(([hex]) => hex === draft.lamp);

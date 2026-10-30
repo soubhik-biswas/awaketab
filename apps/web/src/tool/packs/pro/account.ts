@@ -192,10 +192,21 @@ export function mountAccount(ctx: IToolCtx, host: HTMLElement, go: TGo): () => v
         : tr('account.plan.lifetime');
     const devCount = cache?.token === lic?.token && cache ? cache.rows.length : null;
     const rows: Array<[string, string, string, string]> = [
-      ['devices', tr('account.devices'), devCount === null ? tr('account.devicesUpTo', { max: MAX_DEVICES }) : tr('account.devicesUsed', { n: devCount, max: MAX_DEVICES }), laptopSvg],
+      [
+        'devices',
+        tr('account.devices'),
+        devCount === null
+          ? tr('account.devicesUpTo', { max: MAX_DEVICES })
+          : tr('account.devicesUsed', { n: devCount, max: MAX_DEVICES }),
+        laptopSvg,
+      ],
       ['export', tr('account.export'), tr('account.exportD'), downloadSvg],
-      ...(hasFeature(ctx, 'stats.export') ? [['history', tr('account.history'), tr('account.historyD'), downloadSvg] as [string, string, string, string]] : []),
-      ...(account ? [['signout', tr('account.signout'), tr('account.signoutD'), logoutSvg] as [string, string, string, string]] : []),
+      ...(hasFeature(ctx, 'stats.export')
+        ? [['history', tr('account.history'), tr('account.historyD'), downloadSvg] as [string, string, string, string]]
+        : []),
+      ...(account
+        ? [['signout', tr('account.signout'), tr('account.signoutD'), logoutSvg] as [string, string, string, string]]
+        : []),
     ];
     host.innerHTML =
       `<div class="at-pv at-pv-account">` +

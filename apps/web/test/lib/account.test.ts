@@ -1,6 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ACCOUNT_KEY, readAccount, requestSignin, signOut, validEmail, verifySignin, writeAccount } from '../../src/lib/account';
+import {
+  ACCOUNT_KEY,
+  readAccount,
+  requestSignin,
+  signOut,
+  validEmail,
+  verifySignin,
+  writeAccount,
+} from '../../src/lib/account';
 import { checkoutUrl } from '../../src/lib/checkout-page';
 import { bootSigninPage } from '../../src/lib/signin-page';
 
@@ -40,17 +48,29 @@ describe('sign-in requests', () => {
       [503, 'email_unavailable'],
     ] as const;
     for (const [status, result] of answers) {
-      vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(new Response('{}', { status }))));
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(() => Promise.resolve(new Response('{}', { status }))),
+      );
       await expect(requestSignin('sam@example.com')).resolves.toBe(result);
     }
-    vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('offline'))));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.reject(new Error('offline'))),
+    );
     await expect(requestSignin('sam@example.com')).resolves.toBe('offline');
   });
 
   it('verifies a token once', async () => {
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(Response.json({ ok: true, email: 'sam@example.com' }))));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(Response.json({ ok: true, email: 'sam@example.com' }))),
+    );
     await expect(verifySignin('t')).resolves.toEqual({ ok: true, email: 'sam@example.com' });
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(Response.json({ error: 'expired' }, { status: 410 }))));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(Response.json({ error: 'expired' }, { status: 410 }))),
+    );
     await expect(verifySignin('t')).resolves.toEqual({ ok: false, offline: false });
   });
 });
@@ -104,13 +124,19 @@ describe('sign-in page', () => {
   });
 
   it('only claims a link was sent when the server sent one', async () => {
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(new Response('{}', { status: 503 }))));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response('{}', { status: 503 }))),
+    );
     const root = mount();
     bootSigninPage(root);
     submit(root, 'sam@example.com');
     await flush();
     expect(root.dataset.state).toBe('unavailable');
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(new Response('{}', { status: 202 }))));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response('{}', { status: 202 }))),
+    );
     submit(root, 'sam@example.com');
     await flush();
     expect(root.dataset.state).toBe('sent');
@@ -119,7 +145,10 @@ describe('sign-in page', () => {
 
   it('spends the token from the fragment and clears it from the address bar', async () => {
     history.replaceState(null, '', '/signin#token=abc');
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(Response.json({ ok: true, email: 'sam@example.com' }))));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(Response.json({ ok: true, email: 'sam@example.com' }))),
+    );
     const root = mount();
     bootSigninPage(root);
     expect(location.hash).toBe('');
@@ -131,7 +160,10 @@ describe('sign-in page', () => {
 
   it('an expired or used link lands on the expired state', async () => {
     history.replaceState(null, '', '/signin#token=abc');
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(Response.json({ error: 'expired' }, { status: 410 }))));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(Response.json({ error: 'expired' }, { status: 410 }))),
+    );
     const root = mount();
     bootSigninPage(root);
     await flush();

@@ -74,7 +74,8 @@ export function bootActivatePage(root: HTMLElement): void {
     const step = FLOW_STEP[state];
     root.toggleAttribute('data-flow', step !== undefined);
     if (step !== undefined) setFlowStep(root, step);
-    if (checkout && state !== 'processing') root.querySelector<HTMLElement>(`[data-co="${state === 'checkout-success' ? 'success' : state}"] h1`)?.focus();
+    if (checkout && state !== 'processing')
+      root.querySelector<HTMLElement>(`[data-co="${state === 'checkout-success' ? 'success' : state}"] h1`)?.focus();
   };
 
   // Copy that differs between the two modes is pre-rendered once per mode; the ext variants start hidden.

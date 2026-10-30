@@ -60,13 +60,19 @@ describe('billing emails from Polar events', () => {
     expect(mail?.text).toContain('Amount: $12.00');
     expect(mail?.text).toContain('Saturday, 30 October 2027');
     expect(billingEmail('order.paid', { ...order, billing_reason: 'subscription_cycle' }, PORTAL)).toBeNull();
-    expect(billingEmail('order.paid', { ...order, product: { metadata: { plan: 'biz_kiosk_site' } } }, PORTAL)).toBeNull();
+    expect(
+      billingEmail('order.paid', { ...order, product: { metadata: { plan: 'biz_kiosk_site' } } }, PORTAL),
+    ).toBeNull();
   });
 
   it('warns when a yearly renewal fails, with the grace end date', () => {
     const mail = billingEmail(
       'subscription.past_due',
-      { customer: { email: 'sam@example.com' }, current_period_end: '2026-10-30T10:00:00Z', product: { metadata: { plan: 'pro_yearly' } } },
+      {
+        customer: { email: 'sam@example.com' },
+        current_period_end: '2026-10-30T10:00:00Z',
+        product: { metadata: { plan: 'pro_yearly' } },
+      },
       PORTAL,
     );
     expect(mail?.subject).toBe('Your Pro renewal didn’t go through');
