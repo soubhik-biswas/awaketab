@@ -10,7 +10,7 @@ function Skeleton({
       data-slot="skeleton"
       data-tone={tone}
       className={cn(
-        'block animate-shimmer rounded-xs bg-size-[200%_100%]',
+        'block animate-shimmer rounded-xs bg-[length:200%_100%]',
         tone === 'default' &&
           'bg-secondary bg-[linear-gradient(90deg,var(--secondary)_0%,var(--surface-3)_50%,var(--secondary)_100%)]',
         tone === 'raised' &&
