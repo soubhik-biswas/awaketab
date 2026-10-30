@@ -50,5 +50,7 @@ export function initHelpSearch(): void {
     const first = list.querySelector('a');
     if (first) first.focus();
   });
+  const asked = new URLSearchParams(location.search).get('q');
+  if (asked) input.value = asked.slice(0, 80);
   if (input.value) render();
 }

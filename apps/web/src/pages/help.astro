@@ -97,7 +97,7 @@ const popular = HELP_TOPICS.filter((topic) => topic.scene).map((topic) => ({
         <p class="at-sp-small" data-help-count aria-live="polite">{idle}</p>
         <ul class="at-sp-chips" role="list" data-help-results hidden></ul>
       </div>
-      <script type="application/json" id="at-help-index" is:inline set:html={JSON.stringify(index).replaceAll('<', '\\u003c')} />
+      <script type="application/json" id="at-help-index" is:inline set:html={JSON.stringify(index).replaceAll('<', '\\u003c')}></script>
     </section>
     <Block id="help-popular" h={t('site.help.popular')}>
       <Cards items={popular} cols={3} />
