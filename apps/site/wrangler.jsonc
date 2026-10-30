@@ -1,0 +1,44 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "awaketab-site",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "awaketab-site" }],
+  "observability": { "enabled": true },
+  "vars": {
+    "PUBLIC_SITE_URL": "https://awaketab.com",
+    "PUBLIC_POLAR_SERVER": "production",
+  },
+  "kv_namespaces": [{ "binding": "LICENSES", "id": "REPLACE_WITH_LICENSES_NAMESPACE_ID" }],
+  "analytics_engine_datasets": [{ "binding": "EVENTS", "dataset": "awaketab_events" }],
+  "d1_databases": [
+    {
+      "binding": "AUTH_DB",
+      "database_name": "awaketab-auth",
+      "database_id": "REPLACE_WITH_AUTH_DATABASE_ID",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "env": {
+    "preview": {
+      "name": "awaketab-site-preview",
+      "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "awaketab-site-preview" }],
+      "vars": {
+        "PUBLIC_SITE_URL": "https://awaketab.com",
+        "PUBLIC_POLAR_SERVER": "sandbox",
+      },
+      "kv_namespaces": [{ "binding": "LICENSES", "id": "REPLACE_WITH_LICENSES_PREVIEW_NAMESPACE_ID" }],
+      "analytics_engine_datasets": [{ "binding": "EVENTS", "dataset": "awaketab_events_preview" }],
+      "d1_databases": [
+        {
+          "binding": "AUTH_DB",
+          "database_name": "awaketab-auth-preview",
+          "database_id": "REPLACE_WITH_AUTH_PREVIEW_DATABASE_ID",
+          "migrations_dir": "migrations",
+        },
+      ],
+    },
+  },
+}

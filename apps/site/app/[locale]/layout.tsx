@@ -32,7 +32,7 @@ const SCRIPT_FONT: Partial<Record<TLocale, string>> = {
 };
 
 // The client gets only what client components read; the tool adds its own namespaces here.
-const CLIENT_NAMESPACES = ['site', 'content', 'account', 'tool'] as const;
+const CLIENT_NAMESPACES = ['site', 'content', 'account', 'tool', 'proflow'] as const;
 
 // A returning visitor who already answered the analytics question never sees the box, not even for a frame.
 const CONSENT_BOOT = `try{var o=JSON.parse(localStorage.getItem('at.v1.onboarding')||'null'),s=JSON.parse(localStorage.getItem('at.v1.settings')||'null');if((o&&Array.isArray(o.dismissedTips)&&o.dismissedTips.indexOf('analytics')>=0)||(s&&s.telemetry===false))document.documentElement.dataset.consent=''}catch(e){}`;

@@ -333,7 +333,18 @@
         "keep": "Keep",
         "removeDevice": "Remove device",
         "plans": "See the Pro plans",
-        "loading": "Checking your devices…"
+        "loading": "Checking your devices…",
+        "offline": {
+          "title": "Couldn’t load your devices",
+          "text": "The device list didn’t load, so nothing is shown rather than an empty list. Check the connection and try again.",
+          "retry": "Try again"
+        },
+        "added": "Added {date}",
+        "lapse": {
+          "grace": "Renewal pending · Pro stays on until {date}",
+          "lapsed": "Pro ended on {date} · renew to turn it back on",
+          "portal": "Update payment in Polar"
+        }
       },
       "lapse": {
         "grace": {
@@ -2862,7 +2873,14 @@
         "lead": "This device now knows your Pro email. The timer works the same as before.",
         "how": "Signed in with a magic link",
         "open": "Open the timer",
-        "out": "Sign out"
+        "out": "Sign out",
+        "with": {
+          "email": "Signed in with a magic link",
+          "google": "Signed in with Google",
+          "github": "Signed in with GitHub"
+        },
+        "manage": "Manage devices",
+        "label": "Signed in as"
       },
       "expired": {
         "eyebrow": "LINK EXPIRED",
@@ -2874,6 +2892,19 @@
       "callout": {
         "title": "Not using Pro?",
         "text": "You don’t need to sign in. Settings, presets and history stay on this device."
+      },
+      "social": {
+        "label": "Sign in with an account you already have",
+        "google": "Continue with Google",
+        "github": "Continue with GitHub",
+        "or": "or use your email",
+        "unset": "{provider} sign-in isn’t set up yet. Nothing happened; use the email link instead.",
+        "failed": "{provider} sign-in didn’t finish, and nothing changed. Try again or use the email link.",
+        "offline": "You’re offline. Connect, then try again."
+      },
+      "notReady": {
+        "title": "Sign-in isn’t switched on yet.",
+        "text": "Nothing was sent and no account was made. Pro works without signing in: the licence key from Polar turns it on for each device."
       }
     }
   },
@@ -2905,7 +2936,7 @@
         "name": "Free",
         "price": "No charge",
         "f1": "Keep awake for any length, or no end",
-        "f2": "All 33 faces and 3 themes",
+        "f2": "All 49 faces and 3 themes",
         "f3": "Presets and the ⌘K palette",
         "f4": "Video fallback for older browsers",
         "now": "You are on Free now."
@@ -2965,7 +2996,13 @@
         "note": {
           "_": "You will finish on Polar’s secure page. AwakeTab never sees your card. Tax is added there where it applies.",
           "cancel": "Cancel any time in Settings → Account."
-        }
+        },
+        "lock": "Secure payment",
+        "unsentTitle": "No sign-in link was sent"
+      },
+      "unavailable": {
+        "title": "Purchases open soon",
+        "text": "Checkout isn’t switched on here yet, so nothing was charged. You can use the free tool now."
       }
     },
     "page": {
@@ -2983,7 +3020,7 @@
         "price": "No charge",
         "d": "Everything you need to keep one screen awake.",
         "f1": "Keep awake for any length, or no end",
-        "f2": "All 33 faces",
+        "f2": "All 49 faces",
         "f3": "Presets and the ⌘K palette",
         "f4": "Light, dark and OLED themes",
         "f5": "Video fallback for older browsers",
@@ -3008,13 +3045,15 @@
       "cmp": {
         "h2": "Free or Pro, side by side",
         "col": {
-          "feature": "Feature"
+          "feature": "Feature",
+          "free": "Free",
+          "pro": "Pro"
         },
         "yes": "Included",
         "no": "Not included",
         "awake": "Keeps the screen awake, with an honest status pill",
         "lengths": "Any length, until a time, or until you stop",
-        "faces": "All 33 clock faces and 3 themes",
+        "faces": "All 49 clock faces and 3 themes",
         "presets": "Presets, the ⌘K palette and shared setups",
         "devices": {
           "_": "Devices",
@@ -3079,6 +3118,20 @@
         "a5": "Each browser where you enter the key uses one of five places. AwakeTab for Chrome uses one too. Devices unused for 90 days are removed automatically when you add a new one.",
         "q6": "Is there a monthly plan?",
         "a6": "No. Pro is {yearly} a year, or {once} once with no renewal. Both cover 5 devices."
+      },
+      "refund": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key.",
+      "biz": {
+        "h2": "For your website or your screens",
+        "embed": {
+          "name": "Embed licence",
+          "price": "{price} a year per site",
+          "text": "Removes the “Keep awake by AwakeTab” credit. Licences open soon; the free embed works today."
+        },
+        "kiosk": {
+          "name": "Kiosk licence",
+          "price": "{one} one site · {five} five sites",
+          "text": "Signage and kiosk screens that stay awake from one URL, with your own logo and message."
+        }
       }
     },
     "done": {
@@ -3097,13 +3150,137 @@
         "to": "to",
         "next": ". Next: add your other devices with the same key.",
         "open": "Open the timer",
-        "add": "Add a device"
+        "add": "Add a device",
+        "generic": "Thank you. Polar is emailing your receipt and licence key. Next: add your other devices with the same key."
       },
       "failed": {
         "lead": "Polar declined it and you were not charged. Nothing about your free account changed.",
         "again": "Try again",
-        "plans": "Back to plans"
+        "plans": "Back to plans",
+        "h1": "The payment didn’t go through"
+      },
+      "syncing": {
+        "h1": "Your purchase is still syncing",
+        "lead": "Polar took the payment but is still creating your licence key. You are not charged twice. Try again in a minute, or enter the key from Polar’s email.",
+        "retry": "Try again",
+        "key": "Enter licence key"
+      },
+      "cancelled": {
+        "h1": "Checkout closed",
+        "lead": "Nothing was charged. Pro is optional: the tool, the presets and the extension keep working without it.",
+        "plans": "See the plans again",
+        "open": "Open the timer"
       }
+    },
+    "flow": {
+      "pro": "Pro",
+      "back": "Back to the timer",
+      "label": "Checkout steps",
+      "done": "(done)",
+      "current": "(current step)"
+    },
+    "activate": {
+      "title": "Activate AwakeTab Pro — AwakeTab",
+      "description": "Paste the licence key from your Polar receipt to activate AwakeTab Pro on this device. Checkout returns here automatically when Polar finishes.",
+      "h1": "Activate Pro",
+      "lead": "Your key is in the email from Polar and on the receipt page. This device counts as one of five activations.",
+      "submit": "Activate on this device",
+      "errors": "If activation fails",
+      "ext": {
+        "_": "Copy this key and paste it in the AwakeTab for Chrome options page. There is no automatic hand-off.",
+        "title": "Your licence key",
+        "lead": "Enter your key here to copy it into AwakeTab for Chrome. This browser is not activated: the extension activates itself, so it uses one of your five activations, not two.",
+        "submit": "Show key for the extension",
+        "note": "This browser stays unactivated, so the extension uses one of your five activations, not two."
+      },
+      "back": "AwakeTab Pro",
+      "placeholder": "Paste the key from your receipt",
+      "hint": {
+        "_": "Polar sends the key by email right after checkout.",
+        "ext": "Nothing is activated in this browser."
+      },
+      "checking": {
+        "_": "Checking your key…",
+        "status": "Checking your key with Polar. This usually takes a second or two."
+      },
+      "retry": "Retry",
+      "manage": "Manage devices",
+      "plans": "No key yet? See the Pro plans",
+      "err": {
+        "invalid_key": "Activation didn't work",
+        "activation_limit": "All five devices are in use",
+        "revoked": "This key is no longer active",
+        "polar_unavailable": "Not ready yet",
+        "offline": "No connection",
+        "bad_token": "Activate this device again"
+      },
+      "ok": {
+        "key": "Key ending {tail} · this device uses one of your five activations.",
+        "unlocked": "Unlocked here",
+        "u1": "More colour themes, lamps, backgrounds and presets",
+        "u2": "Message mode on the awake screen",
+        "u3": "12 weeks of stats and CSV export",
+        "u4": "A taller floating window",
+        "u5": "Schedules and auto-start in AwakeTab for Chrome",
+        "u6": "No ads on the guides",
+        "u7": "A sound mixer, more notes and a Pomodoro that repeats",
+        "open": "Open AwakeTab",
+        "title": "Pro is on."
+      },
+      "reset": "Use a different key",
+      "copy": "Copy",
+      "copied": "Copied",
+      "errText": {
+        "invalid_key": "Polar doesn’t know this key. Check it against the email from Polar; keys are letters, numbers and dashes.",
+        "activation_limit": "This key is already on five devices. Remove one you no longer use, then activate here.",
+        "revoked": "This key was refunded or revoked, so it can’t turn Pro on. The free tool keeps working.",
+        "polar_unavailable": "Polar is still creating the key or can’t be reached. Wait a minute and try again; you are not charged twice.",
+        "offline": "You’re offline, so nothing was checked. Connect, then try again.",
+        "bad_token": "This device’s Pro needs to be activated again. Enter the key from Polar’s email."
+      },
+      "label": "Licence key"
+    },
+    "manage": {
+      "title": "Manage Pro devices — AwakeTab",
+      "description": "See which devices hold your AwakeTab Pro licence and remove one if you have reached the five-device limit.",
+      "h1": "Manage devices",
+      "lead": "Devices unused for 90 days are removed automatically when you activate a new one.",
+      "empty": "No licence on this device yet. Activate a key first.",
+      "remove": "Remove",
+      "col": {
+        "device": "Device",
+        "activated": "Activated"
+      },
+      "meter": "{n} of 5 devices",
+      "left": {
+        "_": "{n} activations left",
+        "one": "1 activation left",
+        "none": "No activations left"
+      },
+      "here": "This device",
+      "off": "Pro off",
+      "activated": "Activated",
+      "confirm": {
+        "here": "Remove this device? Pro switches off here and frees one of your five activations.",
+        "other": "Remove {label}? Pro switches off there and frees one of your five activations.",
+        "aria": "Remove {label}?"
+      },
+      "keep": "Keep",
+      "removeDevice": "Remove device",
+      "plans": "See the Pro plans",
+      "loading": "Checking your devices…",
+      "offline": {
+        "title": "Couldn’t load your devices",
+        "text": "The device list didn’t load, so nothing is shown rather than an empty list. Check the connection and try again.",
+        "retry": "Try again"
+      },
+      "added": "Added {date}",
+      "lapse": {
+        "grace": "Renewal pending · Pro stays on until {date}",
+        "lapsed": "Pro ended on {date} · renew to turn it back on",
+        "portal": "Update payment in Polar"
+      },
+      "activate": "Activate a key"
     }
   },
   "site": {
