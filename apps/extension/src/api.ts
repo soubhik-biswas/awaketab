@@ -71,6 +71,7 @@ export interface IExtApi {
     setBadgeBackgroundColor(details: { color: string }): Promise<void>;
     setBadgeTextColor?(details: { color: string }): Promise<void>;
     setTitle(details: { title: string }): Promise<void>;
+    setIcon?(details: { path: Record<string, string> }): Promise<void>;
   };
   notifications?: {
     create(id: string, options: INotificationOptions): Promise<string>;

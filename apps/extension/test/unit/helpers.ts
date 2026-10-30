@@ -1,7 +1,7 @@
 import { LICENSE_PUBLIC_KEYS, sha256Hex, type ILicenseRecord, type TFeatureGate } from '@awaketab/core';
 import { createController, type IController } from '../../src/controller';
 import type { IFakeChrome } from './fake-chrome';
-import en from '../../../web/src/i18n/en.json';
+import en from '../../locales/shared/en.json';
 
 const b64url = (bytes: Uint8Array) =>
   btoa(String.fromCharCode(...bytes))

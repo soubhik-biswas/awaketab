@@ -1,13 +1,13 @@
-import 'virtual:at-tokens.css';
+import '../../src/styles/tokens.css';
 import '../../src/styles/base.css';
 import './popup.css';
-import { PLAN_PRICES, lifetimePrice } from '../../../web/src/lib/license';
+import { PLAN_PRICES, launchOn, lifetimePrice, usd } from '../../../site/lib/pro/plans';
 import { DEFAULT_META, DEFAULT_ONBOARDING, STORAGE_KEYS, type IMeta, type IOnboarding } from '@awaketab/core';
 import { browser } from 'wxt/browser';
 import type { IExtApi, TPowerLevel } from '../../src/api';
 import { clockParts, keyCaps, roundToMinute, words } from '../../src/format';
 import type { IExtState, TExtRequest } from '../../src/messages';
-import { loadPage, q, send, show, translateTree } from '../../src/page';
+import { loadPage, paintMark, paintMarks, q, send, show, translateTree } from '../../src/page';
 import { allWindows, minutesOf } from '../../src/schedules';
 import {
   EXT_KEYS,
@@ -20,7 +20,7 @@ import {
 } from '../../src/settings';
 import { isLive, pillTextKey, remainingMs, totalMs } from '../../src/status';
 
-const C = 2 * Math.PI * 56;
+const C = 2 * Math.PI * 30;
 const PRESET_KEYS = ['p15', 'p30', 'p45', 'p60', 'p120', 'p240'] as const;
 const PRESET_MS: Record<TExtPreset, number> = {
   p15: 15 * 60_000,
@@ -35,15 +35,6 @@ const QUARTER = 15 * 60_000;
 const DAY = 86_400_000;
 const RECEIPT_MS = 5 * 60_000;
 const TIPS_ID = 'ext-first-open';
-const GLYPH = {
-  dot: 'M6 1.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 1 1 0-9z',
-  pause: 'M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z',
-  tri: 'M6 1L11.2 10.5H.8z',
-  ringDot:
-    'M6 3.4a2.6 2.6 0 1 1 0 5.2a2.6 2.6 0 1 1 0-5.2zM6 .6a5.4 5.4 0 1 1 0 10.8a5.4 5.4 0 1 1 0-10.8zm0 1.4a4 4 0 1 0 0 8a4 4 0 1 0 0-8z',
-  half: 'M6 .8a5.2 5.2 0 1 1 0 10.4a5.2 5.2 0 1 1 0-10.4zM6 2.3a3.7 3.7 0 1 1 0 7.4a3.7 3.7 0 1 1 0-7.4zM6 2.3a3.7 3.7 0 0 0 0 7.4z',
-} as const;
-
 type TMode = 'ready' | 'starting' | 'held' | 'ended' | 'blocked';
 
 async function boot(): Promise<void> {
@@ -57,6 +48,7 @@ async function boot(): Promise<void> {
   ]);
   const { t, time } = ctx;
   translateTree(root, t);
+  paintMarks(root);
   let state: IExtState | null = first;
   let ext: IExtSettings = readExt(stored[EXT_KEYS.ext]);
   let meta: IMeta = { ...DEFAULT_META, ...(stored[STORAGE_KEYS.meta] as Partial<IMeta> | undefined) };
@@ -77,7 +69,7 @@ async function boot(): Promise<void> {
   const el = {
     pill: q(root, '[data-pill]'),
     pillText: q(root, '[data-pill-text]'),
-    pillGlyph: q(root, '[data-pill-glyph]', SVGPathElement),
+    mark: q(root, '.pp-head [data-mark-slot]'),
     extra: q(root, '[data-pill-extra]'),
     origin: q(root, '[data-origin]'),
     originIcons: [...root.querySelectorAll<SVGSVGElement>('[data-origin-icon]')],
@@ -86,7 +78,6 @@ async function boot(): Promise<void> {
     meta2: q(root, '[data-meta2]'),
     fail: q(root, '[data-fail]'),
     arcs: [...root.querySelectorAll<SVGCircleElement>('[data-arc]')],
-    tip: q(root, '[data-tip]', SVGGElement),
     kicker: q(root, '[data-kicker]'),
     timerBox: q(root, '[data-timer-box]'),
     days: q(root, '[data-days]'),
@@ -125,7 +116,6 @@ async function boot(): Promise<void> {
     tips: q(root, '[data-tips]'),
     newChip: q(root, '[data-new]', HTMLAnchorElement),
     newLabel: q(root, '[data-new-label]'),
-    foot: q(root, '[data-foot]'),
   };
 
   // Static pieces that depend on runtime values.
@@ -133,12 +123,10 @@ async function boot(): Promise<void> {
   el.newLabel.textContent = t('ext.update.chip', { version: release });
   el.newChip.setAttribute('aria-label', t('ext.update.aria', { version: release }));
   // The same launch-price switch as /pro: the lifetime price drops to its full price when the launch ends.
-  const lifetime = lifetimePrice();
-  const usd = (amount: number) => `$${String(amount)}`;
-  q(root, '[data-pro-price]').textContent = t(lifetime.strike ? 'ext.pro.price.launch' : 'ext.pro.price', {
+  q(root, '[data-pro-price]').textContent = t(launchOn() ? 'ext.pro.price.launch' : 'ext.pro.price', {
     yearly: usd(PLAN_PRICES.pro_yearly),
-    price: usd(lifetime.current),
-    after: usd(lifetime.strike ?? lifetime.current),
+    price: usd(lifetimePrice()),
+    after: usd(PLAN_PRICES.pro_lifetime),
   });
   void api.commands.getAll().then((commands) => {
     const shortcut = commands.find((command) => command.name === 'toggle')?.shortcut || 'Alt+Shift+A';
@@ -259,17 +247,19 @@ async function boot(): Promise<void> {
     el.pill.dataset.lock = view.lock;
     el.pill.dataset.level = view.level;
     el.pillText.textContent = t(pillTextKey(view.lock, view.level));
-    el.pillGlyph.setAttribute(
-      'd',
-      blocked
-        ? GLYPH.tri
-        : view.lock === 'lost'
-          ? GLYPH.pause
-          : view.lock === 'fallback'
-            ? GLYPH.ringDot
-            : held && system
-              ? GLYPH.half
-              : GLYPH.dot,
+    paintMark(
+      el.mark,
+      held
+        ? system
+          ? 'info'
+          : 'awake'
+        : mode === 'starting'
+          ? 'awake'
+          : mode === 'ended'
+            ? 'ended'
+            : blocked
+              ? 'blocked'
+              : 'off',
     );
     show(el.extra, held && system);
     const originKey = held && origin && origin !== 'user' && origin !== 'command' ? `ext.origin.${origin}` : null;
@@ -419,7 +409,6 @@ async function boot(): Promise<void> {
     show(el.pro, proPanel);
     el.proRow.setAttribute('aria-expanded', String(proPanel));
     show(el.tips, tipsOn);
-    show(el.foot, !tipsOn && !incognito && !blocked);
 
     // New in <version>: after an update, until the chip is opened.
     show(el.newChip, meta.lastSeenVersion !== '' && meta.lastSeenVersion !== version);
@@ -454,7 +443,7 @@ async function boot(): Promise<void> {
         caption =
           rem >= DAY
             ? t('ext.popup.timeLeft')
-            : t('tool.timer.until', { wall: time.when(roundToMinute(now + rem), now) });
+            : t('ext.popup.leftUntil', { time: time.when(roundToMinute(now + rem), now) });
         timerAria = t('tool.timer.remaining', { time: words(rem, t) });
       }
     } else if (mode === 'ended') {
@@ -497,9 +486,6 @@ async function boot(): Promise<void> {
     show(el.kicker, kicker !== '');
     const dash = mode === 'blocked' ? '' : p <= 0 ? `0.01 ${C.toFixed(1)}` : `${(C * p).toFixed(1)} ${C.toFixed(1)}`;
     for (const arc of el.arcs) arc.style.strokeDasharray = dash;
-    const tipOn = mode === 'held' && shown !== null && isLive(session) && session.endsAt !== null && p > 0;
-    el.tip.style.opacity = tipOn ? '1' : '0';
-    el.tip.style.transform = `rotate(${(360 * p).toFixed(2)}deg)`;
   }
 
   // ── Until panel: a 15-minute stepper, up to 24 h ahead ──────────────────────────────────────────

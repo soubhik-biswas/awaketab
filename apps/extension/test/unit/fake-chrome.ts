@@ -85,7 +85,7 @@ export interface IFakeChrome {
   session: IFakeStorageArea;
   power: Array<{ call: 'request' | 'release'; level?: TPowerLevel }>;
   alarms: Map<string, IAlarm>;
-  badge: { text: string; color: string; textColor: string; title: string };
+  badge: { text: string; color: string; textColor: string; title: string; icon: string };
   notifications: Array<{ id: string; options: INotificationOptions }>;
   granted: { permissions: Set<string>; origins: Set<string> };
   tabs: ITab[];
@@ -112,7 +112,7 @@ export function createFakeChrome(
   const session = fakeArea('session', fire);
   const power: IFakeChrome['power'] = [];
   const alarms = new Map<string, IAlarm>();
-  const badge = { text: '', color: '', textColor: '', title: '' };
+  const badge = { text: '', color: '', textColor: '', title: '', icon: '' };
   const notifications: IFakeChrome['notifications'] = [];
   const granted = { permissions: new Set<string>(['power', 'storage', 'alarms']), origins: new Set<string>() };
   const tabs: ITab[] = [];
@@ -169,6 +169,10 @@ export function createFakeChrome(
       },
       setTitle({ title }) {
         badge.title = title;
+        return Promise.resolve();
+      },
+      setIcon({ path }) {
+        badge.icon = path['16'] ?? '';
         return Promise.resolve();
       },
     },

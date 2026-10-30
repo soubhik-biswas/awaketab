@@ -52,6 +52,8 @@ const EXTEND_WINDOW_MS = 5 * 60_000;
 const STALE_NOTIFY_MS = 5 * 60_000;
 const SYNC_DEBOUNCE_MS = 2_000;
 export const NOTIFICATION_ID = 'at-end';
+const ICON_LIT = { 16: 'icon-16.png', 32: 'icon-32.png' };
+const ICON_OFF = { 16: 'icon-off-16.png', 32: 'icon-off-32.png' };
 export const WELCOME_PAGE = 'welcome.html';
 
 type TFetch = (input: string, init?: RequestInit) => Promise<Response>;
@@ -102,7 +104,12 @@ export function createController(opts: IControllerOptions): IController {
   let boot: Promise<void> | null = null;
   let switching = false;
   let syncTimer: ReturnType<typeof setTimeout> | null = null;
-  let badge: { text: string; color: string; title: string } = { text: '\u0000', color: '', title: '' };
+  let badge: { text: string; color: string; title: string; lit: boolean | null } = {
+    text: '\u0000',
+    color: '',
+    title: '',
+    lit: null,
+  };
 
   const settings = () => readSettings(store.raw(STORAGE_KEYS.settings));
   const ext = (): IExtSettings => readExt(store.raw(EXT_KEYS.ext));
@@ -246,11 +253,11 @@ export function createController(opts: IControllerOptions): IController {
       if (!(await api.permissions.contains({ permissions: ['notifications'] }))) return;
       await notifications.create(NOTIFICATION_ID, {
         type: 'basic',
-        iconUrl: api.runtime.getURL('icon-128.png'),
-        title: t('end.notify.title'),
+        iconUrl: api.runtime.getURL('icon-ended-128.png'),
+        title: t('tool.kicker.timesup'),
         message: t('end.notify.body', { label: sessionLabel(session) }),
         ...(s.endBehaviour === 'prompt_extend'
-          ? { buttons: [{ title: t('tool.extend.add30') }, { title: t('tool.extend.stop') }] }
+          ? { buttons: [{ title: t('tool.extend.add15') }, { title: t('tool.toast.dismiss') }] }
           : {}),
         // docs/10 §6 "sound": the extension has no audio of its own; `none` silences the system sound.
         silent: s.sound.id === 'none',
@@ -497,7 +504,7 @@ export function createController(opts: IControllerOptions): IController {
       rem === null
         ? ''
         : ` · ${t('tool.timer.remaining', { time: rem >= 60_000 ? t('stats.minutes', { minutes: Math.ceil(rem / 60_000) }) : formatClock(rem) })}`;
-    const next = { text, color: BADGE_COLORS[lvl], title: `${t('app.name')} — ${status}${left}` };
+    const next = { text, color: BADGE_COLORS[lvl], title: `${t('app.name')} — ${status}${left}`, lit: held };
     try {
       if (next.text !== badge.text) await api.action.setBadgeText({ text: next.text });
       if (next.text && next.color !== badge.color) {
@@ -505,7 +512,9 @@ export function createController(opts: IControllerOptions): IController {
         await api.action.setBadgeTextColor?.({ color: BADGE_TEXT_COLOR });
       }
       if (next.title !== badge.title) await api.action.setTitle({ title: next.title });
-      badge = { text: next.text, color: next.text ? next.color : badge.color, title: next.title };
+      // The toolbar lamp is lit only while the device is really kept awake, hollow otherwise.
+      if (next.lit !== badge.lit) await api.action.setIcon?.({ path: next.lit ? ICON_LIT : ICON_OFF });
+      badge = { ...next, color: next.text ? next.color : badge.color };
     } catch {
       // The action API can reject while the browser shuts down; the next render retries.
     }
@@ -626,7 +635,7 @@ export function createController(opts: IControllerOptions): IController {
       if (id !== NOTIFICATION_ID) return;
       await ready();
       await api.notifications?.clear(id).catch(() => false);
-      if (index === 0 && settings().endBehaviour === 'prompt_extend') await extend(30 * 60_000);
+      if (index === 0 && settings().endBehaviour === 'prompt_extend') await extend(15 * 60_000);
       else dismiss();
     },
     async onNotificationClicked(id) {

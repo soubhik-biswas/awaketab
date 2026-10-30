@@ -84,9 +84,12 @@ importers:
       '@iconify-json/logos':
         specifier: 1.2.15
         version: 1.2.15
-      '@phosphor-icons/core':
-        specifier: 2.1.1
-        version: 2.1.1
+      '@resvg/resvg-js':
+        specifier: 2.6.2
+        version: 2.6.2
+      lucide-static:
+        specifier: 0.460.0
+        version: 0.460.0
       typescript:
         specifier: 5.9.3
         version: 5.9.3
