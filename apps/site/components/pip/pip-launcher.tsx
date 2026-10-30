@@ -55,6 +55,9 @@ function FloatingClock({ win, onClose }: { win: Window; onClose: () => void }) {
   return <MiniClock view={view} theme={theme} windowed onExtend={() => wake.extend(EXTEND_SEC)} onClose={onClose} />;
 }
 
+// Any part of the tool can open the mini clock by dispatching this event on window.
+export const PIP_EVENT = 'awaketab:pip';
+
 export interface IPipLauncherProps {
   className?: string;
   style?: CSSProperties;
@@ -112,6 +115,13 @@ export function PipLauncher({ className, style, label, hideButton = false }: IPi
 
   useEffect(() => () => undress.current?.(), []);
 
+  const popRef = useRef<() => Promise<void>>(() => Promise.resolve());
+  useEffect(() => {
+    const onAsk = () => void popRef.current();
+    window.addEventListener(PIP_EVENT, onAsk);
+    return () => window.removeEventListener(PIP_EVENT, onAsk);
+  }, []);
+
   const pop = async () => {
     if (support === 'document') {
       const win = await openDocumentPip();
@@ -127,6 +137,7 @@ export function PipLauncher({ className, style, label, hideButton = false }: IPi
     if (win) setOpen({ kind: 'popup', win });
     else showToast({ id: 'pip-blocked', tone: 'error', title: t('popupBlocked') });
   };
+  popRef.current = pop;
 
   if (support === 'none') return null;
   return (
