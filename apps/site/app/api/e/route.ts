@@ -6,7 +6,7 @@ import { clientIp, rateLimit } from '@/lib/server/ratelimit';
 export const dynamic = 'force-dynamic';
 
 export const POST = api(async (request, { env }) => {
-  if (!(await rateLimit(env, 'e', await clientIp(request)))) return rateLimited();
+  if (!(await rateLimit(env, 'e', clientIp(request)))) return rateLimited();
   const parsed = await parseBatch(request);
   if (!parsed.ok) return jsonError(parsed.status === 413 ? 'too_large' : 'bad_request', parsed.status);
   const now = Date.now();

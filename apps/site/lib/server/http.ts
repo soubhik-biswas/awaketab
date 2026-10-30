@@ -1,6 +1,6 @@
 import { RATE_WINDOW_S } from './env';
 
-export function jsonOk(data: unknown, status = 200, extra: HeadersInit = {}): Response {
+export function jsonOk(data: unknown, status = 200, extra: Record<string, string> = {}): Response {
   return Response.json(data, { status, headers: { 'cache-control': 'no-store', ...extra } });
 }
 
@@ -38,7 +38,7 @@ export function parseActivateBody(
   const deviceId = typeof row.deviceId === 'string' ? row.deviceId : '';
   const deviceLabel =
     typeof row.deviceLabel === 'string'
-      ? [...row.deviceLabel]
+      ? Array.from(row.deviceLabel)
           .filter((ch) => (ch.codePointAt(0) ?? 0) >= 32)
           .join('')
           .slice(0, 40)
