@@ -9,6 +9,7 @@ import SiteFooter from '../components/shell/SiteFooter.astro';
 import UpdateBanner from '../components/shell/UpdateBanner.astro';
 import Consent from '../components/site/Consent.astro';
 import siteCss from '../styles/site.css?raw';
+import sceneCss from '../styles/scene.css?raw';
 import { minifyCss } from '../lib/article-css';
 import { createT } from '../i18n/load';
 import { localeFromPath, localePath, LOCALE_META, textDirection, type TLocale } from '../i18n/locales';
@@ -82,7 +83,7 @@ const t = createT(locale);
     {wholeTool && <link rel="expect" href="#at-tool-parsed" blocking="render" />}
     <script is:inline set:html={bootJs} />
     {header && <link rel="expect" href="#at-hm-menu" blocking="render" />}
-    {header && <style is:inline set:html={minifyCss(siteCss)} />}
+    {header && <style is:inline set:html={minifyCss(siteCss + sceneCss)} />}
     <slot name="head" />
   </head>
   <body>

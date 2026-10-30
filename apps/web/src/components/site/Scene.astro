@@ -1,5 +1,4 @@
 ---
-import '../../styles/scene.css';
 import { sceneSvg, type TSceneKey } from '../../lib/scenes';
 
 interface Props {
@@ -12,6 +11,7 @@ interface Props {
 
 const { scene, width = 320, float = false, decorative = false, class: className } = Astro.props;
 const svg = sceneSvg(scene, { width, decorative, className: float ? 'at-scene-float' : undefined });
+// The scene colours come from styles/scene.css, inlined on site pages and linked by the home sections.
 ---
 
 <span class:list={['at-scene-wrap', className]} set:html={svg} />
