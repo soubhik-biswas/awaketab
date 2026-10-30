@@ -1216,7 +1216,7 @@ function ScenesBoard() {
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {SCENE_NAMES.map(([key, title, description]) => (
           <figure key={key} className="m-0 flex flex-col gap-2.5">
-            <div className="grid grid-cols-2 overflow-hidden rounded-[22px] border border-[#DCD7CC]">
+            <div className="grid grid-cols-2 overflow-hidden rounded-[22px] border border-[#D9D9E5]">
               <div className="flex items-center justify-center bg-[#FFFFFF] py-2">
                 <Scene scene={key} theme="light" width={166} />
               </div>
@@ -1257,10 +1257,10 @@ function BrandBoard() {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-[2fr_1fr_2fr_1fr]">
-        <div className="flex h-[220px] items-center justify-center rounded-[24px] border border-[#DCD7CC] bg-[#FFFFFF]">
+        <div className="flex h-[220px] items-center justify-center rounded-[24px] border border-[#D9D9E5] bg-[#FFFFFF]">
           <Mark size={80} tone="light" lockup="horizontal" />
         </div>
-        <div className="flex h-[220px] items-center justify-center rounded-[24px] border border-[#DCD7CC] bg-[#FFFFFF]">
+        <div className="flex h-[220px] items-center justify-center rounded-[24px] border border-[#D9D9E5] bg-[#FFFFFF]">
           <Mark size={84} tone="light" lockup="stacked" />
         </div>
         <div className="flex h-[220px] items-center justify-center rounded-[24px] bg-[#070B16]">
@@ -1271,16 +1271,16 @@ function BrandBoard() {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div className="flex h-[200px] items-center justify-center rounded-[24px] border border-[#DCD7CC] bg-[#FFFFFF]">
+        <div className="flex h-[200px] items-center justify-center rounded-[24px] border border-[#D9D9E5] bg-[#FFFFFF]">
           <Mark size={64} tone="mono-ink" lockup="horizontal" />
         </div>
         <div className="flex h-[200px] items-center justify-center rounded-[24px] bg-[#0B1020]">
           <Mark size={64} tone="mono-white" lockup="horizontal" />
         </div>
-        <div className="flex h-[200px] items-center justify-center rounded-[24px] bg-[#FF6B2C]">
+        <div className="flex h-[200px] items-center justify-center rounded-[24px] bg-[#9F7BFF]">
           <Mark size={64} tone="brand" lockup="horizontal" />
         </div>
-        <div className="flex h-[200px] items-center justify-center rounded-[24px] bg-[#3BE47F]">
+        <div className="flex h-[200px] items-center justify-center rounded-[24px] bg-[#3DF58E]">
           <Mark size={64} tone="brand" lockup="horizontal" />
         </div>
       </div>
