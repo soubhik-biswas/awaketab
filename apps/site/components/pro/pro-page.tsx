@@ -15,7 +15,11 @@ export async function ProPage({ locale = 'en' }: { locale?: TLocale }) {
   const c = (key: string) => t(`cmp.${key}`);
   const both = (key: string): readonly TCell[] => [tx(c(key), true), yes(c('yes')), yes(c('yes'))];
   const proOnly = (key: string): readonly TCell[] => [tx(c(key), true), no(c('no')), yes(c('yes'))];
-  const split = (key: string): readonly TCell[] => [tx(c(`${key}._`), true), tx(c(`${key}.free`)), yes(c(`${key}.pro`))];
+  const split = (key: string): readonly TCell[] => [
+    tx(c(`${key}._`), true),
+    tx(c(`${key}.free`)),
+    yes(c(`${key}.pro`)),
+  ];
   const rows: ReadonlyArray<readonly TCell[]> = [
     both('awake'),
     both('lengths'),

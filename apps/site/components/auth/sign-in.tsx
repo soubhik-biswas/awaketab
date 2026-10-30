@@ -199,7 +199,11 @@ export function SignIn() {
             <Button asChild variant="outline" size="lg" className={SUBMIT}>
               <a href="/pro/manage">{t('signed.manage')}</a>
             </Button>
-            <button type="button" className={cn(LINK_BTN, 'inline-flex items-center gap-2 self-center')} onClick={() => void signOut()}>
+            <button
+              type="button"
+              className={cn(LINK_BTN, 'inline-flex items-center gap-2 self-center')}
+              onClick={() => void signOut()}
+            >
               <LogOut className="size-4" strokeWidth={2} aria-hidden="true" />
               {t('signed.out')}
             </button>
@@ -210,7 +214,13 @@ export function SignIn() {
 
   const bad = help !== 'idle';
   const helpText =
-    help === 'bad' ? t('error.email') : help === 'rate' ? t('error.rate') : help === 'offline' ? t('error.offline') : t('help');
+    help === 'bad'
+      ? t('error.email')
+      : help === 'rate'
+        ? t('error.rate')
+        : help === 'offline'
+          ? t('error.offline')
+          : t('help');
 
   return (
     <>

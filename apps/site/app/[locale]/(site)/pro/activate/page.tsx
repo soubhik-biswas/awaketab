@@ -18,11 +18,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   await englishOnly(params);
   return (
-    <ActivateFlow
-      timerHref={toolHref('en')}
-      manageHref="/pro/manage"
-      checkoutHref="/pro/checkout"
-      plansHref="/pro"
-    />
+    <ActivateFlow timerHref={toolHref('en')} manageHref="/pro/manage" checkoutHref="/pro/checkout" plansHref="/pro" />
   );
 }

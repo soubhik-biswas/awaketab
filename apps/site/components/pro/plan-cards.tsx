@@ -32,7 +32,15 @@ const PRICE = 'font-display text-[34px] font-extrabold tracking-[-0.03em] [font-
 const CTA = 'h-13 rounded-[12px] px-[18px] text-[15px]';
 
 // The two plan cards of the content page's Pro board, with the real prices.
-export function PlanCards({ timerHref, checkoutHref, launch }: { timerHref: string; checkoutHref: string; launch: boolean }) {
+export function PlanCards({
+  timerHref,
+  checkoutHref,
+  launch,
+}: {
+  timerHref: string;
+  checkoutHref: string;
+  launch: boolean;
+}) {
   const t = useTranslations('proflow.page');
   const on = useLaunch(launch);
   const once = usd(on ? PLAN_PRICES.pro_lifetime_launch : PLAN_PRICES.pro_lifetime);

@@ -76,7 +76,11 @@ export function securityHeaders(): IHeaderRule[] {
   }
   rules.push({
     source: '/embed/:path+',
-    headers: [...COMMON, { key: 'Content-Security-Policy', value: EMBED_CSP }, { key: 'X-Robots-Tag', value: 'noindex' }],
+    headers: [
+      ...COMMON,
+      { key: 'Content-Security-Policy', value: EMBED_CSP },
+      { key: 'X-Robots-Tag', value: 'noindex' },
+    ],
   });
   rules.push({ source: '/api/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex' }] });
   rules.push({ source: '/auth/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex' }] });

@@ -97,8 +97,7 @@ export default function AccountView() {
         Delete account…
       </Button>
       <span className={HELP}>
-        Billing is handled by Polar. Without an account, AwakeTab still works — settings simply stay on
-        this device.
+        Billing is handled by Polar. Without an account, AwakeTab still works — settings simply stay on this device.
       </span>
     </>
   );

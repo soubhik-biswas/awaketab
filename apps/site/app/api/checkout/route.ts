@@ -27,7 +27,10 @@ export const GET = api(async (request, { env }) => {
   if (target.kind === 'link') {
     const link = new URL(target.url);
     if (email) link.searchParams.set('customer_email', email);
-    return new Response(null, { status: 303, headers: { location: link.toString(), 'referrer-policy': 'no-referrer' } });
+    return new Response(null, {
+      status: 303,
+      headers: { location: link.toString(), 'referrer-policy': 'no-referrer' },
+    });
   }
   const origin = siteOrigin(env, request);
   const handler = Checkout({

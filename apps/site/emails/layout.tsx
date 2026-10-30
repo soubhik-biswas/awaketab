@@ -39,13 +39,7 @@ export interface IMailProps {
 function Mark() {
   return (
     <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true" style={{ display: 'block' }}>
-      <path
-        d="M32 11 A21 21 0 1 1 12.27 24.82"
-        fill="none"
-        stroke={MAIL.ink}
-        strokeWidth="9"
-        strokeLinecap="round"
-      />
+      <path d="M32 11 A21 21 0 1 1 12.27 24.82" fill="none" stroke={MAIL.ink} strokeWidth="9" strokeLinecap="round" />
       <circle cx="19.95" cy="14.8" r="5.6" fill={MAIL.lamp} />
     </svg>
   );
