@@ -11,6 +11,12 @@ const settled = new Map<TFaceId, Promise<TFaceDrawing | null>>();
 // A face that fails to load draws nothing instead of throwing; the next mount tries again.
 const waitFor = (id: TFaceId): Promise<TFaceDrawing | null> => {
   let p = settled.get(id);
+  const ready = loadedFace(id);
+  // A face already loaded hands use() a promise React reads at once, so every render calls use() the same way.
+  if (!p && ready) {
+    p = Object.assign(Promise.resolve(ready), { status: 'fulfilled', value: ready });
+    settled.set(id, p);
+  }
   if (!p) {
     p = loadFace(id).catch(() => {
       settled.delete(id);
@@ -22,7 +28,7 @@ const waitFor = (id: TFaceId): Promise<TFaceDrawing | null> => {
 };
 
 function Drawing({ id, m, onDrawn }: { id: TFaceId; m: TFaceModel; onDrawn: (id: TFaceId) => void }) {
-  const Draw = loadedFace(id) ?? use(waitFor(id));
+  const Draw = use(waitFor(id));
   useLayoutEffect(() => onDrawn(id), [id, onDrawn]);
   return Draw ? <Draw m={m} /> : null;
 }

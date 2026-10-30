@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Play } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
@@ -25,22 +26,27 @@ export function Crumbs({ items, label }: { items: readonly ICrumb[]; label: stri
     <Breadcrumb aria-label={label}>
       <BreadcrumbList className="gap-2 text-[14px] text-muted-foreground-strong sm:gap-2">
         {items.map((c, i) => (
-          <BreadcrumbItem key={i} className="gap-2">
+          <Fragment key={i}>
             {i > 0 && (
               <BreadcrumbSeparator className="text-muted-foreground-strong">
                 <span>/</span>
               </BreadcrumbSeparator>
             )}
-            {i === items.length - 1 ? (
-              <BreadcrumbPage className="text-foreground">{c.label}</BreadcrumbPage>
-            ) : c.href ? (
-              <BreadcrumbLink href={c.href} className="text-muted-foreground-strong underline-offset-2 hover:underline">
-                {c.label}
-              </BreadcrumbLink>
-            ) : (
-              <span>{c.label}</span>
-            )}
-          </BreadcrumbItem>
+            <BreadcrumbItem className="gap-2">
+              {i === items.length - 1 ? (
+                <BreadcrumbPage className="text-foreground">{c.label}</BreadcrumbPage>
+              ) : c.href ? (
+                <BreadcrumbLink
+                  href={c.href}
+                  className="text-muted-foreground-strong underline-offset-2 hover:underline"
+                >
+                  {c.label}
+                </BreadcrumbLink>
+              ) : (
+                <span>{c.label}</span>
+              )}
+            </BreadcrumbItem>
+          </Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>

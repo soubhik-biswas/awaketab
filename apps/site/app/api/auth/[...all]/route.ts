@@ -32,8 +32,10 @@ async function guardMagicLink(request: Request, env: IEnv): Promise<Response | s
 
 async function handle(request: Request, env: IEnv): Promise<Response> {
   const auth = getAuth(env, new URL(request.url).origin);
-  if (!auth) return jsonError('auth_unavailable', 503, { code: 'AUTH_UNAVAILABLE' });
   const { pathname } = new URL(request.url);
+  // Without sign-in configured nobody can be signed in, so the session check every page makes answers plainly.
+  if (!auth && request.method === 'GET' && pathname.endsWith('/get-session')) return Response.json(null);
+  if (!auth) return jsonError('auth_unavailable', 503, { code: 'AUTH_UNAVAILABLE' });
   if (request.method === 'POST' && pathname.endsWith('/sign-in/magic-link')) {
     const guard = await guardMagicLink(request, env);
     if (guard instanceof Response) return guard;
