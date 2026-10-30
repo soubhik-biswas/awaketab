@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { CX, CY, f1, P } from './geometry';
-import type { TFaceModel } from './model';
+import { CARD_SHADOW } from './art';
+import type { TFaceModel, TFaceState } from './model';
 
 export type TStyle = CSSProperties & Record<`--${string}`, string | number>;
 
@@ -12,6 +13,8 @@ export interface IDrawProps {
 export const L = 'af-l';
 export const lmin = (px: number): string => `max(${px}px, var(--lmin))`;
 export const MONO = 'var(--font-geist-mono), ui-monospace, monospace';
+// Archivo, the display face; pair it with fontStretch 112 % (or 125 % for the widest cuts).
+export const DISPLAY = 'var(--font-archivo), var(--font-geist), sans-serif';
 
 const fill: CSSProperties = { position: 'absolute', left: 0, top: 0, width: 360, height: 310 };
 export const column = (gap: number): CSSProperties => ({
@@ -158,3 +161,58 @@ export function Stars({
     />
   ));
 }
+
+// The digit sizes the Volt faces share, smaller when hours make the reading long.
+export const digitSize = (m: TFaceModel, size: 'big' | 'mid' | 'sm'): number =>
+  ({ big: m.long ? 64 : 92, mid: m.long ? 52 : 72, sm: m.long ? 46 : 62 })[size];
+
+// The rounded card the scene faces draw on: 332 × 282 at 14, 14.
+export const card = (m: TFaceModel, extra?: CSSProperties): CSSProperties => ({
+  position: 'absolute',
+  left: 14,
+  top: 14,
+  width: 332,
+  height: 282,
+  borderRadius: 44,
+  overflow: 'hidden',
+  boxShadow: CARD_SHADOW[m.theme],
+  ...extra,
+});
+
+export const cardColumn = (gap: number, extra?: CSSProperties): CSSProperties => ({
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  width: 332,
+  height: 282,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap,
+  ...extra,
+});
+
+const NIGHT_STATUS: Readonly<Partial<Record<TFaceState, string>>> = {
+  idle: 'var(--muted-foreground-strong)',
+  paused: 'var(--warning)',
+  blocked: 'var(--destructive)',
+  unsupported: 'var(--info)',
+  up: 'var(--ended)',
+};
+
+// Faces drawn on a night panel keep the dark theme's colours on a light page: the panel carries nightClass(m).
+export const nightClass = (m: TFaceModel): string | undefined => (m.night ? undefined : 'dark');
+export const nightAccent = (m: TFaceModel): string => (m.night ? m.accent : (NIGHT_STATUS[m.st] ?? m.lampValue));
+export const nightHeat = (m: TFaceModel, q: number): string =>
+  m.night
+    ? m.heat(q)
+    : !m.multi
+      ? nightAccent(m)
+      : q <= 0.084
+        ? 'var(--face-ember)'
+        : q <= 0.25
+          ? 'var(--face-amber)'
+          : q <= 0.5
+            ? 'var(--face-lime)'
+            : m.lampValue;
