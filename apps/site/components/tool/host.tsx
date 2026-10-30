@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
+import { fill } from '@/lib/tool/chrome';
 import { returnFocus } from '@/lib/tool/focus';
 import { DEVICE_SIZES } from '@/lib/tool/model';
 import type { TToolView } from '@/lib/tool/ui';
@@ -57,22 +58,22 @@ export function hostViewOf(view: TToolView): THostView | null {
 
 function useTitle(view: THostView): string {
   const { m } = useTool();
-  const s = m.s;
+  const { s, c } = m;
   const titles: Record<THostView, string> = {
     faces: s.faces,
     presets: s.presets,
     history: s.history,
-    clear: 'Clear history',
+    clear: c.clearTitle,
     settings: s.settings,
     devices: s.devices,
     fix: s.help,
-    share: 'Share this setup',
-    extend: 'Extend session',
-    more: 'Menu',
-    welcome: 'Welcome',
-    sound: 'Ambient sound',
+    share: c.share,
+    extend: c.extendTitle,
+    more: c.menu,
+    welcome: c.welcome,
+    sound: c.ambient,
     studio: s.studio,
-    account: 'Account',
+    account: c.account,
   };
   return titles[view];
 }
@@ -95,10 +96,11 @@ function Body({ view }: { view: THostView }) {
 }
 
 function Head({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
+  const { m } = useTool();
   return (
     <div className="flex shrink-0 items-center justify-between gap-3">
       {children}
-      <CloseButton label={`Close ${title}`} onClick={onClose} />
+      <CloseButton label={fill(m.c.close, { title })} onClick={onClose} />
     </div>
   );
 }

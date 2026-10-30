@@ -43,7 +43,7 @@ export function ToolHeader() {
         type="button"
         variant="outline"
         onClick={() => a.go('more')}
-        aria-label="Menu"
+        aria-label={m.c.menu}
         aria-haspopup="dialog"
         aria-expanded={ui.view === 'more'}
         className={cn(
@@ -52,7 +52,7 @@ export function ToolHeader() {
         )}
       >
         <MenuGlyph strokeWidth={2} aria-hidden="true" />
-        {!phone ? <span>Menu</span> : null}
+        {!phone ? <span>{m.c.menu}</span> : null}
       </Button>
     </header>
   );

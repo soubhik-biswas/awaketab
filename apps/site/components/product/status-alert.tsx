@@ -27,7 +27,7 @@ const ICON: Record<TStatusAlertVariant, LucideIcon> = {
 };
 
 export const alertActionClasses =
-  'h-9 border-current bg-transparent px-3 text-[13px] text-current hover:border-current hover:bg-card active:border-current active:bg-card';
+  'relative h-9 border-current bg-transparent px-3 after:absolute after:-inset-1 text-[13px] text-current hover:border-current hover:bg-card active:border-current active:bg-card';
 
 export function StatusAlert({ variant, title, icon, action, children, className, ...props }: IStatusAlertProps) {
   const Icon = icon ?? ICON[variant];

@@ -41,9 +41,11 @@ export function useToolKeys(ctx: IToolContext, stageRef: RefObject<HTMLElement |
         a.toggle();
         return;
       }
-      if (e.key === '+' || e.key === '=' || e.code === 'NumpadAdd') {
+      // German and Nordic layouts type + without Shift on BracketRight, so Shift there types * instead.
+      const shiftPlus = e.shiftKey && e.key === '*' && e.code === 'BracketRight';
+      if (e.key === '+' || e.key === '=' || e.code === 'NumpadAdd' || shiftPlus) {
         e.preventDefault();
-        // The + key adds 15 minutes; with Shift (the + character on most layouts) it adds an hour.
+        // The + key adds 15 minutes; with Shift (the + character on US layouts) it adds an hour.
         a.extend(e.shiftKey ? 3600 : 900);
         return;
       }

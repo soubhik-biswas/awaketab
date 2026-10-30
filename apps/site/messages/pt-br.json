@@ -333,7 +333,18 @@
         "keep": "Keep",
         "removeDevice": "Remove device",
         "plans": "See the Pro plans",
-        "loading": "Checking your devices…"
+        "loading": "Checking your devices…",
+        "offline": {
+          "title": "Não foi possível carregar seus dispositivos",
+          "text": "A lista de dispositivos não carregou, por isso nada é mostrado em vez de uma lista vazia. Verifique a conexão e tente de novo.",
+          "retry": "Tentar de novo"
+        },
+        "added": "Adicionado em {date}",
+        "lapse": {
+          "grace": "Renovação pendente · o Pro continua ativo até {date}",
+          "lapsed": "O Pro terminou em {date} · renove para ativá-lo de novo",
+          "portal": "Atualizar o pagamento na Polar"
+        }
       },
       "lapse": {
         "grace": {
@@ -1424,6 +1435,66 @@
       "behind": "{length} behind you",
       "tomorrow": "{time} tomorrow",
       "yesterday": "{time} yesterday"
+    },
+    "volt": {
+      "soundNav": "Som",
+      "studio": "Estúdio de mostradores",
+      "keep": "Manter ligada",
+      "pause": "Pausar",
+      "resume": "Retomar",
+      "stop": "Parar",
+      "ext15": "+15 min",
+      "again": "Começar de novo",
+      "starting": "Iniciando…",
+      "fix": "Ver como corrigir",
+      "fallback": "Usar o vídeo alternativo",
+      "timer": "Timer",
+      "faces": "Mostradores",
+      "presets": "Predefinições",
+      "history": "Histórico",
+      "devices": "Dispositivos",
+      "settings": "Configurações",
+      "help": "Ajuda e soluções",
+      "more": "Mais",
+      "search": "Pesquisar ou ir para…",
+      "session": "Sessão",
+      "length": "Duração",
+      "label": "Rótulo",
+      "face": "Mostrador",
+      "allFaces": "Todos os 49 mostradores",
+      "options": "Opções",
+      "level": "Nível de manter ligada",
+      "screen": "Tela",
+      "system": "Sistema · app",
+      "sound": "Aviso ao terminar",
+      "soundD": "Um aviso suave de duas notas",
+      "dim": "Escurecer o relógio à noite",
+      "dimD": "Depois das 22:00",
+      "secs": "Mostrar segundos",
+      "secsD": "No mostrador e no título da aba",
+      "idle": "Tela não mantida ligada",
+      "awakeUntil": "Ligada · até ",
+      "awakeFor": "Ligada · sem fim",
+      "fb": "Ligada · vídeo alternativo",
+      "paused": "Pausado",
+      "needs": "Precisa de você · toque para retomar",
+      "blocked": "Bloqueado · economia de bateria",
+      "ended": "Terminou às ",
+      "unsup": "Não compatível aqui",
+      "left": "restantes",
+      "until": "até ",
+      "endsAt": "Termina às ",
+      "wouldEnd": "Terminaria às ",
+      "min": " min",
+      "hour": "1 hora",
+      "hours2": "2 horas",
+      "untilT": "Até…",
+      "label0": "Apresentação para a diretoria",
+      "forLen": " · termina ",
+      "extend": "Estender",
+      "hero": "Mantenha esta tela ligada.",
+      "heroSub": "Um toque. Ela volta a dormir quando o tempo acaba, sem instalar nada e sem conta.",
+      "heroSubPhone": "Um toque. Ela volta a dormir quando o tempo acaba."
     }
   },
   "ambient": {
@@ -1930,6 +2001,104 @@
       "message": "Modo mensagem",
       "stats": "12 semanas de estatísticas",
       "free": "Manter a tela ligada continua grátis, sem anúncios na tela ligada."
+    },
+    "view": {
+      "upsell": {
+        "get": "Assinar o Pro",
+        "key": "Já tem uma chave?",
+        "studio": "O estúdio de mostradores faz parte do Pro. Experimente cores aqui; para salvar, é preciso ter o Pro.",
+        "sound": "O mixer de sons faz parte do Pro. Um som por vez continua grátis em Personalizar.",
+        "devices": "O Pro mantém até 5 dispositivos com uma chave, e mostra o estado deste dispositivo ao vivo."
+      },
+      "studio": {
+        "accent": "Cor de destaque",
+        "auto": "Automático",
+        "sw": {
+          "auto": "Verde padrão",
+          "signal": "Verde sinal",
+          "lime": "Lima",
+          "amber": "Âmbar",
+          "sky": "Céu",
+          "violet": "Violeta",
+          "rose": "Rosa",
+          "ember": "Brasa"
+        },
+        "statusNote": "As cores de status nunca mudam: pausado continua âmbar e bloqueado continua vermelho.",
+        "glow": "Brilho do ambiente",
+        "glowLabel": "Intensidade do brilho do ambiente",
+        "save": "Salvar como meu mostrador",
+        "saveLocked": "Assine o Pro para salvar este mostrador",
+        "saved": "Salvo. O timer agora usa este destaque e este brilho.",
+        "help": "Pro · os mostradores salvos são sincronizados com seus outros dispositivos."
+      },
+      "sound": {
+        "lead": "Misture uma paisagem sonora que só toca enquanto a tela está ligada. Ela some assim que a sessão termina.",
+        "rain": "Chuva na janela",
+        "cafe": "Burburinho de café",
+        "fire": "Estalar da lareira",
+        "brown": "Ruído marrom",
+        "volume": "Volume de {name}",
+        "off": "Desligado",
+        "chime": {
+          "_": "Aviso no fim",
+          "two": "Duas notas",
+          "bell": "Sino",
+          "off": "Desligado"
+        },
+        "preview": "Ouvir por 5 segundos",
+        "help": "Pro · os sons tocam neste dispositivo. O volume do sistema continua valendo."
+      },
+      "devices": {
+        "loading": "Verificando seus dispositivos…",
+        "offline": "Não foi possível acessar o serviço de licenças. Seus dispositivos aparecem de novo quando você estiver on-line.",
+        "count": "{n} de {max} dispositivos em uso",
+        "here": "Este dispositivo",
+        "hereUntil": "Este dispositivo · até {time}",
+        "hereNoEnd": "Este dispositivo · sem fim",
+        "added": "Adicionado em {date}",
+        "state": {
+          "awake": "Ligada",
+          "paused": "Pausado",
+          "idle": "Tela não mantida ligada"
+        },
+        "add": "Adicionar um dispositivo",
+        "addHow": "Abra o AwakeTab no outro dispositivo e digite a chave de licença do seu recibo da Polar. Isso ocupa um dos seus cinco lugares.",
+        "addLink": "Digitar a chave de licença",
+        "help": "Pro · até 5 dispositivos. Este dispositivo mostra o estado ao vivo; os outros mostram quando foram adicionados."
+      },
+      "account": {
+        "guest": "Sem login",
+        "signin": "Entre para sincronizar",
+        "magic": "Conectado com um link mágico",
+        "freeName": "AwakeTab Grátis",
+        "free": "Grátis",
+        "yearly": "Anual",
+        "lifetime": "Vitalício",
+        "plan": {
+          "free": "Manter a tela ligada é grátis e vai continuar grátis. O Pro adiciona mais dispositivos e extras.",
+          "yearly": "Renova em {date}. Cancele quando quiser: você mantém o Pro até o fim do período.",
+          "lifetime": "Pago uma vez. O Pro continua ativo, sem renovação."
+        },
+        "billing": "Gerenciar cobrança",
+        "getPro": "Assinar o Pro",
+        "devices": "Dispositivos",
+        "devicesUsed": "{n} de {max} em uso",
+        "devicesUpTo": "Até {max} com o Pro",
+        "export": "Exportar meus dados",
+        "exportD": "Configurações, predefinições e histórico em um arquivo",
+        "history": "Exportar histórico",
+        "historyD": "Cada sessão como arquivo CSV",
+        "signout": "Sair",
+        "signoutD": "Este dispositivo continua funcionando off-line",
+        "exported": "Salvo nos seus downloads.",
+        "signedOut": "Você saiu. Tudo neste dispositivo continua funcionando.",
+        "delete": "Excluir conta…",
+        "deleteWhat": "Isso desconecta você e remove seu e-mail deste dispositivo. O AwakeTab não guarda contas nos servidores; o registro da sua compra fica com a Polar.",
+        "keep": "Manter",
+        "deleteYes": "Excluir deste dispositivo",
+        "deleted": "Sua conta foi removida deste dispositivo.",
+        "help": "A cobrança é feita pela Polar. Sem conta, o AwakeTab continua funcionando: as configurações só ficam neste dispositivo."
+      }
     }
   },
   "license": {
@@ -2499,6 +2668,953 @@
     "tpl": {
       "agenda": "Agenda",
       "actions": "Next steps"
+    }
+  },
+  "face": {
+    "name": {
+      "ring": "Anel",
+      "bold": "Grande",
+      "horizon": "Horizonte",
+      "tide": "Maré",
+      "flip": "Flip",
+      "rolling": "Rolos",
+      "analog": "Analógico",
+      "luxe": "Analógico luxo",
+      "rings": "Anéis",
+      "words": "Palavras",
+      "nixie": "Nixie",
+      "lcd": "LCD",
+      "led": "LED",
+      "dive": "Mergulho",
+      "chrono": "Cronógrafo",
+      "gauge": "Medidor",
+      "type": "Tipografia",
+      "bars": "Barras",
+      "timeline": "Linha do tempo",
+      "pilot": "Piloto",
+      "dual": "Dois fusos",
+      "radar": "Radar",
+      "dots": "Pontos",
+      "hourglass": "Ampulheta",
+      "battery": "Bateria",
+      "stack": "Pilha",
+      "board": "Painel de partidas",
+      "orbit": "Órbita",
+      "disc": "Disco do tempo",
+      "clocks": "Relógio de relógios",
+      "wordgrid": "Grade de palavras",
+      "tape": "Fita",
+      "moon": "Fase da lua",
+      "aurora": "Aurora",
+      "glass": "Vidro",
+      "neon": "Neon",
+      "liquid": "Líquido",
+      "eclipse": "Eclipse",
+      "skeleton": "Esqueleto",
+      "bauhaus": "Bauhaus",
+      "poster": "Pôster",
+      "eink": "Tinta eletrônica",
+      "terminal": "Terminal",
+      "pulse": "Pulso",
+      "waveform": "Forma de onda",
+      "blob": "Fluido",
+      "hud": "HUD",
+      "constellation": "Constelação",
+      "halo": "Halo"
+    },
+    "blurb": {
+      "ring": "O clássico. A luz percorre a ponta do arco e fica âmbar no instante em que o bloqueio pausa.",
+      "bold": "Números grandes para ler do outro lado da sala, com uma barra de progresso fina.",
+      "horizon": "Um sol de luz se põe no horizonte conforme a sessão avança.",
+      "tide": "O nível da água é o tempo que falta. Calmo e fácil de ler num relance.",
+      "flip": "Cartões que viram, com uma fresta de dobradiça de verdade.",
+      "rolling": "Rolos de odômetro: o próximo número sempre aparece um pouco.",
+      "analog": "Os ponteiros mostram a hora real; o arco de luz da luneta vai até a hora de término.",
+      "luxe": "Um mostrador mais profundo com números serifados, trilha de minutos e um setor de luz.",
+      "rings": "Sessão, minutos e segundos como três anéis concêntricos.",
+      "words": "A hora numa frase, escrita com naturalidade em cada um dos oito idiomas.",
+      "nixie": "Tubos de vidro com malha e oitos fantasmas; o brilho assume a cor da luz.",
+      "lcd": "Segmentos inclinados sobre um 88:88 apagado, como um despertador de cabeceira.",
+      "led": "Painel de matriz de pontos com uma linha de status rolando. Melhor no OLED.",
+      "dive": "Luneta de relógio de mergulho: o arco verde são os minutos que faltam, os ponteiros marcam a hora real.",
+      "chrono": "Submostradores de minutos e segundos com um ponteiro de cronógrafo varrendo.",
+      "gauge": "Uma agulha de instrumento com zona de alerta de cinco minutos.",
+      "type": "Minutos em letras enormes, segundos em verde, uma linha fina de progresso.",
+      "bars": "A sessão inteira em barras: as gastas desbotam e a atual respira.",
+      "timeline": "Agora → Fim, como um cartão de embarque. O jeito mais literal de ler o tempo que falta.",
+      "pilot": "Mostrador de aviador com triângulo no 12, ponteiros de espada e um setor verde com os minutos que faltam.",
+      "dual": "Dois mostradores pequenos lado a lado: a hora agora e a hora de término.",
+      "radar": "Uma tela que varre; o ponto marca a hora de término nos anéis.",
+      "dots": "Sessenta pontos em volta do mostrador; cada minuto que falta mantém um aceso.",
+      "hourglass": "A areia cai de cima para baixo durante a sessão; enquanto a tela está ligada, escorre um fio fino.",
+      "battery": "O tempo que falta como nível de carga, com um brilho suave passando pela célula.",
+      "stack": "Minutos sobre segundos numa pilha editorial compacta, com a hora de término embaixo.",
+      "board": "Placas que viram como num painel de estação; a dos segundos vira a cada tique.",
+      "orbit": "Três órbitas: a sessão em verde, os minutos em azul-céu e uma lua violeta varrendo os segundos.",
+      "disc": "Um disco sólido que encolhe em direção ao 12, esquentando de verde para brasa nos últimos minutos.",
+      "clocks": "Vinte e quatro reloginhos cujos ponteiros giram até escrever o tempo que falta.",
+      "wordgrid": "Uma grade de letras que acende as palavras: “faltam uns quarenta minutos”.",
+      "tape": "Uma régua de minutos desliza sob uma agulha fixa; a faixa de calor mostra o trecho final.",
+      "moon": "A lua mingua de cheia a nova conforme a sessão avança, sob um céu de aurora.",
+      "aurora": "Auroras boreais flutuam atrás de números finos: um papel de parede vivo enquanto a tela está ligada.",
+      "glass": "Um vidro fosco flutua sobre esferas de cor suaves; a hora fica sobre o vidro.",
+      "neon": "Um letreiro de neon numa parede escura, com um zumbido piscante enquanto a tela está ligada.",
+      "liquid": "Uma esfera de luz de vidro que esvazia com a sessão, com ondas e bolhas.",
+      "eclipse": "A lua desliza sobre o sol; a totalidade chega quando o tempo acaba.",
+      "skeleton": "Um mecanismo aberto: engrenagens de latão giram e o balanço oscila.",
+      "bauhaus": "Formas primárias e uma pizza com o tempo que falta: um objeto de design para a mesa.",
+      "poster": "Minutos gigantes recortados em Archivo Expanded, editoriais e marcantes.",
+      "eink": "Uma tela de papel com números serifados e um leve fantasma, tranquila à luz do dia.",
+      "terminal": "Um terminal que informa o bloqueio de tela com honestidade, com um cursor piscando.",
+      "pulse": "Um traçado de monitor cardíaco corre enquanto a tela está ligada.",
+      "waveform": "Um anel de barras de áudio que dança enquanto a tela está ligada; as barras acesas são o tempo que falta.",
+      "blob": "Uma esfera em degradê que muda de forma, como um assistente de voz em repouso.",
+      "hud": "Um arco de segmentos como o painel de um carro, com números em itálico e luzes-espia.",
+      "constellation": "Cada minuto que falta é uma estrela; juntas, formam uma constelação.",
+      "halo": "Um anel em degradê luminoso que se fecha em direção ao 12."
+    },
+    "t": {
+      "top": {
+        "idle": "pronto",
+        "starting": "iniciando",
+        "running": "restantes",
+        "fallback": "restantes",
+        "paused": "pausado",
+        "blocked": "não ligada",
+        "unsupported": "não ligada",
+        "up": "acabou",
+        "awakeFor": "ligada há"
+      },
+      "cap": {
+        "idle": "Pronto",
+        "starting": "Iniciando…",
+        "running": "Tela ligada",
+        "fallback": "Ligada por vídeo alternativo",
+        "paused": "Pausado — aba oculta",
+        "blocked": "Bloqueado — veja como corrigir",
+        "unsupported": "Toque para usar a alternativa",
+        "up": "O tempo acabou"
+      },
+      "end": {
+        "until": "até {time}",
+        "ended": "Terminou às {time}",
+        "idle": "{min} min · termina às {time}",
+        "indefIdle": "até você parar",
+        "indef": "sem fim · até você parar"
+      },
+      "aria": {
+        "left": "faltam {time}",
+        "h": "{h} h {m} min",
+        "m": "{m} min"
+      },
+      "am": "AM",
+      "pm": "PM",
+      "type": {
+        "h": "H:MIN RESTANTES",
+        "m": "MIN RESTANTES"
+      },
+      "hg": {
+        "left": "resta {pct} de areia"
+      },
+      "lcd": {
+        "paused": "PAUSA",
+        "up": "FIM",
+        "idle": "PRONTO",
+        "awake": "LIGADA",
+        "end": "FIM {time}"
+      },
+      "led": {
+        "left": "restantes"
+      },
+      "board": {
+        "left": "FALTAM",
+        "ends": "FIM",
+        "state": "ESTADO",
+        "done": "FEITO",
+        "idle": "PRONTO",
+        "starting": "INÍCIO",
+        "running": "LIGADA",
+        "fallback": "VÍDEO",
+        "paused": "PAUSADO",
+        "blocked": "BLOQUEIO",
+        "unsupported": "SEM LOCK",
+        "up": "ACABOU"
+      },
+      "analog": {
+        "h": "faltam {h} h {m} min",
+        "m": "faltam {m} min"
+      },
+      "dive": {
+        "left": "FALTAM {time}"
+      },
+      "chrono": {
+        "min": "MIN",
+        "sec": "SEG"
+      },
+      "dual": {
+        "now": "AGORA",
+        "ends": "FIM"
+      },
+      "moon": {
+        "up": "Lua nova",
+        "idle": "Lua cheia",
+        "waning": "{pct}% iluminada",
+        "hold": "{pct}% iluminada"
+      },
+      "tl": {
+        "now": "AGORA",
+        "ends": "FIM"
+      }
+    }
+  },
+  "account": {
+    "signin": {
+      "title": "Entrar · AwakeTab",
+      "description": "Entre com um link de uso único por e-mail para sincronizar seus dispositivos do AwakeTab Pro. Sem senha.",
+      "eyebrow": "PRO · SINCRONIZAÇÃO",
+      "h1": "Entre para sincronizar seus dispositivos.",
+      "lead": "Só o Pro precisa de conta, para seus dispositivos compartilharem predefinições e sessões. Todo o resto funciona sem.",
+      "label": "Endereço de e-mail",
+      "help": "Vamos enviar um link de uso único por e-mail.",
+      "error": {
+        "email": "Falta alguma coisa nesse endereço: confira a parte depois do @.",
+        "rate": "Um link acabou de ser enviado. Espere um minuto e peça de novo.",
+        "offline": "Você está off-line. Conecte-se e tente de novo; o timer continua funcionando enquanto isso."
+      },
+      "submit": "Enviar um link de login por e-mail",
+      "sending": "Enviando…",
+      "note": "Sem senha. O link funciona uma vez e expira em {minutes} minutos.",
+      "unavailable": {
+        "title": "Os e-mails de login ainda não estão ativados.",
+        "text": "Nada foi enviado. O Pro funciona sem login: a chave de licença da Polar o ativa em cada dispositivo.",
+        "link": "Usar uma chave de licença"
+      },
+      "sent": {
+        "h": "Confira sua caixa de entrada",
+        "before": "Enviamos um link de login para",
+        "after": ". Abra-o neste dispositivo para ativar a sincronização.",
+        "reset": "Usar outro e-mail"
+      },
+      "verifying": {
+        "h1": "Entrando…",
+        "text": "Verificando seu link. Leva um segundo."
+      },
+      "signed": {
+        "eyebrow": "PRO · SINCRONIZAÇÃO",
+        "h1": "Você entrou.",
+        "lead": "Este dispositivo agora conhece seu e-mail do Pro. O timer funciona como antes.",
+        "how": "Conectado com um link mágico",
+        "open": "Abrir o timer",
+        "out": "Sair",
+        "with": {
+          "email": "Conectado com um link mágico",
+          "google": "Conectado com o Google",
+          "github": "Conectado com o GitHub"
+        },
+        "manage": "Gerenciar dispositivos",
+        "label": "Conectado como"
+      },
+      "expired": {
+        "eyebrow": "LINK EXPIRADO",
+        "h1": "Este link expirou.",
+        "lead": "Os links de login funcionam uma vez e só por {minutes} minutos. Peça um novo: leva segundos.",
+        "again": "Enviar um novo link",
+        "home": "Ir para a página inicial"
+      },
+      "callout": {
+        "title": "Não usa o Pro?",
+        "text": "Você não precisa entrar. Configurações, predefinições e histórico ficam neste dispositivo."
+      },
+      "social": {
+        "label": "Entre com uma conta que você já tem",
+        "google": "Continuar com o Google",
+        "github": "Continuar com o GitHub",
+        "or": "ou use seu e-mail",
+        "unset": "O login com {provider} ainda não está configurado. Nada aconteceu; use o link por e-mail.",
+        "failed": "O login com {provider} não terminou e nada mudou. Tente de novo ou use o link por e-mail.",
+        "offline": "Você está off-line. Conecte-se e tente de novo."
+      },
+      "notReady": {
+        "title": "O login ainda não está ativado.",
+        "text": "Nada foi enviado e nenhuma conta foi criada. O Pro funciona sem login: a chave de licença da Polar o ativa em cada dispositivo."
+      }
+    }
+  },
+  "proflow": {
+    "steps": {
+      "brand": "AwakeTab Pro",
+      "label": "Etapas da compra",
+      "s1": "Plano",
+      "s2": "Conta",
+      "s3": "Pagamento",
+      "s4": "Pronto",
+      "done": "(concluído)",
+      "back": "Voltar ao timer"
+    },
+    "checkout": {
+      "title": "Assinar o AwakeTab Pro",
+      "description": "Escolha um plano Pro, informe seu e-mail e pague na página segura da Polar.",
+      "kicker": "AWAKETAB PRO",
+      "plans": {
+        "h1": "Manter a tela ligada continua grátis.",
+        "lead": "O Pro é para telas em mais de um dispositivo e para os extras.",
+        "period": "Período de cobrança",
+        "yearly": "Anual",
+        "lifetime": "Pagamento único",
+        "continue": "Continuar com o Pro"
+      },
+      "soon": "As compras abrem em breve. Você já pode usar a ferramenta grátis.",
+      "free": {
+        "name": "Grátis",
+        "price": "Sem custo",
+        "f1": "Mantenha a tela ligada pelo tempo que quiser, ou sem fim",
+        "f2": "Todos os 49 mostradores e 3 temas",
+        "f3": "Predefinições e a paleta ⌘K",
+        "f4": "Vídeo alternativo para navegadores antigos",
+        "now": "Você está no plano grátis agora."
+      },
+      "pro": {
+        "name": "Pro",
+        "badge": {
+          "yearly": "Cobrança anual",
+          "lifetime": "Pagamento único"
+        },
+        "f1": "Sincronize até 5 dispositivos",
+        "f2": "Histórico completo com exportação",
+        "f3": "Mixer de sons",
+        "f4": "Estúdio de mostradores: sua própria cor de destaque",
+        "f5": "Várias notas por sessão",
+        "f6": "Tudo do plano grátis"
+      },
+      "price": {
+        "yearly": "{price} / ano",
+        "lifetime": "{price} uma vez"
+      },
+      "account": {
+        "h1": "Para onde enviamos seu link de login?",
+        "lead": "Sem senha. O Pro usa o e-mail só para sincronizar seus dispositivos e enviar recibos.",
+        "label": "Endereço de e-mail",
+        "idle": "Digite um e-mail como nome@exemplo.com.",
+        "ok": "Tudo certo.",
+        "offline": "Você está off-line. Conecte-se e envie o link de novo.",
+        "send": "Enviar link de login",
+        "sending": "Enviando…"
+      },
+      "back": {
+        "plans": "Voltar aos planos"
+      },
+      "check": {
+        "h1": "Confira sua caixa de entrada",
+        "before": "Enviamos um link para",
+        "after": ". Ele funciona uma vez e expira em {minutes} minutos. Você pode abri-lo depois de pagar.",
+        "continue": "Continuar para o pagamento",
+        "other": "Usar outro e-mail"
+      },
+      "pay": {
+        "h1": "Confirmar e pagar",
+        "unsent": "Os e-mails de login ainda não estão ativados, então nenhum link foi enviado. O pagamento funciona normalmente: seu recibo e sua chave de licença vêm da Polar.",
+        "plan": {
+          "_": "Plano",
+          "v": "AwakeTab Pro"
+        },
+        "billing": {
+          "_": "Cobrança",
+          "yearly": "Anual, renova em {date}",
+          "lifetime": "Uma vez, nunca renova"
+        },
+        "account": "Conta",
+        "total": "Total hoje",
+        "btn": "Pagar com a Polar",
+        "note": {
+          "_": "Você vai finalizar na página segura da Polar. O AwakeTab nunca vê seu cartão. Os impostos são somados lá quando se aplicam.",
+          "cancel": "Cancele quando quiser em Configurações → Conta."
+        },
+        "lock": "Pagamento seguro",
+        "unsentTitle": "Nenhum link de login foi enviado"
+      },
+      "unavailable": {
+        "title": "As compras abrem em breve",
+        "text": "O pagamento ainda não está ativado aqui, então nada foi cobrado. Você já pode usar a ferramenta grátis."
+      }
+    },
+    "page": {
+      "title": "AwakeTab Pro — preços e planos",
+      "description": "Manter a tela ligada continua grátis. O AwakeTab Pro adiciona até 5 dispositivos, exportação do histórico, mixer de sons, estúdio de mostradores e mais notas, a partir de {yearly} por ano.",
+      "eyebrow": "AWAKETAB PRO",
+      "h1": "Manter a tela ligada continua grátis.",
+      "lead": "O Pro é para quem usa telas em mais de um dispositivo ou quer os extras.",
+      "soon": "As compras abrem em breve. Você já pode usar a ferramenta grátis.",
+      "plans": {
+        "label": "Planos"
+      },
+      "free": {
+        "name": "Grátis",
+        "price": "Sem custo",
+        "d": "Tudo o que você precisa para manter uma tela ligada.",
+        "f1": "Mantenha a tela ligada pelo tempo que quiser, ou sem fim",
+        "f2": "Todos os 49 mostradores",
+        "f3": "Predefinições e a paleta ⌘K",
+        "f4": "Temas claro, escuro e OLED",
+        "f5": "Vídeo alternativo para navegadores antigos",
+        "btn": "Abrir o timer"
+      },
+      "pro": {
+        "name": "Pro",
+        "badge": "Pro",
+        "price": "{yearly} / ano",
+        "d": {
+          "_": "Ou {once} uma vez, sem renovação. Cancele o plano anual quando quiser nas Configurações.",
+          "launch": "Ou {once} uma vez pelo preço de lançamento até {date}; depois, {after}. Cancele o plano anual quando quiser nas Configurações."
+        },
+        "f1": "Sincronize até 5 dispositivos",
+        "f2": "Histórico completo com exportação",
+        "f3": "Mixer de sons: chuva, café, ruído marrom",
+        "f4": "Estúdio de mostradores: sua própria cor de destaque",
+        "f5": "Várias notas por sessão",
+        "f6": "Apoia uma ferramenta independente",
+        "btn": "Assinar o Pro"
+      },
+      "cmp": {
+        "h2": "Grátis ou Pro, lado a lado",
+        "col": {
+          "feature": "Recurso",
+          "free": "Grátis",
+          "pro": "Pro"
+        },
+        "yes": "Incluído",
+        "no": "Não incluído",
+        "awake": "Mantém a tela ligada, com um indicador de status honesto",
+        "lengths": "Qualquer duração, até um horário ou até você parar",
+        "faces": "Todos os 49 mostradores e 3 temas",
+        "presets": "Predefinições, a paleta ⌘K e configurações compartilhadas",
+        "devices": {
+          "_": "Dispositivos",
+          "free": "Este dispositivo",
+          "pro": "Até 5"
+        },
+        "history": {
+          "_": "Histórico",
+          "free": "7 dias",
+          "pro": "Completo, com exportação"
+        },
+        "sound": {
+          "_": "Som ambiente",
+          "free": "Um som por vez",
+          "pro": "Mixer"
+        },
+        "studio": "Estúdio de mostradores: sua cor de destaque e o brilho do ambiente",
+        "notes": {
+          "_": "Notas",
+          "free": "Uma nota",
+          "pro": "Várias por sessão"
+        },
+        "ext": {
+          "_": "AwakeTab para Chrome",
+          "free": "Manter ligada e timers",
+          "pro": "Adiciona agendamentos e início automático"
+        },
+        "ads": {
+          "_": "Anúncios nos guias",
+          "free": "Podem aparecer",
+          "pro": "Nenhum"
+        }
+      },
+      "how": {
+        "h2": "Como assinar o Pro",
+        "lead": "A Polar recebe o pagamento e envia uma chave de licença. O login é opcional.",
+        "s1": {
+          "h": "Escolha um plano e pague na Polar",
+          "p": "A Polar é a vendedora oficial: recebe o cartão, soma os impostos quando se aplicam e envia por e-mail o recibo com a chave de licença."
+        },
+        "s2": {
+          "h": "O Pro é ativado aqui",
+          "p": "A Polar traz você de volta ao AwakeTab e este navegador se ativa sozinho. Se não der, cole a chave do e-mail."
+        },
+        "s3": {
+          "h": "Adicione seus outros dispositivos",
+          "p": "Digite a mesma chave em até cinco navegadores no total e remova um quando quiser para liberar o lugar."
+        },
+        "signin": "Entre para sincronizar"
+      },
+      "faq": {
+        "h2": "Dúvidas sobre cobrança",
+        "q1": "Posso cancelar?",
+        "a1": "Sim, quando quiser em Configurações → Conta ou no portal do cliente da Polar. Você mantém o Pro até o fim do período pago.",
+        "q2": "Quem cuida do pagamento?",
+        "a2": "A Polar. O AwakeTab nunca vê os dados do seu cartão.",
+        "q3": "O que acontece com meus dados se eu cancelar?",
+        "a3": "As sessões ficam em cada dispositivo. A sincronização para; nada é apagado sem perguntar.",
+        "q4": "O Pro mantém a tela ligada melhor?",
+        "a4": "Não. O grátis e o Pro usam o mesmo bloqueio de tela e o mesmo indicador de status. O Pro só adiciona dispositivos e extras.",
+        "q5": "O que conta como dispositivo?",
+        "a5": "Cada navegador em que você digita a chave ocupa um de cinco lugares. O AwakeTab para Chrome também ocupa um. Dispositivos sem uso por 90 dias são removidos automaticamente quando você adiciona um novo.",
+        "q6": "Existe plano mensal?",
+        "a6": "Não. O Pro custa {yearly} por ano, ou {once} uma vez sem renovação. Os dois cobrem 5 dispositivos."
+      },
+      "refund": "Reembolso em 14 dias, sem perguntas. Escreva para support@awaketab.com com seu recibo ou use o portal do cliente da Polar. O reembolso desativa a chave de licença.",
+      "biz": {
+        "h2": "Para o seu site ou as suas telas",
+        "embed": {
+          "name": "Licença de incorporação",
+          "price": "{price} por ano por site",
+          "text": "Remove o crédito “Keep awake by AwakeTab”. As licenças abrem em breve; a incorporação grátis já funciona."
+        },
+        "kiosk": {
+          "name": "Licença de quiosque",
+          "price": "{one} um site · {five} cinco sites",
+          "text": "Telas de sinalização e quiosque que ficam ligadas a partir de uma URL, com seu próprio logo e mensagem."
+        }
+      }
+    },
+    "done": {
+      "u1": "Até 5 dispositivos com uma chave",
+      "u2": "Histórico completo com exportação",
+      "u3": "O mixer de sons",
+      "u4": "Estúdio de mostradores: sua cor de destaque e o brilho do ambiente",
+      "u5": "Várias notas por sessão, agendamentos no AwakeTab para Chrome e nenhum anúncio nos guias",
+      "processing": {
+        "h1": "Confirmando seu pagamento…",
+        "lead": "Isso costuma levar alguns segundos. Mantenha esta aba aberta."
+      },
+      "success": {
+        "h1": "O Pro está ativado.",
+        "lead": "Obrigado. A Polar está enviando seu recibo e sua chave de licença",
+        "to": "para",
+        "next": ". Próximo passo: adicione seus outros dispositivos com a mesma chave.",
+        "open": "Abrir o timer",
+        "add": "Adicionar um dispositivo",
+        "generic": "Obrigado. A Polar está enviando seu recibo e sua chave de licença por e-mail. Próximo passo: adicione seus outros dispositivos com a mesma chave."
+      },
+      "failed": {
+        "lead": "A Polar recusou e nada foi cobrado. Nada mudou na sua conta grátis.",
+        "again": "Tentar de novo",
+        "plans": "Voltar aos planos",
+        "h1": "O pagamento não foi concluído"
+      },
+      "syncing": {
+        "h1": "Sua compra ainda está sincronizando",
+        "lead": "A Polar recebeu o pagamento, mas ainda está criando sua chave de licença. Você não será cobrado duas vezes. Tente de novo em um minuto ou digite a chave do e-mail da Polar.",
+        "retry": "Tentar de novo",
+        "key": "Digitar a chave de licença"
+      },
+      "cancelled": {
+        "h1": "Pagamento fechado",
+        "lead": "Nada foi cobrado. O Pro é opcional: a ferramenta, as predefinições e a extensão funcionam sem ele.",
+        "plans": "Ver os planos de novo",
+        "open": "Abrir o timer"
+      }
+    },
+    "flow": {
+      "pro": "Pro",
+      "back": "Voltar ao timer",
+      "label": "Etapas da compra",
+      "done": "(concluído)",
+      "current": "(etapa atual)"
+    },
+    "activate": {
+      "title": "Ativar o AwakeTab Pro — AwakeTab",
+      "description": "Cole a chave de licença do seu recibo da Polar para ativar o AwakeTab Pro neste dispositivo. O pagamento volta para cá automaticamente quando a Polar termina.",
+      "h1": "Ativar o Pro",
+      "lead": "Sua chave está no e-mail da Polar e na página do recibo. Este dispositivo conta como uma de cinco ativações.",
+      "submit": "Ativar neste dispositivo",
+      "errors": "Se a ativação falhar",
+      "ext": {
+        "_": "Copie esta chave e cole na página de opções do AwakeTab para Chrome. Não há transferência automática.",
+        "title": "Sua chave de licença",
+        "lead": "Digite sua chave aqui para copiá-la no AwakeTab para Chrome. Este navegador não é ativado: a extensão se ativa sozinha, então usa uma das suas cinco ativações, não duas.",
+        "submit": "Mostrar a chave para a extensão",
+        "note": "Este navegador continua sem ativação, então a extensão usa uma das suas cinco ativações, não duas."
+      },
+      "back": "AwakeTab Pro",
+      "placeholder": "Cole a chave do seu recibo",
+      "hint": {
+        "_": "A Polar envia a chave por e-mail logo após o pagamento.",
+        "ext": "Nada é ativado neste navegador."
+      },
+      "checking": {
+        "_": "Verificando sua chave…",
+        "status": "Verificando sua chave com a Polar. Isso costuma levar um ou dois segundos."
+      },
+      "retry": "Tentar de novo",
+      "manage": "Gerenciar dispositivos",
+      "plans": "Ainda não tem chave? Ver os planos Pro",
+      "err": {
+        "invalid_key": "A ativação não funcionou",
+        "activation_limit": "Os cinco dispositivos estão em uso",
+        "revoked": "Esta chave não está mais ativa",
+        "polar_unavailable": "Ainda não está pronto",
+        "offline": "Sem conexão",
+        "bad_token": "Ative este dispositivo de novo"
+      },
+      "ok": {
+        "key": "Chave terminada em {tail} · este dispositivo usa uma das suas cinco ativações.",
+        "unlocked": "Desbloqueado aqui",
+        "u1": "Mais temas de cor, luzes, fundos e predefinições",
+        "u2": "Modo mensagem na tela ligada",
+        "u3": "12 semanas de estatísticas e exportação CSV",
+        "u4": "Uma janela flutuante mais alta",
+        "u5": "Agendamentos e início automático no AwakeTab para Chrome",
+        "u6": "Nenhum anúncio nos guias",
+        "u7": "Um mixer de sons, mais notas e um Pomodoro que se repete",
+        "open": "Abrir o AwakeTab",
+        "title": "O Pro está ativado."
+      },
+      "reset": "Usar outra chave",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "errText": {
+        "invalid_key": "A Polar não reconhece esta chave. Compare com o e-mail da Polar; as chaves têm letras, números e hifens.",
+        "activation_limit": "Esta chave já está em cinco dispositivos. Remova um que você não usa mais e ative aqui.",
+        "revoked": "Esta chave foi reembolsada ou revogada, então não pode ativar o Pro. A ferramenta grátis continua funcionando.",
+        "polar_unavailable": "A Polar ainda está criando a chave ou não responde. Espere um minuto e tente de novo; você não será cobrado duas vezes.",
+        "offline": "Você está off-line, então nada foi verificado. Conecte-se e tente de novo.",
+        "bad_token": "O Pro precisa ser ativado de novo neste dispositivo. Digite a chave do e-mail da Polar."
+      },
+      "label": "Chave de licença"
+    },
+    "manage": {
+      "title": "Gerenciar dispositivos Pro — AwakeTab",
+      "description": "Veja quais dispositivos usam sua licença do AwakeTab Pro e remova um se você atingiu o limite de cinco.",
+      "h1": "Gerenciar dispositivos",
+      "lead": "Dispositivos sem uso por 90 dias são removidos automaticamente quando você ativa um novo.",
+      "empty": "Ainda não há licença neste dispositivo. Ative uma chave primeiro.",
+      "remove": "Remover",
+      "col": {
+        "device": "Dispositivo",
+        "activated": "Ativado"
+      },
+      "meter": "{n} de 5 dispositivos",
+      "left": {
+        "_": "Restam {n} ativações",
+        "one": "Resta 1 ativação",
+        "none": "Nenhuma ativação restante"
+      },
+      "here": "Este dispositivo",
+      "off": "Pro desativado",
+      "activated": "Ativado",
+      "confirm": {
+        "here": "Remover este dispositivo? O Pro é desativado aqui e libera uma das suas cinco ativações.",
+        "other": "Remover {label}? O Pro é desativado lá e libera uma das suas cinco ativações.",
+        "aria": "Remover {label}?"
+      },
+      "keep": "Manter",
+      "removeDevice": "Remover dispositivo",
+      "plans": "Ver os planos Pro",
+      "loading": "Verificando seus dispositivos…",
+      "offline": {
+        "title": "Não foi possível carregar seus dispositivos",
+        "text": "A lista de dispositivos não carregou, por isso nada é mostrado em vez de uma lista vazia. Verifique a conexão e tente de novo.",
+        "retry": "Tentar de novo"
+      },
+      "added": "Adicionado em {date}",
+      "lapse": {
+        "grace": "Renovação pendente · o Pro continua ativo até {date}",
+        "lapsed": "O Pro terminou em {date} · renove para ativá-lo de novo",
+        "portal": "Atualizar o pagamento na Polar"
+      },
+      "activate": "Ativar uma chave"
+    }
+  },
+  "site": {
+    "nav": {
+      "label": "Site",
+      "uses": "Usos",
+      "guides": "Guias",
+      "support": "Compatibilidade",
+      "help": "Ajuda",
+      "pro": "Pro"
+    },
+    "signin": "Entrar",
+    "cta": {
+      "_": "Abrir o timer",
+      "label": "Comece agora",
+      "title": "Sua tela, ligada com um clique.",
+      "desc": "Funciona no Chrome, Edge, Firefox e Safari."
+    },
+    "ctaShort": "Abrir timer",
+    "consent": {
+      "title": "Podemos contar as visitas?",
+      "body": "Estatísticas opcionais e sem cookies: sem perfil e sem rastreamento de anúncios. O AwakeTab funciona igual nos dois casos.",
+      "decline": "Recusar",
+      "allow": "Permitir"
+    },
+    "foot": {
+      "product": "Produto",
+      "learn": "Aprender",
+      "company": "Empresa",
+      "timer": "Abrir o timer",
+      "changelog": "Novidades",
+      "help": "Central de ajuda",
+      "presenting": "Guia para apresentar",
+      "about": "Sobre",
+      "status": "Páginas de status",
+      "tagline": "Mantém uma tela ligada pelo navegador e depois a deixa dormir de novo.",
+      "contact": "Contato",
+      "cookies": "Sem cookies de rastreamento",
+      "updated": "Atualizado em {date}"
+    },
+    "tool": {
+      "eyebrow": "Experimente aqui",
+      "ends": "Termina às {time} se você começar agora.",
+      "noEnd": "Sem horário de término: a tela fica ligada até você parar.",
+      "adNote": "Um espaço de anúncio por página, abaixo da ferramenta, nunca ao lado de um botão e nunca animado. Espaço reservado: nenhuma rede de anúncios escolhida."
+    },
+    "article": {
+      "open": "Abrir o AwakeTab",
+      "read": "Ler o guia",
+      "eyebrow": {
+        "for": "Para {crumb}",
+        "on": "Guia do dispositivo",
+        "vs": "Comparar",
+        "guides": "Guia · leitura de {n} minutos",
+        "learn": "Aprender"
+      }
+    },
+    "hub": {
+      "for": {
+        "eyebrow": "Usos",
+        "h1": "O que as pessoas mantêm ligado",
+        "lead": "Escolha um momento. Cada página tem uma sessão pronta que você pode começar ali mesmo."
+      },
+      "on": {
+        "eyebrow": "Guias de dispositivos"
+      },
+      "vs": {
+        "eyebrow": "Comparar"
+      },
+      "guides": {
+        "eyebrow": "Guias"
+      },
+      "learn": {
+        "eyebrow": "Aprender",
+        "start": "Comece aqui",
+        "more": "Mais ajuda",
+        "read": "Ler"
+      },
+      "all": "Tudo",
+      "honest": "Como a compatibilidade é verificada"
+    },
+    "sys": {
+      "retry": "Tentar de novo",
+      "home": "Ir para a página inicial",
+      "help": "Visitar a central de ajuda",
+      "notfound": {
+        "h1": "Esta página pegou no sono",
+        "lead": "O link pode ser antigo ou ter sido digitado errado. O timer está bem aqui.",
+        "guides": "Guias populares",
+        "title": "Página não encontrada — AwakeTab",
+        "eyebrow": "404"
+      },
+      "offline": {
+        "title": "Você está off-line — AwakeTab",
+        "eyebrow": "Off-line",
+        "h1": "Você está off-line. O timer, não.",
+        "lead": "Manter a tela ligada não precisa de internet. A sincronização e os links compartilhados esperam você se reconectar.",
+        "timer": "Continuar usando o timer",
+        "description": "Manter a tela ligada não precisa de internet. A sincronização e os links compartilhados esperam você se reconectar."
+      },
+      "status": {
+        "title": "Status do serviço — AwakeTab",
+        "description": "Se o login e a sincronização do AwakeTab estão funcionando e quando há manutenção prevista. O timer funciona em todos os dispositivos de qualquer forma.",
+        "eyebrow": "Manutenção",
+        "h1": "Manutenção programada.",
+        "lead": "O login e a sincronização ficam pausados até cerca de {time}. O timer funciona normalmente em todos os dispositivos.",
+        "okEyebrow": "Status",
+        "okH1": "Tudo funcionando.",
+        "okLead": "O timer, o login e a sincronização estão funcionando. Quando houver manutenção prevista, ela será anunciada aqui primeiro.",
+        "see": "Ver o status"
+      },
+      "expired": {
+        "title": "Link expirado — AwakeTab",
+        "eyebrow": "Link expirado",
+        "h1": "Este link expirou.",
+        "lead": "Os links de login funcionam uma vez e só por [NUMBER] minutos. Peça um novo: leva segundos.",
+        "send": "Enviar um novo link"
+      },
+      "removed": {
+        "title": "Configuração removida — AwakeTab",
+        "eyebrow": "Configuração removida",
+        "h1": "Esta configuração compartilhada foi desativada.",
+        "lead": "Quem compartilhou removeu o link. Você ainda pode começar sua própria sessão com um clique.",
+        "start": "Começar a minha"
+      },
+      "error": {
+        "title": "Algo deu errado — AwakeTab",
+        "eyebrow": "Algo quebrou",
+        "h1": "Algo deu errado do nosso lado.",
+        "lead": "A página não carregou. Nada mudou no seu dispositivo. Tente de novo ou abra o timer: ele funciona off-line."
+      }
+    },
+    "share": {
+      "title": "Uma sessão compartilhada do AwakeTab",
+      "description": "Alguém compartilhou uma sessão do AwakeTab: a duração, o mostrador e o aviso. Nada pessoal vai junto com o link.",
+      "eyebrow": "Uma configuração compartilhada",
+      "loading": "Abrindo uma sessão compartilhada…",
+      "loadingLead": "Lendo a duração, o mostrador e o aviso do link.",
+      "h1": "Alguém compartilhou uma sessão com você.",
+      "leadChime": "Este link abre uma sessão de {length} no mostrador {face}, com um aviso no fim. Toque em iniciar e sua tela fica ligada até {time}.",
+      "leadQuiet": "Este link abre uma sessão de {length} no mostrador {face}, sem aviso no fim. Toque em iniciar e sua tela fica ligada até {time}.",
+      "leadOpen": "Este link abre uma sessão sem fim no mostrador {face}. Toque em iniciar e sua tela fica ligada até você parar.",
+      "minutes": "{n} minutos",
+      "hour": "{n} hora",
+      "hours": "{n} horas",
+      "noEnd": "Sem fim",
+      "startMin": "Iniciar {n} minutos",
+      "startHour": "Iniciar 1 hora",
+      "startHours": "Iniciar {n} horas",
+      "startOpen": "Iniciar a sessão",
+      "change": "Mudar antes",
+      "contains": "O que este link contém",
+      "containsSub": "Links compartilhados nunca levam nada pessoal.",
+      "col": {
+        "setting": "Configuração",
+        "value": "Valor"
+      },
+      "row": {
+        "length": "Duração",
+        "face": "Mostrador",
+        "chime": "Aviso",
+        "private": "Rótulo, nome, dispositivo"
+      },
+      "never": "Nunca incluído",
+      "chimeOn": "Ligado · duas notas",
+      "chimeOff": "Desligado",
+      "install": "Nada para instalar",
+      "installBody": "A sessão roda nesta aba. Feche quando quiser e a tela volta a dormir normalmente."
+    },
+    "help": {
+      "title": "Central de ajuda — AwakeTab",
+      "description": "Respostas para uma tela que ainda apaga, iPhone e iPad, apresentações, a extensão, a cobrança do Pro e seus dados.",
+      "eyebrow": "Central de ajuda",
+      "h1": "Como podemos ajudar?",
+      "lead": "A maioria dos problemas vem da economia de bateria, de uma aba oculta ou de um navegador antigo. Pesquise ou comece por um tema abaixo.",
+      "searchLabel": "Pesquisar na ajuda",
+      "placeholder": "Pesquisar na ajuda: tente “bateria” ou “iPad”",
+      "chips": "Perguntas comuns",
+      "count": "{n} temas · atualizado em {date}",
+      "countPlain": "{n} temas",
+      "one": "1 tema corresponde a “{q}”",
+      "many": "{n} temas correspondem a “{q}”",
+      "none": "Nada corresponde a “{q}”. Tente “bateria”, “iPad” ou “cobrança”.",
+      "popular": "Temas populares",
+      "stuck": "Ainda com problemas?",
+      "stuckBefore": "Escreva para",
+      "stuckAfter": "com seu navegador e dispositivo. Lemos todas as mensagens.",
+      "allTopics": "Todos os temas"
+    },
+    "home": {
+      "faces": {
+        "title": "49 mostradores. Escolha o que você consegue ler do outro lado da sala.",
+        "sub": "Todos grátis. Eles só se movem enquanto a tela está ligada e ficam parados com movimento reduzido.",
+        "items": {
+          "aurora": {
+            "name": "Aurora",
+            "body": "Auroras boreais flutuam atrás da hora enquanto a tela está ligada."
+          },
+          "liquid": {
+            "name": "Líquido",
+            "body": "Uma esfera de luz de vidro que esvazia conforme a sessão passa."
+          },
+          "eclipse": {
+            "name": "Eclipse",
+            "body": "A lua passa na frente do sol; totalidade quando o tempo acaba."
+          },
+          "skeleton": {
+            "name": "Esqueleto",
+            "body": "Um mecanismo aberto: as engrenagens giram e o balanço oscila."
+          },
+          "neon": {
+            "name": "Neon",
+            "body": "Um letreiro de neon numa parede escura, zumbindo enquanto a tela está ligada."
+          },
+          "halo": {
+            "name": "Halo",
+            "body": "Um anel em degradê luminoso que se fecha em direção ao 12."
+          }
+        }
+      },
+      "uses": {
+        "title": "Feito para os momentos em que uma tela apagada atrapalha",
+        "cooking": {
+          "_": "Cozinhar",
+          "body": "As receitas ficam na tela enquanto suas mãos estão ocupadas.",
+          "link": "Para cozinhar"
+        },
+        "presenting": {
+          "_": "Apresentar",
+          "body": "Nada de escurecer no meio do seu melhor slide.",
+          "link": "Para apresentar"
+        },
+        "dashboards": {
+          "_": "Painéis",
+          "body": "Telas de parede e painéis de status que continuam acesos.",
+          "link": "Para painéis"
+        },
+        "nightdesk": {
+          "_": "Mesa à noite",
+          "body": "Ler, estudar, um relógio tranquilo depois que escurece.",
+          "link": "Para a mesa à noite"
+        }
+      },
+      "how": {
+        "1": {
+          "_": "Escolha uma duração",
+          "body": "15 minutos, uma hora, até um horário, ou sem fim."
+        },
+        "2": {
+          "_": "Toque em Manter ligada",
+          "body": "O Screen Wake Lock do seu navegador mantém a tela ligada."
+        },
+        "3": {
+          "_": "Siga com o seu dia",
+          "body": "Um aviso suave quando o tempo acaba; a tela volta a dormir normalmente."
+        },
+        "title": "Como funciona"
+      },
+      "limits": {
+        "title": "Honesto sobre os limites",
+        "body": "Um navegador consegue manter a tela ligada, não o computador inteiro. A economia de bateria, fechar a tampa ou uma política de bloqueio da empresa ainda podem vencer; o AwakeTab avisa quando isso acontece e como resolver."
+      },
+      "faq": {
+        "1": {
+          "_": "Funciona no iPhone e no iPad?",
+          "a": "Sim, no Safari com iOS e iPadOS 16.4 ou posterior. Versões mais antigas usam um vídeo silencioso como alternativa."
+        },
+        "2": {
+          "_": "Preciso de uma conta?",
+          "a": "Não. As configurações ficam neste dispositivo. O Pro usa uma conta só para sincronizar seus dispositivos."
+        },
+        "3": {
+          "_": "Ele impede que meu notebook do trabalho bloqueie?",
+          "a": "Ele mantém a tela ligada enquanto a aba está aberta. As políticas de bloqueio da empresa continuam valendo, e devem continuar."
+        },
+        "4": {
+          "_": "É grátis?",
+          "a": "Manter a tela ligada é grátis. O Pro adiciona sincronização entre dispositivos, histórico completo e o mixer de sons."
+        }
+      },
+      "cta": "Manter ligada agora",
+      "og": {
+        "kicker": "Grátis · no seu navegador",
+        "title": "Tela ligada. E você sabe até quando.",
+        "sub": "Sem conta, nada para instalar."
+      }
+    },
+    "changelog": {
+      "crumb": "Novidades",
+      "eyebrow": "NOVIDADES",
+      "h1": "O que há de novo",
+      "lead": "Cada versão, a mais recente primeiro. Números de versão e datas são provisórios até o lançamento."
+    },
+    "pro": {
+      "eyebrow": "AwakeTab Pro",
+      "h1": "Manter a tela ligada continua grátis.",
+      "lead": "O Pro é para quem usa telas em mais de um dispositivo ou quer os extras. Os preços são provisórios até serem definidos.",
+      "og": {
+        "kicker": "AwakeTab Pro",
+        "title": "Manter ligada é grátis. O Pro é pelo conforto.",
+        "sub": "Visual, histórico, notas."
+      }
     }
   }
 }

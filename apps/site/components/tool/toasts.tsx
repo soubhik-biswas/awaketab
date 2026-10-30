@@ -3,6 +3,7 @@
 import { toast } from 'sonner';
 import { ProductToast, TOAST_DURATION, type IProductToastOptions } from '@/components/product/toasts';
 import { Toaster } from '@/components/ui/sonner';
+import { fill, type IToolChrome } from '@/lib/tool/chrome';
 
 export const TOOL_TOASTER = 'tool';
 
@@ -30,41 +31,54 @@ function show({ id, duration, ...options }: IProductToastOptions): string | numb
 
 export const toolToast = {
   show,
-  extended: ({ until, minutes, onUndo }: { until: string; minutes: number; onUndo: () => void }) =>
+  extended: (c: IToolChrome, { until, minutes, onUndo }: { until: string; minutes: number; onUndo: () => void }) =>
     show({
       id: 'extended',
       tone: 'success',
-      title: `Awake until ${until}`,
-      description: `Extended by ${minutes} minutes.`,
-      actionLabel: 'Undo',
+      title: fill(c.tExt, { time: until }),
+      description: fill(c.tExtD, { n: minutes }),
+      actionLabel: c.undo,
       onAction: onUndo,
+      dismissLabel: c.dismiss,
+      live: false,
     }),
-  lowTime: ({ endsAt, onExtend }: { endsAt: string; onExtend: () => void }) =>
+  lowTime: (
+    c: IToolChrome,
+    { endsAt, extendLabel, onExtend }: { endsAt: string; extendLabel: string; onExtend: () => void },
+  ) =>
     show({
       id: 'low-time',
       tone: 'warning',
-      title: '5 minutes left',
-      description: `Ends at ${endsAt}.`,
-      actionLabel: '+15 min',
+      title: c.tLow,
+      description: fill(c.tLowD, { time: endsAt }),
+      actionLabel: extendLabel,
       onAction: onExtend,
+      dismissLabel: c.dismiss,
+      live: false,
     }),
-  ended: ({ endedAt, onStartAgain }: { endedAt: string; onStartAgain: () => void }) =>
+  ended: (
+    c: IToolChrome,
+    { endedAt, againLabel, onStartAgain }: { endedAt: string; againLabel: string; onStartAgain: () => void },
+  ) =>
     show({
       id: 'ended',
       tone: 'ended',
-      title: 'Time’s up',
-      description: `Ended at ${endedAt}. The screen can sleep again.`,
-      actionLabel: 'Start again',
+      title: c.tabUp,
+      description: fill(c.tUpD, { time: endedAt }),
+      actionLabel: againLabel,
       onAction: onStartAgain,
       duration: Infinity,
+      dismissLabel: c.dismiss,
+      live: false,
     }),
-  copied: () =>
+  copied: (c: IToolChrome) =>
     show({
       id: 'copied',
       tone: 'success',
-      title: 'Link copied',
-      description: 'Paste it anywhere. Your label is not included.',
-      actionLabel: 'Done',
+      title: c.copied,
+      description: c.copiedD,
+      actionLabel: c.done,
       onAction: () => undefined,
+      dismissLabel: c.dismiss,
     }),
 };
