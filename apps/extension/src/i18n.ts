@@ -1,5 +1,4 @@
-import { LOCALES, isLocale, type TLocale } from '../../web/src/i18n/locales';
-import { matchLocale } from '../../web/src/i18n/match';
+import { LOCALES, isLocale, type TLocale } from '../../site/i18n/locales';
 
 export type TCatalog = Record<string, string>;
 export type TVars = Record<string, string | number>;
@@ -21,6 +20,17 @@ export function format(raw: string, vars?: TVars): string {
 
 export function createTranslator(catalog: TCatalog, fallback: TCatalog = {}): TTranslate {
   return (key, vars) => format(catalog[key] ?? fallback[key] ?? key, vars);
+}
+
+function matchLocale(tags: readonly string[]): TLocale | null {
+  for (const tag of tags) {
+    const lower = tag.toLowerCase();
+    if (lower.startsWith('pt')) return 'pt-br';
+    if (lower.startsWith('zh')) return 'zh';
+    const base = lower.split('-')[0] ?? '';
+    if (isLocale(base)) return base;
+  }
+  return null;
 }
 
 export function resolveLocale(setting: string | null | undefined, uiLanguage: string | undefined): TLocale {

@@ -1,4 +1,3 @@
-import { uaClass } from '../../web/src/lib/analytics';
 import { API_ORIGIN } from './license';
 
 const EXT_EVENTS = ['session_start', 'session_end', 'pro_activated', 'client_error'] as const; // docs/10 §8
@@ -14,6 +13,22 @@ type TFetch = (input: string, init?: RequestInit) => Promise<Response>;
 
 export interface ITelemetry {
   track(event: string, params?: Record<string, string | number | boolean>): void;
+}
+
+function uaClass(ua = navigator.userAgent): string {
+  const os = /iPhone|iPad|iPod/u.test(ua)
+    ? 'ios'
+    : /Android/u.test(ua)
+      ? 'android'
+      : /Mac/u.test(ua)
+        ? 'mac'
+        : /Windows/u.test(ua)
+          ? 'win'
+          : 'other';
+  const c = !/Edg\//u.test(ua) && /Chrome\/(\d+)/u.exec(ua);
+  const f = /Firefox\/(\d+)/u.exec(ua);
+  const s = /Version\/(\d+).*Safari/u.exec(ua);
+  return `${c ? `chrome-${String(c[1])}` : f ? `firefox-${String(f[1])}` : s ? `safari-${String(s[1])}` : 'other'}/${os}`;
 }
 
 export function createTelemetry(opts: {
