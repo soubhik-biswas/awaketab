@@ -21,7 +21,15 @@ export interface IKioskConfig {
 }
 
 // The seven faces the kiosk board offers, in its order.
-export const KIOSK_FACES = ['led', 'luxe', 'bold', 'nixie', 'disc', 'clocks', 'moon'] as const satisfies readonly TFaceId[];
+export const KIOSK_FACES = [
+  'led',
+  'luxe',
+  'bold',
+  'nixie',
+  'disc',
+  'clocks',
+  'moon',
+] as const satisfies readonly TFaceId[];
 export type TKioskFace = (typeof KIOSK_FACES)[number];
 
 export const KIOSK_SCREENS: readonly TKioskScreen[] = ['dark', 'oled'];
@@ -38,10 +46,10 @@ export const HOLD_MS = 3000;
 export const RELOCK_MS = 30_000;
 export const KIOSK_STAGE = { width: 960, height: 540, face: 420 } as const;
 
-export const DEFAULT_SCHEDULE: IKioskSchedule = { days: 'weekdays', from: '08:00', to: '18:00' };
+const DEFAULT_SCHEDULE: IKioskSchedule = { days: 'weekdays', from: '08:00', to: '18:00' };
 
-export const KIOSK_PLANS: readonly TPlanId[] = ['biz_kiosk_site', 'biz_kiosk_5'];
-export const KIOSK_LOGO_MAX = 512;
+const KIOSK_PLANS: readonly TPlanId[] = ['biz_kiosk_site', 'biz_kiosk_5'];
+const KIOSK_LOGO_MAX = 512;
 const TEXT_MAX = 80;
 const TOKEN_RE = /^#lic=([A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)$/u;
 const WALL_RE = /^([01]\d|2[0-3])[:-]([0-5]\d)$/u;
@@ -72,7 +80,7 @@ export function parseLogo(raw: string | null | undefined): string | null {
   }
 }
 
-export function readLicHash(hash: string): string | null {
+function readLicHash(hash: string): string | null {
   return TOKEN_RE.exec(hash)?.[1] ?? null;
 }
 
@@ -80,10 +88,7 @@ const isFace = (v: string | null): v is TKioskFace => (KIOSK_FACES as readonly s
 
 // The kiosk link: ?face=led&screen=oled&days=weekdays&from=08-00&to=18-00&kicker=…&msg=…&line=…&logo=https://…
 // `days=always` keeps the screen awake all day; the texts default to the board's reception sign.
-export function parseKioskQuery(
-  search: string,
-  defaults: Pick<IKioskConfig, 'kicker' | 'msg' | 'line'>,
-): IKioskConfig {
+export function parseKioskQuery(search: string, defaults: Pick<IKioskConfig, 'kicker' | 'msg' | 'line'>): IKioskConfig {
   const q = new URLSearchParams(search);
   const face = q.get('face');
   const days = q.get('days');
@@ -194,6 +199,10 @@ export async function applyKioskHash(
   return 'stored';
 }
 
-export function licenceAllows(record: Pick<ILicenseRecord, 'features' | 'exp'> | null, gate: TFeatureGate, now = Date.now()) {
+export function licenceAllows(
+  record: Pick<ILicenseRecord, 'features' | 'exp'> | null,
+  gate: TFeatureGate,
+  now = Date.now(),
+) {
   return !!record && record.exp * 1000 > now && record.features.includes(gate);
 }

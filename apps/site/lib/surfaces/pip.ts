@@ -1,7 +1,7 @@
 import { localePath, type TLocale } from '@/i18n/locales';
 
 export const PIP_SIZE = { width: 320, height: 180 } as const;
-export const PIP_POPUP_NAME = 'awaketab-pip';
+const PIP_POPUP_NAME = 'awaketab-pip';
 
 export type TPipSupport = 'document' | 'popup' | 'none';
 

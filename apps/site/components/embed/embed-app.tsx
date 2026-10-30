@@ -11,7 +11,13 @@ import { formatClock } from '@/lib/embed/clock';
 import { fetchEmbedConfig, onAccent, type IEmbedConfig } from '@/lib/embed/config';
 import { EmbedEngine, elapsedMs, isRunning, planEnd, presetMs, remainingMs } from '@/lib/embed/engine';
 import { embedAdvice, inIframe, wakeLockPolicy } from '@/lib/embed/policy';
-import { EMBED_NARROW, EMBED_VERSION, parseEmbedQuery, type IEmbedParams, type TEmbedTheme } from '@/lib/embed/protocol';
+import {
+  EMBED_NARROW,
+  EMBED_VERSION,
+  parseEmbedQuery,
+  type IEmbedParams,
+  type TEmbedTheme,
+} from '@/lib/embed/protocol';
 import { addTimer, readTimers, safeStorage, settleTimers, writeTimers, type ICookTimer } from '@/lib/embed/timers';
 import { useWindowNow } from '@/lib/surfaces/hooks';
 import { playChime } from '@/lib/tool/sound';

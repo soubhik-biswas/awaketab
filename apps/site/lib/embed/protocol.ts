@@ -172,28 +172,3 @@ export function parsePageMessage(data: unknown): TPageMessage | null {
   }
   return out;
 }
-
-export function parseWidgetMessage(data: unknown): TWidgetMessage | null {
-  const m = record(data);
-  if (!m) return null;
-  if (m.type === 'awaketab:ready')
-    return { type: 'awaketab:ready', version: typeof m.version === 'string' ? m.version.slice(0, 16) : '' };
-  if (m.type === 'awaketab:resize') {
-    if (typeof m.height !== 'number' || !Number.isFinite(m.height)) return null;
-    return {
-      type: 'awaketab:resize',
-      height: Math.round(Math.min(EMBED_MAX_HEIGHT, Math.max(EMBED_MIN_HEIGHT, m.height))),
-    };
-  }
-  if (m.type === 'awaketab:state') {
-    if (typeof m.lock !== 'string' || typeof m.status !== 'string') return null;
-    return {
-      type: 'awaketab:state',
-      lock: m.lock.slice(0, 16),
-      status: m.status.slice(0, 16),
-      endsAt: typeof m.endsAt === 'number' && Number.isFinite(m.endsAt) ? m.endsAt : null,
-      mode: pick(EMBED_MODES, m.mode, 'cook'),
-    };
-  }
-  return null;
-}

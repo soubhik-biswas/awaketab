@@ -1,5 +1,4 @@
 import type { TPresetId } from '@awaketab/core';
-import { startHref, toolHref } from '@/lib/routes';
 import { digits, type ISurfaceView } from '@/lib/surfaces/session';
 import { WIDGET_ACTION, WIDGET_SYNC } from '@/lib/surfaces/widget-protocol';
 
@@ -20,8 +19,8 @@ export const WIDGET_PRESETS: readonly IWidgetPreset[] = [
   { key: 'reading', len: 'min30', preset: 'p30', sec: 1800 },
 ];
 
-export type TWidgetAction = { action: 'extend' } | { action: 'stop' } | { action: 'open' } | { action: 'preset'; preset: TPresetId };
-
+export type TWidgetAction =
+  { action: 'extend' } | { action: 'stop' } | { action: 'open' } | { action: 'preset'; preset: TPresetId };
 
 export interface IWidgetData {
   live: boolean;
@@ -64,11 +63,6 @@ export function widgetData(view: ISurfaceView, s: IWidgetStrings): IWidgetData {
       preset: p.preset,
     })),
   };
-}
-
-// Where a widget tap lands when no AwakeTab window is open: a preset starts at once, anything else opens the tool.
-export function widgetUrl(a: TWidgetAction): string {
-  return a.action === 'preset' ? startHref(a.preset, 'standard') : toolHref();
 }
 
 export function readWidgetAction(data: unknown): TWidgetAction | null {

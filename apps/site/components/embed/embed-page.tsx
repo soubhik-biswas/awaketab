@@ -19,7 +19,13 @@ import {
   embedQuery,
   type TEmbedLocale,
 } from '@/lib/embed/protocol';
-import { DEFAULT_SNIPPET, iframeSnippet, loaderSnippet, SNIPPET_SANDBOX, type ISnippetOptions } from '@/lib/embed/snippet';
+import {
+  DEFAULT_SNIPPET,
+  iframeSnippet,
+  loaderSnippet,
+  SNIPPET_SANDBOX,
+  type ISnippetOptions,
+} from '@/lib/embed/snippet';
 
 const LABEL = 'text-[14px] font-semibold';
 const H2 = 'm-0 font-display text-[22px] font-bold [font-stretch:112%]';
@@ -65,10 +71,7 @@ export function EmbedPage() {
   const set = (patch: Partial<ISnippetOptions>) => setOpts((o) => ({ ...o, ...patch }));
   const lang: TEmbedLocale = opts.lang ?? 'en';
   const box = EMBED_BOX[opts.size];
-  const src = useMemo(
-    () => `${embedPath(lang)}?${embedQuery({ ...opts, lang }, '')}`,
-    [opts, lang],
-  );
+  const src = useMemo(() => `${embedPath(lang)}?${embedQuery({ ...opts, lang }, '')}`, [opts, lang]);
   const snippet = loaderSnippet(opts, origin);
   const frameSnippet = iframeSnippet(opts, tf('frame.title'), origin, tf('attribution'));
 
