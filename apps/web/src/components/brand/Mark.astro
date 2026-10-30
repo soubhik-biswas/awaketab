@@ -13,4 +13,13 @@ interface Props {
 const { size = 32, state = 'awake', glow, small, label, class: className } = Astro.props;
 ---
 
-<Fragment set:html={markSvg({ size, state, glow, small, label, className })} />
+<Fragment
+  set:html={markSvg({
+    size,
+    state,
+    ...(glow === undefined ? {} : { glow }),
+    ...(small === undefined ? {} : { small }),
+    ...(label === undefined ? {} : { label }),
+    ...(className === undefined ? {} : { className }),
+  })}
+/>
