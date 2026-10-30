@@ -4,10 +4,9 @@ import ratings from '../../../../../data/ratings.json';
 import { Block, Callout, Cards, Cta, Faq, Steps, type ICard } from '@/components/site/blocks';
 import { JsonLd } from '@/components/site/json-ld';
 import { HeroButtons, PageHero } from '@/components/site/page-hero';
-import { ToolSlot } from '@/components/site/tool-slot';
 import { LOCALE_META, localePath, type TLocale } from '@/i18n/locales';
 import { articleIn, articlePath, type TSceneKey } from '@/lib/content';
-import { startHref, TOOL_ANCHOR } from '@/lib/routes';
+import { startHref } from '@/lib/routes';
 import { homeSchema, localeParam, pageMetadata } from '@/lib/seo';
 
 const USES: ReadonlyArray<readonly [slug: string, key: string, scene: TSceneKey]> = [
@@ -60,7 +59,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         sceneLabel={t('home.hero.scene')}
         actions={
           <HeroButtons
-            primary={{ href: `#${TOOL_ANCHOR}`, label: t('home.cta') }}
+            primary={{ href: startHref('p60', 'standard', locale), label: t('home.cta') }}
             secondary={{ href: '#home-how', label: t('home.hero.how') }}
           />
         }
@@ -77,18 +76,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             }
           : {})}
       />
-      <Block label={t('home.tool.title')}>
-        <ToolSlot
-          anchor
-          preset="p60"
-          minutes={60}
-          eyebrow={t('tool.eyebrow')}
-          title={t('home.tool.title')}
-          desc={t('home.tool.body')}
-          href={startHref('p60', 'standard', locale)}
-          label={t('home.cta')}
-        />
-      </Block>
       <Block id="home-uses" h={t('home.uses.title')}>
         <Cards items={cards} cols={4} />
       </Block>
@@ -104,7 +91,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <Faq items={faq} />
       </Block>
       <Block label={t('cta.label')}>
-        <Cta title={t('cta.title')} desc={t('cta.desc')} href={`#${TOOL_ANCHOR}`} label={t('home.cta')} />
+        <Cta
+          title={t('cta.title')}
+          desc={t('cta.desc')}
+          href={startHref('p60', 'standard', locale)}
+          label={t('home.cta')}
+        />
       </Block>
     </>
   );
