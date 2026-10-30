@@ -1,0 +1,38 @@
+:root,
+.light {
+  --tool-header: rgba(246, 244, 239, 0.7);
+  --tool-ghost: #ffffff;
+  --tool-bar: rgba(255, 255, 255, 0.9);
+  --tool-bar-phone: rgba(255, 255, 255, 0.92);
+  --tool-bar-shadow: 0 24px 60px rgba(11, 16, 32, 0.14), inset 0 1px 0 #ffffff;
+  --tool-bar-shadow-phone: 0 20px 50px rgba(11, 16, 32, 0.14), inset 0 1px 0 #ffffff;
+  --tool-chips: var(--secondary);
+  --tool-chip-on: #ffffff;
+  --tool-chip-on-shadow: 0 1px 3px rgba(11, 16, 32, 0.12), inset 0 0 0 1px var(--border);
+  --tool-act-shadow: 0 10px 30px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  --tool-thumb: var(--secondary);
+  --tool-exit: rgba(255, 255, 255, 0.85);
+  --tool-glow-a: rgba(61, 245, 142, 0.16);
+  --tool-glow-a-awake: rgba(17, 122, 59, 0.12);
+  --tool-glow-b: rgba(102, 51, 245, 0.1);
+  --tool-glow-b-awake: rgba(102, 51, 245, 0.08);
+}
+
+.dark,
+.oled {
+  --tool-header: rgba(7, 11, 22, 0.55);
+  --tool-ghost: rgba(255, 255, 255, 0.04);
+  --tool-bar: rgba(17, 24, 42, 0.82);
+  --tool-bar-phone: rgba(17, 24, 42, 0.86);
+  --tool-bar-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --tool-bar-shadow-phone: 0 24px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --tool-chips: rgba(255, 255, 255, 0.05);
+  --tool-chip-on: var(--surface-3);
+  --tool-chip-on-shadow: inset 0 0 0 1px var(--input);
+  --tool-thumb: #070b16;
+  --tool-exit: rgba(21, 29, 49, 0.8);
+  --tool-glow-a: rgba(61, 245, 142, 0.13);
+  --tool-glow-a-awake: rgba(61, 245, 142, 0.24);
+  --tool-glow-b: rgba(159, 123, 255, 0.22);
+  --tool-glow-b-awake: rgba(159, 123, 255, 0.18);
+}

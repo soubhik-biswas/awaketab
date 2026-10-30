@@ -57,6 +57,10 @@ export interface IToolStrings {
   untilT: string;
   label0: string;
   forLen: string;
+  extend: string;
+  hero: string;
+  heroSub: string;
+  heroSubPhone: string;
 }
 
 export const STRINGS: Record<TToolLang, IToolStrings> = {
@@ -85,7 +89,7 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     length: 'Length',
     label: 'Label',
     face: 'Face',
-    allFaces: 'All 33 faces',
+    allFaces: 'All 49 faces',
     options: 'Options',
     level: 'Keep-awake level',
     screen: 'Screen',
@@ -115,6 +119,10 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     untilT: 'Until…',
     label0: 'Presenting to the board',
     forLen: ' · ends ',
+    extend: 'Extend',
+    hero: 'Keep this screen awake.',
+    heroSub: 'One tap. It goes back to sleep when time’s up — no install, no account.',
+    heroSubPhone: 'One tap. It sleeps again when time’s up.',
   },
   de: {
     soundNav: 'Klang',
@@ -141,7 +149,7 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     length: 'Dauer',
     label: 'Bezeichnung',
     face: 'Zifferblatt',
-    allFaces: 'Alle 33',
+    allFaces: 'Alle 49',
     options: 'Optionen',
     level: 'Wach-Stufe',
     screen: 'Bildschirm',
@@ -171,6 +179,10 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     untilT: 'Bis…',
     label0: 'Präsentation vor dem Vorstand',
     forLen: ' · endet ',
+    extend: 'Verlängern',
+    hero: 'Bildschirm wach halten.',
+    heroSub: 'Ein Tippen. Danach darf er wieder schlafen — ohne Installation, ohne Konto.',
+    heroSubPhone: 'Ein Tippen. Danach schläft er wieder.',
   },
   ja: {
     soundNav: 'サウンド',
@@ -197,7 +209,7 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     length: '時間',
     label: 'ラベル',
     face: '文字盤',
-    allFaces: '33種類すべて',
+    allFaces: '49種類すべて',
     options: 'オプション',
     level: 'スリープ防止の範囲',
     screen: '画面',
@@ -227,6 +239,10 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     untilT: '時刻まで…',
     label0: '役員会でのプレゼン',
     forLen: ' · 終了 ',
+    extend: '延長',
+    hero: '画面をつけたままに。',
+    heroSub: 'ワンタップ。時間が来たら元どおりスリープ。インストールも登録も不要。',
+    heroSubPhone: 'ワンタップ。時間が来たらスリープ。',
   },
   zh: {
     soundNav: '声音',
@@ -253,7 +269,7 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     length: '时长',
     label: '标签',
     face: '表盘',
-    allFaces: '全部 33 款',
+    allFaces: '全部 49 款',
     options: '选项',
     level: '防休眠范围',
     screen: '屏幕',
@@ -283,6 +299,10 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     untilT: '直到…',
     label0: '向董事会演示',
     forLen: ' · 结束于 ',
+    extend: '延长',
+    hero: '让屏幕保持常亮。',
+    heroSub: '一键开启。时间到后自动恢复休眠，无需安装或账号。',
+    heroSubPhone: '一键开启，到点自动休眠。',
   },
   hi: {
     soundNav: 'ध्वनि',
@@ -309,7 +329,7 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     length: 'अवधि',
     label: 'लेबल',
     face: 'डायल',
-    allFaces: 'सभी 33',
+    allFaces: 'सभी 49',
     options: 'विकल्प',
     level: 'जगाए रखने का स्तर',
     screen: 'स्क्रीन',
@@ -339,6 +359,10 @@ export const STRINGS: Record<TToolLang, IToolStrings> = {
     untilT: 'समय तक…',
     label0: 'बोर्ड के सामने प्रस्तुति',
     forLen: ' · समाप्त ',
+    extend: 'बढ़ाएँ',
+    hero: 'स्क्रीन जगाए रखें।',
+    heroSub: 'एक टैप। समय पूरा होते ही स्क्रीन फिर सो जाएगी — न इंस्टॉल, न अकाउंट।',
+    heroSubPhone: 'एक टैप। समय पूरा होते ही फिर सो जाएगी।',
   },
 };
 

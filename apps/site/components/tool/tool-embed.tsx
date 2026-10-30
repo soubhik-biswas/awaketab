@@ -9,6 +9,7 @@ import type { TFace } from '@awaketab/core';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { formatTime } from '@/lib/format';
+import { toolHref } from '@/lib/routes';
 import { presetIdFor } from '@/lib/tool/settings';
 
 const Face = dynamic(() => import('@/components/face').then((mod) => mod.Face), { ssr: false });
@@ -50,7 +51,7 @@ export function ToolEmbed({
   const theme = resolvedTheme === 'light' ? 'light' : resolvedTheme === 'oled' ? 'oled' : 'dark';
   const now = useSyncExternalStore(subscribeMinute, minuteNow, () => 0);
   const ends = showEnds && now && totalSec > 0 ? ` Ends at ${formatTime(now + totalSec * 1000)} if you start now.` : '';
-  const link = href ?? `/timer?preset=${presetIdFor(totalSec)}&face=${face}&autostart=1`;
+  const link = href ?? `${toolHref()}?preset=${presetIdFor(totalSec)}&face=${face}&autostart=1`;
   return (
     <div
       data-slot="tool-embed"
