@@ -3,7 +3,8 @@ import { NAVY, WHITE } from '../art';
 import { alpha, f1 } from '../geometry';
 import { big, EndLine, type IDrawProps, Kicker, L, lmin, MONO, Svg } from '../kit';
 
-const BULB = 'M66 42 H154 C154 98 117 126 114 155 C117 184 154 212 154 268 H66 C66 212 103 184 106 155 C103 126 66 98 66 42 Z';
+const BULB =
+  'M66 42 H154 C154 98 117 126 114 155 C117 184 154 212 154 268 H66 C66 212 103 184 106 155 C103 126 66 98 66 42 Z';
 const TOP_CLIP = 'M66 42 H154 C154 98 117 126 114 155 H106 C103 126 66 98 66 42 Z';
 const BOTTOM_CLIP = 'M106 155 C103 184 66 212 66 268 H154 C154 212 117 184 114 155 Z';
 const CAP = { light: ['#C9CBD8', '#F4F4FA'], night: ['#2B3550', '#55617E'] } as const;
@@ -33,7 +34,13 @@ export default function Hourglass({ m }: IDrawProps) {
   const y = (k: number) => f1(270 - pile * k);
   const bottom = `M58 270 V${y(0.42)} C80 ${y(0.6)} 96 ${y(1.15)} 110 ${y(1.15)} C124 ${y(1.15)} 140 ${y(0.6)} 162 ${y(0.42)} V270 Z`;
   const cap = m.night ? CAP.night : CAP.light;
-  const ids = { top: `af-hg-t${id}`, bot: `af-hg-b${id}`, sand: `af-hg-s${id}`, wood: `af-hg-w${id}`, glow: `af-hg-g${id}` };
+  const ids = {
+    top: `af-hg-t${id}`,
+    bot: `af-hg-b${id}`,
+    sand: `af-hg-s${id}`,
+    wood: `af-hg-w${id}`,
+    glow: `af-hg-g${id}`,
+  };
   return (
     <>
       <Svg>
@@ -95,7 +102,13 @@ export default function Hourglass({ m }: IDrawProps) {
           style={{ stroke: m.night ? GLASS_LINE.night : GLASS_LINE.light }}
         />
         <path d="M74 52 C76 92 96 118 104 140" fill="none" strokeWidth="3" strokeLinecap="round" stroke={WHITE(0.28)} />
-        <path d="M76 258 C78 226 92 196 102 176" fill="none" strokeWidth="3" strokeLinecap="round" stroke={WHITE(0.16)} />
+        <path
+          d="M76 258 C78 226 92 196 102 176"
+          fill="none"
+          strokeWidth="3"
+          strokeLinecap="round"
+          stroke={WHITE(0.16)}
+        />
         <rect x="38" y="26" width="144" height="16" rx="6" fill={`url(#${ids.wood})`} />
         <rect x="38" y="268" width="144" height="16" rx="6" fill={`url(#${ids.wood})`} />
         <rect x="38" y="26" width="144" height="3" rx="1.5" fill={WHITE(0.22)} />

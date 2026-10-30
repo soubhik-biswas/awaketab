@@ -54,7 +54,15 @@ export default function Poster({ m }: IDrawProps) {
         </span>
       </div>
       <div
-        style={{ position: 'absolute', left: 22, right: 22, bottom: 20, display: 'flex', flexDirection: 'column', gap: 8 }}
+        style={{
+          position: 'absolute',
+          left: 22,
+          right: 22,
+          bottom: 20,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+        }}
       >
         <div style={{ height: 2, background: a.track }}>
           <div className="af-tr" style={{ height: 2, width: m.fracPct, background: m.accent }} />

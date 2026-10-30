@@ -9,7 +9,11 @@ const BEZEL = '#D9D6CD';
 const INK = '#1E1E1C';
 
 const line = (m: TFaceModel): string =>
-  m.st === 'up' ? 'finished — the screen may sleep' : m.st === 'idle' ? `ready when you are · ${m.endLine}` : `left · ${m.endLine}`;
+  m.st === 'up'
+    ? 'finished — the screen may sleep'
+    : m.st === 'idle'
+      ? `ready when you are · ${m.endLine}`
+      : `left · ${m.endLine}`;
 
 // A paper display with serif digits and a faint ghost, calm by daylight.
 export default function Eink({ m }: IDrawProps) {

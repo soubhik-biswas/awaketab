@@ -116,7 +116,12 @@ export default function Clocks({ m }: IDrawProps) {
             >
               <span style={handStyle(hands[0] ?? BLANK, hc, op)} />
               <span style={handStyle(hands[1] ?? BLANK, hc, op)} />
-              <span style={{ ...handStyle(hands[2] ?? BLANK, hc, op), display: hands[2] === undefined ? 'none' : undefined }} />
+              <span
+                style={{
+                  ...handStyle(hands[2] ?? BLANK, hc, op),
+                  display: hands[2] === undefined ? 'none' : undefined,
+                }}
+              />
               <span
                 style={{
                   position: 'absolute',

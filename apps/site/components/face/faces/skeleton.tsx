@@ -72,7 +72,16 @@ export default function Skeleton({ m }: IDrawProps) {
           <path d={G3} fill={brass} opacity=".9" />
           <circle cx="168" cy="200" r="9" style={{ fill: HOLE[k] }} />
         </g>
-        <rect x="92" y="150" width="170" height="14" rx="7" fill={steel} opacity=".55" transform="rotate(-18 180 157)" />
+        <rect
+          x="92"
+          y="150"
+          width="170"
+          height="14"
+          rx="7"
+          fill={steel}
+          opacity=".55"
+          transform="rotate(-18 180 157)"
+        />
         <g className="afx-wobble" data-svg-origin="236 206">
           <circle cx="236" cy="206" r="26" fill="none" stroke={brass} strokeWidth="4" />
           <path d="M236 180 V232 M210 206 H262" stroke={brass} strokeWidth="2.5" />
