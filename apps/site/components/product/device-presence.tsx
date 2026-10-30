@@ -30,10 +30,15 @@ export const IDENTITY_CLASSES: Record<TIdentity, string> = {
 };
 
 export function identityFor(index: number): TIdentity {
-  return IDENTITIES[((index % IDENTITIES.length) + IDENTITIES.length) % IDENTITIES.length];
+  return IDENTITIES[((index % IDENTITIES.length) + IDENTITIES.length) % IDENTITIES.length] ?? 'cobalt';
 }
 
-const KIND_ICON: Record<TDeviceKind, LucideIcon> = { laptop: Laptop, desktop: Monitor, tablet: Tablet, phone: Smartphone };
+const KIND_ICON: Record<TDeviceKind, LucideIcon> = {
+  laptop: Laptop,
+  desktop: Monitor,
+  tablet: Tablet,
+  phone: Smartphone,
+};
 
 const STATUS: Record<TDeviceStatus, { label: string; icon: LucideIcon; badge: string; ring: string }> = {
   awake: { label: 'Awake', icon: CircleCheck, badge: 'bg-accent text-lamp', ring: 'var(--lamp)' },
@@ -88,7 +93,10 @@ export function DeviceRow({ device, divider = 'top' }: { device: IDevice; divide
       className={cn('flex min-h-[52px] items-center gap-2.5', divider === 'top' ? 'border-t' : 'border-b')}
     >
       <span
-        className={cn('inline-flex size-8 shrink-0 items-center justify-center rounded-sm', IDENTITY_CLASSES[device.identity])}
+        className={cn(
+          'inline-flex size-8 shrink-0 items-center justify-center rounded-sm',
+          IDENTITY_CLASSES[device.identity],
+        )}
         aria-hidden="true"
       >
         <Icon className="size-4" />
@@ -127,7 +135,13 @@ export function DevicePresence({ devices, summary, divider = 'top', className, .
   );
 }
 
-export function DevicePresenceSkeleton({ label = 'Loading devices', className }: { label?: string; className?: string }) {
+export function DevicePresenceSkeleton({
+  label = 'Loading devices',
+  className,
+}: {
+  label?: string;
+  className?: string;
+}) {
   return (
     <div aria-busy="true" aria-label={label} className={cn('flex items-center gap-2.5', className)}>
       <Skeleton className="size-8 rounded-sm" />
@@ -156,7 +170,10 @@ export function PresenceMarker({ kind, identity, className, children, ...props }
         kind === 'awake' && 'rounded-full bg-accent text-lamp',
         kind === 'paused' && 'rounded-full border-2 border-warning text-warning',
         kind === 'device' &&
-          cn('rounded-[4px_999px_999px_999px]', identity ? IDENTITY_CLASSES[identity] : 'bg-primary text-primary-foreground'),
+          cn(
+            'rounded-[4px_999px_999px_999px]',
+            identity ? IDENTITY_CLASSES[identity] : 'bg-primary text-primary-foreground',
+          ),
         className,
       )}
       {...props}
@@ -164,9 +181,7 @@ export function PresenceMarker({ kind, identity, className, children, ...props }
       {kind === 'awake' ? (
         <span aria-hidden="true" className="size-2.5 rounded-full bg-lamp shadow-[0_0_0_4px_var(--halo)]" />
       ) : null}
-      {kind === 'paused' ? (
-        <span aria-hidden="true" className="size-2.5 rounded-full border-2 border-warning" />
-      ) : null}
+      {kind === 'paused' ? <span aria-hidden="true" className="size-2.5 rounded-full border-2 border-warning" /> : null}
       {children}
     </span>
   );

@@ -75,7 +75,8 @@ export function ListRow({
 }
 
 export interface IListRowButtonProps
-  extends Omit<React.ComponentProps<'button'>, 'title'>,
+  extends
+    Omit<React.ComponentProps<'button'>, 'title'>,
     Pick<IListRowProps, 'icon' | 'tile' | 'title' | 'meta' | 'trailing' | 'tileSize' | 'divider' | 'titleSize'> {
   chevron?: boolean;
 }

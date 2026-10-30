@@ -85,7 +85,12 @@ export function PresetGroup({
 
   if (variant === 'list') {
     return (
-      <div data-slot="preset-group" className={cn('flex flex-col gap-4', className)} role="group" aria-label={ariaLabel}>
+      <div
+        data-slot="preset-group"
+        className={cn('flex flex-col gap-4', className)}
+        role="group"
+        aria-label={ariaLabel}
+      >
         {presets.map((preset) => {
           const Icon = preset.icon;
           const on = preset.id === value;
@@ -130,29 +135,29 @@ export function PresetGroup({
       aria-label={ariaLabel}
       className={cn('grid grid-cols-2 gap-2', className)}
     >
-        {presets.map((preset) => {
-          const Icon = preset.icon;
-          return (
-            <RadioGroupPrimitive.Item
-              key={preset.id}
-              value={preset.id}
-              className="group/preset flex min-h-14 min-w-0 cursor-pointer items-center gap-2.5 rounded-md border bg-secondary px-2.5 py-2 text-left text-foreground transition-colors duration-fast ease-glide outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring data-[state=checked]:border-2 data-[state=checked]:border-lamp data-[state=checked]:bg-accent"
+      {presets.map((preset) => {
+        const Icon = preset.icon;
+        return (
+          <RadioGroupPrimitive.Item
+            key={preset.id}
+            value={preset.id}
+            className="group/preset flex min-h-14 min-w-0 cursor-pointer items-center gap-2.5 rounded-md border bg-secondary px-2.5 py-2 text-left text-foreground transition-colors duration-fast ease-glide outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring data-[state=checked]:border-2 data-[state=checked]:border-lamp data-[state=checked]:bg-accent"
+          >
+            <span
+              className={cn(
+                tileBase,
+                'size-[34px] rounded-sm bg-card group-data-[state=checked]/preset:border-lamp group-data-[state=checked]/preset:bg-lamp group-data-[state=checked]/preset:text-lamp-foreground',
+              )}
             >
-              <span
-                className={cn(
-                  tileBase,
-                  'size-[34px] rounded-sm bg-card group-data-[state=checked]/preset:border-lamp group-data-[state=checked]/preset:bg-lamp group-data-[state=checked]/preset:text-lamp-foreground',
-                )}
-              >
-                <Icon className="size-[18px]" aria-hidden="true" />
-              </span>
-              <span className="flex min-w-0 flex-col">
-                <span className="text-[14px] font-semibold whitespace-nowrap">{preset.label}</span>
-                <span className="font-mono text-[12px] text-muted-foreground-strong">{preset.meta}</span>
-              </span>
-            </RadioGroupPrimitive.Item>
-          );
-        })}
+              <Icon className="size-[18px]" aria-hidden="true" />
+            </span>
+            <span className="flex min-w-0 flex-col">
+              <span className="text-[14px] font-semibold whitespace-nowrap">{preset.label}</span>
+              <span className="font-mono text-[12px] text-muted-foreground-strong">{preset.meta}</span>
+            </span>
+          </RadioGroupPrimitive.Item>
+        );
+      })}
       {onCreate ? (
         <button
           type="button"

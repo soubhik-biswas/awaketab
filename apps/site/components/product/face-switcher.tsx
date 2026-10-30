@@ -26,7 +26,8 @@ export interface IFaceSwitcherProps {
 
 const plateClasses =
   'relative flex justify-center overflow-hidden rounded-md border bg-face-plate transition-[border-color,box-shadow] duration-fast ease-glide';
-const plateOn = 'group-data-[state=checked]/face:border-2 group-data-[state=checked]/face:border-lamp group-data-[state=checked]/face:shadow-[0_0_0_3px_var(--halo)]';
+const plateOn =
+  'group-data-[state=checked]/face:border-2 group-data-[state=checked]/face:border-lamp group-data-[state=checked]/face:shadow-[0_0_0_3px_var(--halo)]';
 
 export function FaceSwitcher({
   faces,

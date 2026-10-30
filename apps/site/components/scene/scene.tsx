@@ -59,7 +59,14 @@ export function Scene({
         <path d={def.ring} fill="none" stroke="var(--scene-ring)" strokeWidth={8} strokeLinecap="round" />
       ) : null}
       {def.ln ? (
-        <path d={def.ln} fill="none" stroke="var(--scene-ink)" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d={def.ln}
+          fill="none"
+          stroke="var(--scene-ink)"
+          strokeWidth={3}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       ) : null}
       {def.lnLight ? (
         <path
@@ -71,7 +78,9 @@ export function Scene({
           strokeLinejoin="round"
         />
       ) : null}
-      {def.sp ? <path d={def.sp} fill="none" stroke="var(--scene-spark)" strokeWidth={3.5} strokeLinecap="round" /> : null}
+      {def.sp ? (
+        <path d={def.sp} fill="none" stroke="var(--scene-spark)" strokeWidth={3.5} strokeLinecap="round" />
+      ) : null}
       <circle cx={lx} cy={ly} r={lr * 2.3} fill="var(--scene-lamp)" opacity={0.35} />
       <circle cx={lx} cy={ly} r={lr} fill="var(--scene-lamp)" stroke="var(--scene-ink)" strokeWidth={3} />
       <circle

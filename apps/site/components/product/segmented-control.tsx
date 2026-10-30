@@ -12,8 +12,10 @@ export interface ISegmentOption {
   disabled?: boolean;
 }
 
-export interface ISegmentedControlProps
-  extends Omit<React.ComponentProps<typeof RadioGroupPrimitive.Root>, 'children' | 'orientation'> {
+export interface ISegmentedControlProps extends Omit<
+  React.ComponentProps<typeof RadioGroupPrimitive.Root>,
+  'children' | 'orientation'
+> {
   options: ISegmentOption[];
 }
 

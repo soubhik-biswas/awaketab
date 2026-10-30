@@ -83,13 +83,7 @@ function FormLabel({ className, ...props }: React.ComponentProps<typeof LabelPri
   const { error, formItemId } = useFormField();
 
   return (
-    <Label
-      data-slot="form-label"
-      data-error={!!error}
-      className={cn(className)}
-      htmlFor={formItemId}
-      {...props}
-    />
+    <Label data-slot="form-label" data-error={!!error} className={cn(className)} htmlFor={formItemId} {...props} />
   );
 }
 
@@ -129,7 +123,12 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   }
 
   return (
-    <p data-slot="form-message" id={formMessageId} className={cn('text-[12px] leading-[1.45] font-semibold text-destructive', className)} {...props}>
+    <p
+      data-slot="form-message"
+      id={formMessageId}
+      className={cn('text-[12px] leading-[1.45] font-semibold text-destructive', className)}
+      {...props}
+    >
       {body}
     </p>
   );

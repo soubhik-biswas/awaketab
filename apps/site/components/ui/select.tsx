@@ -87,7 +87,10 @@ function SelectLabel({ className, ...props }: React.ComponentProps<typeof Select
   return (
     <SelectPrimitive.Label
       data-slot="select-label"
-      className={cn('px-2.5 pt-2.5 pb-1 font-mono text-[12px] tracking-[.08em] text-muted-foreground-strong uppercase', className)}
+      className={cn(
+        'px-2.5 pt-2.5 pb-1 font-mono text-[12px] tracking-[.08em] text-muted-foreground-strong uppercase',
+        className,
+      )}
       {...props}
     />
   );
@@ -115,7 +118,10 @@ function SelectItem({
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       {meta ? (
-        <span data-slot="select-item-meta" className="ml-auto font-mono text-[12px] font-normal text-muted-foreground-strong">
+        <span
+          data-slot="select-item-meta"
+          className="ml-auto font-mono text-[12px] font-normal text-muted-foreground-strong"
+        >
           {meta}
         </span>
       ) : null}

@@ -131,7 +131,11 @@ export function CommandPalette({
     >
       <CommandInput value={query} onValueChange={setQuery} placeholder={placeholder}>
         {loading ? (
-          <LoaderCircle className="size-[18px] shrink-0 animate-spinner text-lamp" strokeWidth={2.25} aria-label="Searching" />
+          <LoaderCircle
+            className="size-[18px] shrink-0 animate-spinner text-lamp"
+            strokeWidth={2.25}
+            aria-label="Searching"
+          />
         ) : null}
         <button
           type="button"

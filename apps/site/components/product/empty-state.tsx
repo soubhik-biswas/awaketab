@@ -32,11 +32,7 @@ export function EmptyState({
   return (
     <div
       data-slot="empty-state"
-      className={cn(
-        'flex flex-col items-center gap-2.5 text-center',
-        compact ? 'px-1 py-2' : 'py-3',
-        className,
-      )}
+      className={cn('flex flex-col items-center gap-2.5 text-center', compact ? 'px-1 py-2' : 'py-3', className)}
       {...props}
     >
       <Scene scene={scene} theme={sceneTheme} width={sceneWidth ?? (compact ? 220 : 240)} float={float} />
