@@ -171,9 +171,7 @@ export function ActivateFlow({
     <div ref={root} className="relative flex flex-col">
       {step !== undefined ? <FlowHeader step={step} backHref={timerHref} /> : null}
 
-      {state === 'processing' ? (
-        <Processing title={t('done.processing.h1')} lead={t('done.processing.lead')} />
-      ) : null}
+      {state === 'processing' ? <Processing title={t('done.processing.h1')} lead={t('done.processing.lead')} /> : null}
 
       {state === 'checkout-success' ? (
         <Success
@@ -228,7 +226,13 @@ export function ActivateFlow({
               </Button>
             )}
             {state === 'help' ? (
-              <Button type="button" variant="outline" size="lg" className="h-13 rounded-md px-[22px] text-[16px] font-bold" onClick={() => setState('idle')}>
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="h-13 rounded-md px-[22px] text-[16px] font-bold"
+                onClick={() => setState('idle')}
+              >
                 {t('done.syncing.key')}
               </Button>
             ) : (
@@ -282,7 +286,12 @@ export function ActivateFlow({
             {ext ? ta('ext.title') : ta('h1')}
           </h1>
           <p className={LEAD}>{ext ? ta('ext.lead') : ta('lead')}</p>
-          <form className="flex w-full flex-col gap-[18px]" onSubmit={(e) => void submit(e)} noValidate aria-busy={state === 'checking'}>
+          <form
+            className="flex w-full flex-col gap-[18px]"
+            onSubmit={(e) => void submit(e)}
+            noValidate
+            aria-busy={state === 'checking'}
+          >
             <label htmlFor={inputId} className="flex w-full flex-col gap-1.5 text-left">
               <span className="text-[14px] font-semibold">{ta('label')}</span>
               <Input

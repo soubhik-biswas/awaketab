@@ -1,14 +1,6 @@
 import { resolveCheckoutKey } from './checkout-key';
 import type { IEnv, IKv } from './env';
-import {
-  isLookupBody,
-  jsonError,
-  jsonOk,
-  parseActivateBody,
-  parseLookupBody,
-  rateLimited,
-  syncing,
-} from './http';
+import { isLookupBody, jsonError, jsonOk, parseActivateBody, parseLookupBody, rateLimited, syncing } from './http';
 import {
   encryptUtf8,
   PLAN_FEATURES,

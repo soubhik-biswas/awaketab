@@ -29,7 +29,11 @@ describe('billing emails', () => {
   it('warns when a yearly renewal fails and names the last day of Pro', async () => {
     const mail = await billingEmail(
       'subscription.past_due',
-      { customer: { email: 'sam@example.com' }, current_period_end: '2026-10-31T00:00:00Z', metadata: { plan: 'pro_yearly' } },
+      {
+        customer: { email: 'sam@example.com' },
+        current_period_end: '2026-10-31T00:00:00Z',
+        metadata: { plan: 'pro_yearly' },
+      },
       PORTAL,
     );
     expect(mail?.subject).toBe('Your Pro renewal didn’t go through');
@@ -38,9 +42,21 @@ describe('billing emails', () => {
 
   it('sends nothing for renewals, other plans or a missing address', async () => {
     expect(
-      await billingEmail('order.paid', { customer: { email: 'a@b.co' }, billing_reason: 'subscription_cycle', metadata: { plan: 'pro_yearly' } }, PORTAL),
+      await billingEmail(
+        'order.paid',
+        { customer: { email: 'a@b.co' }, billing_reason: 'subscription_cycle', metadata: { plan: 'pro_yearly' } },
+        PORTAL,
+      ),
     ).toBeNull();
-    expect(await billingEmail('order.paid', { customer: { email: 'a@b.co' }, billing_reason: 'purchase', metadata: { plan: 'biz_kiosk_site' } }, PORTAL)).toBeNull();
-    expect(await billingEmail('order.paid', { billing_reason: 'purchase', metadata: { plan: 'pro_lifetime' } }, PORTAL)).toBeNull();
+    expect(
+      await billingEmail(
+        'order.paid',
+        { customer: { email: 'a@b.co' }, billing_reason: 'purchase', metadata: { plan: 'biz_kiosk_site' } },
+        PORTAL,
+      ),
+    ).toBeNull();
+    expect(
+      await billingEmail('order.paid', { billing_reason: 'purchase', metadata: { plan: 'pro_lifetime' } }, PORTAL),
+    ).toBeNull();
   });
 });

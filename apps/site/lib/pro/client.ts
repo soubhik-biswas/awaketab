@@ -19,7 +19,15 @@ import {
 } from '@/lib/tool/pro';
 import { forgetAccount, readAccount, writeAccount, type TSignInMethod } from './account';
 import { deviceKind } from './device';
-import { fetchActivations, isProActive, LICENSE_KEY, readLicense, renewsAt, sha256Hex, type IActivation } from './license';
+import {
+  fetchActivations,
+  isProActive,
+  LICENSE_KEY,
+  readLicense,
+  renewsAt,
+  sha256Hex,
+  type IActivation,
+} from './license';
 import { longDate, MAX_DEVICES, portalUrl } from './plans';
 
 const DEFAULT_STUDIO: IStudioSettings = { lamp: '', glow: 70 };

@@ -31,7 +31,12 @@ import { FlowColumn, H1, LEAD, LINK, RISE } from './flow';
 
 type TState = 'loading' | 'list' | 'empty' | 'offline';
 
-const KIND_ICON: Record<TDeviceKind, LucideIcon> = { laptop: Laptop, desktop: Monitor, tablet: Tablet, phone: Smartphone };
+const KIND_ICON: Record<TDeviceKind, LucideIcon> = {
+  laptop: Laptop,
+  desktop: Monitor,
+  tablet: Tablet,
+  phone: Smartphone,
+};
 
 // /pro/manage: the devices that hold this licence, each in its identity colour, with removal behind a confirm.
 export function ManageDevices({ activateHref, plansHref }: { activateHref: string; plansHref: string }) {
@@ -110,7 +115,10 @@ export function ManageDevices({ activateHref, plansHref }: { activateHref: strin
       <p className={cn(LEAD, 'text-center')}>{t('lead')}</p>
 
       {lapse ? (
-        <StatusAlert variant={lapse.kind === 'grace' ? 'paused' : 'refused'} title={t(`lapse.${lapse.kind}`, { date: lapse.date })}>
+        <StatusAlert
+          variant={lapse.kind === 'grace' ? 'paused' : 'refused'}
+          title={t(`lapse.${lapse.kind}`, { date: lapse.date })}
+        >
           <a className="text-link underline underline-offset-[3px]" href={portalUrl()}>
             {t('lapse.portal')}
           </a>

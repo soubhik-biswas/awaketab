@@ -105,12 +105,7 @@ export function CheckoutFlow({ backHref }: { backHref: string }) {
     });
   };
 
-  const hintText =
-    hint === 'offline'
-      ? tc('account.offline')
-      : valid
-        ? tc('account.ok')
-        : tc('account.idle');
+  const hintText = hint === 'offline' ? tc('account.offline') : valid ? tc('account.ok') : tc('account.idle');
 
   return (
     <div ref={root} className="relative flex flex-col">
@@ -154,7 +149,12 @@ export function CheckoutFlow({ backHref }: { backHref: string }) {
               </ul>
               <span className="mt-auto text-[14px] text-muted-foreground-strong">{tc('free.now')}</span>
             </div>
-            <div className={cn(CARD, 'border-2 border-primary shadow-[0_24px_60px_color-mix(in_srgb,var(--primary)_14%,transparent)]')}>
+            <div
+              className={cn(
+                CARD,
+                'border-2 border-primary shadow-[0_24px_60px_color-mix(in_srgb,var(--primary)_14%,transparent)]',
+              )}
+            >
               <span className="flex items-center justify-between">
                 <strong className="text-[24px]">{tc('pro.name')}</strong>
                 <span className="rounded-full bg-primary-soft px-2.5 py-[3px] text-[13px] font-bold text-primary">
@@ -210,7 +210,11 @@ export function CheckoutFlow({ backHref }: { backHref: string }) {
               aria-live="polite"
               className={cn(
                 'self-start text-[13px] font-semibold',
-                hint === 'bad' || hint === 'offline' ? 'text-destructive' : valid ? 'text-lamp' : 'text-muted-foreground-strong',
+                hint === 'bad' || hint === 'offline'
+                  ? 'text-destructive'
+                  : valid
+                    ? 'text-lamp'
+                    : 'text-muted-foreground-strong',
               )}
             >
               {hintText}

@@ -9,7 +9,7 @@
   "observability": { "enabled": true },
   "vars": {
     "PUBLIC_SITE_URL": "https://awaketab.com",
-    "PUBLIC_POLAR_SERVER": "production"
+    "PUBLIC_POLAR_SERVER": "production",
   },
   "kv_namespaces": [{ "binding": "LICENSES", "id": "REPLACE_WITH_LICENSES_NAMESPACE_ID" }],
   "analytics_engine_datasets": [{ "binding": "EVENTS", "dataset": "awaketab_events" }],
@@ -18,8 +18,8 @@
       "binding": "AUTH_DB",
       "database_name": "awaketab-auth",
       "database_id": "REPLACE_WITH_AUTH_DATABASE_ID",
-      "migrations_dir": "migrations"
-    }
+      "migrations_dir": "migrations",
+    },
   ],
   "env": {
     "preview": {
@@ -27,7 +27,7 @@
       "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "awaketab-site-preview" }],
       "vars": {
         "PUBLIC_SITE_URL": "https://awaketab.com",
-        "PUBLIC_POLAR_SERVER": "sandbox"
+        "PUBLIC_POLAR_SERVER": "sandbox",
       },
       "kv_namespaces": [{ "binding": "LICENSES", "id": "REPLACE_WITH_LICENSES_PREVIEW_NAMESPACE_ID" }],
       "analytics_engine_datasets": [{ "binding": "EVENTS", "dataset": "awaketab_events_preview" }],
@@ -36,9 +36,9 @@
           "binding": "AUTH_DB",
           "database_name": "awaketab-auth-preview",
           "database_id": "REPLACE_WITH_AUTH_PREVIEW_DATABASE_ID",
-          "migrations_dir": "migrations"
-        }
-      ]
-    }
-  }
+          "migrations_dir": "migrations",
+        },
+      ],
+    },
+  },
 }

@@ -136,7 +136,9 @@ export async function activateLicense(input: {
   }
 }
 
-export async function lookupCheckoutKey(checkoutId: string): Promise<{ ok: true; key: string } | { ok: false; error: string }> {
+export async function lookupCheckoutKey(
+  checkoutId: string,
+): Promise<{ ok: true; key: string } | { ok: false; error: string }> {
   try {
     const res = await post('activate', { checkoutId, lookup: true });
     const data = (await res.json()) as { error?: string; key?: string };
