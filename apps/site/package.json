@@ -21,6 +21,7 @@
     "@hookform/resolvers": "6.0.2",
     "@opennextjs/cloudflare": "1.20.14",
     "@polar-sh/nextjs": "1.1.0",
+    "@polar-sh/sdk": "1.0.2",
     "@react-email/render": "2.2.0",
     "@shadcn/react": "0.3.1",
     "better-auth": "1.7.14",

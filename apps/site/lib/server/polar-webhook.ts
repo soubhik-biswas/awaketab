@@ -11,7 +11,7 @@ import {
   transition,
   type IPolarIds,
 } from './links';
-import { verifyStandardWebhook } from './webhook';
+import { webhooks } from '@polar-sh/sdk/2026-10';
 import { billingEmail, portalUrl, type IBillingData } from './email/billing';
 import { sendEmail } from './email/send';
 
@@ -216,13 +216,14 @@ export async function polarWebhookRoute(
   }
   if (Math.abs(Date.now() / 1000 - ts) > WINDOW_S) return new Response('stale', { status: 400 });
   const secret = env.POLAR_WEBHOOK_SECRET ?? '';
-  if (!(await verifyStandardWebhook(raw, request.headers, secret))) {
-    return new Response('unauthorized', { status: 401 });
-  }
+  // Polar's SDK checks the Standard Webhooks signature and timestamp; a signed event of a type it does not list
+  // yet is acknowledged and ignored, so Polar does not retry it forever.
   let payload: IPolarWebhook;
   try {
-    payload = JSON.parse(raw) as IPolarWebhook;
-  } catch {
+    payload = (await webhooks.validateEvent(raw, Object.fromEntries(request.headers), secret)) as IPolarWebhook;
+  } catch (err) {
+    if (err instanceof webhooks.PolarWebhookUnknownTypeError) return jsonOk({ ok: true, ignored: true });
+    if (err instanceof webhooks.PolarWebhookVerificationError) return new Response('unauthorized', { status: 401 });
     return jsonOk({ ok: true });
   }
   const kv = env.LICENSES;
