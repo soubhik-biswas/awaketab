@@ -1,23 +1,21 @@
-const SCENE_KEYS = [
-  'hero',
-  'firstaction',
-  'welcome',
-  'success',
-  'offline',
-  'conflict',
-  'history',
-  'expired',
-  'notfound',
-  'removed',
-  'error',
-  'maintenance',
-  'noitems',
-  'cooking',
-  'presenting',
-  'dashboard',
-  'nightdesk',
-] as const;
-export type TSceneKey = (typeof SCENE_KEYS)[number];
+export type TSceneKey =
+  | 'hero'
+  | 'firstaction'
+  | 'welcome'
+  | 'success'
+  | 'offline'
+  | 'conflict'
+  | 'history'
+  | 'expired'
+  | 'notfound'
+  | 'removed'
+  | 'error'
+  | 'maintenance'
+  | 'noitems'
+  | 'cooking'
+  | 'presenting'
+  | 'dashboard'
+  | 'nightdesk';
 
 type TFill = 'w' | 'w2' | 'p' | 'm' | 't' | 'o' | 'a' | 'a2' | 's' | 'v' | 'k' | 'r' | 'g';
 

@@ -1,4 +1,4 @@
-import { CX, CY, f1, mx, P, TX, type V } from './base.js';
+import { CX, CY, f1, mx, P, TX, type TV } from './base.js';
 
 // A face's drawn word: the locale's string from setFaceText, else the English default.
 export const lx = (key: string, def: string, vars?: Record<string, string | number>): string =>
@@ -29,7 +29,7 @@ export const sectorPath = (r1: number, r2: number, d0: number, d1: number): stri
 
 // A dial label centred on a point of the dial; small sizes rise to the on-screen minimum.
 export const lbl = (
-  v: V,
+  v: TV,
   txt: string,
   rr: number,
   deg: number,

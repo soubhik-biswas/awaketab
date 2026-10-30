@@ -1,12 +1,12 @@
-import { type Draw, esc, mx, type V } from '../base.js';
+import { type TDraw, esc, mx, type TV } from '../base.js';
 import { each, hw, num, nv, wh } from '../kit.js';
 
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
-const kick = (v: V) =>
+const kick = (v: TV) =>
   `font-family: var(--at-font-mono); font-size: max(12px, var(--lmin)); letter-spacing: .16em; text-transform: uppercase; color: ${v.t.ink2}`;
 
 // Time in a sentence. The sentences are English grammar; other locales keep the English words for now.
-const sentence = (v: V): [string, string, string] => {
+const sentence = (v: TV): [string, string, string] => {
   const { h, m, eh, em } = v;
   const endW =
     em === 0
@@ -51,7 +51,7 @@ const sentence = (v: V): [string, string, string] => {
   }
 };
 
-const words: Draw = (v) => {
+const words: TDraw = (v) => {
   const { t, accent } = v;
   const [a, b, c] = sentence(v).map(esc);
   const serif = "font-family: 'IBM Plex Serif', georgia, serif; font-weight: 300;";
@@ -102,7 +102,7 @@ const NUMW: Record<number, string> = {
 };
 
 // The words the grid lights for the time left: "about forty minutes left", "under one minute left".
-function gridWords(st: V['st'], sec: number): string[] {
+function gridWords(st: TV['st'], sec: number): string[] {
   const mm = sec / 60;
   const wl: string[] = [];
   if (st === 'up') return wl;
@@ -126,7 +126,7 @@ function gridWords(st: V['st'], sec: number): string[] {
   return wl;
 }
 
-const wordgrid: Draw = (v) => {
+const wordgrid: TDraw = (v) => {
   const { t, mc1, mc2, mc3 } = v;
   const lit: Record<number, string> = {};
   for (const w of gridWords(v.st, v.st === 'idle' ? v.total : v.r)) {
@@ -237,7 +237,7 @@ const DIG: Record<string, [number, number][]> = {
 };
 const BASE = [14, 95, 192, 273];
 
-const clocks: Draw = (v) => {
+const clocks: TDraw = (v) => {
   const { t, mc1, FILL } = v;
   const cells = each(v.four, (d, di) =>
     each(DIG[String(d)] ?? DIG[0] ?? [], (pr, ci) => {
