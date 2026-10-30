@@ -1,4 +1,4 @@
-import { FACE_IDS, type TFace } from '@awaketab/core';
+import type { TFace } from '@awaketab/core';
 import type { IToolCtx } from '../ctx.js';
 import { strings, t } from '../i18n.js';
 import type { TStatus } from '../ui/view.js';
@@ -37,10 +37,13 @@ export const faceName = (id: TFace): string => {
   return s === k ? (FACES.find((f) => f.id === id)?.name ?? id) : s;
 };
 
+// This site draws only its original 33 faces; the Volt faces live in apps/site.
+const OWN: readonly TFace[] = FACES.map((f) => f.id);
+
 export const stepFace = (id: TFace, by: number): TFace => {
-  const n = FACE_IDS.length;
-  const i = Math.max(0, FACE_IDS.indexOf(id));
-  return FACE_IDS[(((i + by) % n) + n) % n] ?? 'ring';
+  const n = OWN.length;
+  const i = Math.max(0, OWN.indexOf(id));
+  return OWN[(((i + by) % n) + n) % n] ?? 'ring';
 };
 
 const themeOf = (): FaceTheme => {
@@ -127,7 +130,7 @@ export function showFaceGrid(ctx: IToolCtx, pane: HTMLElement): Promise<void> {
     return faceSheet();
   }
   setFaceText(strings('face.t.'));
-  const names = Object.fromEntries(FACE_IDS.map((id) => [id, faceName(id)]));
+  const names = Object.fromEntries(OWN.map((id) => [id, faceName(id)]));
   let theme = themeOf();
   const view = renderFaceGrid(host, {
     selected: ctx.store.get().settings.face,
