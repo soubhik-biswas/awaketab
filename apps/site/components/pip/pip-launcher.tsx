@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
@@ -57,12 +57,14 @@ function FloatingClock({ win, onClose }: { win: Window; onClose: () => void }) {
 
 export interface IPipLauncherProps {
   className?: string;
+  style?: CSSProperties;
   label?: string;
+  hideButton?: boolean;
 }
 
 // "Pop out mini clock": Document Picture-in-Picture where the browser has it, else the /pip popup that mirrors this
 // tab over BroadcastChannel; hidden, not disabled, where neither works.
-export function PipLauncher({ className, label }: IPipLauncherProps) {
+export function PipLauncher({ className, style, label, hideButton = false }: IPipLauncherProps) {
   const t = useTranslations('surfaces.pip');
   const locale = useLocale() as TLocale;
   const mounted = useMounted();
@@ -129,8 +131,9 @@ export function PipLauncher({ className, label }: IPipLauncherProps) {
   if (support === 'none') return null;
   return (
     <>
-      {open ? null : (
+      {open || hideButton ? null : (
         <Button
+          style={style}
           type="button"
           size="lg"
           className={cn(
