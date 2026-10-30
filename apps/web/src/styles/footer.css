@@ -1,3 +1,4 @@
+/* stylelint-disable no-descending-specificity */
 @layer properties, theme, base, components, utilities;
 
 @layer components {

@@ -327,9 +327,9 @@ export function sceneAlt(key: TSceneKey): string {
 }
 
 export interface ISceneOptions {
-  width?: number;
-  decorative?: boolean;
-  className?: string;
+  width?: number | undefined;
+  decorative?: boolean | undefined;
+  className?: string | undefined;
 }
 
 // Inline SVG on a 320 × 240 artboard; every colour is a class that scene.css maps to the theme.

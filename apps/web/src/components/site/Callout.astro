@@ -1,19 +1,21 @@
 ---
 import Lucide from '../icons/Lucide.astro';
 
+type TTone = 'info' | 'warning' | 'lamp';
+
 interface Props {
-  tone?: 'info' | 'warning' | 'lamp';
+  tone?: TTone;
   title: string;
   body?: string | undefined;
   html?: string | undefined;
   id?: string | undefined;
-  as?: 'div' | 'aside';
+  tag?: 'div' | 'aside';
   label?: string | undefined;
   class?: string;
 }
 
-const { tone = 'info', title, body, html, id, as: Tag = 'div', label, class: className } = Astro.props;
-const ICON = { info: 'info', warning: 'triangle-alert', lamp: 'circle-check' } as const;
+const { tone = 'info', title, body, html, id, tag: Tag = 'div', label, class: className } = Astro.props;
+const ICON: Record<TTone, string> = { info: 'info', warning: 'triangle-alert', lamp: 'circle-check' };
 ---
 
 <Tag

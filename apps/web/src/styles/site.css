@@ -1,3 +1,4 @@
+/* stylelint-disable no-descending-specificity */
 @layer properties, theme, base, components, utilities, content;
 
 :root {
@@ -585,7 +586,8 @@
   }
 
   .at-sp-prose code {
-    padding: 0 var(--at-s-1);
+    padding-block: 0;
+    padding-inline: var(--at-s-1);
     border-radius: var(--at-r-xs);
     background: var(--at-surface-2);
     font: var(--at-type-code);
@@ -872,7 +874,8 @@
 
   .at-cl-body code,
   .at-sp-rel code {
-    padding: 0 var(--at-s-1);
+    padding-block: 0;
+    padding-inline: var(--at-s-1);
     border-radius: var(--at-r-xs);
     background: var(--at-surface-2);
     font: var(--at-type-code);
@@ -886,7 +889,8 @@
   }
 
   .at-legal-body code {
-    padding: 0 var(--at-s-1);
+    padding-block: 0;
+    padding-inline: var(--at-s-1);
     border-radius: var(--at-r-xs);
     background: var(--at-surface-2);
     font: var(--at-type-code);
@@ -920,7 +924,8 @@
     align-items: center;
     gap: var(--at-s-4);
     max-inline-size: calc(var(--at-sp-max) - var(--at-s-site-pad) * 2);
-    margin: var(--at-s-4) var(--at-s-site-pad) 0;
+    margin-block: var(--at-s-4) 0;
+    margin-inline: var(--at-s-site-pad);
     padding: var(--at-s-site-callout);
     border: var(--at-border) solid var(--at-line);
     border-radius: var(--at-r-lg);
@@ -1000,7 +1005,8 @@
     }
 
     .at-consent {
-      margin: var(--at-s-3) var(--at-s-3) 0;
+      margin-block: var(--at-s-3) 0;
+      margin-inline: var(--at-s-3);
     }
 
     .at-consent-acts > * {

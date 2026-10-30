@@ -26,7 +26,7 @@ interface Props {
 const { title, description, eyebrow, h1, lead, scene, primary, secondary, canonical } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical} noindex site>
+<BaseLayout title={title} description={description} {...(canonical ? { canonical } : {})} noindex site>
   <main class="at-sp at-sp-system">
     <PageHero eyebrow={eyebrow} h1={h1} lead={lead} scene={scene}>
       <Button slot="actions" variant="primary" size="xl" icon={primary.icon ?? 'play'} href={primary.href}>
