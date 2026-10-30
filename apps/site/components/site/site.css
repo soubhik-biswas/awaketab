@@ -19,6 +19,8 @@
   --site-cta-button-ink: #0b0f1a;
   --site-cta-button-glow: rgba(159, 123, 255, 0.4);
   --site-consent-shadow: rgba(0, 0, 0, 0.3);
+  --site-callout-mix: 8%;
+  --site-callout-shadow: rgba(11, 16, 32, 0.06);
 }
 
 .dark,
@@ -31,6 +33,11 @@
   --site-pro-glow: rgba(159, 123, 255, 0.18);
   --site-art: #0a0f1e;
   --site-well: #070b16;
+  --site-callout-mix: 13%;
+  --site-callout-shadow: rgba(0, 0, 0, 0.35);
+}
+
+.oled {
 }
 
 html:lang(ja) body {
@@ -79,8 +86,11 @@ html[data-consent] .site-consent {
 
 .site-prose h3 {
   margin: 0;
-  font-size: 22px;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-stretch: 112%;
+  font-weight: 800;
+  line-height: 1.15;
   letter-spacing: -0.02em;
 }
 
@@ -111,7 +121,7 @@ html[data-consent] .site-consent {
 
 @media (max-width: 699px) {
   .site-prose h3 {
-    font-size: 20px;
+    font-size: 21px;
   }
 
   .site-prose thead {
@@ -170,4 +180,52 @@ html[data-consent] .site-consent {
   background:
     radial-gradient(circle at 15% 20%, var(--site-cta-lamp), transparent 50%),
     radial-gradient(circle at 85% 80%, var(--site-cta-act), transparent 50%), var(--site-cta);
+}
+
+.site-callout {
+  --site-callout-tone: var(--info);
+  background:
+    radial-gradient(
+      120% 140% at 0% 0%,
+      color-mix(in srgb, var(--site-callout-tone) var(--site-callout-mix), transparent),
+      transparent 55%
+    ),
+    var(--card);
+  box-shadow: 0 24px 60px var(--site-callout-shadow);
+}
+
+.site-callout-warning {
+  --site-callout-tone: var(--warning);
+}
+
+.site-callout-lamp {
+  --site-callout-tone: var(--lamp);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-arrive {
+    opacity: 0;
+    animation: site-arrive-fallback 0s 1.5s forwards;
+  }
+}
+
+@keyframes site-arrive-fallback {
+  to {
+    opacity: 1;
+  }
+}
+
+.site-float {
+  animation: site-float 5s ease-in-out infinite;
+}
+
+@keyframes site-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }

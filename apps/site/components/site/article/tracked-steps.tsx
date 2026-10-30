@@ -4,6 +4,7 @@ import { Check, CircleCheck, Link as LinkIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { display, h3 } from '../styles';
 
 export interface ITrackStep {
   title: string;
@@ -43,6 +44,7 @@ export function TrackedSteps({
             <span
               aria-hidden="true"
               className={cn(
+                display,
                 'inline-flex size-10 flex-none items-center justify-center rounded-full text-[20px] font-extrabold',
                 done[i] ? 'bg-lamp text-lamp-foreground' : 'bg-secondary text-foreground',
               )}
@@ -51,7 +53,7 @@ export function TrackedSteps({
             </span>
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <div className="flex items-start justify-between gap-3">
-                <h3 className="m-0 text-[20px] leading-[1.2] font-bold tracking-[-0.02em] min-[700px]:text-[22px]">
+                <h3 className={cn(h3, 'm-0')}>
                   <span className="text-muted-foreground-strong">{fill(labels.step, i)} · </span>
                   <span dangerouslySetInnerHTML={{ __html: step.title }} />
                 </h3>

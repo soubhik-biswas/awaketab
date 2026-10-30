@@ -3471,6 +3471,36 @@
       "allTopics": "All topics"
     },
     "home": {
+      "faces": {
+        "title": "49 faces. Pick the one you can read from across the room.",
+        "sub": "All free. They move only while the screen is awake, and stand still for reduced motion.",
+        "items": {
+          "aurora": {
+            "name": "Aurora",
+            "body": "Northern lights drift behind the time while the screen is awake."
+          },
+          "liquid": {
+            "name": "Liquid",
+            "body": "A glass sphere of light that drains as the session runs."
+          },
+          "eclipse": {
+            "name": "Eclipse",
+            "body": "The moon slides over the sun; totality when time’s up."
+          },
+          "skeleton": {
+            "name": "Skeleton",
+            "body": "An open movement — gears turn, the balance wheel swings."
+          },
+          "neon": {
+            "name": "Neon",
+            "body": "A neon sign on a dark wall, humming while awake."
+          },
+          "halo": {
+            "name": "Halo",
+            "body": "A glowing gradient ring that closes toward 12."
+          }
+        }
+      },
       "uses": {
         "title": "Made for the moments a dark screen gets in the way",
         "cooking": {
@@ -3532,16 +3562,10 @@
         }
       },
       "cta": "Keep awake now",
-      "hero": {
-        "eyebrow": "Free · no install · no account",
-        "h1": "Keep your screen awake. Right in the browser.",
-        "lead": "AwakeTab asks your browser to keep the display on for as long as you choose — then lets it sleep again. Nothing to install, nothing to sign up for.",
-        "how": "How it works",
-        "scene": "A browser window with the AwakeTab ring and its lit lamp"
-      },
-      "tool": {
-        "title": "Keep this screen awake",
-        "body": "Pick a length and press start. The pill says Screen awake only once the browser confirms the lock."
+      "og": {
+        "kicker": "Free · in your browser",
+        "title": "Keep the screen on. Know when it is.",
+        "sub": "No account, nothing to install."
       }
     },
     "changelog": {
@@ -3549,6 +3573,16 @@
       "eyebrow": "CHANGELOG",
       "h1": "What’s new",
       "lead": "Every release, newest first. Version numbers and dates are placeholders until release."
+    },
+    "pro": {
+      "eyebrow": "AwakeTab Pro",
+      "h1": "Keeping awake stays free.",
+      "lead": "Pro is for people who run screens on more than one device or want the extras. Prices are placeholders until they are set.",
+      "og": {
+        "kicker": "AwakeTab Pro",
+        "title": "Keeping awake is free. Pro is for comfort.",
+        "sub": "Looks, history, notes."
+      }
     }
   }
 }

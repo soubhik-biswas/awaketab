@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useIsClient, useMediaQuery } from 'usehooks-ts';
 import { Face, isFaceId, type TFaceState, type TFaceTheme } from '@/components/face';
 
 // A face in the page's own theme. The server and the first paint keep a box of the face's size, so nothing shifts
@@ -13,6 +13,7 @@ export function SiteFace({
   remain,
   state = 'idle',
   bare = false,
+  framed = false,
   indef = false,
   phoneSize,
   className,
@@ -23,21 +24,14 @@ export function SiteFace({
   remain?: number;
   state?: TFaceState;
   bare?: boolean;
+  framed?: boolean;
   indef?: boolean;
   phoneSize?: number;
   className?: string;
 }) {
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [wide, setWide] = useState(true);
-  useEffect(() => {
-    setMounted(true);
-    const mq = window.matchMedia('(min-width: 700px)');
-    const update = () => setWide(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
+  const mounted = useIsClient();
+  const wide = useMediaQuery('(min-width: 700px)', { defaultValue: true, initializeWithValue: false });
   const px = !wide && phoneSize ? phoneSize : size;
   const theme: TFaceTheme = resolvedTheme === 'dark' || resolvedTheme === 'oled' ? resolvedTheme : 'light';
   if (!mounted)
@@ -64,6 +58,7 @@ export function SiteFace({
       total={total}
       remain={remain ?? total}
       bare={bare}
+      framed={framed}
       indef={indef}
       {...(className ? { className } : {})}
     />

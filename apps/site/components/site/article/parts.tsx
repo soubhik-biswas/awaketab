@@ -72,7 +72,10 @@ function Picks({ picks }: { picks: NonNullable<TArticle['picks']>[string] }) {
         <li key={i} className="flex gap-4 rounded-[22px] border border-border bg-card p-[22px]">
           <span
             aria-hidden="true"
-            className="inline-flex size-10 flex-none items-center justify-center rounded-full bg-lamp text-[20px] font-extrabold text-lamp-foreground"
+            className={cn(
+              s.display,
+              'inline-flex size-10 flex-none items-center justify-center rounded-full bg-lamp text-[20px] font-extrabold text-lamp-foreground',
+            )}
           >
             {i + 1}
           </span>
@@ -180,7 +183,10 @@ function ArticleSteps({ a, t }: { a: TArticle; t: TT }) {
             <div className="flex flex-col gap-2">
               <span
                 aria-hidden="true"
-                className="inline-flex size-10 items-center justify-center rounded-full bg-lamp text-[20px] font-extrabold text-lamp-foreground"
+                className={cn(
+                  s.display,
+                  'inline-flex size-10 items-center justify-center rounded-full bg-lamp text-[20px] font-extrabold text-lamp-foreground',
+                )}
               >
                 {i + 1}
               </span>
@@ -329,7 +335,7 @@ function SectionBody({ section, a, t, tp }: { section: ISection; a: TArticle; t:
         part.kind === 'html' ? (
           <div
             key={i}
-            className="site-prose flex max-w-[760px] flex-col gap-4 text-[17px] leading-[1.65]"
+            className="site-prose flex max-w-[760px] flex-col gap-4 text-[17px] leading-[1.7] min-[700px]:text-[18px]"
             dangerouslySetInnerHTML={{ __html: part.html }}
           />
         ) : (
