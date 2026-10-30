@@ -1,4 +1,5 @@
 export { Face } from './face';
+export { FaceGrid, type IFaceGridProps } from './face-grid';
 export {
   clock,
   FACE_DEFAULTS,
