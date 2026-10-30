@@ -144,7 +144,7 @@ describe('i18n reuse (no duplicated English strings)', () => {
   it('takes the --at-* tokens from the web stylesheet without the Tailwind layer', () => {
     const css = tokensCss();
     expect(css.startsWith(':root,\n[data-theme="light"]')).toBe(true);
-    expect(css).toContain('--at-accent: #087b87;');
+    expect(css).toContain('--at-accent: #117a3b;');
     // Clear Night (DESIGN.md §2.1, §12): the extension gets the new ground, raised and spacing tokens too.
     expect(css).toContain('--at-ground: #0a0e16;');
     expect(css).toContain('--at-raised: #26324b;');
@@ -185,12 +185,12 @@ describe('icons', () => {
 });
 
 describe('inline icons', () => {
-  it('inlines Phosphor duotone icons with the lamp fill layer and keeps their viewBox', () => {
-    const html = inlineIcons('<svg data-icon="gear-six" width="20" height="20" class="at-duo-bad" data-x></svg>');
-    expect(html).toMatch(/^<svg class="at-duo at-duo-bad" width="20" height="20" viewBox="0 0 256 256"/u);
+  it('inlines Lucide icons with the size-matched stroke and keeps their viewBox', () => {
+    const html = inlineIcons('<svg data-icon="settings" width="20" height="20" class="at-tone-bad" data-x></svg>');
+    expect(html).toMatch(/^<svg class="at-icon at-tone-bad" width="20" height="20" viewBox="0 0 24 24" fill="none"/u);
+    expect(html).toContain('stroke="currentColor" stroke-width="1.75"');
     expect(html).toContain(' data-x aria-hidden="true" focusable="false">');
-    expect(html).toMatch(/<path d="[^"]+" class="at-duo-f"\/>/u);
-    expect(html).not.toContain('opacity=');
+    expect(html).not.toContain('<!--');
   });
 
   it('inlines full-colour brand logos unaltered', () => {
