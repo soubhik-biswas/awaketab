@@ -17,7 +17,7 @@ import { pro } from '@/lib/tool/pro';
 import { useTool } from '@/components/tool/context';
 import { BTN_DANGER_OUT, BTN_FULL, H3, HELP, PRO_CHIP, ROW_BTN, TILE } from '@/components/tool/kit';
 
-const PLAN = { monthly: 'Monthly', yearly: 'Yearly', lifetime: 'Lifetime' } as const;
+const PLAN = { monthly: 'Monthly', yearly: 'Yearly', lifetime: 'Pay once' } as const;
 
 async function exportData() {
   const blob = await pro.exportData();
@@ -59,7 +59,9 @@ export default function AccountView() {
           {acct ? <span className={PRO_CHIP}>{PLAN[acct.plan]}</span> : null}
         </span>
         <span className="text-[14px] leading-[1.5] text-muted-foreground-strong">
-          Renews on {acct?.renewsOn ?? '[DATE]'}. Cancel any time — you keep Pro until the end of the period.
+          {acct?.plan === 'lifetime'
+            ? 'Paid once. Pro never renews and stays on.'
+            : `Renews on ${acct?.renewsOn || '[DATE]'}. Cancel any time — you keep Pro until the end of the period.`}
         </span>
         <Button asChild variant="outline" className={BTN_FULL}>
           <Link href={pro.billingUrl()}>
@@ -95,7 +97,7 @@ export default function AccountView() {
         Delete account…
       </Button>
       <span className={HELP}>
-        Billing is handled by [PAYMENT PROVIDER]. Without an account, AwakeTab still works — settings simply stay on
+        Billing is handled by Polar. Without an account, AwakeTab still works — settings simply stay on
         this device.
       </span>
     </>
