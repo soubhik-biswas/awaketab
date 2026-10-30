@@ -1,6 +1,7 @@
 // The Astro site's header rules, carried to Next. Next's App Router writes its own inline boot scripts without a
 // nonce, so script-src allows inline scripts; everything else matches the old policy.
-const SCRIPT = "script-src 'self' 'unsafe-inline'";
+// React's development build needs eval to rebuild server call stacks; production never gets it.
+const SCRIPT = `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''}`;
 const ADS_SCRIPT = `${SCRIPT} https://pagead2.googlesyndication.com https://fundingchoicesmessages.google.com https://*.googletagservices.com`;
 
 const BASE_CSP = [
