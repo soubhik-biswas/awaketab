@@ -47,7 +47,7 @@ export function applyStudio(studio: IStudio, pro: boolean, html: HTMLElement = d
   return used;
 }
 
-function saveStudio(studio: IStudio): void {
+export function saveStudio(studio: IStudio): void {
   try {
     localStorage.setItem(STUDIO_KEY, JSON.stringify(studio));
   } catch {
