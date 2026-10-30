@@ -25,7 +25,10 @@ export function SwitchRow({ label, description, className, disabled, ...props }:
       <span className="flex min-w-0 flex-col gap-px">
         <label
           htmlFor={id}
-          className={cn('cursor-pointer text-[14px] font-semibold', disabled ? 'text-muted-foreground' : 'text-foreground')}
+          className={cn(
+            'cursor-pointer text-[14px] font-semibold',
+            disabled ? 'text-muted-foreground' : 'text-foreground',
+          )}
         >
           {label}
         </label>

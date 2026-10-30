@@ -83,9 +83,11 @@ function commands({ m, a, presets }: IToolContext): ICmd[] {
   add(s.session, fill(c.cLen, { len: fill(c.minutes, { n: 30 }) }), Timer, [], () => a.setLength(1800));
   add(s.session, fill(c.cLen, { len: s.hours2 }), Timer, [], () => a.setLength(7200));
   add(s.session, fill(c.cLen, { len: c.cLenOpen }), InfinityGlyph, [], () => a.setLength(0));
-  presets.slice(0, 9).forEach((p, i) =>
-    add(s.presets, fill(c.cPreset, { name: p.label }), ListChecks, [String(i + 1)], () => a.applyPreset(p, true)),
-  );
+  presets
+    .slice(0, 9)
+    .forEach((p, i) =>
+      add(s.presets, fill(c.cPreset, { name: p.label }), ListChecks, [String(i + 1)], () => a.applyPreset(p, true)),
+    );
   for (const f of PALETTE_FACES) add(s.faces, fill(c.cFace, { name: faceName(f) }), LayoutGrid, [], () => a.setFace(f));
   add(c.gGo, c.cOpenPresets, ListChecks, [], () => a.go('presets'));
   add(c.gGo, c.cOpenHistory, History, [], () => a.go('history'));
