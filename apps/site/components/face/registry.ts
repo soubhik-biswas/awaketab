@@ -158,12 +158,39 @@ export type TFaceDrawing = ComponentType<IDrawProps>;
 type TLoader = () => Promise<{ default: TFaceDrawing }>;
 
 // Ring ships with the page; every other face is its own chunk, loaded the first time it is drawn.
-export const FACE_LOADERS: Readonly<Partial<Record<Exclude<TFaceId, 'ring'>, TLoader>>> = {
+export const FACE_LOADERS: Readonly<Record<Exclude<TFaceId, 'ring'>, TLoader>> = {
   bold: () => import('./faces/bold'),
+  horizon: () => import('./faces/horizon'),
+  tide: () => import('./faces/tide'),
   flip: () => import('./faces/flip'),
+  rolling: () => import('./faces/rolling'),
   analog: () => import('./faces/analog'),
   luxe: () => import('./faces/luxe'),
+  rings: () => import('./faces/rings'),
+  words: () => import('./faces/words'),
+  nixie: () => import('./faces/nixie'),
+  lcd: () => import('./faces/lcd'),
+  led: () => import('./faces/led'),
+  dive: () => import('./faces/dive'),
+  chrono: () => import('./faces/chrono'),
+  gauge: () => import('./faces/gauge'),
+  type: () => import('./faces/type'),
+  bars: () => import('./faces/bars'),
+  timeline: () => import('./faces/timeline'),
+  pilot: () => import('./faces/pilot'),
+  dual: () => import('./faces/dual'),
+  radar: () => import('./faces/radar'),
+  dots: () => import('./faces/dots'),
+  hourglass: () => import('./faces/hourglass'),
+  battery: () => import('./faces/battery'),
+  stack: () => import('./faces/stack'),
+  board: () => import('./faces/board'),
+  orbit: () => import('./faces/orbit'),
   disc: () => import('./faces/disc'),
+  clocks: () => import('./faces/clocks'),
+  wordgrid: () => import('./faces/wordgrid'),
+  tape: () => import('./faces/tape'),
+  moon: () => import('./faces/moon'),
 };
 
 const loaded = new Map<TFaceId, TFaceDrawing>([['ring', Ring]]);
@@ -178,7 +205,6 @@ export function loadFace(id: TFaceId): Promise<TFaceDrawing> {
   let p = pending.get(id);
   if (!p) {
     const load = FACE_LOADERS[id as Exclude<TFaceId, 'ring'>];
-    if (!load) return Promise.reject(new Error(`No drawing for the ${id} face yet`));
     p = load().then(
       (mod) => {
         loaded.set(id, mod.default);
