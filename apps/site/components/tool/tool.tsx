@@ -5,13 +5,6 @@ import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
 import { X } from 'lucide-react';
 import { createStorage, type TFace } from '@awaketab/core';
-import {
-  showCopiedToast,
-  showEndedToast,
-  showExtendedToast,
-  showLowTimeToast,
-  showToast,
-} from '@/components/product/toasts';
 import { Button } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
 import { cn } from '@/lib/utils';
@@ -35,8 +28,11 @@ import { ToolContext, type IToolActions, type IToolContext } from '@/components/
 import { ToolHeader } from '@/components/tool/header';
 import { ToolHost } from '@/components/tool/host';
 import { KBD } from '@/components/tool/kit';
-import { BottomNav, SideNav } from '@/components/tool/nav';
+import { ControlBar } from '@/components/tool/bar';
+import { useLampLight } from '@/components/tool/motion';
 import { Stage } from '@/components/tool/stage';
+import { toolToast, ToolToaster } from '@/components/tool/toasts';
+import './tool.css';
 
 const ToolPalette = dynamic(() => import('@/components/tool/palette').then((mod) => mod.ToolPalette), { ssr: false });
 const QaBridge = dynamic(() => import('@/components/tool/qa-bridge').then((mod) => mod.QaBridge), { ssr: false });
@@ -52,9 +48,10 @@ export interface IToolProps {
 
 const WELCOME_TIP = 'welcome';
 
+// The handoff's layout tiers: desktop from 1300, tablet landscape from 1100, tablet portrait from 700.
 function deviceFor(w: number): TDevice {
-  if (w >= 1280) return 'desktop';
-  if (w >= 1024) return 'tabletL';
+  if (w >= 1300) return 'desktop';
+  if (w >= 1100) return 'tabletL';
   if (w >= 700) return 'tabletP';
   return 'phone';
 }
@@ -255,7 +252,7 @@ function ToolApp({
           face: cur.settings.face,
           chime: cur.settings.chime !== 'off',
         });
-        showToast({
+        toolToast.show({
           id: 'preset-saved',
           tone: 'success',
           title: `Saved “${p.label}”`,
@@ -265,7 +262,7 @@ function ToolApp({
       copyLink: () => {
         void navigator.clipboard?.writeText(shareUrlRef.current).catch(() => undefined);
         toolUi.set({ copied: true });
-        showCopiedToast();
+        toolToast.copied();
       },
       clearHistory: () => {
         clearHistory();
@@ -296,7 +293,7 @@ function ToolApp({
     const offs = [
       wake.on('extended', ({ sec, endsAt }) => {
         const l = latest.current.m;
-        showExtendedToast({
+        toolToast.extended({
           until: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt),
           minutes: Math.round(sec / 60),
           onUndo: () => wake.undoExtend(),
@@ -304,7 +301,7 @@ function ToolApp({
       }),
       wake.on('lowtime', ({ endsAt }) => {
         const l = latest.current.m;
-        showLowTimeToast({
+        toolToast.lowTime({
           endsAt: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt),
           onExtend: () => wake.extend(900),
         });
@@ -312,7 +309,7 @@ function ToolApp({
       wake.on('ended', ({ endedAt }) => {
         const l = latest.current;
         playChime(l.settings.chime);
-        showEndedToast({
+        toolToast.ended({
           endedAt: clockTime(endedAt + (toolUi.get().qa.offsetMs ?? 0), l.m.lang, l.m.fmt),
           onStartAgain: () => setLength(l.m.total),
         });
@@ -354,20 +351,15 @@ function ToolApp({
     document.title = title;
   }, [awake, m.indef, m.remain, m.state, settings.secs]);
 
-  // Toasts sit above the tab bar on phone and tablet portrait, and clear of the panel on wider screens.
   const sizes = DEVICE_SIZES[device];
   const focus = ui.view === 'focus';
+
+  // A new build announces itself with this event; the banner offers a reload that keeps the session.
   useEffect(() => {
-    const root = document.documentElement.style;
-    root.setProperty('--toast-offset-bottom', sizes.bnav && !focus ? `${sizes.bnav + 12}px` : '24px');
-    root.setProperty('--toast-offset-bottom-mobile', sizes.bnav && !focus ? `${sizes.bnav + 12}px` : '12px');
-    root.setProperty('--toast-offset-right', sizes.panel && !focus ? `${sizes.panel + 24}px` : '24px');
-    return () => {
-      root.removeProperty('--toast-offset-bottom');
-      root.removeProperty('--toast-offset-bottom-mobile');
-      root.removeProperty('--toast-offset-right');
-    };
-  }, [sizes.bnav, sizes.panel, focus]);
+    const onUpdate = () => toolUi.set({ update: true });
+    window.addEventListener('awaketab:update', onUpdate);
+    return () => window.removeEventListener('awaketab:update', onUpdate);
+  }, []);
 
   useEffect(() => {
     const onFs = () => {
@@ -397,10 +389,8 @@ function ToolApp({
 
   useToolKeys(ctx, stageRef);
 
-  const sideW = focus ? 0 : sizes.side;
-  const panelW = focus ? 0 : sizes.panel;
   const topH = focus ? 0 : sizes.top;
-  const bnavH = focus ? 0 : sizes.bnav;
+  const barH = focus ? 0 : sizes.bar;
   const faceSize = focus ? Math.round(Math.min(frame.w, frame.h) * (device === 'phone' ? 0.86 : 0.72)) : sizes.face;
   const glowAmt = Math.max(0, Math.min(100, pro.isPro ? pro.studio.glow : 70)) / 70;
   const announce = snap.announce ? announceText(snap.announce, lang, m.fmt) : '';
@@ -408,48 +398,23 @@ function ToolApp({
 
   return (
     <ToolContext.Provider value={ctx}>
-      {!focus || night ? (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0"
-          style={{ left: sideW, right: panelW, opacity: glowAmt }}
-        >
-          <div
-            className={cn(
-              'absolute h-[640px] w-[760px] rounded-full',
-              awake
-                ? 'bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--lamp)_10%,transparent),transparent)] dark:bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--lamp)_22%,transparent),transparent)]'
-                : 'bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--info)_6%,transparent),transparent)] dark:bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--info)_12%,transparent),transparent)]',
-            )}
-            style={{ left: 'calc(50% - 520px)', top: Math.round(frame.h * 0.06) }}
-          />
-          <div
-            className={cn(
-              'absolute h-[600px] w-[680px] rounded-full',
-              awake
-                ? 'bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--primary)_7%,transparent),transparent)] dark:bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--primary)_16%,transparent),transparent)]'
-                : 'bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--ended)_4%,transparent),transparent)] dark:bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--ended)_8%,transparent),transparent)]',
-            )}
-            style={{ left: 'calc(50% - 120px)', top: Math.round(frame.h * 0.28) }}
-          />
-        </div>
-      ) : null}
+      {!focus || night ? <Glow awake={awake} amount={glowAmt} height={frame.h} /> : null}
       {!focus ? <ToolHeader /> : null}
-      {!focus && sizes.side > 0 ? <SideNav /> : null}
-      <Stage ref={stageRef} faceSize={faceSize} left={sideW} right={panelW} top={topH} bottom={bnavH} />
-      <ToolHost panelTop={sizes.top} panelWidth={sizes.panel} />
-      {!focus && sizes.bnav > 0 ? <BottomNav /> : null}
+      <Stage ref={stageRef} faceSize={faceSize} top={topH} bottom={barH} />
+      {!focus ? <ControlBar /> : null}
+      <ToolHost />
       {focus ? (
         <Button
           type="button"
           variant="outline"
           onClick={close}
-          className="absolute top-4 right-4 z-[7] h-11 gap-2 rounded-[10px] border-border bg-card/85 px-4 text-[14px] font-semibold dark:bg-secondary/80 [&_svg]:size-[18px]"
+          className="absolute top-4 right-4 z-[7] h-11 gap-2 rounded-[10px] border-border bg-(--tool-exit) px-4 text-[14px] font-semibold text-foreground [&_svg]:size-[18px]"
         >
           <X strokeWidth={2} aria-hidden="true" />
           Exit fullscreen <Kbd className={KBD}>Esc</Kbd>
         </Button>
       ) : null}
+      <ToolToaster bottom={focus ? 24 : sizes.bar + 12} phoneBottom={focus ? 24 : sizes.bar + 12} />
       {ui.view === 'palette' ? <ToolPalette /> : null}
       <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
         {assertive ? '' : announce}
@@ -459,5 +424,35 @@ function ToolApp({
       </span>
       {qa ? <QaBridge /> : null}
     </ToolContext.Provider>
+  );
+}
+
+// The room glow behind the clock: volt top left, violet lower right; it brightens when the lamp lights.
+function Glow({ awake, amount, height }: { awake: boolean; amount: number; height: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useLampLight(ref, awake);
+  return (
+    <div ref={ref} aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0" style={{ opacity: amount }}>
+        <div
+          className={cn(
+            'absolute h-[640px] w-[760px] rounded-full',
+            awake
+              ? 'bg-[radial-gradient(closest-side,var(--tool-glow-a-awake),transparent)]'
+              : 'bg-[radial-gradient(closest-side,var(--tool-glow-a),transparent)]',
+          )}
+          style={{ left: 'calc(50% - 520px)', top: Math.round(height * 0.06) }}
+        />
+        <div
+          className={cn(
+            'absolute h-[600px] w-[680px] rounded-full',
+            awake
+              ? 'bg-[radial-gradient(closest-side,var(--tool-glow-b-awake),transparent)]'
+              : 'bg-[radial-gradient(closest-side,var(--tool-glow-b),transparent)]',
+          )}
+          style={{ left: 'calc(50% - 120px)', top: Math.round(height * 0.28) }}
+        />
+      </div>
+    </div>
   );
 }
