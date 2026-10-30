@@ -7,8 +7,43 @@ export type TEndReason = 'completed' | 'user' | 'lost_timeout' | 'denied' | 'bat
 export type TPresetId = 'p15' | 'p30' | 'p45' | 'p60' | 'p120' | 'p240' | 'pinf' | 'custom' | 'until';
 export type TAmbientMode = 'standard' | 'clock' | 'focus' | 'minimal' | 'night' | 'message' | 'cook' | 'breathe';
 export type TTheme = 'auto' | 'light' | 'dark' | 'oled';
-export type TFace =
-  'ring' | 'bold' | 'horizon' | 'tide' | 'flip' | 'rolling' | 'analog' | 'rings' | 'word' | 'nixie' | 'lcd' | 'matrix';
+// The 33 Solar Green clock faces, in the order the faces sheet, the C key and a swipe step through them.
+export const FACE_IDS = [
+  'ring',
+  'bold',
+  'horizon',
+  'tide',
+  'flip',
+  'rolling',
+  'analog',
+  'luxe',
+  'rings',
+  'words',
+  'nixie',
+  'lcd',
+  'led',
+  'dive',
+  'chrono',
+  'gauge',
+  'type',
+  'bars',
+  'timeline',
+  'pilot',
+  'dual',
+  'radar',
+  'dots',
+  'hourglass',
+  'battery',
+  'stack',
+  'board',
+  'orbit',
+  'disc',
+  'clocks',
+  'wordgrid',
+  'tape',
+  'moon',
+] as const;
+export type TFace = (typeof FACE_IDS)[number];
 export type TPalette =
   'clear-night' | 'paper' | 'nord' | 'solarized' | 'midnight' | 'forest' | 'sunset' | 'mono' | 'contrast';
 export type TPattern = 'none' | 'grain' | 'dots' | 'grid' | 'topo' | 'waves' | 'aurora' | 'stars' | 'drift';
@@ -81,7 +116,6 @@ export interface ISettings {
   keyboardShortcuts: boolean;
   keyboardHints: boolean;
   reduceMotion: 'system' | 'on' | 'off';
-  faceStyles: Partial<Record<TFace, string>>;
   palette: TPalette;
   pattern: TPattern;
   vibrate: boolean;
@@ -174,7 +208,6 @@ export const DEFAULT_SETTINGS: ISettings = {
   keyboardShortcuts: true,
   keyboardHints: true,
   reduceMotion: 'system',
-  faceStyles: {},
   palette: 'clear-night',
   pattern: 'none',
   vibrate: true,
