@@ -86,6 +86,7 @@
   --at-s-ext-6: 6px;
   --at-s-ext-10: 10px;
   --at-s-ext-14: 14px;
+  --at-s-ext-22: 22px;
   --at-ext-btn-h: 48px;
   --at-ext-pill-h: 28px;
   --at-ext-pill-dot: 8px;
@@ -417,6 +418,10 @@ svg {
 
 .at-btn-full {
   inline-size: 100%;
+}
+
+.at-btn-wide {
+  padding-inline: var(--at-s-ext-22);
 }
 
 .at-link {
