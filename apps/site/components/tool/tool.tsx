@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
 import { X } from 'lucide-react';
 import { createStorage, type TFace } from '@awaketab/core';
+import { ToolSurfaces } from '@/components/pip/tool-surfaces';
 import { Button } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
 import { cn } from '@/lib/utils';
@@ -407,6 +408,7 @@ function ToolApp({
       <Stage ref={stageRef} faceSize={faceSize} top={topH} bottom={barH} />
       {!focus ? <ControlBar /> : null}
       <ToolHost />
+      <ToolSurfaces bottom={barH} hidden={focus} />
       {focus ? (
         <Button
           type="button"
