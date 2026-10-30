@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   AlarmClock,
   Contrast,
@@ -13,6 +14,7 @@ import {
   Moon,
   Palette,
   Pause,
+  PictureInPicture2,
   Play,
   Plus,
   Settings,
@@ -32,7 +34,9 @@ import {
   type ICommandGroup,
   type ICommandPaletteLabels,
 } from '@/components/product/command-palette';
+import { PIP_EVENT } from '@/components/pip/pip-launcher';
 import { fill } from '@/lib/tool/chrome';
+import { pipSupport } from '@/lib/surfaces/pip';
 import { returnFocus } from '@/lib/tool/focus';
 import { toolUi } from '@/lib/tool/ui';
 import { useTool, type IToolContext } from '@/components/tool/context';
@@ -65,7 +69,7 @@ const PALETTE_FACES: TFace[] = [
   'moon',
 ];
 
-function commands({ m, a, presets }: IToolContext): ICmd[] {
+function commands({ m, a, presets }: IToolContext, pipLabel: string): ICmd[] {
   const { s, c } = m;
   const list: ICmd[] = [];
   const add = (group: string, label: string, icon: LucideIcon, keys: string[], run: () => void, kind = '') =>
@@ -98,6 +102,9 @@ function commands({ m, a, presets }: IToolContext): ICmd[] {
   add(c.gGo, c.ambient, Volume2, [], () => a.go('sound'));
   add(c.gGo, c.account, User, [], () => a.go('account'));
   add(c.gLook, c.fullscreen, Maximize, ['F'], () => a.go('focus'), 'full');
+  // Searchable only, like U: no tool board draws a mini clock button.
+  if ((st === 'running' || st === 'fallback') && pipSupport() !== 'none')
+    add(c.gLook, pipLabel, PictureInPicture2, [], () => window.dispatchEvent(new Event(PIP_EVENT)), 'extra');
   add(c.gLook, c.cToggleTheme, Contrast, ['⇧', 'D'], a.cycleTheme);
   add(c.gLook, fill(c.themeIs, { name: c.light }), Sun, [], () => a.setTheme('light'));
   add(c.gLook, fill(c.themeIs, { name: c.dark }), Moon, [], () => a.setTheme('dark'));
@@ -119,7 +126,9 @@ export function ToolPalette() {
   const ctx = useTool();
   const { ui, m, a } = ctx;
   const c = m.c;
-  const all = useMemo(() => commands(ctx), [ctx]);
+  const tp = useTranslations('surfaces.pip');
+  const pipLabel = tp('open');
+  const all = useMemo(() => commands(ctx, pipLabel), [ctx, pipLabel]);
   const groups = useMemo(() => grouped(all), [all]);
   const idle = useMemo(
     () =>

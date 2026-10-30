@@ -444,7 +444,7 @@ export const Stage = forwardRef<HTMLElement, { faceSize: number; top: number; bo
         <FocusControls />
       ) : (
         // The drawn stage keeps its empty control row, whose gap is part of how the stack centres.
-        <div aria-hidden="true" className="h-0 shrink-0" />
+        <div aria-hidden="true" className={cn('h-0 shrink-0', phone ? 'mt-auto w-full' : 'w-auto')} />
       )}
     </main>
   );

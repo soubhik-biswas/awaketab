@@ -414,7 +414,7 @@ function ToolApp({
       <Stage ref={stageRef} faceSize={faceSize} top={topH} bottom={barH} />
       {!focus ? <ControlBar /> : null}
       <ToolHost />
-      <ToolSurfaces bottom={barH} hidden={focus} />
+      <ToolSurfaces />
       {focus ? (
         <Button
           type="button"
