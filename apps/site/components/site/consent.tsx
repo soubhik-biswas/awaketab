@@ -59,7 +59,7 @@ export function Consent({
   return (
     <section
       aria-labelledby="site-consent-h"
-      className="site-consent relative z-[5] mx-3 mt-3 box-border flex flex-col items-stretch gap-4 rounded-[20px] border border-border bg-card px-5 py-[18px] shadow-[0_24px_60px_var(--site-consent-shadow)] min-[700px]:mx-12 min-[700px]:mt-4 min-[700px]:flex-row min-[700px]:items-center xl:mx-24"
+      className="site-consent relative z-[5] mx-3 mt-3 box-border flex flex-col items-stretch gap-4 rounded-[20px] border border-border bg-card px-5 py-[18px] shadow-[0_24px_60px_var(--site-consent-shadow)] min-[700px]:mx-10 min-[700px]:mt-4 min-[700px]:flex-row min-[700px]:items-center min-[1100px]:mx-16 min-[1300px]:mx-24"
     >
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <strong id="site-consent-h" className="text-[16px]">

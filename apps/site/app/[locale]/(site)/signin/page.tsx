@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-// Sign-in inside the site's header and footer; the account flow owns the form and its states.
+// The sign-in page: the account flow draws its own hero for each state, the form card and the note that only Pro needs it.
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   await englishOnly(params);
   return <SignIn />;

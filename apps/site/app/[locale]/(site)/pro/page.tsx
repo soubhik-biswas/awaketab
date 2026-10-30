@@ -7,21 +7,16 @@ import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.pro' });
+  const ts = await getTranslations({ locale: 'en', namespace: 'site.pro' });
   return pageMetadata({
     title: t('title'),
     description: t('description'),
     path: ROUTES.pro,
-    og: {
-      kicker: 'AwakeTab Pro',
-      title: 'Keeping awake is free. Pro is for comfort.',
-      sub: 'Looks, history, notes.',
-      scene: 'success',
-      tone: 'dark',
-    },
+    og: { kicker: ts('og.kicker'), title: ts('og.title'), sub: ts('og.sub'), scene: 'success', tone: 'dark' },
   });
 }
 
-// The Pro page inside the site's header and footer; the Pro flow owns the body.
+// The Pro page: the Pro flow draws the hero, plans and billing questions.
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   await englishOnly(params);
   const t = await getTranslations({ locale: 'en', namespace: 'page.pro' });
