@@ -39,6 +39,14 @@ export function generateStaticParams() {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   applicationName: 'AwakeTab',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [{ url: '/icons/apple-touch-icon.png', sizes: '180x180' }],
+  },
 };
 
 export const viewport: Viewport = {

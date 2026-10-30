@@ -9,7 +9,11 @@ import '../globals.css';
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist', weight: ['300', '400', '500', '600', '700', '800'] });
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono', weight: ['400', '500', '700'] });
 
-export const metadata: Metadata = { title: 'AwakeTab · dev', robots: { index: false, follow: false } };
+export const metadata: Metadata = {
+  title: 'AwakeTab · dev',
+  robots: { index: false, follow: false },
+  icons: { icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }] },
+};
 
 // The dev galleries sit outside the locale routes, so they keep their own minimal root layout.
 export default function DevLayout({ children }: { children: ReactNode }) {
