@@ -95,7 +95,7 @@ export function ManageDevices({ activateHref, plansHref }: { activateHref: strin
     if (next.length === 0) setState('empty');
     requestAnimationFrame(() => {
       const buttons = list.current?.querySelectorAll<HTMLElement>('[data-remove]');
-      buttons?.[Math.min(index, (buttons?.length ?? 1) - 1)]?.focus();
+      buttons?.[Math.min(index, buttons.length - 1)]?.focus();
     });
   };
 

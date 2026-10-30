@@ -12,8 +12,8 @@ export const dynamic = 'force-dynamic';
 // Sign-in requests keep the old endpoint's limits on top of Better Auth's own: five a window per address of the
 // caller, and one email per inbox per minute, so the form cannot be used to flood someone's mail.
 async function guardMagicLink(request: Request, env: IEnv): Promise<Response | string | null> {
-  if (!(await rateLimit(env, 'auth', await clientIp(request), 5))) return rateLimited();
-  let email: string | null = null;
+  if (!(await rateLimit(env, 'auth', clientIp(request), 5))) return rateLimited();
+  let email: string | null;
   try {
     email = normaliseEmail(((await request.clone().json()) as { email?: unknown } | null)?.email);
   } catch {
@@ -44,7 +44,7 @@ async function handle(request: Request, env: IEnv): Promise<Response> {
     return response;
   }
   if (request.method === 'GET' && pathname.endsWith('/magic-link/verify')) {
-    if (!(await rateLimit(env, 'auth-verify', await clientIp(request), 10))) return rateLimited();
+    if (!(await rateLimit(env, 'auth-verify', clientIp(request), 10))) return rateLimited();
   }
   return auth.handler(request);
 }

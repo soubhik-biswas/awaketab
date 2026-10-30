@@ -50,7 +50,7 @@ export interface IEnv {
 
 export interface IServerContext {
   env: IEnv;
-  waitUntil(promise: Promise<unknown>): void;
+  waitUntil: (promise: Promise<unknown>) => void;
 }
 
 const ENV_KEYS = [
@@ -83,7 +83,7 @@ interface ICloudflare {
 
 // Bindings come from the Worker; plain values fall back to process.env so `next dev` with a .env file works.
 export async function serverContext(): Promise<IServerContext> {
-  let cf: ICloudflare | null = null;
+  let cf: ICloudflare | null;
   try {
     cf = (await getCloudflareContext({ async: true })) as unknown as ICloudflare;
   } catch {

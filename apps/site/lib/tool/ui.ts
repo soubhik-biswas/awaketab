@@ -59,7 +59,7 @@ export const toolUi = {
     state = { ...state, ...patch };
     for (const cb of subs) cb();
   },
-  subscribe(cb: () => void) {
+  subscribe: (cb: () => void) => {
     subs.add(cb);
     return () => {
       subs.delete(cb);

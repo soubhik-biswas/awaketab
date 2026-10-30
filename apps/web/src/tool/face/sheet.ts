@@ -1,28 +1,28 @@
-import { type FaceId, type FaceTheme, FACES, faceSvg, loadAllFaces } from './index.js';
+import { type TFaceId, type TFaceTheme, FACES, faceSvg, loadAllFaces } from './index.js';
 
-interface FaceGridOptions {
-  selected: FaceId;
-  theme: FaceTheme;
-  onPick(id: FaceId): void;
+interface IFaceGridOptions {
+  selected: TFaceId;
+  theme: TFaceTheme;
+  onPick(id: TFaceId): void;
   // Thumbnail size in px: 92 desktop, 84 tablet landscape, 96 phone (the faces sheet on the boards).
   size?: number;
   // 3 columns, 5 on tablet portrait.
   columns?: number;
-  ids?: readonly FaceId[];
+  ids?: readonly TFaceId[];
   labels?: boolean;
-  names?: Partial<Record<FaceId, string>>;
+  names?: Partial<Record<TFaceId, string>>;
   label?: string;
 }
 
 // The faces sheet's picker: every face as a live compact thumbnail, the selected one ringed in the lamp colour.
 export function renderFaceGrid(
   container: HTMLElement,
-  opts: FaceGridOptions,
-): { select(id: FaceId): void; setTheme(theme: FaceTheme): void } {
+  opts: IFaceGridOptions,
+): { select(id: TFaceId): void; setTheme(theme: TFaceTheme): void } {
   const ids = opts.ids ?? FACES.map((f) => f.id);
   const size = opts.size ?? 92;
   const cols = opts.columns ?? 3;
-  const name = (id: FaceId) => opts.names?.[id] ?? FACES.find((f) => f.id === id)?.name ?? id;
+  const name = (id: TFaceId) => opts.names?.[id] ?? FACES.find((f) => f.id === id)?.name ?? id;
   let selected = opts.selected;
   let theme = opts.theme;
   let ready = false;
@@ -84,7 +84,7 @@ export function renderFaceGrid(
     if (!cells.some((b) => b.tabIndex === 0) && cells[0]) cells[0].tabIndex = 0;
   };
 
-  const pick = (id: FaceId, focus: boolean) => {
+  const pick = (id: TFaceId, focus: boolean) => {
     selected = id;
     mark();
     if (focus) cells.find((b) => b.dataset.face === id)?.focus();
@@ -93,7 +93,7 @@ export function renderFaceGrid(
 
   grid.addEventListener('click', (e) => {
     const b = (e.target as Element).closest<HTMLElement>('.af-cell');
-    if (b?.dataset.face) pick(b.dataset.face as FaceId, false);
+    if (b?.dataset.face) pick(b.dataset.face as TFaceId, false);
   });
 
   // Radio-group keys: arrows move and pick (Up and Down by a row), Home and End jump to the ends.
@@ -113,7 +113,7 @@ export function renderFaceGrid(
     if (by === undefined) return;
     e.preventDefault();
     const to = Math.min(cells.length - 1, Math.max(0, i + by));
-    const id = cells[to]?.dataset.face as FaceId | undefined;
+    const id = cells[to]?.dataset.face as TFaceId | undefined;
     if (id) pick(id, true);
   });
 

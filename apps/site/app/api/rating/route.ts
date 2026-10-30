@@ -5,7 +5,7 @@ import { clientIp, rateLimit } from '@/lib/server/ratelimit';
 export const dynamic = 'force-dynamic';
 
 export const POST = api(async (request, { env }) => {
-  if (!(await rateLimit(env, 'rating', await clientIp(request), 10))) return rateLimited();
+  if (!(await rateLimit(env, 'rating', clientIp(request), 10))) return rateLimited();
   let stars: number;
   let text: string;
   let locale: string;

@@ -23,7 +23,7 @@ const GRAINS = [
 // Sand falls from top to bottom as the session runs; a fine stream moves while awake.
 export default function Hourglass({ m }: IDrawProps) {
   const id = useId().replace(/[^a-zA-Z0-9_-]/gu, '');
-  const { t, accent } = m;
+  const { accent } = m;
   const ft = m.ringFrac;
   const hi = m.heat(m.frac);
   const lo = alpha(hi, 0xb0);

@@ -50,7 +50,7 @@ export function qaState(state: TWakeState, total = 3600, remain = 2292) {
 export function QaBridge() {
   const { setTheme } = useTheme();
   useEffect(() => {
-    const onMsg = (e: MessageEvent<TQaMessage>) => {
+    const onMsg = (e: MessageEvent<TQaMessage | null>) => {
       if (e.origin !== window.location.origin || e.data?.type !== 'at-qa') return;
       const msg = e.data;
       switch (msg.action) {

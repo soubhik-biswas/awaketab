@@ -24,7 +24,7 @@ export function initHelpSearch(): void {
   if (!box || !input || !count || !list || !data) return;
   const entries = JSON.parse(data) as IHelpEntry[];
   const d = box.dataset;
-  const idle = count.textContent ?? '';
+  const idle = count.textContent;
   const render = (): void => {
     const q = input.value.trim();
     const hits = searchHelp(entries, q);

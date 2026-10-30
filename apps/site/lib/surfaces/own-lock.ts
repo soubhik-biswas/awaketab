@@ -12,7 +12,8 @@ interface IWakeLockApi {
 // A screen wake lock owned by one window (the mini clock's floating window or popup), so the screen stays awake
 // while the tab that opened it sits behind other windows. It asks again whenever that window is shown.
 export function holdOwnLock(win: Window, onChange: (state: TOwnLock) => void): () => void {
-  const api = (win.navigator as Navigator & { wakeLock?: IWakeLockApi }).wakeLock;
+  const nav: { wakeLock?: IWakeLockApi } = win.navigator;
+  const api = nav.wakeLock;
   if (!api) {
     onChange('unsupported');
     return () => undefined;
@@ -27,6 +28,7 @@ export function holdOwnLock(win: Window, onChange: (state: TOwnLock) => void): (
     if (!alive || sentinel || win.document.visibilityState !== 'visible') return;
     try {
       const s = await api.request('screen');
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- the cleanup can run while the request is pending
       if (!alive) {
         void s.release();
         return;

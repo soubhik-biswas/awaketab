@@ -5,13 +5,11 @@ export type TSendResult = { ok: true } | { ok: false; reason: 'not_configured' |
 
 // No email provider is chosen yet, so every send answers "not configured" and callers say so plainly.
 // A provider plugs in here and nowhere else: set emailConfigured() to its key check and send through its API.
-export function emailConfigured(env: IEnv): boolean {
-  void env;
+export function emailConfigured(_env: IEnv): boolean {
   return false;
 }
 
-export async function sendEmail(env: IEnv, mail: IEmail): Promise<TSendResult> {
-  if (!emailConfigured(env)) return { ok: false, reason: 'not_configured' };
-  void mail;
-  return { ok: false, reason: 'failed' };
+export function sendEmail(env: IEnv, _mail: IEmail): Promise<TSendResult> {
+  if (!emailConfigured(env)) return Promise.resolve({ ok: false, reason: 'not_configured' });
+  return Promise.resolve({ ok: false, reason: 'failed' });
 }

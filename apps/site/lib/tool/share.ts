@@ -1,7 +1,5 @@
 import { FACE_IDS, type TFace } from '@awaketab/core';
 
-const SHARE_LENGTHS = [15, 30, 45, 60, 120, 240, 0] as const;
-
 export interface IShareSetup {
   face: TFace;
   minutes: number;
@@ -11,16 +9,6 @@ export interface IShareSetup {
 // A shared setup carries the length, face and chime only, never a label or a device name.
 export function sharePath(s: IShareSetup): string {
   return `/s/${s.face}-${Math.max(0, Math.round(s.minutes))}-${s.chime ? 'chime' : 'quiet'}`;
-}
-
-function parseShareCode(code: string): IShareSetup | null {
-  const m = /^([a-z]+)-(\d{1,4})-(chime|quiet)$/u.exec(code);
-  if (!m) return null;
-  const [, face, min, chime] = m;
-  if (!face || !(FACE_IDS as readonly string[]).includes(face)) return null;
-  const minutes = Number(min);
-  if (!(SHARE_LENGTHS as readonly number[]).includes(minutes)) return null;
-  return { face: face as TFace, minutes, chime: chime === 'chime' };
 }
 
 export interface IToolQuery {

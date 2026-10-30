@@ -18,7 +18,7 @@ import { mintToken, tokenExp } from './token';
 const STALE_MS = 90 * 86_400_000;
 
 export async function activateRoute(request: Request, env: IEnv): Promise<Response> {
-  const ip = await clientIp(request);
+  const ip = clientIp(request);
   if (!(await rateLimit(env, 'license', ip, 10))) return rateLimited();
   let body: unknown;
   try {

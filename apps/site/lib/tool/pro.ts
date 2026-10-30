@@ -30,7 +30,7 @@ export interface IStudioSettings {
   glow: number;
 }
 
-export type ISoundMix = Record<TMixKey, number>;
+export type TSoundMix = Record<TMixKey, number>;
 
 export interface IProSnapshot {
   isPro: boolean;
@@ -38,7 +38,7 @@ export interface IProSnapshot {
   devices: IProDevice[];
   maxDevices: number;
   studio: IStudioSettings;
-  mix: ISoundMix;
+  mix: TSoundMix;
 }
 
 // What the tool needs from Pro. The placeholder below keeps everything on this device; the Pro build
@@ -60,7 +60,7 @@ export const STUDIO_KEY = 'at.v1.studio';
 export const MIX_KEYS: readonly TMixKey[] = ['rain', 'cafe', 'fire', 'brown'];
 
 const DEFAULT_STUDIO: IStudioSettings = { lamp: '', glow: 70 };
-const DEFAULT_MIX: ISoundMix = { rain: 40, cafe: 0, fire: 25, brown: 0 };
+const DEFAULT_MIX: TSoundMix = { rain: 40, cafe: 0, fire: 25, brown: 0 };
 
 const PLACEHOLDER_DEVICES: IProDevice[] = [
   { id: 'this', name: 'Work laptop', kind: 'laptop', identity: 'cobalt', status: 'awake', detail: '', current: true },
@@ -116,7 +116,7 @@ function readStudio(): IStudioSettings {
 }
 
 // The mixer levels live in at.v1.settings.focusSound.mix (0–1), where the old sound pack kept them.
-function readMix(): ISoundMix {
+function readMix(): TSoundMix {
   const raw = readJson(SETTINGS_KEY);
   const fs = isRecord(raw) && isRecord(raw.focusSound) ? raw.focusSound : null;
   if (!fs || !isRecord(fs.mix)) return { ...DEFAULT_MIX };
@@ -129,7 +129,7 @@ function readMix(): ISoundMix {
   return out;
 }
 
-function writeMix(mix: ISoundMix) {
+function writeMix(mix: TSoundMix) {
   const raw = readJson(SETTINGS_KEY);
   const base = isRecord(raw) ? raw : { ...DEFAULT_SETTINGS };
   const fs = isRecord(base.focusSound) ? base.focusSound : DEFAULT_SETTINGS.focusSound;

@@ -4,12 +4,8 @@ import slugsJson from '@/i18n/slugs.json';
 import { LOCALE_META, LOCALES, TRANSLATED_SLUG_LOCALES, type TLocale } from '@/i18n/locales';
 import { SITE, type TContentKind } from '@/lib/routes';
 
-export type TArticle =
-  | (typeof allUseCases)[number]
-  | (typeof allDevices)[number]
-  | (typeof allComparisons)[number]
-  | (typeof allGuides)[number]
-  | (typeof allDocs)[number];
+// Every article collection goes through one transform, so one entry type covers them all.
+export type TArticle = (typeof allUseCases)[number];
 export type TChangelogEntry = (typeof allChangelogs)[number];
 
 type TSlugMap = Record<string, Record<string, Partial<Record<TLocale, string>>>>;

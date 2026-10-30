@@ -1,7 +1,6 @@
 import {
   ArrowRight,
   Ban,
-  Check,
   CircleCheck,
   CircleDashed,
   CirclePause,
@@ -182,7 +181,6 @@ const CELL_TONE: Record<TStatusKind, string> = {
 };
 
 export const yes = (text: string): TCell => ({ kind: 'yes', text });
-const fallbackCell = (text: string): TCell => ({ kind: 'fallback', text });
 export const no = (text: string): TCell => ({ kind: 'no', text });
 export const tx = (text: ReactNode, bold = false): TCell => ({ kind: 'text', text, bold });
 export const status = (kind: TStatusKind, text: string): TCell => ({ kind, text });
@@ -468,57 +466,6 @@ export function Releases({ items }: { items: readonly IRelease[] }) {
             ))}
           </ul>
         </article>
-      ))}
-    </div>
-  );
-}
-
-interface IPlan {
-  title: string;
-  price: string;
-  desc: string;
-  features: readonly string[];
-  action: ReactNode;
-  badge?: string;
-  featured?: boolean;
-}
-
-// The plan cards of the Pro page: the featured one has the act-coloured 2 px border and its glow.
-function Plans({ items }: { items: readonly IPlan[] }) {
-  return (
-    <div className={s.grid[2]}>
-      {items.map((p) => (
-        <div
-          key={p.title}
-          className={cn(
-            'flex flex-col gap-[14px] rounded-[24px] bg-card',
-            p.featured
-              ? 'border-2 border-primary p-[26px] shadow-[0_20px_50px_var(--site-pro-glow)]'
-              : 'border border-border p-[26px]',
-          )}
-        >
-          <span className="flex items-center justify-between">
-            <strong className={s.h3}>{p.title}</strong>
-            {p.badge && (
-              <span className="rounded-full bg-primary-soft px-2.5 py-[3px] text-[13px] font-bold text-primary">
-                {p.badge}
-              </span>
-            )}
-          </span>
-          <span className={cn(s.display, 'text-[34px] font-extrabold tracking-[-0.03em] min-[700px]:text-[44px]')}>
-            {p.price}
-          </span>
-          <span className={s.body}>{p.desc}</span>
-          <ul className="m-0 flex list-none flex-col gap-2 p-0">
-            {p.features.map((f) => (
-              <li key={f} className="flex items-start gap-2.5 text-[15px] leading-[1.45]">
-                <Check className="mt-0.5 size-[18px] flex-none text-lamp" strokeWidth={2.25} aria-hidden="true" />
-                {f}
-              </li>
-            ))}
-          </ul>
-          {p.action}
-        </div>
       ))}
     </div>
   );
