@@ -49,7 +49,7 @@ export const ROW_BTN = cn(
   'w-full cursor-pointer border-x-0 border-t-0 bg-transparent p-0 text-left text-foreground',
 );
 export const TILE =
-  'inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary';
+  'inline-flex size-[38px] shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary';
 export const KBD =
   'h-[22px] min-w-[22px] rounded-[6px] border border-b-2 border-border bg-background px-1.5 font-mono text-[12px] font-normal text-muted-foreground-strong';
 export const PRO_CHIP = 'rounded-full bg-primary-soft px-2 py-0.5 text-[12px] font-bold text-primary';
