@@ -2,7 +2,8 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { installFakeWakeLock } from './fake-wakelock';
 
-const SURFACES = ['/', '/for/cooking', '/about', '/pro', '/pro/activate', '/es/'] as const;
+// The Pro checkout and activation pages use the purchase flow's own header, so they are not site surfaces.
+const SURFACES = ['/', '/for/cooking', '/about', '/pro', '/signin', '/es/'] as const;
 
 async function axe(page: Page): Promise<void> {
   const results = await new AxeBuilder({ page }).analyze();

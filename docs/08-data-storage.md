@@ -207,6 +207,16 @@ Writes are debounced 250 ms except `session.status` changes (immediate). If `loc
 
 Settings → "Delete all local data": removes every `at.*` key and `sessionStorage['at.tabId']`, unregisters the service worker's caches, reloads. The licence is included (the user is warned and shown the key-recovery link — keys are recoverable from the Polar receipt email).
 
+### 2.9a `at.v1.account`, `at.v1.studio` and sessionStorage `at.v1.checkout` (Solar Green, 30 October 2026)
+
+```ts
+interface IAccount { v: 1; email: string; signedInAt: number } // at.v1.account — written by /signin after a verified magic link
+interface IStudio { v: 1; lamp: '' | `#${string}`; glow: number } // at.v1.studio — Face studio (Pro); glow 0–100, step 5, default 70
+interface ICheckoutFlow { plan: 'pro_yearly' | 'pro_lifetime'; email: string } // sessionStorage at.v1.checkout — this tab's Pro checkout
+```
+
+All three are read defensively (damage reads as signed out, the default look or a fresh flow). The email stays on the device: sign-in proves the address once and nothing syncs yet, so no server keeps an account; Sign out and Delete account remove `at.v1.account`. `at.v1.studio` applies only while the licence has Pro; without it the face keeps the default green. `at.v1.checkout` is cleared when the checkout activates Pro, and its email is passed to Polar's checkout as `customer_email` and nowhere else. Account → Export my data writes every `at.v1.*` localStorage key except `at.v1.license` to a JSON file.
+
 ### 2.10 `at.v1.embed.settings` (embed widget, M8)
 
 The `/embed/cook` iframe's only persistent key (`11-embed-spec.md` §7, `00-conventions.md` §13.10). It lives in the awaketab.com origin's storage *as partitioned by the embedding site* in current browsers, so one recipe blog's widget never sees another's.
@@ -254,6 +264,8 @@ Values are stored as objects, not JSON strings. `chrome.storage.sync` receives o
 | `sub:{subscriptionId}` | `string[]` of Polar licence-key ids | 3 years from the last write |
 | `embed:{domain}` | `{ keyHash, attribution: false, theme: { accent, scheme }, expiresAt }` | until `expiresAt + 30 d` |
 | `rl:{route}:{ipHash}:{bucket}` | counter | 120 s |
+| `auth:{sha256(token)}` | `{ v: 1, email, exp }` — a magic sign-in link; deleted by its first verify | 15 minutes (900 s) |
+| `authmail:{sha256(email)}` | `'1'` — one sign-in email per address per minute | 60 s |
 | `rating:{id}` | `{ stars, text?, locale, ver, at }` | 2 years; exported nightly to `data/ratings.json` (aggregate only) |
 
 `canceled` = the subscription will not renew; tokens keep working until `exp` (docs/09 §2.7). `revoked` and `refunded` are terminal.
@@ -318,6 +330,7 @@ Columns: `date,awake_minutes,sessions` (one row per local day, ISO dates; the ro
 | Licence token + random `deviceId` | localStorage / chrome.storage.local | Prove a Pro purchase; count activations (max 5) | Token only, to `/api/license/*` |
 | Anonymous usage events | Analytics Engine, 90 days | Reliability (does the lock hold?) and product decisions | Yes — no IP stored, no ids beyond a per-tab random `sid`; toggle in Settings |
 | Licence record | KV | Fulfil purchases, handle refunds, stop abuse | Held by us; purchase details are with Polar (merchant of record) |
+| Sign-in email (`at.v1.account`, KV `auth:`) | localStorage; KV for 15 minutes while a link is open | Prove the Pro email for sync and receipts | The address goes to the email provider once a provider is chosen; the KV record expires in 15 minutes or on first use |
 | Ratings | KV → aggregate | Show a real rating in search results | Stars + optional text; no identity |
 | Ad cookies (content pages only, with consent) | Google / network | Ads fund the free content pages | Governed by the CMP; never on the tool |
 

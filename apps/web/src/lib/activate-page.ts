@@ -1,6 +1,7 @@
 import { activateLicense, deviceId, fetchActivations } from './license';
 import { lookupCheckoutKey, normaliseLicenseKey } from './license-lookup';
-import { applyLaunch, deviceLabel, fill, trackPro } from './pro-common';
+import { FLOW_KEY, setFlowStep } from './checkout-page';
+import { applyLaunch, deviceLabel, fill, longDate, trackPro } from './pro-common';
 
 const ERR_ROW: Record<string, string> = {
   invalid_key: 'invalid_key',
@@ -15,8 +16,25 @@ const ERR_ROW: Record<string, string> = {
 };
 
 type TActivateState =
-  'idle' | 'checking' | 'error' | 'success' | 'ext-success' | 'checkout-success' | 'cancelled' | 'failed' | 'help';
-const CHECKOUT_STATES: readonly TActivateState[] = ['checkout-success', 'cancelled', 'failed', 'help'];
+  | 'idle'
+  | 'checking'
+  | 'error'
+  | 'success'
+  | 'ext-success'
+  | 'processing'
+  | 'checkout-success'
+  | 'cancelled'
+  | 'failed'
+  | 'help';
+const CHECKOUT_STATES: readonly TActivateState[] = ['processing', 'checkout-success', 'cancelled', 'failed', 'help'];
+// Where each checkout screen sits on the Plan · Account · Payment · Done steps.
+const FLOW_STEP: Partial<Record<TActivateState, number>> = {
+  processing: 2,
+  failed: 2,
+  help: 2,
+  cancelled: 2,
+  'checkout-success': 3,
+};
 
 export const CHECKOUT_RETRY_MS: readonly number[] = [3000, 6000, 12000];
 
@@ -53,6 +71,11 @@ export function bootActivatePage(root: HTMLElement): void {
       view.hidden = (view.dataset.view === 'checkout') !== checkout;
     form.setAttribute('aria-busy', state === 'checking' ? 'true' : 'false');
     if (input) input.readOnly = state === 'checking';
+    const step = FLOW_STEP[state];
+    root.toggleAttribute('data-flow', step !== undefined);
+    if (step !== undefined) setFlowStep(root, step);
+    if (checkout && state !== 'processing')
+      root.querySelector<HTMLElement>(`[data-co="${state === 'checkout-success' ? 'success' : state}"] h1`)?.focus();
   };
 
   // Copy that differs between the two modes is pre-rendered once per mode; the ext variants start hidden.
@@ -112,19 +135,20 @@ export function bootActivatePage(root: HTMLElement): void {
 
   const activate = async (key?: string, fromCheckout = false) => {
     clearError();
-    setState('checking');
+    setState(fromCheckout ? 'processing' : 'checking');
     const payload: { deviceId: string; deviceLabel: string; key?: string; checkoutId?: string } = {
       deviceId: deviceId(),
       deviceLabel: deviceLabel() || 'This browser',
     };
     if (key) payload.key = key;
-    if (checkoutId) payload.checkoutId = checkoutId;
+    // The server reads a checkout id before a key, so a key typed on a checkout return must travel alone.
+    if (fromCheckout && checkoutId) payload.checkoutId = checkoutId;
     const result = fromCheckout
       ? await whileSyncing(
           () => activateLicense(payload),
           (code) => {
             fail(code);
-            setState('checking');
+            setState('processing');
           },
         )
       : await activateLicense(payload);
@@ -139,6 +163,11 @@ export function bootActivatePage(root: HTMLElement): void {
     if (fromCheckout && checkoutId) {
       void checkoutSuccess(root, checkoutId, result);
       setState('checkout-success');
+      try {
+        sessionStorage.removeItem(FLOW_KEY);
+      } catch {
+        // Nothing to clear.
+      }
     } else {
       showSuccess(key ?? '');
     }
@@ -245,13 +274,18 @@ async function checkoutSuccess(
   }
   if (renews) {
     // Yearly tokens carry a 7-day grace past the period end (docs/08 §2.4), so the renewal date is exp − 7 days.
-    renews.textContent = lifetime
-      ? (renews.dataset.never ?? '')
-      : new Date((result.exp - 7 * 86_400) * 1000).toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        });
+    renews.textContent = lifetime ? (renews.dataset.never ?? '') : longDate((result.exp - 7 * 86_400) * 1000, 'UTC');
+  }
+  // The address typed in the checkout flow, when there was one; Polar sends the receipt there.
+  const to = root.querySelector<HTMLElement>('[data-co-email]');
+  try {
+    const email = (JSON.parse(sessionStorage.getItem(FLOW_KEY) ?? '{}') as { email?: string }).email;
+    if (to && email) {
+      to.textContent = email;
+      to.closest<HTMLElement>('[data-co-email-line]')?.removeAttribute('hidden');
+    }
+  } catch {
+    // No flow stored: the generic line stays.
   }
 
   const showBtn = root.querySelector<HTMLButtonElement>('[data-co-show]');
