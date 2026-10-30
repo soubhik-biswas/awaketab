@@ -2936,7 +2936,7 @@
         "name": "Free",
         "price": "No charge",
         "f1": "Keep awake for any length, or no end",
-        "f2": "All 33 faces and 3 themes",
+        "f2": "All 49 faces and 3 themes",
         "f3": "Presets and the ⌘K palette",
         "f4": "Video fallback for older browsers",
         "now": "You are on Free now."
@@ -3020,7 +3020,7 @@
         "price": "No charge",
         "d": "Everything you need to keep one screen awake.",
         "f1": "Keep awake for any length, or no end",
-        "f2": "All 33 faces",
+        "f2": "All 49 faces",
         "f3": "Presets and the ⌘K palette",
         "f4": "Light, dark and OLED themes",
         "f5": "Video fallback for older browsers",
@@ -3053,7 +3053,7 @@
         "no": "Not included",
         "awake": "Keeps the screen awake, with an honest status pill",
         "lengths": "Any length, until a time, or until you stop",
-        "faces": "All 33 clock faces and 3 themes",
+        "faces": "All 49 clock faces and 3 themes",
         "presets": "Presets, the ⌘K palette and shared setups",
         "devices": {
           "_": "Devices",
@@ -3279,7 +3279,8 @@
         "grace": "Renewal pending · Pro stays on until {date}",
         "lapsed": "Pro ended on {date} · renew to turn it back on",
         "portal": "Update payment in Polar"
-      }
+      },
+      "activate": "Activate a key"
     }
   },
   "site": {
