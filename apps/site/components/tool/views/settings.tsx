@@ -118,7 +118,7 @@ export default function SettingsView() {
         <Button type="button" variant="outline" onClick={() => a.go('clear')} className={BTN_DANGER_OUT}>
           {c.clearBtn}
         </Button>
-        <span className={cn(HELP, '[&_a]:text-link [&_a]:underline')}>
+        <span className={cn(HELP, '[&_a]:underline [&_a]:underline-offset-2')}>
           <Link href="/privacy" hrefLang={m.lang === 'en' ? undefined : 'en'}>
             {c.privacy}
           </Link>{' '}

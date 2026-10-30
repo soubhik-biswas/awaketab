@@ -128,7 +128,7 @@ export function FaceFrame({
   return (
     <div
       ref={ref}
-      className={cn('af', m.theme, m.live && 'af-live', m.still && 'af-still', m.size < 170 && 'af-compact', className)}
+      className={cn('af', m.theme, m.live && 'af-live', m.still && 'af-still', m.size < 200 && 'af-compact', className)}
       role="timer"
       aria-label={m.aria}
       data-face={m.face}
