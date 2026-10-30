@@ -126,7 +126,7 @@ export function CheckoutFlow({ backHref }: { backHref: string }) {
           <span className="font-mono text-[14px] tracking-[0.12em] text-lamp">{tc('kicker')}</span>
           <h1
             tabIndex={-1}
-            className="m-0 text-center text-[40px] leading-none font-extrabold tracking-[-0.04em] outline-none min-[700px]:text-[64px]"
+            className="m-0 text-center font-display text-[40px] leading-none font-extrabold tracking-[-0.04em] [font-stretch:112%] outline-none min-[700px]:text-[64px]"
           >
             {tc('plans.h1')}
           </h1>
@@ -154,7 +154,7 @@ export function CheckoutFlow({ backHref }: { backHref: string }) {
               </ul>
               <span className="mt-auto text-[14px] text-muted-foreground-strong">{tc('free.now')}</span>
             </div>
-            <div className={cn(CARD, 'border-2 border-primary shadow-[0_24px_60px_var(--site-pro-glow)]')}>
+            <div className={cn(CARD, 'border-2 border-primary shadow-[0_24px_60px_color-mix(in_srgb,var(--primary)_14%,transparent)]')}>
               <span className="flex items-center justify-between">
                 <strong className="text-[24px]">{tc('pro.name')}</strong>
                 <span className="rounded-full bg-primary-soft px-2.5 py-[3px] text-[13px] font-bold text-primary">
