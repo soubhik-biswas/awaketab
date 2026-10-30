@@ -22,7 +22,7 @@ import {
 import { fill } from '@/lib/tool/chrome';
 import type { TToolView } from '@/lib/tool/ui';
 import { useTool } from '@/components/tool/context';
-import { PRO_CHIP } from '@/components/tool/kit';
+import { PRO_CHIP, TILE } from '@/components/tool/kit';
 
 type TRow = { n: string; icon: LucideIcon; pro?: boolean; keys?: string; lang?: string } & (
   { view: TToolView } | { href: string } | { run: () => void }
@@ -35,7 +35,7 @@ function RowInner({ r }: { r: TRow }) {
   const Icon = r.icon;
   return (
     <>
-      <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary">
+      <span className={TILE}>
         <Icon className="size-[18px]" strokeWidth={1.75} aria-hidden="true" />
       </span>
       <span className="flex-1 text-left text-[15px] font-semibold whitespace-pre">{r.n}</span>
