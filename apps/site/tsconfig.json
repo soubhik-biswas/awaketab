@@ -4,6 +4,7 @@
     "target": "ES2023",
     "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
+    "exactOptionalPropertyTypes": false,
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "preserve",
