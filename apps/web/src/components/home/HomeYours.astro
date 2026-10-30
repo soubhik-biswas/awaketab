@@ -2,12 +2,13 @@
 import { createT } from '../../i18n/load';
 import type { TLocale } from '../../i18n/locales';
 import { FACES, faceSvg } from '../../tool/face/all';
-import { facesHref } from '../../../scripts/boot-inline.mjs';
 import { LAMPS, PALETTES, PATTERNS } from '../../tool/packs/themes/looks';
 import { GENS } from '../../tool/packs/sound/catalog';
 // Linked, not scoped: inline styles on / count against the tool CSS budget.
 import sheet from '../../styles/home-yours.css?url';
 import Icon from '../icons/Icon.astro';
+
+declare const __AT_FACES__: string;
 
 interface Props {
   locale?: TLocale;
@@ -35,7 +36,7 @@ const mix = [
 
 <section id="home-yours" class="at-hy" aria-labelledby="h-yours">
   <link rel="stylesheet" href={sheet} />
-  <link rel="stylesheet" href={facesHref()} />
+  <link rel="stylesheet" href={__AT_FACES__} />
   <div class="at-hb-head">
     <div class="at-hb-intro">
       <h2 id="h-yours">{y('title')}</h2>
