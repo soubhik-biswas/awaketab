@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import { BLACK, SNOW, WHITE } from '../art';
-import '../face-art.css';
 import { EndLine, type IDrawProps, L, mono } from '../kit';
 
 const TOP = { light: '#2A3550', night: '#232E4A' };

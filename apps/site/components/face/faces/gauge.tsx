@@ -1,4 +1,3 @@
-import '../face-art.css';
 import { arc, f1, P } from '../geometry';
 import { big, DialLabel, EndLine, type IDrawProps, MONO, Svg } from '../kit';
 

@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import { CARD_SHADOW, WHITE } from '../art';
-import '../face-art.css';
 import { EndLine, type IDrawProps, Kicker } from '../kit';
 
 // Each digit is six small clocks (two columns, three rows) whose hands trace its seven segments; 225° on every hand leaves a clock blank.

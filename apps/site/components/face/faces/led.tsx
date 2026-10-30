@@ -1,5 +1,4 @@
 import { BLACK, WHITE } from '../art';
-import '../face-art.css';
 import { DOT } from '../fonts';
 import { alpha } from '../geometry';
 import type { IDrawProps } from '../kit';

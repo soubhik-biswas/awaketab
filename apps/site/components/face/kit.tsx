@@ -145,6 +145,7 @@ export function Stars({
     <span
       key={i}
       className="afx-twinkle"
+      data-delay={(i * step).toFixed(2)}
       style={{
         position: 'absolute',
         left: x,
@@ -153,7 +154,6 @@ export function Stars({
         height: d,
         borderRadius: '50%',
         background: colors[i % colors.length],
-        animationDelay: `${(i * step).toFixed(2)}s`,
       }}
     />
   ));
