@@ -13,7 +13,7 @@
   const THEMES = '__AT_THEMES__';
   const dark = matchMedia('(prefers-color-scheme: dark)');
   /** @type {Record<string, string>} */
-  const GROUND = { light: '#F2F6FA', dark: '#0A0E16', oled: '#000000' };
+  const GROUND = { light: '#F6F4EF', dark: '#070B16', oled: '#000000' };
   /** @param {string} theme */
   const apply = (theme) => {
     const resolved = theme === 'auto' ? (dark.matches ? 'dark' : 'light') : theme;
