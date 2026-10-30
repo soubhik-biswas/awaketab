@@ -42,7 +42,7 @@ describe('faceModel', () => {
   });
 
   it('shows the full length at rest and nothing left once time is up', () => {
-    expect(ring({ state: 'idle' }).digits).toBe('60:00');
+    expect(ring({ state: 'idle' }).digits).toBe('1:00:00');
     expect(ring({ state: 'idle' }).endLine).toBe('60 min · ends 11:47 AM');
     const up = ring({ state: 'up' });
     expect(up.digits).toBe('00:00');

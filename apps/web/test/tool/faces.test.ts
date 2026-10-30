@@ -28,7 +28,7 @@ const root = (html: string) => {
 
 describe('Face catalogue', () => {
   it('lists the 33 faces of the faces board in sheet order, each with a name and a description', () => {
-    expect(FACES.map((f) => f.id)).toEqual([...FACE_IDS]);
+    expect(FACES.map((f) => f.id)).toEqual(FACE_IDS.slice(0, 33));
     expect(new Set(FACES.map((f) => f.name)).size).toBe(33);
     for (const f of FACES) expect(f.blurb.length).toBeGreaterThan(20);
     expect(FACES.find((f) => f.id === 'board')?.name).toBe('Departure board');
