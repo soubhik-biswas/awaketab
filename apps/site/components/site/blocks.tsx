@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   Ban,
+  Check,
   CircleCheck,
   CircleDashed,
   CirclePause,
@@ -39,7 +40,7 @@ export function Block({
       id={id}
       aria-labelledby={headId}
       aria-label={headId ? undefined : (label ?? h)}
-      className={cn('flex flex-col gap-[14px] min-[700px]:gap-5', s.pad, className)}
+      className={cn('flex scroll-mt-6 flex-col gap-[14px] min-[700px]:gap-5', s.pad, className)}
     >
       {h && (
         <h2 id={headId} className={s.h2}>
@@ -73,7 +74,7 @@ export function Cards({ items, cols }: { items: readonly ICard[]; cols: 1 | 2 | 
             className="group flex flex-1 flex-col items-stretch overflow-hidden rounded-[24px] border border-border bg-card text-left text-foreground no-underline transition-shadow duration-fast ease-glide hover:shadow-e2"
           >
             {card.scene && (
-              <span className="flex justify-center bg-[var(--site-art)] pt-[14px]">
+              <span className={s.artWell}>
                 <Scene
                   scene={card.scene}
                   width={300}
@@ -112,20 +113,42 @@ export function Cards({ items, cols }: { items: readonly ICard[]; cols: 1 | 2 | 
   );
 }
 
-export function Steps({ items }: { items: ReadonlyArray<{ title: ReactNode; body: ReactNode }> }) {
+const STEP_SCENES: readonly TSceneKey[] = ['firstaction', 'hero', 'success'];
+
+export interface IStep {
+  title: ReactNode;
+  body: ReactNode;
+  scene?: TSceneKey;
+}
+
+// Step cards carry a scene above the number; without one they take the board's first-action, hero, success turn.
+export function Steps({ items }: { items: readonly IStep[] }) {
   const n = Math.min(Math.max(items.length, 1), 4) as 1 | 2 | 3 | 4;
   return (
     <ol className={cn(s.grid[n], 'm-0 list-none p-0')}>
       {items.map((item, i) => (
-        <li key={i} className="flex flex-col gap-2.5 rounded-[22px] border border-border bg-card p-[22px]">
-          <span
-            aria-hidden="true"
-            className="inline-flex size-10 items-center justify-center rounded-full bg-lamp text-[20px] font-extrabold text-lamp-foreground"
-          >
-            {i + 1}
-          </span>
-          <strong className={s.h3}>{item.title}</strong>
-          <span className={s.body}>{item.body}</span>
+        <li key={i} className="flex flex-col overflow-hidden rounded-[24px] border border-border bg-card">
+          <div className={s.artWell}>
+            <Scene
+              scene={item.scene ?? STEP_SCENES[i % STEP_SCENES.length] ?? 'hero'}
+              width={280}
+              decorative
+              className="h-auto w-[280px] max-w-full min-[700px]:w-[240px]"
+            />
+          </div>
+          <div className="flex flex-1 flex-col gap-2.5 px-[22px] pt-5 pb-6">
+            <span
+              aria-hidden="true"
+              className={cn(
+                s.display,
+                'inline-flex size-10 items-center justify-center rounded-full bg-lamp text-[20px] font-extrabold text-lamp-foreground',
+              )}
+            >
+              {i + 1}
+            </span>
+            <strong className={s.h3}>{item.title}</strong>
+            <span className={s.body}>{item.body}</span>
+          </div>
         </li>
       ))}
     </ol>
@@ -234,8 +257,8 @@ export function DataTable({
                 key={c}
                 role={c === 0 ? 'rowheader' : 'cell'}
                 className={cn(
-                  'flex items-center gap-2 text-[15px] leading-[1.45]',
-                  cell.kind === 'text' ? cell.bold && 'font-bold' : CELL_TONE[cell.kind],
+                  'flex items-center gap-2 text-[15px]',
+                  cell.kind === 'text' ? ['leading-[1.45]', cell.bold && 'font-bold'] : CELL_TONE[cell.kind],
                 )}
               >
                 <CellBody cell={cell} prefix={c > 0 ? cols[c] : undefined} />
@@ -250,12 +273,18 @@ export function DataTable({
 
 export type TTone = 'info' | 'warning' | 'lamp';
 
-const TONE: Record<TTone, { box: string; fg: string; icon: LucideIcon }> = {
-  info: { box: 'bg-info-soft border-info/20', fg: 'text-info', icon: Info },
-  warning: { box: 'bg-warning-soft border-warning/20', fg: 'text-warning', icon: TriangleAlert },
-  lamp: { box: 'bg-accent border-lamp/20', fg: 'text-lamp', icon: CircleCheck },
+const TONE: Record<TTone, { box: string; tile: string; fg: string; icon: LucideIcon }> = {
+  info: { box: 'site-callout-info', tile: 'bg-info-soft border-info/25', fg: 'text-info', icon: Info },
+  warning: {
+    box: 'site-callout-warning',
+    tile: 'bg-warning-soft border-warning/25',
+    fg: 'text-warning',
+    icon: TriangleAlert,
+  },
+  lamp: { box: 'site-callout-lamp', tile: 'bg-accent border-lamp/25', fg: 'text-lamp', icon: CircleCheck },
 };
 
+// The callout card: a tinted corner glow on the surface, the tone's icon in a soft tile, an Archivo title.
 export function Callout({
   tone,
   title,
@@ -275,12 +304,33 @@ export function Callout({
     <Tag
       id={id}
       role="note"
-      className={cn('flex max-w-[942px] items-start gap-[14px] rounded-[18px] border px-5 py-[18px]', look.box)}
+      className={cn(
+        'site-callout relative flex items-start gap-[14px] overflow-hidden rounded-[24px] border border-border p-5 min-[700px]:items-center min-[700px]:gap-[22px] min-[700px]:px-8 min-[700px]:py-7',
+        look.box,
+      )}
     >
-      <Icon className={cn('mt-0.5 size-[22px] flex-none', look.fg)} strokeWidth={1.75} aria-hidden="true" />
-      <span className="flex flex-col gap-1">
-        <strong className={cn('text-[17px]', look.fg)}>{title}</strong>
-        <span className={cn(s.body, 'site-prose')}>{children}</span>
+      <span
+        className={cn(
+          'flex size-11 flex-none items-center justify-center rounded-[14px] border min-[700px]:size-14 min-[700px]:rounded-[18px]',
+          look.tile,
+        )}
+      >
+        <Icon className={cn('size-[26px]', look.fg)} strokeWidth={1.75} aria-hidden="true" />
+      </span>
+      <span className="flex min-w-0 flex-col gap-1.5">
+        <strong
+          className={cn(
+            s.display,
+            'text-[20px] leading-[1.15] font-extrabold tracking-[-0.02em] min-[700px]:text-[24px]',
+          )}
+        >
+          {title}
+        </strong>
+        <span
+          className="site-prose text-[16px] leading-[1.55] text-muted-foreground-strong min-[700px]:text-[18px]"
+        >
+          {children}
+        </span>
       </span>
     </Tag>
   );
@@ -295,7 +345,7 @@ export function Faq({ items }: { items: ReadonlyArray<{ q: string; a: ReactNode 
           value={String(i)}
           className="flex max-w-[900px] flex-col gap-2 border-b border-border py-[18px] last:border-b"
         >
-          <AccordionTrigger className="items-center gap-3 rounded-[10px] py-0 text-[17px] font-bold text-foreground hover:no-underline [&>svg]:size-5 [&>svg]:translate-y-0 [&>svg]:text-muted-foreground-strong [&[data-state=closed]>svg]:-rotate-90 [&[data-state=open]>svg]:rotate-0">
+          <AccordionTrigger className="items-center gap-3 rounded-[10px] py-0 text-[17px] font-bold text-foreground hover:no-underline focus-visible:ring-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&>svg]:size-5 [&>svg]:translate-y-0 [&>svg]:text-muted-foreground-strong [&[data-state=closed]>svg]:-rotate-90 [&[data-state=open]>svg]:rotate-0">
             {item.q}
           </AccordionTrigger>
           <AccordionContent className={cn(s.body, 'site-prose pb-0')}>{item.a}</AccordionContent>
@@ -319,12 +369,12 @@ export function Prose({ items, level = 3 }: { items: readonly IProseItem[]; leve
   return (
     <div className="site-prose flex max-w-[760px] flex-col gap-[26px]">
       {items.map((item, i) => (
-        <div key={i} className="flex flex-col gap-2" id={item.id}>
+        <div key={i} className="flex scroll-mt-6 flex-col gap-2" id={item.id}>
           {item.h && <H className={s.h3Prose}>{item.h}</H>}
-          {item.p && <p className="m-0 text-[17px] leading-[1.65]">{item.p}</p>}
+          {item.p && <p className={s.proseP}>{item.p}</p>}
           {item.children}
           {item.list && (
-            <ul className="m-0 flex flex-col gap-2 pl-[22px] text-[17px] leading-[1.6]">
+            <ul className={s.proseList}>
               {item.list.map((li, k) => (
                 <li key={k}>{li}</li>
               ))}
@@ -332,7 +382,7 @@ export function Prose({ items, level = 3 }: { items: readonly IProseItem[]; leve
           )}
           {item.html && (
             <div
-              className="flex flex-col gap-4 text-[17px] leading-[1.65]"
+              className="flex flex-col gap-4 text-[17px] leading-[1.7] min-[700px]:text-[18px]"
               dangerouslySetInnerHTML={{ __html: item.html }}
             />
           )}
@@ -350,11 +400,17 @@ export function Note({ children }: { children: ReactNode }) {
   );
 }
 
+// The closing band is midnight in every theme: volt and violet glows on #0B1020 with the dark-theme act button.
 export function Cta({ title, desc, href, label }: { title: string; desc: string; href: string; label: string }) {
   return (
-    <div className="site-cta flex flex-col items-stretch justify-between gap-5 rounded-[28px] p-6 text-[var(--site-night-ink)] min-[700px]:flex-row min-[700px]:items-center min-[700px]:p-10">
+    <div className="site-cta flex flex-col items-stretch justify-between gap-5 rounded-[28px] p-6 text-[var(--site-night-ink)] min-[700px]:items-start min-[700px]:p-10 min-[1100px]:flex-row min-[1100px]:items-center">
       <span className="flex flex-col gap-2">
-        <strong className="text-[28px] leading-[1.1] font-extrabold tracking-[-0.03em] min-[700px]:text-[40px]">
+        <strong
+          className={cn(
+            s.display,
+            'text-[32px] leading-[1.04] font-extrabold tracking-[-0.035em] text-balance min-[700px]:text-[40px] min-[1100px]:text-[48px]',
+          )}
+        >
           {title}
         </strong>
         <span className="text-[16px] text-[var(--site-night-muted)]">{desc}</span>
@@ -404,12 +460,65 @@ export function Releases({ items }: { items: readonly IRelease[] }) {
           <h3 id={`rel-${r.id}`} className={cn(s.h3, 'm-0')}>
             {r.title}
           </h3>
-          <ul className="site-prose m-0 flex flex-col gap-2 pl-[22px] text-[16px] leading-[1.6]">
-            {r.items.map((html, i) => (
-              <li key={i} dangerouslySetInnerHTML={{ __html: html }} />
+          <ul className="site-prose m-0 flex flex-col gap-2 pl-[22px] text-[16px] leading-[1.65]">
+            {r.items.map((markup, i) => (
+              <li key={i} dangerouslySetInnerHTML={{ __html: markup }} />
             ))}
           </ul>
         </article>
+      ))}
+    </div>
+  );
+}
+
+export interface IPlan {
+  title: string;
+  price: string;
+  desc: string;
+  features: readonly string[];
+  action: ReactNode;
+  badge?: string;
+  featured?: boolean;
+}
+
+// The plan cards of the Pro page: the featured one has the act-coloured 2 px border and its glow.
+export function Plans({ items }: { items: readonly IPlan[] }) {
+  return (
+    <div className={s.grid[2]}>
+      {items.map((p) => (
+        <div
+          key={p.title}
+          className={cn(
+            'flex flex-col gap-[14px] rounded-[24px] bg-card',
+            p.featured
+              ? 'border-2 border-primary p-[26px] shadow-[0_20px_50px_var(--site-pro-glow)]'
+              : 'border border-border p-[26px]',
+          )}
+        >
+          <span className="flex items-center justify-between">
+            <strong className={s.h3}>{p.title}</strong>
+            {p.badge && (
+              <span className="rounded-full bg-primary-soft px-2.5 py-[3px] text-[13px] font-bold text-primary">
+                {p.badge}
+              </span>
+            )}
+          </span>
+          <span
+            className={cn(s.display, 'text-[34px] font-extrabold tracking-[-0.03em] min-[700px]:text-[44px]')}
+          >
+            {p.price}
+          </span>
+          <span className={s.body}>{p.desc}</span>
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+            {p.features.map((f) => (
+              <li key={f} className="flex items-start gap-2.5 text-[15px] leading-[1.45]">
+                <Check className="mt-0.5 size-[18px] flex-none text-lamp" strokeWidth={2.25} aria-hidden="true" />
+                {f}
+              </li>
+            ))}
+          </ul>
+          {p.action}
+        </div>
       ))}
     </div>
   );

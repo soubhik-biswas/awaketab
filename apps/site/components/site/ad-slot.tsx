@@ -11,7 +11,7 @@ export function AdSlot({ label, note }: { label: string; note: string }) {
         role="complementary"
         aria-label={label}
         data-ad-slot=""
-        className="flex min-h-[90px] max-w-[728px] flex-col gap-1.5 rounded-2xl border border-dashed border-input bg-secondary p-5"
+        className="flex min-h-[90px] max-w-[770px] flex-col gap-1.5 rounded-2xl border border-dashed border-input bg-secondary p-5"
       >
         <span className={s.eyebrow}>{label}</span>
         <span className={s.body}>{note}</span>
