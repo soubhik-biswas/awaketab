@@ -150,9 +150,13 @@ const moon: Draw = (v) => {
       ? lx('moon.up', 'New moon · ended')
       : st === 'idle'
         ? lx('moon.idle', 'Full moon · ready')
-        : lx(v.live || st === 'starting' ? 'moon.waning' : 'moon.hold', v.live || st === 'starting' ? '{pct}% lit · waning' : '{pct}% lit · on hold', {
-            pct: Math.round(mk * 100),
-          });
+        : lx(
+            v.live || st === 'starting' ? 'moon.waning' : 'moon.hold',
+            v.live || st === 'starting' ? '{pct}% lit · waning' : '{pct}% lit · on hold',
+            {
+              pct: Math.round(mk * 100),
+            },
+          );
   const tag = v.night ? v.mc2 : (MOON_DARK[st] ?? 'var(--at-fc-star-sky)');
   const crater = (cx: number, cy: number, r: number, o: number) =>
     `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${mx('var(--at-fc-crater)', o)}"></circle>`;

@@ -115,9 +115,10 @@ export default defineConfig({
             // Feature packs (src/tool/packs/<name>/ and their libraries) load on first use under their own budgets.
             // Ring draws with the tool; the other faces load in five small groups (pack-faces-<group>), with the
             // shared drawing kit, the stage bridge, the picker grid and the swipe each in a chunk of their own.
-            const face = /\/src\/tool\/face\/(?:faces\/)?(classic|retro|dials|orbits|words|kit|stage|sheet|swipe)\./u.exec(
-              id,
-            )?.[1];
+            const face =
+              /\/src\/tool\/face\/(?:faces\/)?(classic|retro|dials|orbits|words|kit|stage|sheet|swipe)\./u.exec(
+                id,
+              )?.[1];
             if (face) return `pack-faces-${face}`;
             // The sound pack's synth engine and track player load when something first plays, not with its panel.
             const snd = /\/src\/tool\/packs\/sound\/(engine|player)\./u.exec(id)?.[1];

@@ -126,7 +126,9 @@ describe('Face markup', () => {
           const html = faceSvg({ ...base, face, theme, state, size: 250, bare: false });
           expect(html, face).not.toMatch(/NaN|undefined/u);
           // Masks may name #000 (they read alpha only); every colour comes from a CSS variable.
-          expect(html.replaceAll('#000', '').replaceAll('url(#af-moon-lit)', ''), `${face} ${theme}`).not.toMatch(/#[0-9a-f]{3,8}\b|rgba?\(/iu);
+          expect(html.replaceAll('#000', '').replaceAll('url(#af-moon-lit)', ''), `${face} ${theme}`).not.toMatch(
+            /#[0-9a-f]{3,8}\b|rgba?\(/iu,
+          );
           expect(html, face).not.toMatch(/(?:fill|stroke|stop-color)="(?:var|color-mix)\(/u);
           expect(root(html).querySelector('.af-a')?.children.length, face).toBeGreaterThan(0);
         }
@@ -193,9 +195,7 @@ describe('renderFaceGrid', () => {
     const cells = [...box.querySelectorAll<HTMLButtonElement>('[role="radio"]')];
     expect(group?.getAttribute('aria-label')).toBe('Clock face');
     expect(cells).toHaveLength(33);
-    expect(cells.filter((c) => c.getAttribute('aria-checked') === 'true').map((c) => c.dataset.face)).toEqual([
-      'flip',
-    ]);
+    expect(cells.filter((c) => c.getAttribute('aria-checked') === 'true').map((c) => c.dataset.face)).toEqual(['flip']);
     expect(cells.filter((c) => c.tabIndex === 0)).toHaveLength(1);
     expect(box.querySelector('.af-cell[data-face="board"] .af-name')?.textContent).toBe('Departure board');
     cells[2]?.click();

@@ -58,7 +58,15 @@ const words: Draw = (v) => {
   return `<div style="position: absolute; left: 34px; right: 34px; top: 0; height: 310px; display: flex; flex-direction: column; justify-content: center; gap: 18px"><span style="${kick(v)}">${v.topWord}</span><p style="margin: 0; ${serif} font-size: 38px; line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance"><span style="color: ${accent}">${a}</span> ${b}<span class="afx-blink" style="display: inline-block; width: 3px; height: 30px; margin-left: 6px; vertical-align: -3px; background: ${accent}; opacity: ${v.liveOp}"></span></p><p style="margin: 0; ${serif} font-style: italic; font-size: 20px; line-height: 1.3; color: ${t.ink2}">${c}</p><div style="position: relative; height: 2px; border-radius: 1px; background: ${t.track}"><div class="af-tr" style="position: absolute; left: 0; top: 0; height: 2px; width: ${v.fracPct}; background: ${accent}"></div></div></div>`;
 };
 
-const GRID = ['ABOUTKUNDERZ', 'TWENTYTHIRTY', 'FORTYMFIFTYP', 'FIFTEENFIVEW', 'THREEFOURTEN', 'ONETWOHOURSV', 'MINUTESZLEFT'];
+const GRID = [
+  'ABOUTKUNDERZ',
+  'TWENTYTHIRTY',
+  'FORTYMFIFTYP',
+  'FIFTEENFIVEW',
+  'THREEFOURTEN',
+  'ONETWOHOURSV',
+  'MINUTESZLEFT',
+];
 const AT: Record<string, [number, number, number]> = {
   ABOUT: [0, 0, 5],
   UNDER: [0, 6, 5],

@@ -183,8 +183,7 @@ export function loadFace(id: FaceId): Promise<void> {
   return p;
 }
 
-export const loadAllFaces = (): Promise<void> =>
-  Promise.all(FACES.map((f) => loadFace(f.id))).then(() => undefined);
+export const loadAllFaces = (): Promise<void> => Promise.all(FACES.map((f) => loadFace(f.id))).then(() => undefined);
 
 // Markup for a face whose drawing is loaded (Ring always is; import face/all.ts for every face at build time).
 export function faceSvg(p: FaceProps): string {

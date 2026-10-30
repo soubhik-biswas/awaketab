@@ -21,7 +21,7 @@
 }
 
 @font-face {
-  font-family: DotGothic16;
+  font-family: "DotGothic16";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -418,17 +418,30 @@
     box-shadow var(--at-d-fast) var(--at-ease-glide);
 }
 
+.af-grid-mini .af-thumb {
+  box-sizing: border-box;
+  align-items: center;
+  block-size: calc(var(--af-size, 80px) + 10px);
+  min-block-size: 0;
+  padding-block: 4px;
+}
+
 .af-grid-night .af-thumb {
   background: var(--at-fc-deep);
+}
+
+.af-cell:focus-visible .af-thumb {
+  outline: var(--at-ring) solid var(--at-focus);
+  outline-offset: 2px;
+}
+
+.af-cell:hover .af-thumb {
+  border-color: var(--at-line-strong);
 }
 
 .af-cell[aria-checked="true"] .af-thumb {
   border: var(--at-ring) solid var(--at-accent);
   box-shadow: 0 0 0 3px var(--at-halo);
-}
-
-.af-cell:hover .af-thumb {
-  border-color: var(--at-line-strong);
 }
 
 .af-cell[aria-checked="true"]:hover .af-thumb {
@@ -437,11 +450,6 @@
 
 .af-cell:focus-visible {
   outline: none;
-}
-
-.af-cell:focus-visible .af-thumb {
-  outline: var(--at-ring) solid var(--at-focus);
-  outline-offset: 2px;
 }
 
 .af-name {
@@ -461,14 +469,6 @@
 
 .af-grid-mini {
   gap: 8px;
-}
-
-.af-grid-mini .af-thumb {
-  box-sizing: border-box;
-  align-items: center;
-  block-size: calc(var(--af-size, 80px) + 10px);
-  min-block-size: 0;
-  padding-block: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {

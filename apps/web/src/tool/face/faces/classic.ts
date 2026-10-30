@@ -56,7 +56,9 @@ const horizon: Draw = (v) => {
 const tide: Draw = (v) => {
   const { t, th, accent } = v;
   const shadow =
-    th === 'l' ? `inset 0 0 0 2px ${t.line}, 0 16px 30px ${nv(10)}` : `inset 0 0 0 2px ${t.line}, 0 18px 36px ${bk(40)}`;
+    th === 'l'
+      ? `inset 0 0 0 2px ${t.line}, 0 16px 30px ${nv(10)}`
+      : `inset 0 0 0 2px ${t.line}, 0 18px 36px ${bk(40)}`;
   const bubble = (l: number, b: number, sz: number, d: number) =>
     `<span class="afx-rise" style="position: absolute; left: ${l}px; bottom: ${b}px; width: ${sz}px; height: ${sz}px; border-radius: 50%; border: 1.5px solid ${accent}${d ? `; animation-delay: ${d}s` : ''}"></span>`;
   const scale = each(
