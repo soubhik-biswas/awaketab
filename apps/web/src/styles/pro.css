@@ -200,7 +200,7 @@
   }
 
   .at-pro-hero-h1-art,
-  .at-pro-page:has(.at-pro-hero-art:not([hidden], :empty)) .at-pro-hero-h1 {
+  .at-pro-page[data-state="expired"] .at-pro-hero-h1 {
     font: var(--at-type-pro-hero-art);
   }
 
@@ -1941,7 +1941,7 @@
 
     .at-pro-hero-h1,
     .at-pro-hero-h1-art,
-    .at-pro-page:has(.at-pro-hero-art:not([hidden], :empty)) .at-pro-hero-h1 {
+    .at-pro-page[data-state="expired"] .at-pro-hero-h1 {
       font: var(--at-type-pro-hero-sm);
     }
 
