@@ -1,7 +1,7 @@
 'use client';
 
 import { Play } from 'lucide-react';
-import { Scene } from '@/components/scene';
+import { Scene } from '@/components/scene/scene';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useTool } from '@/components/tool/context';

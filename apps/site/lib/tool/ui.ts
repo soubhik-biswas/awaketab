@@ -26,7 +26,7 @@ export interface IQaOverrides {
   banner?: TBanner;
   emptyPresets?: boolean;
   samples?: boolean;
-  now?: number;
+  offsetMs?: number;
 }
 
 export interface IToolUi {
