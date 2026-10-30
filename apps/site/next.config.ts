@@ -2,6 +2,7 @@ import { withContentCollections } from '@content-collections/next';
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
+import { withSerwist } from '@serwist/turbopack';
 import { securityHeaders } from './lib/server/security-headers';
 
 const config: NextConfig = {
@@ -16,4 +17,4 @@ void initOpenNextCloudflareForDev();
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
-export default withContentCollections(withNextIntl(config));
+export default withContentCollections(withNextIntl(withSerwist(config)));
