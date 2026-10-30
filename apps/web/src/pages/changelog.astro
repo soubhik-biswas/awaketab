@@ -1,14 +1,11 @@
 ---
-// /changelog (B6, canvas board PageChangelog). Fragments are the `changelog` content collection (repo-root
-// `changelog/*.md`), rendered at build time by Astro's Markdown pipeline: no client JS (F-07, docs/14 §7).
-// The release summary heads the page as its own card; the rest are grouped by date with a New / Fixed / Changed
-// tag from front matter. The filter is four native radios; CSS (:has) hides what does not match, so it works
-// without a script.
+// /changelog (the changelog board). Fragments are the `changelog` content collection (repo-root `changelog/*.md`),
+// rendered at build time by Astro's Markdown pipeline: no client JS (F-07, docs/14 §7). The release summary heads the
+// page as its own card; the rest are release cards grouped by date with a New / Fixed / Changed tag from front
+// matter. The filter is four native radios; CSS (:has) hides what does not match, so it works without a script.
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Crumbs from '../components/pages/Crumbs.astro';
-import SegRadio from '../components/pages/SegRadio.astro';
-import '../styles/pages.css';
+import PageHero from '../components/site/PageHero.astro';
 import { t } from '../i18n/load';
 import {
   changelogDate,
@@ -20,7 +17,6 @@ import {
   type TChangelogType,
 } from '../lib/changelog';
 import { articleSchema } from '../lib/seo';
-import Icon from '../components/icons/Icon.astro';
 
 const sorted = sortChangelog(await getCollection('changelog'));
 const entries = await Promise.all(
@@ -41,7 +37,6 @@ const parts = release ? releaseParts(release.body) : null;
 const latest = entries[0]?.date;
 
 const LABEL: Record<TChangelogType, string> = { new: 'New', fixed: 'Fixed', changed: 'Changed' };
-const GLYPH: Record<TChangelogType, string> = { new: 'sparkle', fixed: 'wrench', changed: 'arrows-clockwise' };
 const count = (type: TChangelogType) => rest.filter((e) => e.type === type).length + (type === 'new' && release ? 1 : 0);
 const filters = [
   { value: 'all', label: 'All', count: entries.length },
@@ -60,6 +55,7 @@ const canonical = `${site}/changelog`;
   description={t('page.changelog.description')}
   canonical={canonical}
   ogImage={ogImage}
+  site
   schema={articleSchema({
     canonical,
     title: t('page.changelog.h1'),
@@ -74,74 +70,83 @@ const canonical = `${site}/changelog`;
     ],
   })}
 >
-  <main class="at-page at-cl">
-    <div class="at-pg-intro">
-      <Crumbs current={t('page.changelog.h1')} />
-      <h1 class="at-pg-h1">{t('page.changelog.h1')}</h1>
-      <p class="at-pg-lead">{t('page.changelog.description')}</p>
+  <main class="at-sp at-cl">
+    <PageHero
+      crumbs={[{ href: '/', label: t('app.name') }, { label: t('page.changelog.h1') }]}
+      eyebrow="Changelog"
+      h1={t('page.changelog.h1')}
+      lead={t('page.changelog.description')}
+    >
+      <fieldset class="at-sp-filter">
+        <legend class="sr-only">Show changes</legend>
+        <ul class="at-sp-chips" role="list">
+          {
+            filters.map((f) => (
+              <li>
+                <label class="at-sp-chip">
+                  <input class="sr-only" type="radio" name="cl-filter" value={f.value} checked={f.value === 'all'} aria-label={f.aria} />
+                  <span aria-hidden="true">
+                    {f.label} · {f.count}
+                  </span>
+                </label>
+              </li>
+            ))
+          }
+        </ul>
+      </fieldset>
+    </PageHero>
+
+    <div class="at-sp-block">
+      {
+        release && parts && (
+          <article class="at-sp-rel at-cl-release" aria-labelledby="cl-release" data-changelog-entry={release.id} data-date={release.date} data-type="new">
+            <span class="at-sp-rel-top">
+              <span class="at-sp-tag" data-tone="new">Release {release.release}</span>
+              <time class="at-sp-ver" datetime={release.date}>{changelogLongDate(release.date)}</time>
+            </span>
+            <h2 id="cl-release" class="at-sp-h3" data-changelog-title>
+              {release.title}
+            </h2>
+            <p class="at-sp-body" set:html={inlineMarkdown(parts.lede)} />
+            {parts.parts.length > 0 && (
+              <ul>
+                {parts.parts.map((p) => (
+                  <li>
+                    <strong>{p.head}:</strong> <Fragment set:html={inlineMarkdown(p.body)} />
+                  </li>
+                ))}
+              </ul>
+            )}
+            {parts.rest.map((p) => (
+              <p class="at-sp-body" set:html={inlineMarkdown(p)} />
+            ))}
+          </article>
+        )
+      }
     </div>
 
-    <SegRadio name="cl-filter" label="Show changes" options={filters} checked="all" small class="at-cl-filter" />
-
-    {
-      release && parts && (
-        <article class="at-cl-release" aria-labelledby="cl-release" data-changelog-entry={release.id} data-date={release.date}>
-          <div class="at-pg-aura at-cl-aura" aria-hidden="true" />
-          <div class="at-cl-release-top">
-            <span class="at-cl-num" aria-hidden="true">
-              {release.release}
-            </span>
-            <div class="at-pg-stack-8">
-              <span class="at-tag at-tag-tone at-pg-tag">Release</span>
-              <time class="at-cl-reldate" datetime={release.date}>
-                {changelogLongDate(release.date)}
-              </time>
-            </div>
-          </div>
-          <h2 id="cl-release" class="at-pg-h2" data-changelog-title>
-            {release.title}
-          </h2>
-          <p class="at-pg-body at-pg-measure" set:html={inlineMarkdown(parts.lede)} />
-          {parts.parts.length > 0 && (
-            <dl class="at-cl-parts">
-              {parts.parts.map((p) => (
-                <div>
-                  <dt>{p.head}</dt>
-                  <dd set:html={inlineMarkdown(p.body)} />
-                </div>
-              ))}
-            </dl>
-          )}
-          {parts.rest.map((p) => (
-            <p class="at-pg-body at-pg-measure" set:html={inlineMarkdown(p)} />
-          ))}
-        </article>
-      )
-    }
-
-    <ol class="at-cl-groups" aria-label="Changes by date">
+    <ol class="at-sp-block at-cl-groups" aria-label="Changes by date">
       {
         groups.map((g) => (
           <li class="at-cl-group">
-            <div class="at-cl-date">
-              <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
-                <circle cx="6" cy="6" r="4.75" />
-              </svg>
-              <h2><time datetime={g.date}>{changelogLongDate(g.date)}</time></h2>
-            </div>
-            <ol class="at-cl-items">
+            <h2 class="at-cl-date"><time datetime={g.date}>{changelogLongDate(g.date)}</time></h2>
+            <ol class="at-sp-releases" role="list">
               {g.items.map((e) => (
                 <li class="at-cl-entry" data-changelog-entry={e.id} data-date={e.date} data-type={e.type}>
-                  <span class={`at-tag at-tag-tone at-pg-tag at-cl-tag at-cl-tag-${e.type}`}>
-                    <Icon name={GLYPH[e.type]} size={12} tone="state" />
-                    {LABEL[e.type]}
-                  </span>
-                  <h3 class="at-pg-h3 at-pg-balance" data-changelog-title>
-                    {e.title}
-                  </h3>
-                  <div class="at-cl-body">
-                    <e.Content />
-                  </div>
+                  <article class="at-sp-rel">
+                    <span class="at-sp-rel-top">
+                      <span class="at-sp-tag" data-tone={e.type}>
+                        {LABEL[e.type]}
+                      </span>
+                      <span class="at-sp-ver">{changelogLongDate(e.date)}</span>
+                    </span>
+                    <h3 class="at-sp-h3" data-changelog-title>
+                      {e.title}
+                    </h3>
+                    <div class="at-sp-body at-cl-body">
+                      <e.Content />
+                    </div>
+                  </article>
                 </li>
               ))}
             </ol>

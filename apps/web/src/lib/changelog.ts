@@ -1,3 +1,5 @@
+import { fullDate } from './full-date';
+
 export interface IChangelogSortable {
   id: string;
   data: { date: Date; release?: string | undefined };
@@ -22,13 +24,9 @@ export function changelogDate(date: Date): string {
 
 export type TChangelogType = 'new' | 'fixed' | 'changed';
 
+// Full dates with the weekday ("Saturday, 26 September 2026"), as everywhere on the site.
 export function changelogLongDate(iso: string): string {
-  return new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
+  return fullDate(new Date(`${iso}T12:00:00Z`));
 }
 
 export interface IReleaseParts {

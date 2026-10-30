@@ -555,7 +555,7 @@
     font: var(--at-pg-type-site-prose);
   }
 
-  .at-sp-prose > * {
+  .at-sp-prose > :is(div, section) {
     display: flex;
     flex-direction: column;
     gap: var(--at-s-2);
@@ -807,6 +807,103 @@
 
   .at-sp-view[hidden] {
     display: none;
+  }
+
+  .at-sp-filter {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .at-sp-filter .at-sp-chip {
+    cursor: pointer;
+  }
+
+  .at-sp-filter .at-sp-chip:has(:checked) {
+    border-color: var(--at-accent);
+    background: var(--at-lamp-soft);
+  }
+
+  .at-sp-filter .at-sp-chip:has(:focus-visible) {
+    outline: var(--at-ring) solid var(--at-focus);
+    outline-offset: 2px;
+  }
+
+  .at-cl:has([value="new"]:checked) [data-type]:not([data-type="new"]),
+  .at-cl:has([value="fixed"]:checked) [data-type]:not([data-type="fixed"]),
+  .at-cl:has([value="changed"]:checked) [data-type]:not([data-type="changed"]) {
+    display: none;
+  }
+
+  .at-cl-groups {
+    margin: 0;
+    list-style: none;
+  }
+
+  .at-cl-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-s-3);
+  }
+
+  .at-cl:has([value="new"]:checked) .at-cl-group:not(:has([data-type="new"])),
+  .at-cl:has([value="fixed"]:checked) .at-cl-group:not(:has([data-type="fixed"])),
+  .at-cl:has([value="changed"]:checked) .at-cl-group:not(:has([data-type="changed"])) {
+    display: none;
+  }
+
+  .at-cl-date {
+    color: var(--at-ink-2);
+    font: var(--at-pg-type-site-ver);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .at-cl-body > * + * {
+    margin-block-start: var(--at-s-2);
+  }
+
+  .at-cl-body :is(ul, ol) {
+    padding-inline-start: var(--at-s-site-22);
+  }
+
+  .at-cl-body code,
+  .at-sp-rel code {
+    padding: 0 var(--at-s-1);
+    border-radius: var(--at-r-xs);
+    background: var(--at-surface-2);
+    font: var(--at-type-code);
+  }
+
+  .at-legal-short {
+    padding: var(--at-s-site-callout);
+    border-radius: var(--at-r-md);
+    background: var(--at-surface-2);
+    font: var(--at-pg-type-site-body);
+  }
+
+  .at-legal-body code {
+    padding: 0 var(--at-s-1);
+    border-radius: var(--at-r-xs);
+    background: var(--at-surface-2);
+    font: var(--at-type-code);
+    overflow-wrap: anywhere;
+  }
+
+  .at-legal-dl {
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-s-3);
+    margin: 0;
+  }
+
+  .at-legal-dl dt {
+    font-weight: 700;
+  }
+
+  .at-legal-dl dd {
+    margin: 0;
+    color: var(--at-ink-2);
   }
 
   .at-sp-system {
