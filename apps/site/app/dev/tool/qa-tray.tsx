@@ -166,9 +166,9 @@ export function QaTray() {
             ))}
           </Row>
           <Row label="BANNER">
-            {(['none', 'offline', 'conflict'] as const).map((k) => (
+            {(['none', 'offline', 'conflict', 'update'] as const).map((k) => (
               <Pill key={k} on={on.banner === k} onClick={() => pick('banner', k, { action: 'banner', banner: k })}>
-                {k === 'none' ? 'None' : k === 'offline' ? 'Offline' : 'Other tab'}
+                {k === 'none' ? 'None' : k === 'offline' ? 'Offline' : k === 'conflict' ? 'Other tab' : 'Update ready'}
               </Pill>
             ))}
           </Row>

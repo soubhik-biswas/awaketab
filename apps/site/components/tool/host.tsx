@@ -1,21 +1,22 @@
 'use client';
 
-import { useEffect, useRef, type ComponentType, type ReactNode } from 'react';
+import { useCallback, type ComponentType, type CSSProperties, type ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import { returnFocus } from '@/lib/tool/focus';
+import { DEVICE_SIZES } from '@/lib/tool/model';
 import type { TToolView } from '@/lib/tool/ui';
 import { useTool } from '@/components/tool/context';
 import { CloseButton } from '@/components/tool/kit';
-import { SetupView } from '@/components/tool/views/setup';
+import { arriveEl } from '@/components/tool/motion';
 
-type THostView = Exclude<TToolView, 'timer' | 'palette' | 'focus'> | 'setup';
+type THostView = Exclude<TToolView, 'timer' | 'palette' | 'focus'>;
 
 const lazy = (load: () => Promise<{ default: ComponentType }>) => dynamic(load, { ssr: false });
 
-const VIEWS: Record<Exclude<THostView, 'setup'>, ComponentType> = {
+const VIEWS: Record<THostView, ComponentType> = {
   faces: lazy(() => import('@/components/tool/views/faces')),
   presets: lazy(() => import('@/components/tool/views/presets')),
   history: lazy(() => import('@/components/tool/views/history')),
@@ -32,9 +33,9 @@ const VIEWS: Record<Exclude<THostView, 'setup'>, ComponentType> = {
   account: lazy(() => import('@/components/tool/views/account')),
 };
 
+// Share of the viewport height each sheet takes.
 const SHEET_H: Record<THostView, number> = {
-  setup: 0.6,
-  faces: 0.72,
+  faces: 0.8,
   presets: 0.62,
   history: 0.7,
   clear: 0.56,
@@ -50,18 +51,14 @@ const SHEET_H: Record<THostView, number> = {
   account: 0.8,
 };
 
-export function hostViewOf(view: TToolView, sheets: boolean): THostView | null {
-  if (view === 'focus') return null;
-  const base = view === 'palette' ? 'timer' : view;
-  if (base === 'timer') return sheets ? null : 'setup';
-  return base;
+export function hostViewOf(view: TToolView): THostView | null {
+  return view === 'timer' || view === 'palette' || view === 'focus' ? null : view;
 }
 
 function useTitle(view: THostView): string {
   const { m } = useTool();
   const s = m.s;
   const titles: Record<THostView, string> = {
-    setup: s.session,
     faces: s.faces,
     presets: s.presets,
     history: s.history,
@@ -71,7 +68,7 @@ function useTitle(view: THostView): string {
     fix: s.help,
     share: 'Share this setup',
     extend: 'Extend session',
-    more: s.more,
+    more: 'Menu',
     welcome: 'Welcome',
     sound: 'Ambient sound',
     studio: s.studio,
@@ -80,119 +77,103 @@ function useTitle(view: THostView): string {
   return titles[view];
 }
 
+const TITLE = 'm-0 font-display leading-[1.1] font-extrabold tracking-[-0.025em] text-foreground [font-stretch:112%]';
+
 function Body({ view }: { view: THostView }) {
-  if (view === 'setup') return <SetupView />;
   const View = VIEWS[view];
-  return <View />;
-}
-
-const H2 = 'm-0 font-sans font-extrabold tracking-[-0.02em] text-foreground';
-
-function BodyWrap({ view, children }: { view: THostView; children: ReactNode }) {
   return (
     <div
       className={cn(
-        'flex min-h-0 flex-1 flex-col overflow-x-hidden',
-        view === 'setup' ? 'gap-3' : 'gap-4',
-        view === 'faces' ? 'overflow-y-auto' : 'overflow-y-auto [scrollbar-width:none]',
+        '-m-2 box-border flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto p-2',
+        view === 'more' ? 'gap-0' : 'gap-4',
+        view !== 'faces' && view !== 'more' && '[scrollbar-width:none]',
       )}
     >
-      {children}
+      <View />
     </div>
   );
 }
 
-export function ToolHost({ panelTop, panelWidth }: { panelTop: number; panelWidth: number }) {
-  const { device, ui, viewport, theme, a } = useTool();
-  const sheets = device === 'phone' || device === 'tabletP';
-  const view = hostViewOf(ui.view, sheets);
-  const title = useTitle(view ?? 'setup');
-  const headRef = useRef<HTMLHeadingElement>(null);
+function Head({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
+  return (
+    <div className="flex shrink-0 items-center justify-between gap-3">
+      {children}
+      <CloseButton label={`Close ${title}`} onClick={onClose} />
+    </div>
+  );
+}
 
-  useEffect(() => {
-    if (!sheets && view && view !== 'setup' && view !== 'welcome' && view !== 'clear') headRef.current?.focus();
-  }, [view, sheets]);
+const NO_RISE = 'data-[state=open]:animate-none';
 
+export function ToolHost() {
+  const { device, ui, viewport, a } = useTool();
+  const phone = device === 'phone';
+  const view = hostViewOf(ui.view);
+  const title = useTitle(view ?? 'more');
+  const arrive = useCallback((el: HTMLElement | null) => {
+    if (el) arriveEl(el);
+  }, []);
   if (!view) return null;
+
+  const onOpenChange = (open: boolean) => {
+    if (!open) a.close();
+  };
+  const onCloseAutoFocus = (e: Event) => {
+    e.preventDefault();
+    returnFocus();
+  };
+
+  if (phone) {
+    return (
+      <Drawer open onOpenChange={onOpenChange}>
+        <DrawerContent
+          aria-describedby={undefined}
+          onCloseAutoFocus={onCloseAutoFocus}
+          className="gap-3"
+          style={{ height: Math.round(viewport.h * SHEET_H[view]) }}
+        >
+          <Head title={title} onClose={a.close}>
+            <DrawerTitle className={cn(TITLE, 'text-[24px]')}>{title}</DrawerTitle>
+          </Head>
+          <Body view={view} />
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  const { top, bar } = DEVICE_SIZES[device];
   const modal = view === 'welcome' || view === 'clear';
-  const close = <CloseButton label={`Close ${title}`} onClick={a.close} />;
-
-  if (sheets) {
-    return (
-      <Sheet open onOpenChange={(o) => !o && a.close()}>
-        <SheetContent
-          side="bottom"
-          showCloseButton={false}
-          aria-describedby={undefined}
-          onCloseAutoFocus={(e) => {
-            e.preventDefault();
-            returnFocus();
-          }}
-          className={cn(
-            'gap-3 rounded-t-[28px] bg-sheet pt-2.5 pb-6 shadow-e3',
-            device === 'phone' ? 'px-4' : 'inset-x-[60px] px-7',
-          )}
-          style={{ height: Math.round(viewport.h * SHEET_H[view]), maxHeight: 'none' }}
-        >
-          <div className="flex shrink-0 items-center justify-between gap-3">
-            <SheetTitle className={cn(H2, 'text-[22px]')}>{title}</SheetTitle>
-            {close}
-          </div>
-          <BodyWrap view={view}>
-            <Body view={view} />
-          </BodyWrap>
-        </SheetContent>
-      </Sheet>
-    );
-  }
-
-  if (modal) {
-    return (
-      <Dialog open onOpenChange={(o) => !o && a.close()}>
-        <DialogContent
-          showCloseButton={false}
-          aria-describedby={undefined}
-          role={view === 'clear' ? 'alertdialog' : 'dialog'}
-          onCloseAutoFocus={(e) => {
-            e.preventDefault();
-            returnFocus();
-          }}
-          className="top-[12vh] flex max-h-[80vh] w-[520px] max-w-[calc(100%-2rem)] flex-col gap-3.5 rounded-[28px] bg-sheet p-6 shadow-e3"
-        >
-          <div className="flex shrink-0 items-center justify-between gap-3">
-            <DialogTitle className={cn(H2, 'text-[22px]')}>{title}</DialogTitle>
-            {close}
-          </div>
-          <BodyWrap view={view}>
-            <Body view={view} />
-          </BodyWrap>
-        </DialogContent>
-      </Dialog>
-    );
-  }
+  const sheetW = Math.min(viewport.w - 48, view === 'faces' ? 860 : 600);
+  const box =
+    view === 'more'
+      ? 'top-(--host-top) right-4 left-auto max-h-(--host-max) w-[400px] max-w-[calc(100%-32px)] translate-x-0 gap-2 rounded-[24px] border border-border px-5 pt-2.5 pb-4'
+      : modal
+        ? 'gap-3.5'
+        : 'top-auto bottom-(--host-bottom) h-(--host-h) max-h-none w-(--host-w) max-w-none gap-3 rounded-[28px] border border-border px-7 pt-2.5 pb-6';
+  const vars = {
+    '--host-top': `${top + 8}px`,
+    '--host-max': `${viewport.h - top - 24}px`,
+    '--host-bottom': `${bar + 8}px`,
+    '--host-w': `${sheetW}px`,
+    '--host-h': `${Math.min(Math.round(viewport.h * SHEET_H[view]), viewport.h - top - bar - 32)}px`,
+  } as CSSProperties;
 
   return (
-    <aside
-      aria-label={title}
-      className={cn(
-        'absolute right-0 bottom-0 z-[2] box-border flex flex-col gap-3.5 border-l border-border px-[22px] py-5',
-        theme === 'oled' ? 'bg-card' : 'bg-card/80 dark:bg-card/85',
-      )}
-      style={{ top: panelTop, width: panelWidth }}
-    >
-      <div className="flex shrink-0 items-center justify-between gap-3">
-        <h2
-          ref={headRef}
-          tabIndex={-1}
-          className={cn(H2, 'outline-none', view === 'setup' ? 'text-[20px]' : 'text-[22px]')}
-        >
-          {title}
-        </h2>
-        {view !== 'setup' ? close : null}
-      </div>
-      <BodyWrap view={view}>
+    <Dialog open onOpenChange={onOpenChange}>
+      <DialogContent
+        ref={arrive}
+        showCloseButton={false}
+        aria-describedby={undefined}
+        role={view === 'clear' ? 'alertdialog' : 'dialog'}
+        onCloseAutoFocus={onCloseAutoFocus}
+        className={cn('overflow-hidden', NO_RISE, box)}
+        style={vars}
+      >
+        <Head title={title} onClose={a.close}>
+          <DialogTitle className={cn(TITLE, 'text-[28px]')}>{title}</DialogTitle>
+        </Head>
         <Body view={view} />
-      </BodyWrap>
-    </aside>
+      </DialogContent>
+    </Dialog>
   );
 }
