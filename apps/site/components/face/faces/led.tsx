@@ -1,5 +1,4 @@
 import { BLACK, WHITE } from '../art';
-import '../face-art.css';
 import { DOT } from '../fonts';
 import { alpha } from '../geometry';
 import type { IDrawProps } from '../kit';
@@ -9,6 +8,7 @@ const PANEL_LINE = '#1C2330';
 const RULE = '#141A24';
 const DOT_OFF = '#1A2130';
 const ND = 24;
+const EDGE_MASK = 'linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent)';
 
 // Dot-matrix board with a scrolling status line. Best in OLED.
 export default function Led({ m }: IDrawProps) {
@@ -42,6 +42,8 @@ export default function Led({ m }: IDrawProps) {
           height: 24,
           overflow: 'hidden',
           borderBottom: `1px solid ${RULE}`,
+          WebkitMaskImage: EDGE_MASK,
+          maskImage: EDGE_MASK,
         }}
       >
         <div

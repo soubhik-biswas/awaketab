@@ -81,7 +81,9 @@ export function FixPanel({
             id={titleId}
             className={cn(
               'font-sans text-foreground',
-              card ? 'text-[22px] leading-[1.2] font-bold' : 'text-[20px] font-extrabold tracking-[-0.02em]',
+              card
+                ? 'text-[22px] leading-[1.2] font-bold'
+                : 'font-display text-[20px] font-extrabold tracking-[-0.02em] [font-stretch:112%]',
             )}
           >
             {title}

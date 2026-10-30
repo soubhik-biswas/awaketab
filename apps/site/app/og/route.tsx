@@ -5,17 +5,17 @@ import type { NextRequest } from 'next/server';
 const CARD = {
   dark: {
     base: '#070B16',
-    lamp: 'rgba(59,228,127,.28)',
-    act: 'rgba(255,107,44,.30)',
+    lamp: 'rgba(61,245,142,.28)',
+    act: 'rgba(159,123,255,.30)',
     ink: '#EEF2FA',
     sub: '#C9D1E0',
     kicker: '#7CF0AE',
-    mark: '#3BE47F',
+    mark: '#3DF58E',
   },
   light: {
-    base: '#F6F4EF',
-    lamp: 'rgba(59,228,127,.30)',
-    act: 'rgba(255,107,44,.22)',
+    base: '#F5F5FA',
+    lamp: 'rgba(61,245,142,.30)',
+    act: 'rgba(159,123,255,.22)',
     ink: '#0B1020',
     sub: '#4B5165',
     kicker: '#117A3B',

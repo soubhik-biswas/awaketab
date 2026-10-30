@@ -2,6 +2,8 @@
 
 AwakeTab keeps a screen awake from the browser, always shows when it will sleep again, and then lets it sleep. This folder is everything needed to build it: the spec, the tokens, a clickable prototype and static HTML of every screen.
 
+> **Home page:** `prototype/P19-Content.dc.html` (board 19, desktop) and the first phone on `prototype/M23-Content.dc.html` (board 23, C01). Static copies: `html/P19-Content.html`, `html/M23-Content.html`.
+
 > **For Claude Code:** read this file first, then `docs/HANDOFF.md`, then build in **Next.js 16 (App Router) + Tailwind CSS 4 + shadcn/ui + TypeScript**. Open the prototype and the HTML as the visual reference. Match them exactly, but write real components; never copy the prototype's inline markup.
 
 ---
@@ -10,7 +12,7 @@ AwakeTab keeps a screen awake from the browser, always shows when it will sleep 
 
 | Path | Use it for |
 |---|---|
-| `docs/HANDOFF.md` | The full spec: brand, tokens, type, motion, icons, components, the 33 clock faces, every state and page, emails, accessibility, copy rules and placeholders. |
+| `docs/HANDOFF.md` | The full spec: brand, tokens, type, motion, icons, components, the 49 clock faces, every state and page, emails, accessibility, copy rules and placeholders. |
 | `docs/tokens.css` | Ready-to-paste `app/globals.css` with the shadcn/ui variables, Tailwind 4 `@theme` and the face colours. |
 | `prototype/` | The live design, clickable. Serve it, then open `prototype/index.html` (see below). Boards 15–19b are interactive. |
 | `prototype/App.dc.html`, `Face.dc.html`, `Page.dc.html` | The source of truth for layout, copy and the logic of every state. Read the `renderVals()` script at the bottom of each file. |
@@ -22,7 +24,7 @@ AwakeTab keeps a screen awake from the browser, always shows when it will sleep 
 ```bash
 cd awaketab/prototype
 python3 -m http.server 8000      # or: npx serve .
-# open http://localhost:8000/index.html  → start with 15 · the tool
+# open http://localhost:8000/index.html  → start with 19 · the home page
 ```
 
 ---
@@ -32,7 +34,7 @@ python3 -m http.server 8000      # or: npx serve .
 1. **Foundation.**
    - Create the Next.js 16 app with Tailwind 4 and shadcn/ui.
    - Paste `docs/tokens.css` into `app/globals.css`.
-   - Load Geist and Geist Mono with `next/font/google`.
+   - Load Archivo (variable, with the `wdth` axis), Geist and Geist Mono with `next/font/google`. Archivo is display-only, at `font-stretch: 112%–118%`.
    - Use themes `light`, `dark` and `oled`, plus Auto, which follows the system. Use `next-themes` with the classes `dark` and `oled`.
    - Icons: `lucide-react`.
 
@@ -53,23 +55,22 @@ python3 -m http.server 8000      # or: npx serve .
    - Draw on a 360 × 360 artboard and scale to `size`.
    - Keep labels at 12 px or more on screen at 240 px and up. Below 170 px, show digits only.
    - Animate only in `running` or `fallback`, and honour `prefers-reduced-motion`.
-   - The 33 faces and their rules are in `docs/HANDOFF.md` §7.
+   - The 49 faces and their rules are in `docs/HANDOFF.md` §7.
    - Build Ring, Bold, Flip, Analog and Time disc first, then the rest.
 
-5. **The tool.**
+5. **The tool — and the home page.**
+   - `/` renders the tool itself: no landing hero in front of it, no sidebar anywhere. Below the tool, the story sections from board 19.
    - Port `App.dc.html` for desktop (1440), tablet (1194 landscape, 834 portrait) and phone (390).
    - Layout per device:
-     - **Desktop:** side nav, stage and tool panel.
-     - **Tablet landscape:** icon rail and panel.
-     - **Tablet portrait and phone:** bottom tab bar, with tools as bottom sheets.
+     - **Every device:** header = logo · status · Menu; the clock fills the stage; ONE floating control bar at the bottom (Length or Extend · main action · Face · Fullscreen). Tools rise as one sheet above the bar; no sidebar, no tab bar, no header dock.
    - **Views:** timer, faces, presets, history, settings, help & fixes, share, the ⌘K palette (`Command`), fullscreen and the first-visit welcome.
    - **Pro views:** Face studio, ambient sound, devices and account.
-   - Match boards 20 and 20b (desktop), 21 and 22 (phone), and 25–27 (tablet) state by state.
+   - Match boards 20 and 20b (desktop), 21 and 22 (phone), and 25–27 (tablet) state by state; board 27b fills every remaining view × state × device.
 
 6. **Content site.**
-   - Port `Page.dc.html` into App Router routes: `/`, `/for`, `/for/[scenario]`, `/on/[device]`, `/learn/browser-support`, `/vs/[tool]`, `/guides/[slug]`, `/pro`, `/help`, `/about`, `/changelog`, `/legal/privacy`, `/legal/terms`, `/signin`, `/s/[setup]`, `not-found` and `error`.
+   - Port `Page.dc.html` into App Router routes (the home `/` is the tool from step 5 plus the story sections): `/for`, `/for/[scenario]`, `/on/[device]`, `/learn/browser-support`, `/vs/[tool]`, `/guides/[slug]`, `/pro`, `/help`, `/about`, `/changelog`, `/legal/privacy`, `/legal/terms`, `/signin`, `/s/[setup]`, `not-found` and `error`.
    - Add the system pages for offline, maintenance, link expired and setup removed.
-   - Reference boards: 19, 23 and 23b.
+   - Reference boards: 19, 23, 23b, and 30–32 (every page at desktop and both tablet widths).
 
 7. **Pro, account and emails.**
    - Checkout flow: board 16 (plan → account → inbox → pay → success / declined).
@@ -83,7 +84,8 @@ python3 -m http.server 8000      # or: npx serve .
 
 ## Done means
 
-- [ ] Every state on boards 20 / 20b, 21 / 22 and 25–27 can be reached and matches the design in light, dark and OLED.
+- [ ] `/` opens on the working tool: one tap on Keep awake starts a session; the only navigation is the bottom control bar plus Menu — no sidebar, tab bar or header dock on any device.
+- [ ] Every state on boards 20 / 20b, 21 / 22, 25–27 and 27b can be reached and matches the design in light, dark and OLED.
 - [ ] Status always shows as an icon plus words (plus a dot), never colour alone. Times are full 12-hour (`11:42 AM`) in English, and each locale uses its own clock.
 - [ ] No text under 12 px. Every target is ≥ 44 px. The focus ring is always visible. WCAG 2.2 AA contrast in all three themes.
 - [ ] The keyboard map in `docs/HANDOFF.md` §10 works.

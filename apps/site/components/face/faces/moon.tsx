@@ -1,14 +1,13 @@
 import { useId } from 'react';
 import { BLACK, NAVY, SNOW, WHITE } from '../art';
-import '../face-art.css';
 import { dash } from '../geometry';
 import { type IDrawProps, L, lmin, MONO, Stars, type TStar, Svg } from '../kit';
 import type { TFaceModel, TFaceState } from '../model';
 
 const SKY =
-  'radial-gradient(circle at 82% 104%, rgba(193,177,254,.34), transparent 52%), radial-gradient(circle at 8% 92%, rgba(124,187,255,.24), transparent 48%), radial-gradient(circle at 50% 28%, #1B2452 0%, #0D1332 56%, #070A1C 100%)';
+  'radial-gradient(circle at 50% 30%, rgba(255,240,205,.10), transparent 46%), radial-gradient(circle at 50% 120%, rgba(61,245,142,.10), transparent 55%), radial-gradient(circle at 50% 30%, #161C30 0%, #0B0F1D 58%, #05070F 100%)';
 const SHADOW = {
-  light: `0 18px 36px ${NAVY(0.18)}, 0 0 0 1px #DCD7CC`,
+  light: `0 18px 36px ${NAVY(0.18)}, 0 0 0 1px #D9D9E5`,
   night: `0 22px 44px ${BLACK(0.5)}, 0 0 0 1px #26314A`,
 };
 const GLOW = 'radial-gradient(circle, rgba(255,246,220,.30), rgba(255,246,220,0) 66%)';
@@ -16,6 +15,8 @@ const MOON_LIGHT = ['#FFFDF6', '#ECE5D0', '#C8BFA6'] as const;
 const MOON_INK = '#B9C2D6';
 const CRATER = (a: number) => `rgba(60,50,30,${a})`;
 const STAR_SKY = '#A9D0FF';
+// The phase tag's warm moonlight while awake, starting or ready.
+const MOON_TAG = '#E9DDB4';
 const STARS: readonly TStar[] = [
   [40, 70, 2],
   [70, 40, 3],
@@ -38,9 +39,8 @@ const MR = 56;
 const MCX = 180;
 const MCY = 104;
 
-// On a light page the sky stays night, so its phase tag takes the dark theme's status colours (its root carries .dark).
+// The sky stays night on every theme, so the other states' tag takes the dark theme's status colours (it carries .dark).
 const NIGHT_TAG: Readonly<Partial<Record<TFaceState, string>>> = {
-  idle: 'var(--muted-foreground-strong)',
   paused: 'var(--warning)',
   blocked: 'var(--destructive)',
   unsupported: 'var(--info)',
@@ -57,17 +57,13 @@ export function moonPath(mk: number): string {
 }
 
 const phase = (m: TFaceModel): string =>
-  m.st === 'up'
-    ? 'New moon · ended'
-    : m.st === 'idle'
-      ? 'Full moon · ready'
-      : `${Math.round(m.ringFrac * 100)}% lit · ${m.awake || m.st === 'starting' ? 'waning' : 'on hold'}`;
+  m.st === 'up' ? 'New moon' : m.st === 'idle' ? 'Full moon' : `${Math.round(m.ringFrac * 100)}% lit`;
 
 // The moon wanes from full to new as the session runs down, under an aurora sky.
 export default function Moon({ m }: IDrawProps) {
   const gid = `af-moon-${useId().replace(/[^a-zA-Z0-9_-]/gu, '')}`;
   const lit = moonPath(m.ringFrac);
-  const tag = m.night ? m.mc2 : m.multi ? STAR_SKY : (NIGHT_TAG[m.st] ?? STAR_SKY);
+  const tag = NIGHT_TAG[m.st] ?? MOON_TAG;
   return (
     <>
       <div
@@ -129,7 +125,7 @@ export default function Moon({ m }: IDrawProps) {
         style={{
           position: 'absolute',
           left: 0,
-          top: 176,
+          top: 170,
           width: 360,
           display: 'flex',
           flexDirection: 'column',
@@ -153,7 +149,7 @@ export default function Moon({ m }: IDrawProps) {
           {m.endLine}
         </span>
         <span
-          className={m.night ? L : `${L} dark`}
+          className={NIGHT_TAG[m.st] ? `${L} dark` : L}
           style={{ marginTop: 2, fontFamily: MONO, fontSize: lmin(12), letterSpacing: '.08em', color: tag }}
         >
           {phase(m)}

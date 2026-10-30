@@ -325,7 +325,7 @@ export const SCENE_FILL: Record<TSceneFill, string> = {
   p: 'var(--scene-p)',
   m: 'var(--scene-m)',
   t: 'var(--scene-lamp)',
-  o: 'var(--scene-orange)',
+  o: 'var(--scene-act)',
   a: 'var(--scene-amber)',
   a2: 'var(--scene-amber)',
   s: 'var(--scene-s)',

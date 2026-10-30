@@ -11,6 +11,7 @@ export interface IStatusPillProps extends Omit<React.ComponentProps<'span'>, 'ch
   reason?: string;
   label?: string;
   live?: boolean;
+  icon?: LucideIcon;
 }
 
 type TPillLook = { tone: string; icon?: LucideIcon; spin?: boolean; dot?: boolean };
@@ -51,10 +52,10 @@ export function statusPillLabel(state: TStatusState, time?: string, reason?: str
   }
 }
 
-export function StatusPill({ state, time, reason, label, live = false, className, ...props }: IStatusPillProps) {
+export function StatusPill({ state, time, reason, label, live = false, icon, className, ...props }: IStatusPillProps) {
   const key = state === 'running' ? 'awake' : state;
   const look = LOOK[key];
-  const Icon = look.icon;
+  const Icon = icon ?? look.icon;
   return (
     <span
       data-slot="status-pill"

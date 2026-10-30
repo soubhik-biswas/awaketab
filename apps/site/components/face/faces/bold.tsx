@@ -1,4 +1,3 @@
-import '../face-art.css';
 import { column, EndLine, type IDrawProps, Kicker } from '../kit';
 
 const NS = 30;
@@ -15,7 +14,7 @@ export default function Bold({ m }: IDrawProps) {
           display: 'flex',
           alignItems: 'baseline',
           fontWeight: 800,
-          fontSize: m.long ? 92 : 132,
+          fontSize: m.long ? 80 : 112,
           lineHeight: 0.86,
           letterSpacing: '-0.06em',
           fontVariantNumeric: 'tabular-nums',

@@ -243,7 +243,7 @@ The owner delegated all open questions to the lead ("you take the decision"). Pr
 
 ## Solar Green (30 Oct 2026)
 
-The final design handoff (`awaketab-handoff.zip`, spec copied to `docs/redesign/solar-green/`) replaces Clear Night everywhere: tool, faces, content site, Pro, extension, embed, kiosk, PiP, emails and brand.
+The final design handoff (`awaketab-handoff.zip`, spec now replaced by Volt in `docs/redesign/volt/`) replaces Clear Night everywhere: tool, faces, content site, Pro, extension, embed, kiosk, PiP, emails and brand.
 
 - **Stack (owner, revised 30 Oct 9:00 PM).** Build exactly as the handoff says: Next.js 16 App Router, Tailwind 4, shadcn/ui, TypeScript, next-themes, lucide-react 0.460, in a new `apps/site`. This supersedes the earlier Astro decision; Astro-specific entries below apply to `apps/web` only, which stays live until `apps/site` reaches parity. The zero-hydration contract (ADR-013) is retired with Astro; performance budgets are re-set for the Next app.
 - **Fidelity (owner).** Pixel-for-pixel match with the boards in light, dark and OLED, every state reachable. The board source (`prototype/*.dc.html`, `renderVals()`) is the measure; when docs and boards disagree, the boards win.
@@ -325,3 +325,28 @@ The final design handoff (`awaketab-handoff.zip`, spec copied to `docs/redesign/
 - **Share link** uses minutes as `/s/<face>-<minutes>-<chime|quiet>` (`ring-60-chime`), the route the conventions define, and shows the real host instead of `[DOMAIN]`.
 - **Pro placeholder.** `lib/tool/pro.ts` answers as Pro with the board's sample account and devices until the Pro build calls `setProSource()`; the account row counts the listed devices.
 - **Dim at night** lowers the face to 60 % opacity from 10:00 PM to 6:00 AM.
+
+## Volt (31 Oct 2026)
+
+The owner's refined handoff (`awaketab-volt-handoff.zip`, spec in `docs/redesign/volt/`) replaces Solar Green. The Next.js build, its components, the wake engine, the content collections and every decision above carry over unless a line below changes them.
+
+- **Palette.** Act moves from orange to electric violet (`#6633F5` light, `#9F7BFF` dark); the lamp brightens to volt `#3DF58E` at night; ended becomes neutral pearl (`#4B5165` / `#C9D1E0`) instead of violet; the light ground turns from paper to cool porcelain (`#F5F5FA`). Token names are unchanged, so components follow without edits; the scene's orange spark is renamed `--scene-act`.
+- **Display type.** Archivo (width axis, set at 112 %) is added for headings, the wordmark and arrival moments through `font-display`; Geist stays for every word of UI and the digits. It comes from `next/font/google`, which serves it from the site, so no third-party font request is made.
+- **The home page is the tool.** `/` renders the tool itself (no landing hero in front of it) with board 19's story sections below the fold. The `/timer` route added on 30 Oct never shipped and is removed; `toolHref()` and `startHref()` point at `/`. Preset and until pages keep their own routes.
+- **One control bar, no sidebar.** The tool drops the side nav, icon rail, tab bar and docked panel on every device for the header (logo · status · Menu), the clock and one floating control bar; tools open as a floating sheet above the bar and Menu holds Presets, History, Search, Theme, Settings, Help, Share, the Pro tools and Account. While a session runs the Length chips become Extend.
+- **Website tiers.** The content pages follow the handoff's tiers (phone below 700 px, 20 px margins; tablet portrait to 1099, 40 px; tablet landscape to 1299, 64 px; desktop 96 px). This replaces the 48 px tablet gutter decided for Solar Green.
+- **Faces.** The set grows from 33 to 49; stored face ids stay valid. Galleries draw every face in the same framed watch-glass case and group the picker as New · Signature · Digital · Analog · Ambient · All 49.
+- **Routes stay.** `/privacy` and `/terms` remain the legal pages and `/legal/*` keeps answering 301, as decided for Solar Green.
+- **Motion library (owner, 31 Oct).** GSAP 3.15 with `@gsap/react` (`useGSAP`) drives the motion CSS cannot do well: the live face animations (sweeps, flaps, drums, waves, morphs, eclipses), the arrival moments (lamp lights, success, face swap) and the panel spring. It is free under GSAP's standard no-charge licence. Each use imports only what it needs, runs through `gsap.matchMedia()` so reduced motion stops every decorative tween, and is reverted on unmount. Simple hover, press and fade transitions stay in CSS.
+- **Tool layout tiers.** The tool picks its drawn layout from its own width with the website tiers: desktop from 1300 px, tablet landscape from 1100, tablet portrait from 700, phone below. Between the drawn viewports the face shrinks to the room the stage leaves (never past its drawn size, never under 140 px) and the stage scrolls, so 200 % zoom stays usable.
+- **Bar keyboard.** The control bar is one toolbar tab stop whose stop starts on the main action (roving focus from Radix); arrow keys reach the chips, the face button and fullscreen. This keeps the drawn left-to-right order and the keyboard map's "stage → primary action" tab order.
+- **Tool toasts.** The tool's toasts use their own sonner toaster, centred 12 px above the bar on every device as the tool boards draw them; the site's other toasts keep the bottom-right placement.
+- **No setup panel.** Every Volt device opens tools as sheets, so the old setup panel and its extension promo card are not drawn anywhere; the extension is reached from Menu → Get the browser extension.
+- **Update banner.** A new build raises the "A new version is ready" banner through a `awaketab:update` window event; Reload keeps the session because the session is restored from storage.
+- **Menu glyph.** The design's menu icon (two long lines over a short one) has no Lucide twin, so it is drawn with Lucide's `createLucideIcon` on the same 24 px grid.
+- **Ended pill icon.** The tool's ended pill shows the history icon, as the tool boards draw it; the product board's clock icon stays the StatusPill default.
+- **Face motion in GSAP.** Every face loop (sweeps, flaps, drums, waves, morphs, flicker, gears, balance wheel) is a GSAP timeline built from the prototype's keyframes, durations and timing, inside `gsap.matchMedia('(prefers-reduced-motion: no-preference)')` and only while the face is running or on the fallback. Loops keep their phase from the moment motion started, so a rebuild never jumps. The per-second glides (arcs, levels, the eclipse moon sliding) stay as CSS transitions, which reduced motion and Motion off already stop.
+- **Compact faces below 170 px.** The Volt face file draws compact below 200 px, but the handoff spec and the product sizes say 170 px; faces stay compact below 170 px.
+- **Digits stay visible when compact.** Where the face file sizes the only digits with the label minimum (Skeleton's window, Terminal's body), the digits keep showing on compact faces; only the labels hide, as the spec says ("digits and graphics only").
+- **One heat colour for the whole face.** Bars, Dots, Time disc, Tape, Hourglass, Liquid, Waveform and HUD take one colour for time left (volt, then lime, amber, ember) everywhere, not only in galleries, as the Volt face file draws them.
+- **Night panels on a light page.** Neon, Terminal, Pulse, HUD and Constellation are always dark panels, so on a light page they take the dark theme's status colours (as Departure board already did); HUD's tell-tale lamps keep the page theme's lamp and amber, as drawn.

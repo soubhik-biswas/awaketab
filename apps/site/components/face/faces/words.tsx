@@ -1,4 +1,3 @@
-import '../face-art.css';
 import { SERIF } from '../fonts';
 import { type IDrawProps, Kicker } from '../kit';
 import type { TFaceModel, TFaceState } from '../model';

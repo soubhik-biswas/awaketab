@@ -19,10 +19,12 @@ export interface IFaceProps {
   lblTop?: string;
   lblEnd?: string;
   fmt?: 12 | 24;
+  // Draws the gallery's watch-glass case behind the face (faces with their own card keep it).
+  framed?: boolean;
   className?: string;
 }
 
-// The sheet order of the 33 faces (the same list as FACE_IDS in @awaketab/core).
+// The sheet order of the 49 faces (the same list as FACE_IDS in @awaketab/core).
 export const FACE_IDS = [
   'ring',
   'bold',
@@ -57,6 +59,22 @@ export const FACE_IDS = [
   'wordgrid',
   'tape',
   'moon',
+  'aurora',
+  'glass',
+  'neon',
+  'liquid',
+  'eclipse',
+  'skeleton',
+  'bauhaus',
+  'poster',
+  'eink',
+  'terminal',
+  'pulse',
+  'waveform',
+  'blob',
+  'hud',
+  'constellation',
+  'halo',
 ] as const;
 
 export type TFaceId = (typeof FACE_IDS)[number];
