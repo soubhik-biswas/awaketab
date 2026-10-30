@@ -20,7 +20,7 @@ import { fetchActivations } from '../../../lib/license.js';
 import { POLAR_PORTAL_URL } from '../../../lib/pro-common.js';
 import { esc, icon, longDate, time12, tr, upsell } from './ui.js';
 
-export const MAX_DEVICES = 5;
+const MAX_DEVICES = 5;
 // Device identity colours: never green, amber or red, so they never read as a status.
 export const IDENTITIES = ['cobalt', 'bubblegum', 'denim', 'grape', 'plum', 'sand', 'slate', 'mauve'] as const;
 
@@ -40,7 +40,7 @@ export function deviceKind(label: string): 'phone' | 'tablet' | 'laptop' {
 
 const KIND_ICON = { laptop: laptopSvg, tablet: tabletSvg, phone: phoneSvg };
 
-export function hereState(ctx: IToolCtx): { key: 'awake' | 'paused' | 'idle'; until: number | null } {
+function hereState(ctx: IToolCtx): { key: 'awake' | 'paused' | 'idle'; until: number | null } {
   const s = ctx.store.get();
   const live = s.session && (s.session.status === 'active' || s.session.status === 'paused') ? s.session : null;
   if (live?.status === 'paused') return { key: 'paused', until: null };
@@ -146,7 +146,9 @@ function download(body: string, type: string, name: string): void {
   document.body.append(a);
   a.click();
   a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 1000);
 }
 
 const today = () => new Date().toISOString().slice(0, 10);

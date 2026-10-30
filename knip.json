@@ -23,7 +23,8 @@
         "scripts/kv/*.ts",
         "functions/**/*.ts",
         "test/**/*.{test,spec}.ts",
-        "scripts/**/*.test.ts"
+        "scripts/**/*.test.ts",
+        "src/tool/packs/pro/index.ts"
       ],
       "project": [
         "src/**/*.{astro,ts,tsx,js,mjs,css}",
@@ -31,7 +32,7 @@
         "functions/**/*.ts",
         "test/**/*.ts"
       ],
-      "ignore": ["src/components/brand/Wordmark.astro", "src/tool/packs/pro/**"],
+      "ignore": ["src/components/brand/Wordmark.astro"],
       "ignoreDependencies": [
         "@fontsource/inter",
         "@fontsource/noto-sans-devanagari",

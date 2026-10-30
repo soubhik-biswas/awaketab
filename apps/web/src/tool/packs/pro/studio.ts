@@ -15,7 +15,7 @@ interface IFaceModule {
 // The shared Face component; looked up softly so this pack builds on its own and loads the face lazily.
 const faceModules = import.meta.glob<IFaceModule>('../../face/index.ts');
 
-export const SWATCHES: ReadonlyArray<readonly [string, string]> = [
+const SWATCHES: ReadonlyArray<readonly [string, string]> = [
   ['', 'auto'],
   ['#3BE47F', 'signal'],
   ['#B8F25A', 'lime'],
