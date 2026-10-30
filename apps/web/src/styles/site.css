@@ -337,6 +337,11 @@
     padding: var(--at-s-site-card);
   }
 
+  .at-sp-card-brands {
+    display: flex;
+    gap: var(--at-s-2);
+  }
+
   .at-sp-card-tags {
     display: flex;
     flex-wrap: wrap;
