@@ -2,7 +2,7 @@
   position: relative;
   overflow: hidden;
   direction: ltr;
-  font-family: var(--font-geist), system-ui, sans-serif;
+  font-family: var(--font-geist), var(--font-script, system-ui), system-ui, sans-serif;
   line-height: normal;
   color: var(--foreground);
   text-align: start;
