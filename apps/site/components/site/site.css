@@ -1,0 +1,193 @@
+:root {
+  --site-glow-a: rgba(17, 122, 59, 0.1);
+  --site-glow-b: rgba(185, 61, 11, 0.08);
+  --site-lift: rgba(11, 16, 32, 0.1);
+  --site-act-glow: rgba(185, 61, 11, 0.25);
+  --site-lamp-glow: rgba(17, 122, 59, 0.1);
+  --site-pro-glow: rgba(185, 61, 11, 0.12);
+  --site-art: var(--secondary);
+  --site-well: var(--background);
+  --site-night: #070b16;
+  --site-night-ink: #eef2fa;
+  --site-night-muted: #a9b3c7;
+  --site-night-line: #26314a;
+  --site-night-lamp: #3be47f;
+  --site-cta: #0b1020;
+  --site-cta-lamp: rgba(59, 228, 127, 0.25);
+  --site-cta-act: rgba(255, 107, 44, 0.25);
+  --site-cta-button: #ff6b2c;
+  --site-cta-button-ink: #0b0f1a;
+  --site-cta-button-glow: rgba(255, 107, 44, 0.4);
+  --site-consent-shadow: rgba(0, 0, 0, 0.3);
+}
+
+.dark,
+.oled {
+  --site-glow-a: rgba(59, 228, 127, 0.2);
+  --site-glow-b: rgba(255, 107, 44, 0.14);
+  --site-lift: rgba(0, 0, 0, 0.45);
+  --site-act-glow: rgba(255, 107, 44, 0.35);
+  --site-lamp-glow: rgba(59, 228, 127, 0.12);
+  --site-pro-glow: rgba(255, 107, 44, 0.18);
+  --site-art: #0a0f1e;
+  --site-well: #070b16;
+}
+
+html:lang(ja) body {
+  font-family: var(--font-geist), var(--font-noto-jp), ui-sans-serif, system-ui, sans-serif;
+}
+
+html:lang(zh-Hans) body {
+  font-family: var(--font-geist), var(--font-noto-sc), ui-sans-serif, system-ui, sans-serif;
+}
+
+html:lang(hi) body {
+  font-family: var(--font-geist), var(--font-noto-deva), ui-sans-serif, system-ui, sans-serif;
+}
+
+html[data-consent] .site-consent {
+  display: none;
+}
+
+@keyframes site-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.site-float {
+  animation: site-float 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-float {
+    animation: none;
+  }
+}
+
+.site-prose a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.site-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--secondary);
+}
+
+.site-prose p,
+.site-prose ul,
+.site-prose ol {
+  margin: 0;
+}
+
+.site-prose ul,
+.site-prose ol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 22px;
+}
+
+.site-prose h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.site-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.site-prose th {
+  padding: 12px 20px;
+  background: var(--secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--muted-foreground-strong);
+}
+
+.site-prose td {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  vertical-align: top;
+}
+
+@media (max-width: 699px) {
+  .site-prose h3 {
+    font-size: 20px;
+  }
+
+  .site-prose thead {
+    display: none;
+  }
+
+  .site-prose tr,
+  .site-prose td {
+    display: block;
+  }
+
+  .site-prose tr {
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .site-prose td {
+    padding: 2px 0;
+    border: 0;
+  }
+
+  .site-prose td[data-label]:not(:first-child)::before {
+    content: attr(data-label) ": ";
+    font-weight: 600;
+  }
+}
+
+.site-table {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+}
+
+.site-glow {
+  position: absolute;
+  top: -200px;
+  left: -200px;
+  width: 700px;
+  height: 900px;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, var(--site-glow-a), transparent),
+    radial-gradient(closest-side at 70% 60%, var(--site-glow-b), transparent);
+  pointer-events: none;
+}
+
+@media (min-width: 700px) {
+  .site-glow {
+    left: 35%;
+    width: 1100px;
+  }
+}
+
+.site-cta {
+  background:
+    radial-gradient(circle at 15% 20%, var(--site-cta-lamp), transparent 50%),
+    radial-gradient(circle at 85% 80%, var(--site-cta-act), transparent 50%), var(--site-cta);
+}
