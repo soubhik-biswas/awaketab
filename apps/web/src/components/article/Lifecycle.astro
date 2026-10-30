@@ -1,7 +1,8 @@
 ---
 import type { TLockState } from '@awaketab/wake';
 import StatusPill from '../shell/StatusPill.astro';
-import Icon from '../icons/Icon.astro';
+import { LOCK_PILL } from '../../lib/page-glyphs';
+import Lucide from '../icons/Lucide.astro';
 
 interface Props {
   data: {
@@ -163,15 +164,14 @@ const ARROW = 'M0 0L8 4L0 8z';
           {chain.map((node) =>
             'state' in node ? (
               <StatusPill
-                as="span"
-                size="S"
-                state={node.state}
+                size="sm"
+                state={LOCK_PILL[node.state]}
                 label={pill(node.state)}
               />
             ) : (
               <span class="at-lc-edge">
                 {node.mono ? <code>{node.edge}</code> : node.edge}
-                <Icon name="arrow-right" size={16} tone="ink" class="at-lc-go" />
+                <Lucide name="arrow-right" size={16} class="at-lc-go" />
               </span>
             ),
           )}
