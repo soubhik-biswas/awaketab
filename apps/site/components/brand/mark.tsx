@@ -4,15 +4,7 @@ export type TMarkTone = 'auto' | 'dark' | 'light' | 'brand' | 'mono-ink' | 'mono
 export type TMarkLamp = 'awake' | 'paused' | 'blocked' | 'ended' | 'info' | 'off';
 export type TMarkLockup = 'mark' | 'horizontal' | 'stacked';
 export type TAppMarkState =
-  | 'idle'
-  | 'starting'
-  | 'running'
-  | 'fallback'
-  | 'paused'
-  | 'needsyou'
-  | 'blocked'
-  | 'unsupported'
-  | 'ended';
+  'idle' | 'starting' | 'running' | 'fallback' | 'paused' | 'needsyou' | 'blocked' | 'unsupported' | 'ended';
 
 interface IMarkProps {
   size?: number;

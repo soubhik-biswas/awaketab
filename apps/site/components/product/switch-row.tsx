@@ -5,8 +5,10 @@ import { cn } from 'cn';
 
 import { Switch } from '@/components/ui/switch';
 
-export interface ISwitchRowProps
-  extends Omit<React.ComponentProps<typeof Switch>, 'children' | 'id' | 'aria-describedby'> {
+export interface ISwitchRowProps extends Omit<
+  React.ComponentProps<typeof Switch>,
+  'children' | 'id' | 'aria-describedby'
+> {
   label: React.ReactNode;
   description?: React.ReactNode;
 }

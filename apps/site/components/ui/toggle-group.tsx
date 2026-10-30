@@ -35,10 +35,7 @@ function ToggleGroup({
       data-size={size}
       data-spacing={spacing}
       style={{ '--gap': spacing } as React.CSSProperties}
-      className={cn(
-        'group/toggle-group flex w-fit flex-wrap items-center gap-[--spacing(var(--gap))]',
-        className,
-      )}
+      className={cn('group/toggle-group flex w-fit flex-wrap items-center gap-[--spacing(var(--gap))]', className)}
       {...props}
     >
       <ToggleGroupContext.Provider value={{ variant, size, spacing }}>{children}</ToggleGroupContext.Provider>

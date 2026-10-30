@@ -49,7 +49,10 @@ function DrawerContent({ className, children, ...props }: React.ComponentProps<t
         )}
         {...props}
       >
-        <div aria-hidden="true" className="hidden h-[5px] w-10 shrink-0 self-center rounded-full bg-input group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
+        <div
+          aria-hidden="true"
+          className="hidden h-[5px] w-10 shrink-0 self-center rounded-full bg-input group-data-[vaul-drawer-direction=bottom]/drawer-content:block"
+        />
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>
@@ -60,10 +63,7 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="drawer-header"
-      className={cn(
-        'flex min-h-11 shrink-0 flex-col justify-center gap-1 text-left',
-        className,
-      )}
+      className={cn('flex min-h-11 shrink-0 flex-col justify-center gap-1 text-left', className)}
       {...props}
     />
   );

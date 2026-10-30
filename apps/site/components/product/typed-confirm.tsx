@@ -85,7 +85,11 @@ export function TypedConfirm({
             )}
           />
           {ok ? (
-            <Check className="pointer-events-none absolute right-3 size-[18px] text-lamp" strokeWidth={2.25} aria-hidden="true" />
+            <Check
+              className="pointer-events-none absolute right-3 size-[18px] text-lamp"
+              strokeWidth={2.25}
+              aria-hidden="true"
+            />
           ) : null}
         </span>
       </label>

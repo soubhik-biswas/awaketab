@@ -89,11 +89,7 @@ function DialogFooter({
   showCloseButton?: boolean;
 }) {
   return (
-    <div
-      data-slot="dialog-footer"
-      className={cn('flex flex-wrap justify-end gap-2', className)}
-      {...props}
-    >
+    <div data-slot="dialog-footer" className={cn('flex flex-wrap justify-end gap-2', className)} {...props}>
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>

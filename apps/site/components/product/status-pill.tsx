@@ -3,16 +3,7 @@ import { cn } from 'cn';
 import { Ban, BellRing, Clock, LoaderCircle, Pause, Play, Power, ZapOff, type LucideIcon } from 'lucide-react';
 
 export type TStatusState =
-  | 'idle'
-  | 'starting'
-  | 'awake'
-  | 'running'
-  | 'needsyou'
-  | 'fallback'
-  | 'paused'
-  | 'blocked'
-  | 'ended'
-  | 'unsupported';
+  'idle' | 'starting' | 'awake' | 'running' | 'needsyou' | 'fallback' | 'paused' | 'blocked' | 'ended' | 'unsupported';
 
 export interface IStatusPillProps extends Omit<React.ComponentProps<'span'>, 'children'> {
   state: TStatusState;
@@ -77,7 +68,9 @@ export function StatusPill({ state, time, reason, label, live = false, className
       )}
       {...props}
     >
-      {look.spin ? <LoaderCircle className="size-4 shrink-0 animate-spinner" strokeWidth={2.25} aria-hidden="true" /> : null}
+      {look.spin ? (
+        <LoaderCircle className="size-4 shrink-0 animate-spinner" strokeWidth={2.25} aria-hidden="true" />
+      ) : null}
       {look.dot ? (
         <span
           aria-hidden="true"

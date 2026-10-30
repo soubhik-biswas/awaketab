@@ -64,7 +64,11 @@ function SheetContent({
         {...props}
       >
         {side === 'bottom' ? (
-          <span data-slot="sheet-grabber" aria-hidden="true" className="h-[5px] w-10 shrink-0 self-center rounded-full bg-input" />
+          <span
+            data-slot="sheet-grabber"
+            aria-hidden="true"
+            className="h-[5px] w-10 shrink-0 self-center rounded-full bg-input"
+          />
         ) : null}
         {children}
         {showCloseButton && (
@@ -81,7 +85,13 @@ function SheetContent({
 }
 
 function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="sheet-header" className={cn('flex min-h-11 shrink-0 flex-col justify-center gap-1 pr-12', className)} {...props} />;
+  return (
+    <div
+      data-slot="sheet-header"
+      className={cn('flex min-h-11 shrink-0 flex-col justify-center gap-1 pr-12', className)}
+      {...props}
+    />
+  );
 }
 
 function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {

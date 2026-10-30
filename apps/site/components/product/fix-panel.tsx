@@ -93,7 +93,10 @@ export function FixPanel({
         {list.map((step, index) => (
           <li
             key={index}
-            className={cn('flex gap-2.5 text-[14px] text-foreground', card ? 'items-center' : 'items-start leading-[1.5]')}
+            className={cn(
+              'flex gap-2.5 text-[14px] text-foreground',
+              card ? 'items-center' : 'items-start leading-[1.5]',
+            )}
           >
             <span
               aria-hidden="true"
@@ -106,10 +109,7 @@ export function FixPanel({
         ))}
       </ol>
       <div className={cn('flex', card ? 'flex-wrap gap-2' : 'flex-col gap-4')}>
-        <Button
-          onClick={onUseFallback}
-          className={cn(card ? 'px-3.5' : 'h-13 w-full gap-2 rounded-md text-[15px]')}
-        >
+        <Button onClick={onUseFallback} className={cn(card ? 'px-3.5' : 'h-13 w-full gap-2 rounded-md text-[15px]')}>
           <Play className={card ? undefined : 'size-[18px]'} aria-hidden="true" />
           {fallbackLabel}
         </Button>
