@@ -1,0 +1,164 @@
+/* AwakeTab — Solar Green design tokens
+   Tailwind v4 + shadcn/ui variable names. Drop into app/globals.css.
+   Every text pair is >= 4.5:1, every border/icon/face fill >= 3:1 (see design board 07). */
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *, .oled, .oled *));
+
+:root {
+  /* light · paper */
+  --background: #F6F4EF;
+  --foreground: #0B1020;
+  --card: #FFFFFF;
+  --card-foreground: #0B1020;
+  --popover: #FFFFFF;
+  --popover-foreground: #0B1020;
+  --primary: #B93D0B;            /* orange = act */
+  --primary-foreground: #FFFFFF;
+  --primary-soft: #FDECE3;
+  --secondary: #EFECE5;
+  --secondary-foreground: #0B1020;
+  --muted: #EFECE5;
+  --muted-foreground: #626777;   /* text-3 */
+  --muted-foreground-strong: #4B5165; /* text-2 */
+  --surface-3: #E6E2D9;          /* hover fill */
+  --accent: #E2F6E8;             /* lamp-soft */
+  --accent-foreground: #117A3B;
+  --destructive: #C21D3E;
+  --destructive-soft: #FCE3E7;
+  --border: #DCD7CC;
+  --input: #8F887A;
+  --ring: #1C64B8;
+  --link: #117A3B;
+  --lamp: #117A3B;               /* green = awake / live */
+  --lamp-foreground: #FFFFFF;
+  --warning: #8A5A00;            /* amber = paused */
+  --warning-soft: #FCEFD2;
+  --info: #1C64B8;               /* sky = needs you, info, focus */
+  --info-soft: #E1ECFA;
+  --ended: #6D4AD0;              /* violet = time's up */
+  --ended-soft: #ECE6FC;
+  --radius: 14px;
+
+  /* clock faces only, only while awake — text set (>= 4.5:1) */
+  --face-sky: #1D5FB8;
+  --face-violet: #6D4AD0;
+  --face-lime: #4D7C0F;
+  --face-amber: #A15C00;
+  --face-ember: #C2410C;
+  /* fills and strokes (>= 3:1) */
+  --face-fill-sky: #3B7DD8;
+  --face-fill-violet: #7C5CE0;
+  --face-fill-lime: #4F9A1F;
+  --face-fill-amber: #C47A00;
+  --face-fill-ember: #E0531F;
+}
+
+.dark, .oled {
+  /* midnight */
+  --background: #070B16;
+  --foreground: #EEF2FA;
+  --card: #0E1424;
+  --card-foreground: #EEF2FA;
+  --popover: #0E1424;
+  --popover-foreground: #EEF2FA;
+  --primary: #FF6B2C;
+  --primary-foreground: #0B0F1A;
+  --primary-soft: #3A1A0C;
+  --secondary: #151D31;
+  --secondary-foreground: #EEF2FA;
+  --muted: #151D31;
+  --muted-foreground: #8E99AE;
+  --muted-foreground-strong: #A9B3C7;
+  --surface-3: #1D273F;
+  --accent: #0D3B22;
+  --accent-foreground: #3BE47F;
+  --destructive: #FF6B81;
+  --destructive-soft: #3D1220;
+  --border: #26314A;
+  --input: #6B7894;
+  --ring: #7CBBFF;
+  --link: #7CF0AE;
+  --lamp: #3BE47F;
+  --lamp-foreground: #052812;
+  --warning: #FFC53D;
+  --warning-soft: #3A2C08;
+  --info: #7CBBFF;
+  --info-soft: #0F2645;
+  --ended: #C1B1FE;
+  --ended-soft: #271C4A;
+
+  --face-sky: #7CBBFF;
+  --face-violet: #C1B1FE;
+  --face-lime: #B8F25A;
+  --face-amber: #FFB547;
+  --face-ember: #FF6B2C;
+  --face-fill-sky: #7CBBFF;
+  --face-fill-violet: #C1B1FE;
+  --face-fill-lime: #B8F25A;
+  --face-fill-amber: #FFB547;
+  --face-fill-ember: #FF6B2C;
+}
+
+.oled {
+  /* dark tokens on true black */
+  --background: #000000;
+  --card: #05070C;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted-foreground-strong: var(--muted-foreground-strong);
+  --color-surface-3: var(--surface-3);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-soft: var(--destructive-soft);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+  --color-lamp: var(--lamp);
+  --color-lamp-foreground: var(--lamp-foreground);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-ended: var(--ended);
+  --color-ended-soft: var(--ended-soft);
+  --color-face-sky: var(--face-sky);
+  --color-face-violet: var(--face-violet);
+  --color-face-lime: var(--face-lime);
+  --color-face-amber: var(--face-amber);
+  --color-face-ember: var(--face-ember);
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  --radius-xs: 6px;    /* kbd, tags */
+  --radius-sm: 10px;   /* inputs, tabs */
+  --radius-md: 14px;   /* buttons, menus */
+  --radius-lg: 20px;   /* cards, sheets */
+  --radius-xl: 28px;   /* stage, dialogs */
+
+  --ease-glide: cubic-bezier(.2, 0, 0, 1);    /* 80 ms hover/press, 120 ms toggles */
+  --ease-base: cubic-bezier(.2, .8, .2, 1);   /* 180 ms status pill, toasts */
+  --ease-arrive: cubic-bezier(.16, 1, .3, 1); /* 520 ms lamp lights, success */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
