@@ -8,6 +8,14 @@
   --at-ext-aura-top: -380px;
   --at-ext-aura-h: 1100px;
   --at-ext-hero-mock: 540px;
+  --at-ext-hero-art: 440px;
+  --at-ext-intro-max: 560px;
+  --at-type-ext-hero: 800 clamp(2.5rem, 5.4vw, 3.75rem)/1.02 var(--at-font);
+  --at-type-ext-intro: 400 1.1875rem/1.55 var(--at-font);
+  --at-type-ext-kick: 500 0.875rem/1.4 var(--at-font-mono);
+  --at-s-ext-18: 18px;
+  --at-s-ext-56: 56px;
+  --at-s-ext-72: 72px;
   --at-ext-lead-max: 34em;
   --at-ext-dot-glow: 0 0 10px;
   --at-ext-mock-h: 400px;
@@ -92,22 +100,6 @@
   flex-direction: column;
   min-block-size: 100vh;
   overflow-x: clip;
-}
-
-.wl-aura {
-  position: absolute;
-  inset-block-start: var(--at-ext-aura-top);
-  inset-inline-start: -10%;
-  inline-size: 120%;
-  block-size: var(--at-ext-aura-h);
-  background: radial-gradient(
-    40% 40% at 60% 50%,
-    color-mix(in srgb, var(--at-accent) var(--ext-halo), transparent) 0%,
-    transparent 70%
-  );
-  opacity: 0.7;
-  pointer-events: none;
-  animation: at-aura 26s ease-in-out infinite alternate;
 }
 
 .wl-head {
@@ -204,26 +196,104 @@
 .wl-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--at-s-12) var(--at-s-16);
+  gap: var(--at-s-10) var(--at-s-ext-56);
   align-items: center;
 }
 
 @media (width >= 1024px) {
   .wl-hero {
-    grid-template-columns: minmax(0, 1fr) var(--at-ext-hero-mock);
+    grid-template-columns: minmax(0, 1fr) var(--at-ext-hero-art);
+    padding-block: var(--at-s-ext-72);
   }
 }
 
 .wl-hero-text {
   display: flex;
   flex-direction: column;
-  gap: var(--at-s-6);
+  gap: var(--at-s-ext-18);
 }
 
 .wl-hero-text h1 {
-  font: var(--at-type-h1);
-  letter-spacing: -0.02em;
+  font: var(--at-type-ext-hero);
+  letter-spacing: var(--at-trk-display-2xl);
   text-wrap: balance;
+}
+
+.wl-hero .wl-kicker {
+  font: var(--at-type-ext-kick);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--at-accent-text);
+}
+
+.wl-intro {
+  max-inline-size: var(--at-ext-intro-max);
+  font: var(--at-type-ext-intro);
+  color: var(--at-ink-2);
+  text-wrap: pretty;
+}
+
+.wl-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--at-s-ext-10);
+}
+
+.wl-note {
+  font: var(--at-type-small);
+  color: var(--at-ink-2);
+}
+
+.wl-hero-art {
+  display: flex;
+  justify-content: center;
+}
+
+.wl-scene {
+  inline-size: 100%;
+  max-inline-size: var(--at-ext-hero-art);
+  block-size: auto;
+}
+
+.wl-scene-dark {
+  display: none;
+}
+
+:is([data-theme="dark"], [data-theme="oled"]) .wl-scene-light {
+  display: none;
+}
+
+:is([data-theme="dark"], [data-theme="oled"]) .wl-scene-dark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .wl-scene-light {
+    display: none;
+  }
+
+  :root:not([data-theme]) .wl-scene-dark {
+    display: block;
+  }
+}
+
+.wl-pinsec {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--at-s-12) var(--at-s-16);
+  align-items: center;
+}
+
+@media (width >= 1024px) {
+  .wl-pinsec {
+    grid-template-columns: minmax(0, 1fr) var(--at-ext-hero-mock);
+  }
+}
+
+.wl-pin-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--at-s-5);
 }
 
 .wl-kicker {
@@ -237,7 +307,7 @@
   block-size: var(--at-s-2);
   border-radius: 50%;
   background: var(--at-accent);
-  box-shadow: var(--at-ext-dot-glow) var(--ext-lamp-glow);
+  box-shadow: 0 0 0 3px var(--at-halo);
 }
 
 .wl-steps {
@@ -488,10 +558,6 @@
   color: var(--at-accent);
 }
 
-.wl-pin[aria-pressed="true"] .at-duo-f {
-  opacity: 1;
-}
-
 .wl-pin[aria-pressed="false"],
 .wl-puzzle[data-ping] {
   animation: wl-ping 2.4s var(--ext-ease) infinite;
@@ -499,7 +565,7 @@
 
 @keyframes wl-ping {
   0% {
-    box-shadow: 0 0 0 0 var(--ext-lamp-glow);
+    box-shadow: 0 0 0 0 var(--at-halo);
   }
 
   70%,
@@ -852,7 +918,7 @@
   color: var(--at-ext-screen-off-ink);
 }
 
-[data-level="system"] .wl-screen img {
+[data-level="system"] .wl-screen .at-mark {
   opacity: 0.18;
 }
 
@@ -933,23 +999,6 @@
   gap: var(--at-s-2);
   font: var(--at-type-caption);
   color: var(--at-muted);
-}
-
-.wl-minipill {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--at-s-1);
-  block-size: var(--at-h-pill-xs);
-  padding-inline: var(--at-s-2);
-  border: var(--at-border) solid var(--ext-lamp-line);
-  border-radius: var(--at-r-pill);
-  background: var(--ext-lamp-tag);
-  font-weight: 600;
-  color: var(--at-ink);
-}
-
-.wl-minipill path {
-  fill: var(--at-accent);
 }
 
 .wl-key {

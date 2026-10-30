@@ -5,7 +5,7 @@ import { STORAGE_KEYS } from '@awaketab/core';
 import { browser } from 'wxt/browser';
 import type { IExtApi } from '../../src/api';
 import { keyCaps } from '../../src/format';
-import { applyTheme, loadPage, q, translateTree } from '../../src/page';
+import { applyTheme, loadPage, paintMarks, q, translateTree } from '../../src/page';
 import { readSettings } from '../../src/settings';
 
 async function boot(): Promise<void> {
@@ -15,7 +15,29 @@ async function boot(): Promise<void> {
   const { t, time } = ctx;
   const version = api.runtime.getManifest().version;
   translateTree(root, t);
+  paintMarks(root);
   document.title = t('ext.welcome.title');
+
+  // The hero walks install → pin → popup: both buttons move it to step 2 and bring the toolbar demo into view.
+  const hero = q(root, '[data-hero]');
+  const renderHero = (step: 1 | 2) => {
+    hero.dataset.step = String(step);
+    q(root, '[data-kicker]').textContent = t('ext.welcome.stepOf', { step });
+    q(root, '[data-hero-title]').textContent = t(step === 1 ? 'ext.welcome.title' : 'ext.welcome.done.title');
+    q(root, '[data-hero-lead]').textContent = t(step === 1 ? 'ext.welcome.intro' : 'ext.welcome.done.body');
+    for (const button of hero.querySelectorAll<HTMLElement>('[data-finish]')) button.hidden = step === 2;
+  };
+  renderHero(1);
+  for (const button of hero.querySelectorAll<HTMLButtonElement>('[data-finish]')) {
+    button.addEventListener('click', () => {
+      renderHero(2);
+      q(root, '[data-hero-title]').focus();
+      q(root, '#pin').scrollIntoView({
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    });
+  }
 
   q(root, '[data-installed]').textContent = t('ext.welcome.kicker', { version });
   const steps = [...root.querySelectorAll<HTMLElement>('[data-pin-steps] li')];
