@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { LocaleLinksProvider } from '@/components/site/locale-links';
+import { ServiceWorker } from '@/components/widgets/service-worker';
 import { LOCALE_META, type TLocale } from '@/i18n/locales';
 import { routing } from '@/i18n/routing';
 import { SITE } from '@/lib/routes';
@@ -32,7 +33,7 @@ const SCRIPT_FONT: Partial<Record<TLocale, string>> = {
 };
 
 // The client gets only what client components read; the tool adds its own namespaces here.
-const CLIENT_NAMESPACES = ['site', 'content', 'account', 'tool', 'proflow'] as const;
+const CLIENT_NAMESPACES = ['site', 'content', 'account', 'tool', 'proflow', 'surfaces', 'embed'] as const;
 
 // A returning visitor who already answered the analytics question never sees the box, not even for a frame.
 const CONSENT_BOOT = `try{var o=JSON.parse(localStorage.getItem('at.v1.onboarding')||'null'),s=JSON.parse(localStorage.getItem('at.v1.settings')||'null');if((o&&Array.isArray(o.dismissedTips)&&o.dismissedTips.indexOf('analytics')>=0)||(s&&s.telemetry===false))document.documentElement.dataset.consent=''}catch(e){}`;
@@ -88,6 +89,7 @@ export default async function LocaleLayout({
             </TooltipProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
+        <ServiceWorker />
       </body>
     </html>
   );

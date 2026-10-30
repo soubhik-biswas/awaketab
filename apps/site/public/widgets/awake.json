@@ -1,0 +1,26 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.6",
+  "selectAction": { "type": "Action.Execute", "verb": "open" },
+  "verticalContentAlignment": "Center",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "${digits}",
+      "size": "ExtraLarge",
+      "weight": "Bolder",
+      "horizontalAlignment": "Center",
+      "fontType": "Monospace"
+    },
+    {
+      "type": "TextBlock",
+      "text": "${status} · ${line}",
+      "size": "Small",
+      "weight": "Bolder",
+      "color": "${if(awake, 'Good', 'Default')}",
+      "horizontalAlignment": "Center",
+      "wrap": true
+    }
+  ]
+}

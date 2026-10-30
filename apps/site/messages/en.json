@@ -3584,5 +3584,154 @@
         "sub": "Looks, history, notes."
       }
     }
+  },
+  "surfaces": {
+    "status": {
+      "awake": "Awake",
+      "fallback": "Video fallback",
+      "starting": "Starting…",
+      "paused": "Paused",
+      "hidden": "Paused",
+      "needsyou": "Needs you",
+      "blocked": "Blocked",
+      "unsupported": "Not supported",
+      "ended": "Time’s up",
+      "idle": "Not awake"
+    },
+    "line": {
+      "until": "until {time}",
+      "noEnd": "no end",
+      "hidden": "tab hidden",
+      "left": "{time} left",
+      "needsyou": "tap AwakeTab to resume",
+      "blocked": "open AwakeTab to fix",
+      "ended": "ended at {time}",
+      "idle": "start in AwakeTab",
+      "starting": "asking the browser",
+      "unsupported": "open AwakeTab"
+    },
+    "pip": {
+      "region": "Mini clock",
+      "title": "AwakeTab mini clock",
+      "open": "Pop out mini clock",
+      "add": "+15",
+      "addLabel": "Add 15 minutes",
+      "close": "Close mini clock",
+      "popupBlocked": "The browser blocked the mini clock window. Allow pop-ups for AwakeTab, then try again."
+    },
+    "widgets": {
+      "small": "Awake · {time}",
+      "smallNoEnd": "Awake · no end",
+      "presets": "Presets",
+      "presetsLabel": "Start a preset",
+      "presenting": "Presenting",
+      "cooking": "Cooking",
+      "reading": "Reading",
+      "hour": "1 h",
+      "min45": "45 m",
+      "min30": "30 m",
+      "session": "Keeping the screen awake",
+      "awakeUntil": "Awake until {time}",
+      "awakeNoEnd": "Awake · no end",
+      "extend": "+15 min",
+      "extendLabel": "Add 15 minutes",
+      "stop": "Stop",
+      "start": "Start"
+    },
+    "kiosk": {
+      "section": "Kiosk mode on a shared screen",
+      "region": "Kiosk screen",
+      "kicker": "RECEPTION",
+      "headline": "Please take a seat.",
+      "line": "We’ll call your name.",
+      "hold": "Hold 3 s to exit",
+      "holding": "Keep holding…",
+      "holdLabel": "Hold for 3 seconds to exit kiosk mode",
+      "unlocked": "Kiosk unlocked",
+      "unlockedBody": "Change the face, the schedule or the message — or leave kiosk mode. It locks again after 30 seconds without a touch.",
+      "back": "Back to kiosk",
+      "leave": "Leave kiosk mode",
+      "face": "FACE",
+      "screen": "SCREEN",
+      "midnight": "Midnight",
+      "oled": "OLED black",
+      "schedule": "Schedule",
+      "scheduleBody": "{days} {from} – {to}. Outside these hours the screen is allowed to sleep.",
+      "weekdays": "Weekdays",
+      "everyday": "Every day",
+      "alwaysBody": "Every day, all day. The screen stays awake until you leave kiosk mode.",
+      "burn": "Burn-in care",
+      "burnBody": "The whole layout drifts a few pixels every minute and OLED uses pure black. Try “Shift now”.",
+      "shift": "Shift now",
+      "start": "Start kiosk mode",
+      "asleep": "Outside the schedule: the screen may sleep until {time}.",
+      "licensed": "Kiosk licence active",
+      "invalid": "This kiosk licence link could not be verified. Open the kiosk link from your licence email again."
+    },
+    "embedPage": {
+      "eyebrow": "Website widget",
+      "h1": "Keep your readers' screens awake",
+      "lead": "Add a Cook Mode button that keeps your readers' screens awake: one script tag, an honest status and no third-party requests. Free with a credit link.",
+      "builder": "Build your widget",
+      "builderSub": "Pick how it looks. The demo and the snippet change as you go.",
+      "demo": "Live demo",
+      "demoNote": "This is the real widget, with the credit line the loader adds under it.",
+      "snippet": "Install: one line",
+      "snippetNote": "Paste it where the widget should appear. The loader adds the credit link itself.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "mode": {
+        "_": "Mode",
+        "cook": "Cook",
+        "standard": "Standard",
+        "clock": "Clock",
+        "minimal": "Minimal"
+      },
+      "theme": {
+        "_": "Theme",
+        "auto": "Auto",
+        "light": "Light",
+        "dark": "Dark",
+        "oled": "OLED"
+      },
+      "size": {
+        "_": "Size",
+        "compact": "Compact",
+        "full": "Full width"
+      },
+      "length": {
+        "_": "Start length",
+        "pinf": "Until I stop",
+        "p15": "15 minutes",
+        "p30": "30 minutes",
+        "p45": "45 minutes",
+        "p60": "1 hour",
+        "p120": "2 hours",
+        "p240": "4 hours"
+      },
+      "lang": {
+        "_": "Language",
+        "page": "Match the page"
+      },
+      "allow": "Why the allow attribute matters",
+      "allowBody": "Browsers let an embedded page keep the screen awake only when the site allows it with allow=\"screen-wake-lock\". The loader always adds it. If your platform strips script tags, paste this iframe instead and keep the allow attribute.",
+      "api": "JavaScript API",
+      "apiBody": "The loader exposes window.AwakeTabEmbed with on(\"state\", callback), start({ preset, ms, until }), stop() and setTheme(theme). Call start() from a click: the video fallback needs a tap.",
+      "licence": "Licences open soon",
+      "licenceBody": "A Business licence will remove the credit line and give the Start button your brand colour. Keeping the screen awake is the same either way."
+    },
+    "embed": {
+      "stop": "Stop",
+      "retry": "Retry",
+      "fixLabel": "How to fix (opens AwakeTab)",
+      "timers": {
+        "remove": "Remove {name}",
+        "done": "{name} is done",
+        "default": "{minutes}-minute timer",
+        "quick": "{minutes} min",
+        "left": "{time} left",
+        "finished": "Done"
+      }
+    }
   }
 }
