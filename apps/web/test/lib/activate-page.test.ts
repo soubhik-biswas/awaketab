@@ -329,7 +329,7 @@ describe('activate page', () => {
       expect(root.querySelector<HTMLElement>('[data-view="activate"]')?.hidden).toBe(true);
       expect(root.querySelector('[data-co-plan]')?.textContent).toBe('AwakeTab Pro, yearly');
       expect(root.querySelector('[data-co-price]')?.textContent).toBe('$12 / year');
-      expect(root.querySelector('[data-co-renews]')?.textContent).toBe('27 September 2027');
+      expect(root.querySelector('[data-co-renews]')?.textContent).toBe('Monday, 27 September 2027');
       expect(root.querySelector('[data-co-devices]')?.textContent).toBe('2 of 5');
       expect(root.querySelector('[data-co-tail]')?.textContent).toBe('ending ABCD');
       // The lookup never activates: one activation, one lookup for the same checkout.

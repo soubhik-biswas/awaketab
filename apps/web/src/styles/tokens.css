@@ -618,3 +618,22 @@
 [dir="rtl"] :is([data-slot="breadcrumb-separator"] > svg, .at-flip-rtl) {
   transform: scaleX(-1);
 }
+
+:root {
+  --at-id-cobalt: #3d5ef5;
+  --at-on-id-cobalt: #fff;
+  --at-id-grape: #7c4deb;
+  --at-on-id-grape: #fff;
+  --at-id-plum: #b0219f;
+  --at-on-id-plum: #fff;
+  --at-id-bubblegum: #ff7db8;
+  --at-on-id-bubblegum: #0b1020;
+  --at-id-denim: #4a6fa5;
+  --at-on-id-denim: #fff;
+  --at-id-sand: #e8c99b;
+  --at-on-id-sand: #0b1020;
+  --at-id-slate: #55627a;
+  --at-on-id-slate: #fff;
+  --at-id-mauve: #a0559a;
+  --at-on-id-mauve: #fff;
+}
