@@ -32,6 +32,25 @@ export interface ICommandGroup {
   items: ICommandAction[];
 }
 
+export interface ICommandPaletteLabels {
+  move: string;
+  run: string;
+  close: string;
+  closePalette: string;
+  noMatch: (q: string) => string;
+  count: (n: number, searching: boolean) => string;
+}
+
+const LABELS: ICommandPaletteLabels = {
+  move: 'move',
+  run: 'run',
+  close: 'close',
+  closePalette: 'Close palette',
+  noMatch: (q) => `No commands match “${q}”`,
+  count: (n, searching) =>
+    searching ? `${n} ${n === 1 ? 'result' : 'results'}` : `${n} ${n === 1 ? 'command' : 'commands'}`,
+};
+
 export interface ICommandPaletteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -45,6 +64,7 @@ export interface ICommandPaletteProps {
   placeholder?: string;
   emptyHint?: string;
   title?: string;
+  labels?: ICommandPaletteLabels;
 }
 
 function matches(action: ICommandAction, q: string): boolean {
@@ -90,6 +110,7 @@ export function CommandPalette({
   placeholder = 'Type a command or search…',
   emptyHint,
   title = 'Command palette',
+  labels = LABELS,
 }: ICommandPaletteProps) {
   const [ownQuery, setOwnQuery] = React.useState('');
   const query = queryProp ?? ownQuery;
@@ -111,11 +132,7 @@ export function CommandPalette({
     if (!open && queryProp === undefined) setOwnQuery('');
   }, [open, queryProp]);
 
-  const count = loading
-    ? 'Searching…'
-    : searching
-      ? `${total} ${total === 1 ? 'result' : 'results'}`
-      : `${total} ${total === 1 ? 'command' : 'commands'}`;
+  const count = loading ? 'Searching…' : labels.count(total, searching);
 
   const run = (action: ICommandAction) => {
     onOpenChange(false);
@@ -140,7 +157,7 @@ export function CommandPalette({
         <button
           type="button"
           onClick={() => onOpenChange(false)}
-          aria-label="Close palette"
+          aria-label={labels.closePalette}
           className="relative shrink-0 cursor-pointer rounded-xs border-0 bg-transparent p-0 outline-none after:absolute after:-inset-[11px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <Kbd>esc</Kbd>
@@ -197,7 +214,7 @@ export function CommandPalette({
         {searching && !loading && total === 0 ? (
           <CommandEmpty>
             <Scene scene="notfound" width={176} />
-            <strong className="text-[17px] font-bold">No commands match “{query.trim()}”</strong>
+            <strong className="text-[17px] font-bold">{labels.noMatch(query.trim())}</strong>
             <span className="text-[14px] leading-[1.5] text-muted-foreground-strong">
               {emptyHint ??
                 (onSearchGuides
@@ -217,15 +234,15 @@ export function CommandPalette({
         <span className="inline-flex items-center gap-1.5">
           <FooterKey>↑</FooterKey>
           <FooterKey>↓</FooterKey>
-          move
+          {labels.move}
         </span>
         <span className="inline-flex items-center gap-1.5">
           <FooterKey>↵</FooterKey>
-          run
+          {labels.run}
         </span>
         <span className="inline-flex items-center gap-1.5">
           <FooterKey>esc</FooterKey>
-          close
+          {labels.close}
         </span>
         <span className="ml-auto" aria-live="polite">
           {count}

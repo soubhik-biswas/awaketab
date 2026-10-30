@@ -19,15 +19,14 @@ import {
   Volume2,
   type LucideIcon,
 } from 'lucide-react';
+import { fill } from '@/lib/tool/chrome';
 import type { TToolView } from '@/lib/tool/ui';
 import { useTool } from '@/components/tool/context';
 import { PRO_CHIP } from '@/components/tool/kit';
 
-type TRow = { n: string; icon: LucideIcon; pro?: boolean; keys?: string } & (
+type TRow = { n: string; icon: LucideIcon; pro?: boolean; keys?: string; lang?: string } & (
   { view: TToolView } | { href: string } | { run: () => void }
 );
-
-const THEME_NAME = { light: 'light', dark: 'dark', oled: 'OLED black' } as const;
 
 const ROW =
   'box-border flex min-h-12 w-full cursor-pointer items-center gap-3 rounded-[12px] border-0 bg-transparent p-0 text-left text-foreground no-underline outline-none transition-colors duration-glide ease-glide hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
@@ -48,27 +47,30 @@ function RowInner({ r }: { r: TRow }) {
 
 // Everything that is not the session itself, one tap away, in the order the menu board draws.
 export default function MoreView() {
-  const { theme, a } = useTool();
+  const { theme, m, a } = useTool();
+  const { s, c } = m;
+  const en = m.lang === 'en';
   const rows: TRow[] = [
-    { n: 'Presets', icon: ListChecks, view: 'presets' },
-    { n: 'History', icon: History, view: 'history' },
-    { n: 'Search and commands  ⌘K', icon: Search, view: 'palette', keys: 'Meta+K Control+K' },
-    { n: `Theme: ${THEME_NAME[theme]}`, icon: theme === 'light' ? Sun : Moon, run: a.cycleTheme, keys: 'Shift+D' },
-    { n: 'Settings', icon: Settings, view: 'settings' },
-    { n: 'Help & fixes', icon: LifeBuoy, view: 'fix', keys: '?' },
-    { n: 'Share this setup', icon: Share2, view: 'share' },
-    { n: 'Face studio', icon: Palette, view: 'studio', pro: true },
-    { n: 'Ambient sound', icon: Volume2, view: 'sound', pro: true },
-    { n: 'Devices', icon: Laptop, view: 'devices', pro: true },
-    { n: 'Account', icon: User, view: 'account' },
-    { n: 'Get the browser extension', icon: Puzzle, href: '/extension' },
-    { n: 'AwakeTab Pro', icon: Sparkles, href: '/pro', pro: true },
+    { n: s.presets, icon: ListChecks, view: 'presets' },
+    { n: s.history, icon: History, view: 'history' },
+    { n: `${c.searchCmds}  ⌘K`, icon: Search, view: 'palette', keys: 'Meta+K Control+K' },
+    { n: fill(c.themeIs, { name: c[theme] }), icon: theme === 'light' ? Sun : Moon, run: a.cycleTheme, keys: 'Shift+D' },
+    { n: s.settings, icon: Settings, view: 'settings' },
+    { n: s.help, icon: LifeBuoy, view: 'fix', keys: '?' },
+    { n: c.share, icon: Share2, view: 'share' },
+    { n: s.studio, icon: Palette, view: 'studio', pro: true },
+    { n: c.ambient, icon: Volume2, view: 'sound', pro: true },
+    { n: s.devices, icon: Laptop, view: 'devices', pro: true },
+    { n: c.account, icon: User, view: 'account' },
+    // The extension and Pro pages are English only; hreflang says so before the visitor follows the link.
+    { n: c.extension, icon: Puzzle, href: '/extension', lang: en ? undefined : 'en' },
+    { n: 'AwakeTab Pro', icon: Sparkles, href: '/pro', pro: true, lang: en ? undefined : 'en' },
   ];
   return (
-    <nav aria-label="Menu" className="flex flex-col">
+    <nav aria-label={c.menu} className="flex flex-col">
       {rows.map((r) =>
         'href' in r ? (
-          <Link key={r.n} href={r.href} className={ROW}>
+          <Link key={r.n} href={r.href} hrefLang={r.lang} className={ROW}>
             <RowInner r={r} />
           </Link>
         ) : (
