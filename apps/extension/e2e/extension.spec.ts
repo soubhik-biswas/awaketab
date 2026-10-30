@@ -125,7 +125,7 @@ test('until-time starts an until session from the 15-minute stepper', async ({ c
   await expect(page.locator('[data-until-summary]')).toContainText(`at ${target}`);
   await page.locator('[data-until] button[type="submit"]').click();
   await expect(pill(page)).toHaveText('Screen awake');
-  await expect(page.locator('[data-caption]')).toHaveText(new RegExp(`^Until ${target}( tomorrow)?$`, 'u'));
+  await expect(page.locator('[data-caption]')).toHaveText(new RegExp(`^left · until ${target}( tomorrow)?$`, 'u'));
   await expect(page.locator('[data-until-open]')).toHaveText(target);
   await expect(page.locator('[data-until-open]')).toHaveAttribute('aria-pressed', 'true');
 });
@@ -165,19 +165,19 @@ test('Blocked: a refused request says so, shows the fix, and Retry works once al
   await expect(page.locator('[data-error]')).toBeHidden();
 });
 
-// Chrome caps a popup at 600 px and scrolls anything taller, so every state has to fit the 360×600 frame (ExtPopup,
-// ExtEdge boards) and the frame itself must not change size between states.
+// Chrome caps a popup at 600 px and scrolls anything taller, so every state has to fit the 360×600 frame (the
+// extension board) with its footer in view, and the frame itself must not change size between states.
 async function expectPopupFits(page: Page, state: string): Promise<void> {
   const box = await page.evaluate(() => {
-    const blocks = [...document.querySelectorAll('[data-root] > :not(.pp-aura)')].filter(
+    const blocks = [...document.querySelectorAll('[data-root] > *, .pp-body > *')].filter(
       (block) => block.getClientRects().length > 0,
     );
-    const root = document.querySelector('[data-root]');
+    const body = document.querySelector('.pp-body');
     return {
       document: document.documentElement.scrollHeight,
       frame: document.body.getBoundingClientRect().height,
       content: Math.max(...blocks.map((block) => block.getBoundingClientRect().bottom)),
-      scroll: root ? root.scrollHeight - root.clientHeight : -1,
+      scroll: body ? body.scrollHeight - body.clientHeight : -1,
     };
   });
   expect(box.frame, `${state}: frame`).toBe(600);
@@ -348,12 +348,16 @@ test('install opens the welcome page once, and it has no axe violations', async 
   const page = context.pages().find((p) => p.url() === url);
   if (!page) throw new Error('welcome page not open');
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await expect(page.locator('h1')).toHaveText('AwakeTab is ready. Pin it where you can see it.');
+  await expect(page.locator('h1')).toHaveText('AwakeTab is ready. Pin it where you can reach it.');
+  await expect(page.locator('[data-kicker]')).toHaveText('Installed · step 1 of 2');
   // The toolbar menu mock and the pin step name the extension exactly as Chrome lists it (the manifest name).
   await expect(page.locator('[data-store-name]')).toHaveText('AwakeTab: Keep Screen Awake');
   await expect(page.locator('[data-step2]')).toHaveText('Click the pin next to AwakeTab: Keep Screen Awake.');
   await page.locator('[data-pin-button]').click();
   await expect(page.locator('[data-pin]')).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'I’ve pinned it' }).click();
+  await expect(page.locator('[data-kicker]')).toHaveText('Installed · step 2 of 2');
+  await expect(page.locator('h1')).toHaveText('Now click AwakeTab in your toolbar and press Start.');
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
 
