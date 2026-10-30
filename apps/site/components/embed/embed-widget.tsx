@@ -68,7 +68,9 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
   const live = p.lock === 'held' || p.lock === 'requesting' || p.lock === 'fallback';
   const pillLabel = p.lock === 'idle' ? tp('idle._') : tp(p.lock);
   const accent: CSSProperties | undefined =
-    p.accent && p.action === 'start' ? { background: p.accent.bg, borderColor: p.accent.bg, color: p.accent.fg } : undefined;
+    p.accent && p.action === 'start'
+      ? { background: p.accent.bg, borderColor: p.accent.bg, color: p.accent.fg }
+      : undefined;
   const label = p.action === 'stop' ? ts('stop') : p.action === 'retry' ? ts('retry') : t('start');
   const pill = (
     <StatusPill
@@ -105,7 +107,9 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
         aria-pressed={p.mode === 'cook' && live ? p.paused : undefined}
         className={cn(
           'cursor-pointer self-start rounded-xs text-left font-light tabular-nums focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-          full ? 'text-[28px] @min-[360px]:text-[48px] @min-[600px]:text-[64px] @min-[600px]:font-extralight' : 'text-[28px]',
+          full
+            ? 'text-[28px] @min-[360px]:text-[48px] @min-[600px]:text-[64px] @min-[600px]:font-extralight'
+            : 'text-[28px]',
           p.muted ? 'text-muted-foreground-strong' : 'text-foreground',
         )}
       >
@@ -122,7 +126,7 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
         p.theme,
         '@container relative flex w-full flex-col overflow-hidden border border-border bg-card text-foreground',
         full ? 'min-h-[240px] rounded-[28px]' : 'min-h-[104px] rounded-[16px]',
-        className,
+        p.className,
       )}
     >
       <span
