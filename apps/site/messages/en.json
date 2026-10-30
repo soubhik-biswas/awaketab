@@ -2704,7 +2704,23 @@
       "clocks": "Clock of clocks",
       "wordgrid": "Word grid",
       "tape": "Tape",
-      "moon": "Moon phase"
+      "moon": "Moon phase",
+      "aurora": "Aurora",
+      "glass": "Glass",
+      "neon": "Neon",
+      "liquid": "Liquid",
+      "eclipse": "Eclipse",
+      "skeleton": "Skeleton",
+      "bauhaus": "Bauhaus",
+      "poster": "Poster",
+      "eink": "E-ink",
+      "terminal": "Terminal",
+      "pulse": "Pulse",
+      "waveform": "Waveform",
+      "blob": "Fluid",
+      "hud": "HUD",
+      "constellation": "Constellation",
+      "halo": "Halo"
     },
     "blurb": {
       "ring": "The signature. The lamp rides the end of the arc and turns amber the moment the lock pauses.",
@@ -2739,7 +2755,23 @@
       "clocks": "Twenty-four tiny clocks whose hands swing into place to spell the time left.",
       "wordgrid": "A letter grid that lights the words — “about forty minutes left”.",
       "tape": "A minute ruler glides under a fixed needle; the heat strip shows the final stretch.",
-      "moon": "The moon wanes from full to new as the session runs down, under an aurora sky."
+      "moon": "The moon wanes from full to new as the session runs down, under an aurora sky.",
+      "aurora": "Northern lights drift behind thin digits — a living wallpaper while awake.",
+      "glass": "A frosted pane floats over soft colour orbs; the time sits on the glass.",
+      "neon": "A neon sign on a dark wall, with a humming flicker while awake.",
+      "liquid": "A glass sphere of light that drains as the session runs, with waves and bubbles.",
+      "eclipse": "The moon slides across the sun; totality arrives when time is up.",
+      "skeleton": "An open movement: brass gears turn and the balance wheel swings.",
+      "bauhaus": "Primary shapes and a pie of time left — a design object on the desk.",
+      "poster": "Giant cropped minutes in Archivo Expanded, editorial and bold.",
+      "eink": "A paper display with serif digits and a faint ghost, calm by daylight.",
+      "terminal": "A shell that reports the wake lock honestly, with a blinking cursor.",
+      "pulse": "A heart-monitor trace sweeps while the screen is awake.",
+      "waveform": "A ring of audio bars that dances while awake; lit bars are time left.",
+      "blob": "A morphing gradient orb, like a voice assistant at rest.",
+      "hud": "A car-dashboard arc of segments with italic digits and tell-tale lamps.",
+      "constellation": "Each minute left is a star; they join into a constellation.",
+      "halo": "A glowing gradient ring that closes toward 12."
     },
     "t": {
       "top": {
@@ -2782,7 +2814,7 @@
         "m": "MIN LEFT"
       },
       "hg": {
-        "left": "{pct} remaining"
+        "left": "{pct} sand left"
       },
       "lcd": {
         "paused": "PAUSE",
@@ -2824,10 +2856,10 @@
         "ends": "ENDS"
       },
       "moon": {
-        "up": "New moon · ended",
-        "idle": "Full moon · ready",
-        "waning": "{pct}% lit · waning",
-        "hold": "{pct}% lit · on hold"
+        "up": "New moon",
+        "idle": "Full moon",
+        "waning": "{pct}% lit",
+        "hold": "{pct}% lit"
       },
       "tl": {
         "now": "NOW",
