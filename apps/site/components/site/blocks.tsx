@@ -61,6 +61,8 @@ export interface ICard {
   scene?: TSceneKey;
   meta?: readonly string[];
   lang?: string;
+  // Set when the card's own words are in another language than the page (an English article in a translated list).
+  titleLang?: string;
 }
 
 export function Cards({ items, cols }: { items: readonly ICard[]; cols: 1 | 2 | 3 | 4 }) {
@@ -96,7 +98,9 @@ export function Cards({ items, cols }: { items: readonly ICard[]; cols: 1 | 2 | 
                   ))}
                 </span>
               )}
-              <strong className={s.h3}>{card.title}</strong>
+              <strong className={s.h3} lang={card.titleLang}>
+                {card.title}
+              </strong>
               {card.desc && <span className={s.body}>{card.desc}</span>}
               <span className="mt-auto inline-flex min-h-8 items-center gap-1.5 text-[15px] font-semibold text-lamp">
                 {card.link}
