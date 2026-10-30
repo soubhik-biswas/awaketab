@@ -76,11 +76,16 @@ const ENV_KEYS = [
   'GITHUB_CLIENT_SECRET',
 ] as const;
 
+interface ICloudflare {
+  env: Record<string, unknown>;
+  ctx: { waitUntil(promise: Promise<unknown>): void };
+}
+
 // Bindings come from the Worker; plain values fall back to process.env so `next dev` with a .env file works.
 export async function serverContext(): Promise<IServerContext> {
-  let cf: { env: Record<string, unknown>; ctx: { waitUntil(p: Promise<unknown>): void } } | null = null;
+  let cf: ICloudflare | null = null;
   try {
-    cf = (await getCloudflareContext({ async: true })) as unknown as typeof cf;
+    cf = (await getCloudflareContext({ async: true })) as unknown as ICloudflare;
   } catch {
     cf = null;
   }
