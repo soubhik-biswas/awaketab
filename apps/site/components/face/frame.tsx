@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn } from 'cn';
-import { PLATE } from './art';
+import { CASE, PLATE } from './art';
 import { L, lmin, type TStyle } from './kit';
 import type { TFaceId, TFaceModel, TFaceState } from './model';
 import './face.css';
@@ -16,6 +16,33 @@ const PLATED: ReadonlySet<TFaceId> = new Set<TFaceId>([
   'dots',
   'orbit',
   'disc',
+  'skeleton',
+  'waveform',
+]);
+
+// Faces that draw their own card or panel stay out of the watch-glass case.
+const CASELESS: ReadonlySet<TFaceId> = new Set<TFaceId>([
+  'horizon',
+  'tide',
+  'lcd',
+  'led',
+  'board',
+  'wordgrid',
+  'clocks',
+  'tape',
+  'timeline',
+  'aurora',
+  'glass',
+  'neon',
+  'eclipse',
+  'bauhaus',
+  'poster',
+  'eink',
+  'terminal',
+  'pulse',
+  'blob',
+  'hud',
+  'constellation',
 ]);
 
 function StateIcon({ state, c }: { state: TFaceState; c: string }) {
@@ -76,11 +103,13 @@ function StateIcon({ state, c }: { state: TFaceState; c: string }) {
 export function FaceFrame({
   m,
   bare,
+  framed,
   className,
   children,
 }: {
   m: TFaceModel;
   bare?: boolean | undefined;
+  framed?: boolean | undefined;
   className?: string | undefined;
   children?: ReactNode;
 }) {
@@ -101,6 +130,19 @@ export function FaceFrame({
       style={root}
     >
       <div className="af-a" aria-hidden="true" style={{ transform: `scale(${m.size / 360})` }}>
+        {framed && !CASELESS.has(m.face) && (
+          <div
+            style={{
+              position: 'absolute',
+              left: 6,
+              top: 6,
+              width: 348,
+              height: bare ? 348 : 304,
+              borderRadius: 72,
+              ...CASE[m.theme],
+            }}
+          />
+        )}
         {PLATED.has(m.face) && (
           <div
             style={{

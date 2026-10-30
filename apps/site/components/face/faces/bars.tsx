@@ -35,8 +35,8 @@ export default function Bars({ m }: IDrawProps) {
                 width: 6,
                 height: cur ? 110 : hgt,
                 borderRadius: 3,
-                background: m.st === 'up' || spent ? t.track : m.heat((NBR - i) / NBR),
-                opacity: spent || cur ? 1 : 0.85,
+                background: m.st === 'up' || spent ? t.track : m.heat(m.frac),
+                opacity: spent || cur ? 1 : 0.45 + (0.55 * (NBR - i)) / Math.max(1, NBR - nowBar),
               }}
             />
           );

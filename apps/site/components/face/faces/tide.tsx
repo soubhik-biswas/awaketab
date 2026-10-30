@@ -4,7 +4,7 @@ import { alpha } from '../geometry';
 import { big, EndLine, type IDrawProps, L, lmin, MONO } from '../kit';
 
 const GLASS = {
-  light: 'linear-gradient(90deg, #FFFFFF, #F1EEE7)',
+  light: 'linear-gradient(90deg, #FFFFFF, #EFEFF6)',
   dark: 'linear-gradient(90deg, #121A2E, #0E1424)',
   oled: '#000000',
 };
@@ -29,11 +29,11 @@ export default function Tide({ m }: IDrawProps) {
       <div
         style={{
           position: 'absolute',
-          left: 92,
+          left: 60,
           top: 10,
-          width: 176,
+          width: 240,
           height: 290,
-          borderRadius: 48,
+          borderRadius: 52,
           overflow: 'hidden',
           background: GLASS[theme],
           boxShadow: shadow,
@@ -123,11 +123,14 @@ export default function Tide({ m }: IDrawProps) {
           className={L}
           style={{
             position: 'absolute',
-            left: 278,
-            top: Math.round(296 - 286 * q - 8),
+            left: 254,
+            width: 30,
+            textAlign: 'right',
+            top: Math.round(Math.min(276, Math.max(18, 296 - 286 * q - 8))),
             fontFamily: MONO,
             fontSize: lmin(12),
             color: t.ink2,
+            opacity: 0.8,
           }}
         >
           {Math.round((m.total / 60) * q)}
