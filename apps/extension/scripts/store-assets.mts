@@ -113,7 +113,7 @@ function rgba(hex: string, alpha: number): string {
   return `rgba(${String((n >> 16) & 255)},${String((n >> 8) & 255)},${String(n & 255)},${String(alpha)})`;
 }
 
-// The dark Clear Night palette, as the Store boards draw it (theme="dark").
+// The dark Solar Green palette, as the store boards draw it (theme="dark").
 type TMeasure = (text: string, size: number, weight: number) => number;
 
 async function palette(measure: TMeasure) {
@@ -153,12 +153,12 @@ type TPalette = Awaited<ReturnType<typeof palette>>;
 
 const ICON_DATA = `data:image/svg+xml;base64,${Buffer.from(ICON_SVG).toString('base64')}`;
 const PAPER = {
-  ground: '#F5F3ED',
-  ink: '#17343C',
-  ink2: '#4D6268',
-  muted: '#60777B',
-  line: '#D5DEDA',
-  accent: '#087B87',
+  ground: '#F6F4EF',
+  ink: '#0B1020',
+  ink2: '#4B5165',
+  muted: '#626777',
+  line: '#DCD7CC',
+  accent: '#117A3B',
 };
 const GLYPH_DOT = 'M6 1.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 1 1 0-9z';
 const GLYPH_HALF =
