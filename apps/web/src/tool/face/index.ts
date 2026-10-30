@@ -1,14 +1,14 @@
 import './face.css';
-import { type Draw, type FaceId, type FaceProps, frame, isFace, vals } from './base.js';
+import { type TDraw, type TFaceId, type IFaceProps, frame, isFace, vals } from './base.js';
 import { ring } from './ring.js';
 
-export type { FaceId, FaceProps, FaceState, FaceTheme } from './base.js';
+export type { TFaceId, IFaceProps, TFaceState, TFaceTheme } from './base.js';
 export { setFaceText } from './base.js';
 
 declare const __AT_FACES__: string | undefined;
 
 // The faces board's names and descriptions, in sheet order.
-export const FACES: readonly { id: FaceId; name: string; blurb: string }[] = [
+export const FACES: readonly { id: TFaceId; name: string; blurb: string }[] = [
   {
     id: 'ring',
     name: 'Ring',
@@ -88,7 +88,7 @@ export const FACES: readonly { id: FaceId; name: string; blurb: string }[] = [
   },
 ];
 
-type TGroup = Partial<Record<FaceId, Draw>>;
+type TGroup = Partial<Record<TFaceId, TDraw>>;
 // Ring draws with the page; every other face ships in a small lazy group (one chunk each, see astro.config.mjs).
 const GROUPS = {
   classic: () => import('./faces/classic.js'),
@@ -100,7 +100,7 @@ const GROUPS = {
 type TGroupId = keyof typeof GROUPS;
 
 // The Volt faces exist only in apps/site; this site draws Ring for them.
-const GROUP_OF: Partial<Record<Exclude<FaceId, 'ring'>, TGroupId>> = {
+const GROUP_OF: Partial<Record<Exclude<TFaceId, 'ring'>, TGroupId>> = {
   bold: 'classic',
   horizon: 'classic',
   tide: 'classic',
@@ -170,7 +170,7 @@ export function faceSheet(): Promise<void> {
   }));
 }
 
-export function loadFace(id: FaceId): Promise<void> {
+export function loadFace(id: TFaceId): Promise<void> {
   if (id === 'ring') return Promise.resolve();
   const g = GROUP_OF[id];
   if (!g) return Promise.resolve();
@@ -188,7 +188,7 @@ export function loadFace(id: FaceId): Promise<void> {
 export const loadAllFaces = (): Promise<void> => Promise.all(FACES.map((f) => loadFace(f.id))).then(() => undefined);
 
 // Markup for a face whose drawing is loaded (Ring always is; import face/all.ts for every face at build time).
-export function faceSvg(p: FaceProps): string {
+export function faceSvg(p: IFaceProps): string {
   const v = vals(p, p.nowSec);
   const draw = DRAW[v.face];
   return frame(v, draw ? draw(v) : '', p.bare);
@@ -216,10 +216,10 @@ function parse(html: string): Element | null {
   return tpl.content.firstElementChild;
 }
 
-export function mountFace(el: HTMLElement, p: FaceProps): { update(p: Partial<FaceProps>): void; destroy(): void } {
-  let props: FaceProps = { ...p };
+export function mountFace(el: HTMLElement, p: IFaceProps): { update(p: Partial<IFaceProps>): void; destroy(): void } {
+  let props: IFaceProps = { ...p };
   let t0 = p.nowSec;
-  let drawn: FaceId | '' = '';
+  let drawn: TFaceId | '' = '';
   let wasLive = false;
   let turn = 0;
   let dead = false;

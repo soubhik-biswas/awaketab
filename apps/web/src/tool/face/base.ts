@@ -1,13 +1,13 @@
 import { FACE_IDS, type TFace } from '@awaketab/core';
 
-export type FaceId = TFace;
-export type FaceState = 'idle' | 'starting' | 'running' | 'fallback' | 'paused' | 'blocked' | 'unsupported' | 'up';
-export type FaceTheme = 'light' | 'dark' | 'oled';
+export type TFaceId = TFace;
+export type TFaceState = 'idle' | 'starting' | 'running' | 'fallback' | 'paused' | 'blocked' | 'unsupported' | 'up';
+export type TFaceTheme = 'light' | 'dark' | 'oled';
 
-export interface FaceProps {
-  face: FaceId;
-  theme: FaceTheme;
-  state: FaceState;
+export interface IFaceProps {
+  face: TFaceId;
+  theme: TFaceTheme;
+  state: TFaceState;
   remain: number;
   total: number;
   nowSec: number;
@@ -84,7 +84,7 @@ export const ticks = (r1: number, r2: number, n: number, keep: (i: number) => bo
   return d;
 };
 
-interface Pal {
+interface IPal {
   ink: string;
   ink2: string;
   line: string;
@@ -97,7 +97,7 @@ interface Pal {
 }
 
 // Face colours are page tokens; the theme prop only picks the few roles where the OLED face differs from the page.
-const pal = (theme: FaceTheme): Pal => {
+const pal = (theme: TFaceTheme): IPal => {
   const o = theme === 'oled';
   return {
     ink: 'var(--at-ink)',
@@ -112,7 +112,7 @@ const pal = (theme: FaceTheme): Pal => {
   };
 };
 
-const STATUS: Record<FaceState, string> = {
+const STATUS: Record<TFaceState, string> = {
   idle: 'var(--at-ink-2)',
   starting: 'var(--fl)',
   running: 'var(--fl)',
@@ -132,22 +132,25 @@ const FILL = {
 };
 const TONE = { amber: 'var(--at-face-amber)', lime: 'var(--at-face-lime)', ember: 'var(--at-face-ember)' };
 
-export type V = ReturnType<typeof vals>;
-export type Draw = (v: V) => string;
+export type TV = ReturnType<typeof vals>;
+export type TDraw = (v: TV) => string;
 
-export const isFace = (id: unknown): id is FaceId => (FACE_IDS as readonly unknown[]).includes(id);
+export const isFace = (id: unknown): id is TFaceId => (FACE_IDS as readonly unknown[]).includes(id);
 
-export function vals(p: FaceProps, t0: number) {
-  const face: FaceId = isFace(p.face) ? p.face : 'ring';
-  const theme: FaceTheme = p.theme === 'light' || p.theme === 'oled' ? p.theme : 'dark';
+// Props can arrive untyped (the Pro pack mounts faces through a loose interface), so numbers are coerced.
+const num = (x: unknown): number => Number(x) || 0;
+
+export function vals(p: IFaceProps, t0: number) {
+  const face: TFaceId = isFace(p.face) ? p.face : 'ring';
+  const theme: TFaceTheme = p.theme === 'light' || p.theme === 'oled' ? p.theme : 'dark';
   const th = theme === 'light' ? 'l' : theme === 'oled' ? 'o' : 'd';
-  const st: FaceState = p.state in STATUS ? p.state : 'running';
-  const total = Number(p.total) || 0;
-  let remain = Number(p.remain) || 0;
+  const st: TFaceState = p.state in STATUS ? p.state : 'running';
+  const total = num(p.total);
+  let remain = num(p.remain);
   if (st === 'idle') remain = total;
   if (st === 'up') remain = 0;
-  const size = Number(p.size) || 360;
-  const nowSec = Number(p.nowSec) || 0;
+  const size = num(p.size) || 360;
+  const nowSec = num(p.nowSec);
   const fmt = p.fmt === 24 ? 24 : 12;
   // 240 px and up keep every label at 12 px or more on screen; below 170 px the face is compact (digits, graphics).
   const LMIN = size >= 240 && size < 360 ? (12 * 360) / size : 0;
@@ -293,11 +296,22 @@ export function vals(p: FaceProps, t0: number) {
   };
 }
 
-const PLATED = new Set<FaceId>(['ring', 'analog', 'luxe', 'rings', 'dive', 'chrono', 'pilot', 'dots', 'orbit', 'disc']);
+const PLATED = new Set<TFaceId>([
+  'ring',
+  'analog',
+  'luxe',
+  'rings',
+  'dive',
+  'chrono',
+  'pilot',
+  'dots',
+  'orbit',
+  'disc',
+]);
 
 const ic = (body: string) => `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">${body}</svg>`;
 
-const ICON: Record<FaceState, (c: string) => string> = {
+const ICON: Record<TFaceState, (c: string) => string> = {
   running: (c) =>
     ic(
       `<circle class="afx-pulse" cx="8" cy="8" r="5" fill="${c}" opacity=".5"></circle><circle cx="8" cy="8" r="4" fill="${c}"></circle>`,
@@ -349,7 +363,7 @@ const svgPaint = (html: string): string =>
   });
 
 // The face's root: the 360 × 360 artboard scaled to size, the dial plate, the drawing and the status caption.
-export function frame(v: V, body: string, bare?: boolean, aria = v.aria): string {
+export function frame(v: TV, body: string, bare?: boolean, aria = v.aria): string {
   const cls = `af${v.live ? ' af-live' : ''}${v.still ? ' af-still' : ''}${v.size < 170 ? ' af-compact' : ''}`;
   const plate = PLATED.has(v.face)
     ? `<div style="position: absolute; left: 34px; top: 9px; width: 292px; height: 292px; border-radius: 50%; ${v.plate}"></div>`

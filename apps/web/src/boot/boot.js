@@ -79,7 +79,9 @@
     if (f !== 'ring') root.dataset.face = f;
     if (saved && saved.keyboardHints === false) root.dataset.hints = 'off';
     // An answered analytics question (lib/consent.ts) never paints its inline panel.
-    const tips = JSON.parse(localStorage.getItem('at.v1.onboarding') ?? 'null')?.dismissedTips;
+    const seen = localStorage.getItem('at.v1.onboarding');
+    const onboarding = seen === null ? null : /** @type {Record<string, unknown> | null} */ (JSON.parse(seen));
+    const tips = onboarding?.dismissedTips;
     if ((Array.isArray(tips) && tips.includes('analytics')) || saved?.telemetry === false) root.dataset.consent = '';
     if (saved && saved.reduceMotion === 'on') root.dataset.motion = 'reduce';
     const clock = /** @type {{ clock24h?: unknown; showSeconds?: unknown } | undefined} */ (saved?.ambient);

@@ -1,16 +1,16 @@
-import { type Draw, f1, mx, P, ticks, type V } from '../base.js';
+import { type TDraw, f1, mx, P, ticks, type TV } from '../base.js';
 import { arc, bk, dash, each, lbl, lx, stars, svg, wh } from '../kit.js';
 
 const box = 'position: absolute; left: 0; top: 0; width: 360px; height: 310px';
 const col = 'display: flex; flex-direction: column';
-const kick = (v: V) =>
+const kick = (v: TV) =>
   `<span style="${v.mono} font-size: max(12px, var(--lmin)); letter-spacing: .16em; text-transform: uppercase; color: ${v.t.ink2}">${v.topWord}</span>`;
 const num = (fs: number, w = 300, extra = '') =>
   `font-size: ${fs}px; font-weight: ${w}; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums;${extra}`;
-const end = (v: V, fs: number, c = v.t.ink2) =>
+const end = (v: TV, fs: number, c = v.t.ink2) =>
   `<span style="font-size: max(${fs}px, var(--lmin)); color: ${c}">${v.endLine}</span>`;
-const ringOp = (v: V) => (v.st === 'idle' ? 0.35 : v.ringFrac === 0 ? 0 : 1);
-const sweep = (v: V, l: number, tp: number, sz: number, op: number, body: string, extra = '') =>
+const ringOp = (v: TV) => (v.st === 'idle' ? 0.35 : v.ringFrac === 0 ? 0 : 1);
+const sweep = (v: TV, l: number, tp: number, sz: number, op: number, body: string, extra = '') =>
   `<div class="afx-s" style="position: absolute; left: ${l}px; top: ${tp}px; width: ${sz}px; height: ${sz}px; ${extra}transform: rotate(${v.secDeg.toFixed(2)}deg); --a: ${v.secDeg0.toFixed(2)}deg; opacity: ${op}">${body}</div>`;
 const rot = 'transform="rotate(-90 180 155)"';
 
@@ -18,7 +18,7 @@ const C1 = 2 * Math.PI * 128;
 const C2 = 2 * Math.PI * 104;
 const C3 = 2 * Math.PI * 80;
 
-const rings: Draw = (v) => {
+const rings: TDraw = (v) => {
   const { t, accent, mc2, mc3, st } = v;
   const idle = st === 'idle';
   const ring = (r: number, track: string, c: string, d: string, op: number | string) =>
@@ -30,7 +30,7 @@ const rings: Draw = (v) => {
   )}${sweep(v, 100, 75, 160, v.liveOp, `<span style="position: absolute; left: 76px; top: -4px; width: 8px; height: 8px; border-radius: 50%; background: ${t.ink}; box-shadow: 0 0 10px ${accent}"></span>`)}<div style="${box}; ${col}; align-items: center; justify-content: center; gap: 4px"><span style="${num(v.long ? 34 : 46, 400)} letter-spacing: -0.03em">${v.digits}</span><span style="${v.mono} font-size: max(12px, var(--lmin)); letter-spacing: .1em; color: ${t.ink2}">${v.endShort}</span></div>`;
 };
 
-const radar: Draw = (v) => {
+const radar: TDraw = (v) => {
   const { accent, th } = v;
   const blip = P(110, 360 * (v.st === 'idle' ? 1 : v.frac));
   const pill = th === 'l' ? wh(90) : mx('var(--at-fc-deep)', 85);
@@ -39,10 +39,10 @@ const radar: Draw = (v) => {
   )}<div style="position: absolute; left: 116px; top: 128px; width: 128px; height: 54px; border-radius: 12px; background: ${pill}; border: 1px solid ${v.a(25)}; ${col}; align-items: center; justify-content: center"><span style="${num(26, 500)} letter-spacing: -0.03em">${v.digits}</span><span style="${v.mono} font-size: max(12px, var(--lmin)); letter-spacing: .08em; color: ${accent}">${v.endShort}</span></div>`;
 };
 
-const labels = (v: V, gap: number, fs: number, endFs: number) =>
+const labels = (v: TV, gap: number, fs: number, endFs: number) =>
   `<div style="${box}; ${col}; align-items: center; justify-content: center; gap: ${gap}px">${kick(v)}<span style="${num(fs)}">${v.digits}</span>${end(v, endFs)}</div>`;
 
-const dots: Draw = (v) => {
+const dots: TDraw = (v) => {
   const lit = v.st === 'idle' ? 60 : Math.round(v.frac * 60);
   const list = each(Array.from({ length: 60 }), (_x, i) => {
     const q = P(128, i * 6);
@@ -70,7 +70,7 @@ const ORBIT_STARS = [
   [110, 200, 2],
 ] as const;
 
-const orbit: Draw = (v) => {
+const orbit: TDraw = (v) => {
   const { t, mc1, mc2, mc3, st } = v;
   const p = P(134, 360 * v.ringFrac);
   const ang = st === 'idle' ? 359.9 : Math.min(359.9, ((v.m % 60) + v.s / 60) * 6);
@@ -82,7 +82,7 @@ const orbit: Draw = (v) => {
   )}${sweep(v, 90, 65, 180, v.liveOp, `<div style="position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 250deg, ${mx(mc3, 80)} 360deg); -webkit-mask-image: ${mask}; mask-image: ${mask}"></div><span style="position: absolute; left: 84px; top: -4px; width: 12px; height: 12px; border-radius: 50%; background: ${mc3}; box-shadow: 0 0 12px ${mx(mc3, 80)}"></span>`, 'border-radius: 50%; ')}${labels(v, 5, v.long ? 36 : 48, 13)}`;
 };
 
-const disc: Draw = (v) => {
+const disc: TDraw = (v) => {
   const { t, th, FILL, lamp, accent } = v;
   const deg = 360 * (v.st === 'idle' ? 1 : v.frac);
   const dq = (sec: number) => Math.min(359, (360 * sec) / Math.max(1, v.total)).toFixed(1);
@@ -129,7 +129,7 @@ const MOON_COLS = [
   'var(--at-fc-white)',
   'var(--at-fc-star-pink)',
 ];
-const MOON_DARK: Partial<Record<V['st'], string>> = {
+const MOON_DARK: Partial<Record<TV['st'], string>> = {
   idle: 'var(--at-fc-dk-idle)',
   paused: 'var(--at-fc-dk-warn)',
   blocked: 'var(--at-fc-dk-bad)',
@@ -137,7 +137,7 @@ const MOON_DARK: Partial<Record<V['st'], string>> = {
   up: 'var(--at-fc-dk-ended)',
 };
 
-const moon: Draw = (v) => {
+const moon: TDraw = (v) => {
   const { st } = v;
   const mk = st === 'idle' ? 1 : v.frac;
   const R = 56;
@@ -167,7 +167,7 @@ const moon: Draw = (v) => {
 
 const PX = 14;
 
-const tape: Draw = (v) => {
+const tape: TDraw = (v) => {
   const { t, FILL, lamp, accent } = v;
   const tm = Math.max(5, Math.min(180, Math.ceil(v.total / 60)));
   const shown = v.st === 'idle' ? v.total : v.r;
@@ -188,7 +188,7 @@ const tape: Draw = (v) => {
   return `<div style="position: absolute; left: 0; top: 22px; width: 360px; ${col}; align-items: center; gap: 6px">${kick(v)}<span style="${num(v.long ? 52 : 72)} letter-spacing: -0.045em">${v.digits}</span>${end(v, 14)}</div><div style="position: absolute; left: 20px; top: 172px; width: 320px; height: 96px; border-radius: 18px; background: var(--at-fc-tape-${v.th}); box-shadow: ${v.cardShadow}; overflow: hidden"><div style="position: absolute; inset: 0; -webkit-mask-image: ${fade}; mask-image: ${fade}"><div class="af-tr" style="position: absolute; top: 0; left: ${(160 - (shown / 60) * PX).toFixed(1)}px; width: ${tw}px; height: 96px">${marks}<div style="position: absolute; left: 0; top: 72px; width: ${tw}px; height: 6px; border-radius: 3px; background: ${heat}"></div></div><div style="position: absolute; left: 160px; top: 0; right: 0; bottom: 0; background: ${spent}"></div></div><div style="position: absolute; left: 159px; top: 0; width: 2px; height: 96px; background: ${v.mc1}; box-shadow: 0 0 12px ${mx(v.mc1, 60)}"></div><svg style="position: absolute; left: 150px; top: 0" width="20" height="12" viewBox="0 0 20 12" aria-hidden="true"><path d="M0 0 H20 L10 11 Z" fill="${v.mc1}"></path></svg></div>`;
 };
 
-const timeline: Draw = (v) => {
+const timeline: TDraw = (v) => {
   const { t, accent } = v;
   const f = v.st === 'idle' ? 0 : 1 - v.frac;
   const x = `${(22 + 280 * f).toFixed(1)}px`;
