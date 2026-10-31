@@ -1,5 +1,11 @@
 import { useSyncExternalStore } from 'react';
-import { createStorage, creditMinutes, countDay, type ISession as IStoredSession, type TEndReason } from '@awaketab/core';
+import {
+  createStorage,
+  creditMinutes,
+  countDay,
+  type ISession as IStoredSession,
+  type TEndReason,
+} from '@awaketab/core';
 import { createWakeLock, type IChangeEvent, type IWakeLockHandle, type TLockState } from '@awaketab/wake';
 import {
   IDLE_SESSION,
@@ -547,4 +553,3 @@ export const wake = new WakeController();
 export function useWake(): IWakeSnapshot {
   return useSyncExternalStore(wake.subscribe, wake.getSnapshot, wake.getServerSnapshot);
 }
-
