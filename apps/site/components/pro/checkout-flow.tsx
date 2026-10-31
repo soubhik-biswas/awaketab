@@ -2,307 +2,193 @@
 
 import { Check, Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import { SegmentedControl } from '@/components/product/segmented-control';
-import { StatusAlert } from '@/components/product/status-alert';
-import { Scene } from '@/components/scene/scene';
+import { RadioGroup } from 'radix-ui';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FORM_CARD } from '@/components/auth/sign-in';
+import { SignInButtons } from '@/components/auth/sign-in-buttons';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { requestSignin } from '@/lib/auth/client';
-import { validEmail } from '@/lib/auth/shared';
-import { readAccount } from '@/lib/pro/account';
-import {
-  CHECKOUT_STEPS,
-  checkoutUrl,
-  readFlow,
-  STEP_INDEX,
-  writeFlow,
-  type IFlow,
-  type TCheckoutStep,
-} from '@/lib/pro/flow';
-import { planPrice, renewalDate, usd } from '@/lib/pro/plans';
+import { fetchAuthStatus } from '@/lib/auth/client';
+import type { IAuthStatus } from '@/lib/auth/shared';
+import { CHECKOUT_STEPS, checkoutUrl, STEP_INDEX, type TCheckoutStep } from '@/lib/pro/flow';
+import { planOf, priceLabel, TRIAL_DAYS, yearlySaving, type TProPlan } from '@/lib/pro/plans';
+import { syncAccount } from '@/lib/pro/session';
 import { cn } from '@/lib/utils';
-import { ContinueIcon, FlowColumn, FlowHeader, H1, LEAD, LINK, PRIMARY, RISE } from './flow';
+import { Accent, FlowHeader, H1, Kicker, LEAD, LINK, PANEL, PRIMARY, Rise } from './flow';
 
-const CARD = 'flex flex-col gap-[14px] rounded-[24px] bg-card p-[26px] text-left';
-const FEATURE = 'flex items-center gap-2.5 text-[15px]';
+const UNKNOWN: IAuthStatus = { ready: true, google: true, github: true, passkey: true };
+const FEATURES = ['f1', 'f2', 'f3', 'f4', 'f5'] as const;
+const PLANS: readonly TProPlan[] = ['yearly', 'monthly'];
 
-function Feature({ children }: { children: string }) {
-  return (
-    <li className={FEATURE}>
-      <Check className="size-[18px] flex-none text-lamp" strokeWidth={2.25} aria-hidden="true" />
-      {children}
-    </li>
-  );
-}
-
-// The purchase board's flow at /pro/checkout: plan → account → inbox → pay. Polar then returns to /pro/activate.
+// /pro/checkout: plan → account → pay, then the payment provider returns to /pro/activate. The plan step is the Pro
+// offer panel; the account step is the three sign-in buttons, skipped when already signed in or when sign-in is
+// not set up on this site.
 export function CheckoutFlow({ backHref }: { backHref: string }) {
-  const tc = useTranslations('proflow.checkout');
+  const t = useTranslations('proflow.checkout');
   const [step, setStep] = useState<TCheckoutStep>('plans');
-  const [flow, setFlow] = useState<IFlow>({ plan: 'pro_yearly', email: '' });
-  const [hint, setHint] = useState<'idle' | 'bad' | 'offline'>('idle');
-  const [busy, setBusy] = useState(false);
+  const [plan, setPlan] = useState<TProPlan>('yearly');
+  const [status, setStatus] = useState<IAuthStatus>(UNKNOWN);
+  const [signed, setSigned] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
-  const [now, setNow] = useState<number | null>(null);
   const root = useRef<HTMLDivElement>(null);
-  const hintId = useId();
-  const emailId = useId();
+  const known = useRef({ signed: false, ready: true });
 
-  const go = useCallback((next: TCheckoutStep, email: string, focus = true) => {
-    // Paying needs an address; anything that skips ahead without one lands on the account step.
-    const target = (next === 'check' || next === 'pay') && !validEmail(email) ? 'account' : next;
-    setStep(target);
-    if (window.location.hash.slice(1) !== target)
-      history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${target}`);
+  const go = useCallback((next: TCheckoutStep, focus = true) => {
+    // Paying needs an account when sign-in exists; anything that skips ahead without one lands on the account step.
+    const target = next === 'account' && (known.current.signed || !known.current.ready) ? 'pay' : next;
+    const final = target === 'pay' && !known.current.signed && known.current.ready ? 'account' : target;
+    setStep(final);
+    if (window.location.hash.slice(1) !== final)
+      history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${final}`);
     if (focus) requestAnimationFrame(() => root.current?.querySelector<HTMLElement>('h1')?.focus());
   }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const saved = readFlow();
-    const next: IFlow = {
-      plan: params.get('plan') === 'lifetime' ? 'pro_lifetime' : (saved.plan ?? 'pro_yearly'),
-      email: saved.email ?? readAccount()?.email ?? '',
-      ...(saved.unsent ? { unsent: true } : {}),
-    };
-    setFlow(next);
-    setNow(Date.now());
+    setPlan(planOf(params.get('plan')));
     setUnavailable(params.get('checkout') === 'unavailable');
     const start = window.location.hash.slice(1) as TCheckoutStep;
-    go(CHECKOUT_STEPS.includes(start) ? start : 'plans', next.email, false);
+    void Promise.all([fetchAuthStatus(), syncAccount()]).then(([auth, account]) => {
+      if (auth) setStatus(auth);
+      known.current = {
+        signed: account.state === 'signed-in' || (account.state === 'offline' && account.account !== null),
+        ready: auth ? auth.ready : true,
+      };
+      setSigned(known.current.signed);
+      go(CHECKOUT_STEPS.includes(start) ? start : 'plans', false);
+    });
   }, [go]);
 
-  const update = (patch: Partial<IFlow>) => {
-    setFlow((current) => {
-      const next = { ...current, ...patch };
-      writeFlow(next);
-      return next;
-    });
+  const choose = (next: TProPlan) => {
+    setPlan(next);
+    const q = new URLSearchParams(window.location.search);
+    q.set('plan', next);
+    history.replaceState(null, '', `${window.location.pathname}?${q.toString()}${window.location.hash}`);
   };
 
-  const valid = validEmail(flow.email);
-  const price = usd(planPrice(flow.plan, now ?? undefined));
-
-  const send = (event: FormEvent) => {
-    event.preventDefault();
-    if (busy) return;
-    if (!valid) {
-      setHint('bad');
-      return;
-    }
-    setBusy(true);
-    void requestSignin(flow.email, '/pro/checkout#pay').then((result) => {
-      setBusy(false);
-      if (result === 'offline' || result === 'bad_email') {
-        setHint(result === 'offline' ? 'offline' : 'bad');
-        return;
-      }
-      const sent = result === 'sent' || result === 'rate_limited';
-      update({ unsent: !sent });
-      // No email provider yet: never claim a link was sent, go straight to payment instead.
-      go(sent ? 'check' : 'pay', flow.email);
-    });
+  const onSigned = () => {
+    known.current.signed = true;
+    setSigned(true);
+    go('pay');
   };
-
-  const hintText = hint === 'offline' ? tc('account.offline') : valid ? tc('account.ok') : tc('account.idle');
 
   return (
     <div ref={root} className="relative flex flex-col">
       <FlowHeader step={STEP_INDEX[step]} backHref={backHref} />
 
       {step === 'plans' ? (
-        <section
-          className={cn(
-            RISE,
-            'relative flex flex-col items-center gap-[26px] px-5 pt-11 min-[700px]:px-12 xl:px-[120px]',
-          )}
-        >
-          <span className="font-mono text-[14px] tracking-[0.12em] text-lamp">{tc('kicker')}</span>
-          <h1
-            tabIndex={-1}
-            className="m-0 text-center font-display text-[40px] leading-none font-extrabold tracking-[-0.04em] [font-stretch:112%] outline-none min-[700px]:text-[64px]"
-          >
-            {tc('plans.h1')}
-          </h1>
-          <p className="m-0 max-w-[680px] text-center text-[19px] leading-normal text-muted-foreground-strong">
-            {tc('plans.lead')}
-          </p>
-          <SegmentedControl
-            aria-label={tc('plans.period')}
-            value={flow.plan}
-            onValueChange={(value) => update({ plan: value === 'pro_lifetime' ? 'pro_lifetime' : 'pro_yearly' })}
-            options={[
-              { value: 'pro_yearly', label: tc('plans.yearly') },
-              { value: 'pro_lifetime', label: tc('plans.lifetime') },
-            ]}
-            className="gap-1 rounded-[14px] p-1 [&>button]:flex-none [&>button]:rounded-[10px] [&>button]:px-5 [&>button]:text-[15px]"
-          />
-          <div className="grid w-full max-w-[980px] grid-cols-1 gap-5 min-[700px]:grid-cols-2">
-            <div className={cn(CARD, 'border border-border')}>
-              <strong className="text-[24px]">{tc('free.name')}</strong>
-              <span className="text-[34px] font-extrabold">{tc('free.price')}</span>
-              <ul className="m-0 flex list-none flex-col gap-[14px] p-0">
-                {(['f1', 'f2', 'f3', 'f4'] as const).map((k) => (
-                  <Feature key={k}>{tc(`free.${k}`)}</Feature>
-                ))}
-              </ul>
-              <span className="mt-auto text-[14px] text-muted-foreground-strong">{tc('free.now')}</span>
-            </div>
-            <div
-              className={cn(
-                CARD,
-                'border-2 border-primary shadow-[0_24px_60px_color-mix(in_srgb,var(--primary)_14%,transparent)]',
-              )}
-            >
-              <span className="flex items-center justify-between">
-                <strong className="text-[24px]">{tc('pro.name')}</strong>
-                <span className="rounded-full bg-primary-soft px-2.5 py-[3px] text-[13px] font-bold text-primary">
-                  {tc(flow.plan === 'pro_lifetime' ? 'pro.badge.lifetime' : 'pro.badge.yearly')}
-                </span>
-              </span>
-              <span className="text-[34px] font-extrabold">
-                {tc(flow.plan === 'pro_lifetime' ? 'price.lifetime' : 'price.yearly', { price })}
-              </span>
-              <ul className="m-0 flex list-none flex-col gap-[14px] p-0">
-                {(['f1', 'f2', 'f3', 'f4', 'f5', 'f6'] as const).map((k) => (
-                  <Feature key={k}>{tc(`pro.${k}`)}</Feature>
-                ))}
-              </ul>
-              <Button type="button" size="lg" className={PRIMARY} onClick={() => go('account', flow.email)}>
-                {tc('plans.continue')}
-                <ContinueIcon />
-              </Button>
-            </div>
+        <Rise key="plans" className="items-stretch text-left">
+          <div className="flex flex-col gap-2 rounded-[22px] border border-border bg-card p-[18px] [background-image:radial-gradient(120%_100%_at_0%_0%,color-mix(in_srgb,var(--primary)_8%,transparent),transparent_60%)] dark:[background-image:radial-gradient(120%_100%_at_0%_0%,color-mix(in_srgb,var(--primary)_20%,transparent),transparent_60%)]">
+            <Kicker>{t('kicker')}</Kicker>
+            <h1 className={H1} tabIndex={-1}>
+              {t('h1a')} <Accent>{t('h1b')}</Accent>
+            </h1>
+            <p className="m-0 text-[15px] leading-[1.5] text-muted-foreground-strong">{t('lead')}</p>
           </div>
-        </section>
+          <RadioGroup.Root
+            value={plan}
+            onValueChange={(v) => choose(planOf(v))}
+            aria-label={t('plan')}
+            className="grid grid-cols-2 gap-2.5"
+          >
+            {PLANS.map((p) => {
+              const on = plan === p;
+              return (
+                <RadioGroup.Item
+                  key={p}
+                  value={p}
+                  className={cn(
+                    'flex flex-col gap-1.5 rounded-[18px] bg-card p-4 text-left text-foreground outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring',
+                    on
+                      ? 'border-2 border-primary shadow-[0_0_0_4px_color-mix(in_srgb,var(--primary)_10%,transparent)] dark:shadow-[0_0_0_4px_color-mix(in_srgb,var(--primary)_16%,transparent)]'
+                      : 'border border-border',
+                  )}
+                >
+                  <span className="flex items-center justify-between gap-2">
+                    <strong className="text-[15px] font-semibold">{t(`${p}.name`)}</strong>
+                    {p === 'yearly' ? (
+                      <span className="flex-none rounded-full bg-lamp/10 px-2.5 py-1 font-mono text-[12px] font-bold text-[#0b5f2d] dark:bg-lamp/14 dark:text-lamp">
+                        {t('save', { n: yearlySaving() })}
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="font-display text-[22px] font-bold tracking-[-0.02em]">
+                    {t(`${p}.price`, { price: priceLabel(p) })}
+                  </span>
+                  <span className="text-[13px] leading-[1.45] text-muted-foreground-strong">{t(`${p}.d`)}</span>
+                </RadioGroup.Item>
+              );
+            })}
+          </RadioGroup.Root>
+          <ul className="m-0 flex list-none flex-col overflow-hidden rounded-[18px] border border-border bg-card p-0">
+            {FEATURES.map((k) => (
+              <li key={k} className="flex min-h-[52px] items-center gap-3 px-4 py-2 [&+&]:border-t [&+&]:border-border">
+                <span className="flex size-[26px] flex-none items-center justify-center rounded-full bg-primary/8 text-primary dark:bg-primary/14">
+                  <Check className="size-4" strokeWidth={2.5} aria-hidden="true" />
+                </span>
+                <span className="text-[15px] font-semibold">{t(`features.${k}`)}</span>
+              </li>
+            ))}
+          </ul>
+          <span className="text-[13px] leading-[1.5] text-muted-foreground-strong">
+            {t('note', { days: TRIAL_DAYS, price: priceLabel('yearly') })}
+          </span>
+          <Button type="button" className={cn(PRIMARY, 'min-[700px]:w-full')} onClick={() => go('account')}>
+            {t('trial', { days: TRIAL_DAYS })}
+          </Button>
+          <span className="text-center text-[13px] text-muted-foreground-strong">{t('secure')}</span>
+        </Rise>
       ) : null}
 
       {step === 'account' ? (
-        <FlowColumn className={RISE}>
-          <h1 className={cn(H1, 'outline-none')} tabIndex={-1}>
-            {tc('account.h1')}
+        <Rise key="account">
+          <h1 className={H1} tabIndex={-1}>
+            {t('account.h1')}
           </h1>
-          <p className={LEAD}>{tc('account.lead')}</p>
-          <form className="flex w-full flex-col gap-[18px]" onSubmit={send} noValidate>
-            <label htmlFor={emailId} className="flex w-full flex-col gap-1.5 text-left">
-              <span className="text-[14px] font-semibold">{tc('account.label')}</span>
-              <Input
-                id={emailId}
-                type="email"
-                autoComplete="email"
-                placeholder="you@example.com"
-                value={flow.email}
-                aria-describedby={hintId}
-                aria-invalid={hint === 'bad' && !valid ? true : undefined}
-                onChange={(event) => {
-                  update({ email: event.target.value.trim() });
-                  if (hint !== 'idle') setHint('idle');
-                }}
-                className={cn(
-                  'h-13 rounded-[12px] border-2 px-3.5 text-[17px] aria-invalid:px-3.5',
-                  valid ? 'border-lamp' : 'border-input',
-                )}
-              />
-            </label>
-            <span
-              id={hintId}
-              aria-live="polite"
-              className={cn(
-                'self-start text-[13px] font-semibold',
-                hint === 'bad' || hint === 'offline'
-                  ? 'text-destructive'
-                  : valid
-                    ? 'text-lamp'
-                    : 'text-muted-foreground-strong',
-              )}
-            >
-              {hintText}
-            </span>
-            <Button
-              type="submit"
-              size="lg"
-              loading={busy}
-              aria-disabled={!valid || undefined}
-              className={cn('w-full', valid ? PRIMARY : 'h-13 rounded-md px-[22px] text-[16px] font-bold')}
-            >
-              {busy ? tc('account.sending') : tc('account.send')}
-            </Button>
-          </form>
-          <button type="button" className={LINK} onClick={() => go('plans', flow.email)}>
-            {tc('back.plans')}
+          <p className={LEAD}>{t('account.lead')}</p>
+          <div className={cn(FORM_CARD, 'text-left')}>
+            <SignInButtons status={status} callbackURL={`/pro/checkout?plan=${plan}#pay`} onSigned={onSigned} />
+          </div>
+          <button type="button" className={LINK} onClick={() => go('plans')}>
+            {t('back')}
           </button>
-        </FlowColumn>
-      ) : null}
-
-      {step === 'check' ? (
-        <FlowColumn className={RISE}>
-          <Scene scene="firstaction" width={260} decorative />
-          <h1 className={cn(H1, 'outline-none')} tabIndex={-1}>
-            {tc('check.h1')}
-          </h1>
-          <p className={LEAD}>
-            {tc('check.before')} <strong className="text-foreground">{flow.email}</strong>
-            {tc('check.after', { minutes: 15 })}
-          </p>
-          <Button type="button" size="lg" className={PRIMARY} onClick={() => go('pay', flow.email)}>
-            {tc('check.continue')}
-          </Button>
-          <button type="button" className={LINK} onClick={() => go('account', flow.email)}>
-            {tc('check.other')}
-          </button>
-        </FlowColumn>
+        </Rise>
       ) : null}
 
       {step === 'pay' ? (
-        <FlowColumn className={RISE}>
-          <h1 className={cn(H1, 'outline-none')} tabIndex={-1}>
-            {tc('pay.h1')}
+        <Rise key="pay">
+          <h1 className={H1} tabIndex={-1}>
+            {t('pay.h1')}
           </h1>
           {unavailable ? (
-            <StatusAlert variant="refused" title={tc('unavailable.title')} className="w-full text-left">
-              {tc('unavailable.text')}
-            </StatusAlert>
+            <p
+              role="alert"
+              className="m-0 w-full rounded-[14px] bg-destructive/6 px-[14px] py-3 text-left text-[14px] font-bold text-destructive dark:bg-destructive/10"
+            >
+              {t('pay.unavailable')}
+            </p>
           ) : null}
-          {flow.unsent ? (
-            <StatusAlert variant="info" title={tc('pay.unsentTitle')} className="w-full text-left">
-              {tc('pay.unsent')}
-            </StatusAlert>
-          ) : null}
-          <dl className="m-0 flex w-full flex-col overflow-hidden rounded-[20px] border border-border bg-card">
+          <dl className={cn(PANEL, 'm-0 gap-0 p-0 min-[700px]:p-0')}>
             {[
-              [tc('pay.plan._'), tc('pay.plan.v')],
-              [
-                tc('pay.billing._'),
-                flow.plan === 'pro_lifetime'
-                  ? tc('pay.billing.lifetime')
-                  : tc('pay.billing.yearly', { date: now ? renewalDate(now) : '' }),
-              ],
-              [tc('pay.account'), flow.email],
+              [t('pay.plan'), t(`${plan}.name`)],
+              [t('pay.price'), t(`${plan}.price`, { price: priceLabel(plan) })],
+              [t('pay.trial'), t('pay.trialV', { days: TRIAL_DAYS })],
+              [t('pay.account'), signed ? t('pay.signed') : t('pay.none')],
             ].map(([k, v]) => (
-              <div key={k} className="flex justify-between gap-4 border-t border-secondary px-5 py-4 text-[15px]">
-                <dt>{k}</dt>
-                <dd className="m-0 text-right break-all text-muted-foreground-strong">{v}</dd>
+              <div key={k} className="flex min-h-[52px] items-center justify-between gap-4 px-5 text-[15px] [&+&]:border-t [&+&]:border-border">
+                <dt className="font-semibold">{k}</dt>
+                <dd className="m-0 text-right text-muted-foreground-strong">{v}</dd>
               </div>
             ))}
-            <div className="flex justify-between gap-4 border-t border-secondary bg-secondary px-5 py-4 text-[15px] font-bold">
-              <dt>{tc('pay.total')}</dt>
-              <dd className="m-0 text-[17px]">{price}</dd>
-            </div>
           </dl>
-          <Button
-            type="button"
-            size="lg"
-            className={PRIMARY}
-            onClick={() => window.location.assign(checkoutUrl(flow.plan, flow.email))}
-          >
-            <Lock strokeWidth={2} aria-hidden="true" />
-            {tc('pay.btn')}
+          <Button type="button" className={PRIMARY} onClick={() => window.location.assign(checkoutUrl(plan))}>
+            <Lock className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+            {t('pay.btn')}
           </Button>
-          <span className="text-center text-[13px] leading-normal text-muted-foreground-strong">
-            {tc('pay.note._')} {tc('pay.note.cancel')}
-          </span>
-        </FlowColumn>
+          <span className="text-[13px] leading-normal text-muted-foreground-strong">{t('secure')}</span>
+          <button type="button" className={LINK} onClick={() => go('plans')}>
+            {t('back')}
+          </button>
+        </Rise>
       ) : null}
     </div>
   );
