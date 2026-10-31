@@ -6,7 +6,7 @@ import { englishOnly } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'site.sys.expired' });
-  return systemMetadata(t('title'), t('lead'), ROUTES.expired, t('eyebrow'), t('h1'), 'expired');
+  return systemMetadata(t('h1'), t('description'), ROUTES.expired);
 }
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {

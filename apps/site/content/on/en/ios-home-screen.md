@@ -1,6 +1,6 @@
 ---
 title: "Keep an iOS Home Screen app awake — AwakeTab"
-description: "Keep an iPhone Home Screen web app awake. The wake lock there needs iOS 18.4 or later and one tap; on older iOS, use AwakeTab in Safari."
+description: "Keep an iPhone Home Screen web app awake. The wake lock there needs iOS 18.4 or later and one tap; on older versions of iOS, use AwakeTab in Safari."
 h1: "Keep an iOS Home Screen app awake"
 crumb: "iPhone Home Screen app"
 intent: "keep screen on iphone web app"

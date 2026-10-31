@@ -446,7 +446,7 @@ function InputsBlock() {
             <Lock className="pointer-events-none absolute left-3 size-4 text-muted-foreground" aria-hidden="true" />
             <Input id="g-dis" disabled defaultValue="Set by your organisation" className="pl-9" />
           </span>
-          <Help>Ask [CONTACT EMAIL] to change it.</Help>
+          <Help>Change it from Settings → Account.</Help>
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="g-search">Search · with icon and hint</Label>

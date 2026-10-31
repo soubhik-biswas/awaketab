@@ -49,19 +49,29 @@ function useLanguageTargets(): Array<{ locale: TLocale; href: string; label: str
   return LOCALES.map((l) => ({ locale: l, href: links[l] ?? localePath(l, '/'), label: LOCALE_META[l].label }));
 }
 
-export function LangMenu({ locale, label }: { locale: TLocale; label: string }) {
+export function LangMenu({
+  locale,
+  label,
+  variant = 'chip',
+}: {
+  locale: TLocale;
+  label: string;
+  variant?: 'chip' | 'pill';
+}) {
   const targets = useLanguageTargets();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          aria-label={`${label}: ${LOCALE_META[locale].label}`}
-          className="px-2.5 text-[14px] font-normal text-muted-foreground-strong"
-        >
-          <Globe className="size-4" strokeWidth={2} aria-hidden="true" />
-          {LOCALE_META[locale].label}
-        </Button>
+      <DropdownMenuTrigger
+        aria-label={`${label}: ${LOCALE_META[locale].label}`}
+        className={cn(
+          'relative inline-flex cursor-pointer items-center outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring',
+          variant === 'chip'
+            ? 'h-11 gap-1.5 rounded-[12px] border-0 bg-transparent px-2.5 text-[14px] text-muted-foreground-strong hover:bg-secondary'
+            : 'h-8 rounded-full border border-white/[.09] bg-white/5 px-3 text-[13px] text-[#D5DAE6] after:absolute after:inset-x-0 after:-inset-y-1.5 hover:bg-white/10',
+        )}
+      >
+        {variant === 'chip' && <Globe className="size-4" strokeWidth={2} aria-hidden="true" />}
+        {LOCALE_META[locale].label}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
         <DropdownMenuLabel>{label}</DropdownMenuLabel>
@@ -105,7 +115,7 @@ export function MobileMenu({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label={menuLabel} className="rounded-[12px]">
+        <Button variant="ghost" size="icon" aria-label={menuLabel} className="rounded-[12px] [&_svg]:size-[22px]">
           <Menu className="size-[22px]" strokeWidth={1.75} aria-hidden="true" />
         </Button>
       </SheetTrigger>

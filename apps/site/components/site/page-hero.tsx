@@ -13,6 +13,7 @@ import {
 import type { TSceneKey } from '@/lib/content';
 import { cn } from '@/lib/utils';
 import { Scene } from '@/components/scene/scene';
+import { Accented } from './accent';
 import { Arrive } from './arrive';
 import * as s from './styles';
 
@@ -79,14 +80,16 @@ export function HeroButtons({ primary, secondary }: { primary?: IHeroAction; sec
   );
 }
 
-// The hero of every content and system page: crumbs, eyebrow, h1, lead, meta, buttons, then a scene or a face. It is
-// a row from tablet landscape up; below that it stacks, with the art centred on tablet portrait.
+// The hero of every content and system page: crumbs, eyebrow, the h1 with its serif accent word, lead, meta, buttons,
+// then a scene or a face. It is a row from tablet landscape up; below that it stacks, with the art centred on tablet
+// portrait.
 export function PageHero({
   crumbs,
   crumbLabel = 'Breadcrumb',
   eyebrow,
   kicker,
   h1,
+  accent,
   lead,
   meta,
   actions,
@@ -100,6 +103,7 @@ export function PageHero({
   eyebrow?: string;
   kicker?: ReactNode;
   h1: ReactNode;
+  accent?: string;
   lead?: ReactNode;
   meta?: ReactNode;
   actions?: ReactNode;
@@ -118,7 +122,9 @@ export function PageHero({
       <div className="flex min-w-0 flex-1 flex-col items-start gap-[14px] self-stretch min-[700px]:gap-5 min-[1100px]:self-auto">
         {crumbs && crumbs.length > 0 && <Crumbs items={crumbs} label={crumbLabel} />}
         {kicker ?? (eyebrow && <span className={s.eyebrow}>{eyebrow}</span>)}
-        <h1 className={cn(s.h1, scene && s.h1Art)}>{h1}</h1>
+        <h1 className={cn(s.h1, scene && s.h1Art)}>
+          {typeof h1 === 'string' ? <Accented text={h1} {...(accent ? { accent } : {})} /> : h1}
+        </h1>
         {lead && <p className={cn(s.lead, 'site-prose')}>{lead}</p>}
         {meta && <div className={cn('flex flex-wrap items-center gap-x-4 gap-y-1', s.meta)}>{meta}</div>}
         {actions}
