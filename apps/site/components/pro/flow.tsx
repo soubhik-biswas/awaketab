@@ -16,7 +16,8 @@ export const OUTLINE =
   'h-[52px] w-full gap-2 rounded-full border-input px-[22px] text-[16px] font-semibold min-[700px]:w-auto';
 export const LINK =
   'inline-flex min-h-11 items-center border-0 bg-transparent px-1 text-[15px] font-bold text-lamp underline underline-offset-[3px] outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring';
-export const PANEL = 'flex w-full flex-col gap-3.5 rounded-[24px] border border-border bg-card p-5 text-left min-[700px]:p-7';
+export const PANEL =
+  'flex w-full flex-col gap-3.5 rounded-[24px] border border-border bg-card p-5 text-left min-[700px]:p-7';
 export const ROW = 'flex min-h-[60px] items-center gap-3.5 px-4 py-2.5 [&+&]:border-t [&+&]:border-border';
 
 const STEPS = ['s1', 's2', 's3', 's4'] as const;

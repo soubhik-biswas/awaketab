@@ -9,12 +9,7 @@ interface ILicenseActivation {
 export type TLicenseStatus = 'active' | 'canceled' | 'revoked' | 'refunded' | 'expired';
 
 export type TPlanId =
-  | 'pro_yearly'
-  | 'pro_monthly'
-  | 'pro_lifetime'
-  | 'biz_embed_site_yearly'
-  | 'biz_kiosk_site'
-  | 'biz_kiosk_5';
+  'pro_yearly' | 'pro_monthly' | 'pro_lifetime' | 'biz_embed_site_yearly' | 'biz_kiosk_site' | 'biz_kiosk_5';
 
 export type TFeatureId =
   | 'ambient.packs'
