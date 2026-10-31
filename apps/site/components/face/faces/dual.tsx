@@ -1,4 +1,4 @@
-import { PLATE } from '../art';
+import { plate } from '../art';
 import { f1, P, ticks } from '../geometry';
 import { big, type IDrawProps, Kicker, L, lmin, mono, Svg } from '../kit';
 import type { TFaceModel } from '../model';
@@ -32,7 +32,7 @@ function Dial({
           width: 148,
           height: 148,
           borderRadius: '50%',
-          ...PLATE[m.theme],
+          ...plate(m.theme, m.accent),
           ...(ends ? { outline: `2px solid ${accent}`, outlineOffset: 3 } : null),
         }}
       />

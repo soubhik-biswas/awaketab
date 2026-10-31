@@ -1,6 +1,6 @@
 import { SUB_DIAL } from '../art';
 import { arc, f1, P, ticks } from '../geometry';
-import { DialLabel, type IDrawProps, L, lmin, MONO, mono, Svg, sweep } from '../kit';
+import { D, DialLabel, type IDrawProps, L, lmin, MONO, Svg, sweep } from '../kit';
 
 const MINOR = ticks(128, 134, 60, (i) => i % 5 !== 0);
 const MAJOR = ticks(124, 134, 60, (i) => i % 5 === 0);
@@ -13,18 +13,10 @@ export default function Chrono({ m }: IDrawProps) {
   const sub = SUB_DIAL[m.theme];
   const minDeg = Math.min(m.m, 59.9) * 6;
   const [lx, ly] = P(30, minDeg, 124, 160);
-  const unit = (left: number, text: string) => (
-    <span
-      className={L}
-      style={{ position: 'absolute', left, width: 76, top: 204, textAlign: 'center', ...mono(12, '.12em', t.ink2) }}
-    >
-      {text}
-    </span>
-  );
   return (
     <>
       <Svg>
-        <path d={MINOR} strokeWidth="1.2" opacity=".55" style={{ stroke: t.ink2 }} />
+        <path className={D} d={MINOR} strokeWidth="1.2" opacity=".55" style={{ stroke: t.ink2 }} />
         <path d={MAJOR} strokeWidth="2.4" style={{ stroke: t.ink }} />
         <circle cx="124" cy="160" r="38" strokeWidth="1" style={{ fill: sub, stroke: t.line }} />
         <circle cx="236" cy="160" r="38" strokeWidth="1" style={{ fill: sub, stroke: t.line }} />
@@ -60,8 +52,6 @@ export default function Chrono({ m }: IDrawProps) {
           extra={{ fontFamily: MONO }}
         />
       ))}
-      {unit(86, 'MIN')}
-      {unit(198, 'SEC')}
       <div
         className="afx-s"
         style={{
@@ -112,11 +102,11 @@ export default function Chrono({ m }: IDrawProps) {
         className={L}
         style={{
           position: 'absolute',
-          left: 0,
-          width: 360,
-          top: 219,
+          left: 110,
+          width: 140,
+          top: 212,
           textAlign: 'center',
-          fontSize: lmin(14),
+          fontSize: lmin(13),
           color: t.ink2,
         }}
       >

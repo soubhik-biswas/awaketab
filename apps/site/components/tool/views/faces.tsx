@@ -10,8 +10,7 @@ import { useTool } from '@/components/tool/context';
 import { HELP } from '@/components/tool/kit';
 
 const TABS: ReadonlyArray<[TFaceCol, string]> = [
-  ['fresh', 'New ✦'],
-  ['signature', 'Signature'],
+  ['featured', 'Featured'],
   ['digital', 'Digital'],
   ['analog', 'Analog'],
   ['ambient', 'Ambient'],
@@ -19,7 +18,7 @@ const TABS: ReadonlyArray<[TFaceCol, string]> = [
 ];
 
 function idsOf(col: TFaceCol): readonly TFaceId[] {
-  return col === 'all' ? FACE_IDS : FACE_COLLECTIONS[col];
+  return FACE_COLLECTIONS[col];
 }
 
 export default function FacesView() {

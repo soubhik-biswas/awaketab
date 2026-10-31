@@ -48,7 +48,7 @@ const NUMW: Readonly<Record<number, string>> = {
 };
 const GROUND = {
   light: 'linear-gradient(160deg, #FFFFFF, #F1F1F7)',
-  dark: 'linear-gradient(160deg, #131C33, #0A0F1C)',
+  dark: 'linear-gradient(160deg, #131C33, #0A0B10)',
   oled: '#000000',
 };
 const OFF = { light: 'rgba(11,16,32,.16)', night: 'rgba(238,242,250,.15)' };
