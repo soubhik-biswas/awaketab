@@ -27,7 +27,14 @@ export type TSessionEvent =
   | { type: 'fallback'; now: number }
   | { type: 'held'; mode: TLockMode; now: number }
   | { type: 'hidden'; now: number }
-  | { type: 'refused'; mode: TLockMode; to: 'denied' | 'unsupported'; advice: TAdviceCode | null; held: boolean; now: number }
+  | {
+      type: 'refused';
+      mode: TLockMode;
+      to: 'denied' | 'unsupported';
+      advice: TAdviceCode | null;
+      held: boolean;
+      now: number;
+    }
   | { type: 'pause'; now: number }
   | { type: 'resume'; now: number }
   | { type: 'stop'; now: number }
@@ -38,7 +45,7 @@ export type TSessionEvent =
   | { type: 'tick'; now: number }
   | { type: 'end'; now: number };
 
-export const MAX_SEC = 7 * 24 * 3600;
+const MAX_SEC = 7 * 24 * 3600;
 
 export const IDLE_SESSION: ISession = {
   state: 'idle',
@@ -62,7 +69,7 @@ const LIVE: readonly TWakeState[] = ['starting', 'running', 'fallback', 'paused'
 export const isLive = (s: TWakeState): boolean => LIVE.includes(s);
 export const isAwake = (s: TWakeState): boolean => s === 'running' || s === 'fallback';
 
-export function clampSec(sec: number): number {
+function clampSec(sec: number): number {
   if (!Number.isFinite(sec) || sec <= 0) return 0;
   return Math.min(MAX_SEC, Math.round(sec));
 }
@@ -109,7 +116,8 @@ export function reduce(s: ISession, e: TSessionEvent): ISession {
       return e.supported ? next : { ...next, state: 'unsupported', supported: false };
     }
     case 'fallback': {
-      const base = s.state === 'unsupported' || s.state === 'idle' || s.state === 'ended' ? fresh(s, e.now, s.totalSec) : s;
+      const base =
+        s.state === 'unsupported' || s.state === 'idle' || s.state === 'ended' ? fresh(s, e.now, s.totalSec) : s;
       return { ...base, state: 'starting', mode: 'video', pauseReason: null, now: e.now };
     }
     case 'held': {
@@ -168,7 +176,8 @@ export function reduce(s: ISession, e: TSessionEvent): ISession {
       };
     case 'extend': {
       if (e.sec <= 0) return s;
-      if (s.state === 'ended' || s.state === 'idle') return { ...fresh(s, e.now, clampSec(e.sec)), lastExtendSec: e.sec };
+      if (s.state === 'ended' || s.state === 'idle')
+        return { ...fresh(s, e.now, clampSec(e.sec)), lastExtendSec: e.sec };
       if (s.endsAt === null) return s;
       const left = remainSec(s);
       if (left + e.sec > MAX_SEC) return s;
@@ -186,7 +195,8 @@ export function reduce(s: ISession, e: TSessionEvent): ISession {
     }
     case 'length': {
       const sec = clampSec(e.sec);
-      if (!isLive(s.state)) return { ...s, totalSec: sec, state: s.state === 'ended' ? 'idle' : s.state, endedAt: null };
+      if (!isLive(s.state))
+        return { ...s, totalSec: sec, state: s.state === 'ended' ? 'idle' : s.state, endedAt: null };
       const from = s.pausedAt ?? e.now;
       return { ...s, totalSec: sec, endsAt: sec > 0 ? from + sec * 1000 : null };
     }
