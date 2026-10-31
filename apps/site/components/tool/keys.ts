@@ -4,13 +4,17 @@ import { useEffect, useRef } from 'react';
 import { LENGTHS } from './set-controls';
 import type { IGlance } from './context';
 
+// Space and Enter belong to a focused control; on the stage or the status pill they drive the session.
+const CONTROLS = 'button, a[href], [role="radio"], [role="tab"], [role="switch"], [role="slider"], [role="checkbox"]';
+
 function typing(el: Element | null): boolean {
   if (!(el instanceof HTMLElement)) return false;
   return el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName);
 }
 
-// The keyboard map from the accessibility board. ⌘K / Ctrl K works anywhere; single keys only while no panel is
-// open and nothing is being typed, and only for focus inside the tool (WCAG 2.1.4).
+// The keyboard map from the accessibility board. ⌘K / Ctrl K works anywhere; single keys only while the stage (or a
+// control in the tool) has focus, no panel is open and nothing is being typed (WCAG 2.1.4). The skip link focuses the
+// stage; with focus on the page itself, Space scrolls the story as usual.
 export function useKeys(g: IGlance) {
   const ref = useRef(g);
   useEffect(() => {
@@ -29,10 +33,9 @@ export function useKeys(g: IGlance) {
       if (cur.panel !== 'none' || e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented) return;
       const active = document.activeElement;
       if (typing(active)) return;
-      const inTool = !active || active === document.body || (cur.root?.contains(active) ?? false);
-      if (!inTool) return;
-      const onControl = active instanceof HTMLElement && active !== document.body && active.tagName !== 'MAIN';
-      const inGroup = active instanceof HTMLElement && active.closest('[role="radiogroup"]') !== null;
+      if (!(active instanceof HTMLElement) || active === document.body || !cur.root?.contains(active)) return;
+      const onControl = active.closest(CONTROLS) !== null;
+      const inGroup = active.closest('[role="radiogroup"]') !== null;
       const key = e.key;
       let handled = true;
       if (key === ' ' && !onControl) a.toggle();

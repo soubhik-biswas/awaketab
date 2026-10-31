@@ -44,13 +44,13 @@ function commands(g: IGlance): Array<{ h: string; items: ICmd[] }> {
   const live = isLive(st);
   const session: ICmd[] = [];
   if (live || st === 'ended')
-    session.push({ id: 'extend', label: t('pal.extend'), icon: Plus, keys: '+', run: () => a.extend(900) });
+    session.push({ id: 'extend', label: t('pal.extend'), icon: Plus, run: () => a.extend(900) });
   if (st === 'running' || st === 'fallback')
     session.push({ id: 'pause', label: t('dock.pause'), icon: Pause, keys: 'Space', run: a.pause });
   else if (st === 'paused' || st === 'needsyou')
     session.push({ id: 'resume', label: t('dock.resume'), icon: Play, keys: 'Space', run: a.resume });
   else session.push({ id: 'start', label: t('pal.start'), icon: Play, keys: '↵', run: a.start });
-  if (live) session.push({ id: 'stop', label: t('dock.stop'), icon: X, keys: 'S', run: a.stop });
+  if (live) session.push({ id: 'stop', label: t('dock.stop'), icon: X, run: a.stop });
   session.push({ id: 'full', label: t('dock.full'), icon: Maximize, keys: '⇧F', run: a.fullscreen });
   const go: ICmd[] = [
     {
