@@ -1,20 +1,20 @@
 export const AUTH_BASE_PATH = '/api/auth';
-export const SIGNIN_MINUTES = 15;
-export const SIGNIN_COOLDOWN_S = 60;
-export const TOKEN_RE = /^[A-Za-z0-9_-]{16,128}$/u;
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/u;
 
 export type TSocialProvider = 'google' | 'github';
+export type TSignInMethod = TSocialProvider | 'passkey';
+export const SIGN_IN_METHODS: readonly TSignInMethod[] = ['google', 'github', 'passkey'];
 
 export interface IAuthStatus {
   ready: boolean;
   google: boolean;
   github: boolean;
-  email: boolean;
-  minutes: number;
+  passkey: boolean;
 }
 
-export function validEmail(raw: string): boolean {
-  const email = raw.trim();
-  return email.length <= 254 && EMAIL_RE.test(email);
+export function isSignInMethod(value: unknown): value is TSignInMethod {
+  return typeof value === 'string' && (SIGN_IN_METHODS as readonly string[]).includes(value);
 }
+
+// A passkey-only account has no address of its own; Better Auth's user table still needs a unique value there,
+// so it gets an undeliverable one under the reserved .invalid domain. It is never shown and never mailed.
+export const PASSKEY_USER_DOMAIN = 'passkey.awaketab.invalid';
