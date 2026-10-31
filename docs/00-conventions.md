@@ -1,5 +1,7 @@
 # 00 · Conventions, glossary and canonical facts
 
+> Deployment transition: the active site is now Next.js in `apps/site`, hosted on Cloudflare Workers. [Next.js deployment](DEPLOYMENT.md) supersedes the older Astro/Pages deployment details below. Product identifiers and browser behavior remain governed by this document.
+
 > **This file is the single source of truth for names, identifiers, states, keys, routes, plans and budgets.** Every other document in `docs/` must use these exact identifiers. If a detail here conflicts with another doc, this file wins and the other doc gets fixed. When a decision changes, change it here first.
 
 Status: v1.4 · 26 Sep 2026 · Owner: Soubhik · Derived from `awaketab-blueprint.md` (strategy) — see that document for the *why*; this set of docs is the *what* and *how*.
@@ -14,7 +16,7 @@ Status: v1.4 · 26 Sep 2026 · Owner: Soubhik · Derived from `awaketab-blueprin
 | Tagline | "The tab that keeps your screen awake." |
 | Canonical domain | `https://awaketab.com` (redirect 301 from `awaketab.app`, `awaketab.page`, `awaketab.dev`, `www.awaketab.com`) |
 | Company/legal | Sole proprietorship of Soubhik (India) — confirm with CA; placeholder legal name `AwakeTab` |
-| GitHub org | `awaketab` — repo `awaketab/awaketab` (monorepo) |
+| GitHub repository | `soubhik-biswas/awaketab` (monorepo) |
 | npm scope | `@awaketab` — package `@awaketab/wake` |
 | Extension name | Product name on the website and in running text: **AwakeTab for Chrome**. Store and manifest name on the Chrome Web Store and Edge Add-ons: **AwakeTab: Keep Screen Awake** (`ext.name`, English in every locale; Edge shows the same manifest name). Manifest short name: **AwakeTab**. The licence device label stays "AwakeTab for Chrome · {OS}" |
 | Embed product | **AwakeTab Embed** (first widget: Cook Mode) |

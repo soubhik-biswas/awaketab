@@ -12,10 +12,12 @@ You need Node.js 22 and pnpm 9.15.9. The setup script checks both and does the r
 git clone https://github.com/soubhik-biswas/awaketab.git
 cd awaketab
 node scripts/setup.mjs            # or, once pnpm is installed: pnpm run setup
-pnpm dev                          # http://localhost:4321
+pnpm dev                          # http://localhost:3000
 ```
 
 The script checks for Node.js 22 and tells you how to switch with nvm or fnm if needed. It enables pnpm 9.15.9 through Corepack, runs `pnpm install` and creates `apps/web/.dev.vars` from `apps/web/.dev.vars.example` (an existing file is never overwritten). Add `--with-browsers` to also install Playwright Chromium for the end-to-end tests, or `--dry-run` to see what it would do.
+
+The active website is `apps/site`; its service settings are in [`apps/site/.env.example`](apps/site/.env.example). Site-specific Astro paths and zero-hydration rules below describe the retained `apps/web` implementation. See [Next.js deployment](docs/DEPLOYMENT.md) for current hosting and branch settings.
 
 Use `pnpm run setup`, not `pnpm setup`. `pnpm setup` is a built-in pnpm command that configures `PNPM_HOME`, and it wins over the package script.
 
@@ -23,15 +25,15 @@ Useful commands:
 
 | Command                 | What it does                                                          |
 | ----------------------- | --------------------------------------------------------------------- |
-| `pnpm dev`              | Astro dev server for the website and tool                             |
+| `pnpm dev`              | Next.js dev server for the active website and tool                    |
 | `pnpm -F extension dev` | The Chrome extension in development mode (WXT)                        |
 | `pnpm format`           | Prettier over the repository                                          |
 | `pnpm lint`             | Comment rule, Prettier check, Knip, ESLint and Stylelint              |
 | `pnpm knip`             | Unused files, exports and dependencies (Knip, `knip.json`)            |
-| `pnpm typecheck`        | TypeScript and `astro check` in every workspace                       |
-| `pnpm test`             | Unit tests and Pages Functions tests (Vitest)                         |
+| `pnpm typecheck`        | TypeScript in active workspaces                                      |
+| `pnpm test`             | Shared-package, extension and Next.js site tests (Vitest)             |
 | `pnpm build`            | Builds every package, the site and the extension                      |
-| `pnpm test:seo`         | Checks the built site (run after `pnpm build`)                        |
+| `pnpm test:seo`         | Checks the previous Astro build (build `apps/web` first)              |
 | `pnpm size`             | Bundle size budgets                                                   |
 | `pnpm test:e2e`         | Playwright end-to-end tests for the site (needs a build and Chromium) |
 | `pnpm test:e2e:ext`     | Playwright tests for the extension                                    |
@@ -40,7 +42,7 @@ Useful commands:
 
 - Use `play` for testing and `main` for production. Contributions target `play`; the owner promotes tested changes through a PR from `play` to `main`. Use descriptive branches in your fork.
 - `main` deploys the website automatically, so it only takes changes through pull requests.
-- Only `SoubhikBiswas-gitHub` may approve an issue by applying `approved`. Link approved work in your PR using `Closes #123` or `Tracks: #123`.
+- Only `soubhik-biswas` may approve an issue by applying `approved`. Link approved work in your PR using `Closes #123` or `Tracks: #123`.
 - Keep a pull request to one topic. Fill in the template: what changed, why, and how you checked it. See the [task lifecycle guide](.github/COMMUNITY_WORKFLOW.md).
 - For anything people can see, add screenshots in light and dark.
 - User-visible changes get a short changelog fragment in `changelog/` (copy the front matter of an existing one).
@@ -58,8 +60,8 @@ Useful commands:
 **Tests.**
 
 - Before every commit: `pnpm lint`, `pnpm typecheck` and `pnpm test`.
-- Before pushing: `pnpm build`, `pnpm test:seo` and `pnpm size`.
-- End-to-end tests run in CI on every pull request (Chromium and the extension), and Firefox and WebKit run nightly. Run `pnpm test:e2e --project=chromium` locally when you change how the UI behaves.
+- Before pushing: `pnpm build` and `pnpm size`; changes to the previous Astro site also need `pnpm -F web build` followed by `pnpm test:seo`.
+- Extension Chromium end-to-end tests run in CI on every pull request; nightly runs dependency auditing. The previous site's browser matrix is paused until the Next.js site's own end-to-end suite returns. For changes to `apps/web`, run `pnpm -F web build` and `pnpm test:e2e --project=chromium` locally.
 
 **Design.** AwakeTab has one design system, Clear Night. Read [PRODUCT.md](PRODUCT.md) and [DESIGN.md](DESIGN.md) before touching anything visible.
 
@@ -84,6 +86,7 @@ Useful commands:
 
 | Path                                                                              | What is there                                                           |
 | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                         | Current Next.js Worker deployment and isolated preview setup            |
 | [docs/00-conventions.md](docs/00-conventions.md)                                  | Canonical names, routes, storage keys, budgets and gates. Read it first |
 | [docs/02-prd.md](docs/02-prd.md)                                                  | Requirements with acceptance criteria                                   |
 | [docs/03-architecture.md](docs/03-architecture.md)                                | Monorepo, runtime, build and security                                   |
