@@ -2,7 +2,7 @@
 
 import { Suspense, use, useEffect, useLayoutEffect, useState } from 'react';
 import { FaceFrame } from './frame';
-import { faceModel, type IFaceProps, isFaceId, type TFaceId, type TFaceModel } from './model';
+import { faceModel, type IFaceProps, toFaceId, type TFaceId, type TFaceModel } from './model';
 import { loadedFace, loadFace, type TFaceDrawing } from './registry';
 import { useReducedMotion } from './use-reduced-motion';
 
@@ -33,9 +33,9 @@ function Drawing({ id, m, onDrawn }: { id: TFaceId; m: TFaceModel; onDrawn: (id:
   return Draw ? <Draw m={m} /> : null;
 }
 
-// One clock face: any of the 49 drawings on the 360 × 360 artboard, scaled to size, with the status caption.
+// One clock face: any of the 46 drawings on the 360 × 315 artboard, scaled to size, with the status caption unless bare.
 export function Face(props: IFaceProps) {
-  const want: TFaceId = isFaceId(props.face) ? props.face : 'ring';
+  const want: TFaceId = toFaceId(props.face);
   const reduced = useReducedMotion();
   // The face on screen stays until the next one has loaded, so a swap never flashes an empty dial.
   const [shown, setShown] = useState<TFaceId>(want);

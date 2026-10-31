@@ -1,17 +1,33 @@
+import { fxInk } from '../art';
 import { alpha, sectorPath } from '../geometry';
-import { card, DISPLAY, type IDrawProps, L, lmin, MONO, nightAccent, nightClass, nightHeat } from '../kit';
+import { card, DISPLAY, type IDrawProps, L, lmin, MONO } from '../kit';
 
-const GLASS = 'radial-gradient(80% 70% at 50% 60%, #0D1222, #03050A 75%)';
-const OFF = '#161D2E';
-const LAMP_OFF = { line: '#1F2738', ink: '#4A5570' };
-const KEY_INK = '#7D8AA6';
-const VIDEO = '#7CBBFF';
+// A pale dash with light-grey off segments by day, a dark dash at night.
+const ART = {
+  light: {
+    glass: 'radial-gradient(80% 70% at 50% 60%, #FFFFFF, #ECEFF5 75%)',
+    off: '#DCE0E9',
+    lab: '#5C6275',
+    lampLine: '#D3D6E0',
+    lampInk: '#5C6275',
+    video: '#1C64B8',
+  },
+  night: {
+    glass: 'radial-gradient(80% 70% at 50% 60%, #0D1222, #03050A 75%)',
+    off: '#161D2E',
+    lab: '#7D8AA6',
+    lampLine: '#1F2738',
+    lampInk: '#4A5570',
+    video: '#7CBBFF',
+  },
+};
+type TArt = (typeof ART)['light'];
 const HS = 40;
 const SEGS = Array.from({ length: HS }, (_, i) =>
   sectorPath(i % 5 === 0 ? 116 : 120, 136, -125 + (250 * i) / HS + 0.9 + 360, -125 + (250 * (i + 1)) / HS - 0.9 + 360),
 );
 
-function Lamp({ on, color, children }: { on: boolean; color: string; children: string }) {
+function Lamp({ a, on, color, children }: { a: TArt; on: boolean; color: string; children: string }) {
   return (
     <span
       className={L}
@@ -24,8 +40,8 @@ function Lamp({ on, color, children }: { on: boolean; color: string; children: s
         fontFamily: MONO,
         fontSize: lmin(12),
         letterSpacing: '.1em',
-        border: `1px solid ${on ? color : LAMP_OFF.line}`,
-        color: on ? color : LAMP_OFF.ink,
+        border: `1px solid ${on ? color : a.lampLine}`,
+        color: on ? color : a.lampInk,
         background: on ? alpha(color, 0x1f) : 'transparent',
       }}
     >
@@ -34,12 +50,13 @@ function Lamp({ on, color, children }: { on: boolean; color: string; children: s
   );
 }
 
-// A car-dashboard arc of segments with italic digits and tell-tale lamps.
+// A car-dashboard arc of segments with italic digits and tell-tale lights.
 export default function Hud({ m }: IDrawProps) {
-  const acc = nightAccent(m);
+  const a = m.night ? ART.night : ART.light;
+  const acc = m.accent;
   const lit = Math.round(m.ringFrac * HS);
   return (
-    <div className={nightClass(m)} style={card(m, { background: GLASS })}>
+    <div style={card(m, { background: a.glass })}>
       <svg
         style={{ position: 'absolute', left: -14, top: -14 }}
         width="360"
@@ -47,8 +64,8 @@ export default function Hud({ m }: IDrawProps) {
         viewBox="0 0 360 310"
         aria-hidden="true"
       >
-        <path d={SEGS.slice(lit).join(' ')} fill={OFF} />
-        <path d={SEGS.slice(0, lit).join(' ')} style={{ fill: nightHeat(m, m.frac) }} />
+        <path d={SEGS.slice(lit).join(' ')} fill={a.off} />
+        <path d={SEGS.slice(0, lit).join(' ')} style={{ fill: m.heat(m.frac) }} />
       </svg>
       <div
         style={{
@@ -60,10 +77,10 @@ export default function Hud({ m }: IDrawProps) {
           flexDirection: 'column',
           alignItems: 'center',
           gap: 4,
-          color: '#FFFFFF',
+          color: fxInk(!m.night),
         }}
       >
-        <span className={L} style={{ fontFamily: MONO, fontSize: lmin(12), letterSpacing: '.24em', color: KEY_INK }}>
+        <span className={L} style={{ fontFamily: MONO, fontSize: lmin(12), letterSpacing: '.24em', color: a.lab }}>
           TIME LEFT
         </span>
         <span
@@ -86,7 +103,6 @@ export default function Hud({ m }: IDrawProps) {
         </span>
       </div>
       <div
-        className={m.theme}
         style={{
           position: 'absolute',
           left: 0,
@@ -97,13 +113,13 @@ export default function Hud({ m }: IDrawProps) {
           gap: 8,
         }}
       >
-        <Lamp on={m.awake} color={m.lampValue}>
+        <Lamp a={a} on={m.awake} color={m.lampValue}>
           SCREEN
         </Lamp>
-        <Lamp on={m.st === 'fallback'} color={VIDEO}>
+        <Lamp a={a} on={m.st === 'fallback'} color={a.video}>
           VIDEO
         </Lamp>
-        <Lamp on={m.st === 'paused' || m.st === 'blocked'} color="var(--warning)">
+        <Lamp a={a} on={m.st === 'paused' || m.st === 'blocked'} color={m.t.paused}>
           HOLD
         </Lamp>
       </div>
