@@ -5,9 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { StatusAlert } from '@/components/product/status-alert';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { deviceLabel } from '@/lib/pro/device';
-import { clearFlow, readFlow } from '@/lib/pro/flow';
 import {
   activateLicense,
   deviceId,
@@ -17,7 +15,7 @@ import {
   type TActivateResult,
 } from '@/lib/pro/license';
 import { cn } from '@/lib/utils';
-import { Actions, Declined, FlowColumn, FlowHeader, H1, LEAD, LINK, PRIMARY, Processing, RISE, Success } from './flow';
+import { FlowHeader, H1, LEAD, LINK, Outcome, PRIMARY, Processing, Rise } from './flow';
 
 type TState =
   | 'idle'
@@ -55,8 +53,9 @@ async function whileSyncing<T extends { ok: boolean; error?: string }>(attempt: 
   return result;
 }
 
-// /pro/activate: where Polar returns after paying (processing, Pro is on, declined, still syncing, closed), and
-// where a key from Polar's email turns Pro on by hand. `?ext=1` only shows the key for AwakeTab for Chrome.
+// /pro/activate: where the payment provider returns after paying (processing, Pro is on, declined, still syncing,
+// closed), and where a licence key from the receipt turns Pro on by hand. `?ext=1` only shows the key for the
+// extension.
 export function ActivateFlow({
   timerHref,
   manageHref,
@@ -74,7 +73,6 @@ export function ActivateFlow({
   const [error, setError] = useState('invalid_key');
   const [key, setKey] = useState('');
   const [shown, setShown] = useState('');
-  const [email, setEmail] = useState('');
   const [ext, setExt] = useState(false);
   const [copied, setCopied] = useState(false);
   const checkoutId = useRef<string | null>(null);
@@ -89,11 +87,7 @@ export function ActivateFlow({
     const result: TActivateResult = await whileSyncing(() =>
       activateLicense({ checkoutId: id, deviceId: deviceId(), deviceLabel: deviceLabel() || 'This browser' }),
     );
-    if (result.ok) {
-      setEmail(readFlow().email ?? '');
-      clearFlow();
-      setState('checkout-success');
-    } else if (result.error === 'polar_unavailable') setState('help');
+    if (result.ok) setState('checkout-success'); else if (result.error === 'polar_unavailable') setState('help');
     else if (result.error === 'invalid_key') setState('failed');
     else {
       setError(ERR_CODE[result.error] ?? 'invalid_key');
@@ -166,6 +160,8 @@ export function ActivateFlow({
   };
 
   const step = { processing: 2, failed: 2, help: 2, cancelled: 2, 'checkout-success': 3 }[state as string];
+  const input =
+    'h-[52px] w-full rounded-[12px] border-2 border-input bg-card px-3.5 font-mono text-[15px] text-foreground outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring aria-invalid:border-destructive';
 
   return (
     <div ref={root} className="relative flex flex-col">
@@ -174,102 +170,70 @@ export function ActivateFlow({
       {state === 'processing' ? <Processing title={t('done.processing.h1')} lead={t('done.processing.lead')} /> : null}
 
       {state === 'checkout-success' ? (
-        <Success
+        <Outcome
+          scene="success"
           title={t('done.success.h1')}
-          lead={
-            email ? (
-              <>
-                {t('done.success.lead')} {t('done.success.to')} <strong className="text-foreground">{email}</strong>
-                {t('done.success.next')}
-              </>
-            ) : (
-              t('done.success.generic')
-            )
-          }
-          open={t('done.success.open')}
-          openHref={timerHref}
-          add={t('done.success.add')}
-          addHref={manageHref}
+          lead={t('done.success.lead')}
+          primary={{ label: t('done.success.open'), href: timerHref }}
+          secondary={{ label: t('done.success.add'), href: manageHref }}
         />
       ) : null}
 
       {state === 'failed' ? (
-        <Declined
+        <Outcome
+          scene="error"
+          tone="alert"
           title={t('done.failed.h1')}
           lead={t('done.failed.lead')}
-          again={t('done.failed.again')}
-          againHref={`${checkoutHref}#pay`}
-          plans={t('done.failed.plans')}
-          plansHref={`${checkoutHref}#plans`}
+          primary={{ label: t('done.failed.again'), href: `${checkoutHref}#pay` }}
+          secondary={{ label: t('done.failed.plans'), href: `${checkoutHref}#plans` }}
         />
       ) : null}
 
-      {state === 'help' || state === 'cancelled' ? (
-        <FlowColumn className={RISE} role={state === 'help' ? 'alert' : 'status'}>
-          <h1 className={cn(H1, 'outline-none')} tabIndex={-1}>
-            {t(state === 'help' ? 'done.syncing.h1' : 'done.cancelled.h1')}
-          </h1>
-          <p className={LEAD}>{t(state === 'help' ? 'done.syncing.lead' : 'done.cancelled.lead')}</p>
-          <Actions>
-            {state === 'help' ? (
-              <Button
-                type="button"
-                size="lg"
-                className={PRIMARY}
-                onClick={() => (checkoutId.current ? void fromCheckout(checkoutId.current) : setState('idle'))}
-              >
-                {t('done.syncing.retry')}
-              </Button>
-            ) : (
-              <Button asChild size="lg" className={PRIMARY}>
-                <a href={timerHref}>{t('done.cancelled.open')}</a>
-              </Button>
-            )}
-            {state === 'help' ? (
-              <Button
-                type="button"
-                variant="outline"
-                size="lg"
-                className="h-13 rounded-md px-[22px] text-[16px] font-bold"
-                onClick={() => setState('idle')}
-              >
-                {t('done.syncing.key')}
-              </Button>
-            ) : (
-              <Button asChild variant="outline" size="lg" className="h-13 rounded-md px-[22px] text-[16px] font-bold">
-                <a href={plansHref}>{t('done.cancelled.plans')}</a>
-              </Button>
-            )}
-          </Actions>
-        </FlowColumn>
+      {state === 'help' ? (
+        <Outcome
+          scene="error"
+          tone="alert"
+          title={t('done.syncing.h1')}
+          lead={t('done.syncing.lead')}
+          primary={{
+            label: t('done.syncing.retry'),
+            onClick: () => (checkoutId.current ? void fromCheckout(checkoutId.current) : setState('idle')),
+          }}
+          secondary={{ label: t('done.syncing.key'), onClick: () => setState('idle') }}
+        />
+      ) : null}
+
+      {state === 'cancelled' ? (
+        <Outcome
+          scene="noitems"
+          title={t('done.cancelled.h1')}
+          lead={t('done.cancelled.lead')}
+          primary={{ label: t('done.cancelled.open'), href: timerHref }}
+          secondary={{ label: t('done.cancelled.plans'), href: plansHref }}
+        />
       ) : null}
 
       {state === 'success' ? (
-        <Success
+        <Outcome
+          scene="success"
           title={ta('ok.title')}
           lead={ta('ok.key', { tail: keyTail(shown) })}
-          open={ta('ok.open')}
-          openHref={timerHref}
-          add={ta('manage')}
-          addHref={manageHref}
+          primary={{ label: ta('ok.open'), href: timerHref }}
+          secondary={{ label: ta('manage'), href: manageHref }}
         />
       ) : null}
 
       {state === 'ext-key' ? (
-        <FlowColumn className={RISE}>
-          <h1 className={cn(H1, 'outline-none')} tabIndex={-1}>
+        <Rise>
+          <h1 className={H1} tabIndex={-1}>
             {ta('ext.title')}
           </h1>
           <p className={LEAD}>{ta('ext._')}</p>
           <div className="flex w-full gap-2">
-            <Input
-              readOnly
-              value={shown}
-              aria-label={ta('ext.title')}
-              className="h-13 flex-1 rounded-[12px] px-3.5 font-mono text-[15px]"
-            />
-            <Button type="button" variant="outline" size="lg" className="h-13 rounded-md px-4" onClick={copy}>
-              <Copy strokeWidth={2} aria-hidden="true" />
+            <input readOnly value={shown} aria-label={ta('ext.title')} className={cn(input, 'flex-1')} />
+            <Button type="button" variant="outline" className="h-[52px] gap-2 rounded-[12px] px-4" onClick={copy}>
+              <Copy className="size-[18px]" strokeWidth={2} aria-hidden="true" />
               <span aria-live="polite">{copied ? ta('copied') : ta('copy')}</span>
             </Button>
           </div>
@@ -277,24 +241,24 @@ export function ActivateFlow({
           <button type="button" className={LINK} onClick={() => setState('idle')}>
             {ta('reset')}
           </button>
-        </FlowColumn>
+        </Rise>
       ) : null}
 
       {state === 'idle' || state === 'checking' || state === 'error' ? (
-        <FlowColumn className={RISE}>
-          <h1 className={cn(H1, 'outline-none')} tabIndex={-1}>
+        <Rise>
+          <h1 className={H1} tabIndex={-1}>
             {ext ? ta('ext.title') : ta('h1')}
           </h1>
           <p className={LEAD}>{ext ? ta('ext.lead') : ta('lead')}</p>
           <form
-            className="flex w-full flex-col gap-[18px]"
+            className="flex w-full flex-col gap-[14px] text-left"
             onSubmit={(e) => void submit(e)}
             noValidate
             aria-busy={state === 'checking'}
           >
-            <label htmlFor={inputId} className="flex w-full flex-col gap-1.5 text-left">
+            <label htmlFor={inputId} className="flex w-full flex-col gap-1.5">
               <span className="text-[14px] font-semibold">{ta('label')}</span>
-              <Input
+              <input
                 id={inputId}
                 name="key"
                 autoComplete="off"
@@ -308,7 +272,7 @@ export function ActivateFlow({
                   setKey(event.target.value);
                   if (state === 'error') setState('idle');
                 }}
-                className="h-13 rounded-[12px] border-2 px-3.5 font-mono text-[15px] aria-invalid:px-3.5"
+                className={input}
               />
               <span className="text-[13px] font-semibold text-muted-foreground-strong">
                 {ext ? ta('hint.ext') : ta('hint._')}
@@ -333,14 +297,14 @@ export function ActivateFlow({
                 ) : null}
               </StatusAlert>
             ) : null}
-            <Button type="submit" size="lg" loading={state === 'checking'} className={cn('w-full', PRIMARY)}>
+            <Button type="submit" loading={state === 'checking'} className={cn(PRIMARY, 'min-[700px]:w-full')}>
               {state === 'checking' ? ta('checking._') : ext ? ta('ext.submit') : ta('submit')}
             </Button>
           </form>
-          <a className={cn(LINK, 'inline-flex items-center')} href={plansHref}>
+          <a className={LINK} href={plansHref}>
             {ta('plans')}
           </a>
-        </FlowColumn>
+        </Rise>
       ) : null}
     </div>
   );
