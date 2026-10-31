@@ -5,7 +5,7 @@ import { Globe, Headphones, MessageCircle, Share, Sparkle, Trash2, User, type Lu
 import { RadioGroup, ToggleGroup } from 'radix-ui';
 import { BorderBeam } from '@/components/ui-effects/border-beam';
 import { cn } from '@/lib/utils';
-import { readAccount } from '@/lib/pro/account';
+import { priceLabel } from '@/lib/pro/plans';
 import { ROUTES } from '@/lib/routes';
 import type { TChimeKind, TThemeChoice } from '@/lib/tool/settings';
 import type { TPanel } from '@/lib/tool/ui';
@@ -67,7 +67,7 @@ function MoreRow({
 function AccountCard() {
   const g = useGlance();
   const { t } = g;
-  const acct = typeof window === 'undefined' ? null : readAccount();
+  const acct = g.pro.account;
   if (!acct) {
     return (
       <div className={cn(CARD, 'flex items-center gap-3.5 px-4 py-3.5')}>
@@ -75,7 +75,7 @@ function AccountCard() {
           <User className="size-[22px]" strokeWidth={2} aria-hidden="true" />
         </span>
         <RowText title={t('settings.signedOut')} desc={t('settings.signedOutD')} />
-        <Link href={ROUTES.signin} className={GHOST_BTN}>
+        <Link href={g.pro.expired ? ROUTES.expired : ROUTES.signin} className={GHOST_BTN}>
           {t('settings.signIn')}
         </Link>
       </div>
@@ -238,7 +238,7 @@ export function SettingsPanel() {
             {g.pro.isPro ? t('settings.proCardOn') : t('settings.proCard')}
           </strong>
           <span className="text-[13px] leading-[1.45] text-(--tg-t2)">
-            {g.pro.isPro ? t('settings.proCardOnD') : t('settings.proCardD')}
+            {g.pro.isPro ? t('settings.proCardOnD') : t('settings.proCardD', { price: priceLabel('yearly') })}
           </span>
           <button
             type="button"

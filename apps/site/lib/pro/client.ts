@@ -17,7 +17,7 @@ import {
   type TMixKey,
   setProSource,
 } from '@/lib/tool/pro';
-import { forgetAccount, readAccount, writeAccount, type TSignInMethod } from './account';
+import { forgetAccount, readAccount } from './account';
 import { deviceKind } from './device';
 import {
   fetchActivations,
@@ -29,6 +29,7 @@ import {
   type IActivation,
 } from './license';
 import { longDate, MAX_DEVICES, portalUrl } from './plans';
+import { syncAccount } from './session';
 
 const DEFAULT_STUDIO: IStudioSettings = { lamp: '', glow: 70 };
 const DEFAULT_MIX: TSoundMix = { rain: 40, cafe: 0, fire: 25, brown: 0 };
@@ -81,12 +82,12 @@ function writeMix(mix: TSoundMix): void {
 function accountFrom(): IProAccount | null {
   const acct = readAccount();
   if (!acct) return null;
-  const lic = readLicense();
+  const lic = isProActive() ? readLicense() : null;
   const renews = lic ? renewsAt(lic) : null;
   return {
-    name: acct.name || acct.email,
-    email: acct.email,
-    plan: lic?.plan === 'pro_lifetime' ? 'lifetime' : 'yearly',
+    name: acct.name,
+    method: acct.method,
+    plan: lic?.plan === 'pro_lifetime' ? 'lifetime' : lic?.plan === 'pro_monthly' ? 'monthly' : 'yearly',
     renewsOn: renews ? longDate(renews) : '',
   };
 }
@@ -106,23 +107,19 @@ async function devicesFrom(rows: IActivation[]): Promise<IProDevice[]> {
   }));
 }
 
-function methodOf(providers: string[]): TSignInMethod {
-  if (providers.includes('google')) return 'google';
-  if (providers.includes('github')) return 'github';
-  return 'email';
-}
-
 // The real Pro data behind the tool's Pro views: licence and devices from the licence API, the account from the
-// sign-in session (kept on the device as at.v1.account), Face studio and the mixer in local storage.
+// sign-in session (noted on the device as at.v1.account), Face studio and the mixer in local storage.
 export function createProSource(): IProSource {
   const subs = new Set<() => void>();
   let snap: IProSnapshot | null = null;
   let devices: IProDevice[] = [];
+  let expired = false;
   let loading: Promise<void> | null = null;
 
   const build = (): IProSnapshot => ({
     isPro: isProActive(),
     account: accountFrom(),
+    expired,
     devices,
     maxDevices: MAX_DEVICES,
     studio: readStudio(),
@@ -143,19 +140,9 @@ export function createProSource(): IProSource {
     })();
   };
   const refreshSession = async () => {
-    try {
-      const { data } = await authClient.getSession();
-      if (data?.user.email) {
-        const current = readAccount();
-        if (current?.email !== data.user.email) {
-          const accounts = await authClient.listAccounts().catch(() => null);
-          const providers = Array.isArray(accounts?.data) ? accounts.data.map((a) => a.providerId) : [];
-          writeAccount(data.user.email, methodOf(providers), data.user.name || '');
-        }
-      }
-    } catch {
-      // Offline: the account stored on this device stays.
-    }
+    const result = await syncAccount();
+    if (result.state === 'signed-out') expired = result.expired;
+    else if (result.state === 'signed-in') expired = false;
     emit();
   };
 
@@ -196,12 +183,8 @@ export function createProSource(): IProSource {
       const current = snap ?? build();
       emit({ studio: { ...current.studio, ...patch } });
     },
+    // Face studio is free: the look is saved on this device whatever the plan.
     saveStudio() {
-      // Without Pro the preview still changes, and saving leads to the Pro page instead.
-      if (!isProActive()) {
-        window.location.assign('/pro');
-        return Promise.resolve();
-      }
       writeJson(STUDIO_KEY, { v: 1, ...(snap ?? build()).studio });
       return Promise.resolve();
     },
@@ -220,7 +203,7 @@ export function createProSource(): IProSource {
       forgetAccount();
       emit();
     },
-    // Removes the sign-in account and this device's copy of the address; the purchase record stays with Polar.
+    // Removes the sign-in account and this device's note of it; the purchase record stays with the payment provider.
     async deleteAccount() {
       try {
         await authClient.deleteUser();

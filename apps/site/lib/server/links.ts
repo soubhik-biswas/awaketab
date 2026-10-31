@@ -4,7 +4,11 @@ import type { ILicenseRecord, TLicenseStatus, TPlanId } from './license';
 const LINK_TTL_S = 3 * 365 * 86_400;
 const ORDER_TTL_S = 2 * 365 * 86_400;
 
-export const SUBSCRIPTION_PLANS: ReadonlySet<TPlanId> = new Set<TPlanId>(['pro_yearly', 'biz_embed_site_yearly']);
+export const SUBSCRIPTION_PLANS: ReadonlySet<TPlanId> = new Set<TPlanId>([
+  'pro_yearly',
+  'pro_monthly',
+  'biz_embed_site_yearly',
+]);
 
 export interface IPolarIds {
   licenseKeyId?: string | undefined;

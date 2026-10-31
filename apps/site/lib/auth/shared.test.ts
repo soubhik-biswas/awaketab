@@ -1,15 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { TOKEN_RE, validEmail } from './shared';
+import { isSignInMethod, SIGN_IN_METHODS } from './shared';
 
-describe('sign-in helpers', () => {
-  it('checks addresses like the form does', () => {
-    expect(validEmail('sam@example.com')).toBe(true);
-    expect(validEmail('sam@example')).toBe(false);
-    expect(validEmail(`${'a'.repeat(250)}@b.co`)).toBe(false);
-  });
-
-  it('accepts only URL-safe link tokens', () => {
-    expect(TOKEN_RE.test('AbcdEFGHijklMNOPqrstUVWXyzabcdEF')).toBe(true);
-    expect(TOKEN_RE.test('../../etc/passwd')).toBe(false);
+describe('sign-in methods', () => {
+  it('offers Google, GitHub and a passkey, in that order, and nothing that needs an address', () => {
+    expect(SIGN_IN_METHODS).toEqual(['google', 'github', 'passkey']);
+    expect(isSignInMethod('passkey')).toBe(true);
+    expect(isSignInMethod('email')).toBe(false);
+    expect(isSignInMethod('magic-link')).toBe(false);
+    expect(isSignInMethod(undefined)).toBe(false);
   });
 });

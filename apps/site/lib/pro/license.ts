@@ -1,4 +1,7 @@
-import type { TPlanId } from '@awaketab/core';
+import type { TPlanId as TCorePlanId } from '@awaketab/core';
+
+// Monthly Pro renews like yearly; the shared package does not list it yet.
+type TPlanId = TCorePlanId | 'pro_monthly';
 
 export const LICENSE_KEY = 'at.v1.license';
 const LICENSE_KEY_RE = /^[A-Z0-9-]{20,80}$/u;
@@ -78,18 +81,22 @@ export function keyTail(key: string): string {
   return key.replace(/\s/gu, '').slice(-4).toUpperCase() || '····';
 }
 
-// Pro holds while the signed token is in date; yearly tokens already carry the 7-day grace in `exp`.
+// Pro holds while the signed token is in date; renewing tokens already carry the 7-day grace in `exp`.
 export function isProActive(record: IStoredLicense | null = readLicense(), now = Date.now()): boolean {
   return Boolean(record && record.exp * 1000 > now);
 }
 
-// Yearly tokens carry a 7-day grace past the period end, so the renewal date is exp − 7 days.
+export function renews(plan: string | undefined): boolean {
+  return plan === 'pro_yearly' || plan === 'pro_monthly';
+}
+
+// Renewing tokens carry a 7-day grace past the period end, so the renewal date is exp − 7 days.
 export function renewsAt(record: Pick<IStoredLicense, 'plan' | 'exp'>): number | null {
-  return record.plan === 'pro_yearly' ? (record.exp - 7 * DAY_S) * 1000 : null;
+  return renews(record.plan) ? (record.exp - 7 * DAY_S) * 1000 : null;
 }
 
 export function lapseState(plan: string | undefined, expSec: number | undefined, now = Date.now()) {
-  if (plan !== 'pro_yearly' || typeof expSec !== 'number' || !Number.isFinite(expSec)) return null;
+  if (!renews(plan) || typeof expSec !== 'number' || !Number.isFinite(expSec)) return null;
   if (now >= expSec * 1000) return 'lapsed' as const;
   if (now >= (expSec - 7 * DAY_S) * 1000) return 'grace' as const;
   return null;

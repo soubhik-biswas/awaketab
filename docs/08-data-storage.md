@@ -207,15 +207,15 @@ Writes are debounced 250 ms except `session.status` changes (immediate). If `loc
 
 Settings → "Delete all local data": removes every `at.*` key and `sessionStorage['at.tabId']`, unregisters the service worker's caches, reloads. The licence is included (the user is warned and shown the key-recovery link — keys are recoverable from the Polar receipt email).
 
-### 2.9a `at.v1.account`, `at.v1.studio` and sessionStorage `at.v1.checkout` (Solar Green, 30 October 2026)
+### 2.9a `at.v1.account`, `at.v1.studio` and sessionStorage `at.v1.signin` (Glance, 31 October 2026)
 
 ```ts
-interface IAccount { v: 1; email: string; signedInAt: number } // at.v1.account — written by /signin after a verified magic link
+interface IAccount { v: 1; method: 'google' | 'github' | 'passkey'; name: string; signedInAt: number } // at.v1.account — written once the sign-in session is confirmed
 interface IStudio { v: 1; lamp: '' | `#${string}`; glow: number } // at.v1.studio — Face studio (Pro); glow 0–100, step 5, default 70
-interface ICheckoutFlow { plan: 'pro_yearly' | 'pro_lifetime'; email: string } // sessionStorage at.v1.checkout — this tab's Pro checkout
+type TPendingSignIn = 'google' | 'github' | 'passkey' // sessionStorage at.v1.signin — the button pressed, read once on return
 ```
 
-All three are read defensively (damage reads as signed out, the default look or a fresh flow). The email stays on the device: sign-in proves the address once and nothing syncs yet, so no server keeps an account; Sign out and Delete account remove `at.v1.account`. `at.v1.studio` applies only while the licence has Pro; without it the face keeps the default green. `at.v1.checkout` is cleared when the checkout activates Pro, and its email is passed to Polar's checkout as `customer_email` and nowhere else. Account → Export my data writes every `at.v1.*` localStorage key except `at.v1.license` to a JSON file.
+All three are read defensively (damage reads as signed out or the default look). The account note holds no address: sign-in is Google, GitHub or a passkey, and the server keeps the account (Better Auth on D1) only so Pro can sync. A record from the old email-link sign-in reads as signed out. Sign out, Delete account, or a session the server no longer backs remove `at.v1.account`. `at.v1.studio` is free for everyone. Checkout sends only the plan; a signed-in account id goes to the payment provider as the external customer id. Account → Export my data writes every `at.v1.*` localStorage key except `at.v1.license` to a JSON file.
 
 ### 2.9b `at.v1.presets` and `at.v1.history` (Next.js tool, 30 October 2026)
 
@@ -339,7 +339,7 @@ Columns: `date,awake_minutes,sessions` (one row per local day, ISO dates; the ro
 | Licence token + random `deviceId` | localStorage / chrome.storage.local | Prove a Pro purchase; count activations (max 5) | Token only, to `/api/license/*` |
 | Anonymous usage events | Analytics Engine, 90 days | Reliability (does the lock hold?) and product decisions | Yes — no IP stored, no ids beyond a per-tab random `sid`; toggle in Settings |
 | Licence record | KV | Fulfil purchases, handle refunds, stop abuse | Held by us; purchase details are with Polar (merchant of record) |
-| Sign-in email (`at.v1.account`, KV `auth:`) | localStorage; KV for 15 minutes while a link is open | Prove the Pro email for sync and receipts | The address goes to the email provider once a provider is chosen; the KV record expires in 15 minutes or on first use |
+| Sign-in account (`at.v1.account`, D1 `user`, `account`, `passkey`) | localStorage note; D1 rows for the account | Let Pro sync screens | Google or GitHub share their account id and profile; a passkey shares only its public key. A passkey-only account gets an undeliverable `@passkey.awaketab.invalid` placeholder because the user table needs one; it is never shown or mailed |
 | Ratings | KV → aggregate | Show a real rating in search results | Stars + optional text; no identity |
 | Ad cookies (content pages only, with consent) | Google / network | Ads fund the free content pages | Governed by the CMP; never on the tool |
 

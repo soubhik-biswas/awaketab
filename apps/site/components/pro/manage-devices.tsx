@@ -1,20 +1,10 @@
 'use client';
 
-import { Laptop, Monitor, Smartphone, Tablet, type LucideIcon } from 'lucide-react';
+import { Laptop, LoaderCircle, Monitor, Smartphone, Tablet, type LucideIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  DeviceAvatarStack,
-  DevicePresenceSkeleton,
-  DeviceStatusBadge,
-  IDENTITY_CLASSES,
-  identityFor,
-  type IDevice,
-} from '@/components/product/device-presence';
-import { EmptyState } from '@/components/product/empty-state';
 import { StatusAlert } from '@/components/product/status-alert';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { deviceKind, type TDeviceKind } from '@/lib/pro/device';
 import {
   deactivateDevice,
@@ -27,7 +17,7 @@ import {
 } from '@/lib/pro/license';
 import { longDate, MAX_DEVICES, portalUrl } from '@/lib/pro/plans';
 import { cn } from '@/lib/utils';
-import { FlowColumn, H1, LEAD, LINK, RISE } from './flow';
+import { H1, LEAD, LINK, Outcome, PRIMARY, Rise } from './flow';
 
 type TState = 'loading' | 'list' | 'empty' | 'offline';
 
@@ -38,7 +28,8 @@ const KIND_ICON: Record<TDeviceKind, LucideIcon> = {
   phone: Smartphone,
 };
 
-// /pro/manage: the devices that hold this licence, each in its identity colour, with removal behind a confirm.
+// /pro/manage: the screens that hold this licence, laid out like the Your screens panel, with removal behind an
+// inline confirm.
 export function ManageDevices({ activateHref, plansHref }: { activateHref: string; plansHref: string }) {
   const t = useTranslations('proflow.manage');
   const [state, setState] = useState<TState>('loading');
@@ -62,7 +53,7 @@ export function ManageDevices({ activateHref, plansHref }: { activateHref: strin
       setState('empty');
       return;
     }
-    // An error answer has no device list: that is "try again", never "no devices".
+    // An error answer has no device list: that is "try again", never "no screens".
     if (data === 'offline' || !Array.isArray(data.activations)) {
       setState('offline');
       return;
@@ -99,19 +90,22 @@ export function ManageDevices({ activateHref, plansHref }: { activateHref: strin
     });
   };
 
-  const devices: IDevice[] = rows.map((row, i) => ({
-    id: row.devHash,
-    name: row.label,
-    meta: t('added', { date: longDate(row.at) }),
-    kind: deviceKind(row.label),
-    identity: identityFor(i),
-    status: 'idle',
-  }));
-  const free = Math.max(0, MAX_DEVICES - rows.length);
+  if (state === 'empty')
+    return (
+      <Outcome
+        scene="noitems"
+        title={t('empty')}
+        lead={t('emptyD')}
+        primary={{ label: t('activate'), href: activateHref }}
+        secondary={{ label: t('plans'), href: plansHref }}
+      />
+    );
 
   return (
-    <FlowColumn className={cn(RISE, 'max-w-[680px] items-stretch text-left')}>
-      <h1 className={cn(H1, 'text-center')}>{t('h1')}</h1>
+    <Rise className="items-stretch text-left">
+      <h1 className={cn(H1, 'text-center')} tabIndex={-1}>
+        {t('h1')}
+      </h1>
       <p className={cn(LEAD, 'text-center')}>{t('lead')}</p>
 
       {lapse ? (
@@ -126,15 +120,15 @@ export function ManageDevices({ activateHref, plansHref }: { activateHref: strin
       ) : null}
 
       {state === 'loading' ? (
-        <div className="flex flex-col gap-3" aria-live="polite">
-          <span className="text-[14px] font-semibold">{t('loading')}</span>
-          <DevicePresenceSkeleton label={t('loading')} />
-          <DevicePresenceSkeleton label={t('loading')} />
-        </div>
+        <p role="status" className="m-0 flex items-center justify-center gap-2 text-[15px] font-semibold">
+          <LoaderCircle className="size-5 animate-spin motion-reduce:animate-none" aria-hidden="true" />
+          {t('loading')}
+        </p>
       ) : null}
 
       {state === 'offline' ? (
         <StatusAlert
+          role="alert"
           variant="refused"
           title={t('offline.title')}
           action={{ label: t('offline.retry'), onClick: () => void load() }}
@@ -143,70 +137,50 @@ export function ManageDevices({ activateHref, plansHref }: { activateHref: strin
         </StatusAlert>
       ) : null}
 
-      {state === 'empty' ? (
-        <EmptyState
-          scene="noitems"
-          title={t('empty')}
-          action={
-            <div className="flex flex-wrap justify-center gap-2.5">
-              <Button asChild size="lg" className="h-13 rounded-md px-[22px] text-[16px] font-bold">
-                <a href={activateHref}>{t('activate')}</a>
-              </Button>
-              <a className={cn(LINK, 'inline-flex items-center')} href={plansHref}>
-                {t('plans')}
-              </a>
-            </div>
-          }
-        />
-      ) : null}
-
       {state === 'list' ? (
-        <div className="flex flex-col gap-4 rounded-[20px] border border-border bg-card p-5">
-          <div className="flex items-center gap-3">
-            <DeviceAvatarStack devices={devices} />
-            <span className="flex flex-1 flex-col gap-1.5">
-              <span className="flex justify-between gap-2 text-[14px] font-semibold">
-                <span>{t('meter', { n: rows.length })}</span>
-                <span className="text-muted-foreground-strong">
-                  {free === 0 ? t('left.none') : free === 1 ? t('left.one') : t('left._', { n: free })}
-                </span>
-              </span>
-              <Progress value={(rows.length / MAX_DEVICES) * 100} aria-label={t('meter', { n: rows.length })} />
+        <>
+          <div className="flex flex-col gap-2 rounded-[22px] border border-border bg-card p-[18px] [background-image:radial-gradient(120%_120%_at_100%_0%,color-mix(in_srgb,var(--lamp)_8%,transparent),transparent_55%)]">
+            <span className="font-mono text-[12px] tracking-[.14em] text-muted-foreground-strong uppercase">
+              {t('kicker', { n: rows.length, max: MAX_DEVICES })}
             </span>
+            <strong className="font-display text-[26px] font-bold tracking-[-0.03em]">
+              {t('count', { n: rows.length })}
+            </strong>
           </div>
-          <div ref={list} className="flex flex-col" role="list">
-            {devices.map((device, i) => {
-              const row = rows[i];
-              if (!row) return null;
-              const Icon = KIND_ICON[device.kind];
+          <div ref={list} className="flex flex-col gap-2.5" role="list">
+            {rows.map((row, i) => {
+              const Icon = KIND_ICON[deviceKind(row.label)];
               const isHere = row.devHash === here;
               const labelId = `device-${String(i)}`;
               return (
-                <div key={device.id} role="listitem" className="flex flex-col gap-2 border-t py-2.5">
-                  <div className="flex min-h-[52px] items-center gap-2.5">
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        'inline-flex size-8 shrink-0 items-center justify-center rounded-sm',
-                        IDENTITY_CLASSES[device.identity],
-                      )}
-                    >
-                      <Icon className="size-4" />
+                <div
+                  key={row.devHash}
+                  role="listitem"
+                  className="flex flex-col gap-2.5 rounded-[18px] border border-border bg-card px-3.5 py-3"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <span className="flex size-11 flex-none items-center justify-center rounded-[14px] bg-secondary text-foreground">
+                      <Icon className="size-5" strokeWidth={2} aria-hidden="true" />
                     </span>
-                    <span className="flex min-w-0 flex-1 flex-col">
-                      <span id={labelId} className="text-[14px] font-semibold text-foreground">
-                        {device.name}
+                    <span className="flex min-w-0 flex-1 flex-col gap-[3px]">
+                      <strong id={labelId} className="text-[15px] font-semibold">
+                        {row.label}
+                      </strong>
+                      <span className="inline-flex items-center gap-2 text-[13px] text-muted-foreground-strong">
+                        <span
+                          aria-hidden="true"
+                          className={cn('size-2 rounded-full', isHere ? 'bg-lamp' : 'border-2 border-muted-foreground')}
+                        />
+                        {isHere ? t('here') : t('added', { date: longDate(row.at) })}
                       </span>
-                      <span className="text-[12px] leading-[1.45] text-muted-foreground-strong">{device.meta}</span>
                     </span>
-                    {isHere ? <DeviceStatusBadge status="idle" label={t('here')} /> : null}
-                    {lapse?.kind === 'lapsed' ? <DeviceStatusBadge status="idle" label={t('off')} /> : null}
                     <Button
                       type="button"
                       variant="outline"
                       data-remove=""
                       aria-describedby={labelId}
                       disabled={busy !== null}
+                      className="h-11 rounded-[12px] px-3.5 text-[14px] font-bold"
                       onClick={() => setConfirming(row.devHash)}
                     >
                       {t('remove')}
@@ -216,19 +190,26 @@ export function ManageDevices({ activateHref, plansHref }: { activateHref: strin
                     <div
                       role="group"
                       aria-label={t('confirm.aria', { label: row.label })}
-                      className="flex flex-col gap-2.5 rounded-[14px] border border-destructive/30 bg-destructive-soft p-3"
+                      className="flex flex-col gap-2.5 rounded-[14px] border border-destructive/30 bg-destructive/6 p-3 dark:bg-destructive/10"
                     >
                       <span className="text-[14px]">
                         {isHere ? t('confirm.here') : t('confirm.other', { label: row.label })}
                       </span>
                       <span className="flex flex-wrap gap-2">
-                        <Button type="button" variant="outline" autoFocus onClick={() => setConfirming(null)}>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          autoFocus
+                          className="h-11 rounded-[12px]"
+                          onClick={() => setConfirming(null)}
+                        >
                           {t('keep')}
                         </Button>
                         <Button
                           type="button"
                           variant="destructive"
                           loading={busy === row.devHash}
+                          className="h-11 rounded-[12px]"
                           onClick={() => void remove(row, i)}
                         >
                           {t('removeDevice')}
@@ -240,8 +221,17 @@ export function ManageDevices({ activateHref, plansHref }: { activateHref: strin
               );
             })}
           </div>
-        </div>
+          <span className="text-[13px] leading-[1.5] text-muted-foreground-strong">{t('note')}</span>
+          <div className="flex flex-col items-center gap-2">
+            <Button asChild className={PRIMARY}>
+              <a href={portalUrl()}>{t('portal')}</a>
+            </Button>
+            <a className={LINK} href={plansHref}>
+              {t('back')}
+            </a>
+          </div>
+        </>
       ) : null}
-    </FlowColumn>
+    </Rise>
   );
 }

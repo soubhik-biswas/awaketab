@@ -18,9 +18,10 @@ export interface IProDevice {
   current: boolean;
 }
 
+// The signed-in account as the tool shows it: how the person signed in, and the plan only while Pro is on.
 export interface IProAccount {
   name: string;
-  email: string;
+  method: 'google' | 'github' | 'passkey';
   plan: TProPlan;
   renewsOn: string;
 }
@@ -35,6 +36,8 @@ export type TSoundMix = Record<TMixKey, number>;
 export interface IProSnapshot {
   isPro: boolean;
   account: IProAccount | null;
+  // A sign-in this device remembered has ended on the server, so signing in again is the next step.
+  expired: boolean;
   devices: IProDevice[];
   maxDevices: number;
   studio: IStudioSettings;
@@ -115,6 +118,7 @@ function createPlaceholder(): IProSource {
     snap ??= {
       isPro: false,
       account: null,
+      expired: false,
       devices: [],
       maxDevices: 5,
       studio: typeof window === 'undefined' ? DEFAULT_STUDIO : readStudio(),
@@ -184,6 +188,7 @@ export const pro = {
 const SERVER: IProSnapshot = {
   isPro: false,
   account: null,
+  expired: false,
   devices: [],
   maxDevices: 5,
   studio: DEFAULT_STUDIO,
