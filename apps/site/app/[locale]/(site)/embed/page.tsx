@@ -3,15 +3,15 @@ import { getTranslations } from 'next-intl/server';
 import { EmbedPage } from '@/components/embed/embed-page';
 import { JsonLd } from '@/components/site/json-ld';
 import { ROUTES, SITE } from '@/lib/routes';
-import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
+import { articleSchema, englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.embed' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor(t('h1')),
     description: t('description'),
     path: ROUTES.embed,
-    og: { kicker: 'Website widget', title: t('h1'), scene: 'cooking', tone: 'dark' },
+    og: { template: 'guide', kicker: 'Website widget', title: t('h1'), scene: 'cooking' },
   });
 }
 

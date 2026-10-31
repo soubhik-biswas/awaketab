@@ -5,7 +5,7 @@ import { Block, Callout } from '@/components/site/blocks';
 import { Chips } from '@/components/site/chips';
 import { PageHero } from '@/components/site/page-hero';
 import { ToolSlot } from '@/components/site/tool-slot';
-import { englishOnly, pageMetadata } from '@/lib/seo';
+import { englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 type TParams = Promise<{ locale: string; time: string }>;
 
@@ -35,11 +35,11 @@ export async function generateMetadata({ params }: { params: TParams }): Promise
   const [h, m] = parse(time);
   const t = await getTranslations({ locale: 'en', namespace: 'page' });
   return pageMetadata({
-    title: t('until.title', { time: `${pad(h)}:${pad(m)}` }),
-    description: t('home.description'),
+    title: titleFor(`Keep your screen awake until ${twelve(h, m)}`),
+    description: t('until.description', { time: twelve(h, m) }),
     path: '/',
     noindex: true,
-    og: { kicker: 'Keep awake until', title: twelve(h, m), scene: 'nightdesk', tone: 'dark' },
+    og: { image: 'og-01', alt: 'AwakeTab clock showing 38:12 left' },
   });
 }
 

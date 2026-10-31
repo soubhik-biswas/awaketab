@@ -7,12 +7,12 @@ import {
   Info,
   Minus,
   Play,
+  Plus,
   TriangleAlert,
   type LucideIcon,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
 import type { TSceneKey } from '@/lib/content';
 import { cn } from '@/lib/utils';
 import { Scene } from '@/components/scene/scene';
@@ -144,7 +144,7 @@ export function Steps({ items }: { items: readonly IStep[] }) {
               aria-hidden="true"
               className={cn(
                 s.display,
-                'inline-flex size-10 items-center justify-center rounded-full bg-lamp text-[20px] font-extrabold text-lamp-foreground',
+                'inline-flex size-10 items-center justify-center rounded-full bg-lamp text-[20px] font-bold text-lamp-foreground',
               )}
             >
               {i + 1}
@@ -286,7 +286,7 @@ const TONE: Record<TTone, { box: string; tile: string; fg: string; icon: LucideI
   lamp: { box: 'site-callout-lamp', tile: 'bg-accent border-lamp/25', fg: 'text-lamp', icon: CircleCheck },
 };
 
-// The callout card: a tinted corner glow on the surface, the tone's icon in a soft tile, an Archivo title.
+// The full-width callout: a tinted corner glow on the surface, the tone's icon in a soft tile, a Bricolage title.
 export function Callout({
   tone,
   title,
@@ -321,10 +321,7 @@ export function Callout({
       </span>
       <span className="flex min-w-0 flex-col gap-1.5">
         <strong
-          className={cn(
-            s.display,
-            'text-[20px] leading-[1.15] font-extrabold tracking-[-0.02em] min-[700px]:text-[24px]',
-          )}
+          className={cn(s.display, 'text-[20px] leading-[1.15] font-bold tracking-[-0.02em] min-[700px]:text-[24px]')}
         >
           {title}
         </strong>
@@ -336,19 +333,63 @@ export function Callout({
   );
 }
 
-export function Faq({ items }: { items: ReadonlyArray<{ q: string; a: ReactNode }> }) {
+// A real accordion: the first answer open, the rest closed, and a plus or minus that says which (brief §9, bug 5).
+// The home board draws a bigger row with the sign in a round chip; content pages use the plain sign.
+export function Faq({
+  items,
+  variant = 'page',
+}: {
+  items: ReadonlyArray<{ q: string; a: ReactNode }>;
+  variant?: 'page' | 'home';
+}) {
+  const home = variant === 'home';
   return (
-    <Accordion type="multiple" defaultValue={items.map((_, i) => String(i))} className="flex flex-col">
+    <Accordion type="single" collapsible defaultValue="0" className="flex flex-col">
       {items.map((item, i) => (
         <AccordionItem
           key={i}
           value={String(i)}
-          className="flex max-w-[900px] flex-col gap-2 border-b border-border py-[18px] last:border-b"
+          className={cn(
+            'flex flex-col border-b border-border last:border-b',
+            home ? 'py-[18px] first:border-t min-[700px]:py-[22px]' : 'max-w-[900px] gap-2 py-[18px]',
+          )}
         >
-          <AccordionTrigger className="items-center gap-3 rounded-[10px] py-0 text-[17px] font-bold text-foreground hover:no-underline focus-visible:ring-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&>svg]:size-5 [&>svg]:translate-y-0 [&>svg]:text-muted-foreground-strong [&[data-state=closed]>svg]:-rotate-90 [&[data-state=open]>svg]:rotate-0">
-            {item.q}
+          <AccordionTrigger
+            className={cn(
+              'group items-center rounded-[10px] py-0 font-bold text-foreground hover:no-underline focus-visible:ring-0 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring [&>svg]:hidden',
+              home ? 'gap-4 text-[17px] min-[700px]:text-[19px]' : 'gap-3 text-[17px]',
+            )}
+          >
+            <span>{item.q}</span>
+            <span
+              aria-hidden="true"
+              className={cn(
+                'flex flex-none items-center justify-center',
+                home
+                  ? 'size-8 rounded-full bg-[var(--site-s2)] text-foreground group-data-[state=open]:bg-foreground group-data-[state=open]:text-background'
+                  : 'size-5 text-muted-foreground-strong',
+              )}
+            >
+              <Plus
+                className={cn(home ? 'size-4' : 'size-5', 'group-data-[state=open]:hidden')}
+                strokeWidth={home ? 2.2 : 2}
+              />
+              <Minus
+                className={cn(home ? 'size-4' : 'size-5', 'hidden group-data-[state=open]:block')}
+                strokeWidth={home ? 2.2 : 2}
+              />
+            </span>
           </AccordionTrigger>
-          <AccordionContent className={cn(s.body, 'site-prose pb-0')}>{item.a}</AccordionContent>
+          <AccordionContent
+            className={cn(
+              'site-prose pb-0',
+              home
+                ? 'mt-3 mr-12 text-[16px] leading-[1.6] text-muted-foreground-strong min-[700px]:text-[17px]'
+                : s.body,
+            )}
+          >
+            {item.a}
+          </AccordionContent>
         </AccordionItem>
       ))}
     </Accordion>
@@ -397,35 +438,6 @@ export function Note({ children }: { children: ReactNode }) {
     <p className="m-0 max-w-[760px] border-t border-border pt-3 text-[14px] leading-[1.55] text-muted-foreground-strong">
       {children}
     </p>
-  );
-}
-
-// The closing band is midnight in every theme: volt and violet glows on #0B1020 with the dark-theme act button.
-export function Cta({ title, desc, href, label }: { title: string; desc: string; href: string; label: string }) {
-  return (
-    <div className="site-cta flex flex-col items-stretch justify-between gap-5 rounded-[28px] p-6 text-[var(--site-night-ink)] min-[700px]:items-start min-[700px]:p-10 min-[1100px]:flex-row min-[1100px]:items-center">
-      <span className="flex flex-col gap-2">
-        <strong
-          className={cn(
-            s.display,
-            'text-[32px] leading-[1.04] font-extrabold tracking-[-0.035em] text-balance min-[700px]:text-[40px] min-[1100px]:text-[48px]',
-          )}
-        >
-          {title}
-        </strong>
-        <span className="text-[16px] text-[var(--site-night-muted)]">{desc}</span>
-      </span>
-      <Button
-        asChild
-        size="cta"
-        className="border-[var(--site-cta-button)] bg-[var(--site-cta-button)] text-[var(--site-cta-button-ink)] shadow-[0_12px_30px_var(--site-cta-button-glow)] hover:border-[var(--site-cta-button)] hover:bg-[var(--site-cta-button)] hover:opacity-90"
-      >
-        <a href={href}>
-          <Play className="size-5" aria-hidden="true" />
-          {label}
-        </a>
-      </Button>
-    </div>
   );
 }
 

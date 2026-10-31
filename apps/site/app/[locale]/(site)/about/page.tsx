@@ -3,8 +3,8 @@ import { getTranslations } from 'next-intl/server';
 import { Block, DataTable, Prose, Steps, tx, yes } from '@/components/site/blocks';
 import { JsonLd } from '@/components/site/json-ld';
 import { PageHero } from '@/components/site/page-hero';
-import { CONTACT_EMAIL, CONTACT_MAILTO, ROUTES } from '@/lib/routes';
-import { englishOnly, pageMetadata, personSchema } from '@/lib/seo';
+import { panelHref, ROUTES } from '@/lib/routes';
+import { englishOnly, pageMetadata, personSchema, titleFor } from '@/lib/seo';
 
 const COFFEE = 'https://buymeacoffee.com/awaketab';
 const LOCK_STATES = ['idle', 'requesting', 'held', 'lost', 'denied', 'unsupported', 'fallback'] as const;
@@ -77,10 +77,10 @@ const link = 'text-link underline underline-offset-2';
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.about' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor('A small tool with one job.'),
     description: t('description'),
     path: ROUTES.about,
-    og: { kicker: 'About', title: 'A small tool with one job.', scene: 'nightdesk', tone: 'dark' },
+    og: { image: 'og-02', alt: 'AwakeTab: keep this screen awake' },
   });
 }
 
@@ -119,11 +119,11 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
               h: 'Who we are',
               p: (
                 <>
-                  AwakeTab is an independent project built and maintained by Soubhik Biswas. Say hello at{' '}
-                  <a href={CONTACT_MAILTO} className={link}>
-                    {CONTACT_EMAIL}
-                  </a>
-                  ; messages go to Soubhik directly. If AwakeTab is useful, you can{' '}
+                  AwakeTab is an independent project built and maintained by Soubhik Biswas. Say hello from{' '}
+                  <a href={panelHref('feedback')} className={link}>
+                    Settings → Send feedback
+                  </a>{' '}
+                  inside the tool; Soubhik reads every message. If AwakeTab is useful, you can{' '}
                   <a href={COFFEE} rel="noopener" target="_blank" className={link}>
                     buy Soubhik a coffee
                   </a>{' '}
@@ -203,11 +203,12 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
             {
               p: (
                 <>
-                  Found something that gets in your way? Email{' '}
-                  <a href={CONTACT_MAILTO} className={link}>
-                    {CONTACT_EMAIL}
+                  Found something that gets in your way? Tell us from{' '}
+                  <a href={panelHref('feedback')} className={link}>
+                    Settings → Send feedback
                   </a>{' '}
-                  with the page, your browser and any assistive technology you use.
+                  and pick “Something broke”: your browser and device are attached, so add the page and any assistive
+                  technology you use.
                 </>
               ),
             },
@@ -241,12 +242,12 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
             {
               p: (
                 <>
-                  Email{' '}
-                  <a href={CONTACT_MAILTO} className={link}>
-                    {CONTACT_EMAIL}
+                  There is no support email: feedback inside the tool is the one channel. Open the timer, then{' '}
+                  <a href={panelHref('feedback')} className={link}>
+                    Settings → Send feedback
                   </a>{' '}
-                  for support, refunds, bug reports, device results that differ from the support matrix, or a request to
-                  delete your licence data. Messages go to Soubhik directly.
+                  for help, bug reports or device results that differ from the support matrix. Plans, receipts, refunds
+                  and deleting your Pro data live in Settings → Account.
                 </>
               ),
             },

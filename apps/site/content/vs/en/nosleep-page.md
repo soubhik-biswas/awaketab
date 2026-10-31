@@ -1,6 +1,6 @@
 ---
 title: "A nosleep.page alternative with honest status — AwakeTab"
-description: "nosleep.page and AwakeTab both keep a screen on from a visible tab with the Wake Lock API. Who should use which, as of 26 September 2026."
+description: "nosleep.page and AwakeTab both keep a screen on from a visible tab with the Wake Lock API. Here is who should use which, as of 26 September 2026."
 h1: "AwakeTab vs nosleep.page"
 crumb: "nosleep.page"
 intent: "nosleep.page alternative"

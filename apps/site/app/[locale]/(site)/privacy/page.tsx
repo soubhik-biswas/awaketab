@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { LegalPage, legalLink } from '@/components/site/legal-page';
-import { CONTACT_EMAIL, CONTACT_MAILTO, ROUTES } from '@/lib/routes';
-import { englishOnly, pageMetadata } from '@/lib/seo';
+import { panelHref, ROUTES } from '@/lib/routes';
+import { englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 // Section ids are link targets (/privacy#extension from /extension, #ads, #server-data, #delete) and stay stable;
 // every docs/08 §7 row, retention period and the deletion route are listed.
@@ -47,19 +47,20 @@ const EVENTS = [
 ];
 
 const Code = ({ children }: { children: string }) => <code>{children}</code>;
-const mail = (
-  <a href={CONTACT_MAILTO} className={legalLink}>
-    {CONTACT_EMAIL}
+// There is no contact address: every privacy question goes through feedback inside the tool.
+const feedback = (
+  <a href={panelHref('feedback')} className={legalLink}>
+    Settings → Send feedback
   </a>
 );
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.privacy' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor('Privacy policy'),
     description: t('description'),
     path: ROUTES.privacy,
-    og: { kicker: 'Legal', title: 'Privacy policy', tone: 'light' },
+    og: { image: 'og-02', alt: 'AwakeTab: keep this screen awake' },
   });
 }
 
@@ -218,11 +219,12 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
                 </div>
               </dl>
               <p id="delete" className="m-0">
-                <strong>Deleting your licence data.</strong> Email {mail} from any address with your licence key or
-                Polar receipt, and ask us to delete your licence data. We delete the licence record and its device list
-                within 7 days and confirm by reply. Deleting it ends Pro on every device, and it does not refund the
-                purchase (a refund within 14 days does that, see the terms). Usage events and ratings carry no identity,
-                so no one, including us, can pick out yours; they expire on the schedule above.
+                <strong>Deleting your licence data.</strong> Open the timer and use Settings → Account, or send your
+                licence key from {feedback} and ask us to delete your licence data. We delete the licence record and its
+                device list within 7 days, and Pro shows as off in the app once it is gone. Deleting it ends Pro on
+                every device, and it does not refund the purchase (a refund within 14 days does that, see the terms).
+                Usage events and ratings carry no identity, so no one, including us, can pick out yours; they expire on
+                the schedule above.
               </p>
             </>
           ),
@@ -266,8 +268,13 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         {
           id: 'contact',
           title: 'Contact',
-          summary: 'one address for every question about this policy or your data.',
-          body: <p className="m-0">Questions about this policy or your data: {mail}.</p>,
+          summary: 'one place for every question about this policy or your data: feedback inside the tool.',
+          body: (
+            <p className="m-0">
+              Questions about this policy or your data: open the timer and use {feedback}. There is no email address;
+              feedback is anonymous unless you add your licence key.
+            </p>
+          ),
         },
       ]}
     />
