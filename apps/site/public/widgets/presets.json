@@ -2,28 +2,19 @@
   "type": "AdaptiveCard",
   "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
   "version": "1.6",
+  "verticalContentAlignment": "Center",
+  "selectAction": { "type": "Action.Execute", "verb": "preset", "data": { "preset": "p60" } },
   "body": [
-    { "type": "TextBlock", "text": "${presetsTitle}", "size": "Small", "isSubtle": true },
     {
-      "type": "Container",
-      "$data": "${presets}",
-      "spacing": "Medium",
-      "selectAction": { "type": "Action.Execute", "verb": "preset", "data": { "preset": "${preset}" } },
-      "items": [
+      "type": "ActionSet",
+      "horizontalAlignment": "Center",
+      "actions": [
         {
-          "type": "ColumnSet",
-          "columns": [
-            {
-              "type": "Column",
-              "width": "stretch",
-              "items": [{ "type": "TextBlock", "text": "${name}", "weight": "Bolder" }]
-            },
-            {
-              "type": "Column",
-              "width": "auto",
-              "items": [{ "type": "TextBlock", "text": "${length}", "fontType": "Monospace", "isSubtle": true }]
-            }
-          ]
+          "type": "Action.Execute",
+          "title": "${quick}",
+          "verb": "preset",
+          "data": { "preset": "p60" },
+          "style": "positive"
         }
       ]
     }

@@ -1,6 +1,7 @@
 import { localePath, type TLocale } from '@/i18n/locales';
 
-const PIP_SIZE = { width: 320, height: 180 } as const;
+// The extension board's mini clock: 236 px wide, a status line over a 170 px face.
+const PIP_SIZE = { width: 236, height: 196 } as const;
 const PIP_POPUP_NAME = 'awaketab-pip';
 
 export type TPipSupport = 'document' | 'popup' | 'none';
