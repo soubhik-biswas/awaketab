@@ -45,7 +45,7 @@ export function TrackedSteps({
               aria-hidden="true"
               className={cn(
                 display,
-                'inline-flex size-10 flex-none items-center justify-center rounded-full text-[20px] font-extrabold',
+                'inline-flex size-10 flex-none items-center justify-center rounded-full text-[20px] font-bold',
                 done[i] ? 'bg-lamp text-lamp-foreground' : 'bg-secondary text-foreground',
               )}
             >
