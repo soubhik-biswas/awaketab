@@ -264,11 +264,12 @@ function ToolApp({ lang, frame, root, initialView, readQuery, qa }: IAppProps) {
     [a, fs, root, idle],
   );
 
-  // First paint: the address options (?preset, ?face, ?vibe, ?autostart, ?until) and an optional first panel.
+  // First paint: the address options (?preset, ?face, ?vibe, ?autostart, ?until, ?open) and an optional first panel.
   useEffect(() => {
     if (initialView) toolUi.open(initialView);
     if (!readQuery) return;
     const q = readToolQuery(window.location.search);
+    if (q.open) toolUi.open(q.open);
     if (q.face) updateSettings({ face: glanceFace(q.face) });
     if (q.vibe) updateSettings({ vibe: q.vibe });
     if (q.chime !== undefined) updateSettings({ chime: q.chime ? 'two' : 'off' });

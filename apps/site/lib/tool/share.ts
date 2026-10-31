@@ -8,7 +8,12 @@ interface IToolQuery {
   vibe?: TVibe;
   autostart?: boolean;
   untilAt?: number;
+  open?: TOpenPanel;
 }
+
+// Panels the website links straight into (Send feedback, Settings, the faces store, vibes).
+const OPEN_PANELS = ['feedback', 'settings', 'faces', 'vibes', 'recents', 'language', 'pro'] as const;
+type TOpenPanel = (typeof OPEN_PANELS)[number];
 
 const PRESET_SEC: Record<string, number> = {
   p15: 900,
@@ -43,6 +48,8 @@ export function readToolQuery(search: string, now = Date.now()): IToolQuery {
     if (d.getTime() <= now + 30_000) d.setDate(d.getDate() + 1);
     out.untilAt = d.getTime();
   }
+  const open = OPEN_PANELS.find((x) => x === q.get('open'));
+  if (open) out.open = open;
   return out;
 }
 
