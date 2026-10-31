@@ -1,6 +1,6 @@
 ---
 title: "Manter a tela ligada na apresentação — AwakeTab"
-description: "Slides em tela cheia escondem o navegador. O AwakeTab só segura a tela se continuar visível: na janela flutuante ou numa segunda janela."
+description: "Slides em tela cheia escondem o navegador. O AwakeTab só segura a tela se continuar visível: na janela flutuante ou numa segunda janela ao lado."
 h1: "Tela ligada durante apresentações de slides"
 ogTitle: "Tela ligada na apresentação"
 intent: "manter tela ligada durante apresentação"

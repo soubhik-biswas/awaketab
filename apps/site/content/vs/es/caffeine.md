@@ -1,6 +1,6 @@
 ---
 title: "Alternativa online a Caffeine para Mac — AwakeTab"
-description: "Caffeine para Mac funciona sin ventana visible. AwakeTab no instala nada, usa el Wake Lock del navegador y necesita su pestaña a la vista."
+description: "Caffeine para Mac funciona sin ventana visible. AwakeTab no instala nada, usa el Wake Lock del navegador y necesita su pestaña a la vista para funcionar."
 h1: "Caffeine vs. una pestaña con Wake Lock"
 intent: "alternativa a caffeine online"
 secondaryQueries: ["caffeine para mac alternativa", "caffeine online sin instalar", "mantener pantalla encendida mac sin instalar", "caffeine vs awaketab", "app para que no se apague la pantalla mac"]
