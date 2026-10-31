@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { applyKioskHash, cleanText, driftAt, kioskQuery, kioskWindow, parseKioskQuery, parseLogo } from './kiosk';
+import {
+  applyKioskHash,
+  cleanText,
+  driftAt,
+  kioskQuery,
+  kioskWindow,
+  nightDim,
+  parseKioskQuery,
+  parseLogo,
+} from './kiosk';
 import { joinMirror, readState, stateMessage } from './mirror';
 import { digits, surfaceView } from './session';
 import { readWidgetAction, widgetData, WIDGET_PRESETS } from './widgets';
@@ -100,11 +109,13 @@ describe('mirror', () => {
 describe('kiosk', () => {
   const defaults = { kicker: 'RECEPTION', msg: 'Please take a seat.', line: 'We’ll call your name.' };
 
-  it('defaults to the board: LED, Midnight, weekdays 8 AM to 6 PM', () => {
+  it('defaults to the wall-mode board: Bold on OLED, weekdays 8 AM to 6 PM; a retired LED link reads as LCD', () => {
     const cfg = parseKioskQuery('', defaults);
+    expect(parseKioskQuery('?face=led', defaults).face).toBe('lcd');
+    expect(parseKioskQuery('?screen=dark', defaults).screen).toBe('dark');
     expect(cfg).toMatchObject({
-      face: 'led',
-      screen: 'dark',
+      face: 'bold',
+      screen: 'oled',
       schedule: { days: 'weekdays', from: '08:00', to: '18:00' },
     });
   });
@@ -121,6 +132,13 @@ describe('kiosk', () => {
     expect(kioskWindow(s, at(19, 0, 2))).toMatchObject({ inside: false, next: at(8, 0, 3) });
     expect(kioskWindow(s, at(12, 0, 7))).toMatchObject({ inside: false, next: at(8, 0, 9) });
     expect(kioskWindow(null, mon).inside).toBe(true);
+  });
+
+  it('dims to 40 % from 10 PM to 6 AM', () => {
+    expect(nightDim(at(21, 59, 2))).toBe(1);
+    expect(nightDim(at(22, 0, 2))).toBe(0.4);
+    expect(nightDim(at(5, 59, 3))).toBe(0.4);
+    expect(nightDim(at(6, 0, 3))).toBe(1);
   });
 
   it('drifts through the four offsets', () => {
@@ -162,8 +180,11 @@ describe('widgets', () => {
   it('builds the widget data from the view', () => {
     const data = widgetData(surfaceView(snap()), {
       status: 'Awake',
+      pill: '39 min left',
       line: 'until 11:42 AM',
-      label: 'Presenting to the board',
+      ends: 'Ends 11:42 AM · tap to extend',
+      label: 'Kitchen',
+      quick: 'Keep awake · 1 h',
       extend: '+15 min',
       stop: 'Stop',
       presetsTitle: 'Presets',
@@ -174,6 +195,12 @@ describe('widgets', () => {
       ],
     });
     expect(data.digits).toBe('39:00');
+    expect([data.pill, data.label, data.ends, data.quick]).toEqual([
+      '39 min left',
+      'Kitchen',
+      'Ends 11:42 AM · tap to extend',
+      'Keep awake · 1 h',
+    ]);
     expect(data.presets.map((p) => p.preset)).toEqual(WIDGET_PRESETS.map((p) => p.preset));
   });
 

@@ -1,10 +1,10 @@
 # AwakeTab extension release guide
 
-AwakeTab: Keep Screen Awake is preparing the **1.0.1** artwork update for its first Chrome Web Store release. Version 1.0.0 was submitted on 2026-10-23; it must not be uploaded again. The existing item ID is `kphiinpjmodhjfojkleoigcgiakahfpk`. This guide records the packaging workflow; the publisher dashboard determines submission, review and publication status.
+AwakeTab — Keep your screen awake is preparing the **1.0.1** artwork update for its first Chrome Web Store release. Version 1.0.0 was submitted on 2026-10-23; it must not be uploaded again. The existing item ID is `kphiinpjmodhjfojkleoigcgiakahfpk`. This guide records the packaging workflow; the publisher dashboard determines submission, review and publication status.
 
 ## Release scope
 
-The first release is free: Screen and System keep-awake, timers, until-time sessions, extensions of running timers, toolbar status, keyboard controls, settings and optional end notifications. Pro purchases are disabled. Weekly schedules and auto-start remain licence-gated; do not describe them as free or upload the Pro screenshot for this release.
+Everything is free: the popup (15 min, 30 min, 1 hour or no end, with Pause, Resume and Stop), the toolbar badge, the Alt+Shift+A shortcut, the end chime and the options (badge timer, auto-wake on chosen sites, release when the tab is hidden). Pro is optional and only syncs many screens; nothing in the extension is locked.
 
 ## Packaging and recovery
 
@@ -43,21 +43,18 @@ On validation failure or Ctrl+C, subprocesses stop before version metadata is re
 - Compiled extension ZIP only: manifest at the root, bundled scripts, locales, fonts, icons and dependency licence notices. Do not upload the repository or the outer handoff bundle as the extension package.
 - [Listing copy](listing.md), with a summary that matches the manifest.
 - [Reviewer instructions](reviewer-instructions.md) and [privacy form preparation](privacy-disclosures.md).
-- `store/images/screenshot-1-popup.png` through `screenshot-4-lengths.png`: 1280×800 PNG screenshots.
-- `store/images/promo-440x280.png`: optional small promotional tile.
-- `public/icon-128.png`: store icon.
+- `store/images/cws-01.png` … `cws-05.png`: 1280×800 screenshots, in that order.
+- `store/images/promo-small-440x280.png` (required), `promo-marquee-1400x560.png`, `icon-128.png` and, for Edge, `edge-logo-300.png`.
 
-The editable icon source is `public/icon.svg`. It supplies the toolbar PNGs, extension-page marks and store artwork. Regenerate all images with `pnpm -F extension store:assets`; the store canvas uses flat paper backgrounds and keeps the popup controls in their dark product theme. The four free-launch images cover the popup, Screen/System modes, toolbar states and timer lengths.
-
-The fifth screenshot describes Pro auto-start and is excluded from the first free submission. The existing website walkthrough demonstrates the web tool, so do not submit it as an extension demo video.
+The images and the toolbar icons (`public/icons/extension-16/32/48/128.png`) come from the Glance marketing kit and are used as-is. When the product UI changes, re-export them from the marketing board; nothing in this package renders them.
 
 ## Verification and remaining submission work
 
-Keep a verification record with the exact source revision, package version, SHA-256, build flags and test results. Run the free flow against the final production package in a fresh profile: Screen session, System session, toolbar badge, Stop, popup reopen, settings, telemetry off and no optional site permissions by default.
+Keep a verification record with the exact source revision, package version, SHA-256, build flags and test results. Run the flow against the final production package in a fresh profile: a 1-hour session, Pause and Resume, Stop, no end, the toolbar badge in each state, popup reopen, each option, Add this site, and no optional site permissions by default.
 
-Automated tests establish browser API behavior and accessibility checks. They do not establish that a real display stayed lit through a full idle interval on every operating system. Before submission, record a physical idle/timer check on a target machine, optional notification grant/revocation and the global shortcut. Chrome must remain running; a deliberate lock or closed laptop lid can still sleep.
+Automated tests establish browser API behavior and accessibility checks. They do not establish that a real display stayed lit through a full idle interval on every operating system. Before submission, record a physical idle/timer check on a target machine, the end chime and the global shortcut. Chrome must remain running; a deliberate lock or closed laptop lid can still sleep.
 
-In the publisher dashboard, verify the signed-in email against the owner's authorized publisher account, developer registration, contact verification, 2-Step Verification and existing item/draft status. Confirm the public homepage, privacy policy and support address work. Upload the correct ZIP, select the current matching productivity/tools category, complete disclosures from the actual implementation, choose distribution and inspect every dashboard warning. Do not infer registration, mailbox delivery, trader status, submission or approval from repository files.
+In the publisher dashboard, verify the signed-in account is the owner's authorized publisher account, developer registration, contact verification, 2-Step Verification and existing item/draft status. Confirm the public homepage, privacy policy and help centre work. Upload the correct ZIP, select the current matching productivity/tools category, complete disclosures from the actual implementation, choose distribution and inspect every dashboard warning. Do not infer registration, mailbox delivery, trader status, submission or approval from repository files.
 
 After store approval and publication, put the exact item ID in `apps/web/src/lib/extension.ts` and enable the real store link. Prepare Edge submission separately against its current dashboard requirements.
 

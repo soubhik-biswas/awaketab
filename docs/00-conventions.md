@@ -158,11 +158,11 @@ Timing rules: ticks every 1000 ms aligned to the wall clock; all arithmetic uses
 | `at.v1.license` | `{ token, plan, exp, features[], lastValidatedAt, deviceId }` | Token = ES256 JWT signed by our Worker |
 | `at.v1.meta` | `{ installedAt, sessionCount, ratingPrompt: { shownAt, action, stars?, rearmAt? }, lastSeenVersion }` | `rearmAt` since v1.3 (§13.8) |
 | `at.v1.onboarding` | `{ dismissedTips: [] }` | |
-| `at.v1.account` | `{ v: 1, email, signedInAt }` | Written by `/signin` after a magic link is verified; removed by Sign out or Delete account. Never sent anywhere (§13.30) |
+| `at.v1.account` | `{ v: 1, method, name, signedInAt }` | `method` is `google`, `github` or `passkey`. Written when a sign-in session is confirmed; removed by Sign out, Delete account or a session the server no longer backs. Holds no address. Never sent anywhere (§13.30) |
 | `at.v1.studio` | `{ v: 1, lamp, glow }` | Face studio (Pro): `lamp` `''` or `#RRGGBB`, `glow` 0–100 in steps of 5 (default 70) (§13.30) |
 | `at.v1.notes` | IndexedDB, not localStorage: database `awaketab`, store `notes`, this key. `{ v: 1, notes: [{ id, title, doc, createdAt, updatedAt, pinned? }], current?, voiceOk? }` | Never leaves the device; schema in `08-data-storage.md` §2.1a |
 
-sessionStorage also holds `at.v1.checkout` (`{ plan, email }`, the Pro checkout flow for this tab; cleared when Pro turns on) beside `at.tabId`.
+sessionStorage also holds `at.v1.signin` (the sign-in button pressed, for the trip to Google or GitHub and back; read once) beside `at.tabId`.
 
 `BroadcastChannel('awaketab')` coordinates multiple tabs (second-tab warning, single active lock). Migrations: `migrate(fromVersion)` in `@awaketab/core/storage`; bump prefix to `at.v2.` only for breaking changes.
 
@@ -416,7 +416,9 @@ Accepted on 2026-09-26 with the M6 implementation; confirmed by owner decision D
 | `end.ts` constants | `TITLE_FLASH_MS` 1000 · `TITLE_FLASH_MIN_MS` 3000 · `RATING_DELAY_MS` 2000 · `COUNTED_SESSION_S` 300 (a completed session counts toward `meta.sessionCount` only if ≥ 5 min awake) |
 | `ui/rating.ts` constants | `RATING_MIN_SESSIONS` 5 · `RATING_REARM_SESSIONS` 10 · `RATING_TEXT_MAX` 280 |
 | `stats/heatmap.ts` constants | `HEATMAP_WEEKS` 12 · `FREE_HISTORY_DAYS` 7 |
-| `pip.ts` / `pip-mirror.ts` constants | `PIP_SIZE` 280 × 120 · `PIP_ADD_MS` 15 min · `MIRROR_STALE_MS` 4000 (the `/pip` popup shows "Ready" instead of a stale timer after 4 s without a snapshot) |
+| `pip.ts` / `pip-mirror.ts` constants | `PIP_SIZE` 236 × 196 (Glance: the extension board's mini clock, a status line over a 170 px face; it closes when the session ends) · `MIRROR_STALE_MS` 4000 (the `/pip` popup shows "Ready" instead of a stale timer after 4 s without a snapshot) |
+| Wall mode (`lib/surfaces/kiosk.ts`, Glance) | `KIOSK_STAGE` 1440 × 810 with a 600 px face 70 px from the top · `DRIFT_MS` 180,000 (pixel shift every 3 minutes) · `NIGHT_DIM` 40 % from 10 PM to 6 AM (`nightDim(now)`) · link defaults `face=bold`, `screen=oled` |
+| Home-screen widgets (Glance) | Large (`WidgetLarge`: face, status pill, preset name, "Ends … · tap to extend"), Small (`WidgetSmall`: face and status), Quick start (`WidgetQuickStart`: one violet button, one hour). Windows widget tags stay `session` (large), `awake` (small) and `presets` (quick start), so installed widgets keep working |
 | `BaseLayout` `bare` prop | Chrome-less page (no shell padding, separator or footer); used by `/pip` |
 | `/config/sponsor.json` | `{ enabled, id, name, text, url }`; `id` `[a-z0-9_-]{1,32}`, `url` must be `https:`; validated client-side as untrusted input |
 
@@ -454,56 +456,53 @@ Accepted on 2026-09-26 with the M6 implementation; confirmed by owner decision D
 
 Accepted on 2026-09-26 (owner decision D-04, `LAUNCH-AUDIT.md`), as written with the M7 implementation (`10-extension-spec.md` §13). The `// PROPOSED` markers are gone from the code.
 
-**Storage and sync**
+**Storage and sync** (Glance, 31 Oct 2026: the extension board's popup and options; everything free)
 
 | Identifier | Decision |
 |---|---|
-| `at.v1.ext` | `IExtSettings { v: 1, level: 'display' \| 'system', schedules: ISchedule[], autostart: { browserStart: boolean, sites: IAutostartSite[] } }` in `chrome.storage.local`, mirrored to `chrome.storage.sync` |
-| `at.v1.device` | `{ v: 1, id }` — random UUID per browser profile, `chrome.storage.local` only; the licence `deviceId` |
+| `at.v1.ext` | `IExtSettings { v: 1, badge: boolean (true), releaseHidden: boolean (false), autostart: { on: boolean (true), sites: IAutostartSite[] } }` in `chrome.storage.local`, mirrored to `chrome.storage.sync`. Older records (power level, schedules, browser start) read as these defaults; the key is unchanged |
+| `at.v1.device` | `{ v: 1, id }` — random UUID per browser profile, `chrome.storage.local` only |
+| `at.v1.license` | Kept as stored by earlier versions, revalidated on `at.license`, dropped when revoked; it gates nothing (Pro = sync only) and never syncs |
 | `SYNC_KEYS` | `at.v1.settings`, `at.v1.ext` — the only keys copied to `chrome.storage.sync` (never `at.v1.license`, `at.v1.device`, `at.v1.session`, `at.v1.stats`) |
-| `EXT_DEFAULT_SETTINGS` | `DEFAULT_SETTINGS` with `telemetry: false`, `notifications: false` (extension defaults) |
+| `EXT_DEFAULT_SETTINGS` | `DEFAULT_SETTINGS` with `telemetry: false`, `notifications: false`, `defaultPreset: 'p60'`; the popup remembers the last length in `defaultPreset` |
+| `EXT_PRESETS` | `p15` · `p30` · `p60` · `pinf` — the popup's four chips (15m · 30m · 1h · ∞) |
 | `SESSION_COALESCE_MS` | 10,000 — session writes that only advance `awakeSeconds` are batched |
-| `ISession.modeState` in the extension | `{ level, origin, dismissed? }`; `TOrigin` = `user` · `command` · `schedule` · `autostart` · `startup` |
-| `ISchedule` | `{ id, days: number[] (0 = Sun … 6 = Sat), start: 'HH:MM', end: 'HH:MM', level }`; `SCHEDULES_MAX` 20 |
+| `ISession.modeState` in the extension | `{ origin, tabId?, windowId?, hidden? }`; `TOrigin` = `user` · `command` · `autostart`; `hidden` marks a pause made by release-when-hidden |
 | `IAutostartSite` | `{ host ('docs.example.com' \| '*.example.com'), durationMin: number \| null }`; `AUTOSTART_SITES_MAX` 50 |
 
 **Worker, alarms and UI**
 
 | Identifier | Decision |
 |---|---|
-| Alarm names | `at.tick` (every `TICK_PERIOD_MIN` 0.5 while a session is live) · `at.end` (at the session end) · `at.license` (`LICENSE_PERIOD_MIN` 60) · `at.sched.<id>.start` / `at.sched.<id>.end` (`SCHEDULE_ALARM_PREFIX`) |
-| `EXTEND_WINDOW_MS` | 5 min — the popup's extend prompt after a user session completes; `EXTEND_MS` = 15 / 30 / 60 min |
-| `STALE_NOTIFY_MS` | 5 min — a session that ended while the worker slept is announced only within this window |
+| Permissions | Exactly `power`, `alarms`, `storage`, `offscreen`, `activeTab`, plus `optional_host_permissions: ['https://*/*']` requested one site at a time (justifications in `apps/extension/store/listing.md`) |
+| Keep-awake | `chrome.power.requestKeepAwake('display')` from the service worker, `releaseKeepAwake()` on stop, pause and end (`src/power.ts`) |
+| Alarm names | `at.tick` (every `TICK_PERIOD_MIN` 0.5 while a session runs; none while paused) · `at.end` (at the session end) · `at.license` (`LICENSE_PERIOD_MIN` 60). Any `at.sched.*` alarm an older version set is cleared on start |
 | `SYNC_DEBOUNCE_MS` | 2,000 |
-| Notification id | `at-end` (same tag as the web); buttons `+30 min` (index 0) / `Stop` (index 1) |
-| `BADGE_COLORS` | `display` `#087B87` (Aqua light, 5.0:1 with white; amber means paused, `DESIGN.md` §2.1) · `system` `#2B3A67`; text `#FFFFFF`; text `ON` / `SYS` / `<n>m` / `<n>h` |
-| System-level pill (D-02) | `status.ts` `pillTextKey(lock, level)`: a held `system` lock → `ext.pill.systemHeld` "System awake" (never `tool.pill.held`), secondary line `pillExtraKey()` → `ext.pill.system` "Screen may dim or lock"; badge tooltip `AwakeTab — System awake · Screen may dim or lock`. Display copy only; the lock state stays `held` (§5.1) |
-| `EXT_KEYS` | `{ ext: 'at.v1.ext', device: 'at.v1.device' }` (`settings.ts`) |
-| Unsupported pill in the extension (B9) | `pillTextKey('unsupported', …)` → `tool.pill.denied` ("Blocked — here's the fix"): the extension has no video fallback, so it never offers one. `data-lock` stays `unsupported`; the seven states and their web copy are unchanged |
-| `extend {ms}` on a live session (B9) | Adds the time to the running session (`ISessionEngine.addTime`), except a `schedule` session, which keeps its window; after time is up it starts a new `custom` session of that length as before |
-| `WELCOME_PAGE` (B9, O-25) | `welcome.html`, opened once by `onInstalled('install')`, which also writes `at.v1.meta.lastSeenVersion`; an update from a build without it records `previousVersion` |
-| Popup UI state in existing keys (B9) | "New in {version}" chip: `at.v1.meta.lastSeenVersion` ≠ manifest version (opening the chip writes the version) · first-open tips: `ext-first-open` in `at.v1.onboarding.dismissedTips` · language: `at.v1.settings.locale` (`null` = browser language). No new storage key |
-| Popup states (B9) | `<main data-mode>`: `ready` · `starting` · `held` · `ended` (time's up, `IExtState.extend`) · `blocked` (`denied` or `unsupported`) |
-| `TExtRequest` | Popup → worker messages: `state` · `start {presetId}` · `until {wall}` · `stop` · `toggle` · `extend {ms}` · `dismiss` · `level {level}` |
+| `TExtView` | `ready` · `awake` · `paused` · `blocked` (`denied` or `unsupported`), from `viewOf(lock, session)` (`src/status.ts`) |
+| `BADGE` | ready: none · awake `#3DF58E` on `#04140A`, minutes left (`38`, `2h` from 100 min, `∞` with no end, `ON` when the badge timer is off) · paused `#FFC53D` on `#1A1200`, `II` · blocked `#FF6B81` on `#1A0509`, `!` |
+| Pill copy | `pillCopy()` → `ext.pill.ready` "Ready" · `ext.pill.awake` "Awake · {minutes} min" · `ext.pill.awakeOpen` "Awake · no end" · `ext.pill.paused` "Paused · {minutes} min left" · `ext.pill.pausedOpen` · `ext.pill.hidden` "Paused · tab hidden" · `ext.pill.blocked` "Blocked" · `ext.pill.unsupported` "Not supported"; the toolbar title is `AwakeTab — {pill}` |
+| `TExtRequest` | Popup → worker: `state` · `start {presetId, tab?}` · `stop` · `pause` · `resume` · `toggle` |
+| Paused across a restart | A paused session stays in storage, out of the engine, until Resume; Resume folds the pause into `endsAt` before `resumeSession()` |
+| Release when hidden | With `releaseHidden`, the session's own tab (`modeState.tabId`) not active in its window, or its window minimised, pauses it with `hidden: true`; it resumes when the tab is back. Closing that tab stops it |
+| `OFFSCREEN_PAGE` | `offscreen.html?kind=two\|bell&volume=<0–1>`: the end chime (`AUDIO_PLAYBACK`), from `settings.sound` (`none` is silent; `bell` → bell, anything else → the two-tone chime); closed after `CHIME_MS` 3,000 |
+| Popup links | "Open full app ↗" → `https://awaketab.com/?source=ext` · "See the fix" → `https://awaketab.com/help?source=ext` |
+| Add this site | Options reads the https tabs Chrome exposes (activeTab after a toolbar click, or sites already granted), most recent first, and asks `permissions.request` for that one origin; with none it says how to grant one |
 | `ISessionOptions.resumeIndefiniteMs` | `@awaketab/core`: how long an `indefinite` session stays resumable (default 12 h; the extension passes `Infinity`) |
-| Extension times | `createTimeFormat()` (`src/format.ts`): 12-hour with AM/PM in English, the locale's own clock elsewhere unless the user picks 12 or 24 h; `hour()` names the week axis `12 AM · 6 AM · Noon · 6 PM · 12 AM` (`ext.time.noon`, 12-hour clocks only); `range(start, end)` writes a schedule window as "9:00 AM to 6:00 PM" (`ext.time.span`, plus `ext.time.nextDay` past midnight) for the popup and options |
-| Auto-start and schedule popup lines | A held session started by auto-start (`startup` or `autostart` origin) with no end: caption `tool.timer.elapsedCaption` ("Elapsed"), meta `ext.popup.sinceMeta` ("Since 8:02 AM"), level help shown, no "Awake for" kicker. A scheduled session: `ext.schedule.until` plus a second line with its days (`ext.days.weekdays` "Weekdays" for Mon–Fri, otherwise the day list) |
-| `ext.schedules.intro` | The options schedule intro with a `{range}` the extension formats ("such as weekdays 9:00 AM to 6:00 PM"); replaced the web key `ext.schedules.help`, now removed from the locale files |
-| `IStorageAdapter` | Now exported from `@awaketab/core` (docs/04 §16) |
+| `IStorageAdapter` | Exported from `@awaketab/core` (docs/04 §16) |
 
 **Build and test**
 
 | Identifier | Decision |
 |---|---|
-| `AT_EXT_TEST` · `__AT_TEST__` | `AT_EXT_TEST=1` builds the Playwright flavour into `apps/extension/.output-test/` with `chrome.power` replaced by a recorder (`src/test-hooks.ts`, `chrome.storage.session['at.test.power']`); `chrome.storage.session['at.test.deny'] = true` makes requests throw like a policy block (`POWER_DENY_KEY`, B9) |
+| `AT_EXT_TEST` · `__AT_TEST__` | `AT_EXT_TEST=1` builds the Playwright flavour into `apps/extension/.output-test/` with `chrome.power` replaced by a recorder (`src/test-hooks.ts`, `chrome.storage.session['at.test.power']`); `chrome.storage.session['at.test.deny'] = true` makes requests throw like a policy block |
 | `AT_EXT_OUT` | Alternate WXT output directory (reproducibility check) |
-| `virtual:at-catalog/<locale>` · `virtual:at-catalogs-bg` · `virtual:at-tokens.css` | Build-time modules generated from `apps/web/src/i18n/*.json` (+ `apps/extension/locales/<locale>.json`, B9) and `apps/web/src/styles/tokens.css` (`apps/extension/scripts/i18n.mjs`) |
-| `apps/extension/locales/<locale>.json` (B9) | The extension's own copy (Clear Night popup states, options help, welcome page): `ext.*` keys only, never a web key, same keys and placeholders in all 8 locales (unit test). Merged under the web keys; move them to `apps/web/src/i18n` when the web catalog is next edited |
-| `apps/extension/public/fonts/` (B9, D-R26) | `geist-latin-wght-normal.woff2`, `geist-mono-latin-wght-normal.woff2`, `OFL-Geist.txt` (copied from `apps/web/public/fonts`); `@font-face` + metric fallbacks in `src/styles/base.css`; no remote font request |
-| `--ext-*` (B9) | Extension-local CSS values tokens.css has no name for: `--ext-lift`, `--ext-lift-end` (ground radial lift), `--ext-halo`, `--ext-shadow`, `--ext-float`, `--ext-ease`, `--ext-lamp-{soft,line,tag,faint,glow}` (lamp at 14 / 45 / 12 / 8 / 55 %). Never a replacement for an `--at-*` token |
-| Options page type and layout | `options.css` names the board's settings-row text once: `--at-type-ext-row-label` (600 16/normal), `--at-type-ext-row-help` (400 14/normal), `--at-type-ext-field` (600 13/normal) and `--at-type-ext-lead` (400 15/20), used through `.op-tight` where the ExtOptions board sets no line height. `.op-main` is the `op-main` inline-size container; the schedule and site lists, the site form, the licence row and the seven-length bar switch at a 600 px container width (DESIGN.md §12.2), and the welcome page uses 600 / 1024 px viewport queries (no 720) |
-| `.at-link-underline` | `base.css`: the underlined text link the boards draw for "Privacy policy" and "What's new" |
-| Scripts | `pnpm -F extension zip` → `.output/awaketab-chrome-<version>.zip` · `zip:check` · `store:assets` · `build:test`; root `pnpm test:e2e:ext` |
+| `virtual:at-catalog/<locale>` · `virtual:at-catalogs-bg` | Build-time modules from `apps/extension/locales/<locale>.json` (`scripts/i18n.mjs`); the worker gets the `ext.pill.*` keys |
+| `apps/extension/locales/<locale>.json` | The only extension catalog: `ext.*` keys, same keys and placeholders in all 8 locales (unit test), including the manifest's `ext.name` "AwakeTab — Keep your screen awake", `ext.description` and `ext.command.toggle` |
+| Pages | React 19: `entrypoints/popup/main.tsx`, `entrypoints/options/main.tsx`; the popup draws the site's own `Face` (`apps/site/components/face/face.tsx`), with `next/font/google` aliased to `src/next-font.ts`; radix-ui ToggleGroup and Switch, motion for the sliding chip thumb |
+| Fonts | Inter, Bricolage Grotesque (`@fontsource-variable`), IBM Plex Serif 300 (`@fontsource`), Geist Mono and Archivo (`public/fonts`, OFL); no remote font request |
+| Tokens | `src/styles/tokens.css`: Glance `--at-*` colours for dark (default), light and OLED, `--at-type-*` font shorthands, `--at-r-*` radii, `--at-s-*` spacing; `data-theme` is set from `settings.theme` (Auto follows the system live) |
+| Icons and store images | `public/icons/extension-16/32/48/128.png` and `store/images/*` are the Glance marketing kit files, used as-is; nothing in the package renders them |
+| Scripts | `pnpm -F extension zip` → `.output/awaketab-chrome-<version>.zip` · `zip:check` · `build:test`; root `pnpm test:e2e:ext` |
 | `support-matrix.json` → `extension` | `{ minimumChromeVersion, browsers, unsupported, notes }` — the manifest's `minimum_chrome_version` and `/extension` read it |
 
 **Web**
@@ -529,7 +528,7 @@ Accepted on 2026-09-26 with the M8 implementation; confirmed by owner decision D
 
 | Identifier | Decision |
 |---|---|
-| `protocol.ts` | The page ↔ widget contract shared by the loader and the iframe app: allow-lists `EMBED_MODES` (`cook` `standard` `clock` `minimal`) · `EMBED_THEMES` · `EMBED_SIZES` · `EMBED_PRESETS` (`p15`…`pinf`, `until`) · `EMBED_LOCALES`; `EMBED_BOX` (compact 320 × 104 radius 16 — O-58, B8; full 100 % × 240 radius 28); `EMBED_NARROW` (`compact: [300, 116]`, `full: [600, 420]`) and `reservedHeight(opts, width)` (the taller box for a compact frame under 300 px, or a full cook frame under 600 px); `EMBED_MIN_HEIGHT` 64 / `EMBED_MAX_HEIGHT` 640 (resize clamp); `EMBED_MAX_MS` 7 days (= `CUSTOM_MAX_MS`); `EMBED_PATH` `/embed/cook`; `EMBED_VERSION` `'1'` (sent in `awaketab:ready`); the O-47 credit: `EMBED_CREDIT_URL` `https://awaketab.com/?ref=embed&source=embed`, `EMBED_CREDIT_CLASS` `awaketab-credit`, `EMBED_CREDIT_STYLE` / `EMBED_CREDIT_LINK_STYLE` (inline styles, shared by the loader and the snippet) |
+| `protocol.ts` | The page ↔ widget contract shared by the loader and the iframe app: allow-lists `EMBED_MODES` (`cook` `standard` `clock` `minimal`) · `EMBED_THEMES` · `EMBED_SIZES` · `EMBED_PRESETS` (`p15`…`pinf`, `until`) · `EMBED_LOCALES`; `EMBED_BOX` (compact 320 × 104 radius 18 — the Glance row radius; full 100 % × 240 radius 28); `EMBED_NARROW` (`compact: [300, 116]`, `full: [600, 420]`) and `reservedHeight(opts, width)` (the taller box for a compact frame under 300 px, or a full cook frame under 600 px); `EMBED_MIN_HEIGHT` 64 / `EMBED_MAX_HEIGHT` 640 (resize clamp); `EMBED_MAX_MS` 7 days (= `CUSTOM_MAX_MS`); `EMBED_PATH` `/embed/cook`; `EMBED_VERSION` `'1'` (sent in `awaketab:ready`); the O-47 credit: `EMBED_CREDIT_URL` `https://awaketab.com/?ref=embed&source=embed`, `EMBED_CREDIT_CLASS` `awaketab-credit`, `EMBED_CREDIT_STYLE` / `EMBED_CREDIT_LINK_STYLE` (inline styles, shared by the loader and the snippet) |
 | Loader attributes | `data-mode` `data-theme` `data-lang` (else the host page's `<html lang>`, BCP 47 → one of the 8 locales) `data-size` `data-preset`, plus `data-until="HH:MM"` with `data-preset="until"`. `data-license` from docs/11 §1 is not read: licensing is decided by the verified domain, and a key never travels in a URL |
 | Message shape | `{ type: 'awaketab:<name>', ...payload }` for all six messages of docs/11 §3; anything else is dropped on both sides |
 | Origin checks | Loader: accepts a message only when `event.source` is an iframe it created **and** `event.origin` is the loader's own origin (derived from the `<script src>`, so preview deployments work); posts with that origin as `targetOrigin`. Widget: accepts only from `window.parent`, only when `event.origin` equals the verified parent origin (`location.ancestorOrigins[0]`, else the referrer — the loader sets `referrerpolicy="strict-origin"`) **and** that hostname equals the declared `host=` param when one is present; posts to that exact origin, never `*` |
@@ -951,6 +950,19 @@ Accepted on 2026-10-30. Spec: `docs/redesign/volt/HANDOFF.md` §7 (Volt, 31 Oct 
 | Fonts | `public/fonts/ibm-plex-serif-latin-300-normal.woff2`, `ibm-plex-serif-latin-300-italic.woff2` (Luxe numerals, Words; `OFL-IBMPlexSerif.txt`) and `dotgothic16-latin-400-normal.woff2` (LED; `OFL-DotGothic16.txt`), copied from `@fontsource`, declared in `faces.css` with `font-display: swap`. Nixie One and DSEG7 are removed |
 | `<html data-face>` | `boot.js` writes the saved id when it is not `ring`; `stage.ts` corrects or clears it once the Face module loads |
 | i18n keys | `face.name.<id>` (33), `face.blurb.<id>` (33, build time only, excluded from the island catalog), `face.t.*` (the words drawn on the faces, fed to `setFaceText`); `face.` joins `ISLAND_PREFIXES` |
+
+### Glance clock faces (31 Oct 2026)
+
+Accepted on 2026-10-31. Spec: `docs/redesign/glance/BRIEF.md` §6 and the handoff's `prototype/Face.dc.html` (v3.1) and faces board. Replaces the two face sections above wherever they disagree.
+
+| Identifier | Decision |
+|---|---|
+| Face ids | `FACE_IDS` in `packages/core/src/types.ts` and `apps/site/components/face/model.ts` (the same 46, gallery order): `ring` · `bold` · `horizon` · `tide` · `flip` · `rolling` · `analog` · `luxe` · `rings` · `words` · `nixie` · `lcd` · `dive` · `chrono` · `gauge` · `type` · `bars` · `timeline` · `pilot` · `dual` · `radar` · `dots` · `hourglass` · `battery` · `stack` · `board` · `orbit` · `disc` · `clocks` · `wordgrid` · `tape` · `moon` · `aurora` · `glass` · `neon` · `liquid` · `eclipse` · `skeleton` · `bauhaus` · `poster` · `eink` · `waveform` · `blob` · `hud` · `constellation` · `halo`; default `ring` |
+| Retired | `led`, `pulse`, `terminal`. `migrateFace` (core storage) and `toFaceId` / `RETIRED_FACES` (site) read `led` → `lcd`, `terminal` → `lcd`, `pulse` → `waveform`, `matrix` → `lcd`, `word` → `words`, unknown → `ring` |
+| Collections | `FACE_COLLECTIONS`: `featured` (18), `digital` (15), `analog` (14), `ambient` (17), `all` (46); `FACES[i].kind` and `FACES[i].featured` |
+| Face API | `<Face face theme state remain total nowSec size lamp? bare? framed? indef? motion? lblTop? lblEnd? fmt? className?>`; `FACES`, `FACE_IDS`, `FACE_COLLECTIONS`, `faceName`, `faceKind`, `loadFace`, `preloadFaces`, `isFaceId`, `toFaceId`, `FaceGrid` |
+| Root markup | `.af[role="timer"][aria-label]` > `.af-a[aria-hidden]` (the 360 × 315 artboard plus caption, `transform: scale(size / 360)`); the box is `size × round(size × 0.875)` when bare, square with the caption or `framed`; classes `af-live`, `af-still`, `af-compact` (size < 200: `.af-l` text hidden), `af-thumb` (size ≤ 64: `.af-d` detail hidden) |
+| Colour | The face file's palette per theme (`FACE_PALETTE`), not page tokens; `--fl` (lamp or Face studio accent) and `--fa` (state colour) on the root |
 
 ### 13.25 Colour themes, lamps, patterns, presets and Pro previews
 

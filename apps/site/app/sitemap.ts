@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { alternatesFor, articlePath, articles, changelog, isIndexable } from '@/lib/content';
 import { CONTENT_KINDS, PRESET_ROUTES, ROUTES, SITE } from '@/lib/routes';
+import { PRO_ENABLED } from '@/lib/features';
 
 // English site pages, then every indexable article (English and reviewed translations) with the same reciprocal
 // alternates its HTML emits. Locale homes join once their translation is reviewed.
@@ -15,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ROUTES.privacy,
     ROUTES.terms,
     ROUTES.changelog,
-    ROUTES.pro,
+    ...(PRO_ENABLED ? [ROUTES.pro] : []),
     ROUTES.embed,
     ROUTES.kiosk,
     ROUTES.library,

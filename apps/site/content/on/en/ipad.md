@@ -1,6 +1,6 @@
 ---
 title: "Keep an iPad display awake — AwakeTab"
-description: "Safari on iPadOS 16.4 or later keeps an iPad display on from a visible tab after one tap. Low Power Mode sets Auto-Lock to 30 seconds."
+description: "Safari on iPadOS 16.4 or later keeps an iPad display on from a visible tab after one tap. Low Power Mode still sets Auto-Lock to 30 seconds, though."
 h1: "Keep an iPad display awake"
 crumb: "iPad in Safari"
 intent: "keep ipad screen on"

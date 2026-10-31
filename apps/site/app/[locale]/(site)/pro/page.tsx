@@ -3,16 +3,16 @@ import { getTranslations } from 'next-intl/server';
 import { ProPage } from '@/components/pro/pro-page';
 import { JsonLd } from '@/components/site/json-ld';
 import { ROUTES, SITE } from '@/lib/routes';
-import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
+import { articleSchema, englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.pro' });
   const ts = await getTranslations({ locale: 'en', namespace: 'site.pro' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor(ts('h1')),
     description: t('description'),
     path: ROUTES.pro,
-    og: { kicker: ts('og.kicker'), title: ts('og.title'), sub: ts('og.sub'), scene: 'success', tone: 'dark' },
+    og: { image: 'og-04', alt: ts('ogAlt') },
   });
 }
 

@@ -1,6 +1,6 @@
 import { type ReactNode, useRef } from 'react';
 import { cn } from 'cn';
-import { CASE, PLATE } from './art';
+import { CASE, plate } from './art';
 import { L, lmin, type TStyle } from './kit';
 import type { TFaceId, TFaceModel, TFaceState } from './model';
 import { useFaceMotion } from './motion';
@@ -26,7 +26,6 @@ const CASELESS: ReadonlySet<TFaceId> = new Set<TFaceId>([
   'horizon',
   'tide',
   'lcd',
-  'led',
   'board',
   'wordgrid',
   'clocks',
@@ -39,8 +38,6 @@ const CASELESS: ReadonlySet<TFaceId> = new Set<TFaceId>([
   'bauhaus',
   'poster',
   'eink',
-  'terminal',
-  'pulse',
   'blob',
   'hud',
   'constellation',
@@ -100,7 +97,8 @@ function StateIcon({ state, c }: { state: TFaceState; c: string }) {
   );
 }
 
-// The face's root: the 360 × 360 artboard scaled to size, the dial plate, the drawing and the status caption.
+// The face's root: the 360 × 315 artboard scaled to size with one transform, the dial plate, the drawing and, unless
+// bare, the status caption below it.
 export function FaceFrame({
   m,
   bare,
@@ -120,7 +118,8 @@ export function FaceFrame({
   useFaceMotion(ref, m.live && drawn, `${m.face}|${m.live}`);
   const root: TStyle = {
     width: m.size,
-    height: m.size,
+    height: m.boxH,
+    color: m.t.ink,
     '--lmin': `${m.LMIN.toFixed(2)}px`,
     '--fl': m.lampValue,
     '--fa': m.accentValue,
@@ -128,7 +127,15 @@ export function FaceFrame({
   return (
     <div
       ref={ref}
-      className={cn('af', m.theme, m.live && 'af-live', m.still && 'af-still', m.size < 200 && 'af-compact', className)}
+      className={cn(
+        'af',
+        m.theme,
+        m.live && 'af-live',
+        m.still && 'af-still',
+        m.compact && 'af-compact',
+        m.thumb && 'af-thumb',
+        className,
+      )}
       role="timer"
       aria-label={m.aria}
       data-face={m.face}
@@ -158,7 +165,7 @@ export function FaceFrame({
               width: 292,
               height: 292,
               borderRadius: '50%',
-              ...PLATE[m.theme],
+              ...plate(m.theme, m.accent),
             }}
           />
         )}

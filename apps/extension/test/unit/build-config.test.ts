@@ -2,17 +2,7 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { ICON_SIZES, iconPng } from '../../scripts/icons.mjs';
-import { inlineIcons } from '../../scripts/svg-icons.mjs';
-import {
-  BG_KEYS,
-  bgCatalogs,
-  LOCALES,
-  localeMessages,
-  pageCatalog,
-  readCatalog,
-  readExtCatalog,
-} from '../../scripts/i18n.mjs';
+import { bgCatalogs, LOCALES, localeMessages, pageCatalog, readCatalog } from '../../scripts/i18n.mjs';
 import config from '../../wxt.config';
 
 const EXT = path.resolve('apps/extension');
@@ -22,23 +12,34 @@ async function sources(dir: string): Promise<string[]> {
   for (const entry of await readdir(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) out.push(...(await sources(full)));
-    else if (/\.(ts|html)$/u.test(entry.name) && !entry.name.endsWith('.d.ts')) out.push(full);
+    else if (/\.(ts|tsx|html)$/u.test(entry.name) && !entry.name.endsWith('.d.ts')) out.push(full);
   }
   return out;
 }
 
-describe('manifest (docs/10 §2, FR-EXT-03)', () => {
+describe('manifest (the store listing permissions)', () => {
   const manifest = config.manifest as Record<string, unknown>;
 
-  it('declares only power, storage and alarms, optional notifications, and no host permissions', () => {
-    expect(manifest.permissions).toEqual(['power', 'storage', 'alarms']);
-    expect(manifest.optional_permissions).toEqual(['notifications']);
-    expect(manifest.host_permissions).toEqual([]);
+  it('asks for exactly power, alarms, storage, offscreen and activeTab, and sites one at a time', () => {
+    expect(manifest.permissions).toEqual(['power', 'alarms', 'storage', 'offscreen', 'activeTab']);
     expect(manifest.optional_host_permissions).toEqual(['https://*/*']);
+    expect(manifest).not.toHaveProperty('optional_permissions');
+    expect(manifest).not.toHaveProperty('host_permissions');
     expect(manifest).not.toHaveProperty('content_scripts');
     expect(manifest).not.toHaveProperty('externally_connectable');
     expect(manifest).not.toHaveProperty('content_security_policy');
     expect(manifest.manifest_version ?? config.manifestVersion).toBe(3);
+  });
+
+  it('uses the dark-tile toolbar icons from the marketing kit', async () => {
+    const icons = { 16: 'icons/extension-16.png', 32: 'icons/extension-32.png' };
+    expect((manifest.action as { default_icon: unknown }).default_icon).toEqual(icons);
+    expect(manifest.icons).toEqual({ ...icons, 48: 'icons/extension-48.png', 128: 'icons/extension-128.png' });
+    for (const size of [16, 32, 48, 128]) {
+      const png = await readFile(path.join(EXT, `public/icons/extension-${String(size)}.png`));
+      expect(png.subarray(1, 4).toString()).toBe('PNG');
+      expect(png.readUInt32BE(16)).toBe(size);
+    }
   });
 
   it('binds Alt+Shift+A to toggle and localises name, description and command', () => {
@@ -57,59 +58,40 @@ describe('manifest (docs/10 §2, FR-EXT-03)', () => {
   });
 });
 
-describe('i18n reuse (no duplicated English strings)', () => {
-  it("every key the extension uses exists in the catalogs (shared + the extension's own) of all eight locales", async () => {
+describe('i18n', () => {
+  it('every key the extension uses exists in all eight catalogs', async () => {
     const used = new Set<string>();
-    for (const file of await sources(path.join(EXT, 'entrypoints')).then(async (a) => [
-      ...a,
-      ...(await sources(path.join(EXT, 'src'))),
-    ])) {
+    for (const file of [...(await sources(path.join(EXT, 'entrypoints'))), ...(await sources(path.join(EXT, 'src')))]) {
       const text = await readFile(file, 'utf8');
-      for (const m of text.matchAll(/data-i18n(?:-aria)?="([a-z][\w.-]+)"/gu)) used.add(m[1] ?? '');
-      for (const m of text.matchAll(/\bt\(\s*'([a-z][\w.-]+)'/gu)) used.add(m[1] ?? '');
+      for (const m of text.matchAll(/\bt\(\s*'(ext\.[\w.-]+)'/gu)) used.add(m[1] ?? '');
+      for (const m of text.matchAll(/key: '(ext\.[\w.-]+)'/gu)) used.add(m[1] ?? '');
     }
-    expect(used.size).toBeGreaterThan(80);
+    expect(used.size).toBeGreaterThan(20);
     for (const locale of LOCALES) {
       const page = pageCatalog(locale);
-      const bg = bgCatalogs()[locale] ?? {};
-      const missing = [...used].filter((key) => !(key in page) && !(key in bg));
+      const missing = [...used].filter((key) => !(key in page));
       expect(missing, locale).toEqual([]);
     }
-    for (const locale of LOCALES)
-      for (const key of BG_KEYS) expect(readCatalog(locale), `${locale}:${key}`).toHaveProperty(key);
   });
 
-  it('the extension catalog only adds ext.* keys, never shadows a shared key, and every locale has the same keys and placeholders', () => {
-    const en = readExtCatalog('en');
-    const shared = readCatalog('en');
+  it('only ext.* keys, the same keys and placeholders in every locale, and nothing empty', () => {
+    const en = readCatalog('en');
     const placeholders = (v: string) => [...v.matchAll(/\{(\w+)/gu)].map((m) => m[1]).sort();
-    expect(Object.keys(en).length).toBeGreaterThan(100);
-    for (const key of Object.keys(en)) {
-      expect(key.startsWith('ext.'), key).toBe(true);
-      expect(shared, `${key} is a shared key`).not.toHaveProperty(key);
-    }
+    for (const key of Object.keys(en)) expect(key.startsWith('ext.'), key).toBe(true);
     for (const locale of LOCALES) {
-      const cat = readExtCatalog(locale);
+      const cat = readCatalog(locale);
       expect(Object.keys(cat).sort(), locale).toEqual(Object.keys(en).sort());
       for (const [key, value] of Object.entries(en)) {
         expect(placeholders(cat[key] ?? ''), `${locale}:${key}`).toEqual(placeholders(value));
         expect((cat[key] ?? '').trim(), `${locale}:${key}`).not.toBe('');
       }
+      expect(Object.keys(bgCatalogs()[locale] ?? {}).every((k) => k.startsWith('ext.pill.'))).toBe(true);
     }
   });
 
-  it('ships no English copy in its sources: no user-facing string literal of either catalog', async () => {
-    const english = [...Object.values(readCatalog('en')), ...Object.values(readExtCatalog('en'))].filter(
-      (v) => v.length > 12,
-    );
-    for (const file of await sources(EXT)) {
-      if (
-        file.includes('/test/') ||
-        file.includes('/e2e/') ||
-        file.includes('node_modules') ||
-        file.includes('.output')
-      )
-        continue;
+  it('ships no English copy in its sources: no user-facing string literal of the catalog', async () => {
+    const english = Object.values(readCatalog('en')).filter((v) => v.length > 12);
+    for (const file of [...(await sources(path.join(EXT, 'entrypoints'))), ...(await sources(path.join(EXT, 'src')))]) {
       const text = await readFile(file, 'utf8');
       for (const copy of english) {
         const literal = [`'${copy}'`, `"${copy}"`, `\`${copy}\``, `>${copy}<`].some((form) => text.includes(form));
@@ -118,7 +100,7 @@ describe('i18n reuse (no duplicated English strings)', () => {
     }
   });
 
-  it('writes _locales messages within Chrome limits for every locale', () => {
+  it('writes _locales messages within Chrome limits, with the store name in every locale', () => {
     const files = localeMessages();
     expect(files.map((f) => f.relativeDest)).toEqual([
       '_locales/en/messages.json',
@@ -132,85 +114,44 @@ describe('i18n reuse (no duplicated English strings)', () => {
     ]);
     for (const file of files) {
       const messages = JSON.parse(file.contents) as Record<string, { message: string }>;
-      // The store name is a product name, so it stays in English in every locale.
-      expect(messages.ext_name?.message).toBe('AwakeTab: Keep Screen Awake');
-      expect(messages.ext_name?.message.length).toBeLessThanOrEqual(75);
+      expect(messages.ext_name?.message).toBe('AwakeTab — Keep your screen awake');
       expect(messages.ext_description?.message.length).toBeLessThanOrEqual(132);
       expect(messages.ext_command_toggle?.message).toBeTruthy();
     }
-  });
-
-  it('carries its own --at-* tokens with no Tailwind layer', async () => {
-    const css = await readFile(path.join(EXT, 'src/styles/tokens.css'), 'utf8');
-    expect(css.startsWith(':root,\n[data-theme="light"]')).toBe(true);
-    expect(css).toContain('--at-accent: #117a3b;');
-    expect(css).toContain('--at-primary: #6633f5;');
-    expect(css).toContain('--at-primary: #9f7bff;');
-    expect(css).toContain('--at-ground: #f5f5fa;');
-    expect(css).toContain('[data-theme="oled"]');
-    expect(css).not.toMatch(/@import|@theme|@apply|@layer/u);
+    const en = JSON.parse(files[0]?.contents ?? '{}') as Record<string, { message: string }>;
+    expect(en.ext_description?.message).toBe(
+      'Keep your screen on with one click. A calm clock shows the time left. 46 faces, all free — no account, no tracking.',
+    );
   });
 });
 
-describe('fonts (DESIGN.md §3, D-R26)', () => {
-  it('bundles Archivo, Geist and Geist Mono with their OFL licences and requests no remote font', async () => {
+describe('Glance tokens and fonts', () => {
+  it('carries the Glance colours in dark, light and OLED with no Tailwind layer', async () => {
+    const css = await readFile(path.join(EXT, 'src/styles/tokens.css'), 'utf8');
+    expect(css.startsWith(':root,\n[data-theme="dark"]')).toBe(true);
+    for (const token of ['--at-volt: #3df58e;', '--at-violet: #9f7bff;', '--at-text-2: #a6afc2;', '--at-red: #ff6b81;'])
+      expect(css).toContain(token);
+    expect(css).toContain('[data-theme="light"]');
+    expect(css).toContain('--at-violet: #6633f5;');
+    expect(css).toContain('[data-theme="oled"]');
+    expect(css).not.toMatch(/@import|@theme|@apply|@layer/u);
+  });
+
+  it('self-hosts every font and requests none from the network', async () => {
     const files = await readdir(path.join(EXT, 'public/fonts'));
     expect(files.sort()).toEqual([
       'OFL-Archivo.txt',
       'OFL-Geist.txt',
       'archivo-latin-wdth-wght-normal.woff2',
-      'geist-latin-wght-normal.woff2',
       'geist-mono-latin-wght-normal.woff2',
     ]);
-    const base = await readFile(path.join(EXT, 'src/styles/base.css'), 'utf8');
-    expect(base).toContain('url("/fonts/geist-latin-wght-normal.woff2")');
-    expect(base).toContain('url("/fonts/archivo-latin-wdth-wght-normal.woff2")');
-    expect(base).toContain('font-family: "Geist Fallback"');
+    const ui = await readFile(path.join(EXT, 'src/ui.tsx'), 'utf8');
+    expect(ui).toContain("import '@fontsource-variable/inter/opsz.css';");
+    expect(ui).toContain("import '@fontsource-variable/bricolage-grotesque/opsz.css';");
     for (const file of await sources(path.join(EXT, 'entrypoints'))) {
       expect(await readFile(file, 'utf8'), file).not.toMatch(/fonts\.(googleapis|gstatic)\.com/u);
     }
+    const base = await readFile(path.join(EXT, 'src/styles/base.css'), 'utf8');
     expect(base).not.toMatch(/https?:\/\//u);
-  });
-});
-
-describe('icons', () => {
-  it('renders the shared store and toolbar mark byte-identically every time', () => {
-    for (const size of ICON_SIZES) {
-      const a = iconPng(size);
-      const b = iconPng(size);
-      expect(a.equals(b)).toBe(true);
-      expect(a.readUInt32BE(16)).toBe(size);
-      expect(a.subarray(1, 4).toString()).toBe('PNG');
-    }
-  });
-});
-
-describe('inline icons', () => {
-  it('inlines Lucide icons with the size-matched stroke and keeps their viewBox', () => {
-    const html = inlineIcons('<svg data-icon="settings" width="20" height="20" class="at-tone-bad" data-x></svg>');
-    expect(html).toMatch(/^<svg class="at-icon at-tone-bad" width="20" height="20" viewBox="0 0 24 24" fill="none"/u);
-    expect(html).toContain('stroke="currentColor" stroke-width="1.75"');
-    expect(html).toContain(' data-x aria-hidden="true" focusable="false">');
-    expect(html).not.toContain('<!--');
-  });
-
-  it('inlines full-colour brand logos unaltered', () => {
-    const html = inlineIcons('<svg data-logo="chrome" width="16" height="16"></svg>');
-    expect(html).toContain('viewBox="0 0 256 256"');
-    expect(html).toContain('fill="#1a73e8"');
-    expect(html).not.toContain('currentColor');
-  });
-
-  it('fails the build on an unknown name or a missing size', () => {
-    expect(() => inlineIcons('<svg data-icon="no-such-icon" width="16" height="16"></svg>')).toThrow();
-    expect(() => inlineIcons('<svg data-logo="no-such-logo" width="16" height="16"></svg>')).toThrow();
-    expect(() => inlineIcons('<svg data-icon="x" width="16"></svg>')).toThrow(/width and height/u);
-  });
-
-  it('leaves no placeholder in any extension page', async () => {
-    for (const page of ['popup', 'options', 'welcome']) {
-      const html = inlineIcons(await readFile(path.join(EXT, `entrypoints/${page}/index.html`), 'utf8'));
-      expect(html, page).not.toMatch(/data-(?:icon|logo)=/u);
-    }
   });
 });

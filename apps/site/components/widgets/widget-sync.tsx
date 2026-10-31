@@ -2,8 +2,9 @@
 
 import { useEffect } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import { toFaceId } from '@/components/face';
 import { useFaceTheme, useWindowNow } from '@/lib/surfaces/hooks';
-import { EXTEND_SEC, surfaceView } from '@/lib/surfaces/session';
+import { EXTEND_SEC, shortDuration, surfaceView } from '@/lib/surfaces/session';
 import {
   postWidgetData,
   presetSeconds,
@@ -16,7 +17,9 @@ import {
 import { useToolSettings } from '@/lib/tool/settings';
 import { useWake, wake } from '@/lib/wake';
 import { useSurfaceLine } from '@/components/pip/mini-clock';
-import { WidgetPresets, WidgetScreen, WidgetSmall, WidgetWide } from './widget-tiles';
+import { WidgetLarge, WidgetQuickStart, WidgetScreen, WidgetSmall } from './widget-tiles';
+
+const QUICK = WIDGET_PRESETS[0];
 
 function runWidgetAction(a: TWidgetAction): void {
   if (a.action === 'extend') wake.extend(EXTEND_SEC);
@@ -42,8 +45,14 @@ export function WidgetSync() {
   const json = JSON.stringify(
     widgetData(view, {
       status: t(`status.${view.label}`),
+      pill:
+        view.awake && !view.indef
+          ? t('widgets.left', { dur: shortDuration(view.remain, t) })
+          : t(`status.${view.label}`),
       line: line(view),
-      label: label || t('widgets.session'),
+      ends: view.awake && view.until ? t('widgets.ends', { time: view.until }) : line(view),
+      label: label || t('widgets.name'),
+      quick: t('widgets.quick'),
       extend: t('widgets.extend'),
       stop: t('widgets.stop'),
       presetsTitle: t('widgets.presets'),
@@ -72,21 +81,22 @@ export function WidgetSync() {
 // The three widgets on their home-screen frame, live from the engine, for previews and the dev board.
 export function LiveWidgets({ className }: { className?: string }) {
   const locale = useLocale();
-  const { h12, label } = useToolSettings();
+  const { h12, label, face } = useToolSettings();
   const snap = useWake();
   const theme = useFaceTheme();
   const view = surfaceView(snap, { locale, fmt: h12 ? 12 : 24 });
+  const tile = theme === 'light' ? 'dark' : theme;
   return (
     <WidgetScreen className={className}>
-      <WidgetSmall view={view} theme={theme === 'light' ? 'dark' : theme} />
-      <WidgetPresets onPreset={(preset) => runWidgetAction({ action: 'preset', preset })} />
-      <WidgetWide
+      <WidgetLarge
         view={view}
+        theme={tile}
+        face={toFaceId(face)}
         label={label}
         onExtend={() => wake.extend(EXTEND_SEC)}
-        onStop={() => wake.stop()}
-        onStart={() => wake.start()}
       />
+      <WidgetSmall view={view} theme={tile} face={toFaceId(face)} />
+      <WidgetQuickStart onStart={() => QUICK && runWidgetAction({ action: 'preset', preset: QUICK.preset })} />
     </WidgetScreen>
   );
 }

@@ -1,41 +1,7 @@
-// A shared setup link carries the length, the face and the chime only (handoff §11): /s/<face>-<minutes>-<chime|quiet>.
-const SETUP_FACES = [
-  'ring',
-  'bold',
-  'horizon',
-  'tide',
-  'flip',
-  'rolling',
-  'analog',
-  'luxe',
-  'rings',
-  'words',
-  'nixie',
-  'lcd',
-  'led',
-  'dive',
-  'chrono',
-  'gauge',
-  'type',
-  'bars',
-  'timeline',
-  'pilot',
-  'dual',
-  'radar',
-  'dots',
-  'hourglass',
-  'battery',
-  'stack',
-  'board',
-  'orbit',
-  'disc',
-  'clocks',
-  'wordgrid',
-  'tape',
-  'moon',
-] as const;
-type TSetupFace = (typeof SETUP_FACES)[number];
+import { isFaceId, RETIRED_FACES, toFaceId, type TFaceId } from '@/components/face';
 
+// A shared setup link carries the length, the face and the chime only (handoff §11): /s/<face>-<minutes>-<chime|quiet>,
+// for any of the 46 faces.
 // Lengths a link may carry, each with the tool's preset id (docs/00 §7 `preset=`); 0 means "until I stop".
 const SETUP_LENGTHS: Record<number, string> = {
   15: 'p15',
@@ -48,7 +14,7 @@ const SETUP_LENGTHS: Record<number, string> = {
 };
 
 export interface ISetup {
-  face: TSetupFace;
+  face: TFaceId;
   minutes: number;
   chime: boolean;
 }
@@ -56,10 +22,11 @@ export interface ISetup {
 export function parseSetup(code: string): ISetup | null {
   const m = /^([a-z]+)-(\d{1,3})-(chime|quiet)$/u.exec(code.trim().toLowerCase());
   if (!m) return null;
-  const face = m[1] as TSetupFace;
+  const id = m[1] ?? '';
   const minutes = Number(m[2]);
-  if (!SETUP_FACES.includes(face) || !(minutes in SETUP_LENGTHS)) return null;
-  return { face, minutes, chime: m[3] === 'chime' };
+  // Links shared before a face was retired open its closest face; an unknown face is a removed setup.
+  if (!(isFaceId(id) || id in RETIRED_FACES) || !(minutes in SETUP_LENGTHS)) return null;
+  return { face: toFaceId(id), minutes, chime: m[3] === 'chime' };
 }
 
 // The tool URL a setup opens: the home starts on its own, `autostart=0` lets the visitor change it first.

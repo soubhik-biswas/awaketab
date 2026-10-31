@@ -1,10 +1,10 @@
-import { LOCALES, isLocale, type TLocale } from '../../site/i18n/locales';
+import { isLocale, type TLocale } from '../../site/i18n/locales';
 
 export type TCatalog = Record<string, string>;
 export type TVars = Record<string, string | number>;
 export type TTranslate = (key: string, vars?: TVars) => string;
 
-export { LOCALES, type TLocale };
+export { type TLocale };
 
 const PLURAL = /\{(\w+), plural, one \{([^}]*)\} other \{([^}]*)\}\}/gu;
 const TOKEN = /\{(\w+)\}/gu;

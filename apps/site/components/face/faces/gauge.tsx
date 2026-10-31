@@ -1,5 +1,5 @@
 import { arc, f1, P } from '../geometry';
-import { big, DialLabel, EndLine, type IDrawProps, MONO, Svg } from '../kit';
+import { big, D, DialLabel, EndLine, type IDrawProps, MONO, Svg } from '../kit';
 
 const GX = 180;
 const GY = 175;
@@ -39,10 +39,10 @@ export default function Gauge({ m }: IDrawProps) {
           strokeLinecap="round"
           style={{ stroke: accent }}
         />
-        <path d={MINOR} strokeWidth="1.4" opacity=".55" style={{ stroke: t.ink2 }} />
+        <path className={D} d={MINOR} strokeWidth="1.4" opacity=".55" style={{ stroke: t.ink2 }} />
         <path d={MAJOR} strokeWidth="2.6" style={{ stroke: t.ink }} />
       </Svg>
-      {[0, 0.25, 0.5, 0.75, 1].map((q) => (
+      {[0.25, 0.5, 0.75].map((q) => (
         <DialLabel
           key={q}
           m={m}

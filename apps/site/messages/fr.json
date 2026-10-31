@@ -4,218 +4,32 @@
     "tagline": "L’onglet qui garde votre écran allumé."
   },
   "page": {
-    "home": {
-      "title": "Gardez votre écran allumé — AwakeTab",
-      "description": "Gardez votre écran allumé dans cet onglet grâce à l’API Wake Lock. État fiable, durées prédéfinies et heure de fin. Aucun compte.",
-      "h1": "Gardez votre écran allumé",
-      "what": {
-        "title": "Ce que fait AwakeTab"
-      },
-      "how": {
-        "title": "Comment ça marche"
-      },
-      "limits": {
-        "title": "Limites honnêtes"
-      },
-      "intro": "AwakeTab utilise l’API Wake Lock du navigateur tant que cet onglet est visible, et le statut n’affirme l’éveil qu’après confirmation du navigateur.",
-      "uses": {
-        "title": "What are you keeping awake?",
-        "lead": "Each one opens the tool already set for the job, with the length it needs.",
-        "all": "All {count} use cases",
-        "start": "Start · {length}",
-        "cooking": {
-          "_": "Cooking",
-          "body": "The recipe stays lit while your hands are floury, with kitchen timers beside it."
-        },
-        "reading": {
-          "_": "Reading",
-          "body": "A long article stays on screen while you read, with no tap to wake it."
-        },
-        "presentations": {
-          "_": "Presentations",
-          "body": "Set it to the end of your talk and keep it in a floating window beside the slides."
-        },
-        "dashboards": {
-          "_": "Dashboards",
-          "body": "A wall screen stays on all day, and a link can start the session as the page loads."
-        },
-        "videoCalls": {
-          "_": "Video calls",
-          "body": "The display stays on when the video pauses. Your chat status is left alone."
-        },
-        "downloads": {
-          "_": "Downloads",
-          "body": "The screen stays on through a long download, and a visible tab holds off idle sleep."
-        }
-      },
-      "final": {
-        "title": "One tap, and the screen stays on.",
-        "body": "The pill says {held} only after the browser confirms the lock. For a hidden tab or a minimised window, the extension keeps going.",
-        "start": "Keep this screen awake",
-        "extension": "Add extension",
-        "docs": "How it works, limits and FAQ in the docs"
-      },
-      "yours": {
-        "title": "Make it yours",
-        "lead": "Clock faces, colours, backgrounds, focus sounds and a notepad. Each one loads only when you pick it, and the status pill still tells you the truth.",
-        "compare": "Compare Free and Pro",
-        "faces": {
-          "title": "Twelve clock faces",
-          "tag": "All free",
-          "body": "Classic, retro and modern. Every face shows your session, follows your lamp colour and knows when the screen is paused. Swipe the clock or press C to switch.",
-          "list": "The twelve clock faces"
-        },
-        "looks": {
-          "title": "Themes, lamps and backgrounds",
-          "body": "Clear Night, Paper and Nord, four lamps, three backgrounds and three presets are free. Pro adds six themes, eight lamps, a colour of your own, five backgrounds and five presets.",
-          "themes": "Colour themes, each with a light and a dark version",
-          "lamps": "Lamp colours",
-          "patterns": "Backgrounds",
-          "try": "Previewing {name} · {time} left",
-          "tryNote": "Any Pro look can be tried for 5 minutes, as often as you like. Nothing is saved."
-        },
-        "sound": {
-          "title": "Sounds for focus",
-          "body": "Seven focus sounds made live in your browser, five end sounds, vibration and a quiet tick-tock, all free. Pro adds a mixer to layer them.",
-          "list": "Free focus sounds",
-          "mixer": "Mixer",
-          "honest": "Nothing plays until you ask, and sound never keeps the screen awake."
-        },
-        "notes": {
-          "title": "A notepad beside the clock",
-          "body": "Checklists, headings, export and voice typing. Notes stay in this browser and work offline. One note is free; Pro keeps as many as you like.",
-          "sample": {
-            "title": "Before the call",
-            "1": "Open the slides",
-            "2": "Share the agenda",
-            "3": "Ask about the launch date"
-          },
-          "listening": "Listening…"
-        },
-        "focus": {
-          "title": "Focus tools",
-          "body": "A Pomodoro with pause and skip, an intention under the clock, a breathing guide and a second time zone. With Pro the Pomodoro repeats on its own.",
-          "intention": "Writing the report",
-          "zone": "London",
-          "breathe": "Breathe in",
-          "cycles": "Focus block 2 of 4"
-        }
-      },
-      "ext": {
-        "kicker": "AwakeTab for Chrome",
-        "free": "Free",
-        "title": "Keep the screen awake with the tab out of sight",
-        "lead": "The extension asks the browser itself to keep the screen awake, so it keeps going behind other windows.",
-        "hidden": {
-          "title": "Tab hidden or window minimised",
-          "body": "It keeps going while the browser is running."
-        },
-        "system": {
-          "title": "Only the system, if you prefer",
-          "body": "System level keeps the computer awake and lets the screen dim or turn off."
-        },
-        "badge": {
-          "title": "Status in the toolbar",
-          "body": "The badge shows ON, SYS or the minutes left."
-        },
-        "shortcut": {
-          "title": "A shortcut from any tab",
-          "body": "{keys} starts or stops it without going back to the tab."
-        },
-        "cta": {
-          "get": "Get the extension",
-          "edge": "Add to Edge"
-        },
-        "note": "Works in {browsers}, version {version} or later. {others} have no power API for extensions.",
-        "more": "See everything the extension does",
-        "art": {
-          "tab": "Sales dashboard",
-          "tab2": "Inbox",
-          "started": "Started {time}"
-        }
-      },
-      "levels": {
-        "title": "Choose your level",
-        "lead": "Keeping a screen awake is free, in this tab and in the extension, and so are every clock face and focus sound. Pro adds more looks, a sound mixer, more notes and a longer memory.",
-        "free": "Free",
-        "web": {
-          "name": "Web tab",
-          "per": "nothing to install",
-          "sub": "Runs right here, in this tab.",
-          "g1": "Keeps the screen on while this tab is visible",
-          "g2": "15 min to 4 h, until a time, or a custom length up to 7 days",
-          "g3": "Phones, tablets and computers, and offline after the first visit",
-          "g4": "A status pill that says awake only once the browser confirms it",
-          "g5": "Twelve clock faces, three colour themes, seven focus sounds, a notepad and a Pomodoro",
-          "cta": "Start now"
-        },
-        "ext": {
-          "name": "Extension",
-          "tag": "Best on a computer",
-          "per": "one install",
-          "sub": "{browsers} {version} or later, on a computer.",
-          "g1": "Keeps going with the tab hidden or the window minimised",
-          "g2": "Screen or System: keep only the computer awake and let the screen sleep",
-          "g3": "A toolbar badge with ON, SYS or the minutes left",
-          "g4": "{keys} from any tab",
-          "cta": "Add extension"
-        },
-        "pro": {
-          "name": "Pro",
-          "per": "a year, or {once} once",
-          "sub": "5 devices, no account, 14-day refund.",
-          "g1": "Your own message, up to 80 characters, on the awake screen",
-          "g2": "Six more themes, eight more lamps, your own colour, five more backgrounds and five presets",
-          "g3": "12 weeks of history and a CSV export",
-          "g4": "Schedules and auto-start in the extension",
-          "g5": "A sound mixer, as many notes as you like and a Pomodoro that repeats",
-          "g6": "Try the looks, the mixer, more notes and the repeating Pomodoro for 5 minutes first",
-          "cta": "See Pro"
-        }
-      }
-    },
-    "preset": {
-      "title": "Gardez l’écran allumé pendant {label} — AwakeTab",
-      "description": "Démarrez une session AwakeTab de {label}. La pastille indique que l’écran est allumé uniquement lorsque le Wake Lock est réellement actif."
-    },
-    "until": {
-      "title": "Gardez l’écran allumé jusqu’à {time} — AwakeTab"
-    },
+    "preset": {},
+    "until": {},
     "pip": {
       "title": "Minuteur flottant AwakeTab"
     },
     "404": {
-      "title": "Page introuvable — AwakeTab",
       "h1": "Cette page n’existe pas, mais l’outil est disponible."
     },
     "hub": {
       "for": {
-        "title": "Garder l’écran allumé pour chaque tâche — AwakeTab",
-        "description": "Choisissez un guide AwakeTab pour cuisiner, télécharger, présenter et d’autres tâches. L’écran ne reste éveillé que si l’onglet actif détient un wake lock.",
         "h1": "Garder l’écran allumé pour une tâche"
       },
       "on": {
-        "title": "Garder l’écran allumé sur votre appareil — AwakeTab",
-        "description": "Instructions honnêtes AwakeTab pour navigateurs et systèmes, avec support natif, limites batterie et repli.",
         "h1": "Utiliser AwakeTab sur votre appareil"
       },
       "vs": {
-        "title": "Alternatives à AwakeTab comparées — AwakeTab",
-        "description": "Comparez AwakeTab aux apps caféine selon le mécanisme, la vie privée, le support et les limites honnêtes.",
         "h1": "Comparer les outils d’éveil d’écran",
         "pick": "Pick it when",
         "instead": "{name} instead when",
         "more": "Read the comparison"
       },
       "guides": {
-        "title": "Guides de dépannage wake lock — AwakeTab",
-        "description": "Corrigez l’économiseur et le verrouillage auto sans promettre d’onglet caché ni de capot fermé.",
         "h1": "Dépannage des wake locks",
         "more": "Read the fix"
       },
       "learn": {
-        "title": "Comprendre les wake locks — AwakeTab",
-        "description": "API Screen Wake Lock, support, confidentialité, tests et limites d’une page web.",
         "h1": "Apprendre les wake locks"
       },
       "start": "Start",
@@ -223,538 +37,27 @@
       "native": "Native wake lock"
     },
     "about": {
-      "title": "À propos d’AwakeTab et des tests — AwakeTab",
-      "description": "Rencontrez l’auteur indépendant d’AwakeTab et voyez comment le wake lock est testé sans exagérer.",
       "h1": "À propos d’AwakeTab"
     },
     "privacy": {
-      "title": "Confidentialité — AwakeTab",
-      "description": "AwakeTab stocke réglages et session en local, sans cookies ni empreinte, et n’envoie une télémétrie que si vous l’activez.",
       "h1": "Confidentialité"
     },
     "terms": {
-      "title": "Conditions — AwakeTab",
-      "description": "Conditions claires pour AwakeTab : limites du service, composants open source et usage raisonnable de la batterie.",
       "h1": "Conditions"
     },
     "changelog": {
-      "title": "Journal des changements — AwakeTab",
-      "description": "Suivez les versions d’AwakeTab pour le site, la bibliothèque, l’extension et les widgets.",
       "h1": "Journal des changements"
     },
-    "pro": {
-      "title": "AwakeTab Pro plans and pricing — AwakeTab",
-      "description": "AwakeTab Pro adds colour themes, a sound mixer, more notes, a repeating Pomodoro and 12 weeks of stats. Yearly or once, 5 devices, 14-day refund.",
-      "h1": "AwakeTab Pro",
-      "devices": "5 devices",
-      "lead": "Pro is optional. The awake screen stays honest and ad-free either way. Polar handles checkout; AwakeTab never stores a password.",
-      "tax": "Charged in USD; taxes added at checkout where applicable.",
-      "refund": {
-        "_": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key.",
-        "lead": "14-day refund, no questions asked.",
-        "rest": "Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key."
-      },
-      "activate": {
-        "title": "Activate AwakeTab Pro — AwakeTab",
-        "description": "Paste the licence key from your Polar receipt to activate AwakeTab Pro on this device. Checkout returns here automatically when Polar finishes.",
-        "h1": "Activate Pro",
-        "lead": "Your key is in the email from Polar and on the receipt page. This device counts as one of five activations.",
-        "submit": "Activate on this device",
-        "errors": "If activation fails",
-        "ext": {
-          "_": "Copy this key and paste it in the AwakeTab for Chrome options page. There is no automatic hand-off.",
-          "title": "Your licence key",
-          "lead": "Enter your key here to copy it into AwakeTab for Chrome. This browser is not activated: the extension activates itself, so it uses one of your five activations, not two.",
-          "submit": "Show key for the extension",
-          "note": "This browser stays unactivated, so the extension uses one of your five activations, not two."
-        },
-        "back": "AwakeTab Pro",
-        "placeholder": "Paste the key from your receipt",
-        "hint": {
-          "_": "Polar sends the key by email right after checkout.",
-          "ext": "Nothing is activated in this browser."
-        },
-        "checking": {
-          "_": "Checking your key…",
-          "status": "Checking your key with Polar. This usually takes a second or two."
-        },
-        "retry": "Retry",
-        "manage": "Manage devices",
-        "plans": "No key yet? See the Pro plans",
-        "err": {
-          "invalid_key": "Activation didn't work",
-          "activation_limit": "All five devices are in use",
-          "revoked": "This key is no longer active",
-          "polar_unavailable": "Not ready yet",
-          "offline": "No connection",
-          "bad_token": "Activate this device again"
-        },
-        "ok": {
-          "key": "Key ending {tail} · this device uses one of your five activations.",
-          "unlocked": "Unlocked here",
-          "u1": "More colour themes, lamps, backgrounds and presets",
-          "u2": "Message mode on the awake screen",
-          "u3": "12 weeks of stats and CSV export",
-          "u4": "A taller floating window",
-          "u5": "Schedules and auto-start in AwakeTab for Chrome",
-          "u6": "No ads on the guides",
-          "u7": "A sound mixer, more notes and a Pomodoro that repeats",
-          "open": "Open AwakeTab"
-        },
-        "reset": "Use a different key",
-        "copy": "Copy",
-        "copied": "Copied"
-      },
-      "manage": {
-        "title": "Manage Pro devices — AwakeTab",
-        "description": "See which devices hold your AwakeTab Pro licence and remove one if you have reached the five-device limit.",
-        "h1": "Manage devices",
-        "lead": "Devices unused for 90 days are removed automatically when you activate a new one.",
-        "empty": "No licence on this device yet. Activate a key first.",
-        "remove": "Remove",
-        "col": {
-          "device": "Device",
-          "activated": "Activated"
-        },
-        "meter": "{n} of 5 devices",
-        "left": {
-          "_": "{n} activations left",
-          "one": "1 activation left",
-          "none": "No activations left"
-        },
-        "here": "This device",
-        "off": "Pro off",
-        "activated": "Activated",
-        "confirm": {
-          "here": "Remove this device? Pro switches off here and frees one of your five activations.",
-          "other": "Remove {label}? Pro switches off there and frees one of your five activations.",
-          "aria": "Remove {label}?"
-        },
-        "keep": "Keep",
-        "removeDevice": "Remove device",
-        "plans": "See the Pro plans",
-        "loading": "Checking your devices…",
-        "offline": {
-          "title": "Impossible de charger vos appareils",
-          "text": "La liste des appareils ne s’est pas chargée : rien n’est affiché plutôt qu’une liste vide. Vérifiez la connexion et réessayez.",
-          "retry": "Réessayer"
-        },
-        "added": "Ajouté le {date}",
-        "lapse": {
-          "grace": "Renouvellement en attente · Pro reste actif jusqu’au {date}",
-          "lapsed": "Pro a pris fin le {date} · renouvelez pour le réactiver",
-          "portal": "Mettre à jour le paiement dans Polar"
-        }
-      },
-      "lapse": {
-        "grace": {
-          "kicker": "Yearly · renewal pending",
-          "title": "Pro stays on until {date}",
-          "body": "The yearly payment due on {due} didn’t go through. Update the card in the Polar customer portal and Pro renews for another year on every device below.",
-          "primary": "Update payment in Polar",
-          "secondary": "Email support",
-          "f1k": "Until {date}",
-          "f1v": "Every Pro feature keeps working on all your devices.",
-          "f2k": "After that",
-          "f2v": "Pro features switch off. The free tool keeps working, and your settings stay.",
-          "f3k": "Once paid",
-          "f3v": "Nothing to do: each device picks up the renewal on its next check."
-        },
-        "ended": {
-          "kicker": "Yearly · ended {ended}",
-          "title": "Pro is off on these devices",
-          "body": "They stay listed, and each keeps its settings. Renew and each one turns Pro back on the next time it opens AwakeTab.",
-          "primary": "Renew for {price} / year",
-          "secondary": "Or {price} once",
-          "note": "{price} is the launch price for a limited time; the end date is on the Pro page.",
-          "f1k": "Unchanged",
-          "f1v": "The awake screen, presets, faces and the extension stay free.",
-          "f2k": "Kept",
-          "f2v": "Pro choices, like the Mint lamp or your message, come back when you renew.",
-          "f3k": "Hidden, not deleted",
-          "f3v": "Stats older than 7 days.",
-          "f4k": "Paused",
-          "f4v": "Schedules and auto-start in the extension."
-        },
-        "facts": {
-          "h2": "What stays and what changes"
-        }
-      },
-      "checkout": {
-        "rail": {
-          "_": "Checkout progress",
-          "1": "Payment confirmed by Polar",
-          "2": "Licence key created",
-          "3": "Active on this device"
-        },
-        "success": {
-          "h1": "Pro is active",
-          "lead": "Thank you. The payment went through, and this browser is now one of your five Pro devices.",
-          "aside": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal.",
-          "link": "Manage devices"
-        },
-        "next": "Next steps",
-        "step1": "Open the tool. Lamp colours, Message mode and 12 weeks of stats are ready in Settings.",
-        "step2": "Use Chrome too? Paste the same key into AwakeTab for Chrome’s settings. It counts as one more of your five.",
-        "step3": "Keep the email from Polar. It has your key, the receipt and a link to manage the plan.",
-        "open": "Open AwakeTab",
-        "showKey": "Show my key",
-        "hideKey": "Hide key",
-        "keyLabel": "Your licence key",
-        "keyMissing": "Your key is still on its way. It is in the email from Polar and on the receipt page.",
-        "purchase": "Your purchase",
-        "row": {
-          "plan": "Plan",
-          "price": "Price",
-          "renews": "Renews",
-          "devices": "Devices",
-          "key": "Key"
-        },
-        "plan": {
-          "yearly": "AwakeTab Pro, yearly",
-          "lifetime": "AwakeTab Pro, pay once"
-        },
-        "price": {
-          "yearly": "{price} / year",
-          "lifetime": "{price} once"
-        },
-        "renews": {
-          "never": "No renewal"
-        },
-        "devices": "{n} of 5",
-        "key": "ending {tail}",
-        "cancelled": {
-          "h1": "Checkout closed",
-          "lead": "Nothing was charged. Pro is optional: the tool, the presets and the extension keep working without it.",
-          "primary": "Open AwakeTab",
-          "secondary": "See the plans again",
-          "aside": {
-            "title": "Before you decide",
-            "launch": "Pro is {yearly} / year, or {price} once at the launch price ({after} after; the end date is on the Pro page). Five devices, and a 14-day refund if it isn’t for you.",
-            "_": "Pro is {yearly} / year, or {price} once. Five devices, and a 14-day refund if it isn’t for you."
-          },
-          "link": "Ask a question"
-        },
-        "failed": {
-          "h1": "The payment didn’t go through",
-          "lead": "Polar couldn’t take the payment, so nothing was charged and no licence was created.",
-          "listTitle": "What usually helps",
-          "l1": "Check the card number, expiry date and billing postcode.",
-          "l2": "Some banks hold the first payment to a new shop. Approving it in your bank’s app usually clears it.",
-          "l3": "Try another card or payment method. Taxes are added at checkout, so the total can be above the list price.",
-          "primary": "Try checkout again",
-          "secondary": "Email support",
-          "aside": {
-            "title": "See a charge anyway?",
-            "text": "A declined payment can show as a pending hold for a few days, then drop off. If it doesn’t, email support@awaketab.com with the date and amount."
-          },
-          "link": "Email support"
-        },
-        "help": {
-          "h1": "Where is my licence key?",
-          "lead": "It is in the email from Polar, sent to the address you used at checkout, and on the receipt page.",
-          "listTitle": "If you can’t find it",
-          "l1": "Search your inbox for “Polar” and check spam or Promotions.",
-          "l2": "Just paid? Polar takes a few seconds to create the key. The activation page keeps checking for about 20 seconds on its own.",
-          "l3": "Keys and receipts are also in the Polar customer portal.",
-          "l4": "Still stuck? Email support@awaketab.com from the address you paid with.",
-          "primary": "Enter licence key",
-          "secondary": "Open the Polar customer portal",
-          "callout": "Your purchase is still syncing. Retry in a minute.",
-          "aside": {
-            "title": "If activation says this",
-            "text": "Polar is still creating your key. Wait a minute and press Activate again; you are not charged twice."
-          },
-          "link": "Activate Pro"
-        }
-      },
-      "kicker": "AwakeTab Pro",
-      "hero": {
-        "glance": "At a glance",
-        "devices": "5 devices",
-        "account": "No account",
-        "refund": "14-day refund",
-        "title": "Make AwakeTab yours",
-        "value": "Keeping a screen awake is free and stays free, with every clock face and focus sound. Pro adds more themes, lamps and backgrounds, a sound mixer, more notes, a Pomodoro that repeats, Message mode, 12 weeks of stats, and schedules and auto-start in the Chrome extension.",
-        "price": {
-          "launch": "{yearly} a year, or {once} once at the launch price.",
-          "_": "{yearly} a year, or {once} once."
-        },
-        "compare": "Compare Free and Pro"
-      },
-      "lamp": {
-        "kicker": "Lamp colour",
-        "aqua": "Aqua",
-        "violet": "Violet",
-        "mint": "Mint",
-        "sky": "Sky",
-        "pro": "Pro colour",
-        "free": "Free colour",
-        "group": "Preview a lamp colour",
-        "aria": {
-          "pro": "{name}, Pro colour",
-          "free": "{name}, free colour"
-        },
-        "caption": "Aqua and Violet are free, and so are Amber and Teal. Mint, Sky and six more come with Pro, or any colour you pick. The page shows a preview; nothing is saved."
-      },
-      "plans": {
-        "h2": "Two ways to pay",
-        "yearly": "Yearly",
-        "lifetime": "Lifetime",
-        "once": "Pay once",
-        "per": {
-          "year": "a year",
-          "once": "once"
-        },
-        "cta": {
-          "yearly": "Get yearly Pro",
-          "lifetime": "Get lifetime Pro"
-        },
-        "launch": {
-          "value": "At the launch price, less than two years of the yearly plan.",
-          "date": "Launch price until {date} (UTC), then {price}."
-        },
-        "after": {
-          "value": "Less than three years of the yearly plan."
-        },
-        "norenewal": "Pay once, no renewal.",
-        "shutdown": "If AwakeTab ever shuts down, we will ship a final update that unlocks Pro for everyone.",
-        "tax": "Charged in USD; taxes added at checkout where applicable. Both buttons open Polar checkout, and your licence key arrives by email and on the receipt page.",
-        "lead": {
-          "all": "Both plans include everything above on 5 devices. There is no monthly plan and no account."
-        },
-        "all": "Everything in Pro, on 5 devices",
-        "renew": "Renews each year through Polar",
-        "cancel": "Cancel any time. Pro stays on until the end of the year you paid for."
-      },
-      "faq": {
-        "h2": "Questions",
-        "q1": "Does Pro keep the screen awake better?",
-        "a1": "No. Free and Pro use the same wake lock and the same status pill. Pro adds looks, a sound mixer, more notes, a repeating Pomodoro, a message, history and schedules on top.",
-        "q2": "Do I need an account?",
-        "a2": "No. Polar handles checkout and emails you a licence key. AwakeTab never stores a password.",
-        "q3": "What counts as a device?",
-        "a3": "Each browser where you enter the key uses one of five activations. AwakeTab for Chrome activates itself and uses one too. Devices unused for 90 days are removed automatically when you activate a new one.",
-        "q5": "Can I try Pro before paying?",
-        "a5": "Yes. In the tool, every Pro theme, lamp, background and preset, the sound mixer, more notes, the repeating Pomodoro and a shared Message link can be tried for 5 minutes, as often as you like. A small bar counts down, then the tool goes back to your free choice, and nothing is saved. After you pay, the 14-day refund still applies.",
-        "q6": "What happens if my yearly plan ends?",
-        "a6": "Pro features switch off and the free tool keeps working. Your settings stay, and stats older than 7 days are hidden, not deleted. Renew and they come back.",
-        "q7": "Is there a monthly plan?",
-        "a7": "No. Pro is {yearly} a year, or one payment with no renewal. Both cover 5 devices."
-      },
-      "biz": {
-        "h2": "For your website or your screens",
-        "embed": {
-          "_": "Embed licence",
-          "price": "{price} a year per site",
-          "text": "Removes the \"Keep awake by AwakeTab\" credit. Licences open soon; the free embed works today."
-        },
-        "kiosk": {
-          "_": "Kiosk licence",
-          "price": "{one} one site · {five} five sites",
-          "text": "Signage and kiosk screens that stay awake from one URL, with your own logo and message."
-        }
-      },
-      "cmp": {
-        "h2": "Free or Pro, side by side",
-        "lead": "Everything that keeps a screen awake is free, in the web tab and in the extension. Pro uses the same wake lock and the same honest status pill, and adds the extras in the Pro column.",
-        "caption": "What the free web tab, the free extension and Pro include",
-        "col": {
-          "feature": "Feature",
-          "free": {
-            "_": "Free",
-            "sub": "No key, no account"
-          },
-          "pro": {
-            "_": "Pro",
-            "sub": "From {price} a year"
-          }
-        },
-        "yes": "Included",
-        "no": "Not included",
-        "g": {
-          "web": "Web tab",
-          "ext": "AwakeTab for Chrome",
-          "ads": "Ads",
-          "looks": "Looks",
-          "focus": "Sound, notes and focus"
-        },
-        "r": {
-          "awake": "Keeps the screen awake, with an honest status pill",
-          "lengths": "Every length, from 15 min to 7 days, until a time or until you stop",
-          "faces": "Twelve clock faces and seven ambient modes, Cook timers and Breathe included",
-          "offline": "Install, offline use and 8 languages",
-          "lamps": "Lamp colours",
-          "themes": "Colour themes, each with a light and a dark version",
-          "patterns": "Backgrounds",
-          "presets": "One-tap presets",
-          "preview": "Try a Pro look, the mixer, more notes or the repeating Pomodoro for 5 minutes",
-          "sounds": "Seven focus sounds, five end sounds, vibration, tick-tock and media keys",
-          "mixer": "Sound mixer",
-          "library": "Lo-fi library",
-          "notes": "Notepad with checklists, export and voice typing",
-          "tools": "An intention, a breathing guide and a second time zone",
-          "pomo": "Pomodoro",
-          "msg": "Message mode",
-          "stats": "Stats history",
-          "pip": "Floating window",
-          "ext": "Screen or System level, timers and the toolbar badge",
-          "sched": "Weekly schedules",
-          "auto": "Auto-start when Chrome opens or on a site you pick",
-          "adsawake": "On the awake screen",
-          "adsguides": "On guide pages"
-        },
-        "v": {
-          "lamps": {
-            "free": "Aqua, Violet, Amber, Teal",
-            "pro": "Adds 8 and your own colour"
-          },
-          "themes": {
-            "free": "Clear Night, Paper, Nord",
-            "pro": "Adds 6, High contrast among them"
-          },
-          "patterns": {
-            "free": "Grain, Dots, Grid",
-            "pro": "Adds Contours, Waves, Aurora, Stars, Drift"
-          },
-          "presets": {
-            "free": "Classic, Library, Fjord",
-            "pro": "Adds 5, like Night desk"
-          },
-          "preview": {
-            "pro": "Yours to keep"
-          },
-          "mixer": {
-            "free": "One sound at a time"
-          },
-          "library": {
-            "free": "The lo-fi loop",
-            "pro": "Recorded tracks as we add them"
-          },
-          "notes": {
-            "free": "One note",
-            "pro": "Unlimited, with search and pins"
-          },
-          "pomo": {
-            "free": "Pause and skip",
-            "pro": "Repeats until you stop"
-          },
-          "msg": {
-            "free": "5-minute preview from a shared link"
-          },
-          "stats": {
-            "free": "7 days",
-            "pro": "12 weeks, CSV"
-          },
-          "pip": {
-            "pro": "Taller"
-          },
-          "never": "Never",
-          "ads": {
-            "free": "May show",
-            "pro": "None"
-          }
-        }
-      },
-      "get": {
-        "h2": "What Pro adds",
-        "lead": "On up to five devices. Pro changes what AwakeTab looks like and remembers, never how the screen is kept awake.",
-        "msg": {
-          "h": "Message mode",
-          "p": "Your own line, up to 80 characters, in big type on the awake screen. Anyone who opens a shared Message link can try it free for 5 minutes."
-        },
-        "stats": {
-          "h": "12 weeks of stats",
-          "p": "Free stats show the last 7 days. Pro keeps 12 weeks and exports your sessions as a CSV file."
-        },
-        "pip": {
-          "h": "A taller floating window",
-          "p": "The floating window that stays on top of your other apps opens a third taller."
-        },
-        "sched": {
-          "h": "Schedules and auto-start in Chrome",
-          "p": "In AwakeTab for Chrome, pick the days and hours a screen stays on, or start when Chrome opens or when you visit a site you choose."
-        },
-        "ads": {
-          "h": "No ads on the guides",
-          "p": "Guide pages may carry ads to pay for the free tool. With Pro they don't. The awake screen has no ads for anyone."
-        },
-        "looks": {
-          "h": "Themes, lamps and backgrounds",
-          "p": "Six more colour themes, from Solarized to High contrast, eight more lamps and a colour of your own, five more backgrounds such as Aurora and Stars, and presets like Night desk. Clear Night, Paper, Nord and four lamps stay free."
-        },
-        "sound": {
-          "h": "A sound mixer",
-          "p": "Layer rain, café, fire and noise, each at its own level. A lo-fi library will hold recorded tracks as we add them. The seven focus sounds, one at a time, stay free."
-        },
-        "notes": {
-          "h": "As many notes as you like",
-          "p": "Titles, search and pins for every note you keep. Notes stay in your browser and are never uploaded. One note is free."
-        },
-        "pomo": {
-          "h": "A Pomodoro that repeats",
-          "p": "After the long break, focus blocks start again on their own until you stop, and every finished block counts in your stats. Pause and skip are free."
-        }
-      },
-      "how": {
-        "h2": "How you get Pro",
-        "lead": "No account to create. A licence key does the work, and Polar sends it to you.",
-        "s1": {
-          "h": "Pay on Polar",
-          "p": "The plan button opens Polar checkout. Polar takes the payment, adds any tax and emails your receipt with the licence key."
-        },
-        "s2": {
-          "h": "Pro turns on here",
-          "p": "Polar brings you back to AwakeTab, and this browser activates itself. If it can't, paste the key from the email."
-        },
-        "s3": {
-          "h": "Add your other devices",
-          "p": "Enter the same key in up to five browsers in total. AwakeTab for Chrome takes it in its settings and counts as one of them."
-        },
-        "s4": {
-          "h": "Manage devices any time",
-          "p": "See where Pro is on and remove a device to free its place. Devices unused for 90 days are removed automatically when you activate a new one."
-        }
-      },
-      "trust": {
-        "h2": "Payment, refunds and privacy",
-        "polar": {
-          "h": "Polar handles payment.",
-          "p": "Polar is the seller of record: it takes the card, charges tax where it applies and sends the receipt. AwakeTab never sees your card."
-        },
-        "cancel": {
-          "h": "Cancel any time.",
-          "p": "The yearly plan renews through Polar. Cancel in the Polar customer portal, and Pro stays on until the end of the year you paid for."
-        },
-        "privacy": {
-          "h": "No account, no password.",
-          "p": "Your licence is a key, plus a random ID and a label such as “Chrome · macOS” for each device. Polar keeps your email for the receipt."
-        }
-      },
-      "end": {
-        "h2": "Add Pro to the tab you already use",
-        "lead": "{once} once or {yearly} a year, on 5 devices, with a 14-day refund.",
-        "note": "Already paid?"
-      }
-    },
     "embed": {
-      "title": "Widget pour garder l'écran allumé — AwakeTab",
-      "description": "Ajoutez un bouton Mode cuisine qui garde l'écran de vos lecteurs allumé : une balise script, un statut honnête, aucune requête tierce. Gratuit avec un lien.",
       "h1": "Gardez l'écran de vos lecteurs allumé"
     },
     "kiosk": {
-      "title": "Mode kiosque et affichage dynamique — AwakeTab",
-      "description": "Gardez l'écran d'un kiosque, tableau de bord ou affichage allumé via une URL : démarrage auto, message et thème, plus une licence Kiosk pour votre logo.",
       "h1": "AwakeTab pour kiosques et affichage dynamique"
     },
     "library": {
-      "title": "@awaketab/wake — bibliothèque Wake Lock — AwakeTab",
-      "description": "Bibliothèque open source pour l'API Screen Wake Lock : sept états honnêtes, une mini vidéo de secours et des conseils en cas de refus. Le successeur de NoSleep.js.",
       "h1": "@awaketab/wake : la bibliothèque wake lock honnête"
     },
     "extension": {
-      "title": "Extension Chrome pour garder l’écran allumé — AwakeTab",
-      "description": "AwakeTab for Chrome garde l’écran ou l’ordinateur éveillé depuis la barre, même onglet masqué. Minuteurs, plannings, statut honnête, sans pistage.",
       "h1": "AwakeTab for Chrome",
       "lead": "L’application web ne peut garder le verrou d’écran que tant que son onglet est visible. L’extension demande à Chrome lui-même de garder l’écran — ou seulement l’ordinateur — éveillé, et continue donc de fonctionner onglet masqué ou fenêtre réduite.",
       "cta": {
@@ -837,6 +140,11 @@
       "band": {
         "title": "Keep the screen on while you work in other tabs"
       }
+    },
+    "home": {
+      "title": "AwakeTab — Gardez cet écran allumé",
+      "description": "Gardez l’écran allumé en un clic. Une horloge calme affiche le temps restant. 46 cadrans, six fonds animés, gratuit : rien à installer, aucun compte.",
+      "ogAlt": "Horloge AwakeTab affichant 38:12 restantes"
     }
   },
   "tool": {
@@ -871,7 +179,6 @@
       "word": "Words",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "matrix": "LED",
       "prev": "Previous face",
       "next": "Next face"
     },
@@ -1495,7 +802,606 @@
       "hero": "Gardez cet écran allumé.",
       "heroSub": "Un geste. Il se remet en veille quand le temps est écoulé, sans installation ni compte.",
       "heroSubPhone": "Un geste. Il se remet en veille à la fin."
-    }
+    },
+    "glance": {
+      "tagNew": "Nouveau",
+      "tagHot": "Populaire",
+      "tagPick": "Coup de cœur",
+      "tagNight": "Nuit",
+      "free": "Gratuit",
+      "unit": {
+        "h": "h",
+        "min": "min",
+        "hour": "heure"
+      },
+      "len": {
+        "0": "15 min",
+        "1": "30 min",
+        "2": "1 heure",
+        "3": "2 heures",
+        "4": "Sans fin"
+      },
+      "top": {
+        "search": "Rechercher",
+        "searchLabel": "Recherche et commandes",
+        "vibe": "Ambiance",
+        "faces": "Cadrans",
+        "recents": "Récents",
+        "settings": "Paramètres"
+      },
+      "pill": {
+        "idle": "Écran non maintenu",
+        "starting": "Demande au navigateur…",
+        "awake": "Allumé · jusqu’à {time}",
+        "awakeOpen": "Allumé · jusqu’à l’arrêt",
+        "fallback": "Allumé par vidéo · jusqu’à {time}",
+        "fallbackOpen": "Allumé par vidéo · jusqu’à l’arrêt",
+        "paused": "En pause · encore {dur}",
+        "needsyou": "Touchez pour reprendre · l’onglet était masqué",
+        "blocked": "Pas allumé · {reason}",
+        "unsupported": "Pas de wake lock dans ce navigateur",
+        "ended": "C’est l’heure · en veille depuis {time}"
+      },
+      "reason": {
+        "battery": "économiseur de batterie",
+        "unknown": "le navigateur a refusé",
+        "insecure": "page sécurisée requise",
+        "policy": "non autorisé ici"
+      },
+      "set": {
+        "h1a": "Gardez cet écran",
+        "h1b": "allumé.",
+        "howLong": "Combien de temps",
+        "cta": "Garder allumé · {len}",
+        "noEnd": "sans fin",
+        "noEndCap": "Sans fin",
+        "starting": "Démarrage…",
+        "note": "Se termine à {time} · rien à installer, aucun compte",
+        "noteOpen": "Tourne jusqu’à ce que vous l’arrêtiez · rien à installer, aucun compte"
+      },
+      "stage": {
+        "label": "Minuteur"
+      },
+      "face": {
+        "aria": "Cadran : {face}",
+        "ready": "PRÊT",
+        "left": "RESTANT",
+        "ends": "Se termine à {time}"
+      },
+      "first": {
+        "kicker": "PREMIÈRE SESSION TERMINÉE · {dur}",
+        "h": "Comment ça s’est passé ?"
+      },
+      "rate": {
+        "love": "J’ai adoré",
+        "good": "Ça a marché",
+        "bad": "Quelque chose a planté"
+      },
+      "dock": {
+        "label": "Commandes de la session",
+        "addTime": "Ajouter du temps",
+        "add": "+{n} {unit}",
+        "addAria": "Ajouter {dur}",
+        "pause": "Pause",
+        "resume": "Reprendre",
+        "again": "Recommencer",
+        "fix": "Voir la solution",
+        "video": "Utiliser la vidéo",
+        "stop": "Arrêter",
+        "stopAria": "Arrêter et laisser l’écran se mettre en veille",
+        "faceAria": "Cadran : {face}. Changer de cadran",
+        "full": "Plein écran",
+        "exitFull": "Quitter le plein écran"
+      },
+      "hint": {
+        "move": "Bougez le pointeur pour les commandes",
+        "tap": "Touchez l’écran pour les commandes",
+        "show": "Afficher les commandes"
+      },
+      "banner": {
+        "blocked": {
+          "battery": {
+            "t": "L’économiseur de batterie bloque le wake lock.",
+            "d": "Votre écran peut quand même s’éteindre.",
+            "btn": "Voir la solution"
+          },
+          "unknown": {
+            "t": "Le navigateur a refusé le wake lock.",
+            "d": "Votre écran peut quand même s’éteindre.",
+            "btn": "Voir la solution"
+          },
+          "insecure": {
+            "t": "Le wake lock exige une page sécurisée.",
+            "d": "Votre écran peut quand même s’éteindre.",
+            "btn": "Voir la solution"
+          },
+          "policy": {
+            "t": "Cette page n’autorise pas le wake lock.",
+            "d": "Votre écran peut quand même s’éteindre.",
+            "btn": "Voir la solution"
+          }
+        },
+        "unsupported": {
+          "t": "Ce navigateur n’a pas de wake lock.",
+          "d": "Une vidéo silencieuse et invisible peut garder l’écran allumé à la place.",
+          "btn": "Utiliser la vidéo"
+        },
+        "fallback": {
+          "t": "Allumé grâce à une vidéo silencieuse.",
+          "d": "Fonctionne dans ce navigateur ; gardez cet onglet visible.",
+          "btn": ""
+        },
+        "needsyou": {
+          "t": "L’onglet était masqué, le navigateur a lâché prise.",
+          "d": "Un toucher et l’écran reste de nouveau allumé.",
+          "btn": "Reprendre"
+        },
+        "conflict": {
+          "t": "Un autre onglet garde déjà cet écran allumé.",
+          "d": "Un seul suffit.",
+          "btn": "Prendre le relais"
+        },
+        "offline": {
+          "t": "Vous êtes hors ligne.",
+          "d": "Le minuteur continue ; la synchronisation attend votre retour.",
+          "btn": ""
+        },
+        "update": {
+          "t": "Une nouvelle version est prête.",
+          "d": "Votre session continue après le rechargement.",
+          "btn": "Recharger"
+        }
+      },
+      "toast": {
+        "extended": "{dur} ajoutées · désormais jusqu’à {time}",
+        "undo": "Annuler"
+      },
+      "nudge": {
+        "h": "Vous l’avez fait vôtre.",
+        "d": "{sessions, plural, one {# session} other {# sessions}} et {presets, plural, one {# préréglage} other {# préréglages}}. Vous utilisez plusieurs écrans ? Pro les garde tous synchronisés.",
+        "try": "Essayer Pro gratuitement",
+        "later": "Pas maintenant"
+      },
+      "tab": {
+        "left": "encore {t}",
+        "awake": "Allumé",
+        "paused": "En pause",
+        "blocked": "Pas allumé",
+        "up": "C’est l’heure"
+      },
+      "an": {
+        "start": "Écran allumé jusqu’à {time}.",
+        "startOpen": "Écran allumé jusqu’à ce que vous l’arrêtiez.",
+        "extend": "{dur} ajoutées. Désormais jusqu’à {time}.",
+        "low": "Encore 5 minutes. Ajouter 15 minutes ?",
+        "hidden": "L’onglet était masqué, le navigateur a lâché prise.",
+        "refused": "Pas allumé — {reason}. Voir la solution.",
+        "paused": "En pause. {dur} conservées.",
+        "ended": "C’est l’heure. L’écran peut se mettre en veille.",
+        "face": "Cadran : {face}."
+      },
+      "panel": {
+        "close": "Fermer",
+        "recents": {
+          "t": "Récents",
+          "d": "Préréglages et sessions passées"
+        },
+        "settings": {
+          "t": "Paramètres",
+          "d": "Enregistrés sur cet appareil"
+        },
+        "help": {
+          "t": "Aide et solutions",
+          "d": "N’apparaît que si quelque chose ne va pas"
+        },
+        "studio": {
+          "t": "Atelier de cadrans",
+          "d": "Gratuit · personnalisez n’importe quel cadran"
+        },
+        "feedback": {
+          "t": "Avis",
+          "d": "Vos premières sessions orientent ce que nous construisons ensuite"
+        },
+        "vibes": {
+          "t": "Ambiance",
+          "d": "Un fond animé derrière votre horloge"
+        },
+        "share": {
+          "t": "Partager cette configuration",
+          "d": "Envoyez une horloge prête à démarrer"
+        },
+        "devices": {
+          "t": "Vos écrans",
+          "d": "Pro · synchronisation entre appareils"
+        },
+        "sound": {
+          "t": "Son d’ambiance",
+          "d": "Gratuit · composez votre propre fond sonore"
+        },
+        "clear": {
+          "t": "Effacer l’historique",
+          "d": "Sur cet appareil uniquement"
+        },
+        "language": {
+          "t": "Langue",
+          "d": "Texte et format de l’heure"
+        },
+        "pro": {
+          "t": "AwakeTab Pro",
+          "d": "Facultatif · pour plusieurs écrans"
+        },
+        "proDone": {
+          "t": "Bienvenue dans Pro",
+          "d": "Essai commencé"
+        },
+        "plan": {
+          "t": "Gérer l’abonnement",
+          "d": "Pro · annuel"
+        }
+      },
+      "faces": {
+        "title": "Cadrans",
+        "sub": "Touchez-en un : il s’applique aussitôt derrière ce panneau. Les {n} sont gratuits.",
+        "search": "Rechercher parmi {n} cadrans",
+        "close": "Fermer les cadrans",
+        "collections": "Collections",
+        "label": "Cadran",
+        "featuredTag": "À la une · {tag}",
+        "none": "Aucun cadran nommé « {q} ».",
+        "filter": {
+          "featured": "À la une",
+          "digital": "Numériques",
+          "analog": "Analogiques",
+          "ambient": "Ambiance",
+          "all": "Tous"
+        }
+      },
+      "recents": {
+        "week": "CETTE SEMAINE",
+        "awake": "{dur} allumé",
+        "streak": "{n} jours d’affilée",
+        "longest": "votre plus longue série",
+        "noStreak": "Vos sessions apparaîtront ici",
+        "hours": "Heures allumé",
+        "chart": "Heures allumé chaque jour de cette semaine",
+        "presets": "Préréglages",
+        "emptyH": "Aucun préréglage pour l’instant",
+        "emptyD": "Lancez une session qui vous plaît, puis enregistrez-la ici. Un toucher la retrouve : durée, cadran et ambiance.",
+        "save": "Enregistrer comme préréglage",
+        "saved": "Enregistré comme préréglage : {name}",
+        "history": "Historique",
+        "this": "Cette session",
+        "sinceNow": "{time} – maintenant",
+        "awakeBadge": "Allumé",
+        "untitled": "Session {face}",
+        "today": "Aujourd’hui · {date}",
+        "yesterday": "Hier · {date}",
+        "note": "L’historique reste sur cet appareil. Effacez-le quand vous voulez dans les Paramètres."
+      },
+      "settings": {
+        "appearance": "Apparence",
+        "theme": "Thème",
+        "themes": {
+          "auto": "Système",
+          "light": "Clair",
+          "dark": "Sombre",
+          "oled": "OLED"
+        },
+        "clock": "Horloge",
+        "h12": "Horloge sur 12 heures",
+        "h12D": "Affiche 11:42 AM au lieu de 11:42",
+        "secs": "Afficher les secondes",
+        "secsD": "Sur le cadran et dans le titre de l’onglet",
+        "dim": "Atténuer la nuit",
+        "dimD": "Lueur plus douce après 22:00",
+        "sound": "Son",
+        "chime": "Carillon à la fin",
+        "chimeD": "Sonne une fois quand le temps est écoulé",
+        "chimes": {
+          "two": "Deux notes",
+          "bell": "Cloche",
+          "off": "Désactivé"
+        },
+        "mixer": "Mixeur d’ambiance",
+        "mixerD": "Pluie, café, feu et bruit brun",
+        "studio": "Atelier de cadrans",
+        "studioD": "Votre propre couleur d’accent et votre lueur",
+        "more": "Plus",
+        "ambient": "Son d’ambiance",
+        "ambientD": "Pluie, café, feu, bruit brun",
+        "language": "Langue",
+        "languageD": "Change le texte et le format de l’heure",
+        "share": "Partager cette configuration",
+        "shareD": "Un lien qui s’ouvre prêt à démarrer",
+        "clear": "Effacer l’historique",
+        "clearD": "Les préréglages et les paramètres restent",
+        "account": "Compte",
+        "signedOut": "Non connecté",
+        "signedOutD": "Tout fonctionne sans compte. Connectez-vous uniquement pour synchroniser Pro.",
+        "signIn": "Se connecter",
+        "signedIn": "Connecté avec {via}",
+        "via": {
+          "google": "Google",
+          "github": "GitHub",
+          "passkey": "une clé d’accès"
+        },
+        "proOn": "Pro est activé · synchronisation entre vos écrans",
+        "freeOn": "Tout fonctionne. Pro ajoute seulement la synchronisation de plusieurs écrans.",
+        "manage": "Gérer l’abonnement",
+        "feedback": "Envoyer un avis",
+        "feedbackD": "Deux touchers. Nous lisons chaque message.",
+        "proCard": "Plusieurs écrans ? Gardez-les synchronisés.",
+        "proCardD": "Tout ce qui précède est gratuit, pour toujours. Pro s’adresse à ceux qui utilisent plusieurs écrans : une configuration synchronisée sur chaque appareil, plus une aide prioritaire. {price} par an.",
+        "proCardOn": "Pro est activé. La synchronisation est prête.",
+        "proCardOnD": "Ouvrez AwakeTab sur un autre écran et connectez-vous de la même façon ; votre configuration suit.",
+        "seePro": "Découvrir Pro"
+      },
+      "help": {
+        "checked": "Vérifié à {time}.",
+        "video": "Utiliser la vidéo de secours",
+        "again": "Vérifier à nouveau",
+        "battery": {
+          "h": "Le navigateur a refusé",
+          "d": "L’économiseur de batterie semble activé (batterie faible et non branchée), et ce navigateur ignore alors les demandes pour garder l’écran allumé.",
+          "s1": "Branchez l’appareil ou désactivez l’économiseur",
+          "s1d": "Le wake lock revient tout seul ; nous continuons de vérifier.",
+          "s2": "Ou utilisez la vidéo de secours",
+          "s2d": "Une vidéo silencieuse et invisible garde la plupart des écrans allumés.",
+          "s3": "L’écran s’assombrit encore ?",
+          "s3d": "L’application de bureau peut aussi empêcher la mise en veille du système."
+        },
+        "unknown": {
+          "h": "Le navigateur a refusé",
+          "d": "Ce navigateur a refusé la demande sans dire pourquoi. C’est souvent un réglage d’énergie ou de batterie.",
+          "s1": "Branchez l’appareil ou désactivez l’économiseur",
+          "s1d": "Touchez ensuite Vérifier à nouveau ; cela prend une seconde.",
+          "s2": "Ou utilisez la vidéo de secours",
+          "s2d": "Une vidéo silencieuse et invisible garde la plupart des écrans allumés.",
+          "s3": "L’écran s’assombrit encore ?",
+          "s3d": "L’application de bureau peut aussi empêcher la mise en veille du système."
+        },
+        "insecure": {
+          "h": "Cette page n’est pas sécurisée",
+          "d": "Les navigateurs n’autorisent le wake lock que sur les pages sécurisées (https).",
+          "s1": "Ouvrez awaketab.com en https",
+          "s1d": "Vérifiez que l’adresse commence par https://.",
+          "s2": "Ou utilisez la vidéo de secours",
+          "s2d": "Une vidéo silencieuse et invisible garde la plupart des écrans allumés."
+        },
+        "policy": {
+          "h": "Non autorisé sur cette page",
+          "d": "La page qui intègre AwakeTab n’autorise pas le wake lock.",
+          "s1": "Ouvrez AwakeTab dans son propre onglet",
+          "s1d": "awaketab.com fonctionne de la même façon, avec le wake lock autorisé.",
+          "s2": "Ou utilisez la vidéo de secours",
+          "s2d": "Une vidéo silencieuse et invisible garde la plupart des écrans allumés."
+        }
+      },
+      "studio": {
+        "accent": "Couleur d’accent",
+        "glow": "Lueur de la pièce",
+        "note": "Les couleurs d’état ne changent jamais (la pause reste ambre, le blocage reste rouge) : l’horloge dit toujours la vérité.",
+        "save": "Enregistrer comme mon cadran",
+        "reset": "Rétablir par défaut",
+        "swatch0": "Volt",
+        "swatch1": "Citron vert",
+        "swatch2": "Ambre",
+        "swatch3": "Ciel",
+        "swatch4": "Lilas",
+        "swatch5": "Rose",
+        "swatch6": "Braise"
+      },
+      "vibes": {
+        "label": "Ambiance de fond",
+        "motion": "Mouvement",
+        "still": "Immobile",
+        "calm": "Calme",
+        "lively": "Vif",
+        "note": "Les ambiances se mettent en pause avec l’économiseur de batterie et le mouvement réduit. L’horloge reste toujours lisible."
+      },
+      "vibe": {
+        "aurora": {
+          "n": "Aurore",
+          "d": "Une douce lumière boréale, à la dérive"
+        },
+        "night": {
+          "n": "Ciel nocturne",
+          "d": "Des étoiles, une lune, parfois une étoile filante"
+        },
+        "rain": {
+          "n": "Pluie sur la vitre",
+          "d": "Une fenêtre calme sous la pluie"
+        },
+        "sunset": {
+          "n": "Coucher de soleil",
+          "d": "Une lumière chaude pour le soir"
+        },
+        "lava": {
+          "n": "Lampe à lave",
+          "d": "Des couleurs vives qui fondent lentement"
+        },
+        "calm": {
+          "n": "Calme",
+          "d": "Seule l’horloge bouge"
+        }
+      },
+      "sound": {
+        "playing": "Lecture : {name}",
+        "ready": "Prêt : {name}",
+        "off": "Désactivé · {name}",
+        "silent": "Toutes les couches sont coupées",
+        "fades": "S’estompe à la fin de la session",
+        "waits": "Joue tant que l’écran est allumé",
+        "preview": "C’était un aperçu de cinq secondes ; le son joue tant que l’écran est allumé",
+        "turnOn": "Jouer le son d’ambiance quand l’écran est allumé",
+        "turnOff": "Couper le son d’ambiance",
+        "rain": "Pluie",
+        "cafe": "Café",
+        "fire": "Cheminée",
+        "brown": "Bruit brun",
+        "mixes": "Mélanges",
+        "mix": {
+          "rainy": "Café pluvieux",
+          "focus": "Concentration",
+          "fire": "Coin du feu",
+          "off": "Désactivé",
+          "custom": "Votre mélange"
+        }
+      },
+      "feedback": {
+        "how": "Comment ça s’est passé ?",
+        "note": "Quelque chose à nous dire ? (facultatif)",
+        "placeholder": "Ce qui a marché, ce qui n’a pas marché, ce que vous aimeriez",
+        "topics": "Sujets",
+        "topic": {
+          "faces": "Cadrans",
+          "ease": "Facilité d’usage",
+          "battery": "Batterie",
+          "other": "Autre chose"
+        },
+        "privacy": "Envoyé anonymement avec le type de navigateur et d’appareil. Vos réponses orientent ce que nous construisons ensuite.",
+        "send": "Envoyer un avis",
+        "sending": "Envoi…",
+        "retry": "Réessayer",
+        "later": "Plus tard",
+        "failed": "L’envoi a échoué : vérifiez votre connexion et réessayez. Rien n’est perdu.",
+        "thanks": "Merci, nous lisons chaque message."
+      },
+      "share": {
+        "card": "S’ouvre prêt à démarrer : un toucher et c’est parti.",
+        "link": "Lien",
+        "copy": "Copier",
+        "copied": "Copié",
+        "include": "Inclure",
+        "look": "Cadran et ambiance",
+        "lookD": "S’ouvre avec le même style",
+        "length": "Durée",
+        "lengthD": "Lance le même minuteur",
+        "start": "Démarrer tout de suite",
+        "startOn": "Activé : démarre dès l’ouverture",
+        "startOff": "Désactivé : la personne touche Garder allumé",
+        "note": "Les liens ne contiennent jamais votre nom, votre historique, le nom de vos appareils ni votre position.",
+        "copyLink": "Copier le lien",
+        "via": "Partager via…"
+      },
+      "clear": {
+        "h": "Effacer {n, plural, one {# session} other {# sessions}} ?",
+        "d": "L’historique et votre série de la semaine seront supprimés sur cet appareil. Les préréglages, cadrans et paramètres restent. Action irréversible.",
+        "type": "Tapez CLEAR pour confirmer",
+        "note": "Le bouton se déverrouille quand les cinq lettres correspondent.",
+        "go": "Effacer {n, plural, one {# session} other {# sessions}}",
+        "keep": "Garder l’historique",
+        "done": "Historique effacé sur cet appareil"
+      },
+      "lang": {
+        "en": "Anglais",
+        "de": "Allemand",
+        "ja": "Japonais",
+        "zh": "Chinois",
+        "hi": "Hindi",
+        "es": "Espagnol",
+        "fr": "Français",
+        "pt-br": "Portugais (Brésil)",
+        "note": "L’heure suit la langue : 11:42 AM en anglais, 11:42 en allemand, 午前11:42 en japonais."
+      },
+      "pro": {
+        "kicker": "AWAKETAB PRO",
+        "h1a": "Une configuration.",
+        "h1b": "Tous les écrans.",
+        "d": "Tout ce que vous utilisez aujourd’hui reste gratuit. Pro ajoute la synchronisation pour ceux qui ont plus d’un écran.",
+        "plan": "Formule",
+        "yearly": "Annuelle",
+        "yearlyPrice": "{price} / an",
+        "yearlyD": "Meilleur prix · 14 jours gratuits",
+        "monthly": "Mensuelle",
+        "monthlyPrice": "{price} / mois",
+        "monthlyD": "Résiliable à tout moment",
+        "save": "{n} % D’ÉCONOMIE",
+        "f1": "Une configuration synchronisée sur 5 écrans maximum",
+        "f2": "Démarrez ou arrêtez n’importe quel écran depuis un seul",
+        "f3": "Historique sur tous les appareils, avec export",
+        "f4": "Aide prioritaire par une vraie personne",
+        "f5": "Accès anticipé aux nouveaux cadrans et ambiances",
+        "note": "14 jours gratuits, puis {price} par an. Résiliable à tout moment dans Paramètres → Gérer l’abonnement. Paiement sécurisé par [PAYMENT PROVIDER].",
+        "trial": "Commencer l’essai gratuit de 14 jours",
+        "later": "Plus tard"
+      },
+      "proDone": {
+        "h1a": "Pro est activé.",
+        "h1b": "Merci.",
+        "d": "Votre essai de 14 jours a commencé. La synchronisation est prête : ouvrez AwakeTab sur un autre écran et connectez-vous de la même façon.",
+        "s1": "Ouvrez AwakeTab sur votre autre écran",
+        "s1d": "Tablette de cuisine, télévision, deuxième ordinateur portable.",
+        "s2": "Connectez-vous de la même façon",
+        "s2d": "Google, GitHub ou une clé d’accès, sans mot de passe.",
+        "s3": "Votre configuration arrive",
+        "s3d": "Cadrans, ambiances et préréglages arrivent en une seconde.",
+        "back": "Retour à mon horloge",
+        "manage": "Gérer l’abonnement"
+      },
+      "plan": {
+        "renews": {
+          "yearly": "Pro · annuel · renouvelé le {date}",
+          "monthly": "Pro · mensuel · renouvelé le {date}",
+          "lifetime": "Pro · payé une fois"
+        },
+        "active": "Actif",
+        "plan": "Formule",
+        "yearly": "Pro · annuel",
+        "yearlyD": "{price} / an · prochain paiement le {date}",
+        "change": "Changer",
+        "payment": "Moyen de paiement",
+        "paymentD": "Géré par [PAYMENT PROVIDER]",
+        "update": "Mettre à jour",
+        "screens": "Écrans",
+        "screensD": "{n} sur {max} utilisés",
+        "manage": "Gérer",
+        "cancel": "Résilier Pro",
+        "cancelD": "Reste actif jusqu’au {date}",
+        "cancelBtn": "Résilier",
+        "receipts": "Reçus",
+        "r1": "Pro · annuel · [PRICE]",
+        "r2": "Essai commencé · [PRICE] 0",
+        "download": "Télécharger",
+        "note": "Résiliable à tout moment : Pro reste actif jusqu’à la fin de la période payée. Vos écrans gardent toutes les fonctions gratuites.",
+        "done": "Terminé",
+        "receipt": "Obtenir un reçu",
+        "monthly": "Pro · mensuel",
+        "monthlyD": "{price} / mois · prochain paiement le {date}",
+        "lifetime": "Pro · payé une fois",
+        "lifetimeD": "Aucun renouvellement",
+        "allReceipts": "Tous les reçus",
+        "allReceiptsD": "Conservés par [PAYMENT PROVIDER] pour chaque paiement",
+        "open": "Ouvrir"
+      },
+      "devices": {
+        "kicker": "VOS ÉCRANS · {n} SUR {max}",
+        "awake": "{n} allumés en ce moment",
+        "d": "Démarrez ou arrêtez cet écran ici ; les autres indiquent quand ils ont été ajoutés.",
+        "none": "Aucun écran pour l’instant",
+        "noneD": "La synchronisation commence avec Pro. Tout le reste fonctionne sur cet écran sans Pro.",
+        "asleep": "En veille",
+        "start": "Démarrer",
+        "stop": "Arrêter",
+        "note": "Pro · synchronisation. Retirer un écran le déconnecte immédiatement.",
+        "add": "Ajouter un écran",
+        "done": "Terminé"
+      },
+      "pal": {
+        "placeholder": "Tapez une commande ou cherchez",
+        "session": "Session",
+        "goto": "Aller à",
+        "extend": "Prolonger de 15 minutes",
+        "start": "Garder allumé",
+        "extension": "Obtenir l’extension du navigateur",
+        "pip": "Ouvrir la mini-horloge",
+        "none": "Rien ne correspond à « {q} ».",
+        "move": "naviguer",
+        "run": "lancer",
+        "count": "{n, plural, one {# commande} other {# commandes}}"
+      }
+    },
+    "skipTimer": "Aller au minuteur"
   },
   "ambient": {
     "mode": {
@@ -1958,160 +1864,6 @@
       "label": "Ajouter 15 minutes"
     },
     "empty": "Démarrez une session dans"
-  },
-  "pro": {
-    "badge": "Pro",
-    "title": "AwakeTab Pro",
-    "price": {
-      "yearly": "{price} / an",
-      "lifetime": "{price} en une fois"
-    },
-    "cta": "Obtenir Pro",
-    "card": "AwakeTab Pro adds more themes, lamps and backgrounds, a sound mixer, more notes, a repeating Pomodoro, Message mode and 12 weeks of stats. $12 a year.",
-    "see": "Découvrir les avantages de Pro",
-    "activate": "Saisir la clé de licence",
-    "activated": "Pro est actif sur cet appareil",
-    "lapse": {
-      "grace": {
-        "title": "Le renouvellement de votre Pro n’a pas abouti",
-        "body": "Pro continue de fonctionner ici jusqu’au {date}. Mettez à jour le paiement dans le portail client de Polar et rien ne change.",
-        "keep": "Rien n’est retiré d’ici là.",
-        "action": "Mettre à jour le paiement"
-      },
-      "ended": {
-        "title": "Pro a pris fin sur cet appareil",
-        "body": "Votre année Pro a pris fin le {date}. L’outil fonctionne comme avant ; certaines choses sont revenues à la version gratuite :",
-        "lamp": "Les couleurs de lampe sont Aqua pour l’instant",
-        "message": "Le mode Message est Standard pour l’instant",
-        "stats": "Les statistiques montrent 7 jours ; les semaines plus anciennes sont gardées",
-        "ads": "Les guides affichent de nouveau des publicités",
-        "keep": "Vos choix sont gardés et reviennent si vous renouvelez.",
-        "action": "Renouveler Pro"
-      },
-      "later": "Plus tard",
-      "dismiss": "Fermer"
-    },
-    "sheet": {
-      "amount": "12 $",
-      "per": "par an",
-      "looks": "Plus de thèmes, de lampes et de fonds",
-      "mixer": "Un mélangeur de sons",
-      "notes": "Plus de notes",
-      "pomodoro": "Un Pomodoro qui se répète",
-      "message": "Mode message",
-      "stats": "12 semaines de statistiques",
-      "free": "Garder l'écran allumé reste gratuit, sans publicité sur l'écran allumé."
-    },
-    "view": {
-      "upsell": {
-        "get": "Obtenir Pro",
-        "key": "Vous avez déjà une clé ?",
-        "studio": "Le studio de cadrans fait partie de Pro. Essayez des couleurs ici ; l’enregistrement nécessite Pro.",
-        "sound": "Le mélangeur de sons fait partie de Pro. Un son à la fois reste gratuit dans Personnaliser.",
-        "devices": "Pro gère jusqu’à 5 appareils avec une seule clé, et affiche l’état de cet appareil en direct."
-      },
-      "studio": {
-        "accent": "Couleur d’accent",
-        "auto": "Automatique",
-        "sw": {
-          "auto": "Vert par défaut",
-          "signal": "Vert signal",
-          "lime": "Citron vert",
-          "amber": "Ambre",
-          "sky": "Ciel",
-          "violet": "Violet",
-          "rose": "Rose",
-          "ember": "Braise"
-        },
-        "statusNote": "Les couleurs d’état ne changent jamais : en pause reste ambre, bloqué reste rouge.",
-        "glow": "Lueur de la pièce",
-        "glowLabel": "Intensité de la lueur de la pièce",
-        "save": "Enregistrer comme mon cadran",
-        "saveLocked": "Obtenez Pro pour enregistrer ce cadran",
-        "saved": "Enregistré. Le minuteur utilise maintenant cet accent et cette lueur.",
-        "help": "Pro · les cadrans enregistrés se synchronisent avec vos autres appareils."
-      },
-      "sound": {
-        "lead": "Mélangez une ambiance sonore qui ne joue que tant que l’écran reste allumé. Elle s’estompe dès que la session se termine.",
-        "rain": "Pluie sur la vitre",
-        "cafe": "Murmure de café",
-        "fire": "Crépitement du feu",
-        "brown": "Bruit brun",
-        "volume": "Volume de {name}",
-        "off": "Désactivé",
-        "chime": {
-          "_": "Carillon à la fin",
-          "two": "Deux notes",
-          "bell": "Cloche",
-          "off": "Désactivé"
-        },
-        "preview": "Écouter 5 secondes",
-        "help": "Pro · les sons sont joués sur cet appareil. Le volume du système s’applique toujours."
-      },
-      "devices": {
-        "loading": "Vérification de vos appareils…",
-        "offline": "Impossible de joindre le service de licences. Vos appareils réapparaîtront une fois en ligne.",
-        "count": "{n} appareils sur {max} utilisés",
-        "here": "Cet appareil",
-        "hereUntil": "Cet appareil · jusqu’à {time}",
-        "hereNoEnd": "Cet appareil · sans fin",
-        "added": "Ajouté le {date}",
-        "state": {
-          "awake": "Allumé",
-          "paused": "En pause",
-          "idle": "Écran non maintenu"
-        },
-        "add": "Ajouter un appareil",
-        "addHow": "Ouvrez AwakeTab sur l’autre appareil et saisissez la clé de licence de votre reçu Polar. Elle occupe l’une de vos cinq places.",
-        "addLink": "Saisir la clé de licence",
-        "help": "Pro · jusqu’à 5 appareils. Cet appareil affiche son état en direct ; les autres indiquent quand ils ont été ajoutés."
-      },
-      "account": {
-        "guest": "Non connecté",
-        "signin": "Se connecter pour synchroniser",
-        "magic": "Connecté avec un lien magique",
-        "freeName": "AwakeTab Gratuit",
-        "free": "Gratuit",
-        "yearly": "Annuel",
-        "lifetime": "À vie",
-        "plan": {
-          "free": "Garder l’écran allumé est gratuit et le restera. Pro ajoute plus d’appareils et des extras.",
-          "yearly": "Renouvellement le {date}. Résiliable à tout moment : vous gardez Pro jusqu’à la fin de la période.",
-          "lifetime": "Payé une fois. Pro reste actif, sans renouvellement."
-        },
-        "billing": "Gérer la facturation",
-        "getPro": "Obtenir Pro",
-        "devices": "Appareils",
-        "devicesUsed": "{n} sur {max} utilisés",
-        "devicesUpTo": "Jusqu’à {max} avec Pro",
-        "export": "Exporter mes données",
-        "exportD": "Réglages, préréglages et historique dans un fichier",
-        "history": "Exporter l’historique",
-        "historyD": "Chaque session dans un fichier CSV",
-        "signout": "Se déconnecter",
-        "signoutD": "Cet appareil continue de fonctionner hors ligne",
-        "exported": "Enregistré dans vos téléchargements.",
-        "signedOut": "Déconnecté. Tout continue de fonctionner sur cet appareil.",
-        "delete": "Supprimer le compte…",
-        "deleteWhat": "Cela vous déconnecte et retire votre adresse e-mail de cet appareil. AwakeTab ne conserve aucun compte sur ses serveurs ; votre preuve d’achat reste chez Polar.",
-        "keep": "Conserver",
-        "deleteYes": "Supprimer de cet appareil",
-        "deleted": "Votre compte a été retiré de cet appareil.",
-        "help": "La facturation est gérée par Polar. Sans compte, AwakeTab fonctionne quand même : les réglages restent simplement sur cet appareil."
-      }
-    }
-  },
-  "license": {
-    "error": {
-      "invalid": "Cette clé ne correspond à aucun achat. Vérifiez l’e-mail de reçu.",
-      "limit": "Cette clé est déjà active sur 5 appareils. Retirez-en un dans Gérer les appareils.",
-      "revoked": "Cette clé a été remboursée ou annulée.",
-      "offline": "Vous êtes hors ligne. Réessayez une fois connecté.",
-      "token": "This device needs to re-activate."
-    },
-    "info": {
-      "syncing": "Votre achat est toujours en cours de synchronisation. Réessayez dans une minute."
-    }
   },
   "sponsor": {
     "label": "Sponsorisé"
@@ -2684,7 +2436,6 @@
       "words": "Mots",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "led": "LED",
       "dive": "Plongée",
       "chrono": "Chronographe",
       "gauge": "Jauge",
@@ -2714,8 +2465,6 @@
       "bauhaus": "Bauhaus",
       "poster": "Affiche",
       "eink": "Encre électronique",
-      "terminal": "Terminal",
-      "pulse": "Pouls",
       "waveform": "Forme d’onde",
       "blob": "Fluide",
       "hud": "HUD",
@@ -2735,7 +2484,6 @@
       "words": "L’heure en une phrase, écrite naturellement dans chacune des huit langues.",
       "nixie": "Des tubes de verre avec grille et 8 fantômes ; la lueur prend la couleur de la lampe.",
       "lcd": "Des segments inclinés sur un léger 88:88 fantôme, comme un réveil de chevet.",
-      "led": "Un panneau à matrice de points avec une ligne d’état défilante. Idéal en OLED.",
       "dive": "Une lunette de montre de plongée : l’arc vert indique les minutes restantes, les aiguilles l’heure réelle.",
       "chrono": "Des compteurs de minutes et de secondes avec une trotteuse de chronographe.",
       "gauge": "Une aiguille d’instrument avec une zone d’alerte de cinq minutes.",
@@ -2765,8 +2513,6 @@
       "bauhaus": "Des formes primaires et un camembert du temps restant : un objet design pour le bureau.",
       "poster": "D’énormes minutes recadrées en Archivo Expanded, éditoriales et franches.",
       "eink": "Un écran façon papier avec chiffres à empattements et léger fantôme, apaisant à la lumière du jour.",
-      "terminal": "Un terminal qui rend compte honnêtement du verrouillage de veille, avec un curseur clignotant.",
-      "pulse": "Un tracé de moniteur cardiaque défile tant que l’écran est allumé.",
       "waveform": "Un anneau de barres audio qui danse tant que l’écran est allumé ; les barres allumées sont le temps restant.",
       "blob": "Une sphère en dégradé qui se transforme, comme un assistant vocal au repos.",
       "hud": "Un arc de segments façon tableau de bord, avec chiffres italiques et voyants.",
@@ -2823,9 +2569,6 @@
         "awake": "ALLUMÉ",
         "end": "FIN {time}"
       },
-      "led": {
-        "left": "restant"
-      },
       "board": {
         "left": "RESTE",
         "ends": "FIN",
@@ -2867,454 +2610,6 @@
       }
     }
   },
-  "account": {
-    "signin": {
-      "title": "Connexion · AwakeTab",
-      "description": "Connectez-vous avec un lien à usage unique envoyé par e-mail pour synchroniser vos appareils AwakeTab Pro. Sans mot de passe.",
-      "eyebrow": "PRO · SYNCHRO",
-      "h1": "Connectez-vous pour synchroniser vos appareils.",
-      "lead": "Seul Pro a besoin d’un compte, pour que vos appareils partagent préréglages et sessions. Tout le reste fonctionne sans.",
-      "label": "Adresse e-mail",
-      "help": "Nous vous enverrons un lien à usage unique.",
-      "error": {
-        "email": "Il manque quelque chose dans cette adresse : vérifiez la partie après le @.",
-        "rate": "Un lien vient d’être envoyé. Attendez une minute, puis redemandez.",
-        "offline": "Vous êtes hors ligne. Connectez-vous, puis réessayez ; le minuteur continue de tourner en attendant."
-      },
-      "submit": "M’envoyer un lien de connexion",
-      "sending": "Envoi…",
-      "note": "Sans mot de passe. Le lien fonctionne une fois et expire au bout de {minutes} minutes.",
-      "unavailable": {
-        "title": "Les e-mails de connexion ne sont pas encore activés.",
-        "text": "Rien n’a été envoyé. Pro fonctionne sans connexion : la clé de licence de Polar l’active sur chaque appareil.",
-        "link": "Utiliser une clé de licence"
-      },
-      "sent": {
-        "h": "Consultez votre boîte de réception",
-        "before": "Nous avons envoyé un lien de connexion à",
-        "after": ". Ouvrez-le sur cet appareil pour activer la synchronisation.",
-        "reset": "Utiliser une autre adresse"
-      },
-      "verifying": {
-        "h1": "Connexion en cours…",
-        "text": "Vérification de votre lien. Cela prend une seconde."
-      },
-      "signed": {
-        "eyebrow": "PRO · SYNCHRO",
-        "h1": "Vous êtes connecté.",
-        "lead": "Cet appareil connaît désormais votre adresse Pro. Le minuteur fonctionne comme avant.",
-        "how": "Connecté avec un lien magique",
-        "open": "Ouvrir le minuteur",
-        "out": "Se déconnecter",
-        "with": {
-          "email": "Connecté avec un lien magique",
-          "google": "Connecté avec Google",
-          "github": "Connecté avec GitHub"
-        },
-        "manage": "Gérer les appareils",
-        "label": "Connecté en tant que"
-      },
-      "expired": {
-        "eyebrow": "LIEN EXPIRÉ",
-        "h1": "Ce lien a expiré.",
-        "lead": "Les liens de connexion fonctionnent une fois et seulement pendant {minutes} minutes. Demandez-en un nouveau : cela prend quelques secondes.",
-        "again": "Envoyer un nouveau lien",
-        "home": "Aller à l’accueil"
-      },
-      "callout": {
-        "title": "Vous n’utilisez pas Pro ?",
-        "text": "Inutile de vous connecter. Les réglages, les préréglages et l’historique restent sur cet appareil."
-      },
-      "social": {
-        "label": "Connectez-vous avec un compte que vous avez déjà",
-        "google": "Continuer avec Google",
-        "github": "Continuer avec GitHub",
-        "or": "ou utilisez votre e-mail",
-        "unset": "La connexion avec {provider} n’est pas encore configurée. Rien ne s’est passé ; utilisez plutôt le lien par e-mail.",
-        "failed": "La connexion avec {provider} n’a pas abouti et rien n’a changé. Réessayez ou utilisez le lien par e-mail.",
-        "offline": "Vous êtes hors ligne. Connectez-vous, puis réessayez."
-      },
-      "notReady": {
-        "title": "La connexion n’est pas encore activée.",
-        "text": "Rien n’a été envoyé et aucun compte n’a été créé. Pro fonctionne sans connexion : la clé de licence de Polar l’active sur chaque appareil."
-      }
-    }
-  },
-  "proflow": {
-    "steps": {
-      "brand": "AwakeTab Pro",
-      "label": "Étapes de l’achat",
-      "s1": "Formule",
-      "s2": "Compte",
-      "s3": "Paiement",
-      "s4": "Terminé",
-      "done": "(terminé)",
-      "back": "Retour au minuteur"
-    },
-    "checkout": {
-      "title": "Obtenir AwakeTab Pro",
-      "description": "Choisissez une formule Pro, indiquez votre e-mail et payez sur la page sécurisée de Polar.",
-      "kicker": "AWAKETAB PRO",
-      "plans": {
-        "h1": "Garder l’écran allumé reste gratuit.",
-        "lead": "Pro s’adresse aux écrans sur plusieurs appareils et à ceux qui veulent les extras.",
-        "period": "Période de facturation",
-        "yearly": "Annuel",
-        "lifetime": "Paiement unique",
-        "continue": "Continuer avec Pro"
-      },
-      "soon": "Les achats ouvrent bientôt. Vous pouvez déjà utiliser l’outil gratuit.",
-      "free": {
-        "name": "Gratuit",
-        "price": "Sans frais",
-        "f1": "Écran allumé pour la durée voulue, ou sans fin",
-        "f2": "Les 49 cadrans et 3 thèmes",
-        "f3": "Préréglages et palette ⌘K",
-        "f4": "Vidéo de secours pour les anciens navigateurs",
-        "now": "Vous êtes actuellement en version gratuite."
-      },
-      "pro": {
-        "name": "Pro",
-        "badge": {
-          "yearly": "Facturé chaque année",
-          "lifetime": "Paiement unique"
-        },
-        "f1": "Synchronisez jusqu’à 5 appareils",
-        "f2": "Historique complet avec export",
-        "f3": "Mélangeur de sons",
-        "f4": "Studio de cadrans : votre propre couleur d’accent",
-        "f5": "Plusieurs notes par session",
-        "f6": "Tout ce qu’offre la version gratuite"
-      },
-      "price": {
-        "yearly": "{price} / an",
-        "lifetime": "{price} une fois"
-      },
-      "account": {
-        "h1": "Où envoyer votre lien de connexion ?",
-        "lead": "Sans mot de passe. Pro n’utilise une adresse e-mail que pour synchroniser vos appareils et envoyer les reçus.",
-        "label": "Adresse e-mail",
-        "idle": "Saisissez une adresse comme nom@exemple.com.",
-        "ok": "C’est bon.",
-        "offline": "Vous êtes hors ligne. Connectez-vous, puis renvoyez le lien.",
-        "send": "Envoyer le lien de connexion",
-        "sending": "Envoi…"
-      },
-      "back": {
-        "plans": "Retour aux formules"
-      },
-      "check": {
-        "h1": "Consultez votre boîte de réception",
-        "before": "Nous avons envoyé un lien à",
-        "after": ". Il fonctionne une fois et expire dans {minutes} minutes. Vous pouvez l’ouvrir après le paiement.",
-        "continue": "Passer au paiement",
-        "other": "Utiliser une autre adresse"
-      },
-      "pay": {
-        "h1": "Confirmer et payer",
-        "unsent": "Les e-mails de connexion ne sont pas encore activés, aucun lien n’a donc été envoyé. Le paiement fonctionne normalement : votre reçu et votre clé de licence viennent de Polar.",
-        "plan": {
-          "_": "Formule",
-          "v": "AwakeTab Pro"
-        },
-        "billing": {
-          "_": "Facturation",
-          "yearly": "Annuelle, renouvelée le {date}",
-          "lifetime": "Une fois, jamais renouvelée"
-        },
-        "account": "Compte",
-        "total": "Total aujourd’hui",
-        "btn": "Payer avec Polar",
-        "note": {
-          "_": "Vous finaliserez sur la page sécurisée de Polar. AwakeTab ne voit jamais votre carte. Les taxes y sont ajoutées le cas échéant.",
-          "cancel": "Résiliable à tout moment dans Réglages → Compte."
-        },
-        "lock": "Paiement sécurisé",
-        "unsentTitle": "Aucun lien de connexion n’a été envoyé"
-      },
-      "unavailable": {
-        "title": "Les achats ouvrent bientôt",
-        "text": "Le paiement n’est pas encore activé ici, rien n’a donc été facturé. Vous pouvez déjà utiliser l’outil gratuit."
-      }
-    },
-    "page": {
-      "title": "AwakeTab Pro — tarifs et formules",
-      "description": "Garder l’écran allumé reste gratuit. AwakeTab Pro ajoute jusqu’à 5 appareils, l’export de l’historique, un mélangeur de sons, le studio de cadrans et plus de notes, à partir de {yearly} par an.",
-      "eyebrow": "AWAKETAB PRO",
-      "h1": "Garder l’écran allumé reste gratuit.",
-      "lead": "Pro s’adresse à ceux qui font tourner des écrans sur plusieurs appareils ou qui veulent les extras.",
-      "soon": "Les achats ouvrent bientôt. Vous pouvez déjà utiliser l’outil gratuit.",
-      "plans": {
-        "label": "Formules"
-      },
-      "free": {
-        "name": "Gratuit",
-        "price": "Sans frais",
-        "d": "Tout ce qu’il faut pour garder un écran allumé.",
-        "f1": "Écran allumé pour la durée voulue, ou sans fin",
-        "f2": "Les 49 cadrans",
-        "f3": "Préréglages et palette ⌘K",
-        "f4": "Thèmes clair, sombre et OLED",
-        "f5": "Vidéo de secours pour les anciens navigateurs",
-        "btn": "Ouvrir le minuteur"
-      },
-      "pro": {
-        "name": "Pro",
-        "badge": "Pro",
-        "price": "{yearly} / an",
-        "d": {
-          "_": "Ou {once} une fois, jamais renouvelé. Résiliez la formule annuelle à tout moment depuis les Réglages.",
-          "launch": "Ou {once} une fois au prix de lancement jusqu’au {date}, puis {after}. Résiliez la formule annuelle à tout moment depuis les Réglages."
-        },
-        "f1": "Synchronisez jusqu’à 5 appareils",
-        "f2": "Historique complet avec export",
-        "f3": "Mélangeur de sons : pluie, café, bruit brun",
-        "f4": "Studio de cadrans : votre propre couleur d’accent",
-        "f5": "Plusieurs notes par session",
-        "f6": "Soutient un outil indépendant",
-        "btn": "Obtenir Pro"
-      },
-      "cmp": {
-        "h2": "Gratuit ou Pro, côte à côte",
-        "col": {
-          "feature": "Fonction",
-          "free": "Gratuit",
-          "pro": "Pro"
-        },
-        "yes": "Inclus",
-        "no": "Non inclus",
-        "awake": "Garde l’écran allumé, avec un indicateur d’état honnête",
-        "lengths": "Toute durée, jusqu’à une heure donnée ou jusqu’à l’arrêt",
-        "faces": "Les 49 cadrans et 3 thèmes",
-        "presets": "Préréglages, palette ⌘K et configurations partagées",
-        "devices": {
-          "_": "Appareils",
-          "free": "Cet appareil",
-          "pro": "Jusqu’à 5"
-        },
-        "history": {
-          "_": "Historique",
-          "free": "7 jours",
-          "pro": "Complet, avec export"
-        },
-        "sound": {
-          "_": "Son d’ambiance",
-          "free": "Un son à la fois",
-          "pro": "Mélangeur"
-        },
-        "studio": "Studio de cadrans : votre couleur d’accent et la lueur de la pièce",
-        "notes": {
-          "_": "Notes",
-          "free": "Une note",
-          "pro": "Plusieurs par session"
-        },
-        "ext": {
-          "_": "AwakeTab pour Chrome",
-          "free": "Écran allumé et minuteurs",
-          "pro": "Ajoute les plannings et le démarrage automatique"
-        },
-        "ads": {
-          "_": "Publicités sur les guides",
-          "free": "Possibles",
-          "pro": "Aucune"
-        }
-      },
-      "how": {
-        "h2": "Comment obtenir Pro",
-        "lead": "Polar encaisse le paiement et envoie une clé de licence. La connexion est facultative.",
-        "s1": {
-          "h": "Choisissez une formule et payez sur Polar",
-          "p": "Polar est le vendeur officiel : il encaisse la carte, ajoute les taxes le cas échéant et vous envoie par e-mail le reçu avec la clé de licence."
-        },
-        "s2": {
-          "h": "Pro s’active ici",
-          "p": "Polar vous ramène sur AwakeTab et ce navigateur s’active tout seul. Sinon, collez la clé reçue par e-mail."
-        },
-        "s3": {
-          "h": "Ajoutez vos autres appareils",
-          "p": "Saisissez la même clé dans cinq navigateurs au total, et retirez-en un à tout moment pour libérer sa place."
-        },
-        "signin": "Se connecter pour synchroniser"
-      },
-      "faq": {
-        "h2": "Questions de facturation",
-        "q1": "Puis-je résilier ?",
-        "a1": "Oui, à tout moment dans Réglages → Compte ou dans le portail client de Polar. Vous gardez Pro jusqu’à la fin de la période payée.",
-        "q2": "Qui gère le paiement ?",
-        "a2": "Polar. AwakeTab ne voit jamais les données de votre carte.",
-        "q3": "Que deviennent mes données si je résilie ?",
-        "a3": "Les sessions restent sur chaque appareil. La synchronisation s’arrête ; rien n’est supprimé sans vous demander.",
-        "q4": "Pro garde-t-il mieux l’écran allumé ?",
-        "a4": "Non. Gratuit et Pro utilisent le même verrouillage de veille et le même indicateur d’état. Pro ajoute des appareils et des extras par-dessus.",
-        "q5": "Qu’est-ce qui compte comme un appareil ?",
-        "a5": "Chaque navigateur où vous saisissez la clé occupe l’une des cinq places. AwakeTab pour Chrome en occupe une aussi. Les appareils inutilisés depuis 90 jours sont retirés automatiquement quand vous en ajoutez un nouveau.",
-        "q6": "Existe-t-il une formule mensuelle ?",
-        "a6": "Non. Pro coûte {yearly} par an, ou {once} une fois sans renouvellement. Les deux couvrent 5 appareils."
-      },
-      "refund": "Remboursement sous 14 jours, sans question. Écrivez à support@awaketab.com avec votre reçu ou utilisez le portail client de Polar. Un remboursement désactive la clé de licence.",
-      "biz": {
-        "h2": "Pour votre site web ou vos écrans",
-        "embed": {
-          "name": "Licence d’intégration",
-          "price": "{price} par an et par site",
-          "text": "Retire la mention « Keep awake by AwakeTab ». Les licences ouvrent bientôt ; l’intégration gratuite fonctionne dès aujourd’hui."
-        },
-        "kiosk": {
-          "name": "Licence kiosque",
-          "price": "{one} un site · {five} cinq sites",
-          "text": "Des écrans d’affichage et de kiosque qui restent allumés depuis une seule URL, avec votre logo et votre message."
-        }
-      }
-    },
-    "done": {
-      "u1": "Jusqu’à 5 appareils avec une clé",
-      "u2": "Historique complet avec export",
-      "u3": "Le mélangeur de sons",
-      "u4": "Studio de cadrans : votre couleur d’accent et la lueur de la pièce",
-      "u5": "Plusieurs notes par session, des plannings dans AwakeTab pour Chrome et aucune publicité sur les guides",
-      "processing": {
-        "h1": "Confirmation de votre paiement…",
-        "lead": "Cela prend généralement quelques secondes. Gardez cet onglet ouvert."
-      },
-      "success": {
-        "h1": "Pro est activé.",
-        "lead": "Merci. Polar envoie votre reçu et votre clé de licence",
-        "to": "à",
-        "next": ". Ensuite : ajoutez vos autres appareils avec la même clé.",
-        "open": "Ouvrir le minuteur",
-        "add": "Ajouter un appareil",
-        "generic": "Merci. Polar envoie votre reçu et votre clé de licence par e-mail. Ensuite : ajoutez vos autres appareils avec la même clé."
-      },
-      "failed": {
-        "lead": "Polar l’a refusé et rien ne vous a été facturé. Rien n’a changé sur votre compte gratuit.",
-        "again": "Réessayer",
-        "plans": "Retour aux formules",
-        "h1": "Le paiement n’a pas abouti"
-      },
-      "syncing": {
-        "h1": "Votre achat est encore en cours de synchronisation",
-        "lead": "Polar a reçu le paiement mais crée encore votre clé de licence. Vous ne serez pas facturé deux fois. Réessayez dans une minute ou saisissez la clé reçue de Polar.",
-        "retry": "Réessayer",
-        "key": "Saisir la clé de licence"
-      },
-      "cancelled": {
-        "h1": "Paiement fermé",
-        "lead": "Rien n’a été facturé. Pro est facultatif : l’outil, les préréglages et l’extension fonctionnent sans.",
-        "plans": "Revoir les formules",
-        "open": "Ouvrir le minuteur"
-      }
-    },
-    "flow": {
-      "pro": "Pro",
-      "back": "Retour au minuteur",
-      "label": "Étapes de l’achat",
-      "done": "(terminé)",
-      "current": "(étape actuelle)"
-    },
-    "activate": {
-      "title": "Activer AwakeTab Pro — AwakeTab",
-      "description": "Collez la clé de licence de votre reçu Polar pour activer AwakeTab Pro sur cet appareil. Le paiement revient ici automatiquement quand Polar a terminé.",
-      "h1": "Activer Pro",
-      "lead": "Votre clé figure dans l’e-mail de Polar et sur la page du reçu. Cet appareil compte pour l’une des cinq activations.",
-      "submit": "Activer sur cet appareil",
-      "errors": "Si l’activation échoue",
-      "ext": {
-        "_": "Copiez cette clé et collez-la dans la page d’options d’AwakeTab pour Chrome. Il n’y a pas de transfert automatique.",
-        "title": "Votre clé de licence",
-        "lead": "Saisissez votre clé ici pour la copier dans AwakeTab pour Chrome. Ce navigateur n’est pas activé : l’extension s’active elle-même et utilise donc une seule de vos cinq activations, pas deux.",
-        "submit": "Afficher la clé pour l’extension",
-        "note": "Ce navigateur reste non activé, l’extension utilise donc une seule de vos cinq activations, pas deux."
-      },
-      "back": "AwakeTab Pro",
-      "placeholder": "Collez la clé de votre reçu",
-      "hint": {
-        "_": "Polar envoie la clé par e-mail juste après le paiement.",
-        "ext": "Rien n’est activé dans ce navigateur."
-      },
-      "checking": {
-        "_": "Vérification de votre clé…",
-        "status": "Vérification de votre clé auprès de Polar. Cela prend généralement une ou deux secondes."
-      },
-      "retry": "Réessayer",
-      "manage": "Gérer les appareils",
-      "plans": "Pas encore de clé ? Voir les formules Pro",
-      "err": {
-        "invalid_key": "L’activation n’a pas fonctionné",
-        "activation_limit": "Les cinq appareils sont utilisés",
-        "revoked": "Cette clé n’est plus active",
-        "polar_unavailable": "Pas encore prêt",
-        "offline": "Pas de connexion",
-        "bad_token": "Réactivez cet appareil"
-      },
-      "ok": {
-        "key": "Clé se terminant par {tail} · cet appareil utilise l’une de vos cinq activations.",
-        "unlocked": "Débloqué ici",
-        "u1": "Plus de thèmes de couleur, de lampes, de fonds et de préréglages",
-        "u2": "Mode message sur l’écran allumé",
-        "u3": "12 semaines de statistiques et export CSV",
-        "u4": "Une fenêtre flottante plus haute",
-        "u5": "Plannings et démarrage automatique dans AwakeTab pour Chrome",
-        "u6": "Aucune publicité sur les guides",
-        "u7": "Un mélangeur de sons, plus de notes et un Pomodoro qui se répète",
-        "open": "Ouvrir AwakeTab",
-        "title": "Pro est activé."
-      },
-      "reset": "Utiliser une autre clé",
-      "copy": "Copier",
-      "copied": "Copié",
-      "errText": {
-        "invalid_key": "Polar ne connaît pas cette clé. Comparez-la avec l’e-mail de Polar ; les clés contiennent des lettres, des chiffres et des tirets.",
-        "activation_limit": "Cette clé est déjà utilisée sur cinq appareils. Retirez-en un que vous n’utilisez plus, puis activez ici.",
-        "revoked": "Cette clé a été remboursée ou révoquée, elle ne peut donc pas activer Pro. L’outil gratuit continue de fonctionner.",
-        "polar_unavailable": "Polar crée encore la clé ou est injoignable. Attendez une minute et réessayez ; vous ne serez pas facturé deux fois.",
-        "offline": "Vous êtes hors ligne, rien n’a donc été vérifié. Connectez-vous, puis réessayez.",
-        "bad_token": "Pro doit être réactivé sur cet appareil. Saisissez la clé reçue par e-mail de Polar."
-      },
-      "label": "Clé de licence"
-    },
-    "manage": {
-      "title": "Gérer les appareils Pro — AwakeTab",
-      "description": "Voyez quels appareils utilisent votre licence AwakeTab Pro et retirez-en un si vous avez atteint la limite de cinq.",
-      "h1": "Gérer les appareils",
-      "lead": "Les appareils inutilisés depuis 90 jours sont retirés automatiquement quand vous en activez un nouveau.",
-      "empty": "Aucune licence sur cet appareil pour l’instant. Activez d’abord une clé.",
-      "remove": "Retirer",
-      "col": {
-        "device": "Appareil",
-        "activated": "Activé"
-      },
-      "meter": "{n} appareils sur 5",
-      "left": {
-        "_": "{n} activations restantes",
-        "one": "1 activation restante",
-        "none": "Plus aucune activation"
-      },
-      "here": "Cet appareil",
-      "off": "Pro désactivé",
-      "activated": "Activé",
-      "confirm": {
-        "here": "Retirer cet appareil ? Pro se désactive ici et libère l’une de vos cinq activations.",
-        "other": "Retirer {label} ? Pro se désactive sur cet appareil et libère l’une de vos cinq activations.",
-        "aria": "Retirer {label} ?"
-      },
-      "keep": "Conserver",
-      "removeDevice": "Retirer l’appareil",
-      "plans": "Voir les formules Pro",
-      "loading": "Vérification de vos appareils…",
-      "offline": {
-        "title": "Impossible de charger vos appareils",
-        "text": "La liste des appareils ne s’est pas chargée : rien n’est affiché plutôt qu’une liste vide. Vérifiez la connexion et réessayez.",
-        "retry": "Réessayer"
-      },
-      "added": "Ajouté le {date}",
-      "lapse": {
-        "grace": "Renouvellement en attente · Pro reste actif jusqu’au {date}",
-        "lapsed": "Pro a pris fin le {date} · renouvelez pour le réactiver",
-        "portal": "Mettre à jour le paiement dans Polar"
-      },
-      "activate": "Activer une clé"
-    }
-  },
   "site": {
     "nav": {
       "label": "Site",
@@ -3332,27 +2627,6 @@
       "desc": "Fonctionne dans Chrome, Edge, Firefox et Safari."
     },
     "ctaShort": "Ouvrir le minuteur",
-    "consent": {
-      "title": "Pouvons-nous compter les visites ?",
-      "body": "Statistiques facultatives et sans cookie : pas de profil, pas de suivi publicitaire. AwakeTab fonctionne de la même façon dans les deux cas.",
-      "decline": "Refuser",
-      "allow": "Autoriser"
-    },
-    "foot": {
-      "product": "Produit",
-      "learn": "Comprendre",
-      "company": "Entreprise",
-      "timer": "Ouvrir le minuteur",
-      "changelog": "Nouveautés",
-      "help": "Centre d’aide",
-      "presenting": "Guide pour présenter",
-      "about": "À propos",
-      "status": "Pages d’état",
-      "tagline": "Garde un écran allumé depuis le navigateur, puis le laisse se mettre en veille.",
-      "contact": "Contact",
-      "cookies": "Aucun cookie de suivi",
-      "updated": "Mis à jour le {date}"
-    },
     "tool": {
       "eyebrow": "Essayez ici",
       "ends": "Se termine à {time} si vous démarrez maintenant.",
@@ -3402,20 +2676,16 @@
         "h1": "Cette page s’est endormie",
         "lead": "Le lien est peut-être ancien ou mal saisi. Le minuteur est juste ici.",
         "guides": "Guides populaires",
-        "title": "Page introuvable — AwakeTab",
-        "eyebrow": "404"
+        "eyebrow": "404",
+        "description": "Cette page AwakeTab s’est endormie : le lien est peut-être ancien ou mal saisi. Le minuteur fonctionne juste ici, et l’aide comme les guides sont à un toucher."
       },
       "offline": {
-        "title": "Vous êtes hors ligne — AwakeTab",
         "eyebrow": "Hors ligne",
         "h1": "Vous êtes hors ligne. Le minuteur, non.",
         "lead": "Garder l’écran allumé ne demande pas Internet. La synchronisation et les liens partagés attendent votre reconnexion.",
-        "timer": "Continuer avec le minuteur",
-        "description": "Garder l’écran allumé ne demande pas Internet. La synchronisation et les liens partagés attendent votre reconnexion."
+        "timer": "Continuer avec le minuteur"
       },
       "status": {
-        "title": "État du service — AwakeTab",
-        "description": "Si la connexion et la synchronisation d’AwakeTab fonctionnent, et quand une maintenance est prévue. Le minuteur fonctionne sur tous les appareils dans tous les cas.",
         "eyebrow": "Maintenance",
         "h1": "Maintenance prévue.",
         "lead": "La connexion et la synchronisation sont suspendues jusqu’à environ {time}. Le minuteur fonctionne normalement sur tous les appareils.",
@@ -3424,30 +2694,19 @@
         "okLead": "Le minuteur, la connexion et la synchronisation fonctionnent. Toute maintenance prévue est d’abord annoncée ici.",
         "see": "Voir l’état"
       },
-      "expired": {
-        "title": "Lien expiré — AwakeTab",
-        "eyebrow": "Lien expiré",
-        "h1": "Ce lien a expiré.",
-        "lead": "Les liens de connexion fonctionnent une fois et seulement pendant [NUMBER] minutes. Demandez-en un nouveau : cela prend quelques secondes.",
-        "send": "Envoyer un nouveau lien"
-      },
       "removed": {
-        "title": "Configuration retirée — AwakeTab",
         "eyebrow": "Configuration retirée",
         "h1": "Cette configuration partagée a été désactivée.",
         "lead": "La personne qui l’a partagée a retiré le lien. Vous pouvez quand même démarrer votre propre session en un clic.",
         "start": "Démarrer la mienne"
       },
       "error": {
-        "title": "Un problème est survenu — AwakeTab",
         "eyebrow": "Quelque chose a planté",
         "h1": "Un problème est survenu de notre côté.",
         "lead": "La page n’a pas pu se charger. Rien n’a changé sur votre appareil. Réessayez ou ouvrez le minuteur : il fonctionne hors ligne."
       }
     },
     "share": {
-      "title": "Une session AwakeTab partagée",
-      "description": "Quelqu’un a partagé une session AwakeTab : sa durée, son cadran et son carillon. Rien de personnel ne voyage avec le lien.",
       "eyebrow": "Une configuration partagée",
       "loading": "Ouverture d’une session partagée…",
       "loadingLead": "Lecture de la durée, du cadran et du carillon depuis le lien.",
@@ -3483,8 +2742,6 @@
       "installBody": "La session tourne dans cet onglet. Fermez-le quand vous voulez et l’écran se remet en veille normalement."
     },
     "help": {
-      "title": "Centre d’aide — AwakeTab",
-      "description": "Des réponses pour un écran qui s’éteint quand même, iPhone et iPad, les présentations, l’extension, la facturation Pro et vos données.",
       "eyebrow": "Centre d’aide",
       "h1": "Comment pouvons-nous vous aider ?",
       "lead": "La plupart des problèmes viennent de l’économiseur de batterie, d’un onglet masqué ou d’un ancien navigateur. Cherchez, ou commencez par un sujet ci-dessous.",
@@ -3498,107 +2755,7 @@
       "none": "Rien ne correspond à « {q} ». Essayez « batterie », « iPad » ou « facturation ».",
       "popular": "Sujets populaires",
       "stuck": "Toujours bloqué ?",
-      "stuckBefore": "Écrivez à",
-      "stuckAfter": "en précisant votre navigateur et votre appareil. Nous lisons chaque message.",
       "allTopics": "Tous les sujets"
-    },
-    "home": {
-      "faces": {
-        "title": "49 cadrans. Choisissez celui que vous lisez depuis l’autre bout de la pièce.",
-        "sub": "Tous gratuits. Ils ne bougent que tant que l’écran est allumé, et restent immobiles avec les animations réduites.",
-        "items": {
-          "aurora": {
-            "name": "Aurore",
-            "body": "Des aurores boréales dérivent derrière l’heure tant que l’écran est allumé."
-          },
-          "liquid": {
-            "name": "Liquide",
-            "body": "Une sphère de lumière en verre qui se vide au fil de la session."
-          },
-          "eclipse": {
-            "name": "Éclipse",
-            "body": "La lune glisse devant le soleil ; totalité quand le temps est écoulé."
-          },
-          "skeleton": {
-            "name": "Squelette",
-            "body": "Un mouvement apparent : les rouages tournent, le balancier oscille."
-          },
-          "neon": {
-            "name": "Néon",
-            "body": "Une enseigne au néon sur un mur sombre, qui grésille tant que l’écran est allumé."
-          },
-          "halo": {
-            "name": "Halo",
-            "body": "Un anneau en dégradé lumineux qui se referme vers 12 h."
-          }
-        }
-      },
-      "uses": {
-        "title": "Pour les moments où un écran éteint vous gêne",
-        "cooking": {
-          "_": "Cuisine",
-          "body": "Les recettes restent à l’écran quand vous avez les mains prises.",
-          "link": "Pour cuisiner"
-        },
-        "presenting": {
-          "_": "Présentation",
-          "body": "Pas d’écran qui s’assombrit au milieu de votre meilleure diapo.",
-          "link": "Pour présenter"
-        },
-        "dashboards": {
-          "_": "Tableaux de bord",
-          "body": "Écrans muraux et tableaux d’état qui restent allumés.",
-          "link": "Pour les tableaux de bord"
-        },
-        "nightdesk": {
-          "_": "Bureau de nuit",
-          "body": "Lire, étudier, une horloge paisible une fois la nuit tombée.",
-          "link": "Pour le bureau de nuit"
-        }
-      },
-      "how": {
-        "1": {
-          "_": "Choisissez une durée",
-          "body": "15 minutes, une heure, jusqu’à une heure précise, ou sans fin."
-        },
-        "2": {
-          "_": "Appuyez sur Garder allumé",
-          "body": "Le Screen Wake Lock de votre navigateur garde l’écran allumé."
-        },
-        "3": {
-          "_": "Passez à autre chose",
-          "body": "Un doux carillon quand le temps est écoulé ; l’écran se remet en veille normalement."
-        },
-        "title": "Comment ça marche"
-      },
-      "limits": {
-        "title": "Honnête sur les limites",
-        "body": "Un navigateur peut garder l’écran allumé, pas tout l’ordinateur. L’économiseur de batterie, la fermeture du capot ou une politique de verrouillage de l’entreprise peuvent l’emporter : AwakeTab vous le dit quand cela arrive, et comment y remédier."
-      },
-      "faq": {
-        "1": {
-          "_": "Ça fonctionne sur iPhone et iPad ?",
-          "a": "Oui, dans Safari sous iOS et iPadOS 16.4 ou plus récent. Les versions antérieures utilisent une vidéo silencieuse de secours."
-        },
-        "2": {
-          "_": "Faut-il un compte ?",
-          "a": "Non. Les réglages restent sur cet appareil. Pro n’utilise un compte que pour synchroniser vos appareils."
-        },
-        "3": {
-          "_": "Est-ce que ça empêche mon ordinateur de travail de se verrouiller ?",
-          "a": "L’écran reste allumé tant que l’onglet est ouvert. Les politiques de verrouillage de l’entreprise s’appliquent toujours, et c’est normal."
-        },
-        "4": {
-          "_": "C’est gratuit ?",
-          "a": "Garder l’écran allumé est gratuit. Pro ajoute la synchronisation des appareils, l’historique complet et le mélangeur de sons."
-        }
-      },
-      "cta": "Garder allumé maintenant",
-      "og": {
-        "kicker": "Gratuit · dans votre navigateur",
-        "title": "L’écran reste allumé. Et vous savez jusqu’à quand.",
-        "sub": "Sans compte, rien à installer."
-      }
     },
     "changelog": {
       "crumb": "Nouveautés",
@@ -3607,13 +2764,208 @@
       "lead": "Chaque version, la plus récente d’abord. Les numéros de version et les dates sont provisoires jusqu’à la sortie."
     },
     "pro": {
-      "eyebrow": "AwakeTab Pro",
-      "h1": "Garder l’écran allumé reste gratuit.",
-      "lead": "Pro s’adresse à ceux qui font tourner des écrans sur plusieurs appareils ou qui veulent les extras. Les prix sont provisoires jusqu’à ce qu’ils soient fixés.",
-      "og": {
-        "kicker": "AwakeTab Pro",
-        "title": "Garder l’écran allumé est gratuit. Pro, c’est pour le confort.",
-        "sub": "Apparence, historique, notes."
+      "h1": "Garder l’écran allumé reste gratuit."
+    },
+    "consent": {
+      "title": "Compter cette visite ?",
+      "body": "Sans cookies et anonyme. AwakeTab fonctionne de la même façon dans les deux cas.",
+      "short": "Sans cookies, anonyme",
+      "decline": "Non merci",
+      "allow": "Autoriser"
+    },
+    "foot": {
+      "kicker": "FAIT PAR DES HUMAINS · LU PAR DES HUMAINS",
+      "ctaH": "Dites-nous ce qui le rendrait",
+      "ctaAccent": "vôtre.",
+      "ctaLine": "Deux touchers dans l’outil : Paramètres → Envoyer un avis. Nous lisons chaque message.",
+      "timer": "Ouvrir le minuteur",
+      "feedback": "Envoyer un avis",
+      "tagline": "Garde un écran allumé depuis le navigateur, puis le laisse se mettre en veille. Gratuit, pour toujours.",
+      "status": "Tout fonctionne · API wake lock en bonne santé",
+      "statusDown": "Maintenance prévue · le minuteur fonctionne toujours",
+      "social": {
+        "github": "AwakeTab sur GitHub",
+        "x": "Partager AwakeTab sur X",
+        "rss": "Flux des nouveautés (RSS)"
+      },
+      "product": "Produit",
+      "uses": "Usages",
+      "learn": "Apprendre",
+      "company": "À propos",
+      "faces": "Cadrans",
+      "vibes": "Ambiances",
+      "pro": "Pro",
+      "new": "NOUVEAU",
+      "cooking": "Cuisine",
+      "presenting": "Présentations",
+      "dashboards": "Tableaux de bord",
+      "nightdesk": "Bureau de nuit",
+      "help": "Centre d’aide",
+      "support": "Compatibilité des navigateurs",
+      "guides": "Guides",
+      "changelog": "Nouveautés",
+      "about": "À propos d’AwakeTab",
+      "statusLink": "État",
+      "copyright": "© [YEAR] [COMPANY NAME]",
+      "cookies": "Aucun cookie de suivi",
+      "theme": {
+        "label": "Thème",
+        "system": "Système",
+        "light": "Clair",
+        "dark": "Sombre"
+      }
+    },
+    "story": {
+      "cue": "Faites défiler : ce qui le rend différent",
+      "faces": {
+        "eyebrow": "46 CADRANS · TOUS GRATUITS",
+        "h": "Une horloge pour chaque pièce",
+        "accent": "où vous travaillez.",
+        "lead": "Choisissez-en un comme un fond d’écran. Ils ne bougent que tant que l’écran est allumé, et restent immobiles avec le mouvement réduit."
+      },
+      "vibes": {
+        "eyebrow": "AMBIANCES · NOUVEAU",
+        "h": "Créez l’ambiance.",
+        "accent": "Six fonds animés.",
+        "lead": "Aurore, ciel nocturne avec étoiles filantes, pluie sur la vitre, lent coucher de soleil, lampe à lave qui fond, ou calme parfait. Ils se mettent en pause avec l’économiseur de batterie, et l’horloge reste toujours lisible.",
+        "items": {
+          "aurora": {
+            "name": "Aurore",
+            "line": "Une douce lumière, à la dérive"
+          },
+          "night": {
+            "name": "Ciel nocturne",
+            "line": "Des étoiles et parfois une étoile filante"
+          },
+          "rain": {
+            "name": "Pluie sur la vitre",
+            "line": "Une fenêtre calme sous la pluie"
+          },
+          "sunset": {
+            "name": "Coucher de soleil",
+            "line": "Une lumière chaude pour le soir"
+          },
+          "lava": {
+            "name": "Lampe à lave",
+            "line": "Des couleurs vives qui fondent lentement"
+          },
+          "calm": {
+            "name": "Calme",
+            "line": "Seule l’horloge bouge"
+          }
+        }
+      },
+      "bento": {
+        "eyebrow": "CONÇU POUR UN COUP D’ŒIL",
+        "h": "Touchez-le trois secondes.",
+        "accent": "Faites-lui confiance une heure.",
+        "read": {
+          "h": "Lisible depuis l’autre bout de la pièce",
+          "d": "Chiffres immenses, fort contraste, une seule couleur pour le temps restant. Plus besoin de plisser les yeux vers l’ordinateur depuis les fourneaux."
+        },
+        "tap": {
+          "h": "Un toucher. C’est tout.",
+          "d": "Rien à installer, aucun compte, aucun réglage avant de commencer.",
+          "cta": "Garder allumé · 1 h"
+        },
+        "honest": {
+          "h": "Il ne fait jamais semblant",
+          "d": "Si le navigateur refuse, vous le voyez en toutes lettres, avec la solution.",
+          "awake": "Allumé · jusqu’à 12:26",
+          "paused": "En pause · encore 57 min",
+          "blocked": "Pas allumé · économiseur de batterie"
+        },
+        "free": {
+          "h": "Gratuit. Tout.",
+          "d": "Chaque cadran, thème, préréglage et son. Pro synchronise seulement plusieurs écrans.",
+          "zero": "$0"
+        },
+        "devices": {
+          "h": "Téléphone, tablette, ordinateur, mur",
+          "d": "La même horloge calme sur chaque écran que vous posez."
+        },
+        "palette": {
+          "h": "⌘K pour tout",
+          "d": "Prolonger, changer de cadran, ouvrir un préréglage, sans souris.",
+          "q": "prol",
+          "r1": "Prolonger de 15 minutes",
+          "r2": "Prolonger d’1 heure"
+        }
+      },
+      "how": {
+        "1": {
+          "t": "Choisissez une durée",
+          "d": "15 minutes, une heure ou sans fin. Une heure est déjà choisie à votre arrivée."
+        },
+        "2": {
+          "t": "Touchez Garder allumé",
+          "d": "Le Screen Wake Lock de votre navigateur garde l’écran allumé. L’indicateur passe au vert."
+        },
+        "3": {
+          "t": "Passez à autre chose",
+          "d": "Un carillon doux quand le temps est écoulé, puis l’écran se met en veille normalement."
+        },
+        "eyebrow": "COMMENT ÇA MARCHE",
+        "h": "Trois étapes.",
+        "accent": "Dont deux facultatives."
+      },
+      "uses": {
+        "eyebrow": "FAIT POUR",
+        "h": "Les moments où un écran noir",
+        "accent": "vous gêne.",
+        "cooking": {
+          "t": "Cuisine",
+          "d": "Les recettes restent allumées pendant que vos mains sont occupées.",
+          "l": "Pour cuisiner"
+        },
+        "presenting": {
+          "t": "Présentations",
+          "d": "Plus d’écran qui faiblit au milieu de votre meilleure diapositive.",
+          "l": "Pour présenter"
+        },
+        "dashboards": {
+          "t": "Tableaux de bord",
+          "d": "Écrans muraux et tableaux de suivi qui restent allumés.",
+          "l": "Pour les tableaux de bord"
+        },
+        "nightdesk": {
+          "t": "Bureau de nuit",
+          "d": "Lire, réviser : une horloge calme à la nuit tombée.",
+          "l": "Pour le bureau de nuit"
+        }
+      },
+      "faq": {
+        "1": {
+          "q": "Ça marche sur iPhone et iPad ?",
+          "a": "Oui, dans Safari sous iOS et iPadOS 16.4 ou plus récent. Les versions plus anciennes utilisent une vidéo silencieuse de secours, et l’indicateur vous dit laquelle fonctionne."
+        },
+        "2": {
+          "q": "Faut-il un compte ?",
+          "a": "Non. Les paramètres, préréglages et l’historique restent sur cet appareil."
+        },
+        "3": {
+          "q": "Empêchera-t-il mon ordinateur de travail de se verrouiller ?",
+          "a": "Il garde l’écran allumé tant que l’onglet est ouvert. Les règles de verrouillage de votre entreprise s’appliquent toujours, et c’est normal."
+        },
+        "4": {
+          "q": "C’est vraiment gratuit ?",
+          "a": "Oui. Chaque cadran, thème, préréglage et son. Pro est facultatif et synchronise seulement plusieurs écrans."
+        },
+        "5": {
+          "q": "Que se passe-t-il quand le temps est écoulé ?",
+          "a": "Un carillon doux, puis votre écran se met en veille comme d’habitude."
+        },
+        "eyebrow": "QUESTIONS",
+        "h": "Des réponses franches.",
+        "before": "Autre chose ? Touchez ",
+        "link": "Paramètres → Envoyer un avis",
+        "after": " dans l’outil. Nous lisons chaque message."
+      },
+      "cta": {
+        "h": "Votre écran, allumé",
+        "accent": "en un toucher.",
+        "lead": "Fonctionne dans Chrome, Edge, Firefox et Safari. Rien à installer.",
+        "button": "Garder cet écran allumé"
       }
     }
   }

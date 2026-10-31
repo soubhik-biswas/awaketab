@@ -46,7 +46,7 @@ const STATUS: Record<TDeviceStatus, { label: string; icon: LucideIcon; badge: st
   idle: { label: 'Not awake', icon: Power, badge: 'bg-secondary text-muted-foreground-strong', ring: 'var(--input)' },
 };
 
-export function DeviceAvatarStack({ devices, className }: { devices: IDevice[]; className?: string }) {
+function DeviceAvatarStack({ devices, className }: { devices: IDevice[]; className?: string }) {
   return (
     <span className={cn('flex', className)} aria-hidden="true">
       {devices.map((device, index) => {
@@ -69,7 +69,7 @@ export function DeviceAvatarStack({ devices, className }: { devices: IDevice[]; 
   );
 }
 
-export function DeviceStatusBadge({ status, label }: { status: TDeviceStatus; label?: string }) {
+function DeviceStatusBadge({ status, label }: { status: TDeviceStatus; label?: string }) {
   const look = STATUS[status];
   const Icon = look.icon;
   return (

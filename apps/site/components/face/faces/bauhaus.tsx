@@ -35,12 +35,14 @@ export default function Bauhaus({ m }: IDrawProps) {
         <path d="M262 282 A44 44 0 0 1 350 282 Z" fill={a.semi} />
         <rect x="24" y="242" width="150" height="10" fill={a.ink} />
       </svg>
-      <div style={{ position: 'absolute', left: 210, top: 92, display: 'flex', flexDirection: 'column', color: a.ink }}>
+      <div
+        style={{ position: 'absolute', left: 216, top: 100, display: 'flex', flexDirection: 'column', color: a.ink }}
+      >
         <span
           style={{
             fontFamily: DISPLAY,
             fontStretch: '112%',
-            fontSize: m.h > 0 ? 72 : 96,
+            fontSize: m.h > 0 ? 60 : 76,
             fontWeight: 800,
             letterSpacing: '-0.04em',
             lineHeight: 0.86,

@@ -1,80 +1,57 @@
 import { DEFAULT_SETTINGS, STORAGE_KEYS, type ISettings, type TPresetId } from '@awaketab/core';
-import type { TPowerLevel } from './api';
 
 export const EXT_KEYS = { ext: 'at.v1.ext', device: 'at.v1.device' } as const;
 
 export const SYNC_KEYS: readonly string[] = [STORAGE_KEYS.settings, EXT_KEYS.ext];
 
-export const SCHEDULES_MAX = 20;
-export const AUTOSTART_SITES_MAX = 50;
-
-export interface ISchedule {
-  id: string;
-  days: number[];
-  start: string;
-  end: string;
-  level: TPowerLevel;
-}
+const AUTOSTART_SITES_MAX = 50;
 
 export interface IAutostartSite {
   host: string;
   durationMin: number | null;
 }
 
+// The options page: the badge timer, auto-wake on chosen sites and release-when-hidden.
 export interface IExtSettings {
   v: 1;
-  level: TPowerLevel;
-  schedules: ISchedule[];
-  autostart: { browserStart: boolean; sites: IAutostartSite[] };
+  badge: boolean;
+  releaseHidden: boolean;
+  autostart: { on: boolean; sites: IAutostartSite[] };
 }
 
 const DEFAULT_EXT: IExtSettings = {
   v: 1,
-  level: 'display',
-  schedules: [],
-  autostart: { browserStart: false, sites: [] },
+  badge: true,
+  releaseHidden: false,
+  autostart: { on: true, sites: [] },
 };
 
-const EXT_DEFAULT_SETTINGS: ISettings = { ...DEFAULT_SETTINGS, telemetry: false, notifications: false };
+const EXT_DEFAULT_SETTINGS: ISettings = {
+  ...DEFAULT_SETTINGS,
+  telemetry: false,
+  notifications: false,
+  defaultPreset: 'p60',
+};
 
-const EXT_PRESETS = ['p15', 'p30', 'p45', 'p60', 'p120', 'p240', 'pinf'] as const;
+// The popup's four length chips, in their order.
+export const EXT_PRESETS = ['p15', 'p30', 'p60', 'pinf'] as const;
 export type TExtPreset = (typeof EXT_PRESETS)[number];
-
-const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/u;
-
-export function isHHMM(value: unknown): value is string {
-  return typeof value === 'string' && HHMM.test(value);
-}
-
-export function isLevel(value: unknown): value is TPowerLevel {
-  return value === 'display' || value === 'system';
-}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+export function isExtPreset(value: unknown): value is TExtPreset {
+  return typeof value === 'string' && (EXT_PRESETS as readonly string[]).includes(value);
+}
+
 export function readSettings(raw: unknown): ISettings {
   if (!isRecord(raw)) return structuredClone(EXT_DEFAULT_SETTINGS);
   const merged = { ...structuredClone(EXT_DEFAULT_SETTINGS), ...(raw as Partial<ISettings>) };
-  merged.telemetry = raw.telemetry === true;
-  merged.notifications = raw.notifications === true;
-  if (!EXT_PRESETS.includes(merged.defaultPreset as TExtPreset)) merged.defaultPreset = 'pinf';
+  merged.telemetry = false;
+  merged.notifications = false;
+  if (!isExtPreset(merged.defaultPreset)) merged.defaultPreset = 'p60';
   return merged;
-}
-
-function sanitizeSchedule(raw: unknown): ISchedule | null {
-  if (!isRecord(raw)) return null;
-  const days = Array.isArray(raw.days)
-    ? [
-        ...new Set(
-          raw.days.filter((d): d is number => Number.isInteger(d) && (d as number) >= 0 && (d as number) <= 6),
-        ),
-      ].sort()
-    : [];
-  if (typeof raw.id !== 'string' || !/^[a-z0-9-]{1,40}$/u.test(raw.id)) return null;
-  if (!days.length || !isHHMM(raw.start) || !isHHMM(raw.end) || raw.start === raw.end) return null;
-  return { id: raw.id, days, start: raw.start, end: raw.end, level: isLevel(raw.level) ? raw.level : 'display' };
 }
 
 function sanitizeSite(raw: unknown): IAutostartSite | null {
@@ -87,20 +64,18 @@ function sanitizeSite(raw: unknown): IAutostartSite | null {
   return { host, durationMin };
 }
 
+// Older records carried a power level, schedules and a browser-start switch; they read as the defaults.
 export function readExt(raw: unknown): IExtSettings {
   if (!isRecord(raw)) return structuredClone(DEFAULT_EXT);
   const autostart = isRecord(raw.autostart) ? raw.autostart : {};
-  const schedules = Array.isArray(raw.schedules)
-    ? raw.schedules.map(sanitizeSchedule).filter((s): s is ISchedule => s !== null)
-    : [];
   const sites = Array.isArray(autostart.sites)
     ? autostart.sites.map(sanitizeSite).filter((s): s is IAutostartSite => s !== null)
     : [];
   return {
     v: 1,
-    level: isLevel(raw.level) ? raw.level : 'display',
-    schedules: schedules.slice(0, SCHEDULES_MAX),
-    autostart: { browserStart: autostart.browserStart === true, sites: sites.slice(0, AUTOSTART_SITES_MAX) },
+    badge: raw.badge !== false,
+    releaseHidden: raw.releaseHidden === true,
+    autostart: { on: autostart.on !== false, sites: sites.slice(0, AUTOSTART_SITES_MAX) },
   };
 }
 
@@ -152,11 +127,7 @@ export function matchSite(url: string | undefined, sites: readonly IAutostartSit
   return null;
 }
 
-export function isExtPreset(value: unknown): value is TExtPreset {
-  return typeof value === 'string' && (EXT_PRESETS as readonly string[]).includes(value);
-}
-
 export function presetOf(settings: ISettings): TExtPreset {
   const id: TPresetId = settings.defaultPreset;
-  return isExtPreset(id) ? id : 'pinf';
+  return isExtPreset(id) ? id : 'p60';
 }

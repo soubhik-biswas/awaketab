@@ -7,7 +7,7 @@ import { MiniClock } from '@/components/pip/mini-clock';
 import { PipLauncher } from '@/components/pip/pip-launcher';
 import { Button } from '@/components/ui/button';
 import { LiveWidgets } from '@/components/widgets/widget-sync';
-import { WidgetPresets, WidgetScreen, WidgetSmall, WidgetWide } from '@/components/widgets/widget-tiles';
+import { WidgetLarge, WidgetQuickStart, WidgetScreen, WidgetSmall } from '@/components/widgets/widget-tiles';
 import { formatClock } from '@/lib/embed/clock';
 import type { ICookTimer } from '@/lib/embed/timers';
 import { surfaceView } from '@/lib/surfaces/session';
@@ -201,9 +201,9 @@ export function SurfacesBoard() {
               <MiniClock
                 view={view}
                 theme="dark"
-                onExtend={extend}
+                face="halo"
                 onClose={() => setPip(false)}
-                className="absolute right-7 bottom-7"
+                className="absolute right-5 bottom-5"
               />
             ) : (
               <Button
@@ -231,9 +231,9 @@ export function SurfacesBoard() {
         <div className="flex flex-col gap-3">
           <H2>Home-screen widgets</H2>
           <WidgetScreen>
+            <WidgetLarge view={view} theme="dark" label="Kitchen" onExtend={extend} />
             <WidgetSmall view={view} theme="dark" />
-            <WidgetPresets />
-            <WidgetWide view={view} label="Presenting to the board" />
+            <WidgetQuickStart />
           </WidgetScreen>
           <Note>Live, from this tab’s engine:</Note>
           <LiveWidgets />

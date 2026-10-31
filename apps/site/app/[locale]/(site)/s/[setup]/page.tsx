@@ -6,7 +6,7 @@ import { EndsAt } from '@/components/site/ends-at';
 import { HeroButtons, PageHero } from '@/components/site/page-hero';
 import { SystemPage } from '@/components/site/system-page';
 import { ROUTES, toolHref } from '@/lib/routes';
-import { englishOnly, pageMetadata } from '@/lib/seo';
+import { englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 import { parseSetup, setupToolHref } from '@/lib/share-setup';
 
 type TParams = Promise<{ locale: string; setup: string }>;
@@ -14,13 +14,22 @@ type TParams = Promise<{ locale: string; setup: string }>;
 export async function generateMetadata({ params }: { params: TParams }): Promise<Metadata> {
   const { setup } = await params;
   const t = await getTranslations({ locale: 'en', namespace: 'site' });
-  const ok = parseSetup(decodeURIComponent(setup)) !== null;
+  const found = parseSetup(decodeURIComponent(setup));
   return pageMetadata({
-    title: ok ? t('share.title') : t('sys.removed.title'),
-    description: t('share.description'),
+    title: titleFor(found ? t('share.h1') : t('sys.removed.h1')),
+    description: found ? t('share.description') : t('sys.removed.description'),
     path: `/s/${setup}`,
     noindex: true,
-    og: { kicker: t('share.eyebrow'), title: t('share.h1'), scene: 'dashboard', tone: 'light' },
+    og: found
+      ? {
+          template: 'shared',
+          kicker: t('share.eyebrow'),
+          title: t('share.ogTitle'),
+          sub: t('share.ogSub'),
+          face: found.face,
+          minutes: found.minutes,
+        }
+      : { image: 'og-01', alt: 'AwakeTab clock showing 38:12 left' },
   });
 }
 

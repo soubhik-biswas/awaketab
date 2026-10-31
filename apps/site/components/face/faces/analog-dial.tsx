@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { alpha, f1, P, sectorPath, ticks } from '../geometry';
-import { hand, type IDrawProps, Svg } from '../kit';
+import { D, hand, type IDrawProps, Svg } from '../kit';
 import type { TFaceModel } from '../model';
 
 const SUNBURST = {
@@ -47,6 +47,7 @@ export function AnalogDial({ m, luxe, children }: IDrawProps & { luxe: boolean; 
           </>
         )}
         <path
+          className={D}
           d={luxe ? LUXE_MINOR : MINOR}
           strokeWidth="1.3"
           strokeLinecap="round"

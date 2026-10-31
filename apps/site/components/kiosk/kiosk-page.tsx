@@ -1,12 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocale, useTranslations } from 'next-intl';
 import screenfull from 'screenfull';
 import { createStorage, verifyLicenseToken, type ILicenseRecord } from '@awaketab/core';
 import { faceName } from '@/components/face';
-import { Chip } from '@/components/product/chip';
 import { showToast } from '@/components/product/toasts';
 import { Button } from '@/components/ui/button';
 import { KioskScreen } from '@/components/kiosk/kiosk-screen';
@@ -20,6 +19,7 @@ import {
   KIOSK_FACES,
   KIOSK_SCREENS,
   licenceAllows,
+  nightDim,
   parseKioskQuery,
   type IKioskConfig,
   type IKioskSchedule,
@@ -28,10 +28,19 @@ import { surfaceView, type ISurfaceView } from '@/lib/surfaces/session';
 import { useToolSettings } from '@/lib/tool/settings';
 import { isLive, useWake, wake } from '@/lib/wake';
 
-const LABEL = 'font-mono text-[12px] tracking-[.1em] text-muted-foreground-strong';
-const CARD =
-  'flex flex-col gap-1.5 rounded-[16px] bg-card p-[14px] text-[14px] leading-[1.5] shadow-[0_0_0_1px_var(--border)]';
-const CHIP = 'px-[14px] aria-pressed:border aria-pressed:font-semibold';
+const LABEL = 'font-mono text-[12px] tracking-[.14em] text-muted-foreground-strong uppercase';
+const CARD = 'flex flex-col gap-1.5 rounded-[18px] border border-border bg-glass p-4 text-[14px] leading-[1.5]';
+// Selected chips invert, so a choice is never dark on dark.
+const CHIP =
+  'inline-flex h-11 cursor-pointer items-center justify-center rounded-[12px] border border-border bg-glass px-3.5 text-[14px] font-semibold text-foreground transition-colors duration-200 hover:border-border-hi focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background';
+
+function KChip({ pressed, onClick, children }: { pressed: boolean; onClick: () => void; children: ReactNode }) {
+  return (
+    <button type="button" aria-pressed={pressed} className={CHIP} onClick={onClick}>
+      {children}
+    </button>
+  );
+}
 
 function wallToday(wall: string, now: number): number {
   const [h, m] = wall.split(':').map(Number);
@@ -157,11 +166,11 @@ export function KioskPage() {
 
   return (
     <section aria-labelledby="kiosk-h" className="flex flex-col gap-3 px-5 py-10 min-[700px]:px-10 lg:px-16 xl:px-24">
-      <h1 id="kiosk-h" className="m-0 text-[22px] font-bold">
+      <h1 id="kiosk-h" className="m-0 font-display text-[30px] font-bold tracking-[-0.03em]">
         {t('section')}
       </h1>
-      <div className="grid items-start gap-8 xl:grid-cols-[960px_1fr]">
-        <KioskScreen config={shown} view={view} shift={shift} onLeave={() => undefined} />
+      <div className="grid items-start gap-8 xl:grid-cols-[minmax(0,960px)_1fr]">
+        <KioskScreen config={shown} view={view} shift={shift} dim={nightDim(now)} onLeave={() => undefined} />
         <div className="flex flex-col gap-[14px]">
           <div className="flex flex-col gap-2">
             <span className={LABEL} id="kiosk-face">
@@ -169,9 +178,9 @@ export function KioskPage() {
             </span>
             <div className="flex flex-wrap gap-1.5" role="group" aria-labelledby="kiosk-face">
               {KIOSK_FACES.map((f) => (
-                <Chip key={f} className={CHIP} pressed={config.face === f} onClick={() => set({ face: f })}>
+                <KChip key={f} pressed={config.face === f} onClick={() => set({ face: f })}>
                   {faceName(f)}
-                </Chip>
+                </KChip>
               ))}
             </div>
           </div>
@@ -181,9 +190,9 @@ export function KioskPage() {
             </span>
             <div className="flex gap-1.5" role="group" aria-labelledby="kiosk-screen">
               {KIOSK_SCREENS.map((sc) => (
-                <Chip key={sc} className={CHIP} pressed={config.screen === sc} onClick={() => set({ screen: sc })}>
+                <KChip key={sc} pressed={config.screen === sc} onClick={() => set({ screen: sc })}>
                   {sc === 'dark' ? t('midnight') : t('oled')}
-                </Chip>
+                </KChip>
               ))}
             </div>
           </div>
@@ -205,7 +214,7 @@ export function KioskPage() {
             <Button
               type="button"
               variant="outline"
-              className="h-11 self-start rounded-[12px] px-4 text-[14px] font-semibold"
+              className="mt-1 h-11 self-start rounded-[12px] px-4 text-[14px] font-bold"
               onClick={() => setShift((n) => n + 1)}
             >
               {t('shift')}
@@ -213,7 +222,7 @@ export function KioskPage() {
           </div>
           <Button
             type="button"
-            className="h-11 self-start rounded-[12px] border-0 px-4 text-[14px] font-bold"
+            className="h-[52px] self-start rounded-full border-0 px-6 text-[16px] font-bold shadow-[0_12px_30px_var(--primary-glow)]"
             onClick={start}
           >
             {t('start')}
@@ -223,7 +232,15 @@ export function KioskPage() {
       {running
         ? createPortal(
             <div className="fixed inset-0 z-[100] bg-black">
-              <KioskScreen config={shown} view={view} shift={shift} asleep={asleep} onLeave={leave} fill />
+              <KioskScreen
+                config={shown}
+                view={view}
+                shift={shift}
+                asleep={asleep}
+                dim={nightDim(now)}
+                onLeave={leave}
+                fill
+              />
             </div>,
             document.body,
           )

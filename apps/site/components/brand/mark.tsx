@@ -26,103 +26,89 @@ interface IAppMarkProps {
   label?: string;
 }
 
-const HIGHLIGHT = '#DDFFE9';
 const INK: Record<Exclude<TMarkTone, 'auto'>, string> = {
-  dark: '#EEF2FA',
+  dark: '#F2F4FA',
   light: '#0B1020',
-  brand: '#0B0F1A',
+  brand: '#0B0718',
   'mono-ink': '#0B1020',
   'mono-white': '#FFFFFF',
 };
-const LAMPS_DARK: Record<TMarkLamp, string> = {
+const BEAD_DARK: Record<TMarkLamp, string> = {
   awake: '#3DF58E',
   paused: '#FFC53D',
   blocked: '#FF6B81',
-  ended: '#C9D1E0',
+  ended: '#99A1B5',
   info: '#7CBBFF',
-  off: '#8E99AE',
+  off: '#99A1B5',
 };
-const LAMPS_LIGHT: Record<TMarkLamp, string> = {
+const BEAD_LIGHT: Record<TMarkLamp, string> = {
   awake: '#117A3B',
   paused: '#8A5A00',
   blocked: '#C21D3E',
-  ended: '#4B5165',
+  ended: '#5C6275',
   info: '#1C64B8',
-  off: '#626777',
+  off: '#5C6275',
 };
-const LAMPS_AUTO: Record<TMarkLamp, string> = {
+const BEAD_AUTO: Record<TMarkLamp, string> = {
   awake: 'var(--lamp)',
   paused: 'var(--warning)',
   blocked: 'var(--destructive)',
-  ended: 'var(--ended)',
+  ended: 'var(--muted-foreground)',
   info: 'var(--info)',
   off: 'var(--muted-foreground)',
 };
 
-const ARC = 'M32 11 A21 21 0 1 1 12.27 24.82';
-const ARC_SMALL = 'M32 11 A21 21 0 1 1 11.12 29.8';
+// The v3.1 mark on its 32 grid: a faint full track (time used), the bold 300° arc from 12 o'clock (time left) and
+// the bead on the arc's end (now).
+function MarkSvg({ size, ink, bead, label }: { size: number; ink: string; bead: string; label?: string | undefined }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
+      role={label ? 'img' : undefined}
+      aria-label={label}
+      aria-hidden={label ? undefined : true}
+      className="shrink-0"
+    >
+      <circle cx={16} cy={16} r={11} fill="none" stroke={ink} strokeOpacity={0.22} strokeWidth={4} />
+      <path d="M16 5 A11 11 0 1 1 6.47 10.5" fill="none" stroke={ink} strokeWidth={4} strokeLinecap="round" />
+      <circle cx={6.47} cy={10.5} r={4.6} fill={bead} />
+    </svg>
+  );
+}
 
-// Port of prototype/Mark.dc.html: 64 grid, r 21, 70° gap (84° at the small optical cut), lamp at −125°.
 export function Mark({
   size = 120,
   tone = 'dark',
   lampState = 'awake',
-  glow: glowProp = true,
   lockup = 'mark',
-  small: smallProp,
   className,
   label = 'AwakeTab',
 }: IMarkProps) {
-  const small = smallProp === true || size <= 20;
   const auto = tone === 'auto';
   const ink = auto ? 'var(--foreground)' : INK[tone];
-  let lamp = auto ? LAMPS_AUTO[lampState] : (tone === 'dark' ? LAMPS_DARK : LAMPS_LIGHT)[lampState];
-  if (tone === 'brand') lamp = '#0B0F1A';
-  if (tone === 'mono-ink') lamp = '#0B1020';
-  if (tone === 'mono-white') lamp = '#FFFFFF';
-  const mono = tone === 'brand' || tone.startsWith('mono');
-  const glow = glowProp && !mono && !small && lampState !== 'off';
-  const hollow = lampState === 'off' || lampState === 'paused' || lampState === 'blocked';
-  const lit = glow && !hollow;
-  const lx = small ? 17.9 : 19.95;
-  const ly = small ? 16.4 : 14.8;
+  let bead = auto ? BEAD_AUTO[lampState] : (tone === 'dark' ? BEAD_DARK : BEAD_LIGHT)[lampState];
+  if (tone === 'brand' || tone.startsWith('mono')) bead = ink;
   const word = lockup !== 'mark';
   const stacked = lockup === 'stacked';
-  const svg = (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
-      role={word ? undefined : 'img'}
-      aria-label={word ? undefined : label}
-      aria-hidden={word ? true : undefined}
-      className="shrink-0"
-    >
-      <path d={small ? ARC_SMALL : ARC} fill="none" stroke={ink} strokeWidth={small ? 10 : 9} strokeLinecap="round" />
-      <circle cx={lx} cy={ly} r={11} fill={lamp} opacity={lit ? 0.28 : 0} />
-      <circle
-        cx={lx}
-        cy={ly}
-        r={small ? 6.2 : 5.6}
-        fill={hollow ? 'transparent' : lamp}
-        stroke={lamp}
-        strokeWidth={hollow ? 3 : 0}
-      />
-      <circle cx={lx - 1.65} cy={ly - 1.6} r={1.6} fill={HIGHLIGHT} opacity={lit ? 0.9 : 0} />
-    </svg>
-  );
-  if (!word) return <span className={cn('inline-flex', className)}>{svg}</span>;
+  if (!word)
+    return (
+      <span className={cn('inline-flex', className)}>
+        <MarkSvg size={size} ink={ink} bead={bead} label={label} />
+      </span>
+    );
   return (
     <span
-      className={cn('inline-flex items-center font-sans', stacked ? 'flex-col' : 'flex-row', className)}
-      style={{ gap: Math.round(size * (stacked ? 0.14 : 0.22)), color: ink }}
+      className={cn('inline-flex items-center', stacked ? 'flex-col' : 'flex-row', className)}
+      style={{ gap: Math.round(size * (stacked ? 0.14 : 0.33)), color: ink }}
       role="img"
       aria-label={label}
     >
-      {svg}
+      <MarkSvg size={size} ink={ink} bead={bead} />
       <span
-        style={{ fontSize: Math.round(size * (stacked ? 0.42 : 0.62)) }}
-        className="font-display leading-none font-extrabold tracking-[-0.02em] whitespace-nowrap [font-stretch:112%]"
+        style={{ fontSize: Math.round(size * (stacked ? 0.42 : 0.73)) }}
+        className="font-display leading-none font-bold tracking-[-0.03em] whitespace-nowrap"
       >
         Awake<span className="font-medium">Tab</span>
       </span>
@@ -130,43 +116,17 @@ export function Mark({
   );
 }
 
-const APP_LAMP: Record<TAppMarkState, string> = {
-  idle: 'var(--muted-foreground-strong)',
-  starting: 'var(--info)',
-  running: 'var(--lamp)',
-  fallback: 'var(--lamp)',
-  paused: 'var(--warning)',
-  needsyou: 'var(--info)',
-  blocked: 'var(--destructive)',
-  unsupported: 'var(--muted-foreground-strong)',
-  ended: 'var(--ended)',
-};
-
-// The tool header draws the small optical cut with a status lamp: hollow when nothing keeps the screen awake.
-export function AppMark({ state = 'idle', size = 32, wordSize = 21, word = true, className, label }: IAppMarkProps) {
-  const lamp = APP_LAMP[state];
-  const hollow = state === 'idle' || state === 'paused' || state === 'blocked' || state === 'unsupported';
-  const awake = state === 'running' || state === 'fallback';
+// The tool's header lockup: the bead is always volt, as the boards draw it.
+export function AppMark({ size = 30, wordSize = 22, word = true, className, label }: IAppMarkProps) {
   return (
     <span className={cn('inline-flex shrink-0 items-center gap-2.5', className)}>
-      <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" className="shrink-0">
-        <path d={ARC_SMALL} fill="none" stroke="var(--foreground)" strokeWidth={10} strokeLinecap="round" />
-        <circle cx={17.9} cy={16.4} r={9} fill={lamp} opacity={awake ? 0.35 : 0} />
-        <circle
-          cx={17.9}
-          cy={16.4}
-          r={6.2}
-          fill={hollow ? 'var(--background)' : lamp}
-          stroke={lamp}
-          strokeWidth={2.5}
-        />
-      </svg>
+      <MarkSvg size={size} ink="var(--foreground)" bead="var(--lamp)" />
       {word ? (
         <span
           style={{ fontSize: wordSize }}
-          className="font-display font-extrabold tracking-[-0.03em] whitespace-nowrap text-foreground [font-stretch:112%]"
+          className="font-display font-bold tracking-[-0.03em] whitespace-nowrap text-foreground"
         >
-          AwakeTab
+          Awake<span className="font-medium">Tab</span>
         </span>
       ) : (
         <span className="sr-only">{label ?? 'AwakeTab'}</span>
