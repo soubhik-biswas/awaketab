@@ -108,26 +108,26 @@
 
 .dark,
 .oled {
-  --background: #000000;
-  --foreground: #eef2fa;
-  --card: #05060a;
-  --card-foreground: #eef2fa;
-  --popover: #05060a;
-  --popover-foreground: #eef2fa;
+  --background: #05060a;
+  --foreground: #f2f4fa;
+  --card: #0e1016;
+  --card-foreground: #f2f4fa;
+  --popover: #0e1016;
+  --popover-foreground: #f2f4fa;
   --primary: #9f7bff;
-  --primary-foreground: #0b0f1a;
+  --primary-foreground: #0b0718;
   --primary-soft: #241a4d;
-  --secondary: #0e1016;
-  --secondary-foreground: #eef2fa;
-  --muted: #0e1016;
-  --muted-foreground: #8e99ae;
-  --muted-foreground-strong: #a9b3c7;
-  --surface-3: #15171e;
+  --secondary: #15171e;
+  --secondary-foreground: #f2f4fa;
+  --muted: #15171e;
+  --muted-foreground: #99a1b5;
+  --muted-foreground-strong: #a6afc2;
+  --surface-3: #1c1f29;
   --accent: #0d3b22;
   --accent-foreground: #3df58e;
   --destructive: #ff6b81;
   --destructive-soft: #3d1220;
-  --border: #26314a;
+  --border: rgba(255, 255, 255, 0.09);
   --input: #6b7894;
   --ring: #7cbbff;
   --link: #7cf0ae;
@@ -140,9 +140,9 @@
   --ended: #c9d1e0;
   --ended-soft: #1d273f;
 
-  --field: #000000;
-  --pop: #05060a;
-  --sheet: #05060a;
+  --field: #05060a;
+  --pop: #0e1016;
+  --sheet: #0e1016;
   --on-danger: #1a0509;
   --halo: rgba(61, 245, 142, 0.28);
   --primary-glow: rgba(159, 123, 255, 0.38);
@@ -175,19 +175,21 @@
   --raised: var(--surface-3);
   --highlight: var(--surface-3);
   --face-plate: #070b16;
+  --border-hi: rgba(255, 255, 255, 0.18);
+  --panel: rgba(13, 16, 30, 0.86);
+  --glass: rgba(255, 255, 255, 0.04);
+  --grid: rgba(255, 255, 255, 0.05);
+  --vibe-opacity: 1;
+  --shadow-panel: 0 30px 80px rgba(0, 0, 0, 0.55);
 }
 
 .oled {
   --background: #000000;
-  --card: #05070c;
-  --popover: #0e1424;
-  --secondary: #0e1424;
-  --muted: #0e1424;
-  --surface-3: #151d31;
-  --border: #1d273f;
+  --card: #05060a;
+  --popover: #05060a;
   --field: #000000;
-  --pop: #0e1424;
-  --sheet: #0e1424;
+  --pop: #05060a;
+  --sheet: #05060a;
   --panel: rgba(6, 7, 12, 0.94);
   --glass: rgba(255, 255, 255, 0.035);
   --grid: rgba(255, 255, 255, 0.03);
