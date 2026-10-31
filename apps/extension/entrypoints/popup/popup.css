@@ -99,6 +99,13 @@ body {
   color: var(--at-text);
 }
 
+.xp-alert {
+  margin: 0;
+  font: var(--at-type-meta);
+  color: var(--at-red);
+  text-align: center;
+}
+
 .xp-row {
   display: flex;
   gap: var(--at-s-10);

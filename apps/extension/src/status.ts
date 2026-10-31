@@ -18,7 +18,7 @@ export const BADGE: Record<Exclude<TExtView, 'ready'>, { bg: string; fg: string 
   blocked: { bg: '#FF6B81', fg: '#1A0509' },
 };
 
-export type TLiveSession = ISession & { status: 'active' | 'paused' };
+type TLiveSession = ISession & { status: 'active' | 'paused' };
 
 export function isLive(session: ISession | null | undefined): session is TLiveSession {
   return session?.status === 'active' || session?.status === 'paused';
@@ -46,7 +46,7 @@ export function totalMs(session: ISession): number | null {
   return Math.max(1, session.endsAt - session.startedAt);
 }
 
-export function minutesLeft(session: ISession, now: number): number | null {
+function minutesLeft(session: ISession, now: number): number | null {
   const rem = remainingMs(session, now);
   return rem === null ? null : Math.max(1, Math.ceil(rem / 60_000));
 }
