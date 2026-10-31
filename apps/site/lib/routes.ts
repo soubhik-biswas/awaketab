@@ -2,12 +2,13 @@ import { localePath, type TLocale } from '@/i18n/locales';
 
 export const SITE = 'https://awaketab.com';
 
-export const CONTACT_EMAIL = 'support@awaketab.com';
-export const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}`;
-
 // Where "Open the timer" goes: the home page is the tool. The anchor marks a page's own tool card.
 export const TOOL_ANCHOR = 'tool';
 export const toolHref = (locale: TLocale = 'en'): string => localePath(locale, '/');
+
+// Feedback is the only support channel (no email anywhere): these open the tool with a panel already showing.
+export type TToolPanel = 'feedback' | 'settings' | 'faces' | 'vibes';
+export const panelHref = (panel: TToolPanel, locale: TLocale = 'en'): string => `${toolHref(locale)}?open=${panel}`;
 
 export type TContentKind = 'for' | 'on' | 'vs' | 'guides' | 'learn';
 export const CONTENT_KINDS: readonly TContentKind[] = ['for', 'on', 'vs', 'guides', 'learn'];
@@ -56,4 +57,7 @@ export const ROUTES = {
   library: '/library',
   embed: '/embed',
   kiosk: '/kiosk',
+  rss: '/rss.xml',
 } as const;
+
+export const SOURCE_URL = 'https://github.com/SoubhikBiswas-gitHub/awaketab';
