@@ -6,7 +6,6 @@ import type { TLocale } from '@/i18n/locales';
 import { TOOL_LANGS, type TToolLang } from '@/lib/tool/strings';
 import { localeParam } from '@/lib/seo';
 
-// The tool has drawn strings in five languages; the others open the English tool above their own story.
 const toolLang = (locale: TLocale): TToolLang => TOOL_LANGS.find((l) => l === locale) ?? 'en';
 
 // The home page is the tool: one screen-high frame first, then the story and the footer (home board). The small
