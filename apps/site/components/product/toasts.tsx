@@ -29,7 +29,7 @@ const TONE: Record<TToastTone, { icon: LucideIcon; color: string }> = {
   info: { icon: CircleCheck, color: 'text-info' },
 };
 
-export const TOAST_DURATION = 6000;
+const TOAST_DURATION = 6000;
 
 interface IProductToastProps extends Omit<IProductToastOptions, 'id'> {
   toastId: string | number;
@@ -117,7 +117,7 @@ export function ProductToast({
             onAction();
             toast.dismiss(toastId);
           }}
-          className="inline-flex h-11 shrink-0 cursor-pointer items-center border-0 bg-transparent px-2 text-[15px] font-semibold text-lamp underline underline-offset-3 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className="inline-flex h-11 shrink-0 cursor-pointer items-center border-0 bg-transparent px-2 text-[15px] font-semibold text-lamp underline underline-offset-3 outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring"
         >
           {actionLabel}
         </button>
@@ -126,7 +126,7 @@ export function ProductToast({
         type="button"
         onClick={() => toast.dismiss(toastId)}
         aria-label={dismissLabel}
-        className="inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-sm border-0 bg-transparent text-muted-foreground-strong transition-colors duration-glide outline-none hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        className="inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-sm border-0 bg-transparent text-muted-foreground-strong transition-colors duration-glide outline-none hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring"
       >
         <X className="size-4" aria-hidden="true" />
       </button>

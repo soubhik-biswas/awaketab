@@ -18,7 +18,7 @@ import {
 import { fullDate } from '@/lib/dates';
 import { inline } from '@/lib/markdown';
 import { SITE, startHref, type TContentKind } from '@/lib/routes';
-import { articleSchema, ogImageUrl, pageMetadata, type IOgCard } from '@/lib/seo';
+import { articleSchema, ogImageUrl, pageMetadata, titleFor, type IOgCard } from '@/lib/seo';
 import { AdSlot } from '../ad-slot';
 import { EndsAt } from '../ends-at';
 import { Block, Callout, Cards, Faq, Note, type ICard } from '../blocks';
@@ -50,12 +50,22 @@ const PRESET_WORDS: Partial<Record<string, string>> = {
   p240: '4-hour',
 };
 
-const OG_TONE: Record<TContentKind, 'light' | 'dark'> = {
-  for: 'light',
-  on: 'dark',
-  vs: 'light',
-  guides: 'dark',
-  learn: 'light',
+// Use cases share on the porcelain use-case card; guides, devices, comparisons and docs on the graphite guide card.
+const OG_TEMPLATE: Record<TContentKind, 'use' | 'guide'> = {
+  for: 'use',
+  on: 'guide',
+  vs: 'guide',
+  guides: 'guide',
+  learn: 'guide',
+};
+
+// Every family draws a scene on its share card, as the marketing board's templates do.
+const OG_SCENE: Record<TContentKind, TSceneKey> = {
+  for: 'hero',
+  on: 'firstaction',
+  vs: 'conflict',
+  guides: 'maintenance',
+  learn: 'history',
 };
 
 const heroScene = (kind: TContentKind, enSlug: string): TSceneKey | undefined =>
@@ -69,13 +79,12 @@ async function eyebrowFor(a: TArticle, locale: TLocale): Promise<string> {
 }
 
 async function articleOg(a: TArticle): Promise<IOgCard> {
-  const scene = heroScene(a.kind, a.enSlug);
   return {
+    template: OG_TEMPLATE[a.kind],
     kicker: await eyebrowFor(a, a.locale),
     title: a.ogTitle ?? a.h1,
-    sub: a.intent,
-    tone: OG_TONE[a.kind],
-    ...(scene ? { scene } : {}),
+    scene: heroScene(a.kind, a.enSlug) ?? OG_SCENE[a.kind],
+    alt: a.h1,
   };
 }
 
@@ -90,7 +99,7 @@ export async function articleMetadata(kind: TContentKind, locale: string, slug: 
   const og = await articleOg(a);
   const indexable = isIndexable(a);
   return pageMetadata({
-    title: a.title,
+    title: titleFor(a.h1, a.crumb),
     description: a.description,
     path: articlePath(kind, a.enSlug, a.locale),
     locale: a.locale,

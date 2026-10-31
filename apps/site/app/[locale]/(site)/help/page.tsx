@@ -6,16 +6,16 @@ import { JsonLd } from '@/components/site/json-ld';
 import { PageHero } from '@/components/site/page-hero';
 import { changelog, HELP_CHIPS, HELP_TOPICS } from '@/lib/content';
 import { fullDate } from '@/lib/dates';
-import { CONTACT_EMAIL, CONTACT_MAILTO, ROUTES, SITE } from '@/lib/routes';
-import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
+import { panelHref, ROUTES, SITE } from '@/lib/routes';
+import { articleSchema, englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'site.help' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor(t('h1')),
     description: t('description'),
     path: ROUTES.help,
-    og: { kicker: t('eyebrow'), title: t('h1'), sub: t('lead'), scene: 'maintenance', tone: 'dark' },
+    og: { template: 'guide', kicker: t('eyebrow'), title: t('h1'), sub: t('ogSub'), scene: 'maintenance' },
   });
 }
 
@@ -80,9 +80,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       <Block label={t('stuck')}>
         <Callout tone="info" title={t('stuck')}>
           {t('stuckBefore')}{' '}
-          <a href={CONTACT_MAILTO} className="font-semibold text-link underline underline-offset-2">
-            {CONTACT_EMAIL}
-          </a>{' '}
+          <a href={panelHref('feedback')} className="font-semibold text-link underline underline-offset-2">
+            {t('stuckLink')}
+          </a>
           {t('stuckAfter')}
         </Callout>
       </Block>

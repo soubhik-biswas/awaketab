@@ -71,7 +71,7 @@ export default function Battery({ m }: IDrawProps) {
               fontSize: 38,
               fontWeight: 600,
               letterSpacing: '-0.03em',
-              color: inside ? 'var(--lamp-foreground)' : t.ink,
+              color: inside ? (m.night ? '#052812' : '#FFFFFF') : t.ink,
               fontVariantNumeric: 'tabular-nums',
             }}
           >

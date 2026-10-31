@@ -6,14 +6,7 @@ import { englishOnly } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'site.sys' });
-  return systemMetadata(
-    t('offline.title'),
-    t('offline.description'),
-    '/offline',
-    t('offline.eyebrow'),
-    t('offline.h1'),
-    'offline',
-  );
+  return systemMetadata(t('offline.h1'), t('offline.description'), '/offline');
 }
 
 // The service worker shows this page for an uncached address while offline; "Try again" reloads it.

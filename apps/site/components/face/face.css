@@ -2,7 +2,10 @@
   position: relative;
   overflow: hidden;
   direction: ltr;
-  font-family: var(--font-geist), var(--font-script, system-ui), system-ui, sans-serif;
+  font-family: var(--font-inter), var(--font-script, system-ui), system-ui, sans-serif;
+  font-feature-settings:
+    "tnum" 1,
+    "cv11" 1;
   line-height: normal;
   color: var(--foreground);
   text-align: start;
@@ -37,7 +40,8 @@
   transition: none !important;
 }
 
-.af-compact .af-l {
+.af-compact .af-l,
+.af-thumb .af-d {
   visibility: hidden;
 }
 

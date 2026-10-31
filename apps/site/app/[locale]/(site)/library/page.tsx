@@ -7,7 +7,7 @@ import { JsonLd } from '@/components/site/json-ld';
 import { HeroButtons, PageHero } from '@/components/site/page-hero';
 import { inline, tokenize } from '@/lib/markdown';
 import { ROUTES, SITE } from '@/lib/routes';
-import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
+import { articleSchema, englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 const STATES = ['idle', 'requesting', 'held', 'lost', 'denied', 'unsupported', 'fallback'] as const;
 const CODE = `import { createWakeLock } from '@awaketab/wake';
@@ -33,10 +33,10 @@ const CMP: ReadonlyArray<readonly [string, string, string]> = [
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.library' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor(t('h1')),
     description: t('description'),
     path: ROUTES.library,
-    og: { kicker: 'Open source', title: t('h1'), tone: 'light' },
+    og: { template: 'guide', kicker: 'Open source', title: t('h1'), scene: 'history' },
   });
 }
 

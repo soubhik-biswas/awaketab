@@ -12,8 +12,14 @@
       }
     },
     "apps/extension": {
-      "entry": ["scripts/*.{mjs,mts}", "test/**/*.test.ts", "e2e/**/*.spec.ts"],
-      "project": ["entrypoints/**/*.ts", "src/**/*.ts", "scripts/**/*.{mjs,mts}", "test/**/*.ts", "e2e/**/*.ts"]
+      "entry": ["scripts/*.{mjs,mts}", "test/**/*.test.ts", "e2e/**/*.spec.ts", "src/next-font.ts"],
+      "project": [
+        "entrypoints/**/*.{ts,tsx}",
+        "src/**/*.{ts,tsx}",
+        "scripts/**/*.{mjs,mts}",
+        "test/**/*.ts",
+        "e2e/**/*.ts"
+      ]
     },
     "packages/wake": {
       "entry": ["src/adapters/*.ts", "test/**/*.test.ts"],
@@ -30,7 +36,6 @@
         "open-next.config.ts",
         "worker/sw.ts",
         "scripts/*.{mjs,mts}",
-        "emails/**/*.tsx",
         "**/*.test.{ts,tsx}"
       ],
       "project": ["**/*.{ts,tsx,mjs,mts}"],
@@ -45,8 +50,6 @@
         "react-day-picker",
         "react-hook-form",
         "react-resizable-panels",
-        "recharts",
-        "@react-email/ui",
         "tailwindcss",
         "tw-animate-css"
       ],

@@ -33,7 +33,7 @@ export interface ICommandGroup {
   items: ICommandAction[];
 }
 
-export interface ICommandPaletteLabels {
+interface ICommandPaletteLabels {
   move: string;
   run: string;
   close: string;
@@ -169,7 +169,7 @@ export function CommandPalette({
           onClick={() => onOpenChange(false)}
           aria-label={labels.closePalette}
           className={cn(
-            'relative shrink-0 cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+            'relative shrink-0 cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring',
             tool
               ? 'h-11 min-w-11 rounded-[8px] border border-border bg-background px-2.5 font-mono text-[12px] text-muted-foreground-strong'
               : 'rounded-xs border-0 bg-transparent p-0 after:absolute after:-inset-[11px]',

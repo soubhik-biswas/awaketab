@@ -1,31 +1,25 @@
-export type TProPlan = 'pro_yearly' | 'pro_lifetime';
+export type TProPlan = 'yearly' | 'monthly';
 
-export const PLAN_PRICES = {
-  pro_yearly: 12,
-  pro_lifetime: 29,
-  pro_lifetime_launch: 19,
-  biz_embed_site_yearly: 29,
-  biz_kiosk_site: 19,
-  biz_kiosk_5: 49,
-} as const;
+// The yearly price is the product's real one; monthly has no product price yet, so it stays a placeholder.
+const PLAN_PRICES: Record<TProPlan, number | null> = { yearly: 12, monthly: null };
 
-export const PRO_LAUNCH_END = Date.parse('2026-12-08T00:00:00.000Z');
 export const MAX_DEVICES = 5;
+export const TRIAL_DAYS = 14;
 
-export function usd(amount: number): string {
-  return `$${String(amount)}`;
+export function priceLabel(plan: TProPlan): string {
+  const amount = PLAN_PRICES[plan];
+  return amount === null ? '[PRICE]' : `$${String(amount)}`;
 }
 
-export function launchOn(now = Date.now(), end = PRO_LAUNCH_END): boolean {
-  return now < end;
+// Whole percent saved by paying yearly instead of twelve months; a placeholder until both prices exist.
+export function yearlySaving(): string {
+  const { yearly, monthly } = PLAN_PRICES;
+  if (yearly === null || monthly === null || monthly <= 0) return '[NUMBER]';
+  return String(Math.round((1 - yearly / (monthly * 12)) * 100));
 }
 
-export function lifetimePrice(now = Date.now()): number {
-  return launchOn(now) ? PLAN_PRICES.pro_lifetime_launch : PLAN_PRICES.pro_lifetime;
-}
-
-export function planPrice(plan: TProPlan, now = Date.now()): number {
-  return plan === 'pro_lifetime' ? lifetimePrice(now) : PLAN_PRICES.pro_yearly;
+export function planOf(raw: string | null | undefined): TProPlan {
+  return raw === 'monthly' ? 'monthly' : 'yearly';
 }
 
 // Full dates everywhere in English: "Saturday, 31 October 2026".
@@ -41,22 +35,12 @@ export function longDate(ms: number, timeZone?: string): string {
   return `${day}, ${rest}`;
 }
 
-// PRO_LAUNCH_END is midnight UTC, so the last launch-price day is the one before it.
-export function launchDay(end = PRO_LAUNCH_END): string {
-  return longDate(end - 1, 'UTC');
-}
-
-export function renewalDate(now = Date.now()): string {
-  const next = new Date(now);
-  next.setFullYear(next.getFullYear() + 1);
-  return longDate(next.getTime());
-}
-
 const POLAR_PORTAL = {
   sandbox: 'https://sandbox.polar.sh/awaketab/portal',
   production: 'https://polar.sh/awaketab/portal',
 } as const;
 
+// The payment provider's own portal holds receipts, the card on file, plan changes and cancelling.
 export function portalUrl(): string {
   return process.env.NEXT_PUBLIC_POLAR_SERVER === 'sandbox' ? POLAR_PORTAL.sandbox : POLAR_PORTAL.production;
 }

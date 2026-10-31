@@ -1,6 +1,6 @@
 ---
 title: "Mac-Display im Browser wach halten — AwakeTab"
-description: "Safari ab 16.4, Chrome ab 84 und Firefox ab 126 halten das Mac-Display an. Dabei schläft auch der Mac nicht ein, zugeklappt aber schon."
+description: "Safari ab 16.4, Chrome ab 84 und Firefox ab 126 halten das Mac-Display an. Dabei schläft auch der Mac nicht ein, mit zugeklapptem Deckel aber schon."
 h1: "Mac-Display im Browser wach halten"
 intent: "mac bildschirm ruhezustand verhindern browser"
 secondaryQueries: ["mac bildschirm nicht ausschalten", "macbook bildschirm anlassen", "mac display dauerhaft an ohne app", "macbook bildschirm geht aus safari", "mac ruhezustand verhindern browser"]

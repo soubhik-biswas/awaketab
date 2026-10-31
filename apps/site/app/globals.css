@@ -5,7 +5,7 @@
 
 :root,
 .light {
-  --background: #f5f5fa;
+  --background: #f4f4f9;
   --foreground: #0b1020;
   --card: #ffffff;
   --card-foreground: #0b1020;
@@ -17,14 +17,14 @@
   --secondary: #ececf4;
   --secondary-foreground: #0b1020;
   --muted: #ececf4;
-  --muted-foreground: #626777;
+  --muted-foreground: #5c6275;
   --muted-foreground-strong: #4b5165;
   --surface-3: #e3e3ee;
   --accent: #e2f6e8;
   --accent-foreground: #117a3b;
   --destructive: #c21d3e;
   --destructive-soft: #fce3e7;
-  --border: #d9d9e5;
+  --border: rgba(11, 16, 32, 0.09);
   --input: #878aa0;
   --ring: #1c64b8;
   --link: #117a3b;
@@ -34,7 +34,7 @@
   --warning-soft: #fcefd2;
   --info: #1c64b8;
   --info-soft: #e1ecfa;
-  --ended: #4b5165;
+  --ended: #5c6275;
   --ended-soft: #e3e3ee;
   --field: #ffffff;
   --pop: #ffffff;
@@ -46,6 +46,12 @@
   --shadow-e1: 0 1px 2px rgba(11, 16, 32, 0.06);
   --shadow-e2: 0 1px 2px rgba(11, 16, 32, 0.06), 0 8px 20px rgba(11, 16, 32, 0.08);
   --shadow-e3: 0 2px 6px rgba(11, 16, 32, 0.1), 0 28px 60px rgba(11, 16, 32, 0.2);
+  --border-hi: rgba(11, 16, 32, 0.18);
+  --panel: rgba(255, 255, 255, 0.9);
+  --glass: #ffffff;
+  --grid: rgba(11, 16, 32, 0.05);
+  --vibe-opacity: 1;
+  --shadow-panel: 0 30px 70px rgba(11, 16, 32, 0.14);
   --radius: 14px;
 
   --face-sky: #1d5fb8;
@@ -102,26 +108,26 @@
 
 .dark,
 .oled {
-  --background: #070b16;
-  --foreground: #eef2fa;
-  --card: #0e1424;
-  --card-foreground: #eef2fa;
-  --popover: #0e1424;
-  --popover-foreground: #eef2fa;
+  --background: #05060a;
+  --foreground: #f2f4fa;
+  --card: #0e1016;
+  --card-foreground: #f2f4fa;
+  --popover: #0e1016;
+  --popover-foreground: #f2f4fa;
   --primary: #9f7bff;
-  --primary-foreground: #0b0f1a;
+  --primary-foreground: #0b0718;
   --primary-soft: #241a4d;
-  --secondary: #151d31;
+  --secondary: #15171e;
   --secondary-foreground: #eef2fa;
-  --muted: #151d31;
-  --muted-foreground: #8e99ae;
-  --muted-foreground-strong: #a9b3c7;
-  --surface-3: #1d273f;
+  --muted: #15171e;
+  --muted-foreground: #99a1b5;
+  --muted-foreground-strong: #a6afc2;
+  --surface-3: #1c1f29;
   --accent: #0d3b22;
   --accent-foreground: #3df58e;
   --destructive: #ff6b81;
   --destructive-soft: #3d1220;
-  --border: #26314a;
+  --border: rgba(255, 255, 255, 0.09);
   --input: #6b7894;
   --ring: #7cbbff;
   --link: #7cf0ae;
@@ -131,12 +137,12 @@
   --warning-soft: #3a2c08;
   --info: #7cbbff;
   --info-soft: #0f2645;
-  --ended: #c9d1e0;
+  --ended: #99a1b5;
   --ended-soft: #1d273f;
 
-  --field: #070b16;
-  --pop: #151d31;
-  --sheet: #151d31;
+  --field: #05060a;
+  --pop: #0e1016;
+  --sheet: #0e1016;
   --on-danger: #1a0509;
   --halo: rgba(61, 245, 142, 0.28);
   --primary-glow: rgba(159, 123, 255, 0.38);
@@ -169,21 +175,30 @@
   --raised: var(--surface-3);
   --highlight: var(--surface-3);
   --face-plate: #070b16;
+  --border-hi: rgba(255, 255, 255, 0.18);
+  --panel: rgba(13, 16, 30, 0.86);
+  --glass: rgba(255, 255, 255, 0.04);
+  --grid: rgba(255, 255, 255, 0.05);
+  --vibe-opacity: 1;
+  --shadow-panel: 0 30px 80px rgba(0, 0, 0, 0.55);
 }
 
 .oled {
   --background: #000000;
-  --card: #05070c;
-  --popover: #0e1424;
-  --secondary: #0e1424;
-  --muted: #0e1424;
-  --surface-3: #151d31;
-  --border: #1d273f;
+  --card: #05060a;
+  --popover: #05060a;
+  --secondary: #0e1016;
+  --muted: #0e1016;
+  --surface-3: #15171e;
+  --border: rgba(255, 255, 255, 0.09);
   --field: #000000;
-  --pop: #0e1424;
-  --sheet: #0e1424;
+  --pop: #05060a;
+  --sheet: #05060a;
+  --panel: rgba(6, 7, 12, 0.94);
+  --glass: rgba(255, 255, 255, 0.035);
+  --grid: rgba(255, 255, 255, 0.03);
+  --vibe-opacity: 0.3;
 }
-
 :root,
 .scene-light {
   --scene-ink: #0b1020;
@@ -241,6 +256,11 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-muted-foreground-strong: var(--muted-foreground-strong);
   --color-surface-3: var(--surface-3);
+  --color-border-hi: var(--border-hi);
+  --color-panel: var(--panel);
+  --color-glass: var(--glass);
+  --color-grid: var(--grid);
+  --shadow-panel: var(--shadow-panel);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
@@ -308,8 +328,10 @@
   --shadow-e2: var(--shadow-e2);
   --shadow-e3: var(--shadow-e3);
 
-  --font-sans: var(--font-geist), var(--font-script, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-archivo), var(--font-geist), var(--font-script, ui-sans-serif), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-inter), var(--font-script, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    var(--font-bricolage), var(--font-inter), var(--font-script, ui-sans-serif), ui-sans-serif, sans-serif;
+  --font-accent: var(--font-serif), Georgia, serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --radius-xs: 6px;
@@ -317,10 +339,16 @@
   --radius-md: 14px;
   --radius-lg: 20px;
   --radius-xl: 28px;
+  --radius-control: 12px;
+  --radius-row: 18px;
+  --radius-panel: 28px;
 
   --ease-glide: cubic-bezier(0.2, 0, 0, 1);
   --ease-base: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-arrive: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-drawer: 360ms;
+  --duration-thumb: 350ms;
   --duration-glide: 80ms;
   --duration-fast: 120ms;
   --duration-base: 180ms;
@@ -409,6 +437,10 @@
 }
 
 @layer base {
+  :root {
+    --font-geist: var(--font-inter);
+  }
+
   * {
     border-color: var(--border);
   }
@@ -430,7 +462,7 @@
 
   :focus-visible {
     outline: 2px solid var(--ring);
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 
   :lang(ja) {

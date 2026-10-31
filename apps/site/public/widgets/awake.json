@@ -9,16 +9,14 @@
       "type": "TextBlock",
       "text": "${digits}",
       "size": "ExtraLarge",
-      "weight": "Bolder",
-      "horizontalAlignment": "Center",
-      "fontType": "Monospace"
+      "weight": "Lighter",
+      "horizontalAlignment": "Center"
     },
     {
       "type": "TextBlock",
-      "text": "${status} · ${line}",
+      "text": "${status}",
       "size": "Small",
-      "weight": "Bolder",
-      "color": "${if(awake, 'Good', 'Default')}",
+      "isSubtle": true,
       "horizontalAlignment": "Center",
       "wrap": true
     }

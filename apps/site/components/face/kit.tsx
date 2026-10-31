@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { CX, CY, f1, P } from './geometry';
 import { CARD_SHADOW } from './art';
-import type { TFaceModel, TFaceState } from './model';
+import type { TFaceModel } from './model';
 
 export type TStyle = CSSProperties & Record<`--${string}`, string | number>;
 
@@ -11,10 +11,12 @@ export interface IDrawProps {
 
 // Text that keeps the on-screen minimum (var(--lmin)); the compact face hides it.
 export const L = 'af-l';
+// Detail (minor ticks, dial numerals, stars) that a thumbnail drops, keeping only the main shape and digits.
+export const D = 'af-d';
 export const lmin = (px: number): string => `max(${px}px, var(--lmin))`;
 export const MONO = 'var(--font-geist-mono), ui-monospace, monospace';
 // Archivo, the display face; pair it with fontStretch 112 % (or 125 % for the widest cuts).
-export const DISPLAY = 'var(--font-archivo), var(--font-geist), sans-serif';
+export const DISPLAY = 'var(--font-archivo), var(--font-inter), sans-serif';
 
 const fill: CSSProperties = { position: 'absolute', left: 0, top: 0, width: 360, height: 310 };
 export const column = (gap: number): CSSProperties => ({
@@ -88,6 +90,7 @@ export function DialLabel({ m, text, rr, deg, fs: fs0, color, extra, cx = CX, cy
   const [x, y] = P(rr, deg, cx, cy);
   return (
     <span
+      className={D}
       style={{
         position: 'absolute',
         left: `${f1(x - 20)}px`,
@@ -147,7 +150,7 @@ export function Stars({
   return pts.map(([x, y, d = 2], i) => (
     <span
       key={i}
-      className="afx-twinkle"
+      className={`afx-twinkle ${D}`}
       data-delay={(i * step).toFixed(2)}
       style={{
         position: 'absolute',
@@ -192,27 +195,3 @@ export const cardColumn = (gap: number, extra?: CSSProperties): CSSProperties =>
   gap,
   ...extra,
 });
-
-const NIGHT_STATUS: Readonly<Partial<Record<TFaceState, string>>> = {
-  idle: 'var(--muted-foreground-strong)',
-  paused: 'var(--warning)',
-  blocked: 'var(--destructive)',
-  unsupported: 'var(--info)',
-  up: 'var(--ended)',
-};
-
-// Faces drawn on a night panel keep the dark theme's colours on a light page: the panel carries nightClass(m).
-export const nightClass = (m: TFaceModel): string | undefined => (m.night ? undefined : 'dark');
-export const nightAccent = (m: TFaceModel): string => (m.night ? m.accent : (NIGHT_STATUS[m.st] ?? m.lampValue));
-export const nightHeat = (m: TFaceModel, q: number): string =>
-  m.night
-    ? m.heat(q)
-    : !m.multi
-      ? nightAccent(m)
-      : q <= 0.084
-        ? 'var(--face-ember)'
-        : q <= 0.25
-          ? 'var(--face-amber)'
-          : q <= 0.5
-            ? 'var(--face-lime)'
-            : m.lampValue;

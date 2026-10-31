@@ -1,23 +1,20 @@
 import { FACE_IDS, type TFace } from '@awaketab/core';
+import { VIBES, type TVibe } from '@/lib/tool/settings';
+import { PRO_ENABLED } from '@/lib/features';
 
-export interface IShareSetup {
-  face: TFace;
-  minutes: number;
-  chime: boolean;
-}
-
-// A shared setup carries the length, face and chime only, never a label or a device name.
-export function sharePath(s: IShareSetup): string {
-  return `/s/${s.face}-${Math.max(0, Math.round(s.minutes))}-${s.chime ? 'chime' : 'quiet'}`;
-}
-
-export interface IToolQuery {
+interface IToolQuery {
   totalSec?: number;
   face?: TFace;
   chime?: boolean;
+  vibe?: TVibe;
   autostart?: boolean;
   untilAt?: number;
+  open?: TOpenPanel;
 }
+
+// Panels the website links straight into (Send feedback, Settings, the faces store, vibes).
+const OPEN_PANELS = ['feedback', 'settings', 'faces', 'vibes', 'recents', 'language', 'pro'] as const;
+type TOpenPanel = (typeof OPEN_PANELS)[number];
 
 const PRESET_SEC: Record<string, number> = {
   p15: 900,
@@ -29,7 +26,9 @@ const PRESET_SEC: Record<string, number> = {
   pinf: 0,
 };
 
-// The tool's address options: ?preset=p45&face=flip&chime=on&autostart=0&until=HH-MM.
+const presetFor = (sec: number): string | null => Object.entries(PRESET_SEC).find(([, v]) => v === sec)?.[0] ?? null;
+
+// The tool's address options: ?preset=p45&face=flip&vibe=night&chime=on&autostart=1&until=HH-MM.
 export function readToolQuery(search: string, now = Date.now()): IToolQuery {
   const q = new URLSearchParams(search);
   const out: IToolQuery = {};
@@ -37,6 +36,8 @@ export function readToolQuery(search: string, now = Date.now()): IToolQuery {
   if (preset && preset in PRESET_SEC) out.totalSec = PRESET_SEC[preset];
   const face = q.get('face');
   if (face && (FACE_IDS as readonly string[]).includes(face)) out.face = face as TFace;
+  const vibe = VIBES.find((v) => v === q.get('vibe'));
+  if (vibe) out.vibe = vibe;
   const chime = q.get('chime');
   if (chime === 'on' || chime === 'off') out.chime = chime === 'on';
   const auto = q.get('autostart');
@@ -48,5 +49,31 @@ export function readToolQuery(search: string, now = Date.now()): IToolQuery {
     if (d.getTime() <= now + 30_000) d.setDate(d.getDate() + 1);
     out.untilAt = d.getTime();
   }
+  const open = OPEN_PANELS.find((x) => x === q.get('open'));
+  if (open && (open !== 'pro' || PRO_ENABLED)) out.open = open;
   return out;
+}
+
+interface IShareSetup {
+  face: TFace;
+  vibe: TVibe;
+  totalSec: number;
+  look: boolean;
+  length: boolean;
+  start: boolean;
+}
+
+// A shared setup opens the tool ready to start. It carries the look and the length only, never a name,
+// history, device or place.
+export function shareLink(origin: string, s: IShareSetup): string {
+  const q = new URLSearchParams();
+  const preset = presetFor(s.totalSec);
+  if (s.length && preset) q.set('preset', preset);
+  if (s.look) {
+    q.set('face', s.face);
+    q.set('vibe', s.vibe);
+  }
+  if (s.start) q.set('autostart', '1');
+  const query = q.toString();
+  return `${origin}/${query ? `?${query}` : ''}`;
 }

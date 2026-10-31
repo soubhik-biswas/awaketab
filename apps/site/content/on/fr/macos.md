@@ -1,6 +1,6 @@
 ---
 title: "Empêcher la veille de l’écran du Mac — AwakeTab"
-description: "Safari 16.4+, Chrome 84+ et Firefox 126+ gardent l’écran du Mac allumé. Le Mac ne s’endort pas non plus, sauf si vous fermez le capot."
+description: "Safari 16.4+, Chrome 84+ et Firefox 126+ gardent l’écran du Mac allumé. Le Mac ne s’endort pas non plus, sauf si vous fermez le capot du portable."
 h1: "Empêcher la mise en veille de l’écran du Mac depuis un onglet"
 ogTitle: "Écran du Mac allumé depuis un onglet"
 intent: "empêcher la mise en veille de l'écran mac navigateur"

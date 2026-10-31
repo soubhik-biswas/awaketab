@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
@@ -24,21 +24,69 @@ export async function englishOnly(params: Promise<{ locale: string }>): Promise<
   return locale;
 }
 
+// The share images of the marketing board: five fixed files in public/og, and three templates the /og route draws
+// per page from its H1 (use case on porcelain, guide on graphite, shared link with its clock).
+type TOgImage = 'og-01' | 'og-02' | 'og-03' | 'og-04' | 'og-08';
+type TOgTemplate = 'use' | 'guide' | 'shared';
+
 export interface IOgCard {
-  kicker: string;
-  title: string;
+  image?: TOgImage;
+  template?: TOgTemplate;
+  alt?: string;
+  kicker?: string;
+  title?: string;
   sub?: string;
   scene?: TSceneKey;
+  face?: string;
+  minutes?: number;
+  // Older callers name a tone: light draws the use-case template, dark the guide template.
   tone?: 'light' | 'dark';
 }
 
-// The social card in the style of the brand board: kicker, headline, line, scene, on paper or midnight.
+const OG_SIZE = { width: 1200, height: 630 } as const;
+
+// The head icons and both theme colours from the marketing board, shared by every locale layout.
+export const SITE_ICONS: NonNullable<Metadata['icons']> = {
+  icon: [
+    { url: '/favicon.ico', sizes: 'any' },
+    { url: '/favicon.svg', type: 'image/svg+xml' },
+    { url: '/icons/favicon-16.png', sizes: '16x16', type: 'image/png' },
+    { url: '/icons/favicon-32.png', sizes: '32x32', type: 'image/png' },
+    { url: '/icons/favicon-48.png', sizes: '48x48', type: 'image/png' },
+  ],
+  apple: [{ url: '/icons/apple-touch-icon-180.png', sizes: '180x180' }],
+};
+
+export const SITE_VIEWPORT: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#05060A' },
+    { media: '(prefers-color-scheme: light)', color: '#F4F4F9' },
+  ],
+};
+
 export function ogImageUrl(card: IOgCard, locale: TLocale = 'en'): string {
-  const q = new URLSearchParams({ k: card.kicker, t: card.title, m: card.tone ?? 'dark' });
+  if (card.image || !card.title) return `/og/${card.image ?? 'og-01'}.png`;
+  const template = card.template ?? (card.tone === 'light' ? 'use' : 'guide');
+  const q = new URLSearchParams({ v: template, h: card.title });
+  if (card.kicker) q.set('k', card.kicker);
   if (card.sub) q.set('d', card.sub);
   if (card.scene) q.set('s', card.scene);
+  if (card.face) q.set('f', card.face);
+  if (card.minutes !== undefined) q.set('n', String(card.minutes));
   if (locale !== 'en') q.set('l', locale);
   return `/og?${q.toString()}`;
+}
+
+const SUFFIX = ' · AwakeTab';
+
+// "{H1} · AwakeTab" under 60 characters (brief §9h). A long H1 drops its clause after a colon or question mark,
+// then falls back to its short crumb, so the suffix always stays.
+export function titleFor(h1: string, short?: string): string {
+  const clean = h1.trim().replace(/[.!]$/u, '');
+  if (clean.length + SUFFIX.length < 60) return clean + SUFFIX;
+  const clause = clean.split(/[:?]\s/u)[0]?.trim() ?? clean;
+  if (clause !== clean && clause.length + SUFFIX.length < 60) return clause + SUFFIX;
+  return (short ?? clause.slice(0, 48)) + SUFFIX;
 }
 
 export interface IPageMeta {
@@ -61,7 +109,11 @@ export function pageMetadata(meta: IPageMeta): Metadata {
       ? meta.alternates
       : [{ locale, hreflang: LOCALE_META[locale].hreflang, href: canonical }];
   const english = alternates.find((a) => a.locale === 'en');
-  const image = ogImageUrl(meta.og, locale);
+  const image = {
+    url: ogImageUrl(meta.og, locale),
+    ...OG_SIZE,
+    alt: meta.og.alt ?? meta.ogAlt ?? meta.og.title ?? meta.title,
+  };
   return {
     title: { absolute: meta.title },
     description: meta.description,
@@ -95,7 +147,7 @@ export function pageMetadata(meta: IPageMeta): Metadata {
       title: meta.title,
       description: meta.description,
       url: canonical,
-      images: [{ url: image, width: 1200, height: 630, ...(meta.ogAlt ? { alt: meta.ogAlt } : {}) }],
+      images: [image],
     },
     twitter: { card: 'summary_large_image', title: meta.title, description: meta.description, images: [image] },
   };

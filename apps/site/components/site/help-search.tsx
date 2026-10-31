@@ -32,7 +32,7 @@ export function HelpSearch({
     <div className="flex max-w-[760px] flex-col gap-[14px]">
       <label
         htmlFor={id}
-        className="flex items-center gap-2.5 rounded-2xl border border-input bg-field px-[18px] text-muted-foreground-strong focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring"
+        className="flex items-center gap-2.5 rounded-2xl border border-[var(--site-strong-line)] bg-[var(--site-search)] px-[18px] text-muted-foreground-strong focus-within:outline-2 focus-within:outline-offset-3 focus-within:outline-ring"
       >
         <Search className="size-[22px] flex-none" strokeWidth={2} aria-hidden="true" />
         <span className="sr-only">{labels.search}</span>

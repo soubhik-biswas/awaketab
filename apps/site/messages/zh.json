@@ -4,218 +4,32 @@
     "tagline": "让屏幕保持常亮的标签页。"
   },
   "page": {
-    "home": {
-      "title": "让屏幕保持常亮 — AwakeTab",
-      "description": "在浏览器标签页里用 Wake Lock API 让屏幕保持常亮。状态真实、预设时长、定时至某一时刻。无需账号。",
-      "h1": "让屏幕保持常亮",
-      "what": {
-        "title": "AwakeTab 的功能"
-      },
-      "how": {
-        "title": "工作原理"
-      },
-      "limits": {
-        "title": "诚实的限制"
-      },
-      "intro": "只要此标签页可见，AwakeTab 就会使用浏览器的 Wake Lock API；只有浏览器确认锁定后，状态才会写屏幕已保持唤醒。",
-      "uses": {
-        "title": "What are you keeping awake?",
-        "lead": "Each one opens the tool already set for the job, with the length it needs.",
-        "all": "All {count} use cases",
-        "start": "Start · {length}",
-        "cooking": {
-          "_": "Cooking",
-          "body": "The recipe stays lit while your hands are floury, with kitchen timers beside it."
-        },
-        "reading": {
-          "_": "Reading",
-          "body": "A long article stays on screen while you read, with no tap to wake it."
-        },
-        "presentations": {
-          "_": "Presentations",
-          "body": "Set it to the end of your talk and keep it in a floating window beside the slides."
-        },
-        "dashboards": {
-          "_": "Dashboards",
-          "body": "A wall screen stays on all day, and a link can start the session as the page loads."
-        },
-        "videoCalls": {
-          "_": "Video calls",
-          "body": "The display stays on when the video pauses. Your chat status is left alone."
-        },
-        "downloads": {
-          "_": "Downloads",
-          "body": "The screen stays on through a long download, and a visible tab holds off idle sleep."
-        }
-      },
-      "final": {
-        "title": "One tap, and the screen stays on.",
-        "body": "The pill says {held} only after the browser confirms the lock. For a hidden tab or a minimised window, the extension keeps going.",
-        "start": "Keep this screen awake",
-        "extension": "Add extension",
-        "docs": "How it works, limits and FAQ in the docs"
-      },
-      "yours": {
-        "title": "Make it yours",
-        "lead": "Clock faces, colours, backgrounds, focus sounds and a notepad. Each one loads only when you pick it, and the status pill still tells you the truth.",
-        "compare": "Compare Free and Pro",
-        "faces": {
-          "title": "Twelve clock faces",
-          "tag": "All free",
-          "body": "Classic, retro and modern. Every face shows your session, follows your lamp colour and knows when the screen is paused. Swipe the clock or press C to switch.",
-          "list": "The twelve clock faces"
-        },
-        "looks": {
-          "title": "Themes, lamps and backgrounds",
-          "body": "Clear Night, Paper and Nord, four lamps, three backgrounds and three presets are free. Pro adds six themes, eight lamps, a colour of your own, five backgrounds and five presets.",
-          "themes": "Colour themes, each with a light and a dark version",
-          "lamps": "Lamp colours",
-          "patterns": "Backgrounds",
-          "try": "Previewing {name} · {time} left",
-          "tryNote": "Any Pro look can be tried for 5 minutes, as often as you like. Nothing is saved."
-        },
-        "sound": {
-          "title": "Sounds for focus",
-          "body": "Seven focus sounds made live in your browser, five end sounds, vibration and a quiet tick-tock, all free. Pro adds a mixer to layer them.",
-          "list": "Free focus sounds",
-          "mixer": "Mixer",
-          "honest": "Nothing plays until you ask, and sound never keeps the screen awake."
-        },
-        "notes": {
-          "title": "A notepad beside the clock",
-          "body": "Checklists, headings, export and voice typing. Notes stay in this browser and work offline. One note is free; Pro keeps as many as you like.",
-          "sample": {
-            "title": "Before the call",
-            "1": "Open the slides",
-            "2": "Share the agenda",
-            "3": "Ask about the launch date"
-          },
-          "listening": "Listening…"
-        },
-        "focus": {
-          "title": "Focus tools",
-          "body": "A Pomodoro with pause and skip, an intention under the clock, a breathing guide and a second time zone. With Pro the Pomodoro repeats on its own.",
-          "intention": "Writing the report",
-          "zone": "London",
-          "breathe": "Breathe in",
-          "cycles": "Focus block 2 of 4"
-        }
-      },
-      "ext": {
-        "kicker": "AwakeTab for Chrome",
-        "free": "Free",
-        "title": "Keep the screen awake with the tab out of sight",
-        "lead": "The extension asks the browser itself to keep the screen awake, so it keeps going behind other windows.",
-        "hidden": {
-          "title": "Tab hidden or window minimised",
-          "body": "It keeps going while the browser is running."
-        },
-        "system": {
-          "title": "Only the system, if you prefer",
-          "body": "System level keeps the computer awake and lets the screen dim or turn off."
-        },
-        "badge": {
-          "title": "Status in the toolbar",
-          "body": "The badge shows ON, SYS or the minutes left."
-        },
-        "shortcut": {
-          "title": "A shortcut from any tab",
-          "body": "{keys} starts or stops it without going back to the tab."
-        },
-        "cta": {
-          "get": "Get the extension",
-          "edge": "Add to Edge"
-        },
-        "note": "Works in {browsers}, version {version} or later. {others} have no power API for extensions.",
-        "more": "See everything the extension does",
-        "art": {
-          "tab": "Sales dashboard",
-          "tab2": "Inbox",
-          "started": "Started {time}"
-        }
-      },
-      "levels": {
-        "title": "Choose your level",
-        "lead": "Keeping a screen awake is free, in this tab and in the extension, and so are every clock face and focus sound. Pro adds more looks, a sound mixer, more notes and a longer memory.",
-        "free": "Free",
-        "web": {
-          "name": "Web tab",
-          "per": "nothing to install",
-          "sub": "Runs right here, in this tab.",
-          "g1": "Keeps the screen on while this tab is visible",
-          "g2": "15 min to 4 h, until a time, or a custom length up to 7 days",
-          "g3": "Phones, tablets and computers, and offline after the first visit",
-          "g4": "A status pill that says awake only once the browser confirms it",
-          "g5": "Twelve clock faces, three colour themes, seven focus sounds, a notepad and a Pomodoro",
-          "cta": "Start now"
-        },
-        "ext": {
-          "name": "Extension",
-          "tag": "Best on a computer",
-          "per": "one install",
-          "sub": "{browsers} {version} or later, on a computer.",
-          "g1": "Keeps going with the tab hidden or the window minimised",
-          "g2": "Screen or System: keep only the computer awake and let the screen sleep",
-          "g3": "A toolbar badge with ON, SYS or the minutes left",
-          "g4": "{keys} from any tab",
-          "cta": "Add extension"
-        },
-        "pro": {
-          "name": "Pro",
-          "per": "a year, or {once} once",
-          "sub": "5 devices, no account, 14-day refund.",
-          "g1": "Your own message, up to 80 characters, on the awake screen",
-          "g2": "Six more themes, eight more lamps, your own colour, five more backgrounds and five presets",
-          "g3": "12 weeks of history and a CSV export",
-          "g4": "Schedules and auto-start in the extension",
-          "g5": "A sound mixer, as many notes as you like and a Pomodoro that repeats",
-          "g6": "Try the looks, the mixer, more notes and the repeating Pomodoro for 5 minutes first",
-          "cta": "See Pro"
-        }
-      }
-    },
-    "preset": {
-      "title": "让屏幕常亮 {label} — AwakeTab",
-      "description": "开始一个 {label} 的 AwakeTab 会话。只有真正持有 Wake Lock 时，状态标签才会显示“屏幕保持常亮”。"
-    },
-    "until": {
-      "title": "让屏幕常亮至 {time} — AwakeTab"
-    },
+    "preset": {},
+    "until": {},
     "pip": {
       "title": "AwakeTab 悬浮计时器"
     },
     "404": {
-      "title": "页面未找到 — AwakeTab",
       "h1": "这个页面不在这里 — 但工具在。"
     },
     "hub": {
       "for": {
-        "title": "按任务保持屏幕唤醒 — AwakeTab",
-        "description": "烹饪、下载、演示等场景指南。屏幕只在活动标签页持有唤醒锁时保持点亮。",
         "h1": "为一项任务保持屏幕唤醒"
       },
       "on": {
-        "title": "在你的设备上保持屏幕唤醒 — AwakeTab",
-        "description": "按浏览器和系统设计的诚实说明，区分原生支持、电池限制和回退。",
         "h1": "在设备上使用 AwakeTab"
       },
       "vs": {
-        "title": "AwakeTab 与替代方案对比 — AwakeTab",
-        "description": "按机制、隐私、支持和诚实限制比较咖啡因类工具。",
         "h1": "比较屏幕唤醒工具",
         "pick": "Pick it when",
         "instead": "{name} instead when",
         "more": "Read the comparison"
       },
       "guides": {
-        "title": "唤醒锁故障排除 — AwakeTab",
-        "description": "修复省电和自动锁定。从不承诺后台标签或合盖仍有效。",
         "h1": "唤醒锁排除指南",
         "more": "Read the fix"
       },
       "learn": {
-        "title": "了解屏幕唤醒锁 — AwakeTab",
-        "description": "Screen Wake Lock API、支持、隐私、测试，以及网页能做到的边界。",
         "h1": "学习屏幕唤醒锁"
       },
       "start": "Start",
@@ -223,538 +37,27 @@
       "native": "Native wake lock"
     },
     "about": {
-      "title": "关于 AwakeTab 与测试 — AwakeTab",
-      "description": "了解独立作者，以及如何在不夸大网页能力的前提下测试唤醒锁。",
       "h1": "关于 AwakeTab"
     },
     "privacy": {
-      "title": "隐私 — AwakeTab",
-      "description": "设置和会话只存在本机，无 cookie、无指纹；遥测仅在你开启时发送。",
       "h1": "隐私"
     },
     "terms": {
-      "title": "条款 — AwakeTab",
-      "description": "使用 AwakeTab 的简明条款：服务限制、开源组件和省电使用。",
       "h1": "条款"
     },
     "changelog": {
-      "title": "更新日志 — AwakeTab",
-      "description": "跟踪网站、库、扩展和嵌入工具的发布说明。",
       "h1": "更新日志"
     },
-    "pro": {
-      "title": "AwakeTab Pro plans and pricing — AwakeTab",
-      "description": "AwakeTab Pro adds colour themes, a sound mixer, more notes, a repeating Pomodoro and 12 weeks of stats. Yearly or once, 5 devices, 14-day refund.",
-      "h1": "AwakeTab Pro",
-      "devices": "5 devices",
-      "lead": "Pro is optional. The awake screen stays honest and ad-free either way. Polar handles checkout; AwakeTab never stores a password.",
-      "tax": "Charged in USD; taxes added at checkout where applicable.",
-      "refund": {
-        "_": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key.",
-        "lead": "14-day refund, no questions asked.",
-        "rest": "Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key."
-      },
-      "activate": {
-        "title": "Activate AwakeTab Pro — AwakeTab",
-        "description": "Paste the licence key from your Polar receipt to activate AwakeTab Pro on this device. Checkout returns here automatically when Polar finishes.",
-        "h1": "Activate Pro",
-        "lead": "Your key is in the email from Polar and on the receipt page. This device counts as one of five activations.",
-        "submit": "Activate on this device",
-        "errors": "If activation fails",
-        "ext": {
-          "_": "Copy this key and paste it in the AwakeTab for Chrome options page. There is no automatic hand-off.",
-          "title": "Your licence key",
-          "lead": "Enter your key here to copy it into AwakeTab for Chrome. This browser is not activated: the extension activates itself, so it uses one of your five activations, not two.",
-          "submit": "Show key for the extension",
-          "note": "This browser stays unactivated, so the extension uses one of your five activations, not two."
-        },
-        "back": "AwakeTab Pro",
-        "placeholder": "Paste the key from your receipt",
-        "hint": {
-          "_": "Polar sends the key by email right after checkout.",
-          "ext": "Nothing is activated in this browser."
-        },
-        "checking": {
-          "_": "Checking your key…",
-          "status": "Checking your key with Polar. This usually takes a second or two."
-        },
-        "retry": "Retry",
-        "manage": "Manage devices",
-        "plans": "No key yet? See the Pro plans",
-        "err": {
-          "invalid_key": "Activation didn't work",
-          "activation_limit": "All five devices are in use",
-          "revoked": "This key is no longer active",
-          "polar_unavailable": "Not ready yet",
-          "offline": "No connection",
-          "bad_token": "Activate this device again"
-        },
-        "ok": {
-          "key": "Key ending {tail} · this device uses one of your five activations.",
-          "unlocked": "Unlocked here",
-          "u1": "More colour themes, lamps, backgrounds and presets",
-          "u2": "Message mode on the awake screen",
-          "u3": "12 weeks of stats and CSV export",
-          "u4": "A taller floating window",
-          "u5": "Schedules and auto-start in AwakeTab for Chrome",
-          "u6": "No ads on the guides",
-          "u7": "A sound mixer, more notes and a Pomodoro that repeats",
-          "open": "Open AwakeTab"
-        },
-        "reset": "Use a different key",
-        "copy": "Copy",
-        "copied": "Copied"
-      },
-      "manage": {
-        "title": "Manage Pro devices — AwakeTab",
-        "description": "See which devices hold your AwakeTab Pro licence and remove one if you have reached the five-device limit.",
-        "h1": "Manage devices",
-        "lead": "Devices unused for 90 days are removed automatically when you activate a new one.",
-        "empty": "No licence on this device yet. Activate a key first.",
-        "remove": "Remove",
-        "col": {
-          "device": "Device",
-          "activated": "Activated"
-        },
-        "meter": "{n} of 5 devices",
-        "left": {
-          "_": "{n} activations left",
-          "one": "1 activation left",
-          "none": "No activations left"
-        },
-        "here": "This device",
-        "off": "Pro off",
-        "activated": "Activated",
-        "confirm": {
-          "here": "Remove this device? Pro switches off here and frees one of your five activations.",
-          "other": "Remove {label}? Pro switches off there and frees one of your five activations.",
-          "aria": "Remove {label}?"
-        },
-        "keep": "Keep",
-        "removeDevice": "Remove device",
-        "plans": "See the Pro plans",
-        "loading": "Checking your devices…",
-        "offline": {
-          "title": "无法加载你的设备",
-          "text": "设备列表未能加载，因此这里不显示任何内容，而不是一个空列表。请检查网络连接后重试。",
-          "retry": "重试"
-        },
-        "added": "添加于 {date}",
-        "lapse": {
-          "grace": "等待续订 · Pro 在 {date} 前保持开启",
-          "lapsed": "Pro 已于 {date} 结束 · 续订即可重新开启",
-          "portal": "在 Polar 中更新付款方式"
-        }
-      },
-      "lapse": {
-        "grace": {
-          "kicker": "Yearly · renewal pending",
-          "title": "Pro stays on until {date}",
-          "body": "The yearly payment due on {due} didn’t go through. Update the card in the Polar customer portal and Pro renews for another year on every device below.",
-          "primary": "Update payment in Polar",
-          "secondary": "Email support",
-          "f1k": "Until {date}",
-          "f1v": "Every Pro feature keeps working on all your devices.",
-          "f2k": "After that",
-          "f2v": "Pro features switch off. The free tool keeps working, and your settings stay.",
-          "f3k": "Once paid",
-          "f3v": "Nothing to do: each device picks up the renewal on its next check."
-        },
-        "ended": {
-          "kicker": "Yearly · ended {ended}",
-          "title": "Pro is off on these devices",
-          "body": "They stay listed, and each keeps its settings. Renew and each one turns Pro back on the next time it opens AwakeTab.",
-          "primary": "Renew for {price} / year",
-          "secondary": "Or {price} once",
-          "note": "{price} is the launch price for a limited time; the end date is on the Pro page.",
-          "f1k": "Unchanged",
-          "f1v": "The awake screen, presets, faces and the extension stay free.",
-          "f2k": "Kept",
-          "f2v": "Pro choices, like the Mint lamp or your message, come back when you renew.",
-          "f3k": "Hidden, not deleted",
-          "f3v": "Stats older than 7 days.",
-          "f4k": "Paused",
-          "f4v": "Schedules and auto-start in the extension."
-        },
-        "facts": {
-          "h2": "What stays and what changes"
-        }
-      },
-      "checkout": {
-        "rail": {
-          "_": "Checkout progress",
-          "1": "Payment confirmed by Polar",
-          "2": "Licence key created",
-          "3": "Active on this device"
-        },
-        "success": {
-          "h1": "Pro is active",
-          "lead": "Thank you. The payment went through, and this browser is now one of your five Pro devices.",
-          "aside": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal.",
-          "link": "Manage devices"
-        },
-        "next": "Next steps",
-        "step1": "Open the tool. Lamp colours, Message mode and 12 weeks of stats are ready in Settings.",
-        "step2": "Use Chrome too? Paste the same key into AwakeTab for Chrome’s settings. It counts as one more of your five.",
-        "step3": "Keep the email from Polar. It has your key, the receipt and a link to manage the plan.",
-        "open": "Open AwakeTab",
-        "showKey": "Show my key",
-        "hideKey": "Hide key",
-        "keyLabel": "Your licence key",
-        "keyMissing": "Your key is still on its way. It is in the email from Polar and on the receipt page.",
-        "purchase": "Your purchase",
-        "row": {
-          "plan": "Plan",
-          "price": "Price",
-          "renews": "Renews",
-          "devices": "Devices",
-          "key": "Key"
-        },
-        "plan": {
-          "yearly": "AwakeTab Pro, yearly",
-          "lifetime": "AwakeTab Pro, pay once"
-        },
-        "price": {
-          "yearly": "{price} / year",
-          "lifetime": "{price} once"
-        },
-        "renews": {
-          "never": "No renewal"
-        },
-        "devices": "{n} of 5",
-        "key": "ending {tail}",
-        "cancelled": {
-          "h1": "Checkout closed",
-          "lead": "Nothing was charged. Pro is optional: the tool, the presets and the extension keep working without it.",
-          "primary": "Open AwakeTab",
-          "secondary": "See the plans again",
-          "aside": {
-            "title": "Before you decide",
-            "launch": "Pro is {yearly} / year, or {price} once at the launch price ({after} after; the end date is on the Pro page). Five devices, and a 14-day refund if it isn’t for you.",
-            "_": "Pro is {yearly} / year, or {price} once. Five devices, and a 14-day refund if it isn’t for you."
-          },
-          "link": "Ask a question"
-        },
-        "failed": {
-          "h1": "The payment didn’t go through",
-          "lead": "Polar couldn’t take the payment, so nothing was charged and no licence was created.",
-          "listTitle": "What usually helps",
-          "l1": "Check the card number, expiry date and billing postcode.",
-          "l2": "Some banks hold the first payment to a new shop. Approving it in your bank’s app usually clears it.",
-          "l3": "Try another card or payment method. Taxes are added at checkout, so the total can be above the list price.",
-          "primary": "Try checkout again",
-          "secondary": "Email support",
-          "aside": {
-            "title": "See a charge anyway?",
-            "text": "A declined payment can show as a pending hold for a few days, then drop off. If it doesn’t, email support@awaketab.com with the date and amount."
-          },
-          "link": "Email support"
-        },
-        "help": {
-          "h1": "Where is my licence key?",
-          "lead": "It is in the email from Polar, sent to the address you used at checkout, and on the receipt page.",
-          "listTitle": "If you can’t find it",
-          "l1": "Search your inbox for “Polar” and check spam or Promotions.",
-          "l2": "Just paid? Polar takes a few seconds to create the key. The activation page keeps checking for about 20 seconds on its own.",
-          "l3": "Keys and receipts are also in the Polar customer portal.",
-          "l4": "Still stuck? Email support@awaketab.com from the address you paid with.",
-          "primary": "Enter licence key",
-          "secondary": "Open the Polar customer portal",
-          "callout": "Your purchase is still syncing. Retry in a minute.",
-          "aside": {
-            "title": "If activation says this",
-            "text": "Polar is still creating your key. Wait a minute and press Activate again; you are not charged twice."
-          },
-          "link": "Activate Pro"
-        }
-      },
-      "kicker": "AwakeTab Pro",
-      "hero": {
-        "glance": "At a glance",
-        "devices": "5 devices",
-        "account": "No account",
-        "refund": "14-day refund",
-        "title": "Make AwakeTab yours",
-        "value": "Keeping a screen awake is free and stays free, with every clock face and focus sound. Pro adds more themes, lamps and backgrounds, a sound mixer, more notes, a Pomodoro that repeats, Message mode, 12 weeks of stats, and schedules and auto-start in the Chrome extension.",
-        "price": {
-          "launch": "{yearly} a year, or {once} once at the launch price.",
-          "_": "{yearly} a year, or {once} once."
-        },
-        "compare": "Compare Free and Pro"
-      },
-      "lamp": {
-        "kicker": "Lamp colour",
-        "aqua": "Aqua",
-        "violet": "Violet",
-        "mint": "Mint",
-        "sky": "Sky",
-        "pro": "Pro colour",
-        "free": "Free colour",
-        "group": "Preview a lamp colour",
-        "aria": {
-          "pro": "{name}, Pro colour",
-          "free": "{name}, free colour"
-        },
-        "caption": "Aqua and Violet are free, and so are Amber and Teal. Mint, Sky and six more come with Pro, or any colour you pick. The page shows a preview; nothing is saved."
-      },
-      "plans": {
-        "h2": "Two ways to pay",
-        "yearly": "Yearly",
-        "lifetime": "Lifetime",
-        "once": "Pay once",
-        "per": {
-          "year": "a year",
-          "once": "once"
-        },
-        "cta": {
-          "yearly": "Get yearly Pro",
-          "lifetime": "Get lifetime Pro"
-        },
-        "launch": {
-          "value": "At the launch price, less than two years of the yearly plan.",
-          "date": "Launch price until {date} (UTC), then {price}."
-        },
-        "after": {
-          "value": "Less than three years of the yearly plan."
-        },
-        "norenewal": "Pay once, no renewal.",
-        "shutdown": "If AwakeTab ever shuts down, we will ship a final update that unlocks Pro for everyone.",
-        "tax": "Charged in USD; taxes added at checkout where applicable. Both buttons open Polar checkout, and your licence key arrives by email and on the receipt page.",
-        "lead": {
-          "all": "Both plans include everything above on 5 devices. There is no monthly plan and no account."
-        },
-        "all": "Everything in Pro, on 5 devices",
-        "renew": "Renews each year through Polar",
-        "cancel": "Cancel any time. Pro stays on until the end of the year you paid for."
-      },
-      "faq": {
-        "h2": "Questions",
-        "q1": "Does Pro keep the screen awake better?",
-        "a1": "No. Free and Pro use the same wake lock and the same status pill. Pro adds looks, a sound mixer, more notes, a repeating Pomodoro, a message, history and schedules on top.",
-        "q2": "Do I need an account?",
-        "a2": "No. Polar handles checkout and emails you a licence key. AwakeTab never stores a password.",
-        "q3": "What counts as a device?",
-        "a3": "Each browser where you enter the key uses one of five activations. AwakeTab for Chrome activates itself and uses one too. Devices unused for 90 days are removed automatically when you activate a new one.",
-        "q5": "Can I try Pro before paying?",
-        "a5": "Yes. In the tool, every Pro theme, lamp, background and preset, the sound mixer, more notes, the repeating Pomodoro and a shared Message link can be tried for 5 minutes, as often as you like. A small bar counts down, then the tool goes back to your free choice, and nothing is saved. After you pay, the 14-day refund still applies.",
-        "q6": "What happens if my yearly plan ends?",
-        "a6": "Pro features switch off and the free tool keeps working. Your settings stay, and stats older than 7 days are hidden, not deleted. Renew and they come back.",
-        "q7": "Is there a monthly plan?",
-        "a7": "No. Pro is {yearly} a year, or one payment with no renewal. Both cover 5 devices."
-      },
-      "biz": {
-        "h2": "For your website or your screens",
-        "embed": {
-          "_": "Embed licence",
-          "price": "{price} a year per site",
-          "text": "Removes the \"Keep awake by AwakeTab\" credit. Licences open soon; the free embed works today."
-        },
-        "kiosk": {
-          "_": "Kiosk licence",
-          "price": "{one} one site · {five} five sites",
-          "text": "Signage and kiosk screens that stay awake from one URL, with your own logo and message."
-        }
-      },
-      "cmp": {
-        "h2": "Free or Pro, side by side",
-        "lead": "Everything that keeps a screen awake is free, in the web tab and in the extension. Pro uses the same wake lock and the same honest status pill, and adds the extras in the Pro column.",
-        "caption": "What the free web tab, the free extension and Pro include",
-        "col": {
-          "feature": "Feature",
-          "free": {
-            "_": "Free",
-            "sub": "No key, no account"
-          },
-          "pro": {
-            "_": "Pro",
-            "sub": "From {price} a year"
-          }
-        },
-        "yes": "Included",
-        "no": "Not included",
-        "g": {
-          "web": "Web tab",
-          "ext": "AwakeTab for Chrome",
-          "ads": "Ads",
-          "looks": "Looks",
-          "focus": "Sound, notes and focus"
-        },
-        "r": {
-          "awake": "Keeps the screen awake, with an honest status pill",
-          "lengths": "Every length, from 15 min to 7 days, until a time or until you stop",
-          "faces": "Twelve clock faces and seven ambient modes, Cook timers and Breathe included",
-          "offline": "Install, offline use and 8 languages",
-          "lamps": "Lamp colours",
-          "themes": "Colour themes, each with a light and a dark version",
-          "patterns": "Backgrounds",
-          "presets": "One-tap presets",
-          "preview": "Try a Pro look, the mixer, more notes or the repeating Pomodoro for 5 minutes",
-          "sounds": "Seven focus sounds, five end sounds, vibration, tick-tock and media keys",
-          "mixer": "Sound mixer",
-          "library": "Lo-fi library",
-          "notes": "Notepad with checklists, export and voice typing",
-          "tools": "An intention, a breathing guide and a second time zone",
-          "pomo": "Pomodoro",
-          "msg": "Message mode",
-          "stats": "Stats history",
-          "pip": "Floating window",
-          "ext": "Screen or System level, timers and the toolbar badge",
-          "sched": "Weekly schedules",
-          "auto": "Auto-start when Chrome opens or on a site you pick",
-          "adsawake": "On the awake screen",
-          "adsguides": "On guide pages"
-        },
-        "v": {
-          "lamps": {
-            "free": "Aqua, Violet, Amber, Teal",
-            "pro": "Adds 8 and your own colour"
-          },
-          "themes": {
-            "free": "Clear Night, Paper, Nord",
-            "pro": "Adds 6, High contrast among them"
-          },
-          "patterns": {
-            "free": "Grain, Dots, Grid",
-            "pro": "Adds Contours, Waves, Aurora, Stars, Drift"
-          },
-          "presets": {
-            "free": "Classic, Library, Fjord",
-            "pro": "Adds 5, like Night desk"
-          },
-          "preview": {
-            "pro": "Yours to keep"
-          },
-          "mixer": {
-            "free": "One sound at a time"
-          },
-          "library": {
-            "free": "The lo-fi loop",
-            "pro": "Recorded tracks as we add them"
-          },
-          "notes": {
-            "free": "One note",
-            "pro": "Unlimited, with search and pins"
-          },
-          "pomo": {
-            "free": "Pause and skip",
-            "pro": "Repeats until you stop"
-          },
-          "msg": {
-            "free": "5-minute preview from a shared link"
-          },
-          "stats": {
-            "free": "7 days",
-            "pro": "12 weeks, CSV"
-          },
-          "pip": {
-            "pro": "Taller"
-          },
-          "never": "Never",
-          "ads": {
-            "free": "May show",
-            "pro": "None"
-          }
-        }
-      },
-      "get": {
-        "h2": "What Pro adds",
-        "lead": "On up to five devices. Pro changes what AwakeTab looks like and remembers, never how the screen is kept awake.",
-        "msg": {
-          "h": "Message mode",
-          "p": "Your own line, up to 80 characters, in big type on the awake screen. Anyone who opens a shared Message link can try it free for 5 minutes."
-        },
-        "stats": {
-          "h": "12 weeks of stats",
-          "p": "Free stats show the last 7 days. Pro keeps 12 weeks and exports your sessions as a CSV file."
-        },
-        "pip": {
-          "h": "A taller floating window",
-          "p": "The floating window that stays on top of your other apps opens a third taller."
-        },
-        "sched": {
-          "h": "Schedules and auto-start in Chrome",
-          "p": "In AwakeTab for Chrome, pick the days and hours a screen stays on, or start when Chrome opens or when you visit a site you choose."
-        },
-        "ads": {
-          "h": "No ads on the guides",
-          "p": "Guide pages may carry ads to pay for the free tool. With Pro they don't. The awake screen has no ads for anyone."
-        },
-        "looks": {
-          "h": "Themes, lamps and backgrounds",
-          "p": "Six more colour themes, from Solarized to High contrast, eight more lamps and a colour of your own, five more backgrounds such as Aurora and Stars, and presets like Night desk. Clear Night, Paper, Nord and four lamps stay free."
-        },
-        "sound": {
-          "h": "A sound mixer",
-          "p": "Layer rain, café, fire and noise, each at its own level. A lo-fi library will hold recorded tracks as we add them. The seven focus sounds, one at a time, stay free."
-        },
-        "notes": {
-          "h": "As many notes as you like",
-          "p": "Titles, search and pins for every note you keep. Notes stay in your browser and are never uploaded. One note is free."
-        },
-        "pomo": {
-          "h": "A Pomodoro that repeats",
-          "p": "After the long break, focus blocks start again on their own until you stop, and every finished block counts in your stats. Pause and skip are free."
-        }
-      },
-      "how": {
-        "h2": "How you get Pro",
-        "lead": "No account to create. A licence key does the work, and Polar sends it to you.",
-        "s1": {
-          "h": "Pay on Polar",
-          "p": "The plan button opens Polar checkout. Polar takes the payment, adds any tax and emails your receipt with the licence key."
-        },
-        "s2": {
-          "h": "Pro turns on here",
-          "p": "Polar brings you back to AwakeTab, and this browser activates itself. If it can't, paste the key from the email."
-        },
-        "s3": {
-          "h": "Add your other devices",
-          "p": "Enter the same key in up to five browsers in total. AwakeTab for Chrome takes it in its settings and counts as one of them."
-        },
-        "s4": {
-          "h": "Manage devices any time",
-          "p": "See where Pro is on and remove a device to free its place. Devices unused for 90 days are removed automatically when you activate a new one."
-        }
-      },
-      "trust": {
-        "h2": "Payment, refunds and privacy",
-        "polar": {
-          "h": "Polar handles payment.",
-          "p": "Polar is the seller of record: it takes the card, charges tax where it applies and sends the receipt. AwakeTab never sees your card."
-        },
-        "cancel": {
-          "h": "Cancel any time.",
-          "p": "The yearly plan renews through Polar. Cancel in the Polar customer portal, and Pro stays on until the end of the year you paid for."
-        },
-        "privacy": {
-          "h": "No account, no password.",
-          "p": "Your licence is a key, plus a random ID and a label such as “Chrome · macOS” for each device. Polar keeps your email for the receipt."
-        }
-      },
-      "end": {
-        "h2": "Add Pro to the tab you already use",
-        "lead": "{once} once or {yearly} a year, on 5 devices, with a 14-day refund.",
-        "note": "Already paid?"
-      }
-    },
     "embed": {
-      "title": "网站屏幕常亮小组件 — AwakeTab",
-      "description": "为网站添加一个“烹饪模式”按钮,让读者的屏幕保持常亮:只需一个 script 标签,状态如实显示,不发出任何第三方请求。保留署名链接即可免费使用。",
       "h1": "让读者的屏幕保持常亮"
     },
     "kiosk": {
-      "title": "自助终端与数字标牌显示模式 — AwakeTab",
-      "description": "用一个网址让自助终端、仪表板或数字标牌屏幕保持常亮:可设置自动开始、消息和主题,购买 Kiosk 许可证还可显示自己的徽标。",
       "h1": "适用于自助终端和数字标牌的 AwakeTab"
     },
     "library": {
-      "title": "@awaketab/wake — Wake Lock 库 — AwakeTab",
-      "description": "开源的 Screen Wake Lock 库:七种如实的状态、小巧的视频后备方案和被拒绝时的建议。持续维护的 NoSleep.js 替代品。",
       "h1": "@awaketab/wake:诚实的唤醒锁库"
     },
     "extension": {
-      "title": "让屏幕保持常亮的 Chrome 扩展 — AwakeTab",
-      "description": "AwakeTab for Chrome 可从工具栏让屏幕或电脑保持唤醒，即使标签页被隐藏也有效。支持计时器和计划，状态诚实，不做追踪。",
       "h1": "AwakeTab for Chrome",
       "lead": "网页版只有在标签页可见时才能保持唤醒锁。扩展会直接请求 Chrome 让屏幕（或仅让电脑）保持唤醒，因此即使标签页被隐藏或窗口已最小化也能继续工作。",
       "cta": {
@@ -837,6 +140,11 @@
       "band": {
         "title": "Keep the screen on while you work in other tabs"
       }
+    },
+    "home": {
+      "title": "AwakeTab — 让这块屏幕保持常亮",
+      "description": "一键让屏幕保持常亮。一只安静的时钟显示剩余时间。46 款表盘、6 种动态背景，全部免费，无需安装，无需账户。",
+      "ogAlt": "显示剩余 38:12 的 AwakeTab 时钟"
     }
   },
   "tool": {
@@ -871,7 +179,6 @@
       "word": "Words",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "matrix": "LED",
       "prev": "Previous face",
       "next": "Next face"
     },
@@ -1495,7 +802,606 @@
       "hero": "让屏幕保持常亮。",
       "heroSub": "一键开启。时间到后自动恢复休眠，无需安装或账号。",
       "heroSubPhone": "一键开启，到点自动休眠。"
-    }
+    },
+    "glance": {
+      "free": "免费",
+      "unit": {
+        "h": "小时",
+        "min": "分钟",
+        "hour": "小时"
+      },
+      "len": {
+        "0": "15 分钟",
+        "1": "30 分钟",
+        "2": "1 小时",
+        "3": "2 小时",
+        "4": "不限时"
+      },
+      "top": {
+        "search": "搜索",
+        "searchLabel": "搜索和命令",
+        "vibe": "氛围",
+        "faces": "表盘",
+        "recents": "记录",
+        "settings": "设置"
+      },
+      "pill": {
+        "idle": "未保持常亮",
+        "starting": "正在询问浏览器…",
+        "awake": "常亮中 · 至 {time}",
+        "awakeOpen": "常亮中 · 直到你停止",
+        "fallback": "视频常亮中 · 至 {time}",
+        "fallbackOpen": "视频常亮中 · 直到你停止",
+        "paused": "已暂停 · 剩余 {dur}",
+        "needsyou": "轻触继续 · 标签页曾被隐藏",
+        "blocked": "未常亮 · {reason}",
+        "unsupported": "此浏览器不支持唤醒锁",
+        "ended": "时间到 · 已于 {time} 休眠"
+      },
+      "reason": {
+        "battery": "省电模式",
+        "unknown": "浏览器拒绝了",
+        "insecure": "需要安全页面",
+        "policy": "此处不允许"
+      },
+      "set": {
+        "h1a": "让屏幕",
+        "h1b": "保持常亮。",
+        "howLong": "时长",
+        "cta": "保持常亮 · {len}",
+        "noEnd": "不限时",
+        "noEndCap": "不限时",
+        "starting": "正在启动…",
+        "note": "结束于 {time} · 无需安装 · 无需账号",
+        "noteOpen": "直到你停止 · 无需安装 · 无需账号"
+      },
+      "stage": {
+        "label": "计时"
+      },
+      "face": {
+        "aria": "表盘：{face}",
+        "ready": "就绪",
+        "left": "剩余",
+        "ends": "结束于 {time}"
+      },
+      "first": {
+        "kicker": "首次使用完成 · {dur}",
+        "h": "感觉如何？"
+      },
+      "rate": {
+        "love": "很喜欢",
+        "good": "能用",
+        "bad": "出了问题"
+      },
+      "dock": {
+        "label": "会话控制",
+        "addTime": "增加时间",
+        "add": "+{n} {unit}",
+        "addAria": "增加 {dur}",
+        "pause": "暂停",
+        "resume": "继续",
+        "again": "重新开始",
+        "fix": "查看解决办法",
+        "video": "使用视频",
+        "stop": "停止",
+        "stopAria": "停止并让屏幕休眠",
+        "faceAria": "表盘：{face}。更换表盘",
+        "full": "全屏",
+        "exitFull": "退出全屏"
+      },
+      "hint": {
+        "move": "移动指针以显示控件",
+        "tap": "轻触任意处以显示控件",
+        "show": "显示控件"
+      },
+      "banner": {
+        "blocked": {
+          "battery": {
+            "t": "省电模式阻止了唤醒锁。",
+            "d": "屏幕仍可能变暗。",
+            "btn": "查看解决办法"
+          },
+          "unknown": {
+            "t": "浏览器拒绝了唤醒锁。",
+            "d": "屏幕仍可能变暗。",
+            "btn": "查看解决办法"
+          },
+          "insecure": {
+            "t": "唤醒锁需要安全页面。",
+            "d": "屏幕仍可能变暗。",
+            "btn": "查看解决办法"
+          },
+          "policy": {
+            "t": "此页面不允许唤醒锁。",
+            "d": "屏幕仍可能变暗。",
+            "btn": "查看解决办法"
+          }
+        },
+        "unsupported": {
+          "t": "此浏览器没有唤醒锁。",
+          "d": "可以用一段静音、不可见的视频保持屏幕常亮。",
+          "btn": "使用视频"
+        },
+        "fallback": {
+          "t": "正通过静音视频保持常亮。",
+          "d": "请保持此标签页可见。",
+          "btn": ""
+        },
+        "needsyou": {
+          "t": "标签页曾被隐藏，浏览器已释放。",
+          "d": "轻触一下即可再次常亮。",
+          "btn": "继续"
+        },
+        "conflict": {
+          "t": "另一个标签页正在保持屏幕常亮。",
+          "d": "一个标签页就够了。",
+          "btn": "接管"
+        },
+        "offline": {
+          "t": "你已离线。",
+          "d": "计时继续，同步会在联网后进行。",
+          "btn": ""
+        },
+        "update": {
+          "t": "新版本已就绪。",
+          "d": "重新加载后会话会继续。",
+          "btn": "重新加载"
+        }
+      },
+      "toast": {
+        "extended": "已增加 {dur} · 现在至 {time}",
+        "undo": "撤销"
+      },
+      "tab": {
+        "left": "剩余 {t}",
+        "awake": "常亮中",
+        "paused": "已暂停",
+        "blocked": "未常亮",
+        "up": "时间到"
+      },
+      "an": {
+        "start": "屏幕将常亮至 {time}。",
+        "startOpen": "屏幕将常亮，直到你停止。",
+        "extend": "已增加 {dur}。现在至 {time}。",
+        "low": "还剩 5 分钟。增加 15 分钟吗？",
+        "hidden": "标签页曾被隐藏，浏览器已释放。",
+        "refused": "未常亮 — {reason}。请查看解决办法。",
+        "paused": "已暂停。保留 {dur}。",
+        "ended": "时间到。屏幕现在可以休眠。",
+        "face": "表盘：{face}。"
+      },
+      "tagNew": "新",
+      "tagHot": "热门",
+      "tagPick": "精选",
+      "tagNight": "夜间",
+      "nudge": {
+        "h": "它已经是你的了。",
+        "d": "已用 {sessions, plural, other {# 次}}，存了 {presets, plural, other {# 个预设}}。在不止一块屏幕上用吗？Pro 让它们全部保持同步。",
+        "try": "免费试用 Pro",
+        "later": "以后再说"
+      },
+      "panel": {
+        "close": "关闭",
+        "recents": {
+          "t": "记录",
+          "d": "预设和你用过的会话"
+        },
+        "settings": {
+          "t": "设置",
+          "d": "保存在这台设备上"
+        },
+        "help": {
+          "t": "帮助与解决方法",
+          "d": "只在出问题时显示"
+        },
+        "studio": {
+          "t": "表盘工作室",
+          "d": "免费 · 把任意表盘变成你的"
+        },
+        "feedback": {
+          "t": "反馈",
+          "d": "你最初的几次使用决定我们接下来做什么"
+        },
+        "vibes": {
+          "t": "氛围",
+          "d": "时钟背后的动态背景"
+        },
+        "share": {
+          "t": "分享这套设置",
+          "d": "给别人发一个随时可用的时钟"
+        },
+        "devices": {
+          "t": "你的屏幕",
+          "d": "Pro · 跨设备同步"
+        },
+        "sound": {
+          "t": "环境声",
+          "d": "免费 · 混出你自己的背景声"
+        },
+        "clear": {
+          "t": "清除记录",
+          "d": "仅限这台设备"
+        },
+        "language": {
+          "t": "语言",
+          "d": "文字和时间格式"
+        },
+        "pro": {
+          "t": "AwakeTab Pro",
+          "d": "可选 · 适合多块屏幕"
+        },
+        "proDone": {
+          "t": "欢迎使用 Pro",
+          "d": "试用已开始"
+        },
+        "plan": {
+          "t": "管理订阅",
+          "d": "Pro · 按年"
+        }
+      },
+      "faces": {
+        "title": "表盘",
+        "sub": "点一下，它会立即在这个面板后面生效。全部 {n} 款都免费。",
+        "search": "搜索 {n} 款表盘",
+        "close": "关闭表盘",
+        "collections": "合集",
+        "label": "表盘",
+        "featuredTag": "精选 · {tag}",
+        "none": "没有叫“{q}”的表盘。",
+        "filter": {
+          "featured": "精选",
+          "digital": "数字",
+          "analog": "指针",
+          "ambient": "氛围",
+          "all": "全部"
+        }
+      },
+      "recents": {
+        "week": "本周",
+        "awake": "常亮 {dur}",
+        "streak": "连续 {n} 天",
+        "longest": "目前最长的一次",
+        "noStreak": "你的会话会显示在这里",
+        "hours": "常亮小时数",
+        "chart": "本周每天的常亮小时数",
+        "presets": "预设",
+        "emptyH": "还没有预设",
+        "emptyD": "开始一个你喜欢的会话，然后存到这里。一点即可恢复：时长、表盘和氛围。",
+        "save": "将当前设置存为预设",
+        "saved": "已存为预设：{name}",
+        "history": "历史",
+        "this": "本次会话",
+        "sinceNow": "{time} – 现在",
+        "awakeBadge": "常亮中",
+        "untitled": "{face} 会话",
+        "today": "今天 · {date}",
+        "yesterday": "昨天 · {date}",
+        "note": "历史只保存在这台设备上。随时可以在设置中清除。"
+      },
+      "settings": {
+        "appearance": "外观",
+        "theme": "主题",
+        "themes": {
+          "auto": "跟随系统",
+          "light": "浅色",
+          "dark": "深色",
+          "oled": "OLED"
+        },
+        "clock": "时钟",
+        "h12": "12 小时制",
+        "h12D": "显示上午11:42，而不是 11:42",
+        "secs": "显示秒",
+        "secsD": "在表盘和标签页标题中显示",
+        "dim": "夜间调暗",
+        "dimD": "晚上 10:00 后光线更柔和",
+        "sound": "声音",
+        "chime": "结束提示音",
+        "chimeD": "时间到时响一次",
+        "chimes": {
+          "two": "双音",
+          "bell": "铃声",
+          "off": "关闭"
+        },
+        "mixer": "环境声混音",
+        "mixerD": "雨声、咖啡馆、炉火和棕噪声",
+        "studio": "表盘工作室",
+        "studioD": "你自己的强调色和光晕",
+        "more": "更多",
+        "ambient": "环境声",
+        "ambientD": "雨声、咖啡馆、炉火、棕噪声",
+        "language": "语言",
+        "languageD": "更改文字和时间格式",
+        "share": "分享这套设置",
+        "shareD": "打开即可开始的链接",
+        "clear": "清除记录",
+        "clearD": "预设和设置会保留",
+        "account": "账户",
+        "signedOut": "未登录",
+        "signedOutD": "不登录也能使用全部功能。只有同步 Pro 时才需要登录。",
+        "signIn": "登录",
+        "signedIn": "已通过{via}登录",
+        "via": {
+          "google": "Google",
+          "github": "GitHub",
+          "passkey": "通行密钥"
+        },
+        "proOn": "Pro 已开启 · 在你的屏幕间同步",
+        "freeOn": "全部功能都能用。Pro 只是为多块屏幕增加同步。",
+        "manage": "管理订阅",
+        "feedback": "发送反馈",
+        "feedbackD": "点两下即可。每条消息我们都会读。",
+        "proCard": "屏幕很多？让它们保持同步。",
+        "proCardD": "以上所有功能永久免费。Pro 适合使用多块屏幕的人：一套设置同步到每台设备，外加优先帮助。每年 {price}。",
+        "proCardOn": "Pro 已开启。同步已就绪。",
+        "proCardOnD": "在另一块屏幕上打开 AwakeTab，用同样的方式登录，你的设置就会跟过去。",
+        "seePro": "了解 Pro"
+      },
+      "help": {
+        "checked": "我们在 {time} 检查过。",
+        "video": "使用视频备用方案",
+        "again": "再检查一次",
+        "battery": {
+          "h": "浏览器拒绝了",
+          "d": "省电模式似乎已开启（电量低且未接电源），这时这个浏览器会忽略保持常亮的请求。",
+          "s1": "接上电源，或关闭省电模式",
+          "s1d": "唤醒锁会自动恢复，我们会继续检查。",
+          "s2": "或者使用视频备用方案",
+          "s2d": "一段无声、不可见的视频能让大多数屏幕保持常亮。",
+          "s3": "仍然变暗？",
+          "s3d": "桌面应用还能阻止系统休眠。"
+        },
+        "unknown": {
+          "h": "浏览器拒绝了",
+          "d": "这个浏览器没有说明原因就拒绝了保持常亮的请求。通常是电源或电池设置导致的。",
+          "s1": "接上电源，或关闭省电模式",
+          "s1d": "然后点“再检查一次”，只需一秒。",
+          "s2": "或者使用视频备用方案",
+          "s2d": "一段无声、不可见的视频能让大多数屏幕保持常亮。",
+          "s3": "仍然变暗？",
+          "s3d": "桌面应用还能阻止系统休眠。"
+        },
+        "insecure": {
+          "h": "这个页面不安全",
+          "d": "浏览器只在安全的（https）页面上允许唤醒锁。",
+          "s1": "用 https 打开 awaketab.com",
+          "s1d": "确认地址以 https:// 开头。",
+          "s2": "或者使用视频备用方案",
+          "s2d": "一段无声、不可见的视频能让大多数屏幕保持常亮。"
+        },
+        "policy": {
+          "h": "此页面不允许",
+          "d": "嵌入 AwakeTab 的页面不允许使用唤醒锁。",
+          "s1": "在单独的标签页中打开 AwakeTab",
+          "s1d": "awaketab.com 的用法完全相同，并允许唤醒锁。",
+          "s2": "或者使用视频备用方案",
+          "s2d": "一段无声、不可见的视频能让大多数屏幕保持常亮。"
+        }
+      },
+      "studio": {
+        "accent": "强调色",
+        "glow": "房间光晕",
+        "note": "状态颜色永远不变：暂停始终是琥珀色，被阻止始终是红色，所以时钟总是说实话。",
+        "save": "存为我的表盘",
+        "reset": "恢复默认",
+        "swatch0": "荧光绿",
+        "swatch1": "青柠",
+        "swatch2": "琥珀",
+        "swatch3": "天蓝",
+        "swatch4": "丁香紫",
+        "swatch5": "玫瑰",
+        "swatch6": "余烬"
+      },
+      "vibes": {
+        "label": "背景氛围",
+        "motion": "动效",
+        "still": "静止",
+        "calm": "舒缓",
+        "lively": "活泼",
+        "note": "省电模式和减少动态效果时，氛围会暂停。时钟始终清晰可读。"
+      },
+      "vibe": {
+        "aurora": {
+          "n": "极光",
+          "d": "柔和的北方之光，缓缓飘动"
+        },
+        "night": {
+          "n": "夜空",
+          "d": "星星、月亮，偶尔一颗流星"
+        },
+        "rain": {
+          "n": "窗上雨",
+          "d": "一扇安静的雨窗"
+        },
+        "sunset": {
+          "n": "日落",
+          "d": "傍晚的暖光"
+        },
+        "lava": {
+          "n": "熔岩灯",
+          "d": "浓烈的色彩，慢慢融化"
+        },
+        "calm": {
+          "n": "安静",
+          "d": "只有时钟在动"
+        }
+      },
+      "sound": {
+        "playing": "正在播放：{name}",
+        "ready": "已就绪：{name}",
+        "off": "已关闭 · {name}",
+        "silent": "所有声层都已关闭",
+        "fades": "会话结束时淡出",
+        "waits": "屏幕常亮时播放",
+        "preview": "刚才是 5 秒试听；屏幕常亮时才会播放",
+        "turnOn": "常亮时播放环境声",
+        "turnOff": "关闭环境声",
+        "rain": "雨声",
+        "cafe": "咖啡馆",
+        "fire": "壁炉",
+        "brown": "棕噪声",
+        "mixes": "混音",
+        "mix": {
+          "rainy": "雨天咖啡馆",
+          "focus": "深度专注",
+          "fire": "炉边",
+          "off": "关闭",
+          "custom": "你的混音"
+        }
+      },
+      "feedback": {
+        "how": "用得怎么样？",
+        "note": "有什么想告诉我们的吗？（可选）",
+        "placeholder": "哪些好用，哪些不好用，你希望它能做什么",
+        "topics": "主题",
+        "topic": {
+          "faces": "表盘",
+          "ease": "易用性",
+          "battery": "电池",
+          "other": "其他"
+        },
+        "privacy": "匿名发送，只附带你的浏览器和设备类型。你的回答决定我们接下来做什么。",
+        "send": "发送反馈",
+        "sending": "正在发送…",
+        "retry": "重试",
+        "later": "以后再说",
+        "failed": "没有发送成功，请检查网络后重试。内容没有丢失。",
+        "thanks": "谢谢，每条消息我们都会读。"
+      },
+      "share": {
+        "card": "打开即可开始，点一下就运行。",
+        "link": "链接",
+        "copy": "复制",
+        "copied": "已复制",
+        "include": "包含",
+        "look": "表盘和氛围",
+        "lookD": "以相同的外观打开",
+        "length": "时长",
+        "lengthD": "开始同样的计时",
+        "start": "立即开始",
+        "startOn": "开：一打开就开始",
+        "startOff": "关：对方点“保持常亮”",
+        "note": "链接中绝不包含你的姓名、历史、设备名称或位置。",
+        "copyLink": "复制链接",
+        "via": "分享到…"
+      },
+      "clear": {
+        "h": "清除 {n, plural, other {# 次会话}}？",
+        "d": "这台设备上的历史和每周连续记录将被删除。预设、表盘和设置会保留。此操作无法撤销。",
+        "type": "输入 CLEAR 以确认",
+        "note": "五个字母全部匹配后按钮才会解锁。",
+        "go": "清除 {n, plural, other {# 次会话}}",
+        "keep": "保留历史",
+        "done": "已清除这台设备上的历史"
+      },
+      "lang": {
+        "en": "英语",
+        "de": "德语",
+        "ja": "日语",
+        "zh": "中文",
+        "hi": "印地语",
+        "es": "西班牙语",
+        "fr": "法语",
+        "pt-br": "葡萄牙语（巴西）",
+        "note": "时间跟随语言显示：英语为 11:42 AM，德语为 11:42，日语为 午前11:42。"
+      },
+      "pro": {
+        "kicker": "AWAKETAB PRO",
+        "h1a": "一套设置，",
+        "h1b": "每块屏幕。",
+        "d": "你今天用的一切都保持免费。Pro 为使用不止一块屏幕的人增加同步。",
+        "plan": "方案",
+        "yearly": "按年",
+        "yearlyPrice": "{price} / 年",
+        "yearlyD": "最划算 · 14 天免费",
+        "monthly": "按月",
+        "monthlyPrice": "{price} / 月",
+        "monthlyD": "随时取消",
+        "save": "省 {n}%",
+        "f1": "一套设置同步到最多 5 块屏幕",
+        "f2": "在一块屏幕上启动或停止任意屏幕",
+        "f3": "跨设备历史，可导出",
+        "f4": "真人优先帮助",
+        "f5": "抢先体验新表盘和氛围",
+        "note": "14 天免费，之后每年 {price}。随时可在 设置 → 管理订阅 中取消。由 [PAYMENT PROVIDER] 提供安全结账。",
+        "trial": "开始 14 天免费试用",
+        "later": "以后再说"
+      },
+      "proDone": {
+        "h1a": "Pro 已开启。",
+        "h1b": "谢谢你。",
+        "d": "你的 14 天试用已经开始。同步已就绪：在另一块屏幕上打开 AwakeTab，用同样的方式登录。",
+        "s1": "在另一块屏幕上打开 AwakeTab",
+        "s1d": "厨房平板、电视、第二台笔记本。",
+        "s2": "用同样的方式登录",
+        "s2d": "Google、GitHub 或通行密钥，无需密码。",
+        "s3": "它会接上你的设置",
+        "s3d": "表盘、氛围和预设一秒内到达。",
+        "back": "回到我的时钟",
+        "manage": "管理订阅"
+      },
+      "plan": {
+        "renews": {
+          "yearly": "Pro · 按年 · {date} 续订",
+          "monthly": "Pro · 按月 · {date} 续订",
+          "lifetime": "Pro · 一次性付费"
+        },
+        "active": "生效中",
+        "plan": "方案",
+        "yearly": "Pro · 按年",
+        "yearlyD": "{price} / 年 · 下次付款 {date}",
+        "change": "更改",
+        "payment": "付款方式",
+        "paymentD": "由 [PAYMENT PROVIDER] 处理",
+        "update": "更新",
+        "screens": "屏幕",
+        "screensD": "已用 {n} / {max}",
+        "manage": "管理",
+        "cancel": "取消 Pro",
+        "cancelD": "有效期至 {date}",
+        "cancelBtn": "取消",
+        "receipts": "收据",
+        "r1": "Pro · 按年 · [PRICE]",
+        "r2": "试用开始 · [PRICE] 0",
+        "download": "下载",
+        "note": "随时取消：Pro 会保持到你已付费周期结束。你的屏幕保留所有免费功能。",
+        "done": "完成",
+        "receipt": "获取收据",
+        "monthly": "Pro · 按月",
+        "monthlyD": "{price} / 月 · 下次付款 {date}",
+        "lifetime": "Pro · 一次性付费",
+        "lifetimeD": "不会续订",
+        "allReceipts": "全部收据",
+        "allReceiptsD": "每笔付款都由 [PAYMENT PROVIDER] 保存",
+        "open": "打开"
+      },
+      "devices": {
+        "kicker": "你的屏幕 · {n} / {max}",
+        "awake": "{n} 块正在常亮",
+        "d": "在这里启动或停止这块屏幕；其他屏幕会显示它们加入的时间。",
+        "none": "还没有屏幕",
+        "noneD": "同步从 Pro 开始。其他功能在这块屏幕上无需 Pro 即可使用。",
+        "asleep": "已休眠",
+        "start": "启动",
+        "stop": "停止",
+        "note": "Pro · 同步。移除一块屏幕会立即让它退出登录。",
+        "add": "添加屏幕",
+        "done": "完成"
+      },
+      "pal": {
+        "placeholder": "输入命令或搜索",
+        "session": "会话",
+        "goto": "前往",
+        "extend": "延长 15 分钟",
+        "start": "保持常亮",
+        "extension": "获取浏览器扩展",
+        "pip": "打开迷你时钟",
+        "none": "没有匹配“{q}”的内容。",
+        "move": "移动",
+        "run": "运行",
+        "count": "{n, plural, other {# 条命令}}"
+      }
+    },
+    "skipTimer": "跳到计时器"
   },
   "ambient": {
     "mode": {
@@ -1958,160 +1864,6 @@
       "label": "增加 15 分钟"
     },
     "empty": "开始会话请前往"
-  },
-  "pro": {
-    "badge": "Pro",
-    "title": "AwakeTab Pro",
-    "price": {
-      "yearly": "{price} / 年",
-      "lifetime": "{price} 买断"
-    },
-    "cta": "获取 Pro",
-    "card": "AwakeTab Pro adds more themes, lamps and backgrounds, a sound mixer, more notes, a repeating Pomodoro, Message mode and 12 weeks of stats. $12 a year.",
-    "see": "看看 Pro 有什么",
-    "activate": "输入许可证密钥",
-    "activated": "Pro 已在此设备上启用",
-    "lapse": {
-      "grace": {
-        "title": "你的 Pro 续订没有成功",
-        "body": "在 {date} 之前，Pro 在这里照常可用。在 Polar 客户门户更新付款方式，一切照旧。",
-        "keep": "在此期间不会移除任何内容。",
-        "action": "更新付款"
-      },
-      "ended": {
-        "title": "此设备上的 Pro 已结束",
-        "body": "你的 Pro 年度已于 {date} 结束。工具照常可用；有几项回到了免费版：",
-        "lamp": "灯光颜色暂时为 Aqua",
-        "message": "留言模式暂时为标准",
-        "stats": "统计显示 7 天；更早的周数据会保留",
-        "ads": "指南页面重新显示广告",
-        "keep": "你的选择会保存，续订后恢复。",
-        "action": "续订 Pro"
-      },
-      "later": "以后再说",
-      "dismiss": "关闭"
-    },
-    "sheet": {
-      "amount": "12 美元",
-      "per": "每年",
-      "looks": "更多主题、灯色和背景",
-      "mixer": "声音混音器",
-      "notes": "更多笔记",
-      "pomodoro": "循环番茄钟",
-      "message": "消息模式",
-      "stats": "12 周统计",
-      "free": "保持屏幕常亮始终免费，常亮屏幕上不显示广告。"
-    },
-    "view": {
-      "upsell": {
-        "get": "获取 Pro",
-        "key": "已有密钥？",
-        "studio": "表盘工作室属于 Pro。你可以在这里试试颜色，保存需要 Pro。",
-        "sound": "混音器属于 Pro。在“自定义”中，同一时间播放一种声音仍然免费。",
-        "devices": "Pro 一个密钥最多支持 5 台设备，并实时显示这台设备的状态。"
-      },
-      "studio": {
-        "accent": "强调色",
-        "auto": "自动",
-        "sw": {
-          "auto": "默认绿",
-          "signal": "信号绿",
-          "lime": "青柠",
-          "amber": "琥珀",
-          "sky": "天蓝",
-          "violet": "紫罗兰",
-          "rose": "玫瑰",
-          "ember": "余烬"
-        },
-        "statusNote": "状态颜色永不改变 — 暂停始终是琥珀色，阻止始终是红色。",
-        "glow": "房间光晕",
-        "glowLabel": "房间光晕强度",
-        "save": "保存为我的表盘",
-        "saveLocked": "获取 Pro 以保存此表盘",
-        "saved": "已保存。计时现在使用这个强调色和光晕。",
-        "help": "Pro · 保存的表盘会同步到你的其他设备。"
-      },
-      "sound": {
-        "lead": "混合一段只在屏幕常亮时播放的环境音。会话结束的那一刻就会淡出。",
-        "rain": "雨打窗户",
-        "cafe": "咖啡馆低语",
-        "fire": "柴火噼啪",
-        "brown": "棕噪声",
-        "volume": "{name}音量",
-        "off": "关闭",
-        "chime": {
-          "_": "结束时提示音",
-          "two": "双音",
-          "bell": "铃声",
-          "off": "关闭"
-        },
-        "preview": "试听 5 秒",
-        "help": "Pro · 声音从这台设备播放，仍受系统音量控制。"
-      },
-      "devices": {
-        "loading": "正在检查你的设备…",
-        "offline": "无法连接许可证服务。联网后会重新显示你的设备。",
-        "count": "已使用 {n}/{max} 台设备",
-        "here": "这台设备",
-        "hereUntil": "这台设备 · 至{time}",
-        "hereNoEnd": "这台设备 · 不限时",
-        "added": "添加于 {date}",
-        "state": {
-          "awake": "常亮中",
-          "paused": "已暂停",
-          "idle": "未启用"
-        },
-        "add": "添加设备",
-        "addHow": "在另一台设备上打开 AwakeTab，输入 Polar 收据中的许可证密钥。这会占用你五个名额中的一个。",
-        "addLink": "输入许可证密钥",
-        "help": "Pro · 最多 5 台设备。这台设备显示实时状态，其他设备显示添加时间。"
-      },
-      "account": {
-        "guest": "未登录",
-        "signin": "登录以同步",
-        "magic": "已通过魔法链接登录",
-        "freeName": "AwakeTab 免费版",
-        "free": "免费",
-        "yearly": "按年",
-        "lifetime": "终身",
-        "plan": {
-          "free": "保持常亮是免费的，并将一直免费。Pro 增加更多设备和额外功能。",
-          "yearly": "将于 {date} 续订。可随时取消 — 在本期结束前你仍可使用 Pro。",
-          "lifetime": "一次付费。Pro 持续开启，无需续订。"
-        },
-        "billing": "管理账单",
-        "getPro": "获取 Pro",
-        "devices": "设备",
-        "devicesUsed": "已使用 {n}/{max}",
-        "devicesUpTo": "Pro 最多 {max} 台",
-        "export": "导出我的数据",
-        "exportD": "设置、预设和历史记录，打包为一个文件",
-        "history": "导出历史记录",
-        "historyD": "每个会话，导出为 CSV 文件",
-        "signout": "退出登录",
-        "signoutD": "这台设备离线也能继续使用",
-        "exported": "已保存到你的下载文件夹。",
-        "signedOut": "已退出登录。这台设备上的一切照常可用。",
-        "delete": "删除账户…",
-        "deleteWhat": "这会让你退出登录，并从这台设备上移除你的邮箱。AwakeTab 不在服务器上保存账户；你的购买记录保留在 Polar。",
-        "keep": "保留",
-        "deleteYes": "从这台设备删除",
-        "deleted": "你的账户已从这台设备移除。",
-        "help": "账单由 Polar 处理。没有账户，AwakeTab 照样可用 — 设置只是保存在这台设备上。"
-      }
-    }
-  },
-  "license": {
-    "error": {
-      "invalid": "该密钥没有对应的购买记录。请查看收据邮件。",
-      "limit": "该密钥已在 5 台设备上启用。请在“管理设备”中移除一台。",
-      "revoked": "该密钥已退款或已取消。",
-      "offline": "你已离线。联网后请重试。",
-      "token": "This device needs to re-activate."
-    },
-    "info": {
-      "syncing": "你的购买仍在同步。请一分钟后重试。"
-    }
   },
   "sponsor": {
     "label": "赞助"
@@ -2684,7 +2436,6 @@
       "words": "文字",
       "nixie": "辉光管",
       "lcd": "LCD",
-      "led": "LED",
       "dive": "潜水",
       "chrono": "计时码表",
       "gauge": "仪表",
@@ -2714,8 +2465,6 @@
       "bauhaus": "包豪斯",
       "poster": "海报",
       "eink": "墨水屏",
-      "terminal": "终端",
-      "pulse": "脉搏",
       "waveform": "波形",
       "blob": "流体",
       "hud": "HUD",
@@ -2735,7 +2484,6 @@
       "words": "用一句话说出时间，八种语言各自地道表达。",
       "nixie": "带网格和淡淡 8 字残影的玻璃管；光芒采用指示灯颜色。",
       "lcd": "斜体段码叠在淡淡的 88:88 底影上，像床头闹钟。",
-      "led": "点阵屏，配滚动的状态行。OLED 下最好看。",
       "dive": "潜水表圈：绿色弧线是剩余分钟，指针走真实时间。",
       "chrono": "分钟和秒钟小表盘，配一根扫动的计时指针。",
       "gauge": "一根仪表指针，带五分钟警示区。",
@@ -2765,8 +2513,6 @@
       "bauhaus": "基本几何形状和一块剩余时间的饼图 — 桌上的设计摆件。",
       "poster": "用 Archivo Expanded 裁切的巨大分钟数，杂志感十足。",
       "eink": "纸质显示屏，配衬线数字和淡淡残影，在日光下平静可读。",
-      "terminal": "一个如实报告唤醒锁状态的命令行，带闪烁的光标。",
-      "pulse": "屏幕常亮时，一条心电图曲线不断扫过。",
       "waveform": "一圈音频条在常亮时跳动；亮着的条就是剩余时间。",
       "blob": "一个不断变形的渐变光球，像休息中的语音助手。",
       "hud": "像汽车仪表盘的分段弧线，配斜体数字和指示灯。",
@@ -2823,9 +2569,6 @@
         "awake": "常亮",
         "end": "结束 {time}"
       },
-      "led": {
-        "left": "剩余"
-      },
       "board": {
         "left": "剩余",
         "ends": "结束",
@@ -2867,454 +2610,6 @@
       }
     }
   },
-  "account": {
-    "signin": {
-      "title": "登录 · AwakeTab",
-      "description": "通过一次性邮件链接登录，同步你的 AwakeTab Pro 设备。无需密码。",
-      "eyebrow": "PRO · 同步",
-      "h1": "登录以同步你的设备。",
-      "lead": "只有 Pro 需要账户，这样你的设备才能共享预设和会话。其他一切无需账户即可使用。",
-      "label": "邮箱地址",
-      "help": "我们会给你发送一个一次性链接。",
-      "error": {
-        "email": "这个地址少了点什么 — 请检查 @ 后面的部分。",
-        "rate": "刚刚已经发送过链接。请等一分钟再试。",
-        "offline": "你已离线。联网后再试 — 计时在此期间照常运行。"
-      },
-      "submit": "给我发送登录链接",
-      "sending": "正在发送…",
-      "note": "无需密码。链接只能使用一次，{minutes} 分钟后失效。",
-      "unavailable": {
-        "title": "登录邮件尚未开启。",
-        "text": "没有发送任何邮件。Pro 无需登录即可使用：Polar 提供的许可证密钥可在每台设备上开启 Pro。",
-        "link": "使用许可证密钥"
-      },
-      "sent": {
-        "h": "请查收邮件",
-        "before": "我们已将登录链接发送至",
-        "after": "。在这台设备上打开它即可开启同步。",
-        "reset": "使用其他邮箱"
-      },
-      "verifying": {
-        "h1": "正在为你登录…",
-        "text": "正在验证你的链接，只需一秒。"
-      },
-      "signed": {
-        "eyebrow": "PRO · 同步",
-        "h1": "你已登录。",
-        "lead": "这台设备现在记住了你的 Pro 邮箱。计时功能与之前完全相同。",
-        "how": "已通过魔法链接登录",
-        "open": "打开计时器",
-        "out": "退出登录",
-        "with": {
-          "email": "已通过魔法链接登录",
-          "google": "已通过 Google 登录",
-          "github": "已通过 GitHub 登录"
-        },
-        "manage": "管理设备",
-        "label": "当前登录"
-      },
-      "expired": {
-        "eyebrow": "链接已过期",
-        "h1": "此链接已过期。",
-        "lead": "登录链接只能使用一次，且仅在 {minutes} 分钟内有效。请重新获取一个 — 几秒就到。",
-        "again": "发送新链接",
-        "home": "前往首页"
-      },
-      "callout": {
-        "title": "没有使用 Pro？",
-        "text": "那就不需要登录。设置、预设和历史记录都保存在这台设备上。"
-      },
-      "social": {
-        "label": "使用已有账户登录",
-        "google": "使用 Google 继续",
-        "github": "使用 GitHub 继续",
-        "or": "或使用你的邮箱",
-        "unset": "{provider} 登录尚未设置。什么也没有发生；请改用邮件链接。",
-        "failed": "{provider} 登录未完成，一切保持不变。请重试或改用邮件链接。",
-        "offline": "你已离线。联网后再试。"
-      },
-      "notReady": {
-        "title": "登录尚未开启。",
-        "text": "没有发送任何邮件，也没有创建账户。Pro 无需登录即可使用：Polar 提供的许可证密钥可在每台设备上开启 Pro。"
-      }
-    }
-  },
-  "proflow": {
-    "steps": {
-      "brand": "AwakeTab Pro",
-      "label": "结账步骤",
-      "s1": "方案",
-      "s2": "账户",
-      "s3": "付款",
-      "s4": "完成",
-      "done": "（已完成）",
-      "back": "返回计时器"
-    },
-    "checkout": {
-      "title": "获取 AwakeTab Pro",
-      "description": "选择 Pro 方案，填写邮箱，然后在 Polar 的安全页面付款。",
-      "kicker": "AWAKETAB PRO",
-      "plans": {
-        "h1": "保持常亮一直免费。",
-        "lead": "Pro 适合在多台设备上使用屏幕的人，以及想要额外功能的人。",
-        "period": "计费周期",
-        "yearly": "按年",
-        "lifetime": "一次付清",
-        "continue": "继续使用 Pro"
-      },
-      "soon": "购买即将开放。你现在就可以使用免费工具。",
-      "free": {
-        "name": "免费",
-        "price": "不收费",
-        "f1": "任意时长保持常亮，或不限时",
-        "f2": "全部 49 款表盘和 3 种主题",
-        "f3": "预设和 ⌘K 命令面板",
-        "f4": "为旧版浏览器提供视频备用方案",
-        "now": "你目前使用的是免费版。"
-      },
-      "pro": {
-        "name": "Pro",
-        "badge": {
-          "yearly": "按年计费",
-          "lifetime": "一次付清"
-        },
-        "f1": "最多同步 5 台设备",
-        "f2": "完整历史记录，可导出",
-        "f3": "混音器",
-        "f4": "表盘工作室：你自己的强调色",
-        "f5": "每个会话可写多条笔记",
-        "f6": "包含免费版的全部功能"
-      },
-      "price": {
-        "yearly": "{price} / 年",
-        "lifetime": "{price} 一次付清"
-      },
-      "account": {
-        "h1": "登录链接应该发到哪里？",
-        "lead": "无需密码。Pro 只用邮箱来同步你的设备和发送收据。",
-        "label": "邮箱地址",
-        "idle": "请输入类似 name@example.com 的邮箱。",
-        "ok": "没问题。",
-        "offline": "你已离线。联网后请重新发送链接。",
-        "send": "发送登录链接",
-        "sending": "正在发送…"
-      },
-      "back": {
-        "plans": "返回方案"
-      },
-      "check": {
-        "h1": "请查收邮件",
-        "before": "我们已将链接发送至",
-        "after": "。链接只能使用一次，{minutes} 分钟后失效。你可以在付款后再打开它。",
-        "continue": "继续付款",
-        "other": "使用其他邮箱"
-      },
-      "pay": {
-        "h1": "确认并付款",
-        "unsent": "登录邮件尚未开启，因此没有发送链接。付款照常进行：收据和许可证密钥由 Polar 发送。",
-        "plan": {
-          "_": "方案",
-          "v": "AwakeTab Pro"
-        },
-        "billing": {
-          "_": "计费",
-          "yearly": "按年，于 {date} 续订",
-          "lifetime": "一次付清，永不续订"
-        },
-        "account": "账户",
-        "total": "今日应付",
-        "btn": "使用 Polar 付款",
-        "note": {
-          "_": "你将在 Polar 的安全页面完成付款。AwakeTab 永远看不到你的银行卡。如需缴税，将在那里加上。",
-          "cancel": "可随时在“设置 → 账户”中取消。"
-        },
-        "lock": "安全付款",
-        "unsentTitle": "没有发送登录链接"
-      },
-      "unavailable": {
-        "title": "购买即将开放",
-        "text": "这里尚未开放结账，因此没有收取任何费用。你现在就可以使用免费工具。"
-      }
-    },
-    "page": {
-      "title": "AwakeTab Pro — 价格与方案",
-      "description": "保持常亮一直免费。AwakeTab Pro 增加最多 5 台设备、历史导出、混音器、表盘工作室和更多笔记，每年 {yearly} 起。",
-      "eyebrow": "AWAKETAB PRO",
-      "h1": "保持常亮一直免费。",
-      "lead": "Pro 适合在多台设备上运行屏幕的人，或想要额外功能的人。",
-      "soon": "购买即将开放。你现在就可以使用免费工具。",
-      "plans": {
-        "label": "方案"
-      },
-      "free": {
-        "name": "免费",
-        "price": "不收费",
-        "d": "让一块屏幕保持常亮所需的一切。",
-        "f1": "任意时长保持常亮，或不限时",
-        "f2": "全部 49 款表盘",
-        "f3": "预设和 ⌘K 命令面板",
-        "f4": "浅色、深色和 OLED 主题",
-        "f5": "为旧版浏览器提供视频备用方案",
-        "btn": "打开计时器"
-      },
-      "pro": {
-        "name": "Pro",
-        "badge": "Pro",
-        "price": "{yearly} / 年",
-        "d": {
-          "_": "或一次付清 {once}，永不续订。年度方案可随时在设置中取消。",
-          "launch": "或在 {date} 前以首发价 {once} 一次付清，之后为 {after}。年度方案可随时在设置中取消。"
-        },
-        "f1": "最多同步 5 台设备",
-        "f2": "完整历史记录，可导出",
-        "f3": "混音器：雨声、咖啡馆、棕噪声",
-        "f4": "表盘工作室：你自己的强调色",
-        "f5": "每个会话可写多条笔记",
-        "f6": "支持一个独立开发的工具",
-        "btn": "获取 Pro"
-      },
-      "cmp": {
-        "h2": "免费版与 Pro 对比",
-        "col": {
-          "feature": "功能",
-          "free": "免费",
-          "pro": "Pro"
-        },
-        "yes": "包含",
-        "no": "不包含",
-        "awake": "保持屏幕常亮，并如实显示状态",
-        "lengths": "任意时长、到指定时间，或直到你停止",
-        "faces": "全部 49 款表盘和 3 种主题",
-        "presets": "预设、⌘K 命令面板和共享设置",
-        "devices": {
-          "_": "设备",
-          "free": "这台设备",
-          "pro": "最多 5 台"
-        },
-        "history": {
-          "_": "历史记录",
-          "free": "7 天",
-          "pro": "完整，可导出"
-        },
-        "sound": {
-          "_": "环境音",
-          "free": "同一时间一种声音",
-          "pro": "混音器"
-        },
-        "studio": "表盘工作室：自定义强调色和房间光晕",
-        "notes": {
-          "_": "笔记",
-          "free": "一条笔记",
-          "pro": "每个会话多条"
-        },
-        "ext": {
-          "_": "AwakeTab Chrome 扩展",
-          "free": "保持常亮和计时",
-          "pro": "增加计划和自动启动"
-        },
-        "ads": {
-          "_": "指南页面上的广告",
-          "free": "可能显示",
-          "pro": "无"
-        }
-      },
-      "how": {
-        "h2": "如何获取 Pro",
-        "lead": "由 Polar 收款并发送许可证密钥。登录是可选的。",
-        "s1": {
-          "h": "选择方案并在 Polar 付款",
-          "p": "Polar 是登记卖方：它负责收取银行卡付款、按需加收税费，并通过邮件发送附有许可证密钥的收据。"
-        },
-        "s2": {
-          "h": "Pro 在这里开启",
-          "p": "Polar 会把你带回 AwakeTab，这个浏览器会自动激活。如果没有成功，请粘贴邮件中的密钥。"
-        },
-        "s3": {
-          "h": "添加你的其他设备",
-          "p": "同一个密钥总共可在最多五个浏览器中输入，随时移除其中一个即可腾出名额。"
-        },
-        "signin": "登录以同步"
-      },
-      "faq": {
-        "h2": "账单问题",
-        "q1": "可以取消吗？",
-        "a1": "可以，随时在“设置 → 账户”或 Polar 客户门户中取消。在已付费的周期结束前你仍可使用 Pro。",
-        "q2": "谁来处理付款？",
-        "a2": "Polar。AwakeTab 永远看不到你的银行卡信息。",
-        "q3": "取消后我的数据会怎样？",
-        "a3": "会话保留在每台设备上。同步会停止；不经询问不会删除任何内容。",
-        "q4": "Pro 能让屏幕更好地保持常亮吗？",
-        "a4": "不能。免费版和 Pro 使用相同的唤醒锁和相同的状态显示。Pro 只是在此之上增加设备和额外功能。",
-        "q5": "什么算一台设备？",
-        "a5": "你输入密钥的每个浏览器占用五个名额中的一个。AwakeTab Chrome 扩展也占用一个。添加新设备时，90 天未使用的设备会被自动移除。",
-        "q6": "有按月方案吗？",
-        "a6": "没有。Pro 为每年 {yearly}，或一次付清 {once} 且永不续订。两者都支持 5 台设备。"
-      },
-      "refund": "14 天内无理由退款。请附上收据发邮件至 support@awaketab.com，或使用 Polar 客户门户。退款后许可证密钥将被停用。",
-      "biz": {
-        "h2": "用于你的网站或屏幕",
-        "embed": {
-          "name": "嵌入许可证",
-          "price": "每个网站每年 {price}",
-          "text": "移除“Keep awake by AwakeTab”署名。许可证即将开放；免费嵌入现在即可使用。"
-        },
-        "kiosk": {
-          "name": "自助终端许可证",
-          "price": "{one} 一个网站 · {five} 五个网站",
-          "text": "通过一个网址保持常亮的标牌和自助终端屏幕，可显示你自己的标志和信息。"
-        }
-      }
-    },
-    "done": {
-      "u1": "一个密钥最多 5 台设备",
-      "u2": "完整历史记录，可导出",
-      "u3": "混音器",
-      "u4": "表盘工作室：自定义强调色和房间光晕",
-      "u5": "每个会话多条笔记、AwakeTab Chrome 扩展中的计划，以及指南页无广告",
-      "processing": {
-        "h1": "正在确认你的付款…",
-        "lead": "通常只需几秒钟。请保持此标签页打开。"
-      },
-      "success": {
-        "h1": "Pro 已开启。",
-        "lead": "谢谢。Polar 正在通过邮件发送你的收据和许可证密钥",
-        "to": "至",
-        "next": "。下一步：用同一个密钥添加你的其他设备。",
-        "open": "打开计时器",
-        "add": "添加设备",
-        "generic": "谢谢。Polar 正在通过邮件发送你的收据和许可证密钥。下一步：用同一个密钥添加你的其他设备。"
-      },
-      "failed": {
-        "lead": "Polar 拒绝了这笔付款，你没有被扣款。你的免费账户没有任何变化。",
-        "again": "重试",
-        "plans": "返回方案",
-        "h1": "付款未成功"
-      },
-      "syncing": {
-        "h1": "你的购买仍在同步",
-        "lead": "Polar 已收款，但仍在生成你的许可证密钥。你不会被重复扣款。请一分钟后重试，或输入 Polar 邮件中的密钥。",
-        "retry": "重试",
-        "key": "输入许可证密钥"
-      },
-      "cancelled": {
-        "h1": "已关闭结账",
-        "lead": "没有收取任何费用。Pro 是可选的：工具、预设和扩展没有它也照常可用。",
-        "plans": "再看看方案",
-        "open": "打开计时器"
-      }
-    },
-    "flow": {
-      "pro": "Pro",
-      "back": "返回计时器",
-      "label": "结账步骤",
-      "done": "（已完成）",
-      "current": "（当前步骤）"
-    },
-    "activate": {
-      "title": "激活 AwakeTab Pro — AwakeTab",
-      "description": "粘贴 Polar 收据中的许可证密钥，在这台设备上激活 AwakeTab Pro。Polar 完成结账后会自动返回这里。",
-      "h1": "激活 Pro",
-      "lead": "你的密钥在 Polar 的邮件和收据页面上。这台设备算作五次激活中的一次。",
-      "submit": "在这台设备上激活",
-      "errors": "如果激活失败",
-      "ext": {
-        "_": "复制这个密钥，粘贴到 AwakeTab Chrome 扩展的选项页面。不会自动传递。",
-        "title": "你的许可证密钥",
-        "lead": "在这里输入密钥，以便复制到 AwakeTab Chrome 扩展。这个浏览器不会被激活：扩展会自行激活，因此只占用五次激活中的一次，而不是两次。",
-        "submit": "显示扩展用的密钥",
-        "note": "这个浏览器保持未激活，因此扩展只占用五次激活中的一次，而不是两次。"
-      },
-      "back": "AwakeTab Pro",
-      "placeholder": "粘贴收据中的密钥",
-      "hint": {
-        "_": "Polar 会在结账后立即通过邮件发送密钥。",
-        "ext": "这个浏览器中不会激活任何内容。"
-      },
-      "checking": {
-        "_": "正在检查你的密钥…",
-        "status": "正在向 Polar 核验你的密钥，通常只需一两秒。"
-      },
-      "retry": "重试",
-      "manage": "管理设备",
-      "plans": "还没有密钥？查看 Pro 方案",
-      "err": {
-        "invalid_key": "激活未成功",
-        "activation_limit": "五台设备都已占用",
-        "revoked": "此密钥已失效",
-        "polar_unavailable": "尚未就绪",
-        "offline": "没有网络连接",
-        "bad_token": "请重新激活这台设备"
-      },
-      "ok": {
-        "key": "密钥尾号 {tail} · 这台设备占用五次激活中的一次。",
-        "unlocked": "已在此解锁",
-        "u1": "更多颜色主题、指示灯、背景和预设",
-        "u2": "常亮屏幕上的消息模式",
-        "u3": "12 周统计和 CSV 导出",
-        "u4": "更高的浮动窗口",
-        "u5": "AwakeTab Chrome 扩展中的计划和自动启动",
-        "u6": "指南页无广告",
-        "u7": "混音器、更多笔记和可循环的番茄钟",
-        "open": "打开 AwakeTab",
-        "title": "Pro 已开启。"
-      },
-      "reset": "使用其他密钥",
-      "copy": "复制",
-      "copied": "已复制",
-      "errText": {
-        "invalid_key": "Polar 不认识这个密钥。请对照 Polar 的邮件检查；密钥由字母、数字和连字符组成。",
-        "activation_limit": "此密钥已在五台设备上使用。请移除一台不再使用的设备，然后在这里激活。",
-        "revoked": "此密钥已退款或被撤销，无法开启 Pro。免费工具仍可继续使用。",
-        "polar_unavailable": "Polar 仍在生成密钥，或暂时无法连接。请等一分钟再试；你不会被重复扣款。",
-        "offline": "你已离线，因此没有进行任何检查。联网后再试。",
-        "bad_token": "这台设备上的 Pro 需要重新激活。请输入 Polar 邮件中的密钥。"
-      },
-      "label": "许可证密钥"
-    },
-    "manage": {
-      "title": "管理 Pro 设备 — AwakeTab",
-      "description": "查看哪些设备在使用你的 AwakeTab Pro 许可证，达到五台上限时可移除一台。",
-      "h1": "管理设备",
-      "lead": "激活新设备时，90 天未使用的设备会被自动移除。",
-      "empty": "这台设备还没有许可证。请先激活一个密钥。",
-      "remove": "移除",
-      "col": {
-        "device": "设备",
-        "activated": "激活时间"
-      },
-      "meter": "{n}/5 台设备",
-      "left": {
-        "_": "还剩 {n} 次激活",
-        "one": "还剩 1 次激活",
-        "none": "没有剩余激活次数"
-      },
-      "here": "这台设备",
-      "off": "Pro 已关闭",
-      "activated": "已激活",
-      "confirm": {
-        "here": "移除这台设备？这里的 Pro 将关闭，并腾出五次激活中的一次。",
-        "other": "移除 {label}？那台设备上的 Pro 将关闭，并腾出五次激活中的一次。",
-        "aria": "移除 {label}？"
-      },
-      "keep": "保留",
-      "removeDevice": "移除设备",
-      "plans": "查看 Pro 方案",
-      "loading": "正在检查你的设备…",
-      "offline": {
-        "title": "无法加载你的设备",
-        "text": "设备列表未能加载，因此这里不显示任何内容，而不是一个空列表。请检查网络连接后重试。",
-        "retry": "重试"
-      },
-      "added": "添加于 {date}",
-      "lapse": {
-        "grace": "等待续订 · Pro 在 {date} 前保持开启",
-        "lapsed": "Pro 已于 {date} 结束 · 续订即可重新开启",
-        "portal": "在 Polar 中更新付款方式"
-      },
-      "activate": "激活密钥"
-    }
-  },
   "site": {
     "nav": {
       "label": "网站",
@@ -3332,27 +2627,6 @@
       "desc": "支持 Chrome、Edge、Firefox 和 Safari。"
     },
     "ctaShort": "打开计时器",
-    "consent": {
-      "title": "允许我们统计访问量吗？",
-      "body": "可选的、无 cookie 的统计 — 不建立画像，不做广告追踪。无论选择哪个，AwakeTab 都一样好用。",
-      "decline": "拒绝",
-      "allow": "允许"
-    },
-    "foot": {
-      "product": "产品",
-      "learn": "了解",
-      "company": "关于我们",
-      "timer": "打开计时器",
-      "changelog": "更新日志",
-      "help": "帮助中心",
-      "presenting": "演示指南",
-      "about": "关于",
-      "status": "状态页面",
-      "tagline": "在浏览器里让屏幕保持常亮，用完再让它恢复休眠。",
-      "contact": "联系",
-      "cookies": "不使用追踪 cookie",
-      "updated": "最后更新于 {date}"
-    },
     "tool": {
       "eyebrow": "在这里试试",
       "ends": "现在开始将于{time}结束。",
@@ -3402,20 +2676,16 @@
         "h1": "这个页面睡着了",
         "lead": "链接可能过时或输错了。计时器就在这里。",
         "guides": "热门指南",
-        "title": "找不到页面 — AwakeTab",
-        "eyebrow": "404"
+        "eyebrow": "404",
+        "description": "这个 AwakeTab 页面睡着了：链接可能已过期或输错了。计时器就在这里照常可用，帮助中心和指南一点就到。"
       },
       "offline": {
-        "title": "你已离线 — AwakeTab",
         "eyebrow": "离线",
         "h1": "你离线了，计时器没有。",
         "lead": "保持屏幕常亮不需要联网。同步和共享链接会等到你重新联网。",
-        "timer": "继续使用计时器",
-        "description": "保持屏幕常亮不需要联网。同步和共享链接会等到你重新联网。"
+        "timer": "继续使用计时器"
       },
       "status": {
-        "title": "服务状态 — AwakeTab",
-        "description": "AwakeTab 的登录和同步是否正常运行，以及何时计划维护。无论如何，计时器在每台设备上都能使用。",
         "eyebrow": "维护",
         "h1": "计划维护。",
         "lead": "登录和同步将暂停到大约{time}。计时器在每台设备上照常工作。",
@@ -3424,30 +2694,19 @@
         "okLead": "计时器、登录和同步都在正常工作。计划维护会先在这里公布。",
         "see": "查看状态"
       },
-      "expired": {
-        "title": "链接已过期 — AwakeTab",
-        "eyebrow": "链接已过期",
-        "h1": "此链接已过期。",
-        "lead": "登录链接只能使用一次，且仅在 [NUMBER] 分钟内有效。请重新获取一个 — 几秒就到。",
-        "send": "发送新链接"
-      },
       "removed": {
-        "title": "设置已移除 — AwakeTab",
         "eyebrow": "设置已移除",
         "h1": "这个共享设置已被关闭。",
         "lead": "分享者已移除这个链接。你仍然可以一键开始自己的会话。",
         "start": "开始我自己的"
       },
       "error": {
-        "title": "出错了 — AwakeTab",
         "eyebrow": "出了点问题",
         "h1": "我们这边出错了。",
         "lead": "页面无法加载。你的设备上没有任何改动。请重试，或打开计时器 — 它离线也能用。"
       }
     },
     "share": {
-      "title": "一个共享的 AwakeTab 会话",
-      "description": "有人分享了一个 AwakeTab 会话：时长、表盘和提示音。链接不携带任何个人信息。",
       "eyebrow": "共享的设置",
       "loading": "正在打开共享的会话…",
       "loadingLead": "正在从链接读取时长、表盘和提示音。",
@@ -3483,8 +2742,6 @@
       "installBody": "会话在这个标签页中运行。随时关闭它，屏幕就会照常休眠。"
     },
     "help": {
-      "title": "帮助中心 — AwakeTab",
-      "description": "屏幕仍然变暗、iPhone 和 iPad、演示、扩展、Pro 账单以及你的数据等问题的解答。",
       "eyebrow": "帮助中心",
       "h1": "需要什么帮助？",
       "lead": "大多数问题来自省电模式、隐藏的标签页或旧版浏览器。搜索一下，或从下面的主题开始。",
@@ -3498,107 +2755,7 @@
       "none": "没有与“{q}”匹配的内容。试试“电池”“iPad”或“账单”。",
       "popular": "热门主题",
       "stuck": "还没解决？",
-      "stuckBefore": "请写信至",
-      "stuckAfter": "，并注明你的浏览器和设备。每条消息我们都会阅读。",
       "allTopics": "全部主题"
-    },
-    "home": {
-      "faces": {
-        "title": "49 款表盘。挑一款隔着房间也能看清的。",
-        "sub": "全部免费。只在屏幕常亮时才会动，开启减弱动态效果时保持静止。",
-        "items": {
-          "aurora": {
-            "name": "极光",
-            "body": "屏幕常亮时，极光在时间背后飘动。"
-          },
-          "liquid": {
-            "name": "液体",
-            "body": "一个光的玻璃球，随会话流逝而减少。"
-          },
-          "eclipse": {
-            "name": "日食",
-            "body": "月亮滑过太阳；时间到时迎来全食。"
-          },
-          "skeleton": {
-            "name": "镂空",
-            "body": "镂空机芯 — 齿轮转动，摆轮摆动。"
-          },
-          "neon": {
-            "name": "霓虹",
-            "body": "暗墙上的霓虹招牌，常亮时嗡嗡作响。"
-          },
-          "halo": {
-            "name": "光环",
-            "body": "一个发光的渐变圆环，向 12 点逐渐闭合。"
-          }
-        }
-      },
-      "uses": {
-        "title": "为屏幕变暗碍事的时刻而生",
-        "cooking": {
-          "_": "做饭",
-          "body": "双手忙碌时，菜谱依然留在屏幕上。",
-          "link": "用于做饭"
-        },
-        "presenting": {
-          "_": "演示",
-          "body": "讲到最精彩的那页时不会变暗。",
-          "link": "用于演示"
-        },
-        "dashboards": {
-          "_": "仪表盘",
-          "body": "墙上的屏幕和状态看板始终亮着。",
-          "link": "用于仪表盘"
-        },
-        "nightdesk": {
-          "_": "夜间书桌",
-          "body": "阅读、学习，入夜后一只安静的时钟。",
-          "link": "用于夜间书桌"
-        }
-      },
-      "how": {
-        "1": {
-          "_": "选择时长",
-          "body": "15 分钟、1 小时、到某个时间 — 或者不限时。"
-        },
-        "2": {
-          "_": "按下“保持屏幕常亮”",
-          "body": "浏览器的 Screen Wake Lock 让显示屏保持开启。"
-        },
-        "3": {
-          "_": "专心做事",
-          "body": "时间到时一声轻柔的提示音；屏幕随后照常休眠。"
-        },
-        "title": "使用方法"
-      },
-      "limits": {
-        "title": "坦诚说明局限",
-        "body": "浏览器能让屏幕保持开启，但不能让整台电脑不休眠。省电模式、合上屏幕或公司的锁屏策略仍可能生效 — 一旦发生，AwakeTab 会告诉你，并说明如何解决。"
-      },
-      "faq": {
-        "1": {
-          "_": "在 iPhone 和 iPad 上能用吗？",
-          "a": "能，在 iOS 和 iPadOS 16.4 或更高版本的 Safari 中可用。更早的版本会使用无声视频备用方案。"
-        },
-        "2": {
-          "_": "需要账户吗？",
-          "a": "不需要。设置保存在这台设备上。Pro 只用账户来同步你的设备。"
-        },
-        "3": {
-          "_": "它能阻止我的工作电脑锁屏吗？",
-          "a": "标签页打开时，它会让显示屏保持常亮。公司的锁屏策略依然适用，这也是应该的。"
-        },
-        "4": {
-          "_": "免费吗？",
-          "a": "保持常亮是免费的。Pro 增加设备同步、完整历史记录和混音器。"
-        }
-      },
-      "cta": "立即保持常亮",
-      "og": {
-        "kicker": "免费 · 在浏览器中",
-        "title": "让屏幕常亮，也清楚何时结束。",
-        "sub": "无需账户，无需安装。"
-      }
     },
     "changelog": {
       "crumb": "更新日志",
@@ -3607,13 +2764,208 @@
       "lead": "每次发布，最新的在前。版本号和日期在发布前均为占位内容。"
     },
     "pro": {
-      "eyebrow": "AwakeTab Pro",
-      "h1": "保持常亮一直免费。",
-      "lead": "Pro 适合在多台设备上运行屏幕的人，或想要额外功能的人。价格确定前均为占位内容。",
-      "og": {
-        "kicker": "AwakeTab Pro",
-        "title": "保持常亮免费。Pro 让一切更舒适。",
-        "sub": "外观、历史、笔记。"
+      "h1": "保持常亮一直免费。"
+    },
+    "consent": {
+      "title": "统计这次访问吗？",
+      "body": "不用 Cookie，完全匿名。无论选哪个，AwakeTab 都一样好用。",
+      "short": "无 Cookie，匿名",
+      "decline": "不用了",
+      "allow": "允许"
+    },
+    "foot": {
+      "kicker": "由人制作 · 由人阅读",
+      "ctaH": "告诉我们，怎样让它",
+      "ctaAccent": "更像你的。",
+      "ctaLine": "在工具里点两下：设置 → 发送反馈。每条消息我们都会读。",
+      "timer": "打开计时器",
+      "feedback": "发送反馈",
+      "tagline": "在浏览器里让屏幕保持常亮，结束后再让它正常休眠。永久免费。",
+      "status": "所有系统正常 · 唤醒锁 API 运行良好",
+      "statusDown": "已计划维护 · 计时器照常可用",
+      "social": {
+        "github": "GitHub 上的 AwakeTab",
+        "x": "在 X 上分享 AwakeTab",
+        "rss": "更新日志订阅（RSS）"
+      },
+      "product": "产品",
+      "uses": "使用场景",
+      "learn": "学习",
+      "company": "关于",
+      "faces": "表盘",
+      "vibes": "氛围",
+      "pro": "Pro",
+      "new": "新",
+      "cooking": "做饭",
+      "presenting": "演示",
+      "dashboards": "仪表盘",
+      "nightdesk": "夜间书桌",
+      "help": "帮助中心",
+      "support": "浏览器支持",
+      "guides": "指南",
+      "changelog": "更新日志",
+      "about": "关于 AwakeTab",
+      "statusLink": "运行状态",
+      "copyright": "© [YEAR] [COMPANY NAME]",
+      "cookies": "无追踪 Cookie",
+      "theme": {
+        "label": "主题",
+        "system": "跟随系统",
+        "light": "浅色",
+        "dark": "深色"
+      }
+    },
+    "story": {
+      "cue": "向下滚动：它有什么不同",
+      "faces": {
+        "eyebrow": "46 款表盘 · 全部免费",
+        "h": "你工作的每个房间，",
+        "accent": "都有一只合适的时钟。",
+        "lead": "像挑壁纸一样挑一款。它们只在屏幕常亮时才会动，开启减少动态效果时保持静止。"
+      },
+      "vibes": {
+        "eyebrow": "氛围 · 新",
+        "h": "定下心情。",
+        "accent": "六种动态背景。",
+        "lead": "极光、有流星的夜空、窗上雨、缓缓落下的夕阳、慢慢融化的熔岩灯，或者完全的安静。省电模式下会暂停，时钟始终清晰可读。",
+        "items": {
+          "aurora": {
+            "name": "极光",
+            "line": "柔和的光，缓缓飘动"
+          },
+          "night": {
+            "name": "夜空",
+            "line": "星星，偶尔一颗流星"
+          },
+          "rain": {
+            "name": "窗上雨",
+            "line": "一扇安静的雨窗"
+          },
+          "sunset": {
+            "name": "日落",
+            "line": "傍晚的暖光"
+          },
+          "lava": {
+            "name": "熔岩灯",
+            "line": "浓烈的色彩，慢慢融化"
+          },
+          "calm": {
+            "name": "安静",
+            "line": "只有时钟在动"
+          }
+        }
+      },
+      "bento": {
+        "eyebrow": "为一瞥而设计",
+        "h": "碰它三秒。",
+        "accent": "信它一小时。",
+        "read": {
+          "h": "隔着房间也能看清",
+          "d": "超大数字、高对比度，剩余时间只用一种颜色。不用在灶台边眯着眼看笔记本。"
+        },
+        "tap": {
+          "h": "点一下，就这样。",
+          "d": "无需安装，无需账户，不用先做设置。",
+          "cta": "保持常亮 · 1 小时"
+        },
+        "honest": {
+          "h": "从不假装",
+          "d": "浏览器拒绝时，你会看到文字说明和解决方法。",
+          "awake": "常亮中 · 至 下午12:26",
+          "paused": "已暂停 · 剩余 57 分钟",
+          "blocked": "未常亮 · 省电模式"
+        },
+        "free": {
+          "h": "免费。全部。",
+          "d": "每一款表盘、主题、预设和声音。Pro 只负责同步多块屏幕。",
+          "zero": "$0"
+        },
+        "devices": {
+          "h": "手机、平板、笔记本、墙面",
+          "d": "你立起的每块屏幕，都是同一只安静的时钟。"
+        },
+        "palette": {
+          "h": "⌘K 搞定一切",
+          "d": "延长、换表盘、打开预设，全都不用鼠标。",
+          "q": "延长",
+          "r1": "延长 15 分钟",
+          "r2": "延长 1 小时"
+        }
+      },
+      "how": {
+        "1": {
+          "t": "选择时长",
+          "d": "15 分钟、一小时，或者不设结束。一打开就已选好一小时。"
+        },
+        "2": {
+          "t": "点“保持常亮”",
+          "d": "浏览器的 Screen Wake Lock 让屏幕保持点亮。状态变成绿色。"
+        },
+        "3": {
+          "t": "专心做事",
+          "d": "时间到时轻轻一声提示，然后屏幕照常休眠。"
+        },
+        "eyebrow": "使用方法",
+        "h": "三个步骤。",
+        "accent": "其中两个可选。"
+      },
+      "uses": {
+        "eyebrow": "适用于",
+        "h": "那些屏幕一黑",
+        "accent": "就碍事的时刻。",
+        "cooking": {
+          "t": "做饭",
+          "d": "双手忙碌时，菜谱依然亮着。",
+          "l": "做饭时用"
+        },
+        "presenting": {
+          "t": "演示",
+          "d": "讲到最精彩的那页时不会变暗。",
+          "l": "演示时用"
+        },
+        "dashboards": {
+          "t": "仪表盘",
+          "d": "墙上的屏幕和状态看板一直亮着。",
+          "l": "仪表盘用"
+        },
+        "nightdesk": {
+          "t": "夜间书桌",
+          "d": "阅读、学习，夜里的一只安静时钟。",
+          "l": "夜间书桌用"
+        }
+      },
+      "faq": {
+        "1": {
+          "q": "能在 iPhone 和 iPad 上用吗？",
+          "a": "能，在 iOS 和 iPadOS 16.4 及以上版本的 Safari 中可用。更早的版本使用无声视频备用方案，状态会告诉你正在用哪一种。"
+        },
+        "2": {
+          "q": "需要账户吗？",
+          "a": "不需要。设置、预设和历史都保存在这台设备上。"
+        },
+        "3": {
+          "q": "它能阻止公司笔记本锁屏吗？",
+          "a": "标签页打开时它会让屏幕保持常亮。公司的锁屏策略仍然有效，这也是应该的。"
+        },
+        "4": {
+          "q": "真的免费吗？",
+          "a": "是的。每一款表盘、主题、预设和声音都免费。Pro 是可选的，只用来同步多块屏幕。"
+        },
+        "5": {
+          "q": "时间到了会怎样？",
+          "a": "轻轻一声提示，然后屏幕像平时一样休眠。"
+        },
+        "eyebrow": "常见问题",
+        "h": "直接回答。",
+        "before": "还有别的问题？在工具里点 ",
+        "link": "设置 → 发送反馈",
+        "after": "。每条消息我们都会读。"
+      },
+      "cta": {
+        "h": "你的屏幕，",
+        "accent": "一点就常亮。",
+        "lead": "支持 Chrome、Edge、Firefox 和 Safari。无需安装。",
+        "button": "让这块屏幕保持常亮"
       }
     }
   }

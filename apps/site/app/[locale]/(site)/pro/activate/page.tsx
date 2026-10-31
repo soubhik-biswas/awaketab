@@ -2,16 +2,16 @@ import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { ActivateFlow } from '@/components/pro/activate-flow';
 import { toolHref } from '@/lib/routes';
-import { englishOnly, pageMetadata } from '@/lib/seo';
+import { englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'proflow.activate' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor(t('h1')),
     description: t('description'),
     path: '/pro/activate',
     noindex: true,
-    og: { kicker: 'AwakeTab Pro', title: t('h1'), scene: 'success', tone: 'dark' },
+    og: { image: 'og-04', alt: 'AwakeTab Pro: one setup, every screen' },
   });
 }
 

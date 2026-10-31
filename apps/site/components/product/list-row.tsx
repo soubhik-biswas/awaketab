@@ -81,7 +81,7 @@ export function ListRowButton({
       type={type}
       data-slot="list-row"
       className={cn(
-        'cursor-pointer border-0 bg-transparent p-0 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+        'cursor-pointer border-0 bg-transparent p-0 outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring',
         rowClasses(divider),
         className,
       )}

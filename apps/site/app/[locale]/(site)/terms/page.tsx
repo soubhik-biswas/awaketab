@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { LegalPage, legalLink } from '@/components/site/legal-page';
-import { CONTACT_EMAIL, CONTACT_MAILTO, ROUTES } from '@/lib/routes';
-import { englishOnly, pageMetadata } from '@/lib/seo';
+import { panelHref, ROUTES } from '@/lib/routes';
+import { englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.terms' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor('Terms of use'),
     description: t('description'),
     path: ROUTES.terms,
-    og: { kicker: 'Legal', title: 'Terms of use', tone: 'light' },
+    og: { image: 'og-02', alt: 'AwakeTab: keep this screen awake' },
   });
 }
 
@@ -65,11 +65,13 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
                 addition to these terms. Features and browser support may change as platforms change.
               </p>
               <p className="m-0">
-                Paid licences include a 14-day refund, no questions asked. Email{' '}
-                <a href={CONTACT_MAILTO} className={legalLink}>
-                  {CONTACT_EMAIL}
+                Paid licences include a 14-day refund, no questions asked. Ask from Settings → Account → Manage plan, or
+                send a note from{' '}
+                <a href={panelHref('feedback')} className={legalLink}>
+                  Settings → Send feedback
                 </a>{' '}
-                with your receipt or use the Polar customer portal. Refunds deactivate the licence key.
+                with your receipt; the payment provider&apos;s customer portal works too. Refunds deactivate the licence
+                key.
               </p>
             </>
           ),

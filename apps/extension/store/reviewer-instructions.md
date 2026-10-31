@@ -1,25 +1,25 @@
 # AwakeTab reviewer instructions
 
-Product: AwakeTab: Keep Screen Awake. Candidate version: 1.0.1. Minimum Chrome: 116.
+Product: AwakeTab — Keep your screen awake. Minimum Chrome: 116.
 
-The free features need no account, licence, website login or payment. Pro purchases are unavailable in this release. The settings' licence field and locked schedules/auto-start sections are for licence-based functionality; no reviewer credential is needed for the free functionality submitted here.
+Every feature is free and needs no account, licence, website login or payment.
 
 ## Core flow
 
-1. Install the package and pin the AwakeTab toolbar icon. The welcome page explains Screen and System modes and their limits.
-2. Open the popup. It starts in Ready. Select 30 min; the status becomes Screen awake after Chrome accepts `chrome.power.requestKeepAwake('display')`. The toolbar badge shows minutes left.
-3. Close the popup and switch tabs. Reopen it: the active timer continues. Click Stop; status returns to Ready and the toolbar badge clears.
-4. Choose System, then Until I stop. Status is System awake, the badge is SYS, and the display may dim while the computer remains awake. Stop releases the keep-awake request.
-5. Try an until-time session and add 15 minutes to a running session. Alt+Shift+A is the toolbar toggle shortcut; another extension or OS shortcut may occupy it, in which case Chrome's extension shortcut settings can change it.
-6. Open Settings. Change a default duration and reopen the popup to verify it persists. End notifications are off until enabled; enabling them requests only the optional notifications permission.
-7. Privacy settings show anonymous usage statistics off by default. A free session needs no remote code, page-content access, site permissions or developer service call.
+1. Install the package and pin the AwakeTab toolbar icon. No tab opens on install.
+2. Open the popup. It reads Ready, with 1h picked. Click "Keep this tab awake": the status becomes "Awake · 60 min" after Chrome accepts `chrome.power.requestKeepAwake('display')`, and the toolbar badge shows the minutes left on a green badge.
+3. Switch tabs or bring another app to the front: the display stays awake. Reopen the popup and click Pause: the badge shows an amber II and the keep-awake is released. Resume asks again; Stop (shown while paused) ends the session and clears the badge.
+4. Pick ∞ for no end: the badge shows ∞. Alt+Shift+A starts or stops from any tab; Chrome's extension shortcut settings can change it.
+5. When a timed session ends, the keep-awake is released and an optional chime plays from an offscreen document.
+6. Open Options (right-click the icon → Options). Turn "Show time left on the icon" off: the badge reads ON instead of minutes. "Release when the tab is hidden" pauses the session while its tab is not on screen and resumes it when you come back.
+7. To try auto-wake: visit an https site, click the AwakeTab icon there (this grants activeTab for that tab), return to Options and click "+ Add this site". Chrome asks for access to that one site. Reloading that site starts a session; closing its last tab stops it.
 
 ## Limits and permissions
 
-Power, storage and alarms are required. Notifications are optional. Optional HTTPS host access is declared for licence-based per-site auto-start and is requested one chosen site at a time; no hosts are granted on installation. The extension does not inspect page content or simulate keyboard or mouse activity.
+`power`, `alarms`, `storage`, `offscreen` and `activeTab` are required. Optional HTTPS host access is requested one chosen site at a time; no site is granted on installation. The extension never reads page content and does not simulate keyboard or mouse activity.
 
-The extension operates only while Chrome runs. It cannot override a deliberately locked device, a closed laptop lid or enterprise/OS power policy, and it does not change presence in messaging applications.
+The extension works only while Chrome runs. It cannot override a deliberately locked device, a closed laptop lid or an enterprise or OS power policy; when Chrome refuses, the popup says Blocked, the badge shows a red !, and "See the fix" opens the help page.
 
-Public privacy policy: https://awaketab.com/privacy#extension
+Public privacy policy: [PRIVACY POLICY URL]
 
-Support: support@awaketab.com
+Help: [HELP CENTRE URL]

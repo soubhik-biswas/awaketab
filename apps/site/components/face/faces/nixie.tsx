@@ -1,11 +1,31 @@
 import type { CSSProperties } from 'react';
-import { BLACK, WHITE } from '../art';
+import { BLACK, NAVY, WHITE } from '../art';
 import { alpha } from '../geometry';
 import { EndLine, type IDrawProps } from '../kit';
 
-const TUBE = '#0A0D12';
-const TUBE_LINE = '#2A3240';
-const BASE = 'linear-gradient(180deg, #2A3140, #12161E)';
+// Frosted tubes on a pale base by day, smoked glass on a dark base at night.
+const ART = {
+  light: {
+    tube: '#F7F7FA',
+    edge: '#CDD1DC',
+    mesh: NAVY(0.06),
+    ghost: NAVY(0.06),
+    base: 'linear-gradient(180deg, #ECEEF4, #CDD2DD)',
+    baseShadow: NAVY(0.12),
+  },
+  night: {
+    tube: '#0A0D12',
+    edge: '#2A3240',
+    mesh: WHITE(0.04),
+    ghost: WHITE(0.05),
+    base: 'linear-gradient(180deg, #2A3140, #12161E)',
+    baseShadow: BLACK(0.35),
+  },
+};
+const glow = (light: boolean, c: string): string =>
+  light
+    ? `0 0 1px ${c}, 0 0 10px ${alpha(c, 0x55)}, 0 0 22px ${alpha(c, 0x22)}`
+    : `0 0 4px ${c}, 0 0 18px ${alpha(c, 0x4d)}, 0 0 40px ${alpha(c, 0x33)}`;
 
 const glyph: CSSProperties = {
   position: 'absolute',
@@ -21,6 +41,7 @@ const glyph: CSSProperties = {
 // Glass tubes with mesh and ghost 8s; the glow takes the lamp colour.
 export default function Nixie({ m }: IDrawProps) {
   const { accent } = m;
+  const a = m.night ? ART.night : ART.light;
   const ink = m.st === 'idle' ? m.t.ink2 : accent;
   const colonDot: CSSProperties = {
     display: 'block',
@@ -53,18 +74,18 @@ export default function Nixie({ m }: IDrawProps) {
                 width: 66,
                 height: 166,
                 borderRadius: '33px 33px 10px 10px',
-                backgroundColor: TUBE,
-                border: `1px solid ${TUBE_LINE}`,
+                backgroundColor: a.tube,
+                border: `1px solid ${a.edge}`,
                 overflow: 'hidden',
-                backgroundImage: `radial-gradient(ellipse at 50% 18%, ${WHITE(0.1)}, transparent 60%), repeating-linear-gradient(60deg, ${WHITE(0.04)} 0 1px, transparent 1px 7px), repeating-linear-gradient(-60deg, ${WHITE(0.04)} 0 1px, transparent 1px 7px)`,
+                backgroundImage: `radial-gradient(ellipse at 50% 18%, ${WHITE(0.1)}, transparent 60%), repeating-linear-gradient(60deg, ${a.mesh} 0 1px, transparent 1px 7px), repeating-linear-gradient(-60deg, ${a.mesh} 0 1px, transparent 1px 7px)`,
               }}
             >
-              <span style={{ ...glyph, color: WHITE(0.05) }}>8</span>
+              <span style={{ ...glyph, color: a.ghost }}>8</span>
               <span
                 style={{
                   ...glyph,
                   color: ink,
-                  textShadow: `0 0 4px ${accent}, 0 0 18px ${alpha(accent, 0x99)}, 0 0 40px ${alpha(accent, 0x40)}`,
+                  textShadow: glow(!m.night, accent),
                 }}
               >
                 {d}
@@ -96,8 +117,8 @@ export default function Nixie({ m }: IDrawProps) {
           width: 336,
           height: 22,
           borderRadius: 6,
-          background: BASE,
-          boxShadow: `inset 0 1px 0 ${WHITE(0.12)}, 0 8px 18px ${BLACK(0.35)}`,
+          background: a.base,
+          boxShadow: `inset 0 1px 0 ${WHITE(0.12)}, 0 8px 18px ${a.baseShadow}`,
         }}
       >
         <span

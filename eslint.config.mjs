@@ -73,7 +73,7 @@ export default tseslint.config(
   },
   {
     // React handlers are one-line arrows that return a setter's void; that is the idiom, not a mistake.
-    files: ['apps/site/**/*.{ts,tsx}'],
+    files: ['apps/site/**/*.{ts,tsx}', 'apps/extension/**/*.tsx'],
     rules: {
       '@typescript-eslint/no-confusing-void-expression': ['error', { ignoreArrowShorthand: true }],
     },

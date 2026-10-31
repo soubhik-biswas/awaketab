@@ -74,7 +74,7 @@ function Picks({ picks }: { picks: NonNullable<TArticle['picks']>[string] }) {
             aria-hidden="true"
             className={cn(
               s.display,
-              'inline-flex size-10 flex-none items-center justify-center rounded-full bg-lamp text-[20px] font-extrabold text-lamp-foreground',
+              'inline-flex size-10 flex-none items-center justify-center rounded-full bg-lamp text-[20px] font-bold text-lamp-foreground',
             )}
           >
             {i + 1}
@@ -185,7 +185,7 @@ function ArticleSteps({ a, t }: { a: TArticle; t: TT }) {
                 aria-hidden="true"
                 className={cn(
                   s.display,
-                  'inline-flex size-10 items-center justify-center rounded-full bg-lamp text-[20px] font-extrabold text-lamp-foreground',
+                  'inline-flex size-10 items-center justify-center rounded-full bg-lamp text-[20px] font-bold text-lamp-foreground',
                 )}
               >
                 {i + 1}

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { NextIntlClientProvider } from 'next-intl';
 import { Tool } from '@/components/tool/tool';
-import { isToolLang } from '@/lib/tool/strings';
+import en from '@/messages/en.json';
+import { isToolLang, type TToolLang } from '@/lib/tool/strings';
 import { QaTray } from './qa-tray';
 
 export const metadata: Metadata = {
@@ -9,7 +11,29 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-// Development builds only: the tool inside a device-sized frame, driven by the QA tray. Production answers 404.
+type TTree = { [key: string]: string | TTree };
+
+const LOADERS: Record<Exclude<TToolLang, 'en'>, () => Promise<{ default: TTree }>> = {
+  de: () => import('@/messages/de.json'),
+  ja: () => import('@/messages/ja.json'),
+  zh: () => import('@/messages/zh.json'),
+  hi: () => import('@/messages/hi.json'),
+  es: () => import('@/messages/es.json'),
+  fr: () => import('@/messages/fr.json'),
+  'pt-br': () => import('@/messages/pt-br.json'),
+};
+
+function merge(base: TTree, over: TTree): TTree {
+  const out: TTree = { ...base };
+  for (const [key, value] of Object.entries(over)) {
+    const prev = out[key];
+    out[key] = typeof value === 'object' && typeof prev === 'object' ? merge(prev, value) : value;
+  }
+  return out;
+}
+
+// Development builds only: the tool inside a device-sized frame, driven by the QA tray, in any of its five
+// languages (untranslated strings fall back to English, as on the site). Production answers 404.
 export default async function DevToolPage({
   searchParams,
 }: {
@@ -17,7 +41,13 @@ export default async function DevToolPage({
 }) {
   if (process.env.NODE_ENV === 'production') notFound();
   const q = await searchParams;
-  const lang = typeof q.lang === 'string' && isToolLang(q.lang) ? q.lang : 'en';
-  if (q.frame === '1') return <Tool lang={lang} qa welcome={q.welcome !== '0'} />;
-  return <QaTray />;
+  const lang: TToolLang = typeof q.lang === 'string' && isToolLang(q.lang) ? q.lang : 'en';
+  if (q.frame !== '1') return <QaTray />;
+  const base = en as unknown as TTree;
+  const messages = lang === 'en' ? base : merge(base, (await LOADERS[lang]()).default);
+  return (
+    <NextIntlClientProvider locale={lang} messages={messages} timeZone="UTC">
+      <Tool lang={lang} qa />
+    </NextIntlClientProvider>
+  );
 }

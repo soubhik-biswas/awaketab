@@ -1,10 +1,18 @@
+import { fxInk, fxInk2 } from '../art';
 import { f1 } from '../geometry';
-import { card, type IDrawProps, L, lmin, nightAccent, nightClass } from '../kit';
+import { card, type IDrawProps, L, lmin } from '../kit';
 
-const SKY =
-  'radial-gradient(70% 60% at 70% 30%, rgba(159,123,255,.16), transparent 60%), radial-gradient(60% 50% at 20% 70%, rgba(61,245,142,.08), transparent 60%), #02030A';
-const DIM_STAR = '#3A425A';
-const INK2 = '#B9C2D6';
+// A dawn sky with ink-green stars by day, a night sky with glowing stars at night.
+const ART = {
+  light: {
+    sky: 'radial-gradient(70% 60% at 70% 30%, rgba(102,51,245,.10), transparent 60%), radial-gradient(60% 50% at 20% 70%, rgba(17,122,59,.08), transparent 60%), #F4F5FA',
+    dim: '#C3C9D8',
+  },
+  night: {
+    sky: 'radial-gradient(70% 60% at 70% 30%, rgba(159,123,255,.16), transparent 60%), radial-gradient(60% 50% at 20% 70%, rgba(61,245,142,.08), transparent 60%), #02030A',
+    dim: '#3A425A',
+  },
+};
 const CS = 30;
 const POINTS = Array.from({ length: CS }, (_, i) => {
   const tt = i / (CS - 1);
@@ -13,13 +21,15 @@ const POINTS = Array.from({ length: CS }, (_, i) => {
 
 // Each minute left is a star; they join into a constellation.
 export default function Constellation({ m }: IDrawProps) {
-  const acc = nightAccent(m);
+  const light = !m.night;
+  const a = light ? ART.light : ART.night;
+  const acc = m.accent;
   const lit = Math.round(m.ringFrac * CS);
   const path = POINTS.slice(0, lit)
     .map(([x, y], i) => `${i ? 'L' : 'M'}${f1(x)} ${f1(y)}`)
     .join(' ');
   return (
-    <div className={nightClass(m)} style={card(m, { background: SKY })}>
+    <div style={card(m, { background: a.sky })}>
       <svg
         style={{ position: 'absolute', left: 0, top: 0 }}
         width="332"
@@ -45,7 +55,7 @@ export default function Constellation({ m }: IDrawProps) {
               width: sz,
               height: sz,
               borderRadius: '50%',
-              background: on ? '#FFFFFF' : DIM_STAR,
+              background: on ? (light ? acc : '#FFFFFF') : a.dim,
               boxShadow: on ? `0 0 ${bright ? 12 : 6}px ${acc}` : undefined,
             }}
           />
@@ -61,7 +71,7 @@ export default function Constellation({ m }: IDrawProps) {
           flexDirection: 'column',
           alignItems: 'center',
           gap: 2,
-          color: '#FFFFFF',
+          color: fxInk(light),
         }}
       >
         <span
@@ -75,7 +85,7 @@ export default function Constellation({ m }: IDrawProps) {
         >
           {m.digits}
         </span>
-        <span className={L} style={{ fontSize: lmin(13), color: INK2 }}>
+        <span className={L} style={{ fontSize: lmin(13), color: fxInk2(light) }}>
           {lit} of {CS} stars lit · {m.endLine}
         </span>
       </div>

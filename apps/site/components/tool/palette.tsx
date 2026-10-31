@@ -1,175 +1,245 @@
 'use client';
 
-import { useMemo } from 'react';
-import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Command } from 'cmdk';
 import {
-  AlarmClock,
-  Contrast,
+  Globe,
+  Headphones,
   History,
-  Infinity as InfinityGlyph,
   LayoutGrid,
   LifeBuoy,
-  ListChecks,
   Maximize,
-  Moon,
-  Palette,
+  MessageCircle,
   Pause,
   PictureInPicture2,
   Play,
   Plus,
-  Settings,
-  Share2,
-  Sun,
-  Timer,
-  User,
-  Volume2,
+  Search,
+  Share,
+  SlidersVertical,
+  Sparkle,
+  Wand,
   X,
   type LucideIcon,
 } from 'lucide-react';
-import type { TFace } from '@awaketab/core';
-import { faceName } from '@/components/face';
-import {
-  CommandPalette,
-  type ICommandAction,
-  type ICommandGroup,
-  type ICommandPaletteLabels,
-} from '@/components/product/command-palette';
+import { Dialog } from 'radix-ui';
 import { PIP_EVENT } from '@/components/pip/pip-launcher';
-import { fill } from '@/lib/tool/chrome';
-import { pipSupport } from '@/lib/surfaces/pip';
-import { returnFocus } from '@/lib/tool/focus';
-import { toolUi } from '@/lib/tool/ui';
-import { useTool, type IToolContext } from '@/components/tool/context';
+import { ROUTES } from '@/lib/routes';
+import { isLive } from '@/lib/wake';
+import { useGlance, type IGlance } from './context';
+import { EASE, Kbd } from './kit';
 
-interface ICmd extends ICommandAction {
-  group: string;
-  kind: string;
+interface ICmd {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  keys?: string;
+  words?: string[];
+  run: () => void;
 }
 
-const PALETTE_FACES: TFace[] = [
-  'ring',
-  'bold',
-  'flip',
-  'luxe',
-  'dive',
-  'gauge',
-  'timeline',
-  'nixie',
-  'led',
-  'pilot',
-  'dual',
-  'radar',
-  'board',
-  'hourglass',
-  'orbit',
-  'disc',
-  'clocks',
-  'wordgrid',
-  'tape',
-  'moon',
-];
-
-function commands({ m, a, presets }: IToolContext, pipLabel: string): ICmd[] {
-  const { s, c } = m;
-  const list: ICmd[] = [];
-  const add = (group: string, label: string, icon: LucideIcon, keys: string[], run: () => void, kind = '') =>
-    list.push({ id: `cmd-${list.length}`, group, label, icon, keys, onSelect: run, kind });
-  const st = m.state;
-  if (st === 'running' || st === 'fallback') {
-    add(s.session, s.pause, Pause, ['Space'], a.pause);
-    add(s.session, c.cStopAwake, X, [], a.stop);
-  } else if (st === 'paused' || st === 'needsyou') add(s.session, s.resume, Play, ['Space'], a.resume);
-  else add(s.session, s.keep, Play, ['Space'], () => a.start());
-  add(s.session, c.cExt15, Plus, ['+'], () => a.extend(900));
-  add(s.session, c.cExt60, Plus, ['⇧', '+'], () => a.extend(3600));
-  // Searchable only: the idle list keeps the drawn commands, and U is listed here so every key has a home.
-  add(s.session, c.cUntil, AlarmClock, ['U'], () => a.go('extend'), 'extra');
-  add(s.session, fill(c.cLen, { len: fill(c.minutes, { n: 30 }) }), Timer, [], () => a.setLength(1800));
-  add(s.session, fill(c.cLen, { len: s.hours2 }), Timer, [], () => a.setLength(7200));
-  add(s.session, fill(c.cLen, { len: c.cLenOpen }), InfinityGlyph, [], () => a.setLength(0));
-  presets
-    .slice(0, 9)
-    .forEach((p, i) =>
-      add(s.presets, fill(c.cPreset, { name: p.label }), ListChecks, [String(i + 1)], () => a.applyPreset(p, true)),
-    );
-  for (const f of PALETTE_FACES) add(s.faces, fill(c.cFace, { name: faceName(f) }), LayoutGrid, [], () => a.setFace(f));
-  add(c.gGo, c.cOpenPresets, ListChecks, [], () => a.go('presets'));
-  add(c.gGo, c.cOpenHistory, History, [], () => a.go('history'));
-  add(c.gGo, c.cOpenSettings, Settings, [], () => a.go('settings'));
-  add(c.gGo, s.help, LifeBuoy, ['?'], () => a.go('fix'), 'help');
-  add(c.gGo, c.share, Share2, [], () => a.go('share'));
-  add(c.gGo, s.studio, Palette, [], () => a.go('studio'));
-  add(c.gGo, c.ambient, Volume2, [], () => a.go('sound'));
-  add(c.gGo, c.account, User, [], () => a.go('account'));
-  add(c.gLook, c.fullscreen, Maximize, ['F'], () => a.go('focus'), 'full');
-  // Searchable only, like U: no tool board draws a mini clock button.
-  if ((st === 'running' || st === 'fallback') && pipSupport() !== 'none')
-    add(c.gLook, pipLabel, PictureInPicture2, [], () => window.dispatchEvent(new Event(PIP_EVENT)), 'extra');
-  add(c.gLook, c.cToggleTheme, Contrast, ['⇧', 'D'], a.cycleTheme);
-  add(c.gLook, fill(c.themeIs, { name: c.light }), Sun, [], () => a.setTheme('light'));
-  add(c.gLook, fill(c.themeIs, { name: c.dark }), Moon, [], () => a.setTheme('dark'));
-  add(c.gLook, fill(c.themeIs, { name: c.oled }), Contrast, [], () => a.setTheme('oled'));
-  return list;
+function commands(g: IGlance): Array<{ h: string; items: ICmd[] }> {
+  const { t, a, st } = g;
+  const live = isLive(st);
+  const session: ICmd[] = [];
+  if (live || st === 'ended')
+    session.push({ id: 'extend', label: t('pal.extend'), icon: Plus, run: () => a.extend(900) });
+  if (st === 'running' || st === 'fallback')
+    session.push({ id: 'pause', label: t('dock.pause'), icon: Pause, keys: 'Space', run: a.pause });
+  else if (st === 'paused' || st === 'needsyou')
+    session.push({ id: 'resume', label: t('dock.resume'), icon: Play, keys: 'Space', run: a.resume });
+  else session.push({ id: 'start', label: t('pal.start'), icon: Play, keys: '↵', run: a.start });
+  if (live) session.push({ id: 'stop', label: t('dock.stop'), icon: X, run: a.stop });
+  session.push({ id: 'full', label: t('dock.full'), icon: Maximize, keys: '⇧F', run: a.fullscreen });
+  const go: ICmd[] = [
+    {
+      id: 'faces',
+      label: t('top.faces'),
+      icon: LayoutGrid,
+      keys: 'F',
+      words: ['face', 'clock', 'gallery'],
+      run: () => a.open('faces'),
+    },
+    {
+      id: 'recents',
+      label: t('top.recents'),
+      icon: History,
+      keys: 'R',
+      words: ['history', 'presets'],
+      run: () => a.open('recents'),
+    },
+    {
+      id: 'settings',
+      label: t('top.settings'),
+      icon: SlidersVertical,
+      keys: ',',
+      words: ['theme', 'dark', 'light', 'oled'],
+      run: () => a.open('settings'),
+    },
+    {
+      id: 'vibe',
+      label: t('top.vibe'),
+      icon: Wand,
+      keys: 'V',
+      words: ['background', 'aurora', 'rain', 'night'],
+      run: () => a.open('vibes'),
+    },
+    {
+      id: 'ext',
+      label: t('pal.extension'),
+      icon: Sparkle,
+      words: ['ext', 'extension', 'chrome', 'edge', 'firefox', 'add-on', 'addon', 'browser'],
+      run: () => window.location.assign(ROUTES.extension),
+    },
+    {
+      id: 'feedback',
+      label: t('settings.feedback'),
+      icon: MessageCircle,
+      words: ['feedback', 'bug', 'idea', 'help'],
+      run: () => a.feedback(),
+    },
+    {
+      id: 'help',
+      label: t('panel.help.t'),
+      icon: LifeBuoy,
+      words: ['help', 'fix', 'battery', 'problem'],
+      run: () => a.open('help'),
+    },
+    {
+      id: 'sound',
+      label: t('settings.ambient'),
+      icon: Headphones,
+      words: ['sound', 'rain', 'noise', 'mixer'],
+      run: () => a.open('sound'),
+    },
+    { id: 'share', label: t('settings.share'), icon: Share, words: ['share', 'link'], run: () => a.open('share') },
+    {
+      id: 'lang',
+      label: t('settings.language'),
+      icon: Globe,
+      words: ['language', 'deutsch', '日本語', '中文', 'हिन्दी'],
+      run: () => a.open('language'),
+    },
+    {
+      id: 'pip',
+      label: t('pal.pip'),
+      icon: PictureInPicture2,
+      words: ['mini', 'picture', 'pip', 'float'],
+      run: () => window.dispatchEvent(new Event(PIP_EVENT)),
+    },
+  ];
+  return [
+    { h: t('pal.session'), items: session },
+    { h: t('pal.goto'), items: go },
+  ];
 }
 
-function grouped(list: ICmd[]): ICommandGroup[] {
-  const out: ICommandGroup[] = [];
-  for (const c of list) {
-    const g = out.find((x) => x.heading === c.group);
-    if (g) g.items.push(c);
-    else out.push({ heading: c.group, items: [c] });
-  }
-  return out;
-}
+const ITEM =
+  'flex h-12 cursor-pointer items-center gap-3 rounded-[12px] px-3 text-[15px] font-medium text-(--tg-text) outline-none data-[selected=true]:bg-(--tg-s2) data-[selected=true]:shadow-[inset_0_0_0_1px_var(--tg-border)]';
 
-export function ToolPalette() {
-  const ctx = useTool();
-  const { ui, m, a } = ctx;
-  const c = m.c;
-  const tp = useTranslations('surfaces.pip');
-  const pipLabel = tp('open');
-  const all = useMemo(() => commands(ctx, pipLabel), [ctx, pipLabel]);
-  const groups = useMemo(() => grouped(all), [all]);
-  const idle = useMemo(
-    () =>
-      grouped(
-        all
-          .filter((x) => (x.group === m.s.session && x.kind === '') || x.kind === 'help' || x.kind === 'full')
-          .slice(0, 7),
-      ),
-    [all, m.s.session],
-  );
-  const labels = useMemo<ICommandPaletteLabels>(
-    () => ({
-      move: c.palMove,
-      run: c.palRun,
-      close: c.palClose,
-      closePalette: c.palClosePalette,
-      noMatch: (q) => fill(c.palEmpty, { q }),
-      // The board counts results whether or not anything is typed.
-      count: (n) => (n === 1 ? c.palResult1 : fill(c.palResults, { n })),
-    }),
-    [c],
-  );
+// ⌘K: every action without a mouse, grouped, with its key.
+export function Palette() {
+  const g = useGlance();
+  const { t } = g;
+  const open = g.panel === 'palette';
+  const [q, setQ] = useState('');
+  const groups = commands(g);
+  const count = groups.reduce((n, gr) => n + gr.items.length, 0);
+  const w = Math.min(g.W - 24, 640);
+  const run = (c: ICmd) => {
+    g.a.close();
+    setQ('');
+    c.run();
+  };
   return (
-    <CommandPalette
-      fit="tool"
-      open={ui.view === 'palette'}
-      onOpenChange={(open) => {
-        if (open) return;
-        if (toolUi.get().view === 'palette') a.close();
-        setTimeout(() => {
-          if (toolUi.get().view === 'timer') returnFocus();
-        }, 0);
+    <Dialog.Root
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) {
+          setQ('');
+          g.a.close();
+        }
       }}
-      idleGroups={idle}
-      groups={groups}
-      query={ui.palQuery}
-      onQueryChange={(palQuery) => toolUi.set({ palQuery })}
-      emptyHint={c.palHint}
-      placeholder={c.palPlaceholder}
-      title={c.palTitle}
-      labels={labels}
-    />
+    >
+      <AnimatePresence>
+        {open ? (
+          <Dialog.Portal forceMount container={g.root}>
+            <Dialog.Overlay asChild forceMount>
+              <motion.div
+                className="absolute inset-0 z-[7] bg-(--tg-scrim) backdrop-blur-[6px]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+            </Dialog.Overlay>
+            <Dialog.Content asChild forceMount aria-describedby={undefined}>
+              <motion.div
+                className="tg-glass absolute z-[8] overflow-hidden rounded-[24px] bg-(--tg-panel)! shadow-(--tg-shadow) outline-none"
+                style={{ left: Math.round((g.W - w) / 2), top: g.phone ? 72 : 120, width: w }}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 14 }}
+                transition={{ duration: 0.42, ease: EASE }}
+              >
+                <Dialog.Title className="sr-only">{t('top.searchLabel')}</Dialog.Title>
+                <Command label={t('top.searchLabel')} loop className="flex flex-col">
+                  <div className="flex h-16 items-center gap-3 border-b border-(--tg-border) pr-4 pl-5 text-(--tg-t2)">
+                    <Search className="size-5 flex-none" strokeWidth={2} aria-hidden="true" />
+                    <Command.Input
+                      value={q}
+                      onValueChange={setQ}
+                      placeholder={t('pal.placeholder')}
+                      className="min-w-0 flex-1 bg-transparent text-[18px] text-(--tg-text) caret-(--tg-violet) outline-none placeholder:text-(--tg-t3)"
+                    />
+                    <Kbd>esc</Kbd>
+                  </div>
+                  <Command.List className="tg-scroll max-h-[min(60vh,520px)] overflow-y-auto p-2 [&_[cmdk-list-sizer]]:flex [&_[cmdk-list-sizer]]:flex-col [&_[cmdk-list-sizer]]:gap-0.5">
+                    <Command.Empty className="px-3 py-6 text-center text-[15px] text-(--tg-t2)">
+                      {t('pal.none', { q })}
+                    </Command.Empty>
+                    {groups.map((gr) => (
+                      <Command.Group
+                        key={gr.h}
+                        heading={gr.h}
+                        className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pt-2.5 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[12px] [&_[cmdk-group-heading]]:tracking-[.12em] [&_[cmdk-group-heading]]:text-(--tg-t2) [&_[cmdk-group-heading]]:uppercase"
+                      >
+                        {gr.items.map((c) => {
+                          const Icon = c.icon;
+                          return (
+                            <Command.Item
+                              key={c.id}
+                              value={`${c.label} ${c.id}`}
+                              keywords={c.words}
+                              onSelect={() => run(c)}
+                              className={ITEM}
+                            >
+                              <span className="flex size-[30px] flex-none items-center justify-center rounded-[9px] bg-(--tg-s2) text-(--tg-text)">
+                                <Icon className="size-4" strokeWidth={2} aria-hidden="true" />
+                              </span>
+                              <span className="flex-1">{c.label}</span>
+                              {c.keys ? <Kbd>{c.keys}</Kbd> : null}
+                            </Command.Item>
+                          );
+                        })}
+                      </Command.Group>
+                    ))}
+                  </Command.List>
+                  <div className="flex h-12 items-center gap-4 border-t border-(--tg-border) px-4 text-[13px] text-(--tg-t2)">
+                    <span>
+                      <Kbd>↑</Kbd> <Kbd>↓</Kbd> {t('pal.move')}
+                    </span>
+                    <span>
+                      <Kbd>↵</Kbd> {t('pal.run')}
+                    </span>
+                    <span className="ml-auto">{t('pal.count', { n: count })}</span>
+                  </div>
+                </Command>
+              </motion.div>
+            </Dialog.Content>
+          </Dialog.Portal>
+        ) : null}
+      </AnimatePresence>
+    </Dialog.Root>
   );
 }
