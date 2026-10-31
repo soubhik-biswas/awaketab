@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
@@ -45,6 +45,25 @@ export interface IOgCard {
 
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 
+// The head icons and both theme colours from the marketing board, shared by every locale layout.
+export const SITE_ICONS: NonNullable<Metadata['icons']> = {
+  icon: [
+    { url: '/favicon.ico', sizes: 'any' },
+    { url: '/favicon.svg', type: 'image/svg+xml' },
+    { url: '/icons/favicon-16.png', sizes: '16x16', type: 'image/png' },
+    { url: '/icons/favicon-32.png', sizes: '32x32', type: 'image/png' },
+    { url: '/icons/favicon-48.png', sizes: '48x48', type: 'image/png' },
+  ],
+  apple: [{ url: '/icons/apple-touch-icon-180.png', sizes: '180x180' }],
+};
+
+export const SITE_VIEWPORT: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#05060A' },
+    { media: '(prefers-color-scheme: light)', color: '#F4F4F9' },
+  ],
+};
+
 export function ogImageUrl(card: IOgCard, locale: TLocale = 'en'): string {
   if (card.image || !card.title) return `/og/${card.image ?? 'og-01'}.png`;
   const template = card.template ?? (card.tone === 'light' ? 'use' : 'guide');
@@ -61,13 +80,12 @@ export function ogImageUrl(card: IOgCard, locale: TLocale = 'en'): string {
 const SUFFIX = ' · AwakeTab';
 
 // "{H1} · AwakeTab" under 60 characters (brief §9h). A long H1 drops its clause after a colon or question mark,
-// then the suffix, then falls back to its short crumb.
+// then falls back to its short crumb, so the suffix always stays.
 export function titleFor(h1: string, short?: string): string {
   const clean = h1.trim().replace(/[.!]$/u, '');
   if (clean.length + SUFFIX.length < 60) return clean + SUFFIX;
   const clause = clean.split(/[:?]\s/u)[0]?.trim() ?? clean;
   if (clause !== clean && clause.length + SUFFIX.length < 60) return clause + SUFFIX;
-  if (clean.length < 60) return clean;
   return (short ?? clause.slice(0, 48)) + SUFFIX;
 }
 

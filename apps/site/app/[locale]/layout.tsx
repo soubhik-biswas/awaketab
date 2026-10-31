@@ -14,6 +14,7 @@ import { ServiceWorker } from '@/components/widgets/service-worker';
 import { LOCALE_META, type TLocale } from '@/i18n/locales';
 import { routing } from '@/i18n/routing';
 import { SITE } from '@/lib/routes';
+import { SITE_ICONS, SITE_VIEWPORT } from '@/lib/seo';
 import { FONT_VARIABLES } from '../fonts';
 import '../globals.css';
 import '@/components/site/site.css';
@@ -41,22 +42,10 @@ export function generateStaticParams() {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   applicationName: 'AwakeTab',
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-    ],
-    apple: [{ url: '/icons/apple-touch-icon.png', sizes: '180x180' }],
-  },
+  icons: SITE_ICONS,
 };
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F4F4F9' },
-    { media: '(prefers-color-scheme: dark)', color: '#05060A' },
-  ],
-};
+export const viewport: Viewport = SITE_VIEWPORT;
 
 export default async function LocaleLayout({
   children,
