@@ -1495,6 +1495,588 @@
       "hero": "Keep this screen awake.",
       "heroSub": "One tap. It goes back to sleep when time’s up — no install, no account.",
       "heroSubPhone": "One tap. It sleeps again when time’s up."
+    },
+    "glance": {
+      "free": "Free",
+      "unit": {
+        "h": "h",
+        "min": "min",
+        "hour": "hour"
+      },
+      "len": {
+        "0": "15 min",
+        "1": "30 min",
+        "2": "1 hour",
+        "3": "2 hours",
+        "4": "No end"
+      },
+      "top": {
+        "search": "Search",
+        "searchLabel": "Search and commands",
+        "vibe": "Vibe",
+        "faces": "Faces",
+        "recents": "Recents",
+        "settings": "Settings"
+      },
+      "pill": {
+        "idle": "Not keeping awake",
+        "starting": "Asking the browser…",
+        "awake": "Awake · until {time}",
+        "awakeOpen": "Awake · until you stop",
+        "fallback": "Awake via video · until {time}",
+        "fallbackOpen": "Awake via video · until you stop",
+        "paused": "Paused · {dur} left",
+        "needsyou": "Tap to resume · tab was hidden",
+        "blocked": "Not awake · {reason}",
+        "unsupported": "No wake lock in this browser",
+        "ended": "Time’s up · it slept at {time}"
+      },
+      "reason": {
+        "battery": "battery saver",
+        "unknown": "the browser said no",
+        "insecure": "needs a secure page",
+        "policy": "not allowed here"
+      },
+      "set": {
+        "h1a": "Keep this screen",
+        "h1b": "awake.",
+        "howLong": "How long",
+        "cta": "Keep awake · {len}",
+        "noEnd": "no end",
+        "noEndCap": "No end",
+        "starting": "Starting…",
+        "note": "Ends at {time} · no install, no account",
+        "noteOpen": "Runs until you stop it · no install, no account"
+      },
+      "stage": {
+        "label": "Timer"
+      },
+      "face": {
+        "aria": "Clock face: {face}",
+        "ready": "READY",
+        "left": "LEFT",
+        "ends": "Ends at {time}"
+      },
+      "first": {
+        "kicker": "FIRST SESSION DONE · {dur}",
+        "h": "How did it go?"
+      },
+      "rate": {
+        "love": "Loved it",
+        "good": "It worked",
+        "bad": "Something broke"
+      },
+      "dock": {
+        "label": "Session controls",
+        "addTime": "Add time",
+        "add": "+{n} {unit}",
+        "addAria": "Add {dur}",
+        "pause": "Pause",
+        "resume": "Resume",
+        "again": "Start again",
+        "fix": "See the fix",
+        "video": "Use video",
+        "stop": "Stop",
+        "stopAria": "Stop and let the screen sleep",
+        "faceAria": "Clock face: {face}. Change face",
+        "full": "Fullscreen",
+        "exitFull": "Leave fullscreen"
+      },
+      "hint": {
+        "move": "Move the pointer for controls",
+        "tap": "Tap anywhere for controls",
+        "show": "Show controls"
+      },
+      "banner": {
+        "blocked": {
+          "battery": {
+            "t": "Battery saver is blocking the wake lock.",
+            "d": "Your screen may still go dark.",
+            "btn": "See the fix"
+          },
+          "unknown": {
+            "t": "The browser turned the wake lock down.",
+            "d": "Your screen may still go dark.",
+            "btn": "See the fix"
+          },
+          "insecure": {
+            "t": "Wake locks need a secure page.",
+            "d": "Your screen may still go dark.",
+            "btn": "See the fix"
+          },
+          "policy": {
+            "t": "This page doesn’t allow a wake lock.",
+            "d": "Your screen may still go dark.",
+            "btn": "See the fix"
+          }
+        },
+        "unsupported": {
+          "t": "This browser has no wake lock.",
+          "d": "A silent, invisible video can keep the screen on instead.",
+          "btn": "Use video"
+        },
+        "fallback": {
+          "t": "Awake through a silent video.",
+          "d": "Works on this browser; keep this tab visible.",
+          "btn": ""
+        },
+        "needsyou": {
+          "t": "The tab was hidden, so the browser let go.",
+          "d": "One tap and the screen stays on again.",
+          "btn": "Resume"
+        },
+        "conflict": {
+          "t": "Another tab is keeping this screen awake.",
+          "d": "Only one tab needs to.",
+          "btn": "Take over"
+        },
+        "offline": {
+          "t": "You’re offline.",
+          "d": "The timer keeps working; sync waits until you’re back.",
+          "btn": ""
+        },
+        "update": {
+          "t": "A new version is ready.",
+          "d": "Your session carries on after reloading.",
+          "btn": "Reload"
+        }
+      },
+      "toast": {
+        "extended": "{dur} added · now until {time}",
+        "undo": "Undo"
+      },
+      "nudge": {
+        "h": "You’ve made it yours.",
+        "d": "{sessions, plural, one {# session} other {# sessions}} and {presets, plural, one {# preset} other {# presets}} in. Running more than one screen? Pro keeps them all in sync.",
+        "try": "Try Pro free",
+        "later": "Not now"
+      },
+      "tab": {
+        "left": "{t} left",
+        "awake": "Awake",
+        "paused": "Paused",
+        "blocked": "Not awake",
+        "up": "Time’s up"
+      },
+      "an": {
+        "start": "Screen awake until {time}.",
+        "startOpen": "Screen awake until you stop it.",
+        "extend": "{dur} added. Now until {time}.",
+        "low": "5 minutes left. Add 15 minutes?",
+        "hidden": "The tab was hidden, so the browser let go.",
+        "refused": "Not awake — {reason}. See the fix.",
+        "paused": "Paused. {dur} kept.",
+        "ended": "Time’s up. The screen can sleep now.",
+        "face": "Face: {face}."
+      },
+      "panel": {
+        "close": "Close",
+        "recents": {
+          "t": "Recents",
+          "d": "Presets and the sessions you ran"
+        },
+        "settings": {
+          "t": "Settings",
+          "d": "Saved on this device"
+        },
+        "help": {
+          "t": "Help & fixes",
+          "d": "Only shown when something is wrong"
+        },
+        "studio": {
+          "t": "Face studio",
+          "d": "Free · make any face yours"
+        },
+        "feedback": {
+          "t": "Feedback",
+          "d": "Your first sessions shape what we build next"
+        },
+        "vibes": {
+          "t": "Vibe",
+          "d": "A living background behind your clock"
+        },
+        "share": {
+          "t": "Share this setup",
+          "d": "Send someone a clock that’s ready to go"
+        },
+        "devices": {
+          "t": "Your screens",
+          "d": "Pro · sync across devices"
+        },
+        "sound": {
+          "t": "Ambient sound",
+          "d": "Free · mix your own background"
+        },
+        "clear": {
+          "t": "Clear history",
+          "d": "This device only"
+        },
+        "language": {
+          "t": "Language",
+          "d": "Text and time format"
+        },
+        "pro": {
+          "t": "AwakeTab Pro",
+          "d": "Optional · for many screens"
+        },
+        "proDone": {
+          "t": "Welcome to Pro",
+          "d": "Trial started"
+        },
+        "plan": {
+          "t": "Manage plan",
+          "d": "Pro · yearly"
+        }
+      },
+      "faces": {
+        "title": "Faces",
+        "sub": "Tap one — it applies live behind this panel. All {n} are free.",
+        "search": "Search {n} faces",
+        "close": "Close faces",
+        "collections": "Collections",
+        "label": "Clock face",
+        "featuredTag": "Featured · {tag}",
+        "none": "No face called “{q}”.",
+        "filter": {
+          "featured": "Featured",
+          "digital": "Digital",
+          "analog": "Analog",
+          "ambient": "Ambient",
+          "all": "All"
+        }
+      },
+      "recents": {
+        "week": "THIS WEEK",
+        "awake": "{dur} awake",
+        "streak": "{n}-day streak",
+        "longest": "your longest yet",
+        "noStreak": "Sessions you run show up here",
+        "hours": "Hours awake",
+        "chart": "Hours awake each day this week",
+        "presets": "Presets",
+        "emptyH": "No presets yet",
+        "emptyD": "Start a session you like, then save it here. One tap brings it back — length, face and vibe.",
+        "save": "Save current as a preset",
+        "saved": "Saved as a preset: {name}",
+        "history": "History",
+        "this": "This session",
+        "sinceNow": "{time} – now",
+        "awakeBadge": "Awake",
+        "untitled": "{face} session",
+        "today": "Today · {date}",
+        "yesterday": "Yesterday · {date}",
+        "note": "History stays on this device. Clear it any time in Settings."
+      },
+      "settings": {
+        "appearance": "Appearance",
+        "theme": "Theme",
+        "themes": {
+          "auto": "System",
+          "light": "Light",
+          "dark": "Dark",
+          "oled": "OLED"
+        },
+        "clock": "Clock",
+        "h12": "12-hour clock",
+        "h12D": "Shows 11:42 AM instead of 11:42",
+        "secs": "Show seconds",
+        "secsD": "On the face and in the tab title",
+        "dim": "Dim at night",
+        "dimD": "Softer glow after 10:00 PM",
+        "sound": "Sound",
+        "chime": "Chime at the end",
+        "chimeD": "Plays once when time is up",
+        "chimes": {
+          "two": "Two notes",
+          "bell": "Bell",
+          "off": "Off"
+        },
+        "mixer": "Ambient mixer",
+        "mixerD": "Rain, café, fire and brown noise",
+        "studio": "Face studio",
+        "studioD": "Your own accent colour and glow",
+        "more": "More",
+        "ambient": "Ambient sound",
+        "ambientD": "Rain, café, fire, brown noise",
+        "language": "Language",
+        "languageD": "Changes text and the time format",
+        "share": "Share this setup",
+        "shareD": "A link that opens ready to start",
+        "clear": "Clear history",
+        "clearD": "Presets and settings stay",
+        "account": "Account",
+        "signedOut": "Not signed in",
+        "signedOutD": "Everything works without an account. Sign in only to sync Pro.",
+        "signIn": "Sign in",
+        "signedIn": "Signed in with {via}",
+        "via": {
+          "google": "Google",
+          "github": "GitHub",
+          "email": "your account",
+          "passkey": "a passkey"
+        },
+        "proOn": "Pro is on · sync across your screens",
+        "freeOn": "Everything works. Pro only adds sync for many screens.",
+        "manage": "Manage plan",
+        "feedback": "Send feedback",
+        "feedbackD": "Two taps. We read every message.",
+        "proCard": "Many screens? Keep them in sync.",
+        "proCardD": "Everything above is free, for good. Pro is for people who run several screens: one setup synced to every device, plus priority help. [PRICE] a year.",
+        "proCardOn": "Pro is on. Sync is ready.",
+        "proCardOnD": "Open AwakeTab on another screen and sign in the same way; your setup follows.",
+        "seePro": "See Pro"
+      },
+      "help": {
+        "checked": "We checked at {time}.",
+        "video": "Use the video fallback",
+        "again": "Check again",
+        "battery": {
+          "h": "The browser said no",
+          "d": "Battery saver looks to be on (the battery is low and unplugged), and this browser ignores wake requests while it is.",
+          "s1": "Plug in, or turn battery saver off",
+          "s1d": "The lock comes back by itself — we keep checking.",
+          "s2": "Or use the video fallback",
+          "s2d": "A silent, invisible video keeps most screens on.",
+          "s3": "Still dimming?",
+          "s3d": "The desktop app can block system sleep as well."
+        },
+        "unknown": {
+          "h": "The browser said no",
+          "d": "This browser turned the wake request down without saying why. A power or battery setting is the usual cause.",
+          "s1": "Plug in, or turn battery saver off",
+          "s1d": "Then tap Check again — it takes a second.",
+          "s2": "Or use the video fallback",
+          "s2d": "A silent, invisible video keeps most screens on.",
+          "s3": "Still dimming?",
+          "s3d": "The desktop app can block system sleep as well."
+        },
+        "insecure": {
+          "h": "This page isn’t secure",
+          "d": "Browsers only allow wake locks on secure (https) pages.",
+          "s1": "Open awaketab.com with https",
+          "s1d": "Check the address starts with https://.",
+          "s2": "Or use the video fallback",
+          "s2d": "A silent, invisible video keeps most screens on."
+        },
+        "policy": {
+          "h": "Not allowed on this page",
+          "d": "The page that embeds AwakeTab doesn’t allow wake locks.",
+          "s1": "Open AwakeTab in its own tab",
+          "s1d": "awaketab.com works the same, with the lock allowed.",
+          "s2": "Or use the video fallback",
+          "s2d": "A silent, invisible video keeps most screens on."
+        }
+      },
+      "studio": {
+        "accent": "Accent colour",
+        "glow": "Room glow",
+        "note": "Status colours never change — paused stays amber, blocked stays red — so the clock always tells the truth.",
+        "save": "Save as my face",
+        "reset": "Reset to default",
+        "swatch0": "Volt",
+        "swatch1": "Lime",
+        "swatch2": "Amber",
+        "swatch3": "Sky",
+        "swatch4": "Lilac",
+        "swatch5": "Rose",
+        "swatch6": "Ember"
+      },
+      "vibes": {
+        "label": "Background vibe",
+        "motion": "Motion",
+        "still": "Still",
+        "calm": "Calm",
+        "lively": "Lively",
+        "note": "Vibes pause on battery saver and under reduced motion. The clock always stays readable."
+      },
+      "vibe": {
+        "aurora": {
+          "n": "Aurora",
+          "d": "Soft northern light, drifting"
+        },
+        "night": {
+          "n": "Night sky",
+          "d": "Stars, a moon, the odd shooting star"
+        },
+        "rain": {
+          "n": "Rain on glass",
+          "d": "A calm, rainy window"
+        },
+        "sunset": {
+          "n": "Sunset",
+          "d": "Warm light for the evening"
+        },
+        "lava": {
+          "n": "Lava lamp",
+          "d": "Bold colour, slowly melting"
+        },
+        "calm": {
+          "n": "Calm",
+          "d": "Nothing moves but the clock"
+        }
+      },
+      "sound": {
+        "playing": "Playing: {name}",
+        "ready": "Ready: {name}",
+        "off": "Off · {name}",
+        "silent": "Every layer is off",
+        "fades": "Fades out when the session ends",
+        "waits": "Plays while the screen is awake",
+        "preview": "That was a five-second preview; it plays while the screen is awake",
+        "turnOn": "Play ambient sound while awake",
+        "turnOff": "Turn ambient sound off",
+        "rain": "Rain",
+        "cafe": "Café",
+        "fire": "Fireplace",
+        "brown": "Brown noise",
+        "mixes": "Mixes",
+        "mix": {
+          "rainy": "Rainy café",
+          "focus": "Deep focus",
+          "fire": "Fireside",
+          "off": "Off",
+          "custom": "Your mix"
+        }
+      },
+      "feedback": {
+        "how": "How was it?",
+        "note": "Anything we should know? (optional)",
+        "placeholder": "What worked, what didn’t, what you wish it did",
+        "topics": "Topics",
+        "topic": {
+          "faces": "Faces",
+          "ease": "Ease of use",
+          "battery": "Battery",
+          "other": "Something else"
+        },
+        "privacy": "Sent anonymously with your browser and device type. Your answers shape what we build next.",
+        "send": "Send feedback",
+        "sending": "Sending…",
+        "retry": "Try again",
+        "later": "Maybe later",
+        "failed": "That didn’t send — check your connection and try again. Nothing was lost.",
+        "thanks": "Thank you — we read every message."
+      },
+      "share": {
+        "card": "Opens ready to start — one tap and it runs.",
+        "link": "Link",
+        "copy": "Copy",
+        "copied": "Copied",
+        "include": "Include",
+        "look": "Face and vibe",
+        "lookD": "Opens with the same look",
+        "length": "Length",
+        "lengthD": "Starts the same timer",
+        "start": "Start straight away",
+        "startOn": "On — it starts as soon as it opens",
+        "startOff": "Off — the visitor taps Keep awake",
+        "note": "Links never contain your name, history, device names or location.",
+        "copyLink": "Copy link",
+        "via": "Share via…"
+      },
+      "clear": {
+        "h": "Clear {n, plural, one {# session} other {# sessions}}?",
+        "d": "History and your weekly streak on this device will be deleted. Presets, faces and settings stay. This can’t be undone.",
+        "type": "Type CLEAR to confirm",
+        "note": "The button unlocks when all five letters match.",
+        "go": "Clear {n, plural, one {# session} other {# sessions}}",
+        "keep": "Keep history",
+        "done": "History cleared on this device"
+      },
+      "lang": {
+        "en": "English",
+        "de": "German",
+        "ja": "Japanese",
+        "zh": "Chinese",
+        "hi": "Hindi",
+        "es": "Spanish",
+        "note": "Times follow the language: 11:42 AM in English, 11:42 in German, 午前11:42 in Japanese."
+      },
+      "pro": {
+        "kicker": "AWAKETAB PRO",
+        "h1a": "One setup.",
+        "h1b": "Every screen.",
+        "d": "Everything you use today stays free. Pro adds sync for people who run more than one screen.",
+        "plan": "Plan",
+        "yearly": "Yearly",
+        "yearlyPrice": "[PRICE] / year",
+        "yearlyD": "Best value · 14 days free",
+        "monthly": "Monthly",
+        "monthlyPrice": "[PRICE] / month",
+        "monthlyD": "Cancel any time",
+        "save": "SAVE [NUMBER]%",
+        "f1": "One setup synced to up to 5 screens",
+        "f2": "Start or stop any screen from one",
+        "f3": "History across devices, with export",
+        "f4": "Priority help from a person",
+        "f5": "Early access to new faces and vibes",
+        "note": "14 days free, then [PRICE] a year. Cancel any time in Settings → Manage plan. Secure checkout by [PAYMENT PROVIDER].",
+        "trial": "Start 14-day free trial",
+        "later": "Maybe later"
+      },
+      "proDone": {
+        "h1a": "Pro is on.",
+        "h1b": "Thank you.",
+        "d": "Your 14-day trial has started. Sync is ready — open AwakeTab on another screen and sign in the same way.",
+        "s1": "Open AwakeTab on your other screen",
+        "s1d": "Kitchen tablet, TV, a second laptop.",
+        "s2": "Sign in the same way",
+        "s2d": "Google, GitHub or a passkey — no password.",
+        "s3": "It picks up your setup",
+        "s3d": "Faces, vibes and presets arrive in a second.",
+        "back": "Back to my clock",
+        "manage": "Manage plan"
+      },
+      "plan": {
+        "renews": "Pro · yearly · renews {date}",
+        "active": "Active",
+        "plan": "Plan",
+        "yearly": "Pro · yearly",
+        "yearlyD": "[PRICE] / year · next payment {date}",
+        "change": "Change",
+        "payment": "Payment method",
+        "paymentD": "Handled by [PAYMENT PROVIDER]",
+        "update": "Update",
+        "screens": "Screens",
+        "screensD": "{n} of {max} in use",
+        "manage": "Manage",
+        "cancel": "Cancel Pro",
+        "cancelD": "Stays on until {date}",
+        "cancelBtn": "Cancel",
+        "receipts": "Receipts",
+        "r1": "Pro · yearly · [PRICE]",
+        "r2": "Trial started · [PRICE] 0",
+        "download": "Download",
+        "note": "Cancel any time — Pro stays on until the end of the period you paid for. Your screens keep every free feature.",
+        "done": "Done",
+        "receipt": "Get a receipt"
+      },
+      "devices": {
+        "kicker": "YOUR SCREENS · {n} OF {max}",
+        "awake": "{n} awake right now",
+        "d": "Start or stop this screen from here; the others show when they joined.",
+        "none": "No screens yet",
+        "noneD": "Sync starts with Pro. Everything else works on this screen without it.",
+        "asleep": "Asleep",
+        "start": "Start",
+        "stop": "Stop",
+        "note": "Pro · sync. Removing a screen signs it out straight away.",
+        "add": "Add a screen",
+        "done": "Done"
+      },
+      "pal": {
+        "placeholder": "Type a command or search",
+        "session": "Session",
+        "goto": "Go to",
+        "extend": "Extend 15 minutes",
+        "start": "Keep awake",
+        "extension": "Get the browser extension",
+        "pip": "Open the mini clock",
+        "none": "Nothing matches “{q}”.",
+        "move": "move",
+        "run": "run",
+        "count": "{n, plural, one {# command} other {# commands}}"
+      }
     }
   },
   "ambient": {

@@ -1,64 +1,51 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { MotionConfig } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
-import { X } from 'lucide-react';
-import { createStorage, type TFace } from '@awaketab/core';
+import { useMediaQuery } from 'usehooks-ts';
 import { ToolSurfaces } from '@/components/pip/tool-surfaces';
-import { Button } from '@/components/ui/button';
-import { Kbd } from '@/components/ui/kbd';
+import { isLocale, localePath } from '@/i18n/locales';
 import { cn } from '@/lib/utils';
 import { formatDuration } from '@/lib/format';
-import { CHROME, fill, lengthText } from '@/lib/tool/chrome';
-import { clockTime } from '@/lib/tool/clock';
-import { rememberOpener, returnFocus } from '@/lib/tool/focus';
-import { addHistory, clearHistory, useHistory } from '@/lib/tool/history';
-import { deriveModel, DEVICE_SIZES, type TFaceTheme } from '@/lib/tool/model';
+import { clockTime, secondsOfDay } from '@/lib/tool/clock';
+import { faceLabel, glanceFace } from '@/lib/tool/collections';
+import { addHistory, useHistory } from '@/lib/tool/history';
+import { countSession, firstDone, markSeen, nudgeDue, quietNudge, useJourney } from '@/lib/tool/journey';
 import { iconForLabel, savePreset, usePresets } from '@/lib/tool/presets';
 import { usePro } from '@/lib/tool/pro';
-import { readToolQuery, sharePath } from '@/lib/tool/share';
-import { setAmbient } from '@/lib/tool/sound';
-import { playChime } from '@/lib/tool/sound';
-import { updateSettings, useToolSettings, type TThemeChoice } from '@/lib/tool/settings';
+import { readToolQuery } from '@/lib/tool/share';
+import { playChime, setAmbient } from '@/lib/tool/sound';
+import { updateSettings, useToolSettings, type IToolSettings, type TThemeChoice } from '@/lib/tool/settings';
 import type { TToolLang } from '@/lib/tool/strings';
-import { toolUi, useToolUi, type TDevice, type TToolView } from '@/lib/tool/ui';
-import { isAwake, isLive, useWake, wake, type IAnnounce } from '@/lib/wake';
+import { toolUi, useToolUi, type TBlockReason, type TDevice, type TPanel } from '@/lib/tool/ui';
+import { elapsedSec, isAwake, isLive, remainSec, useWake, wake, type IWakeSnapshot } from '@/lib/wake';
 import { useOnline } from '@/hooks/use-online';
-import { useToolKeys } from '@/hooks/use-tool-keys';
-import { ToolContext, type IToolActions, type IToolContext } from '@/components/tool/context';
-import { ToolHeader } from '@/components/tool/header';
-import { ToolHost } from '@/components/tool/host';
-import { KBD } from '@/components/tool/kit';
-import { ControlBar } from '@/components/tool/bar';
-import { useLampLight } from '@/components/tool/motion';
-import { Stage } from '@/components/tool/stage';
-import { toolToast, ToolToaster } from '@/components/tool/toasts';
-import './tool.css';
+import { Backdrop } from './backdrop';
+import { Banner } from './banner';
+import { ToolContext, type IGlance, type IToolActions, type TBannerKind, type TT } from './context';
+import { Dock } from './dock';
+import { useFrame, useFullscreen, useIdle, useLowBattery } from './hooks';
+import { useKeys } from './keys';
+import { ControlsHint, Nudge, showExtended, showNote, ToolToaster } from './overlays';
+import { Panels } from './panels';
+import { Palette } from './palette';
+import { Stage } from './stage';
+import { TopBar } from './top-bar';
+import './glance.css';
 
-const ToolPalette = dynamic(() => import('@/components/tool/palette').then((mod) => mod.ToolPalette), { ssr: false });
-const QaBridge = dynamic(() => import('@/components/tool/qa-bridge').then((mod) => mod.QaBridge), { ssr: false });
+const QaBridge = dynamic(() => import('./qa-bridge').then((m) => m.QaBridge), { ssr: false });
 
 export interface IToolProps {
   lang?: TToolLang;
-  initialView?: TToolView;
+  initialView?: TPanel;
+  // Kept for older callers: the tool opens straight onto the working timer, with no welcome step.
   welcome?: boolean;
   readQuery?: boolean;
   qa?: boolean;
   className?: string;
-}
-
-const WELCOME_TIP = 'welcome';
-
-// iPhone Safari has no element fullscreen and insecure origins have no clipboard, whatever the DOM types say.
-function enterFullscreen(): void {
-  const root: Partial<Pick<HTMLElement, 'requestFullscreen'>> = document.documentElement;
-  void root.requestFullscreen?.().catch(() => undefined);
-}
-
-function copyText(text: string): void {
-  const nav: Partial<Pick<Navigator, 'clipboard'>> = navigator;
-  void nav.clipboard?.writeText(text).catch(() => undefined);
 }
 
 // The handoff's layout tiers: desktop from 1300, tablet landscape from 1100, tablet portrait from 700.
@@ -69,274 +56,247 @@ function deviceFor(w: number): TDevice {
   return 'phone';
 }
 
-function useFrameSize(ref: React.RefObject<HTMLDivElement | null>) {
-  const [size, setSize] = useState<{ w: number; h: number } | null>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const read = () => {
-      const r = el.getBoundingClientRect();
-      setSize((prev) =>
-        prev && prev.w === Math.round(r.width) && prev.h === Math.round(r.height)
-          ? prev
-          : { w: Math.round(r.width), h: Math.round(r.height) },
-      );
-    };
-    read();
-    const ro = new ResizeObserver(read);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [ref]);
-  return size;
+function reasonFor(snap: IWakeSnapshot, low: boolean): TBlockReason {
+  if (snap.advice === 'insecure_context') return 'insecure';
+  if (snap.advice === 'permissions_policy' || snap.advice === 'iframe_no_allow') return 'policy';
+  return low ? 'battery' : 'unknown';
 }
 
-const noopSubscribe = () => () => undefined;
-
-function useOrigin(): string {
-  return useSyncExternalStore(
-    noopSubscribe,
-    () => window.location.origin,
-    () => '',
-  );
-}
-
-function announceText(an: IAnnounce, lang: TToolLang, fmt: 12 | 24): string {
-  const c = CHROME[lang];
-  const time = an.endsAt === null ? '' : clockTime(an.endsAt, lang, fmt);
-  switch (an.kind) {
-    case 'start':
-      return time ? fill(c.anStart, { time }) : c.anStartOpen;
-    case 'extend':
-      return fill(c.anExtend, { n: Math.round(an.extendSec / 60), time });
-    case 'lowtime':
-      return c.anLow;
-    case 'hidden':
-      return c.anHidden;
-    case 'refused':
-      return c.anRefused;
-    case 'ended':
-      return fill(c.anEnded, { time: clockTime(Date.now(), lang, fmt) });
-  }
-}
-
-function markWelcomed() {
-  try {
-    const store = createStorage();
-    const ob = store.onboarding();
-    if (!ob.dismissedTips.includes(WELCOME_TIP))
-      store.writeOnboarding({ ...ob, dismissedTips: [...ob.dismissedTips, WELCOME_TIP] });
-  } catch {
-    // Storage blocked: the welcome may show again next visit.
-  }
-}
-
-function welcomed(): boolean {
-  try {
-    return createStorage().onboarding().dismissedTips.includes(WELCOME_TIP);
-  } catch {
-    return true;
-  }
-}
-
-export function Tool({
-  lang = 'en',
-  initialView,
-  welcome = true,
-  readQuery = true,
-  qa = false,
-  className,
-}: IToolProps) {
-  const frameRef = useRef<HTMLDivElement>(null);
-  const size = useFrameSize(frameRef);
+// The tool: the home page's first screen. It measures its own frame and lays out to the device tier it finds, so it
+// renders nothing on the server and never reads the window during render.
+export function Tool({ lang = 'en', initialView, readQuery = true, qa = false, className }: IToolProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [root, setRoot] = useState<HTMLDivElement | null>(null);
+  const attach = useCallback((el: HTMLDivElement | null) => {
+    ref.current = el;
+    setRoot(el);
+  }, []);
+  const size = useFrame(ref);
+  const snap = useWake();
   return (
     <div
-      ref={frameRef}
+      ref={attach}
       lang={lang}
       data-slot="tool"
-      className={cn('relative h-dvh w-full overflow-hidden bg-background font-sans text-foreground', className)}
+      data-state={snap.state}
+      className={cn('relative h-dvh w-full overflow-hidden font-sans', className)}
     >
-      {size ? (
-        <ToolApp lang={lang} frame={size} initialView={initialView} welcome={welcome} readQuery={readQuery} qa={qa} />
-      ) : null}
+      <MotionConfig reducedMotion="user">
+        {size ? (
+          <ToolApp lang={lang} frame={size} root={root} initialView={initialView} readQuery={readQuery} qa={qa} />
+        ) : null}
+      </MotionConfig>
     </div>
   );
 }
 
-function ToolApp({
-  lang,
-  frame,
-  initialView,
-  welcome,
-  readQuery,
-  qa,
-}: Required<Pick<IToolProps, 'lang' | 'welcome' | 'readQuery' | 'qa'>> & {
+interface IAppProps {
+  lang: TToolLang;
   frame: { w: number; h: number };
-  initialView?: TToolView;
-}) {
+  root: HTMLDivElement | null;
+  initialView?: TPanel;
+  readQuery: boolean;
+  qa: boolean;
+}
+
+function ToolApp({ lang, frame, root, initialView, readQuery, qa }: IAppProps) {
+  const t: TT = useTranslations('tool.glance');
   const snap = useWake();
   const settings = useToolSettings();
   const ui = useToolUi();
   const pro = usePro();
+  const presets = usePresets();
+  const history = useHistory();
+  const journey = useJourney();
+  const online = useOnline();
+  const low = useLowBattery();
+  const fs = useFullscreen();
+  const touch = useMediaQuery('(hover: none)');
+  const { theme, resolvedTheme, setTheme } = useTheme();
+
   useEffect(() => {
     // Loaded after the first paint so the sign-in client never weighs on the tool's start.
     void import('@/lib/pro/client').then((m) => m.connectPro());
+    markSeen();
   }, []);
-  const presets = usePresets();
-  const history = useHistory();
-  const online = useOnline();
-  const origin = useOrigin();
-  const { theme: themeSetting, resolvedTheme, setTheme } = useTheme();
-  const stageRef = useRef<HTMLElement>(null);
-  const device = deviceFor(frame.w);
-  const theme: TFaceTheme = resolvedTheme === 'light' ? 'light' : resolvedTheme === 'oled' ? 'oled' : 'dark';
-  const night = theme !== 'light';
-  const themeChoice: TThemeChoice =
-    themeSetting === 'light' || themeSetting === 'dark' || themeSetting === 'oled' ? themeSetting : 'auto';
-  const m = useMemo(
-    () => deriveModel(snap, settings, lang, ui.qa.offsetMs ?? 0),
-    [snap, settings, lang, ui.qa.offsetMs],
+
+  const W = frame.w;
+  const H = frame.h;
+  const device = deviceFor(W);
+  const phone = device === 'phone';
+  const tabP = device === 'tabletP';
+  const tabL = device === 'tabletL';
+  const desk = device === 'desktop';
+  const narrow = phone || tabP;
+  const faceTheme = resolvedTheme === 'light' ? 'light' : resolvedTheme === 'oled' ? 'oled' : 'dark';
+  const night = faceTheme !== 'light';
+  const themeChoice: TThemeChoice = theme === 'light' || theme === 'dark' || theme === 'oled' ? theme : 'auto';
+  const fmt = settings.h12 ? 12 : 24;
+  const offset = ui.qa.offsetMs ?? 0;
+  const now = (snap.now || Date.now()) + offset;
+  const st = snap.state;
+  const live = isLive(st);
+  const isSet = st === 'idle' || st === 'starting';
+  const indef = live ? snap.endsAt === null : settings.totalSec === 0;
+  const total = live || st === 'ended' ? snap.totalSec : settings.totalSec;
+  const remain = live ? (indef ? elapsedSec(snap) : remainSec(snap)) : st === 'ended' ? 0 : total;
+  const endsAt = now + (indef ? 0 : remain) * 1000;
+  const panel = ui.panel;
+  const idleOn = (st === 'running' || st === 'fallback') && panel === 'none';
+  const idle = useIdle(idleOn);
+  const hidden = ui.qa.controls === 'hidden' || idle.idle;
+  const still = low || settings.motion === 'still';
+  const reason = ui.qa.reason ?? reasonFor(snap, low);
+  const qaBanner = ui.qa.banner && ui.qa.banner !== 'none' ? ui.qa.banner : null;
+  const banner: TBannerKind | null =
+    st === 'blocked' || st === 'unsupported' || st === 'fallback' || st === 'needsyou'
+      ? st
+      : (qaBanner ?? (snap.peerHolds ? 'conflict' : !online ? 'offline' : ui.update ? 'update' : null));
+
+  const time = useCallback((ms: number) => clockTime(ms, lang, fmt), [lang, fmt]);
+  const dur = useCallback(
+    (sec: number) => {
+      const h = Math.floor(sec / 3600);
+      const m = Math.round((sec % 3600) / 60);
+      if (!h) return `${Math.max(m, sec > 0 ? 1 : 0)} ${t('unit.min')}`;
+      return m ? `${h} ${t('unit.h')} ${m} ${t('unit.min')}` : `${h} ${t('unit.h')}`;
+    },
+    [t],
   );
-  const latest = useRef({ m, settings });
-  latest.current = { m, settings };
 
-  const go = useCallback((view: TToolView) => {
-    rememberOpener();
-    if (view === 'focus') enterFullscreen();
-    toolUi.go(view);
-  }, []);
+  const latest = useRef({ settings, snap, time, dur, t, presets });
+  useEffect(() => {
+    latest.current = { settings, snap, time, dur, t, presets };
+  });
 
-  const close = useCallback(() => {
-    const view = toolUi.get().view;
-    if (view === 'welcome') markWelcomed();
-    if (view === 'focus' && document.fullscreenElement) void document.exitFullscreen().catch(() => undefined);
-    toolUi.close();
-    if (view === 'focus') returnFocus(stageRef.current);
-  }, []);
+  const [announce, setAnnounce] = useState('');
 
-  const setLength = useCallback((sec: number) => {
-    wake.setLength(sec);
-    if (!isLive(wake.getSnapshot().state)) updateSettings({ totalSec: sec });
-  }, []);
-
-  const a: IToolActions = useMemo(
-    () => ({
-      start: (sec) => wake.start(sec ?? latest.current.settings.totalSec),
+  const a: IToolActions = useMemo(() => {
+    const setLength = (sec: number) => {
+      wake.setLength(sec);
+      if (!isLive(wake.getSnapshot().state)) updateSettings({ totalSec: sec });
+    };
+    return {
+      start: () => {
+        const s = wake.getSnapshot().state;
+        if (s === 'ended' || s === 'idle' || s === 'unsupported') wake.start(latest.current.settings.totalSec);
+      },
       toggle: () => {
-        const st = wake.getSnapshot().state;
-        if (st === 'idle' || st === 'ended') wake.start(latest.current.settings.totalSec);
+        const s = wake.getSnapshot().state;
+        if (s === 'idle' || s === 'ended') wake.start(latest.current.settings.totalSec);
         else wake.toggle();
       },
       pause: () => wake.pause(),
       resume: () => wake.resume(),
       stop: () => wake.stop(),
       extend: (sec) => wake.extend(sec),
+      shorten: (sec) => {
+        const s = wake.getSnapshot();
+        if (s.endsAt === null || !isLive(s.state)) return;
+        if (remainSec(s) > sec + 60) wake.until(s.endsAt - sec * 1000);
+      },
       undo: () => wake.undoExtend(),
       setLength,
-      until: (endsAt) => wake.until(endsAt),
       useFallback: () => {
         wake.useFallback();
-        if (toolUi.get().view === 'fix') toolUi.close();
+        if (toolUi.get().panel === 'help') toolUi.close();
       },
-      checkAgain: () => {
-        wake.checkAgain();
-        if (toolUi.get().view === 'fix') toolUi.close();
-      },
+      checkAgain: () => wake.checkAgain(),
       takeOver: () => wake.takeOver(),
-      dismissPeer: () => wake.dismissPeer(),
-      go,
-      close,
-      setFace: (face: TFace) => updateSettings({ face }),
+      reload: () => window.location.reload(),
+      open: (p) => toolUi.open(p),
+      close: () => toolUi.close(),
+      setFace: (face) => {
+        updateSettings({ face });
+        setAnnounce(latest.current.t('an.face', { face: faceLabel(face) }));
+      },
       setTheme: (choice) => {
         setTheme(choice === 'auto' ? 'system' : choice);
         updateSettings({ theme: choice });
       },
-      cycleTheme: () => {
-        const next = theme === 'light' ? 'dark' : theme === 'dark' ? 'oled' : 'light';
-        setTheme(next);
-        updateSettings({ theme: next });
-      },
-      applyPreset: (p, start = false) => {
-        const cur = latest.current.settings;
-        updateSettings({ face: p.face, chime: p.chime ? (cur.chime === 'off' ? 'two' : cur.chime) : 'off' });
+      setVibe: (vibe) => updateSettings({ vibe }),
+      setMotion: (motion) => updateSettings({ motion }),
+      applyPreset: (p) => {
+        updateSettings({ face: p.face, ...(p.vibe ? { vibe: p.vibe } : {}) });
         setLength(p.totalSec);
         toolUi.close();
-        if (start && !isAwake(wake.getSnapshot().state)) wake.start(p.totalSec);
+        const s = wake.getSnapshot().state;
+        if (!isAwake(s)) {
+          if (isLive(s)) wake.stop();
+          wake.start(p.totalSec);
+        }
       },
       savePreset: () => {
         const cur = latest.current;
         const p = savePreset({
           label: cur.settings.label,
-          totalSec: cur.m.total,
+          totalSec: cur.settings.totalSec,
           face: cur.settings.face,
           chime: cur.settings.chime !== 'off',
+          vibe: cur.settings.vibe,
         });
-        const { s, c } = cur.m;
-        toolToast.show({
-          id: 'preset-saved',
-          tone: 'success',
-          title: fill(c.savedPreset, { label: p.label }),
-          description: fill(c.savedPresetD, { len: lengthText(p.totalSec, s, c), n: Math.min(9, presets.length + 1) }),
-        });
+        showNote(cur.t('recents.saved', { name: p.label }));
       },
-      copyLink: () => {
-        copyText(shareUrlRef.current);
-        toolUi.set({ copied: true });
-        toolToast.copied(latest.current.m.c);
+      fullscreen: () => undefined,
+      showControls: () => undefined,
+      feedback: (rating) => toolUi.set({ panel: 'feedback', rating: rating ?? toolUi.get().rating }),
+      quietNudge: () => quietNudge(),
+      setLang: (code) => {
+        const url = new URL(window.location.href);
+        if (url.pathname.startsWith('/dev/')) {
+          url.searchParams.set('lang', code);
+          window.location.assign(url.toString());
+        } else if (isLocale(code)) window.location.assign(localePath(code, '/'));
       },
-      clearHistory: () => {
-        clearHistory();
-        toolUi.go('history');
+      update: (patch: Partial<IToolSettings>) => updateSettings(patch),
+    };
+  }, [setTheme]);
+
+  const actions: IToolActions = useMemo(
+    () => ({
+      ...a,
+      fullscreen: () => {
+        fs.toggle(root);
+        if (!fs.on) idle.rest();
       },
-      updateSettings,
+      showControls: () => idle.wake(),
     }),
-    [setLength, go, close, setTheme, theme, presets.length],
+    [a, fs, root, idle],
   );
 
-  const shareUrl = `${origin}${sharePath({ face: settings.face, minutes: Math.round(settings.totalSec / 60), chime: settings.chime !== 'off' })}`;
-  const shareUrlRef = useRef(shareUrl);
-  shareUrlRef.current = shareUrl;
-
-  // First paint: address options, then the first-visit welcome.
+  // First paint: the address options (?preset, ?face, ?vibe, ?autostart, ?until) and an optional first panel.
   useEffect(() => {
-    if (initialView) toolUi.go(initialView);
-    const q = readQuery ? readToolQuery(window.location.search) : {};
-    if (q.face) updateSettings({ face: q.face });
+    if (initialView) toolUi.open(initialView);
+    if (!readQuery) return;
+    const q = readToolQuery(window.location.search);
+    if (q.face) updateSettings({ face: glanceFace(q.face) });
+    if (q.vibe) updateSettings({ vibe: q.vibe });
     if (q.chime !== undefined) updateSettings({ chime: q.chime ? 'two' : 'off' });
-    if (q.totalSec !== undefined) setLength(q.totalSec);
+    if (q.totalSec !== undefined) {
+      wake.setLength(q.totalSec);
+      updateSettings({ totalSec: q.totalSec });
+    }
     if (q.untilAt) wake.until(q.untilAt);
     else if (q.autostart) wake.start(q.totalSec ?? latest.current.settings.totalSec);
-    else if (!initialView && welcome && !welcomed() && wake.getSnapshot().state === 'idle') toolUi.go('welcome');
-  }, [initialView, readQuery, welcome, setLength]);
+  }, [initialView, readQuery]);
 
   useEffect(() => {
     const offs = [
-      wake.on('extended', ({ sec, endsAt }) => {
-        const l = latest.current.m;
-        toolToast.extended(l.c, {
-          until: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt),
-          minutes: Math.round(sec / 60),
-          onUndo: () => wake.undoExtend(),
-        });
-      }),
-      wake.on('lowtime', ({ endsAt }) => {
-        const l = latest.current.m;
-        toolToast.lowTime(l.c, {
-          endsAt: clockTime(endsAt + (toolUi.get().qa.offsetMs ?? 0), l.lang, l.fmt),
-          extendLabel: l.s.ext15,
-          onExtend: () => wake.extend(900),
-        });
-      }),
-      wake.on('ended', ({ endedAt }) => {
+      wake.on('extended', ({ sec, endsAt: end }) => {
         const l = latest.current;
-        playChime(l.settings.chime);
-        toolToast.ended(l.m.c, {
-          endedAt: clockTime(endedAt + (toolUi.get().qa.offsetMs ?? 0), l.m.lang, l.m.fmt),
-          againLabel: l.m.s.again,
-          onStartAgain: () => setLength(l.m.total),
-        });
+        showExtended(
+          l.t('toast.extended', { dur: l.dur(sec), time: l.time(end + (toolUi.get().qa.offsetMs ?? 0)) }),
+          l.t('toast.undo'),
+          () => wake.undoExtend(),
+        );
+      }),
+      wake.on('ended', () => {
+        playChime(latest.current.settings.chime);
+        if (firstDone()) toolUi.set({ first: true });
       }),
       wake.on('finished', (f) => {
         const l = latest.current.settings;
+        if (f.awakeSec >= 60) countSession();
         addHistory({
           label: l.label,
           icon: iconForLabel(l.label, f.totalSec),
@@ -352,93 +312,147 @@ function ToolApp({
     return () => {
       for (const off of offs) off();
     };
-  }, [setLength]);
+  }, []);
 
-  const awake = isAwake(snap.state);
+  // Leaving Time's up (a new start or a stop) puts the first-session card away for good.
   useEffect(() => {
-    setAmbient(pro.mix, awake && pro.isPro);
-  }, [awake, pro.mix, pro.isPro]);
+    if (st !== 'ended' && toolUi.get().first && !ui.qa.first) toolUi.set({ first: false });
+  }, [st, ui.qa.first]);
 
-  // The tab title carries the countdown, so a glance at the tab bar is enough.
-  useEffect(() => {
-    const base = 'AwakeTab';
-    const { s, c } = m;
-    let title = base;
-    if (awake && !m.indef)
-      title = `${fill(c.tabLeft, { t: settings.secs ? formatDuration(m.remain) : `${Math.ceil(m.remain / 60)}${s.min}` })} · ${base}`;
-    else if (awake) title = `${c.tabAwake} · ${base}`;
-    else if (m.state === 'paused') title = `${s.paused} · ${base}`;
-    else if (m.state === 'blocked') title = `${c.tabBlocked} · ${base}`;
-    else if (m.state === 'ended') title = `${c.tabUp} · ${base}`;
-    document.title = title;
-  }, [awake, m, settings.secs]);
-
-  const sizes = DEVICE_SIZES[device];
-  const focus = ui.view === 'focus';
-
-  // A new build announces itself with this event; the banner offers a reload that keeps the session.
+  // A new build announces itself; the banner offers a reload that keeps the session.
   useEffect(() => {
     const onUpdate = () => toolUi.set({ update: true });
     window.addEventListener('awaketab:update', onUpdate);
     return () => window.removeEventListener('awaketab:update', onUpdate);
   }, []);
 
+  // Pro switching on during a visit opens the thank-you panel once.
+  const wasPro = useRef(pro.isPro);
   useEffect(() => {
-    const onFs = () => {
-      if (!document.fullscreenElement && toolUi.get().view === 'focus') close();
-    };
-    document.addEventListener('fullscreenchange', onFs);
-    return () => document.removeEventListener('fullscreenchange', onFs);
-  }, [close]);
+    if (pro.isPro && !wasPro.current) toolUi.open('proDone');
+    wasPro.current = pro.isPro;
+  }, [pro.isPro]);
 
-  const ctx: IToolContext = {
-    m,
+  const awake = isAwake(st);
+  useEffect(() => {
+    setAmbient(pro.mix, awake && settings.ambientOn);
+  }, [awake, pro.mix, settings.ambientOn]);
+
+  // The tab title is live: "59:12 left · AwakeTab".
+  const baseTitle = useRef<string | null>(null);
+  useEffect(() => {
+    baseTitle.current ??= document.title;
+    const base = 'AwakeTab';
+    let title = baseTitle.current;
+    if (awake && !indef)
+      title = `${t('tab.left', { t: settings.secs ? formatDuration(remain) : dur(remain) })} · ${base}`;
+    else if (awake) title = `${t('tab.awake')} · ${base}`;
+    else if (st === 'paused' || st === 'needsyou') title = `${t('tab.paused')} · ${base}`;
+    else if (st === 'blocked') title = `${t('tab.blocked')} · ${base}`;
+    else if (st === 'ended') title = `${t('tab.up')} · ${base}`;
+    document.title = title;
+  }, [awake, indef, remain, st, settings.secs, t, dur]);
+
+  // What a screen reader hears when the session changes.
+  const lastAnnounce = useRef(0);
+  useEffect(() => {
+    const an = snap.announce;
+    if (!an || an.id === lastAnnounce.current) return;
+    lastAnnounce.current = an.id;
+    const end = an.endsAt === null ? '' : time(an.endsAt + offset);
+    const text: Record<typeof an.kind, string> = {
+      start: end ? t('an.start', { time: end }) : t('an.startOpen'),
+      extend: t('an.extend', { dur: dur(an.extendSec), time: end }),
+      lowtime: t('an.low'),
+      hidden: t('an.hidden'),
+      refused: t('an.refused', { reason: t(`reason.${reason}`) }),
+      paused: t('an.paused', { dur: dur(remainSec(snap)) }),
+      ended: t('an.ended'),
+    };
+    setAnnounce(text[an.kind]);
+  }, [snap, time, dur, t, offset, reason]);
+
+  const g: IGlance = {
+    lang,
+    t,
+    fmt,
+    device,
+    phone,
+    tabP,
+    tabL,
+    desk,
+    narrow,
+    touch,
+    W,
+    H,
+    night,
+    faceTheme,
+    themeChoice,
     snap,
     settings,
     ui,
-    device,
-    theme,
-    themeChoice,
-    night,
-    viewport: frame,
-    pro,
     presets,
     history,
-    online,
-    shareUrl,
-    a,
+    pro,
+    journey,
+    st,
+    isSet,
+    hidden,
+    still,
+    fullscreen: fs.on,
+    panel,
+    total,
+    remain,
+    indef,
+    now,
+    nowSec: secondsOfDay(now),
+    endsAt,
+    face: glanceFace(settings.face),
+    reason,
+    banner,
+    topH: phone ? 64 : 76,
+    dockH: phone ? 136 : 80,
+    root,
+    time,
+    dur,
+    a: actions,
   };
 
-  useToolKeys(ctx, stageRef);
+  useKeys(g);
 
-  const topH = focus ? 0 : sizes.top;
-  const barH = focus ? 0 : sizes.bar;
-  const faceSize = focus ? Math.round(Math.min(frame.w, frame.h) * (device === 'phone' ? 0.86 : 0.72)) : sizes.face;
-  const glowAmt = Math.max(0, Math.min(100, pro.isPro ? pro.studio.glow : 70)) / 70;
-  const announce = snap.announce ? announceText(snap.announce, lang, m.fmt) : '';
-  const assertive = snap.announce?.kind === 'refused';
+  const nudge =
+    st === 'running' &&
+    panel === 'none' &&
+    !hidden &&
+    (ui.qa.nudge === true || (ui.qa.nudge === undefined && nudgeDue(journey, presets.length, pro.devices.length, now)));
+  const assertive =
+    st === 'blocked' && announce !== '' && announce === t('an.refused', { reason: t(`reason.${reason}`) });
 
   return (
-    <ToolContext.Provider value={ctx}>
-      {!focus || night ? <Glow awake={awake} amount={glowAmt} height={frame.h} /> : null}
-      {!focus ? <ToolHeader /> : null}
-      <Stage ref={stageRef} faceSize={faceSize} top={topH} bottom={barH} />
-      {!focus ? <ControlBar /> : null}
-      <ToolHost />
-      <ToolSurfaces />
-      {focus ? (
-        <Button
-          type="button"
-          variant="outline"
-          onClick={close}
-          className="absolute top-4 right-4 z-[7] h-11 gap-2 rounded-[10px] border-border bg-(--tool-exit) px-4 text-[14px] font-semibold text-foreground [&_svg]:size-[18px]!"
-        >
-          <X strokeWidth={2} aria-hidden="true" />
-          {m.c.exitFull} <Kbd className={KBD}>Esc</Kbd>
-        </Button>
+    <ToolContext.Provider value={g}>
+      <Backdrop
+        W={W}
+        H={H}
+        night={night}
+        narrow={narrow}
+        topH={g.topH}
+        vibe={settings.vibe}
+        motion={settings.motion}
+        still={still}
+        state={st}
+      />
+      <TopBar />
+      <Banner />
+      <Stage />
+      <Dock />
+      <ControlsHint />
+      {nudge ? (
+        <Nudge sessions={ui.qa.nudge ? 12 : journey.sessions} presets={ui.qa.nudge ? 2 : presets.length} />
       ) : null}
-      <ToolToaster bottom={focus ? 24 : sizes.bar + 12} phoneBottom={focus ? 24 : sizes.bar + 12} />
-      {ui.view === 'palette' ? <ToolPalette /> : null}
+      <ToolToaster bottom={g.dockH + (phone ? 28 : 44)} />
+      <Panels />
+      <Palette />
+      <ToolSurfaces />
       <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
         {assertive ? '' : announce}
       </span>
@@ -447,35 +461,5 @@ function ToolApp({
       </span>
       {qa ? <QaBridge /> : null}
     </ToolContext.Provider>
-  );
-}
-
-// The room glow behind the clock: volt top left, violet lower right; it brightens when the lamp lights.
-function Glow({ awake, amount, height }: { awake: boolean; amount: number; height: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useLampLight(ref, awake);
-  return (
-    <div ref={ref} aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0" style={{ opacity: amount }}>
-        <div
-          className={cn(
-            'absolute h-[640px] w-[760px] rounded-full',
-            awake
-              ? 'bg-[radial-gradient(closest-side,var(--tool-glow-a-awake),transparent)]'
-              : 'bg-[radial-gradient(closest-side,var(--tool-glow-a),transparent)]',
-          )}
-          style={{ left: 'calc(50% - 520px)', top: Math.round(height * 0.06) }}
-        />
-        <div
-          className={cn(
-            'absolute h-[600px] w-[680px] rounded-full',
-            awake
-              ? 'bg-[radial-gradient(closest-side,var(--tool-glow-b-awake),transparent)]'
-              : 'bg-[radial-gradient(closest-side,var(--tool-glow-b),transparent)]',
-          )}
-          style={{ left: 'calc(50% - 120px)', top: Math.round(height * 0.28) }}
-        />
-      </div>
-    </div>
   );
 }
