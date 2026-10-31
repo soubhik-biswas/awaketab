@@ -952,6 +952,19 @@ Accepted on 2026-10-30. Spec: `docs/redesign/volt/HANDOFF.md` §7 (Volt, 31 Oct 
 | `<html data-face>` | `boot.js` writes the saved id when it is not `ring`; `stage.ts` corrects or clears it once the Face module loads |
 | i18n keys | `face.name.<id>` (33), `face.blurb.<id>` (33, build time only, excluded from the island catalog), `face.t.*` (the words drawn on the faces, fed to `setFaceText`); `face.` joins `ISLAND_PREFIXES` |
 
+### Glance clock faces (31 Oct 2026)
+
+Accepted on 2026-10-31. Spec: `docs/redesign/glance/BRIEF.md` §6 and the handoff's `prototype/Face.dc.html` (v3.1) and faces board. Replaces the two face sections above wherever they disagree.
+
+| Identifier | Decision |
+|---|---|
+| Face ids | `FACE_IDS` in `packages/core/src/types.ts` and `apps/site/components/face/model.ts` (the same 46, gallery order): `ring` · `bold` · `horizon` · `tide` · `flip` · `rolling` · `analog` · `luxe` · `rings` · `words` · `nixie` · `lcd` · `dive` · `chrono` · `gauge` · `type` · `bars` · `timeline` · `pilot` · `dual` · `radar` · `dots` · `hourglass` · `battery` · `stack` · `board` · `orbit` · `disc` · `clocks` · `wordgrid` · `tape` · `moon` · `aurora` · `glass` · `neon` · `liquid` · `eclipse` · `skeleton` · `bauhaus` · `poster` · `eink` · `waveform` · `blob` · `hud` · `constellation` · `halo`; default `ring` |
+| Retired | `led`, `pulse`, `terminal`. `migrateFace` (core storage) and `toFaceId` / `RETIRED_FACES` (site) read `led` → `lcd`, `terminal` → `lcd`, `pulse` → `waveform`, `matrix` → `lcd`, `word` → `words`, unknown → `ring` |
+| Collections | `FACE_COLLECTIONS`: `featured` (18), `digital` (15), `analog` (14), `ambient` (17), `all` (46); `FACES[i].kind` and `FACES[i].featured` |
+| Face API | `<Face face theme state remain total nowSec size lamp? bare? framed? indef? motion? lblTop? lblEnd? fmt? className?>`; `FACES`, `FACE_IDS`, `FACE_COLLECTIONS`, `faceName`, `faceKind`, `loadFace`, `preloadFaces`, `isFaceId`, `toFaceId`, `FaceGrid` |
+| Root markup | `.af[role="timer"][aria-label]` > `.af-a[aria-hidden]` (the 360 × 315 artboard plus caption, `transform: scale(size / 360)`); the box is `size × round(size × 0.875)` when bare, square with the caption or `framed`; classes `af-live`, `af-still`, `af-compact` (size < 200: `.af-l` text hidden), `af-thumb` (size ≤ 64: `.af-d` detail hidden) |
+| Colour | The face file's palette per theme (`FACE_PALETTE`), not page tokens; `--fl` (lamp or Face studio accent) and `--fa` (state colour) on the root |
+
 ### 13.25 Colour themes, lamps, patterns, presets and Pro previews
 
 Accepted on 2026-09-28. Spec: `05-frontend-spec.md` §1.1a–§1.1d; storage fields: `08-data-storage.md` §2.1. Budgets: no critical tool JS added and total tool JS about flat (the old lamp code left `settings.ts` and `accent.ts`); the pack has its own budget (`themes` ≤ 25 KB gz) and its own stylesheet; the inlined tool CSS is unchanged and the lazy `tool-more.css` lost the old lamp swatch rules.
