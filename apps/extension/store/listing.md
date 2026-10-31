@@ -1,6 +1,6 @@
 # Store listing — AwakeTab — Keep your screen awake
 
-Copy for the Chrome Web Store and Edge Add-ons, word for word from `docs/redesign/glance/LISTING_COPY.md` (the marketing board). Use with [the release guide](PUBLISHING.md), [reviewer instructions](reviewer-instructions.md) and [privacy disclosures](privacy-disclosures.md). Store form fields use plain text; keep the paragraph spacing and drop the Markdown when pasting. Placeholders stay in [BRACKETS]. There is no email address anywhere: support and feedback are in the app (Settings → Send feedback) and on the help centre.
+Copy for the Chrome Web Store and Edge Add-ons, word for word from `docs/plan/glance/LISTING_COPY.md` (the marketing board). Use with [the release guide](PUBLISHING.md), [reviewer instructions](reviewer-instructions.md) and [privacy disclosures](privacy-disclosures.md). Store form fields use plain text; keep the paragraph spacing and drop the Markdown when pasting. Placeholders stay in [BRACKETS]. There is no email address anywhere: support and feedback are in the app (Settings → Send feedback) and on the help centre.
 
 ## Identity
 
