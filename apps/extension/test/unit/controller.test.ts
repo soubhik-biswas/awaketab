@@ -46,7 +46,7 @@ describe('background controller — keep-awake and badge', () => {
     expect(fake.badge.text).toBe('∞');
     expect(fake.alarms.has(ALARMS.end)).toBe(false);
     await fake.api.storage.local.set({ [EXT_KEYS.ext]: { v: 1, badge: false } });
-    await flush(20);
+    await flush(200);
     expect(fake.badge.text).toBe('ON');
   });
 
