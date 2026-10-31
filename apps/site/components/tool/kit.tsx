@@ -20,12 +20,9 @@ export function Kbd({ className, children }: { className?: string; children: Rea
   );
 }
 
-export function SecLabel({ children, first = false }: { children: ReactNode; first?: boolean }) {
-  return (
-    <span className={cn('font-mono text-[12px] tracking-[.14em] text-(--tg-t2) uppercase', !first && 'mt-2.5')}>
-      {children}
-    </span>
-  );
+// Every section label keeps its 10 px top margin, the first one too, as the boards draw them.
+export function SecLabel({ children }: { children: ReactNode }) {
+  return <span className="mt-2.5 font-mono text-[12px] tracking-[.14em] text-(--tg-t2) uppercase">{children}</span>;
 }
 
 export function Group({ children, className, ...props }: ComponentProps<'div'>) {

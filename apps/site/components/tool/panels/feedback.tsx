@@ -33,7 +33,7 @@ export function FeedbackPanel() {
   return (
     <>
       <PanelBody>
-        <SecLabel first>{t('feedback.how')}</SecLabel>
+        <SecLabel>{t('feedback.how')}</SecLabel>
         <RadioGroup.Root
           value={rating}
           onValueChange={(v) => setRating(v as TRating)}
