@@ -2,181 +2,177 @@
 
 import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
-import type { TPresetId } from '@awaketab/core';
-import { Face, type TFaceTheme } from '@/components/face';
-import { useSurfaceLine } from '@/components/pip/mini-clock';
+import { Face, type TFaceId, type TFaceTheme } from '@/components/face';
+import { SURFACE_GLASS, SurfacePill, useSurfaceLine } from '@/components/pip/mini-clock';
 import { cn } from '@/lib/utils';
-import { digits, TONE_TEXT, type ISurfaceView } from '@/lib/surfaces/session';
-import { WIDGET_PRESETS } from '@/lib/surfaces/widgets';
+import { shortDuration, type ISurfaceView } from '@/lib/surfaces/session';
 
-const TILE = 'rounded-[26px] bg-card/85 shadow-[0_0_0_1px_var(--border)]';
+const TILE = cn('box-border h-[170px] rounded-[28px]', SURFACE_GLASS);
 
 function useWidgetLines() {
-  const t = useTranslations('surfaces.widgets');
+  const t = useTranslations('surfaces');
   const line = useSurfaceLine();
   return {
-    small: (v: ISurfaceView) => (v.awake ? (v.until ? t('small', { time: v.until }) : t('smallNoEnd')) : line(v)),
-    wide: (v: ISurfaceView) => (v.awake ? (v.until ? t('awakeUntil', { time: v.until }) : t('awakeNoEnd')) : line(v)),
+    pill: (v: ISurfaceView) =>
+      v.awake && !v.indef ? t('widgets.left', { dur: shortDuration(v.remain, t) }) : t(`status.${v.label}`),
+    ends: (v: ISurfaceView) => (v.awake && v.until ? t('widgets.ends', { time: v.until }) : line(v)),
   };
 }
 
-// Small widget: the Ring face over the end time.
-export function WidgetSmall({ view, theme, className }: { view: ISurfaceView; theme: TFaceTheme; className?: string }) {
-  const lines = useWidgetLines();
+function FaceSlot(p: { view: ISurfaceView; theme: TFaceTheme; face: TFaceId }) {
   return (
-    <div
-      data-slot="widget-small"
-      className={cn(TILE, 'flex flex-col items-center justify-center gap-1 backdrop-blur-[10px]', className)}
-    >
-      <Face
-        face="ring"
-        theme={theme}
-        state={view.face}
-        size={110}
-        remain={view.remain}
-        total={view.total || 3600}
-        nowSec={view.nowSec}
-        indef={view.indef}
-        bare
-      />
-      <span className={cn('text-[12px] font-semibold', TONE_TEXT[view.tone])}>{lines.small(view)}</span>
-    </div>
+    <Face
+      face={p.face}
+      theme={p.theme}
+      state={p.view.face}
+      size={130}
+      remain={p.view.remain}
+      total={p.view.total || 3600}
+      nowSec={p.view.nowSec}
+      indef={p.view.indef}
+      bare
+      motion="auto"
+    />
   );
 }
 
-// Presets widget: three starts, each a tap away.
-export function WidgetPresets({ onPreset, className }: { onPreset?: (p: TPresetId) => void; className?: string }) {
-  const t = useTranslations('surfaces.widgets');
-  return (
-    <div
-      data-slot="widget-presets"
-      role="group"
-      aria-label={t('presetsLabel')}
-      className={cn(TILE, 'flex flex-col justify-between p-4', className)}
-    >
-      <span className="text-[12px] text-muted-foreground-strong">{t('presets')}</span>
-      {WIDGET_PRESETS.map((p) => {
-        const body = (
-          <>
-            <span>{t(p.key)}</span>
-            <span className="font-mono text-[12px] text-muted-foreground-strong">{t(p.len)}</span>
-          </>
-        );
-        const row = 'flex items-center justify-between text-[14px] font-semibold';
-        return onPreset ? (
-          <button
-            key={p.key}
-            type="button"
-            className={cn(
-              row,
-              'relative min-h-6 cursor-pointer rounded-xs text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-            )}
-            onClick={() => onPreset(p.preset)}
-          >
-            {body}
-          </button>
-        ) : (
-          <span key={p.key} className={row}>
-            {body}
-          </span>
-        );
-      })}
-    </div>
-  );
-}
-
-function WideAction({
-  children,
-  onClick,
-  label,
-  className,
-}: {
-  children: ReactNode;
-  onClick?: (() => void) | undefined;
-  label?: string;
-  className: string;
-}) {
-  const look = cn('flex h-10 items-center rounded-[12px] px-4 text-[14px]', className);
-  return onClick ? (
-    <button
-      type="button"
-      aria-label={label}
-      onClick={onClick}
-      className={cn(
-        look,
-        'cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-      )}
-    >
-      {children}
-    </button>
-  ) : (
-    <span className={look}>{children}</span>
-  );
-}
-
-// Wide widget: the session label, big digits, the end time, +15 min and Stop.
-export function WidgetWide({
+// Large widget: the face beside the status pill, the preset name and when it ends; a tap adds 15 minutes.
+export function WidgetLarge({
   view,
+  theme,
+  face = 'ring',
   label,
   onExtend,
-  onStop,
-  onStart,
   className,
 }: {
   view: ISurfaceView;
+  theme: TFaceTheme;
+  face?: TFaceId;
   label?: string;
   onExtend?: () => void;
-  onStop?: () => void;
-  onStart?: () => void;
   className?: string;
 }) {
   const t = useTranslations('surfaces.widgets');
   const lines = useWidgetLines();
-  return (
-    <div data-slot="widget-wide" className={cn(TILE, 'col-span-2 flex items-center gap-[14px] px-[18px]', className)}>
-      <span className="flex flex-1 flex-col gap-1">
-        <span className="text-[12px] text-muted-foreground-strong">{label || t('session')}</span>
-        <span className="text-[40px] font-bold tracking-[-0.03em]">{view.indef ? '∞' : digits(view.remain)}</span>
-        <span className={cn('text-[13px] font-semibold', TONE_TEXT[view.tone])}>{lines.wide(view)}</span>
+  const body = (
+    <>
+      <span className="flex-none">
+        <FaceSlot view={view} theme={theme} face={face} />
       </span>
-      <span className="flex flex-col gap-2">
-        {view.live ? (
-          <>
-            {view.canExtend ? (
-              <WideAction
-                onClick={onExtend}
-                label={t('extendLabel')}
-                className="bg-primary font-bold text-primary-foreground"
-              >
-                {t('extend')}
-              </WideAction>
-            ) : null}
-            <WideAction onClick={onStop} className="border border-input font-semibold text-foreground">
-              {t('stop')}
-            </WideAction>
-          </>
-        ) : (
-          <WideAction onClick={onStart} className="bg-primary font-bold text-primary-foreground">
-            {t('start')}
-          </WideAction>
-        )}
+      <span className="flex min-w-0 flex-col gap-1.5 text-left">
+        <SurfacePill view={view} text={lines.pill(view)} />
+        <strong className="truncate font-display text-[22px] font-bold tracking-[-0.02em]">{label || t('name')}</strong>
+        <span className="text-[13px] text-muted-foreground-strong">{lines.ends(view)}</span>
       </span>
+    </>
+  );
+  const look = cn(TILE, 'col-span-2 flex items-center gap-3.5 p-4 text-foreground', className);
+  return view.canExtend && onExtend ? (
+    <button
+      type="button"
+      data-slot="widget-large"
+      onClick={onExtend}
+      aria-label={t('extendLabel')}
+      className={cn(
+        look,
+        'cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring',
+      )}
+    >
+      {body}
+    </button>
+  ) : (
+    <div data-slot="widget-large" className={look}>
+      {body}
     </div>
   );
 }
 
-// The home-screen frame the widgets board draws them on: a phone wallpaper with the two-column widget grid.
+// Small widget: the face over one status word.
+export function WidgetSmall({
+  view,
+  theme,
+  face = 'halo',
+  className,
+}: {
+  view: ISurfaceView;
+  theme: TFaceTheme;
+  face?: TFaceId;
+  className?: string;
+}) {
+  const t = useTranslations('surfaces');
+  return (
+    <div data-slot="widget-small" className={cn(TILE, 'flex flex-col items-center justify-center gap-1', className)}>
+      <FaceSlot view={view} theme={theme} face={face} />
+      <span className="text-[12px] text-muted-foreground-strong">{t(`status.${view.label}`)}</span>
+    </div>
+  );
+}
+
+// Quick start: one violet button that keeps the screen awake for an hour.
+export function WidgetQuickStart({ onStart, className }: { onStart?: () => void; className?: string }) {
+  const t = useTranslations('surfaces.widgets');
+  const disc = (
+    <span
+      aria-hidden="true"
+      className="flex size-16 items-center justify-center rounded-full bg-[linear-gradient(180deg,#B39BFF,#7C5CFF)] shadow-[0_10px_26px_rgba(124,92,255,.5)]"
+    >
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="#0B0718">
+        <path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z" />
+      </svg>
+    </span>
+  );
+  const look = cn(TILE, 'flex flex-col items-center justify-center gap-2.5 text-foreground', className);
+  const text = <span className="text-[13px] font-semibold">{t('quick')}</span>;
+  return onStart ? (
+    <button
+      type="button"
+      data-slot="widget-quick"
+      onClick={onStart}
+      aria-label={t('quickLabel')}
+      className={cn(
+        look,
+        'cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring',
+      )}
+    >
+      {disc}
+      {text}
+    </button>
+  ) : (
+    <div data-slot="widget-quick" className={look}>
+      {disc}
+      {text}
+    </div>
+  );
+}
+
+const APPS = [
+  'linear-gradient(135deg,#FF8FB1,#FF6A3D)',
+  'linear-gradient(135deg,#7CBBFF,#1C64B8)',
+  'linear-gradient(135deg,#FFC53D,#E08A00)',
+  'linear-gradient(135deg,#C1B1FE,#6633F5)',
+];
+
+// The phone home screen the widgets board draws them on: wallpaper, status bar, the widget grid and an app row.
 export function WidgetScreen({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div
       data-slot="widget-screen"
       className={cn(
-        'dark relative grid h-[520px] w-full max-w-[420px] grid-cols-2 auto-rows-[158px] gap-[18px] overflow-hidden rounded-[44px] px-[22px] py-[34px] text-foreground shadow-[0_0_0_8px_var(--secondary)]',
-        'bg-[radial-gradient(circle_at_20%_15%,var(--accent),transparent_50%),radial-gradient(circle_at_80%_85%,var(--primary-soft),transparent_50%),var(--background)]',
+        'dark relative box-border h-[844px] w-full max-w-[390px] overflow-hidden rounded-[48px] border border-white/12 text-foreground',
+        'bg-[radial-gradient(120%_80%_at_20%_10%,#1B3A2E,transparent_60%),radial-gradient(120%_80%_at_90%_90%,#2A1E5C,transparent_60%),#0A0C14]',
         className,
       )}
     >
-      {children}
+      <div aria-hidden="true" className="flex justify-between px-[30px] py-4 text-[15px] font-semibold">
+        <span>11:23</span>
+        <span>●●● ▮</span>
+      </div>
+      <div className="grid grid-cols-2 gap-[22px] px-6 py-[18px]">{children}</div>
+      <div aria-hidden="true" className="flex justify-between px-[30px]">
+        {APPS.map((bg) => (
+          <span key={bg} className="size-[58px] rounded-[16px]" style={{ background: bg }} />
+        ))}
+      </div>
     </div>
   );
 }
