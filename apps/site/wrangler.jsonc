@@ -1,6 +1,10 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "awaketab-site",
+  "routes": [
+    { "pattern": "awaketab.com", "custom_domain": true },
+    { "pattern": "www.awaketab.com", "custom_domain": true },
+  ],
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
@@ -26,9 +30,10 @@
   "env": {
     "preview": {
       "name": "awaketab-site-preview",
+      "routes": [{ "pattern": "play.awaketab.com", "custom_domain": true }],
       "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "awaketab-site-preview" }],
       "vars": {
-        "PUBLIC_SITE_URL": "https://awaketab.com",
+        "PUBLIC_SITE_URL": "https://play.awaketab.com",
         "PUBLIC_POLAR_SERVER": "sandbox",
       },
       "kv_namespaces": [{ "binding": "LICENSES", "id": "e32aa55d1e52487794f44e342ade04c8" }],

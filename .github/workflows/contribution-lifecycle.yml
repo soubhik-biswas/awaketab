@@ -28,7 +28,7 @@ concurrency:
 
 jobs:
   update:
-    if: github.repository_owner == 'SoubhikBiswas-gitHub'
+    if: github.repository_owner == 'soubhik-biswas'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -5,7 +5,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-OWNER = 'SoubhikBiswas-gitHub'
+OWNER = 'soubhik-biswas'
 STAGES = {
     'needs-information': 'Needs information',
     'ready': 'Ready',
@@ -102,7 +102,7 @@ def deployment_status(event_name, payload):
     if event_name == 'check_run':
         check = payload['check_run']
         if (check.get('app', {}).get('slug') != 'cloudflare-workers-and-pages'
-                or check['name'] != 'Cloudflare Pages'
+                or check['name'] not in ('Cloudflare Pages', 'Workers Builds: awaketab-site')
                 or check.get('check_suite', {}).get('head_branch') != 'main'):
             return None
         if check['status'] != 'completed':

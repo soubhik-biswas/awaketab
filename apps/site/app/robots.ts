@@ -4,6 +4,7 @@ import { SITE } from '@/lib/routes';
 
 // The picture-in-picture popup, the embed iframe apps and the API stay out of search (docs/00 §7).
 export default function robots(): MetadataRoute.Robots {
+  if (process.env.NEXT_PUBLIC_DEPLOY_ENV === 'play') return { rules: { userAgent: '*', disallow: '/' } };
   return {
     rules: {
       userAgent: '*',
