@@ -33,7 +33,7 @@ function Drawing({ id, m, onDrawn }: { id: TFaceId; m: TFaceModel; onDrawn: (id:
   return Draw ? <Draw m={m} /> : null;
 }
 
-// One clock face: any of the 46 drawings on the 360 × 360 artboard, scaled to size, with the status caption.
+// One clock face: any of the 46 drawings on the 360 × 315 artboard, scaled to size, with the status caption unless bare.
 export function Face(props: IFaceProps) {
   const want: TFaceId = toFaceId(props.face);
   const reduced = useReducedMotion();

@@ -1,9 +1,11 @@
 export { Face } from './face';
 export { FaceGrid, type IFaceGridProps } from './face-grid';
 export {
+  ART_H,
+  ART_W,
   clock,
-  FACE_DEFAULTS,
   FACE_IDS,
+  FACE_PALETTE,
   FACE_STATES,
   faceModel,
   isFaceId,
