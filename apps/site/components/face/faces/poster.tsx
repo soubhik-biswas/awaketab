@@ -15,11 +15,11 @@ export default function Poster({ m }: IDrawProps) {
       <span
         style={{
           position: 'absolute',
-          left: -6,
-          top: -36,
+          left: 18,
+          top: 4,
           fontFamily: DISPLAY,
-          fontStretch: '125%',
-          fontSize: big.length > 3 ? 170 : 250,
+          fontStretch: '112%',
+          fontSize: big.length > 3 ? 120 : 196,
           fontWeight: 900,
           letterSpacing: '-0.06em',
           lineHeight: 1,

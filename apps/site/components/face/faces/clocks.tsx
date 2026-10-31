@@ -41,15 +41,21 @@ export const digitHands = (d: number): readonly (readonly number[])[] => {
     return on.length === 0 ? [BLANK, BLANK] : on.length === 1 ? [on[0] ?? 0, on[0] ?? 0] : on;
   });
 };
+const BLANK_DIGIT = JOIN.map(() => [BLANK, BLANK] as const);
+
+// The four digits' hands; a leading zero stays blank, so one hour reads "1:00", never "01:00".
+export const clockHands = (four: readonly number[]): readonly (readonly (readonly number[])[])[] =>
+  four.map((d, i) => (i === 0 && d === 0 ? BLANK_DIGIT : digitHands(d)));
+
 const BASE_X = [14, 95, 192, 273];
 const GROUND = {
   light: 'linear-gradient(180deg, #FFFFFF, #F1F1F7)',
-  dark: 'linear-gradient(180deg, #131B30, #0A0F1C)',
+  dark: 'linear-gradient(180deg, #14161D, #0A0B10)',
   oled: '#000000',
 };
 const MINI = {
   light: 'radial-gradient(circle at 50% 30%, #FFFFFF, #E9E9F1)',
-  dark: 'radial-gradient(circle at 50% 30%, #1E2844, #10172A)',
+  dark: 'radial-gradient(circle at 50% 30%, #1F222C, #101218)',
   oled: '#05070C',
 };
 
@@ -95,8 +101,8 @@ export default function Clocks({ m }: IDrawProps) {
         }}
       />
       <Kicker m={m} style={{ position: 'absolute', left: 0, top: 52, width: 360, textAlign: 'center' }} />
-      {m.four.map((d, di) =>
-        digitHands(d).map((hands, ci) => {
+      {clockHands(m.four).map((digit, di) =>
+        digit.map((hands, ci) => {
           const blank = hands.every((deg) => deg === BLANK);
           const hc = blank ? t.ink2 : di < 2 ? t.ink : mc1;
           const op = blank ? 0.16 : 1;
