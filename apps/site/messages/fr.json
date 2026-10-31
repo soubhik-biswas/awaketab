@@ -140,6 +140,11 @@
       "band": {
         "title": "Keep the screen on while you work in other tabs"
       }
+    },
+    "home": {
+      "title": "AwakeTab — Gardez cet écran allumé",
+      "description": "Gardez l’écran allumé en un clic. Une horloge calme affiche le temps restant. 46 cadrans, six fonds animés, gratuit : rien à installer, aucun compte.",
+      "ogAlt": "Horloge AwakeTab affichant 38:12 restantes"
     }
   },
   "tool": {
@@ -174,7 +179,6 @@
       "word": "Words",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "matrix": "LED",
       "prev": "Previous face",
       "next": "Next face"
     },
@@ -803,8 +807,601 @@
       "tagNew": "Nouveau",
       "tagHot": "Populaire",
       "tagPick": "Coup de cœur",
-      "tagNight": "Nuit"
-    }
+      "tagNight": "Nuit",
+      "free": "Gratuit",
+      "unit": {
+        "h": "h",
+        "min": "min",
+        "hour": "heure"
+      },
+      "len": {
+        "0": "15 min",
+        "1": "30 min",
+        "2": "1 heure",
+        "3": "2 heures",
+        "4": "Sans fin"
+      },
+      "top": {
+        "search": "Rechercher",
+        "searchLabel": "Recherche et commandes",
+        "vibe": "Ambiance",
+        "faces": "Cadrans",
+        "recents": "Récents",
+        "settings": "Paramètres"
+      },
+      "pill": {
+        "idle": "Écran non maintenu",
+        "starting": "Demande au navigateur…",
+        "awake": "Allumé · jusqu’à {time}",
+        "awakeOpen": "Allumé · jusqu’à l’arrêt",
+        "fallback": "Allumé par vidéo · jusqu’à {time}",
+        "fallbackOpen": "Allumé par vidéo · jusqu’à l’arrêt",
+        "paused": "En pause · encore {dur}",
+        "needsyou": "Touchez pour reprendre · l’onglet était masqué",
+        "blocked": "Pas allumé · {reason}",
+        "unsupported": "Pas de wake lock dans ce navigateur",
+        "ended": "C’est l’heure · en veille depuis {time}"
+      },
+      "reason": {
+        "battery": "économiseur de batterie",
+        "unknown": "le navigateur a refusé",
+        "insecure": "page sécurisée requise",
+        "policy": "non autorisé ici"
+      },
+      "set": {
+        "h1a": "Gardez cet écran",
+        "h1b": "allumé.",
+        "howLong": "Combien de temps",
+        "cta": "Garder allumé · {len}",
+        "noEnd": "sans fin",
+        "noEndCap": "Sans fin",
+        "starting": "Démarrage…",
+        "note": "Se termine à {time} · rien à installer, aucun compte",
+        "noteOpen": "Tourne jusqu’à ce que vous l’arrêtiez · rien à installer, aucun compte"
+      },
+      "stage": {
+        "label": "Minuteur"
+      },
+      "face": {
+        "aria": "Cadran : {face}",
+        "ready": "PRÊT",
+        "left": "RESTANT",
+        "ends": "Se termine à {time}"
+      },
+      "first": {
+        "kicker": "PREMIÈRE SESSION TERMINÉE · {dur}",
+        "h": "Comment ça s’est passé ?"
+      },
+      "rate": {
+        "love": "J’ai adoré",
+        "good": "Ça a marché",
+        "bad": "Quelque chose a planté"
+      },
+      "dock": {
+        "label": "Commandes de la session",
+        "addTime": "Ajouter du temps",
+        "add": "+{n} {unit}",
+        "addAria": "Ajouter {dur}",
+        "pause": "Pause",
+        "resume": "Reprendre",
+        "again": "Recommencer",
+        "fix": "Voir la solution",
+        "video": "Utiliser la vidéo",
+        "stop": "Arrêter",
+        "stopAria": "Arrêter et laisser l’écran se mettre en veille",
+        "faceAria": "Cadran : {face}. Changer de cadran",
+        "full": "Plein écran",
+        "exitFull": "Quitter le plein écran"
+      },
+      "hint": {
+        "move": "Bougez le pointeur pour les commandes",
+        "tap": "Touchez l’écran pour les commandes",
+        "show": "Afficher les commandes"
+      },
+      "banner": {
+        "blocked": {
+          "battery": {
+            "t": "L’économiseur de batterie bloque le wake lock.",
+            "d": "Votre écran peut quand même s’éteindre.",
+            "btn": "Voir la solution"
+          },
+          "unknown": {
+            "t": "Le navigateur a refusé le wake lock.",
+            "d": "Votre écran peut quand même s’éteindre.",
+            "btn": "Voir la solution"
+          },
+          "insecure": {
+            "t": "Le wake lock exige une page sécurisée.",
+            "d": "Votre écran peut quand même s’éteindre.",
+            "btn": "Voir la solution"
+          },
+          "policy": {
+            "t": "Cette page n’autorise pas le wake lock.",
+            "d": "Votre écran peut quand même s’éteindre.",
+            "btn": "Voir la solution"
+          }
+        },
+        "unsupported": {
+          "t": "Ce navigateur n’a pas de wake lock.",
+          "d": "Une vidéo silencieuse et invisible peut garder l’écran allumé à la place.",
+          "btn": "Utiliser la vidéo"
+        },
+        "fallback": {
+          "t": "Allumé grâce à une vidéo silencieuse.",
+          "d": "Fonctionne dans ce navigateur ; gardez cet onglet visible.",
+          "btn": ""
+        },
+        "needsyou": {
+          "t": "L’onglet était masqué, le navigateur a lâché prise.",
+          "d": "Un toucher et l’écran reste de nouveau allumé.",
+          "btn": "Reprendre"
+        },
+        "conflict": {
+          "t": "Un autre onglet garde déjà cet écran allumé.",
+          "d": "Un seul suffit.",
+          "btn": "Prendre le relais"
+        },
+        "offline": {
+          "t": "Vous êtes hors ligne.",
+          "d": "Le minuteur continue ; la synchronisation attend votre retour.",
+          "btn": ""
+        },
+        "update": {
+          "t": "Une nouvelle version est prête.",
+          "d": "Votre session continue après le rechargement.",
+          "btn": "Recharger"
+        }
+      },
+      "toast": {
+        "extended": "{dur} ajoutées · désormais jusqu’à {time}",
+        "undo": "Annuler"
+      },
+      "nudge": {
+        "h": "Vous l’avez fait vôtre.",
+        "d": "{sessions, plural, one {# session} other {# sessions}} et {presets, plural, one {# préréglage} other {# préréglages}}. Vous utilisez plusieurs écrans ? Pro les garde tous synchronisés.",
+        "try": "Essayer Pro gratuitement",
+        "later": "Pas maintenant"
+      },
+      "tab": {
+        "left": "encore {t}",
+        "awake": "Allumé",
+        "paused": "En pause",
+        "blocked": "Pas allumé",
+        "up": "C’est l’heure"
+      },
+      "an": {
+        "start": "Écran allumé jusqu’à {time}.",
+        "startOpen": "Écran allumé jusqu’à ce que vous l’arrêtiez.",
+        "extend": "{dur} ajoutées. Désormais jusqu’à {time}.",
+        "low": "Encore 5 minutes. Ajouter 15 minutes ?",
+        "hidden": "L’onglet était masqué, le navigateur a lâché prise.",
+        "refused": "Pas allumé — {reason}. Voir la solution.",
+        "paused": "En pause. {dur} conservées.",
+        "ended": "C’est l’heure. L’écran peut se mettre en veille.",
+        "face": "Cadran : {face}."
+      },
+      "panel": {
+        "close": "Fermer",
+        "recents": {
+          "t": "Récents",
+          "d": "Préréglages et sessions passées"
+        },
+        "settings": {
+          "t": "Paramètres",
+          "d": "Enregistrés sur cet appareil"
+        },
+        "help": {
+          "t": "Aide et solutions",
+          "d": "N’apparaît que si quelque chose ne va pas"
+        },
+        "studio": {
+          "t": "Atelier de cadrans",
+          "d": "Gratuit · personnalisez n’importe quel cadran"
+        },
+        "feedback": {
+          "t": "Avis",
+          "d": "Vos premières sessions orientent ce que nous construisons ensuite"
+        },
+        "vibes": {
+          "t": "Ambiance",
+          "d": "Un fond animé derrière votre horloge"
+        },
+        "share": {
+          "t": "Partager cette configuration",
+          "d": "Envoyez une horloge prête à démarrer"
+        },
+        "devices": {
+          "t": "Vos écrans",
+          "d": "Pro · synchronisation entre appareils"
+        },
+        "sound": {
+          "t": "Son d’ambiance",
+          "d": "Gratuit · composez votre propre fond sonore"
+        },
+        "clear": {
+          "t": "Effacer l’historique",
+          "d": "Sur cet appareil uniquement"
+        },
+        "language": {
+          "t": "Langue",
+          "d": "Texte et format de l’heure"
+        },
+        "pro": {
+          "t": "AwakeTab Pro",
+          "d": "Facultatif · pour plusieurs écrans"
+        },
+        "proDone": {
+          "t": "Bienvenue dans Pro",
+          "d": "Essai commencé"
+        },
+        "plan": {
+          "t": "Gérer l’abonnement",
+          "d": "Pro · annuel"
+        }
+      },
+      "faces": {
+        "title": "Cadrans",
+        "sub": "Touchez-en un : il s’applique aussitôt derrière ce panneau. Les {n} sont gratuits.",
+        "search": "Rechercher parmi {n} cadrans",
+        "close": "Fermer les cadrans",
+        "collections": "Collections",
+        "label": "Cadran",
+        "featuredTag": "À la une · {tag}",
+        "none": "Aucun cadran nommé « {q} ».",
+        "filter": {
+          "featured": "À la une",
+          "digital": "Numériques",
+          "analog": "Analogiques",
+          "ambient": "Ambiance",
+          "all": "Tous"
+        }
+      },
+      "recents": {
+        "week": "CETTE SEMAINE",
+        "awake": "{dur} allumé",
+        "streak": "{n} jours d’affilée",
+        "longest": "votre plus longue série",
+        "noStreak": "Vos sessions apparaîtront ici",
+        "hours": "Heures allumé",
+        "chart": "Heures allumé chaque jour de cette semaine",
+        "presets": "Préréglages",
+        "emptyH": "Aucun préréglage pour l’instant",
+        "emptyD": "Lancez une session qui vous plaît, puis enregistrez-la ici. Un toucher la retrouve : durée, cadran et ambiance.",
+        "save": "Enregistrer comme préréglage",
+        "saved": "Enregistré comme préréglage : {name}",
+        "history": "Historique",
+        "this": "Cette session",
+        "sinceNow": "{time} – maintenant",
+        "awakeBadge": "Allumé",
+        "untitled": "Session {face}",
+        "today": "Aujourd’hui · {date}",
+        "yesterday": "Hier · {date}",
+        "note": "L’historique reste sur cet appareil. Effacez-le quand vous voulez dans les Paramètres."
+      },
+      "settings": {
+        "appearance": "Apparence",
+        "theme": "Thème",
+        "themes": {
+          "auto": "Système",
+          "light": "Clair",
+          "dark": "Sombre",
+          "oled": "OLED"
+        },
+        "clock": "Horloge",
+        "h12": "Horloge sur 12 heures",
+        "h12D": "Affiche 11:42 AM au lieu de 11:42",
+        "secs": "Afficher les secondes",
+        "secsD": "Sur le cadran et dans le titre de l’onglet",
+        "dim": "Atténuer la nuit",
+        "dimD": "Lueur plus douce après 22:00",
+        "sound": "Son",
+        "chime": "Carillon à la fin",
+        "chimeD": "Sonne une fois quand le temps est écoulé",
+        "chimes": {
+          "two": "Deux notes",
+          "bell": "Cloche",
+          "off": "Désactivé"
+        },
+        "mixer": "Mixeur d’ambiance",
+        "mixerD": "Pluie, café, feu et bruit brun",
+        "studio": "Atelier de cadrans",
+        "studioD": "Votre propre couleur d’accent et votre lueur",
+        "more": "Plus",
+        "ambient": "Son d’ambiance",
+        "ambientD": "Pluie, café, feu, bruit brun",
+        "language": "Langue",
+        "languageD": "Change le texte et le format de l’heure",
+        "share": "Partager cette configuration",
+        "shareD": "Un lien qui s’ouvre prêt à démarrer",
+        "clear": "Effacer l’historique",
+        "clearD": "Les préréglages et les paramètres restent",
+        "account": "Compte",
+        "signedOut": "Non connecté",
+        "signedOutD": "Tout fonctionne sans compte. Connectez-vous uniquement pour synchroniser Pro.",
+        "signIn": "Se connecter",
+        "signedIn": "Connecté avec {via}",
+        "via": {
+          "google": "Google",
+          "github": "GitHub",
+          "passkey": "une clé d’accès"
+        },
+        "proOn": "Pro est activé · synchronisation entre vos écrans",
+        "freeOn": "Tout fonctionne. Pro ajoute seulement la synchronisation de plusieurs écrans.",
+        "manage": "Gérer l’abonnement",
+        "feedback": "Envoyer un avis",
+        "feedbackD": "Deux touchers. Nous lisons chaque message.",
+        "proCard": "Plusieurs écrans ? Gardez-les synchronisés.",
+        "proCardD": "Tout ce qui précède est gratuit, pour toujours. Pro s’adresse à ceux qui utilisent plusieurs écrans : une configuration synchronisée sur chaque appareil, plus une aide prioritaire. {price} par an.",
+        "proCardOn": "Pro est activé. La synchronisation est prête.",
+        "proCardOnD": "Ouvrez AwakeTab sur un autre écran et connectez-vous de la même façon ; votre configuration suit.",
+        "seePro": "Découvrir Pro"
+      },
+      "help": {
+        "checked": "Vérifié à {time}.",
+        "video": "Utiliser la vidéo de secours",
+        "again": "Vérifier à nouveau",
+        "battery": {
+          "h": "Le navigateur a refusé",
+          "d": "L’économiseur de batterie semble activé (batterie faible et non branchée), et ce navigateur ignore alors les demandes pour garder l’écran allumé.",
+          "s1": "Branchez l’appareil ou désactivez l’économiseur",
+          "s1d": "Le wake lock revient tout seul ; nous continuons de vérifier.",
+          "s2": "Ou utilisez la vidéo de secours",
+          "s2d": "Une vidéo silencieuse et invisible garde la plupart des écrans allumés.",
+          "s3": "L’écran s’assombrit encore ?",
+          "s3d": "L’application de bureau peut aussi empêcher la mise en veille du système."
+        },
+        "unknown": {
+          "h": "Le navigateur a refusé",
+          "d": "Ce navigateur a refusé la demande sans dire pourquoi. C’est souvent un réglage d’énergie ou de batterie.",
+          "s1": "Branchez l’appareil ou désactivez l’économiseur",
+          "s1d": "Touchez ensuite Vérifier à nouveau ; cela prend une seconde.",
+          "s2": "Ou utilisez la vidéo de secours",
+          "s2d": "Une vidéo silencieuse et invisible garde la plupart des écrans allumés.",
+          "s3": "L’écran s’assombrit encore ?",
+          "s3d": "L’application de bureau peut aussi empêcher la mise en veille du système."
+        },
+        "insecure": {
+          "h": "Cette page n’est pas sécurisée",
+          "d": "Les navigateurs n’autorisent le wake lock que sur les pages sécurisées (https).",
+          "s1": "Ouvrez awaketab.com en https",
+          "s1d": "Vérifiez que l’adresse commence par https://.",
+          "s2": "Ou utilisez la vidéo de secours",
+          "s2d": "Une vidéo silencieuse et invisible garde la plupart des écrans allumés."
+        },
+        "policy": {
+          "h": "Non autorisé sur cette page",
+          "d": "La page qui intègre AwakeTab n’autorise pas le wake lock.",
+          "s1": "Ouvrez AwakeTab dans son propre onglet",
+          "s1d": "awaketab.com fonctionne de la même façon, avec le wake lock autorisé.",
+          "s2": "Ou utilisez la vidéo de secours",
+          "s2d": "Une vidéo silencieuse et invisible garde la plupart des écrans allumés."
+        }
+      },
+      "studio": {
+        "accent": "Couleur d’accent",
+        "glow": "Lueur de la pièce",
+        "note": "Les couleurs d’état ne changent jamais (la pause reste ambre, le blocage reste rouge) : l’horloge dit toujours la vérité.",
+        "save": "Enregistrer comme mon cadran",
+        "reset": "Rétablir par défaut",
+        "swatch0": "Volt",
+        "swatch1": "Citron vert",
+        "swatch2": "Ambre",
+        "swatch3": "Ciel",
+        "swatch4": "Lilas",
+        "swatch5": "Rose",
+        "swatch6": "Braise"
+      },
+      "vibes": {
+        "label": "Ambiance de fond",
+        "motion": "Mouvement",
+        "still": "Immobile",
+        "calm": "Calme",
+        "lively": "Vif",
+        "note": "Les ambiances se mettent en pause avec l’économiseur de batterie et le mouvement réduit. L’horloge reste toujours lisible."
+      },
+      "vibe": {
+        "aurora": {
+          "n": "Aurore",
+          "d": "Une douce lumière boréale, à la dérive"
+        },
+        "night": {
+          "n": "Ciel nocturne",
+          "d": "Des étoiles, une lune, parfois une étoile filante"
+        },
+        "rain": {
+          "n": "Pluie sur la vitre",
+          "d": "Une fenêtre calme sous la pluie"
+        },
+        "sunset": {
+          "n": "Coucher de soleil",
+          "d": "Une lumière chaude pour le soir"
+        },
+        "lava": {
+          "n": "Lampe à lave",
+          "d": "Des couleurs vives qui fondent lentement"
+        },
+        "calm": {
+          "n": "Calme",
+          "d": "Seule l’horloge bouge"
+        }
+      },
+      "sound": {
+        "playing": "Lecture : {name}",
+        "ready": "Prêt : {name}",
+        "off": "Désactivé · {name}",
+        "silent": "Toutes les couches sont coupées",
+        "fades": "S’estompe à la fin de la session",
+        "waits": "Joue tant que l’écran est allumé",
+        "preview": "C’était un aperçu de cinq secondes ; le son joue tant que l’écran est allumé",
+        "turnOn": "Jouer le son d’ambiance quand l’écran est allumé",
+        "turnOff": "Couper le son d’ambiance",
+        "rain": "Pluie",
+        "cafe": "Café",
+        "fire": "Cheminée",
+        "brown": "Bruit brun",
+        "mixes": "Mélanges",
+        "mix": {
+          "rainy": "Café pluvieux",
+          "focus": "Concentration",
+          "fire": "Coin du feu",
+          "off": "Désactivé",
+          "custom": "Votre mélange"
+        }
+      },
+      "feedback": {
+        "how": "Comment ça s’est passé ?",
+        "note": "Quelque chose à nous dire ? (facultatif)",
+        "placeholder": "Ce qui a marché, ce qui n’a pas marché, ce que vous aimeriez",
+        "topics": "Sujets",
+        "topic": {
+          "faces": "Cadrans",
+          "ease": "Facilité d’usage",
+          "battery": "Batterie",
+          "other": "Autre chose"
+        },
+        "privacy": "Envoyé anonymement avec le type de navigateur et d’appareil. Vos réponses orientent ce que nous construisons ensuite.",
+        "send": "Envoyer un avis",
+        "sending": "Envoi…",
+        "retry": "Réessayer",
+        "later": "Plus tard",
+        "failed": "L’envoi a échoué : vérifiez votre connexion et réessayez. Rien n’est perdu.",
+        "thanks": "Merci, nous lisons chaque message."
+      },
+      "share": {
+        "card": "S’ouvre prêt à démarrer : un toucher et c’est parti.",
+        "link": "Lien",
+        "copy": "Copier",
+        "copied": "Copié",
+        "include": "Inclure",
+        "look": "Cadran et ambiance",
+        "lookD": "S’ouvre avec le même style",
+        "length": "Durée",
+        "lengthD": "Lance le même minuteur",
+        "start": "Démarrer tout de suite",
+        "startOn": "Activé : démarre dès l’ouverture",
+        "startOff": "Désactivé : la personne touche Garder allumé",
+        "note": "Les liens ne contiennent jamais votre nom, votre historique, le nom de vos appareils ni votre position.",
+        "copyLink": "Copier le lien",
+        "via": "Partager via…"
+      },
+      "clear": {
+        "h": "Effacer {n, plural, one {# session} other {# sessions}} ?",
+        "d": "L’historique et votre série de la semaine seront supprimés sur cet appareil. Les préréglages, cadrans et paramètres restent. Action irréversible.",
+        "type": "Tapez CLEAR pour confirmer",
+        "note": "Le bouton se déverrouille quand les cinq lettres correspondent.",
+        "go": "Effacer {n, plural, one {# session} other {# sessions}}",
+        "keep": "Garder l’historique",
+        "done": "Historique effacé sur cet appareil"
+      },
+      "lang": {
+        "en": "Anglais",
+        "de": "Allemand",
+        "ja": "Japonais",
+        "zh": "Chinois",
+        "hi": "Hindi",
+        "es": "Espagnol",
+        "fr": "Français",
+        "pt-br": "Portugais (Brésil)",
+        "note": "L’heure suit la langue : 11:42 AM en anglais, 11:42 en allemand, 午前11:42 en japonais."
+      },
+      "pro": {
+        "kicker": "AWAKETAB PRO",
+        "h1a": "Une configuration.",
+        "h1b": "Tous les écrans.",
+        "d": "Tout ce que vous utilisez aujourd’hui reste gratuit. Pro ajoute la synchronisation pour ceux qui ont plus d’un écran.",
+        "plan": "Formule",
+        "yearly": "Annuelle",
+        "yearlyPrice": "{price} / an",
+        "yearlyD": "Meilleur prix · 14 jours gratuits",
+        "monthly": "Mensuelle",
+        "monthlyPrice": "{price} / mois",
+        "monthlyD": "Résiliable à tout moment",
+        "save": "{n} % D’ÉCONOMIE",
+        "f1": "Une configuration synchronisée sur 5 écrans maximum",
+        "f2": "Démarrez ou arrêtez n’importe quel écran depuis un seul",
+        "f3": "Historique sur tous les appareils, avec export",
+        "f4": "Aide prioritaire par une vraie personne",
+        "f5": "Accès anticipé aux nouveaux cadrans et ambiances",
+        "note": "14 jours gratuits, puis {price} par an. Résiliable à tout moment dans Paramètres → Gérer l’abonnement. Paiement sécurisé par [PAYMENT PROVIDER].",
+        "trial": "Commencer l’essai gratuit de 14 jours",
+        "later": "Plus tard"
+      },
+      "proDone": {
+        "h1a": "Pro est activé.",
+        "h1b": "Merci.",
+        "d": "Votre essai de 14 jours a commencé. La synchronisation est prête : ouvrez AwakeTab sur un autre écran et connectez-vous de la même façon.",
+        "s1": "Ouvrez AwakeTab sur votre autre écran",
+        "s1d": "Tablette de cuisine, télévision, deuxième ordinateur portable.",
+        "s2": "Connectez-vous de la même façon",
+        "s2d": "Google, GitHub ou une clé d’accès, sans mot de passe.",
+        "s3": "Votre configuration arrive",
+        "s3d": "Cadrans, ambiances et préréglages arrivent en une seconde.",
+        "back": "Retour à mon horloge",
+        "manage": "Gérer l’abonnement"
+      },
+      "plan": {
+        "renews": {
+          "yearly": "Pro · annuel · renouvelé le {date}",
+          "monthly": "Pro · mensuel · renouvelé le {date}",
+          "lifetime": "Pro · payé une fois"
+        },
+        "active": "Actif",
+        "plan": "Formule",
+        "yearly": "Pro · annuel",
+        "yearlyD": "{price} / an · prochain paiement le {date}",
+        "change": "Changer",
+        "payment": "Moyen de paiement",
+        "paymentD": "Géré par [PAYMENT PROVIDER]",
+        "update": "Mettre à jour",
+        "screens": "Écrans",
+        "screensD": "{n} sur {max} utilisés",
+        "manage": "Gérer",
+        "cancel": "Résilier Pro",
+        "cancelD": "Reste actif jusqu’au {date}",
+        "cancelBtn": "Résilier",
+        "receipts": "Reçus",
+        "r1": "Pro · annuel · [PRICE]",
+        "r2": "Essai commencé · [PRICE] 0",
+        "download": "Télécharger",
+        "note": "Résiliable à tout moment : Pro reste actif jusqu’à la fin de la période payée. Vos écrans gardent toutes les fonctions gratuites.",
+        "done": "Terminé",
+        "receipt": "Obtenir un reçu",
+        "monthly": "Pro · mensuel",
+        "monthlyD": "{price} / mois · prochain paiement le {date}",
+        "lifetime": "Pro · payé une fois",
+        "lifetimeD": "Aucun renouvellement",
+        "allReceipts": "Tous les reçus",
+        "allReceiptsD": "Conservés par [PAYMENT PROVIDER] pour chaque paiement",
+        "open": "Ouvrir"
+      },
+      "devices": {
+        "kicker": "VOS ÉCRANS · {n} SUR {max}",
+        "awake": "{n} allumés en ce moment",
+        "d": "Démarrez ou arrêtez cet écran ici ; les autres indiquent quand ils ont été ajoutés.",
+        "none": "Aucun écran pour l’instant",
+        "noneD": "La synchronisation commence avec Pro. Tout le reste fonctionne sur cet écran sans Pro.",
+        "asleep": "En veille",
+        "start": "Démarrer",
+        "stop": "Arrêter",
+        "note": "Pro · synchronisation. Retirer un écran le déconnecte immédiatement.",
+        "add": "Ajouter un écran",
+        "done": "Terminé"
+      },
+      "pal": {
+        "placeholder": "Tapez une commande ou cherchez",
+        "session": "Session",
+        "goto": "Aller à",
+        "extend": "Prolonger de 15 minutes",
+        "start": "Garder allumé",
+        "extension": "Obtenir l’extension du navigateur",
+        "pip": "Ouvrir la mini-horloge",
+        "none": "Rien ne correspond à « {q} ».",
+        "move": "naviguer",
+        "run": "lancer",
+        "count": "{n, plural, one {# commande} other {# commandes}}"
+      }
+    },
+    "skipTimer": "Aller au minuteur"
   },
   "ambient": {
     "mode": {
@@ -2079,7 +2676,8 @@
         "h1": "Cette page s’est endormie",
         "lead": "Le lien est peut-être ancien ou mal saisi. Le minuteur est juste ici.",
         "guides": "Guides populaires",
-        "eyebrow": "404"
+        "eyebrow": "404",
+        "description": "Cette page AwakeTab s’est endormie : le lien est peut-être ancien ou mal saisi. Le minuteur fonctionne juste ici, et l’aide comme les guides sont à un toucher."
       },
       "offline": {
         "eyebrow": "Hors ligne",
@@ -2167,6 +2765,208 @@
     },
     "pro": {
       "h1": "Garder l’écran allumé reste gratuit."
+    },
+    "consent": {
+      "title": "Compter cette visite ?",
+      "body": "Sans cookies et anonyme. AwakeTab fonctionne de la même façon dans les deux cas.",
+      "short": "Sans cookies, anonyme",
+      "decline": "Non merci",
+      "allow": "Autoriser"
+    },
+    "foot": {
+      "kicker": "FAIT PAR DES HUMAINS · LU PAR DES HUMAINS",
+      "ctaH": "Dites-nous ce qui le rendrait",
+      "ctaAccent": "vôtre.",
+      "ctaLine": "Deux touchers dans l’outil : Paramètres → Envoyer un avis. Nous lisons chaque message.",
+      "timer": "Ouvrir le minuteur",
+      "feedback": "Envoyer un avis",
+      "tagline": "Garde un écran allumé depuis le navigateur, puis le laisse se mettre en veille. Gratuit, pour toujours.",
+      "status": "Tout fonctionne · API wake lock en bonne santé",
+      "statusDown": "Maintenance prévue · le minuteur fonctionne toujours",
+      "social": {
+        "github": "AwakeTab sur GitHub",
+        "x": "Partager AwakeTab sur X",
+        "rss": "Flux des nouveautés (RSS)"
+      },
+      "product": "Produit",
+      "uses": "Usages",
+      "learn": "Apprendre",
+      "company": "À propos",
+      "faces": "Cadrans",
+      "vibes": "Ambiances",
+      "pro": "Pro",
+      "new": "NOUVEAU",
+      "cooking": "Cuisine",
+      "presenting": "Présentations",
+      "dashboards": "Tableaux de bord",
+      "nightdesk": "Bureau de nuit",
+      "help": "Centre d’aide",
+      "support": "Compatibilité des navigateurs",
+      "guides": "Guides",
+      "changelog": "Nouveautés",
+      "about": "À propos d’AwakeTab",
+      "statusLink": "État",
+      "copyright": "© [YEAR] [COMPANY NAME]",
+      "cookies": "Aucun cookie de suivi",
+      "theme": {
+        "label": "Thème",
+        "system": "Système",
+        "light": "Clair",
+        "dark": "Sombre"
+      }
+    },
+    "story": {
+      "cue": "Faites défiler : ce qui le rend différent",
+      "faces": {
+        "eyebrow": "46 CADRANS · TOUS GRATUITS",
+        "h": "Une horloge pour chaque pièce",
+        "accent": "où vous travaillez.",
+        "lead": "Choisissez-en un comme un fond d’écran. Ils ne bougent que tant que l’écran est allumé, et restent immobiles avec le mouvement réduit."
+      },
+      "vibes": {
+        "eyebrow": "AMBIANCES · NOUVEAU",
+        "h": "Créez l’ambiance.",
+        "accent": "Six fonds animés.",
+        "lead": "Aurore, ciel nocturne avec étoiles filantes, pluie sur la vitre, lent coucher de soleil, lampe à lave qui fond, ou calme parfait. Ils se mettent en pause avec l’économiseur de batterie, et l’horloge reste toujours lisible.",
+        "items": {
+          "aurora": {
+            "name": "Aurore",
+            "line": "Une douce lumière, à la dérive"
+          },
+          "night": {
+            "name": "Ciel nocturne",
+            "line": "Des étoiles et parfois une étoile filante"
+          },
+          "rain": {
+            "name": "Pluie sur la vitre",
+            "line": "Une fenêtre calme sous la pluie"
+          },
+          "sunset": {
+            "name": "Coucher de soleil",
+            "line": "Une lumière chaude pour le soir"
+          },
+          "lava": {
+            "name": "Lampe à lave",
+            "line": "Des couleurs vives qui fondent lentement"
+          },
+          "calm": {
+            "name": "Calme",
+            "line": "Seule l’horloge bouge"
+          }
+        }
+      },
+      "bento": {
+        "eyebrow": "CONÇU POUR UN COUP D’ŒIL",
+        "h": "Touchez-le trois secondes.",
+        "accent": "Faites-lui confiance une heure.",
+        "read": {
+          "h": "Lisible depuis l’autre bout de la pièce",
+          "d": "Chiffres immenses, fort contraste, une seule couleur pour le temps restant. Plus besoin de plisser les yeux vers l’ordinateur depuis les fourneaux."
+        },
+        "tap": {
+          "h": "Un toucher. C’est tout.",
+          "d": "Rien à installer, aucun compte, aucun réglage avant de commencer.",
+          "cta": "Garder allumé · 1 h"
+        },
+        "honest": {
+          "h": "Il ne fait jamais semblant",
+          "d": "Si le navigateur refuse, vous le voyez en toutes lettres, avec la solution.",
+          "awake": "Allumé · jusqu’à 12:26",
+          "paused": "En pause · encore 57 min",
+          "blocked": "Pas allumé · économiseur de batterie"
+        },
+        "free": {
+          "h": "Gratuit. Tout.",
+          "d": "Chaque cadran, thème, préréglage et son. Pro synchronise seulement plusieurs écrans.",
+          "zero": "$0"
+        },
+        "devices": {
+          "h": "Téléphone, tablette, ordinateur, mur",
+          "d": "La même horloge calme sur chaque écran que vous posez."
+        },
+        "palette": {
+          "h": "⌘K pour tout",
+          "d": "Prolonger, changer de cadran, ouvrir un préréglage, sans souris.",
+          "q": "prol",
+          "r1": "Prolonger de 15 minutes",
+          "r2": "Prolonger d’1 heure"
+        }
+      },
+      "how": {
+        "1": {
+          "t": "Choisissez une durée",
+          "d": "15 minutes, une heure ou sans fin. Une heure est déjà choisie à votre arrivée."
+        },
+        "2": {
+          "t": "Touchez Garder allumé",
+          "d": "Le Screen Wake Lock de votre navigateur garde l’écran allumé. L’indicateur passe au vert."
+        },
+        "3": {
+          "t": "Passez à autre chose",
+          "d": "Un carillon doux quand le temps est écoulé, puis l’écran se met en veille normalement."
+        },
+        "eyebrow": "COMMENT ÇA MARCHE",
+        "h": "Trois étapes.",
+        "accent": "Dont deux facultatives."
+      },
+      "uses": {
+        "eyebrow": "FAIT POUR",
+        "h": "Les moments où un écran noir",
+        "accent": "vous gêne.",
+        "cooking": {
+          "t": "Cuisine",
+          "d": "Les recettes restent allumées pendant que vos mains sont occupées.",
+          "l": "Pour cuisiner"
+        },
+        "presenting": {
+          "t": "Présentations",
+          "d": "Plus d’écran qui faiblit au milieu de votre meilleure diapositive.",
+          "l": "Pour présenter"
+        },
+        "dashboards": {
+          "t": "Tableaux de bord",
+          "d": "Écrans muraux et tableaux de suivi qui restent allumés.",
+          "l": "Pour les tableaux de bord"
+        },
+        "nightdesk": {
+          "t": "Bureau de nuit",
+          "d": "Lire, réviser : une horloge calme à la nuit tombée.",
+          "l": "Pour le bureau de nuit"
+        }
+      },
+      "faq": {
+        "1": {
+          "q": "Ça marche sur iPhone et iPad ?",
+          "a": "Oui, dans Safari sous iOS et iPadOS 16.4 ou plus récent. Les versions plus anciennes utilisent une vidéo silencieuse de secours, et l’indicateur vous dit laquelle fonctionne."
+        },
+        "2": {
+          "q": "Faut-il un compte ?",
+          "a": "Non. Les paramètres, préréglages et l’historique restent sur cet appareil."
+        },
+        "3": {
+          "q": "Empêchera-t-il mon ordinateur de travail de se verrouiller ?",
+          "a": "Il garde l’écran allumé tant que l’onglet est ouvert. Les règles de verrouillage de votre entreprise s’appliquent toujours, et c’est normal."
+        },
+        "4": {
+          "q": "C’est vraiment gratuit ?",
+          "a": "Oui. Chaque cadran, thème, préréglage et son. Pro est facultatif et synchronise seulement plusieurs écrans."
+        },
+        "5": {
+          "q": "Que se passe-t-il quand le temps est écoulé ?",
+          "a": "Un carillon doux, puis votre écran se met en veille comme d’habitude."
+        },
+        "eyebrow": "QUESTIONS",
+        "h": "Des réponses franches.",
+        "before": "Autre chose ? Touchez ",
+        "link": "Paramètres → Envoyer un avis",
+        "after": " dans l’outil. Nous lisons chaque message."
+      },
+      "cta": {
+        "h": "Votre écran, allumé",
+        "accent": "en un toucher.",
+        "lead": "Fonctionne dans Chrome, Edge, Firefox et Safari. Rien à installer.",
+        "button": "Garder cet écran allumé"
+      }
     }
   }
 }

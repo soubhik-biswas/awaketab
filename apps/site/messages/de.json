@@ -140,6 +140,11 @@
       "band": {
         "title": "Keep the screen on while you work in other tabs"
       }
+    },
+    "home": {
+      "title": "AwakeTab — Dieser Bildschirm bleibt wach",
+      "description": "Ein Klick, und der Bildschirm bleibt an. Eine ruhige Uhr zeigt die Restzeit. 46 Ziffernblätter, sechs lebendige Hintergründe – gratis, ohne Konto.",
+      "ogAlt": "AwakeTab-Uhr mit noch 38:12"
     }
   },
   "tool": {
@@ -174,7 +179,6 @@
       "word": "Words",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "matrix": "LED",
       "prev": "Previous face",
       "next": "Next face"
     },
@@ -969,8 +973,435 @@
       "tagNew": "Neu",
       "tagHot": "Beliebt",
       "tagPick": "Empfohlen",
-      "tagNight": "Nacht"
-    }
+      "tagNight": "Nacht",
+      "nudge": {
+        "h": "Du hast es dir zu eigen gemacht.",
+        "d": "{sessions, plural, one {# Sitzung} other {# Sitzungen}} und {presets, plural, one {# Vorlage} other {# Vorlagen}} – läuft es bei dir auf mehr als einem Bildschirm? Pro hält sie alle synchron.",
+        "try": "Pro gratis testen",
+        "later": "Jetzt nicht"
+      },
+      "panel": {
+        "close": "Schließen",
+        "recents": {
+          "t": "Verlauf",
+          "d": "Vorlagen und deine bisherigen Sitzungen"
+        },
+        "settings": {
+          "t": "Einstellungen",
+          "d": "Auf diesem Gerät gespeichert"
+        },
+        "help": {
+          "t": "Hilfe & Lösungen",
+          "d": "Erscheint nur, wenn etwas nicht stimmt"
+        },
+        "studio": {
+          "t": "Ziffernblatt-Studio",
+          "d": "Gratis · mach jedes Ziffernblatt zu deinem"
+        },
+        "feedback": {
+          "t": "Feedback",
+          "d": "Deine ersten Sitzungen bestimmen, was wir als Nächstes bauen"
+        },
+        "vibes": {
+          "t": "Stimmung",
+          "d": "Ein lebendiger Hintergrund hinter deiner Uhr"
+        },
+        "share": {
+          "t": "Dieses Setup teilen",
+          "d": "Schick jemandem eine startklare Uhr"
+        },
+        "devices": {
+          "t": "Deine Bildschirme",
+          "d": "Pro · Sync über Geräte hinweg"
+        },
+        "sound": {
+          "t": "Umgebungsklang",
+          "d": "Gratis · misch deinen eigenen Hintergrund"
+        },
+        "clear": {
+          "t": "Verlauf löschen",
+          "d": "Nur auf diesem Gerät"
+        },
+        "language": {
+          "t": "Sprache",
+          "d": "Text und Zeitformat"
+        },
+        "pro": {
+          "t": "AwakeTab Pro",
+          "d": "Optional · für viele Bildschirme"
+        },
+        "proDone": {
+          "t": "Willkommen bei Pro",
+          "d": "Testphase gestartet"
+        },
+        "plan": {
+          "t": "Abo verwalten",
+          "d": "Pro · jährlich"
+        }
+      },
+      "faces": {
+        "title": "Ziffernblätter",
+        "sub": "Tippe auf eins – es gilt sofort hinter diesem Fenster. Alle {n} sind gratis.",
+        "search": "{n} Ziffernblätter durchsuchen",
+        "close": "Ziffernblätter schließen",
+        "collections": "Sammlungen",
+        "label": "Ziffernblatt",
+        "featuredTag": "Empfohlen · {tag}",
+        "none": "Kein Ziffernblatt namens „{q}“.",
+        "filter": {
+          "featured": "Empfohlen",
+          "digital": "Digital",
+          "analog": "Analog",
+          "ambient": "Ambient",
+          "all": "Alle"
+        }
+      },
+      "recents": {
+        "week": "DIESE WOCHE",
+        "awake": "{dur} wach",
+        "streak": "{n} Tage am Stück",
+        "longest": "deine längste Serie bisher",
+        "noStreak": "Deine Sitzungen erscheinen hier",
+        "hours": "Stunden wach",
+        "chart": "Stunden wach an jedem Tag dieser Woche",
+        "presets": "Vorlagen",
+        "emptyH": "Noch keine Vorlagen",
+        "emptyD": "Starte eine Sitzung, die dir gefällt, und speichere sie hier. Ein Tippen holt sie zurück – Dauer, Ziffernblatt und Stimmung.",
+        "save": "Aktuelles als Vorlage speichern",
+        "saved": "Als Vorlage gespeichert: {name}",
+        "history": "Verlauf",
+        "this": "Diese Sitzung",
+        "sinceNow": "{time} – jetzt",
+        "awakeBadge": "Wach",
+        "untitled": "Sitzung mit {face}",
+        "today": "Heute · {date}",
+        "yesterday": "Gestern · {date}",
+        "note": "Der Verlauf bleibt auf diesem Gerät. Du kannst ihn jederzeit in den Einstellungen löschen."
+      },
+      "settings": {
+        "appearance": "Darstellung",
+        "theme": "Design",
+        "themes": {
+          "auto": "System",
+          "light": "Hell",
+          "dark": "Dunkel",
+          "oled": "OLED"
+        },
+        "clock": "Uhr",
+        "h12": "12-Stunden-Uhr",
+        "h12D": "Zeigt 11:42 AM statt 11:42",
+        "secs": "Sekunden zeigen",
+        "secsD": "Auf dem Ziffernblatt und im Tab-Titel",
+        "dim": "Nachts dimmen",
+        "dimD": "Sanfteres Leuchten ab 22:00",
+        "sound": "Klang",
+        "chime": "Klang am Ende",
+        "chimeD": "Spielt einmal, wenn die Zeit um ist",
+        "chimes": {
+          "two": "Zwei Töne",
+          "bell": "Glocke",
+          "off": "Aus"
+        },
+        "mixer": "Klangmischer",
+        "mixerD": "Regen, Café, Feuer und braunes Rauschen",
+        "studio": "Ziffernblatt-Studio",
+        "studioD": "Deine eigene Akzentfarbe und dein Leuchten",
+        "more": "Mehr",
+        "ambient": "Umgebungsklang",
+        "ambientD": "Regen, Café, Feuer, braunes Rauschen",
+        "language": "Sprache",
+        "languageD": "Ändert Text und Zeitformat",
+        "share": "Dieses Setup teilen",
+        "shareD": "Ein Link, der startklar öffnet",
+        "clear": "Verlauf löschen",
+        "clearD": "Vorlagen und Einstellungen bleiben",
+        "account": "Konto",
+        "signedOut": "Nicht angemeldet",
+        "signedOutD": "Alles funktioniert ohne Konto. Melde dich nur an, um Pro zu synchronisieren.",
+        "signIn": "Anmelden",
+        "signedIn": "Angemeldet mit {via}",
+        "via": {
+          "google": "Google",
+          "github": "GitHub",
+          "passkey": "einem Passkey"
+        },
+        "proOn": "Pro ist an · Sync über deine Bildschirme",
+        "freeOn": "Alles funktioniert. Pro ergänzt nur Sync für viele Bildschirme.",
+        "manage": "Abo verwalten",
+        "feedback": "Feedback senden",
+        "feedbackD": "Zwei Tipper. Wir lesen jede Nachricht.",
+        "proCard": "Viele Bildschirme? Halte sie synchron.",
+        "proCardD": "Alles oben ist gratis, für immer. Pro ist für alle, die mehrere Bildschirme nutzen: ein Setup auf jedem Gerät, dazu bevorzugte Hilfe. {price} im Jahr.",
+        "proCardOn": "Pro ist an. Sync ist bereit.",
+        "proCardOnD": "Öffne AwakeTab auf einem anderen Bildschirm und melde dich genauso an; dein Setup kommt mit.",
+        "seePro": "Pro ansehen"
+      },
+      "help": {
+        "checked": "Geprüft um {time}.",
+        "video": "Video-Ersatz nutzen",
+        "again": "Erneut prüfen",
+        "battery": {
+          "h": "Der Browser hat abgelehnt",
+          "d": "Energiesparen scheint an zu sein (der Akku ist schwach und nicht am Strom), und dieser Browser ignoriert dann Wach-Anfragen.",
+          "s1": "Strom anschließen oder Energiesparen ausschalten",
+          "s1d": "Der Wake Lock kommt von selbst zurück – wir prüfen weiter.",
+          "s2": "Oder den Video-Ersatz nutzen",
+          "s2d": "Ein stummes, unsichtbares Video hält die meisten Bildschirme an.",
+          "s3": "Wird es trotzdem dunkel?",
+          "s3d": "Die Desktop-App kann auch den Ruhezustand des Systems verhindern."
+        },
+        "unknown": {
+          "h": "Der Browser hat abgelehnt",
+          "d": "Dieser Browser hat die Wach-Anfrage ohne Grund abgelehnt. Meist steckt eine Energie- oder Akku-Einstellung dahinter.",
+          "s1": "Strom anschließen oder Energiesparen ausschalten",
+          "s1d": "Dann auf Erneut prüfen tippen – das dauert eine Sekunde.",
+          "s2": "Oder den Video-Ersatz nutzen",
+          "s2d": "Ein stummes, unsichtbares Video hält die meisten Bildschirme an.",
+          "s3": "Wird es trotzdem dunkel?",
+          "s3d": "Die Desktop-App kann auch den Ruhezustand des Systems verhindern."
+        },
+        "insecure": {
+          "h": "Diese Seite ist nicht sicher",
+          "d": "Browser erlauben Wake Locks nur auf sicheren (https-)Seiten.",
+          "s1": "awaketab.com mit https öffnen",
+          "s1d": "Prüfe, ob die Adresse mit https:// beginnt.",
+          "s2": "Oder den Video-Ersatz nutzen",
+          "s2d": "Ein stummes, unsichtbares Video hält die meisten Bildschirme an."
+        },
+        "policy": {
+          "h": "Auf dieser Seite nicht erlaubt",
+          "d": "Die Seite, die AwakeTab einbettet, erlaubt keine Wake Locks.",
+          "s1": "AwakeTab in einem eigenen Tab öffnen",
+          "s1d": "awaketab.com funktioniert genauso, mit erlaubtem Wake Lock.",
+          "s2": "Oder den Video-Ersatz nutzen",
+          "s2d": "Ein stummes, unsichtbares Video hält die meisten Bildschirme an."
+        }
+      },
+      "studio": {
+        "accent": "Akzentfarbe",
+        "glow": "Raumleuchten",
+        "note": "Statusfarben ändern sich nie – Pause bleibt bernsteinfarben, Blockiert bleibt rot –, damit die Uhr immer die Wahrheit sagt.",
+        "save": "Als mein Ziffernblatt speichern",
+        "reset": "Auf Standard zurücksetzen",
+        "swatch0": "Volt",
+        "swatch1": "Limette",
+        "swatch2": "Bernstein",
+        "swatch3": "Himmel",
+        "swatch4": "Flieder",
+        "swatch5": "Rose",
+        "swatch6": "Glut"
+      },
+      "vibes": {
+        "label": "Hintergrundstimmung",
+        "motion": "Bewegung",
+        "still": "Still",
+        "calm": "Ruhig",
+        "lively": "Lebhaft",
+        "note": "Stimmungen pausieren beim Energiesparen und bei reduzierter Bewegung. Die Uhr bleibt immer gut lesbar."
+      },
+      "vibe": {
+        "aurora": {
+          "n": "Polarlicht",
+          "d": "Sanftes Nordlicht, treibend"
+        },
+        "night": {
+          "n": "Nachthimmel",
+          "d": "Sterne, ein Mond, ab und zu eine Sternschnuppe"
+        },
+        "rain": {
+          "n": "Regen am Fenster",
+          "d": "Ein ruhiges, verregnetes Fenster"
+        },
+        "sunset": {
+          "n": "Sonnenuntergang",
+          "d": "Warmes Licht für den Abend"
+        },
+        "lava": {
+          "n": "Lavalampe",
+          "d": "Kräftige Farben, langsam schmelzend"
+        },
+        "calm": {
+          "n": "Ruhe",
+          "d": "Nur die Uhr bewegt sich"
+        }
+      },
+      "sound": {
+        "playing": "Spielt: {name}",
+        "ready": "Bereit: {name}",
+        "off": "Aus · {name}",
+        "silent": "Alle Ebenen sind aus",
+        "fades": "Blendet aus, wenn die Sitzung endet",
+        "waits": "Spielt, solange der Bildschirm wach ist",
+        "preview": "Das war eine fünfsekündige Vorschau; der Klang spielt, solange der Bildschirm wach ist",
+        "turnOn": "Umgebungsklang spielen, solange wach",
+        "turnOff": "Umgebungsklang ausschalten",
+        "rain": "Regen",
+        "cafe": "Café",
+        "fire": "Kaminfeuer",
+        "brown": "Braunes Rauschen",
+        "mixes": "Mischungen",
+        "mix": {
+          "rainy": "Regen-Café",
+          "focus": "Tiefer Fokus",
+          "fire": "Am Kamin",
+          "off": "Aus",
+          "custom": "Deine Mischung"
+        }
+      },
+      "feedback": {
+        "how": "Wie war’s?",
+        "note": "Sollen wir noch etwas wissen? (optional)",
+        "placeholder": "Was geklappt hat, was nicht, was du dir wünschst",
+        "topics": "Themen",
+        "topic": {
+          "faces": "Ziffernblätter",
+          "ease": "Bedienung",
+          "battery": "Akku",
+          "other": "Etwas anderes"
+        },
+        "privacy": "Wird anonym mit Browser- und Gerätetyp gesendet. Deine Antworten bestimmen, was wir als Nächstes bauen.",
+        "send": "Feedback senden",
+        "sending": "Wird gesendet…",
+        "retry": "Erneut versuchen",
+        "later": "Vielleicht später",
+        "failed": "Das wurde nicht gesendet – prüfe deine Verbindung und versuch es noch einmal. Nichts ist verloren.",
+        "thanks": "Danke – wir lesen jede Nachricht."
+      },
+      "share": {
+        "card": "Öffnet startklar – ein Tippen, und es läuft.",
+        "link": "Link",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "include": "Mitschicken",
+        "look": "Ziffernblatt und Stimmung",
+        "lookD": "Öffnet im gleichen Look",
+        "length": "Dauer",
+        "lengthD": "Startet den gleichen Timer",
+        "start": "Sofort starten",
+        "startOn": "An – startet, sobald der Link geöffnet wird",
+        "startOff": "Aus – die Person tippt auf Wach halten",
+        "note": "Links enthalten nie deinen Namen, Verlauf, Gerätenamen oder Standort.",
+        "copyLink": "Link kopieren",
+        "via": "Teilen über…"
+      },
+      "clear": {
+        "h": "{n, plural, one {# Sitzung} other {# Sitzungen}} löschen?",
+        "d": "Verlauf und Wochenserie auf diesem Gerät werden gelöscht. Vorlagen, Ziffernblätter und Einstellungen bleiben. Das lässt sich nicht rückgängig machen.",
+        "type": "Zum Bestätigen CLEAR eingeben",
+        "note": "Die Schaltfläche wird frei, wenn alle fünf Buchstaben stimmen.",
+        "go": "{n, plural, one {# Sitzung} other {# Sitzungen}} löschen",
+        "keep": "Verlauf behalten",
+        "done": "Verlauf auf diesem Gerät gelöscht"
+      },
+      "lang": {
+        "en": "Englisch",
+        "de": "Deutsch",
+        "ja": "Japanisch",
+        "zh": "Chinesisch",
+        "hi": "Hindi",
+        "es": "Spanisch",
+        "fr": "Französisch",
+        "pt-br": "Portugiesisch (Brasilien)",
+        "note": "Uhrzeiten folgen der Sprache: 11:42 AM auf Englisch, 11:42 auf Deutsch, 午前11:42 auf Japanisch."
+      },
+      "pro": {
+        "kicker": "AWAKETAB PRO",
+        "h1a": "Ein Setup.",
+        "h1b": "Jeder Bildschirm.",
+        "d": "Alles, was du heute nutzt, bleibt gratis. Pro ergänzt Sync für alle, die mehr als einen Bildschirm nutzen.",
+        "plan": "Abo",
+        "yearly": "Jährlich",
+        "yearlyPrice": "{price} / Jahr",
+        "yearlyD": "Bester Preis · 14 Tage gratis",
+        "monthly": "Monatlich",
+        "monthlyPrice": "{price} / Monat",
+        "monthlyD": "Jederzeit kündbar",
+        "save": "{n} % SPAREN",
+        "f1": "Ein Setup auf bis zu 5 Bildschirmen synchron",
+        "f2": "Jeden Bildschirm von einem aus starten oder stoppen",
+        "f3": "Verlauf über alle Geräte, mit Export",
+        "f4": "Bevorzugte Hilfe von einem Menschen",
+        "f5": "Neue Ziffernblätter und Stimmungen früher",
+        "note": "14 Tage gratis, danach {price} im Jahr. Jederzeit kündbar unter Einstellungen → Abo verwalten. Sicherer Bezahlvorgang über [PAYMENT PROVIDER].",
+        "trial": "14 Tage gratis testen",
+        "later": "Vielleicht später"
+      },
+      "proDone": {
+        "h1a": "Pro ist an.",
+        "h1b": "Danke.",
+        "d": "Deine 14-tägige Testphase hat begonnen. Sync ist bereit – öffne AwakeTab auf einem anderen Bildschirm und melde dich genauso an.",
+        "s1": "AwakeTab auf dem anderen Bildschirm öffnen",
+        "s1d": "Küchen-Tablet, Fernseher, ein zweiter Laptop.",
+        "s2": "Genauso anmelden",
+        "s2d": "Google, GitHub oder ein Passkey – kein Passwort.",
+        "s3": "Dein Setup kommt mit",
+        "s3d": "Ziffernblätter, Stimmungen und Vorlagen sind in einer Sekunde da.",
+        "back": "Zurück zu meiner Uhr",
+        "manage": "Abo verwalten"
+      },
+      "plan": {
+        "renews": {
+          "yearly": "Pro · jährlich · verlängert sich am {date}",
+          "monthly": "Pro · monatlich · verlängert sich am {date}",
+          "lifetime": "Pro · einmal bezahlt"
+        },
+        "active": "Aktiv",
+        "plan": "Abo",
+        "yearly": "Pro · jährlich",
+        "yearlyD": "{price} / Jahr · nächste Zahlung am {date}",
+        "change": "Ändern",
+        "payment": "Zahlungsmethode",
+        "paymentD": "Abgewickelt über [PAYMENT PROVIDER]",
+        "update": "Aktualisieren",
+        "screens": "Bildschirme",
+        "screensD": "{n} von {max} in Gebrauch",
+        "manage": "Verwalten",
+        "cancel": "Pro kündigen",
+        "cancelD": "Bleibt bis {date} aktiv",
+        "cancelBtn": "Kündigen",
+        "receipts": "Belege",
+        "r1": "Pro · jährlich · [PRICE]",
+        "r2": "Testphase gestartet · [PRICE] 0",
+        "download": "Herunterladen",
+        "note": "Jederzeit kündbar – Pro bleibt bis zum Ende des bezahlten Zeitraums aktiv. Deine Bildschirme behalten jede Gratis-Funktion.",
+        "done": "Fertig",
+        "receipt": "Beleg holen",
+        "monthly": "Pro · monatlich",
+        "monthlyD": "{price} / Monat · nächste Zahlung am {date}",
+        "lifetime": "Pro · einmal bezahlt",
+        "lifetimeD": "Keine Verlängerungen",
+        "allReceipts": "Alle Belege",
+        "allReceiptsD": "Für jede Zahlung bei [PAYMENT PROVIDER] hinterlegt",
+        "open": "Öffnen"
+      },
+      "devices": {
+        "kicker": "DEINE BILDSCHIRME · {n} VON {max}",
+        "awake": "{n} gerade wach",
+        "d": "Starte oder stoppe diesen Bildschirm hier; bei den anderen siehst du, wann sie dazukamen.",
+        "none": "Noch keine Bildschirme",
+        "noneD": "Sync beginnt mit Pro. Alles andere funktioniert auf diesem Bildschirm auch ohne.",
+        "asleep": "Schläft",
+        "start": "Starten",
+        "stop": "Stoppen",
+        "note": "Pro · Sync. Wer einen Bildschirm entfernt, meldet ihn sofort ab.",
+        "add": "Bildschirm hinzufügen",
+        "done": "Fertig"
+      },
+      "pal": {
+        "placeholder": "Befehl eingeben oder suchen",
+        "session": "Sitzung",
+        "goto": "Gehe zu",
+        "extend": "15 Minuten verlängern",
+        "start": "Wach halten",
+        "extension": "Browser-Erweiterung holen",
+        "pip": "Mini-Uhr öffnen",
+        "none": "Nichts passt zu „{q}“.",
+        "move": "bewegen",
+        "run": "ausführen",
+        "count": "{n, plural, one {# Befehl} other {# Befehle}}"
+      }
+    },
+    "skipTimer": "Zum Timer springen"
   },
   "ambient": {
     "mode": {
@@ -2245,7 +2676,8 @@
         "h1": "Diese Seite ist eingeschlafen",
         "lead": "Der Link ist vielleicht alt oder vertippt. Der Timer ist gleich hier.",
         "guides": "Beliebte Ratgeber",
-        "eyebrow": "404"
+        "eyebrow": "404",
+        "description": "Diese AwakeTab-Seite ist eingeschlafen: Der Link ist vielleicht alt oder vertippt. Der Timer funktioniert gleich hier, Hilfe und Anleitungen sind einen Tipper entfernt."
       },
       "offline": {
         "eyebrow": "Offline",
@@ -2333,6 +2765,208 @@
     },
     "pro": {
       "h1": "Wachhalten bleibt kostenlos."
+    },
+    "consent": {
+      "title": "Diesen Besuch zählen?",
+      "body": "Ohne Cookies und anonym. AwakeTab funktioniert so oder so gleich.",
+      "short": "Ohne Cookies, anonym",
+      "decline": "Nein danke",
+      "allow": "Erlauben"
+    },
+    "foot": {
+      "kicker": "VON MENSCHEN GEMACHT · VON MENSCHEN GELESEN",
+      "ctaH": "Sag uns, was es zu",
+      "ctaAccent": "deinem macht.",
+      "ctaLine": "Zwei Tipper im Tool – Einstellungen → Feedback senden. Wir lesen jede Nachricht.",
+      "timer": "Timer öffnen",
+      "feedback": "Feedback senden",
+      "tagline": "Hält einen Bildschirm aus dem Browser heraus wach und lässt ihn danach wieder schlafen. Gratis, für immer.",
+      "status": "Alle Systeme normal · Wake-Lock-API in Ordnung",
+      "statusDown": "Wartung geplant · der Timer funktioniert trotzdem",
+      "social": {
+        "github": "AwakeTab auf GitHub",
+        "x": "AwakeTab auf X teilen",
+        "rss": "Changelog-Feed (RSS)"
+      },
+      "product": "Produkt",
+      "uses": "Einsatzzwecke",
+      "learn": "Wissen",
+      "company": "Über uns",
+      "faces": "Ziffernblätter",
+      "vibes": "Stimmungen",
+      "pro": "Pro",
+      "new": "NEU",
+      "cooking": "Kochen",
+      "presenting": "Präsentieren",
+      "dashboards": "Dashboards",
+      "nightdesk": "Schreibtisch bei Nacht",
+      "help": "Hilfe",
+      "support": "Browser-Unterstützung",
+      "guides": "Anleitungen",
+      "changelog": "Änderungen",
+      "about": "Über AwakeTab",
+      "statusLink": "Status",
+      "copyright": "© [YEAR] [COMPANY NAME]",
+      "cookies": "Keine Tracking-Cookies",
+      "theme": {
+        "label": "Design",
+        "system": "System",
+        "light": "Hell",
+        "dark": "Dunkel"
+      }
+    },
+    "story": {
+      "cue": "Scrollen – was es anders macht",
+      "faces": {
+        "eyebrow": "46 ZIFFERNBLÄTTER · ALLE GRATIS",
+        "h": "Eine Uhr für jeden Raum,",
+        "accent": "in dem du arbeitest.",
+        "lead": "Such dir eins aus wie ein Hintergrundbild. Sie bewegen sich nur, solange der Bildschirm wach ist, und stehen still bei reduzierter Bewegung."
+      },
+      "vibes": {
+        "eyebrow": "STIMMUNGEN · NEU",
+        "h": "Setz die Stimmung.",
+        "accent": "Sechs lebendige Hintergründe.",
+        "lead": "Polarlicht, ein Nachthimmel mit Sternschnuppen, Regen am Fenster, ein langsamer Sonnenuntergang, eine schmelzende Lavalampe – oder vollkommene Ruhe. Beim Energiesparen pausieren sie, und die Uhr bleibt immer gut lesbar.",
+        "items": {
+          "aurora": {
+            "name": "Polarlicht",
+            "line": "Sanftes Licht, treibend"
+          },
+          "night": {
+            "name": "Nachthimmel",
+            "line": "Sterne und ab und zu eine Sternschnuppe"
+          },
+          "rain": {
+            "name": "Regen am Fenster",
+            "line": "Ein ruhiges, verregnetes Fenster"
+          },
+          "sunset": {
+            "name": "Sonnenuntergang",
+            "line": "Warmes Licht für den Abend"
+          },
+          "lava": {
+            "name": "Lavalampe",
+            "line": "Kräftige Farben, langsam schmelzend"
+          },
+          "calm": {
+            "name": "Ruhe",
+            "line": "Nur die Uhr bewegt sich"
+          }
+        }
+      },
+      "bento": {
+        "eyebrow": "GEBAUT FÜR DEN KURZEN BLICK",
+        "h": "Drei Sekunden antippen.",
+        "accent": "Eine Stunde vertrauen.",
+        "read": {
+          "h": "Lesbar quer durch den Raum",
+          "d": "Riesige Ziffern, hoher Kontrast, eine Farbe für die Restzeit. Kein Blinzeln vom Herd zum Laptop."
+        },
+        "tap": {
+          "h": "Ein Tippen. Das war’s.",
+          "d": "Ohne Installation, ohne Konto, ohne Einstellungen vorab.",
+          "cta": "Wach halten · 1 Std."
+        },
+        "honest": {
+          "h": "Es tut nie nur so",
+          "d": "Sagt der Browser Nein, siehst du es in Worten – mit der Lösung.",
+          "awake": "Wach · bis 12:26",
+          "paused": "Pausiert · noch 57 Min.",
+          "blocked": "Nicht wach · Energiesparen"
+        },
+        "free": {
+          "h": "Gratis. Alles.",
+          "d": "Jedes Ziffernblatt, Design, jede Vorlage und jeder Klang. Pro synchronisiert nur viele Bildschirme.",
+          "zero": "$0"
+        },
+        "devices": {
+          "h": "Handy, Tablet, Laptop, Wand",
+          "d": "Dieselbe ruhige Uhr auf jedem Bildschirm, den du aufstellst."
+        },
+        "palette": {
+          "h": "⌘K für alles",
+          "d": "Verlängern, Ziffernblatt wechseln, eine Vorlage öffnen – ohne Maus.",
+          "q": "verl",
+          "r1": "15 Minuten verlängern",
+          "r2": "1 Stunde verlängern"
+        }
+      },
+      "how": {
+        "1": {
+          "t": "Dauer wählen",
+          "d": "15 Minuten, eine Stunde oder ganz ohne Ende. Eine Stunde ist beim Ankommen schon gewählt."
+        },
+        "2": {
+          "t": "Auf Wach halten tippen",
+          "d": "Der Screen Wake Lock deines Browsers hält das Display an. Die Anzeige wird grün."
+        },
+        "3": {
+          "t": "Weitermachen",
+          "d": "Ein sanfter Klang, wenn die Zeit um ist, dann schläft der Bildschirm wieder normal ein."
+        },
+        "eyebrow": "SO FUNKTIONIERT’S",
+        "h": "Drei Schritte.",
+        "accent": "Zwei sind optional."
+      },
+      "uses": {
+        "eyebrow": "GEMACHT FÜR",
+        "h": "Die Momente, in denen ein dunkler Bildschirm",
+        "accent": "im Weg ist.",
+        "cooking": {
+          "t": "Kochen",
+          "d": "Rezepte bleiben hell, während die Hände beschäftigt sind.",
+          "l": "Fürs Kochen"
+        },
+        "presenting": {
+          "t": "Präsentieren",
+          "d": "Kein Dimmen mitten in deiner besten Folie.",
+          "l": "Fürs Präsentieren"
+        },
+        "dashboards": {
+          "t": "Dashboards",
+          "d": "Wandbildschirme und Statustafeln, die an bleiben.",
+          "l": "Für Dashboards"
+        },
+        "nightdesk": {
+          "t": "Schreibtisch bei Nacht",
+          "d": "Lesen, Lernen – eine ruhige Uhr nach Einbruch der Dunkelheit.",
+          "l": "Für den Schreibtisch bei Nacht"
+        }
+      },
+      "faq": {
+        "1": {
+          "q": "Funktioniert es auf iPhone und iPad?",
+          "a": "Ja – in Safari ab iOS und iPadOS 16.4. Ältere Versionen nutzen einen stummen Video-Ersatz, und die Anzeige sagt dir, was gerade läuft."
+        },
+        "2": {
+          "q": "Brauche ich ein Konto?",
+          "a": "Nein. Einstellungen, Vorlagen und Verlauf bleiben auf diesem Gerät."
+        },
+        "3": {
+          "q": "Verhindert es, dass mein Arbeitslaptop sperrt?",
+          "a": "Es hält das Display wach, solange der Tab offen ist. Sperrregeln deiner Firma gelten weiter, und das ist auch richtig so."
+        },
+        "4": {
+          "q": "Ist es wirklich gratis?",
+          "a": "Ja. Jedes Ziffernblatt, Design, jede Vorlage und jeder Klang. Pro ist optional und synchronisiert nur mehrere Bildschirme."
+        },
+        "5": {
+          "q": "Was passiert, wenn die Zeit um ist?",
+          "a": "Ein sanfter Klang, dann schläft dein Bildschirm ein, wie er es sonst auch tut."
+        },
+        "eyebrow": "FRAGEN",
+        "h": "Klare Antworten.",
+        "before": "Noch etwas anderes? Tippe im Tool auf ",
+        "link": "Einstellungen → Feedback senden",
+        "after": ". Wir lesen jede Nachricht."
+      },
+      "cta": {
+        "h": "Dein Bildschirm, wach",
+        "accent": "mit einem Tippen.",
+        "lead": "Funktioniert in Chrome, Edge, Firefox und Safari. Nichts zu installieren.",
+        "button": "Diesen Bildschirm wach halten"
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 ---
 title: "Display beim Download anlassen — AwakeTab"
-description: "AwakeTab hält das Display an, solange der Tab sichtbar ist. In Chrome und Edge schläft dann auch der PC nicht ein, zugeklappt aber schon."
+description: "AwakeTab hält das Display an, solange der Tab sichtbar ist. In Chrome und Edge schläft dann auch der PC nicht ein, mit zugeklapptem Deckel aber schon."
 h1: "Display beim Download anlassen – was ein Browser-Tab kann"
 ogTitle: "Display beim Download anlassen"
 intent: "pc beim download wach halten"

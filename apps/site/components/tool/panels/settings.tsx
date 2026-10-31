@@ -30,6 +30,8 @@ export const LANG_NAMES: Record<string, string> = {
   zh: '中文',
   hi: 'हिन्दी',
   es: 'Español',
+  fr: 'Français',
+  'pt-br': 'Português (Brasil)',
 };
 
 function MoreRow({

@@ -1,20 +1,19 @@
 # Store listing — AwakeTab — Keep your screen awake
 
-Copy for the Chrome Web Store (also Edge and Firefox). It follows the Glance listing copy (`docs/redesign/glance/LISTING_COPY.md`), which is the source; change that first. Use with [the release guide](PUBLISHING.md), [reviewer instructions](reviewer-instructions.md) and [privacy disclosures](privacy-disclosures.md). Store form fields use plain text; keep the paragraph spacing and drop the Markdown when pasting. Placeholders stay in [BRACKETS]. No email address appears anywhere: feedback is in the app (Settings → Send feedback).
+Copy for the Chrome Web Store and Edge Add-ons, word for word from `docs/redesign/glance/LISTING_COPY.md` (the marketing board). Use with [the release guide](PUBLISHING.md), [reviewer instructions](reviewer-instructions.md) and [privacy disclosures](privacy-disclosures.md). Store form fields use plain text; keep the paragraph spacing and drop the Markdown when pasting. Placeholders stay in [BRACKETS]. There is no email address anywhere: support and feedback are in the app (Settings → Send feedback) and on the help centre.
 
 ## Identity
 
 | Field | Value |
 |---|---|
-| Name (33 / 75, manifest, every locale) | AwakeTab — Keep your screen awake |
-| Summary (115 / 132, the manifest description in English) | Keep your screen on with one click. A calm clock shows the time left. 46 faces, all free — no account, no tracking. |
+| Name (33 / 75) | AwakeTab — Keep your screen awake |
+| Summary (115 / 132) | Keep your screen on with one click. A calm clock shows the time left. 46 faces, all free — no account, no tracking. |
 | Category | Productivity → Tools |
-| Language | English (also German, Japanese, Chinese, Hindi; the extension itself also ships Spanish, French and Brazilian Portuguese) |
+| Language | English (also German, Japanese, Chinese, Hindi) |
 | Homepage | https://awaketab.com/extension |
-| Help | [HELP CENTRE URL] |
+| Support | https://awaketab.com/help, and Settings → Send feedback inside AwakeTab |
 | Privacy policy URL | [PRIVACY POLICY URL] |
-| Minimum version | Chrome 116 (manifest `minimum_chrome_version`, from the support matrix) |
-| Price | Free. Pro is optional and only syncs many screens. |
+| Price | Free. AwakeTab Pro is optional: [PRICE] / year, 14 days free. |
 
 ## Description
 
@@ -64,12 +63,30 @@ Keeps the computer's display awake for a length of time the user chooses, and sh
 
 **Remote code:** No. All code ships inside the package.
 
-## Images (`store/images/`, from the marketing kit, used as-is)
+## Privacy practices (data usage form)
 
-| File | Size | Where |
+- **Data collected:** None by default. Only when the user chooses to send feedback: the message, plus browser and device type. With Pro only: an account identifier from Google, GitHub or a passkey, used only for sync.
+- **Sold or transferred to third parties:** No.
+- **Used for anything unrelated to the single purpose:** No.
+- **Used to decide creditworthiness or for lending:** No.
+- **Privacy policy URL:** [PRIVACY POLICY URL]
+
+> Have legal review the privacy answers and the policy before submitting. The answers must match what the build actually sends.
+
+## Images
+
+The store kit from the marketing board, used as exported. Do not regenerate or edit these files; if the product UI changes, re-export them from the board.
+
+| File (`store/glance/chrome-web-store/`) | Size | Field |
 |---|---|---|
 | `cws-01.png` … `cws-05.png` | 1280 × 800 | Screenshots, in that order (dark, light, dark, dark, light) |
 | `promo-small-440x280.png` | 440 × 280 | Small promo tile (required) |
-| `promo-marquee-1400x560.png` | 1400 × 560 | Marquee |
-| `icon-128.png` | 128 × 128 | Store icon (96 px artwork, 16 px transparent padding) |
-| `edge-logo-300.png` | 300 × 300 | Edge Add-ons logo |
+| `promo-marquee-1400x560.png` | 1400 × 560 | Marquee promo tile |
+| `icon-128.png` | 128 × 128, transparent | Store icon (96 px artwork, 16 px padding) |
+| `edge-logo-300.png` | 300 × 300, transparent | Edge Add-ons logo |
+
+Product Hunt and launch-post images live in `docs/launch/` with their copy.
+
+## Package
+
+Use `pnpm -F extension publish:package --current` for the first unpublished version, or `pnpm -F extension publish:package` to choose a later version bump. It validates and builds with purchases disabled, then writes `AwakeTab-v<version>.zip` to the Desktop. It does not submit to a store. See [packaging and recovery](PUBLISHING.md#packaging-and-recovery).

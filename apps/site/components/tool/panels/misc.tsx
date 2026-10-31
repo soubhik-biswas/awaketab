@@ -105,14 +105,8 @@ export function ClearPanel() {
   );
 }
 
-const LANG_ROWS: Array<[string, TToolLang | 'es']> = [
-  ['en', 'en'],
-  ['de', 'de'],
-  ['ja', 'ja'],
-  ['zh', 'zh'],
-  ['hi', 'hi'],
-  ['es', 'es'],
-];
+// The six languages the board lists; a French or Portuguese tool adds its own row so the choice is always shown.
+const LANG_ROWS: readonly TToolLang[] = ['en', 'de', 'ja', 'zh', 'hi', 'es'];
 
 export function LanguagePanel() {
   const g = useGlance();
@@ -121,9 +115,9 @@ export function LanguagePanel() {
     <PanelBody>
       <RadioGroup.Root value={g.lang} onValueChange={(v) => g.a.setLang(v)} aria-label={t('panel.language.t')}>
         <Group>
-          {LANG_ROWS.map(([k, fmtLang]) => {
+          {(LANG_ROWS.includes(g.lang) ? LANG_ROWS : [...LANG_ROWS, g.lang]).map((k) => {
             const on = k === g.lang;
-            const time = fmtLang === 'es' ? clockTime(g.now, 'de', 12) : clockTime(g.now, fmtLang, 12);
+            const time = clockTime(g.now, k, 12);
             return (
               <RadioGroup.Item
                 key={k}

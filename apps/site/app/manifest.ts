@@ -42,7 +42,8 @@ export default function manifest(): MetadataRoute.Manifest & { widgets: TWidget[
     id: '/',
     name: 'AwakeTab — keep your screen awake',
     short_name: 'AwakeTab',
-    description: 'Keeps your screen awake from the browser, shows when it will sleep again, then lets it sleep.',
+    description:
+      'Keep your screen on with one click. A calm clock shows the time left. 46 faces, all free — no account, no tracking.',
     start_url: '/?source=pwa',
     scope: '/',
     display: 'standalone',
@@ -50,8 +51,8 @@ export default function manifest(): MetadataRoute.Manifest & { widgets: TWidget[
     orientation: 'any',
     lang: 'en',
     dir: 'ltr',
-    background_color: '#070B16',
-    theme_color: '#070B16',
+    background_color: '#05060A',
+    theme_color: '#05060A',
     categories: ['utilities', 'productivity'],
     icons: [
       { src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml' },
