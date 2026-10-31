@@ -137,7 +137,7 @@ export function homeSchema(locale: TLocale, ratings: IRatingsSummary): TSchemaNo
         url: `${SITE}/`,
         logo: { '@type': 'ImageObject', url: `${SITE}/icons/icon-512.png`, width: 512, height: 512 },
         founder: { '@id': `${SITE}/about#person` },
-        sameAs: ['https://github.com/SoubhikBiswas-gitHub/awaketab'],
+        sameAs: ['https://github.com/soubhik-biswas/awaketab'],
       },
       {
         '@type': 'WebSite',

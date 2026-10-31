@@ -1,8 +1,8 @@
 # @awaketab/wake
 
 [![npm version](https://img.shields.io/npm/v/@awaketab/wake?label=npm&color=B86E00)](https://www.npmjs.com/package/@awaketab/wake)
-[![gzip size](https://img.shields.io/badge/gzip-%E2%89%A4%203.4%20KB-B86E00)](https://github.com/SoubhikBiswas-gitHub/awaketab/blob/main/packages/wake/package.json)
-[![CI](https://github.com/SoubhikBiswas-gitHub/awaketab/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SoubhikBiswas-gitHub/awaketab/actions/workflows/ci.yml)
+[![gzip size](https://img.shields.io/badge/gzip-%E2%89%A4%203.4%20KB-B86E00)](https://github.com/soubhik-biswas/awaketab/blob/main/packages/wake/package.json)
+[![CI](https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml)
 [![npm provenance](https://img.shields.io/badge/npm-provenance-2B3A67)](https://www.npmjs.com/package/@awaketab/wake#provenance)
 [![license: MIT](https://img.shields.io/npm/l/@awaketab/wake)](./LICENSE)
 
@@ -127,7 +127,7 @@ Try the live state-machine demo at [awaketab.com/library](https://awaketab.com/l
 
 ## Contributing
 
-Issues and PRs are welcome at [github.com/SoubhikBiswas-gitHub/awaketab](https://github.com/SoubhikBiswas-gitHub/awaketab). A PR needs a changeset (`pnpm changeset`), a test for any transition change, and a passing size check (`pnpm -F @awaketab/wake size`). Security issues: security@awaketab.com.
+Issues and PRs are welcome at [github.com/soubhik-biswas/awaketab](https://github.com/soubhik-biswas/awaketab). A PR needs a changeset (`pnpm changeset`), a test for any transition change, and a passing size check (`pnpm -F @awaketab/wake size`). Security issues: security@awaketab.com.
 
 Support development via [Buy me a coffee](https://buymeacoffee.com/awaketab).
 

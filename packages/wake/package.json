@@ -81,12 +81,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/SoubhikBiswas-gitHub/awaketab",
+    "url": "https://github.com/soubhik-biswas/awaketab",
     "directory": "packages/wake"
   },
   "homepage": "https://awaketab.com/library",
   "bugs": {
-    "url": "https://github.com/SoubhikBiswas-gitHub/awaketab/issues"
+    "url": "https://github.com/soubhik-biswas/awaketab/issues"
   },
   "funding": {
     "type": "individual",

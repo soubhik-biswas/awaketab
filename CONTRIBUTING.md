@@ -9,7 +9,7 @@ This guide covers setup, how to send a change, the house rules and where the doc
 You need Node.js 22 and pnpm 9.15.9. The setup script checks both and does the rest:
 
 ```bash
-git clone https://github.com/SoubhikBiswas-gitHub/awaketab.git
+git clone https://github.com/soubhik-biswas/awaketab.git
 cd awaketab
 node scripts/setup.mjs            # or, once pnpm is installed: pnpm run setup
 pnpm dev                          # http://localhost:4321

@@ -92,7 +92,7 @@ Raw Lighthouse reports (JSON and HTML, 30 runs) were kept outside the repository
 
 ## Production, measured on GitHub Actions
 
-Run: https://github.com/SoubhikBiswas-gitHub/awaketab/actions/runs/36322585254 (Lighthouse workflow, `base_url=https://awaketab.pages.dev`, mobile, 3 runs per URL, 27 Sep 2026 7:04 PM IST).
+Run: https://github.com/soubhik-biswas/awaketab/actions/runs/36322585254 (Lighthouse workflow, `base_url=https://awaketab.pages.dev`, mobile, 3 runs per URL, 27 Sep 2026 7:04 PM IST).
 
 | Page | LCP median | LCP best | CLS max | TBT median | Performance |
 |---|---|---|---|---|---|

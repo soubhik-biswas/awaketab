@@ -110,7 +110,7 @@ describe('built site SEO', () => {
       const value = /<script type="application\/ld\+json">(.*?)<\/script>/u.exec(html)?.[1] ?? '{}';
       const schema = JSON.parse(value) as { '@graph'?: Array<{ '@type'?: string; sameAs?: unknown }> };
       const org = schema['@graph']?.find((node) => node['@type'] === 'Organization');
-      expect(org?.sameAs, home).toEqual(['https://github.com/SoubhikBiswas-gitHub/awaketab']);
+      expect(org?.sameAs, home).toEqual(['https://github.com/soubhik-biswas/awaketab']);
     }
   });
 

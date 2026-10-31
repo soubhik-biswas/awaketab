@@ -27,7 +27,7 @@ const home = localePath(locale, '/');
 const trim = (path: string): string => path.replace(/(.)\/$/u, '$1');
 const here = trim(Astro.url.pathname);
 const english = locale !== 'en';
-const repo = 'https://github.com/SoubhikBiswas-gitHub/awaketab';
+const repo = 'https://github.com/soubhik-biswas/awaketab';
 const year = /^\d{4}/u.exec(VERSION)?.[0] ?? String(new Date().getFullYear());
 
 // The board's four links lead each column; the product pages the site already had follow them.

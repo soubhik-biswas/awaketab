@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         lead={t('description')}
         actions={
           <HeroButtons
-            primary={{ href: 'https://github.com/SoubhikBiswas-gitHub/awaketab', label: 'View on GitHub' }}
+            primary={{ href: 'https://github.com/soubhik-biswas/awaketab', label: 'View on GitHub' }}
             secondary={{ href: '/learn/screen-wake-lock-api-guide', label: 'Read the API guide' }}
           />
         }
