@@ -22,4 +22,4 @@ The extension operates only while Chrome runs. It cannot override a deliberately
 
 Public privacy policy: https://awaketab.com/privacy#extension
 
-Support: support@awaketab.com
+Support: https://awaketab.com/help, or Settings → Send feedback inside AwakeTab. There is no support email.

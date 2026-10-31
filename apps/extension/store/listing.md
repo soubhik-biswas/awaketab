@@ -1,80 +1,91 @@
-# Store listing — AwakeTab: Keep Screen Awake
+# Store listing — AwakeTab — Keep your screen awake
 
-Copy for the first Chrome Web Store release. Use with [the release guide](PUBLISHING.md), [reviewer instructions](reviewer-instructions.md) and [privacy disclosures](privacy-disclosures.md). Store form fields use plain text; preserve paragraph spacing and remove Markdown formatting when pasting. No submission or approval is claimed here.
+Copy for the Chrome Web Store and Edge Add-ons, word for word from `docs/redesign/glance/LISTING_COPY.md` (the marketing board). Use with [the release guide](PUBLISHING.md), [reviewer instructions](reviewer-instructions.md) and [privacy disclosures](privacy-disclosures.md). Store form fields use plain text; keep the paragraph spacing and drop the Markdown when pasting. Placeholders stay in [BRACKETS]. There is no email address anywhere: support and feedback are in the app (Settings → Send feedback) and on the help centre.
 
 ## Identity
 
 | Field | Value |
 |---|---|
-| Name (manifest, all locales) | AwakeTab: Keep Screen Awake, in English in every locale (`_locales/*/messages.json` → `ext_name`, generated from `ext.name`) |
-| Edge Add-ons display name | AwakeTab: Keep Screen Awake (Edge reads the name from the same package's manifest) |
-| Store title | AwakeTab: Keep Screen Awake (the manifest name; the store shows it as the title) |
-| Short description (manifest, ≤ 132) | Keep your screen (or your whole computer) awake from a click — with an honest status you can trust. |
+| Name (33 / 75) | AwakeTab — Keep your screen awake |
+| Summary (115 / 132) | Keep your screen on with one click. A calm clock shows the time left. 46 faces, all free — no account, no tracking. |
 | Category | Productivity → Tools |
-| Language | English (the extension UI itself ships en, es, pt-BR, de, fr, ja, zh-CN, hi) |
+| Language | English (also German, Japanese, Chinese, Hindi) |
 | Homepage | https://awaketab.com/extension |
-| Support | support@awaketab.com |
-| Privacy policy URL | https://awaketab.com/privacy#extension |
-| Minimum version | Chrome 116 (manifest `minimum_chrome_version`, from the support matrix) |
-| Price | Free. Pro purchases are unavailable at launch. |
+| Support | https://awaketab.com/help, and Settings → Send feedback inside AwakeTab |
+| Privacy policy URL | [PRIVACY POLICY URL] |
+| Price | Free. AwakeTab Pro is optional: [PRICE] / year, 14 days free. |
 
-## Detailed description
+## Description
 
-AwakeTab keeps your display — or just your computer — awake while Chrome is running, using Chrome's own power API. Unlike a web page, it keeps working when its tab is hidden or the window is minimised.
+```text
+Keep your screen awake — only for as long as you need.
 
-- Screen or System: keep the display on, or keep only the computer awake and let the screen dim.
-- The same presets as the AwakeTab web app: 15 minutes to 4 hours, until a time, or until you stop.
-- The toolbar badge shows ON, SYS or the minutes left. Alt+Shift+A toggles it from any tab.
-- An honest status: the popup says "Screen awake" only after Chrome has accepted the request, and "System awake" when only the computer is kept awake.
-- Optional notification when a timer ends, with +15 min and Dismiss buttons.
+AwakeTab stops your display from dimming or going to sleep while you read a recipe, present slides, watch a dashboard or wait for a long download. Pick a length, click once, and a big, calm clock shows exactly how much time is left. When the time is up, your computer goes back to its normal sleep settings.
 
-The keep-awake features above are free and require no account or licence. Pro purchases are not available at launch. Weekly schedules and auto-start are licence-gated extras, not included in the free feature set. The settings include a licence field for activation when Pro becomes available.
+WHAT YOU GET — ALL FREE
+• One click from the toolbar: 15 min, 30 min, 1 hour, 2 hours or no end
+• Time left on the icon badge, so you never need to open anything
+• Works in any tab, and while you use other apps
+• 46 clock faces — analog, digital and ambient — and six living backgrounds
+• Presets for the things you do every day (Kitchen, Slides, Night desk…)
+• Light, dark and OLED themes, 12- or 24-hour time, five languages
+• Keyboard shortcuts and full screen-reader support
 
-What it does not do:
-- It works only while Chrome is running.
-- It cannot stop sleep when you close a laptop lid.
-- It does not keep Teams or Slack showing you as available: presence follows your keyboard and mouse, and AwakeTab never simulates input.
-- Firefox and Safari have no power API for extensions, so there is no version for them.
+HONEST BY DESIGN
+• Green means your screen really is being kept awake. If your computer or browser refuses (battery saver, a work policy), AwakeTab says so in plain words and shows the fix.
+• Nothing keeps running after the time is up.
 
-Privacy: no account, no ads, no remote code. Anonymous usage statistics are off by default; if you turn them on, the extension sends only session start/end, Pro activation and error counts to awaketab.com — never URLs, tab titles or site names.
+PRIVATE BY DEFAULT
+• No account. No ads. No tracking.
+• Settings, presets and history stay on this device.
+
+OPTIONAL PRO
+Everything above is free, for good. AwakeTab Pro ([PRICE] / year, 14 days free) syncs one setup to up to five screens and lets you start or stop any of them from one.
+
+Help: [HELP CENTRE URL]
+Feedback: open AwakeTab → Settings → Send feedback.
+```
 
 ## Single purpose
 
-Prevent the device from sleeping for a chosen time.
+Keeps the computer's display awake for a length of time the user chooses, and shows how much time is left.
 
 ## Permission justifications
 
-| Permission | Justification |
+| Permission | Why |
 |---|---|
-| `power` | Hold the display or system keep-awake the user starts (`chrome.power.requestKeepAwake`). |
-| `storage` | Save the user's settings, the current session and an optional Pro licence in `chrome.storage.local`; settings, schedules and auto-start sites also sync through `chrome.storage.sync`. The licence never syncs. |
-| `alarms` | Run timers, the 30-second keep-alive check and weekly schedules while the service worker sleeps. |
-| `notifications` (optional) | Tell the user a timer ended, with +15 min / Dismiss buttons. Requested only when the user turns notifications on. |
-| Host permissions (optional, `https://*/*` declared, one site requested at a time) | Start automatically when a tab on a site the user adds loads, and stop when the last one closes (Pro auto-start). No host access is granted at install; the prompt names the one site. Page content is never read. |
+| `power` | Asks the operating system to keep the display awake (chrome.power.requestKeepAwake('display')) while a session runs, and releases it when the session ends or is stopped. |
+| `alarms` | Ends the session at the chosen time and updates the time left on the icon badge, even when the popup is closed. |
+| `storage` | Saves settings, presets, the chosen face and session history on this device. |
+| `offscreen` | Plays the optional end-of-session chime, which needs an audio context. |
+| `activeTab` | Used only when the user clicks 'Add this site' in Options, to read the current site's address. |
+| `optional host permissions` | Requested one site at a time, only for sites the user adds to 'Always keep these sites awake', so the extension can tell when that site is open. Page content is never read. |
 
-Remote code: none. All scripts are bundled in the package.
+**Remote code:** No. All code ships inside the package.
 
-## Data usage disclosure
+## Privacy practices (data usage form)
 
-- Data collected by default: none.
-- Optional (user opt-in in Settings → Privacy): anonymous usage statistics — session start/end (plan type, preset, end reason, minutes), Pro activation (plan) and error codes, with a random per-worker id held in memory only.
-- Pro activation (user action): licence key, a random device id and the label "AwakeTab for Chrome · {OS}" sent to awaketab.com to count one of five activations.
-- Not sold, not used for advertising, not used for creditworthiness.
+- **Data collected:** None by default. Only when the user chooses to send feedback: the message, plus browser and device type. With Pro only: an account identifier from Google, GitHub or a passkey, used only for sync.
+- **Sold or transferred to third parties:** No.
+- **Used for anything unrelated to the single purpose:** No.
+- **Used to decide creditworthiness or for lending:** No.
+- **Privacy policy URL:** [PRIVACY POLICY URL]
+
+> Have legal review the privacy answers and the policy before submitting. The answers must match what the build actually sends.
 
 ## Images
 
-Generated reproducibly by `pnpm -F extension store:assets` into `store/images/` from `scripts/store-assets.mts`. Upload the first four screenshots for the free launch, followed by the optional promo tile and the store icon:
+The store kit from the marketing board, used as exported. Do not regenerate or edit these files; if the product UI changes, re-export them from the board.
 
-| File | Size | Screenshot (docs/10 §9) |
+| File (`store/glance/chrome-web-store/`) | Size | Field |
 |---|---|---|
-| `screenshot-1-popup.png` | 1280×800 | The active popup with an enlarged toolbar badge |
-| `screenshot-2-screen-or-system.png` | 1280×800 | Screen or System, side by side |
-| `screenshot-3-toolbar-badge.png` | 1280×800 | The five toolbar badge states |
-| `screenshot-4-lengths.png` | 1280×800 | A 2 h session and an end time past midnight |
-| `promo-440x280.png` | 440×280 | Small promotional tile |
-| `public/icon-128.png` | 128×128 | Store icon (also 16/32/48 in the package) |
+| `cws-01.png` … `cws-05.png` | 1280 × 800 | Screenshots, in that order (dark, light, dark, dark, light) |
+| `promo-small-440x280.png` | 440 × 280 | Small promo tile (required) |
+| `promo-marquee-1400x560.png` | 1400 × 560 | Marquee promo tile |
+| `icon-128.png` | 128 × 128, transparent | Store icon (96 px artwork, 16 px padding) |
+| `edge-logo-300.png` | 300 × 300, transparent | Edge Add-ons logo |
 
-Keep `screenshot-5-pro-auto-start.png` for a later Pro release. Do not upload it as a free-launch feature screenshot.
+Product Hunt and launch-post images live in `docs/launch/` with their copy.
 
 ## Package
 
