@@ -149,6 +149,7 @@
   },
   "tool": {
     "skip": "Saltar al contenido",
+    "skipTimer": "Ir al temporizador",
     "header": {
       "settings": "Configuración",
       "share": "Compartir",

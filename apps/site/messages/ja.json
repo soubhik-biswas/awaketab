@@ -149,6 +149,7 @@
   },
   "tool": {
     "skip": "本文へスキップ",
+    "skipTimer": "タイマーへ移動",
     "header": {
       "settings": "設定",
       "share": "共有",

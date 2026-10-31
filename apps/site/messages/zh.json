@@ -149,6 +149,7 @@
   },
   "tool": {
     "skip": "跳到正文",
+    "skipTimer": "跳到计时器",
     "header": {
       "settings": "设置",
       "share": "分享",

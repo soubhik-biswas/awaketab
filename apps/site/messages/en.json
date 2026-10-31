@@ -170,6 +170,7 @@
   },
   "tool": {
     "skip": "Skip to content",
+    "skipTimer": "Skip to the timer",
     "header": {
       "settings": "Settings",
       "share": "Share",
