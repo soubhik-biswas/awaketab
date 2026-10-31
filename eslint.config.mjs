@@ -19,7 +19,8 @@ export default tseslint.config(
       '**/next-env.d.ts',
       'apps/site/public/**',
       '**/node_modules/**',
-      'apps/web/public/**',
+      // The retiring Astro site is out of the checks; pnpm test:web still runs its tests.
+      'apps/web/**',
       // Agent/editor git worktrees are full repo copies; lint the checkout, not its clones.
       '.claude/**',
     ],
