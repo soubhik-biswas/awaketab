@@ -7,7 +7,7 @@ export type TEndReason = 'completed' | 'user' | 'lost_timeout' | 'denied' | 'bat
 export type TPresetId = 'p15' | 'p30' | 'p45' | 'p60' | 'p120' | 'p240' | 'pinf' | 'custom' | 'until';
 export type TAmbientMode = 'standard' | 'clock' | 'focus' | 'minimal' | 'night' | 'message' | 'cook' | 'breathe';
 export type TTheme = 'auto' | 'light' | 'dark' | 'oled';
-// The 49 Volt clock faces, in the order the faces sheet, the C key and a swipe step through them.
+// The 46 Glance clock faces, in the order the faces gallery, the C key and a swipe step through them.
 export const FACE_IDS = [
   'ring',
   'bold',
@@ -21,7 +21,6 @@ export const FACE_IDS = [
   'words',
   'nixie',
   'lcd',
-  'led',
   'dive',
   'chrono',
   'gauge',
@@ -51,8 +50,6 @@ export const FACE_IDS = [
   'bauhaus',
   'poster',
   'eink',
-  'terminal',
-  'pulse',
   'waveform',
   'blob',
   'hud',

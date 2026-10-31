@@ -15,7 +15,7 @@ const line = (m: TFaceModel): string =>
       ? `ready when you are · ${m.endLine}`
       : `left · ${m.endLine}`;
 
-// A paper display with serif digits and a faint ghost, calm by daylight.
+// Paper-like and calm, with serif digits and a faint ghost; dark themes turn it into night paper.
 export default function Eink({ m }: IDrawProps) {
   const digits: CSSProperties = {
     position: 'absolute',
@@ -33,6 +33,8 @@ export default function Eink({ m }: IDrawProps) {
     <div
       style={card(m, {
         borderRadius: 26,
+        // Night paper: dark and OLED invert the page and turn its hues back.
+        ...(m.night ? { filter: 'invert(.93) hue-rotate(180deg) contrast(.95)' } : null),
         backgroundColor: PAPER,
         backgroundImage: 'radial-gradient(rgba(0,0,0,.035) 1px, transparent 1.2px)',
         backgroundSize: '4px 4px',

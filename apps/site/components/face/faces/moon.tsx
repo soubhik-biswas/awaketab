@@ -1,22 +1,31 @@
 import { useId } from 'react';
-import { BLACK, NAVY, SNOW, WHITE } from '../art';
+import { BLACK, fxInk, fxInk2, NAVY, WHITE } from '../art';
 import { dash } from '../geometry';
 import { type IDrawProps, L, lmin, MONO, Stars, type TStar, Svg } from '../kit';
-import type { TFaceModel, TFaceState } from '../model';
+import { FACE_PALETTE, stateColour, type TFaceModel } from '../model';
 
-const SKY =
-  'radial-gradient(circle at 50% 30%, rgba(255,240,205,.10), transparent 46%), radial-gradient(circle at 50% 120%, rgba(61,245,142,.10), transparent 55%), radial-gradient(circle at 50% 30%, #161C30 0%, #0B0F1D 58%, #05070F 100%)';
-const SHADOW = {
-  light: `0 18px 36px ${NAVY(0.18)}, 0 0 0 1px #D9D9E5`,
-  night: `0 22px 44px ${BLACK(0.5)}, 0 0 0 1px #26314A`,
+// A pale daytime sky by day, a night sky at night.
+const ART = {
+  light: {
+    sky: 'radial-gradient(circle at 50% 120%, rgba(17,122,59,.10), transparent 55%), radial-gradient(circle at 50% 30%, #FFFFFF 0%, #EEF1F8 58%, #DFE4F0 100%)',
+    shadow: `0 18px 36px ${NAVY(0.18)}, 0 0 0 1px #D9D9E5`,
+    track: NAVY(0.1),
+    dark: NAVY(0.07),
+    edge: NAVY(0.16),
+    lit: ['#FFFDF6', '#E9E1C9', '#B9AD8E'],
+  },
+  night: {
+    sky: 'radial-gradient(circle at 50% 30%, rgba(255,240,205,.10), transparent 46%), radial-gradient(circle at 50% 120%, rgba(61,245,142,.10), transparent 55%), radial-gradient(circle at 50% 30%, #161C30 0%, #0B0F1D 58%, #05070F 100%)',
+    shadow: `0 22px 44px ${BLACK(0.5)}, 0 0 0 1px #2A2D38`,
+    track: WHITE(0.08),
+    dark: WHITE(0.06),
+    edge: WHITE(0.14),
+    lit: ['#FFFDF6', '#ECE5D0', '#C8BFA6'],
+  },
 };
 const GLOW = 'radial-gradient(circle, rgba(255,246,220,.30), rgba(255,246,220,0) 66%)';
-const MOON_LIGHT = ['#FFFDF6', '#ECE5D0', '#C8BFA6'] as const;
-const MOON_INK = '#B9C2D6';
 const CRATER = (a: number) => `rgba(60,50,30,${a})`;
 const STAR_SKY = '#A9D0FF';
-// The phase tag's warm moonlight while awake, starting or ready.
-const MOON_TAG = '#E9DDB4';
 const STARS: readonly TStar[] = [
   [40, 70, 2],
   [70, 40, 3],
@@ -39,12 +48,12 @@ const MR = 56;
 const MCX = 180;
 const MCY = 104;
 
-// The sky stays night on every theme, so the other states' tag takes the dark theme's status colours (it carries .dark).
-const NIGHT_TAG: Readonly<Partial<Record<TFaceState, string>>> = {
-  paused: 'var(--warning)',
-  blocked: 'var(--destructive)',
-  unsupported: 'var(--info)',
-  up: 'var(--ended)',
+// The phase tag: warm moonlight (deep amber by day) while awake, starting or ready; the state colour otherwise.
+const tagColour = (m: TFaceModel): string => {
+  const light = !m.night;
+  if (m.awake || m.st === 'starting') return light ? '#8A5A00' : '#E9DDB4';
+  if (m.st === 'idle') return light ? '#4B5165' : '#E9DDB4';
+  return stateColour(FACE_PALETTE[light ? 'light' : 'dark'], m.st, m.lampValue);
 };
 
 // The lit part of the moon: a full disc, then a shrinking crescent as the session runs down.
@@ -59,11 +68,11 @@ export function moonPath(mk: number): string {
 const phase = (m: TFaceModel): string =>
   m.st === 'up' ? 'New moon' : m.st === 'idle' ? 'Full moon' : `${Math.round(m.ringFrac * 100)}% lit`;
 
-// The moon wanes from full to new as the session runs down, under an aurora sky.
+// The moon wanes from full to new as the session runs down: a night sky in dark, a pale daytime sky in light.
 export default function Moon({ m }: IDrawProps) {
   const gid = `af-moon-${useId().replace(/[^a-zA-Z0-9_-]/gu, '')}`;
   const lit = moonPath(m.ringFrac);
-  const tag = NIGHT_TAG[m.st] ?? MOON_TAG;
+  const a = m.night ? ART.night : ART.light;
   return (
     <>
       <div
@@ -75,11 +84,11 @@ export default function Moon({ m }: IDrawProps) {
           height: 292,
           borderRadius: '50%',
           overflow: 'hidden',
-          background: SKY,
-          boxShadow: m.night ? SHADOW.night : SHADOW.light,
+          background: a.sky,
+          boxShadow: a.shadow,
         }}
       >
-        <Stars pts={STARS} colors={STAR_COLOURS} />
+        {m.night && <Stars pts={STARS} colors={STAR_COLOURS} />}
         <div
           className="afx-breath"
           style={{
@@ -96,12 +105,12 @@ export default function Moon({ m }: IDrawProps) {
       <Svg>
         <defs>
           <radialGradient id={gid} cx="42%" cy="36%" r="72%">
-            <stop offset="0" style={{ stopColor: MOON_LIGHT[0] }} />
-            <stop offset=".62" style={{ stopColor: MOON_LIGHT[1] }} />
-            <stop offset="1" style={{ stopColor: MOON_LIGHT[2] }} />
+            <stop offset="0" style={{ stopColor: a.lit[0] }} />
+            <stop offset=".62" style={{ stopColor: a.lit[1] }} />
+            <stop offset="1" style={{ stopColor: a.lit[2] }} />
           </radialGradient>
         </defs>
-        <circle cx="180" cy="155" r="140" fill="none" strokeWidth="3" style={{ stroke: WHITE(0.08) }} />
+        <circle cx="180" cy="155" r="140" fill="none" strokeWidth="3" style={{ stroke: a.track }} />
         <circle
           className="af-tr"
           cx="180"
@@ -114,7 +123,7 @@ export default function Moon({ m }: IDrawProps) {
           opacity={m.st === 'idle' ? 0.35 : m.ringFrac === 0 ? 0 : 1}
           style={{ stroke: m.mc1, strokeDasharray: dash(C140, m.ringFrac) }}
         />
-        <circle cx="180" cy="104" r="56" strokeWidth="1" style={{ fill: WHITE(0.06), stroke: WHITE(0.14) }} />
+        <circle cx="180" cy="104" r="56" strokeWidth="1" style={{ fill: a.dark, stroke: a.edge }} />
         {lit && <path className="af-tr" d={lit} fill={`url(#${gid})`} />}
         <circle cx="167" cy="88" r="8" style={{ fill: CRATER(0.08) }} />
         <circle cx="195" cy="116" r="11" style={{ fill: CRATER(0.07) }} />
@@ -139,18 +148,18 @@ export default function Moon({ m }: IDrawProps) {
             fontWeight: 300,
             letterSpacing: '-0.04em',
             lineHeight: 1,
-            color: SNOW,
+            color: fxInk(!m.night),
             fontVariantNumeric: 'tabular-nums',
           }}
         >
           {m.digits}
         </span>
-        <span className={L} style={{ fontSize: lmin(13), color: MOON_INK }}>
+        <span className={L} style={{ fontSize: lmin(13), color: fxInk2(!m.night) }}>
           {m.endLine}
         </span>
         <span
-          className={NIGHT_TAG[m.st] ? `${L} dark` : L}
-          style={{ marginTop: 2, fontFamily: MONO, fontSize: lmin(12), letterSpacing: '.08em', color: tag }}
+          className={L}
+          style={{ marginTop: 2, fontFamily: MONO, fontSize: lmin(12), letterSpacing: '.08em', color: tagColour(m) }}
         >
           {phase(m)}
         </span>

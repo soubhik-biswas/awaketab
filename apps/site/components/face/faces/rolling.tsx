@@ -1,7 +1,17 @@
 import type { CSSProperties } from 'react';
-import { BLACK, FLIP_CARD, SNOW, WHITE } from '../art';
+import { BLACK, NAVY, WHITE } from '../art';
 import { alpha } from '../geometry';
 import { EndLine, type IDrawProps } from '../kit';
+
+const DRUM_SHADOW = {
+  light: `0 10px 22px ${NAVY(0.1)}, inset 0 0 0 1px #D6D9E3`,
+  night: `0 10px 22px ${BLACK(0.25)}, inset 0 0 0 1px ${WHITE(0.05)}`,
+};
+// The drums fade into the porcelain ground by day and into shadow at night.
+const DRUM_FADE = {
+  light: 'linear-gradient(180deg, rgba(244,245,250,.92), transparent 32%, transparent 68%, rgba(244,245,250,.92))',
+  night: `linear-gradient(180deg, ${BLACK(0.55)}, transparent 32%, transparent 68%, ${BLACK(0.55)})`,
+};
 
 const row = (top: number, current: boolean): CSSProperties => ({
   position: 'absolute',
@@ -17,7 +27,8 @@ const row = (top: number, current: boolean): CSSProperties => ({
 
 // Odometer drums: the next digit is always just visible; the last drum rolls each second while awake.
 export default function Rolling({ m }: IDrawProps) {
-  const { accent } = m;
+  const { t, accent } = m;
+  const k = m.night ? 'night' : 'light';
   const mods = m.h > 0 ? [10, 10, 6, 10] : [6, 10, 6, 10];
   return (
     <div
@@ -43,10 +54,10 @@ export default function Rolling({ m }: IDrawProps) {
                   width: 66,
                   height: 156,
                   borderRadius: 12,
-                  background: FLIP_CARD[m.theme],
-                  color: SNOW,
+                  background: t.card,
+                  color: t.cardInk,
                   overflow: 'hidden',
-                  boxShadow: `0 10px 22px ${BLACK(0.25)}, inset 0 0 0 1px ${WHITE(0.05)}`,
+                  boxShadow: DRUM_SHADOW[k],
                 }}
               >
                 <div
@@ -61,7 +72,7 @@ export default function Rolling({ m }: IDrawProps) {
                   style={{
                     position: 'absolute',
                     inset: 0,
-                    background: `linear-gradient(180deg, ${BLACK(0.55)}, transparent 32%, transparent 68%, ${BLACK(0.55)})`,
+                    background: DRUM_FADE[k],
                     pointerEvents: 'none',
                   }}
                 />

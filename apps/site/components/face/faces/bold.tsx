@@ -14,7 +14,7 @@ export default function Bold({ m }: IDrawProps) {
           display: 'flex',
           alignItems: 'baseline',
           fontWeight: 800,
-          fontSize: m.long ? 80 : 112,
+          fontSize: m.long ? 76 : 100,
           lineHeight: 0.86,
           letterSpacing: '-0.06em',
           fontVariantNumeric: 'tabular-nums',

@@ -3,7 +3,7 @@ import { BLACK, WHITE, themed } from '../art';
 import { alpha, f1, P, ticks } from '../geometry';
 import { DialLabel, type IDrawProps, L, MONO, lmin, Svg } from '../kit';
 
-const WELL = { light: '#E9E9F1', dark: '#0A0F1C', oled: '#0A0E18' };
+const WELL = { light: '#E9E9F1', dark: '#0A0B10', oled: '#0A0E18' };
 const PILL = { light: 'rgba(255,255,255,.94)', night: 'rgba(10,15,28,.9)' };
 const MINOR = ticks(110, 115, 60, (i) => i % 5 !== 0);
 const MAJOR = ticks(108, 117, 12);

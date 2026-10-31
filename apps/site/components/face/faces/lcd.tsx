@@ -1,9 +1,10 @@
-import { BLACK, CARD_SHADOW, LCD_GROUND } from '../art';
+import { BLACK, CARD_SHADOW } from '../art';
 import { alpha } from '../geometry';
 import { type IDrawProps, L, MONO, mono } from '../kit';
 
+// The bezel stays dark in every theme, like the real object.
 const BEZEL = {
-  light: 'linear-gradient(180deg, #2A3550, #1D273F)',
+  light: 'linear-gradient(180deg, #2A3550, #1C1F29)',
   night: 'linear-gradient(180deg, #1C2438, #0C1120)',
 };
 const NB = 20;
@@ -34,7 +35,7 @@ export default function Lcd({ m }: IDrawProps) {
           width: 300,
           height: 196,
           borderRadius: 16,
-          background: `radial-gradient(ellipse at 50% 40%, ${alpha(accent, 0x14)}, transparent 70%), ${LCD_GROUND[m.theme]}`,
+          background: `radial-gradient(ellipse at 50% 40%, ${alpha(accent, 0x14)}, transparent 70%), ${m.t.lcdS}`,
           boxShadow: `inset 0 2px 12px ${BLACK(0.35)}`,
           overflow: 'hidden',
         }}

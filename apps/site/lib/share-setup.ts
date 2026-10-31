@@ -1,3 +1,5 @@
+import { RETIRED_FACES } from '@/components/face/model';
+
 // A shared setup link carries the length, the face and the chime only (handoff §11): /s/<face>-<minutes>-<chime|quiet>.
 const SETUP_FACES = [
   'ring',
@@ -12,7 +14,6 @@ const SETUP_FACES = [
   'words',
   'nixie',
   'lcd',
-  'led',
   'dive',
   'chrono',
   'gauge',
@@ -56,7 +57,8 @@ export interface ISetup {
 export function parseSetup(code: string): ISetup | null {
   const m = /^([a-z]+)-(\d{1,3})-(chime|quiet)$/u.exec(code.trim().toLowerCase());
   if (!m) return null;
-  const face = m[1] as TSetupFace;
+  // Links shared before a face was retired open its closest face.
+  const face = ((m[1] && RETIRED_FACES[m[1]]) ?? m[1]) as TSetupFace;
   const minutes = Number(m[2]);
   if (!SETUP_FACES.includes(face) || !(minutes in SETUP_LENGTHS)) return null;
   return { face, minutes, chime: m[3] === 'chime' };

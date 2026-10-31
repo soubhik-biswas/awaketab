@@ -5,7 +5,7 @@ import { big, EndLine, type IDrawProps, Kicker, L, lmin, MONO } from '../kit';
 const PX = 14;
 const GROUND = {
   light: 'linear-gradient(180deg, #FFFFFF, #EFEFF6)',
-  dark: 'linear-gradient(180deg, #131B30, #0A0F1C)',
+  dark: 'linear-gradient(180deg, #14161D, #0A0B10)',
   oled: '#05070C',
 };
 const SPENT = { light: 'rgba(246,244,239,.62)', night: 'rgba(7,11,22,.62)' };

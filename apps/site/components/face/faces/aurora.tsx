@@ -3,10 +3,15 @@ import { BLACK, WHITE } from '../art';
 import { alpha } from '../geometry';
 import { card, cardColumn, digitSize, type IDrawProps, L, lmin, MONO } from '../kit';
 
-const SKY = '#05060F';
-const VIOLET = '#7B5CFF';
-const CYAN = '#3FB8FF';
-const VEIL = `radial-gradient(120% 80% at 50% 0%, ${WHITE(0.1)}, transparent 50%), radial-gradient(90% 70% at 50% 100%, ${BLACK(0.35)}, transparent 60%)`;
+// A pastel mesh with dark ink by day, so the digits keep their contrast; a deep mesh at night.
+const ART = {
+  light: { base: '#EEF0F8', ink: '#0B1020', shade: WHITE(0.45), track: 'rgba(11,16,32,.16)', mint: '#6FDDA0' },
+  night: { base: '#05060F', ink: '#FFFFFF', shade: BLACK(0.35), track: WHITE(0.22), mint: '' },
+};
+const VIOLET = { light: '#B29CFF', night: '#7B5CFF' };
+const CYAN = { light: '#8FD3FF', night: '#3FB8FF' };
+const veil = (shade: string): string =>
+  `radial-gradient(120% 80% at 50% 0%, ${WHITE(0.1)}, transparent 50%), radial-gradient(90% 70% at 50% 100%, ${shade}, transparent 60%)`;
 
 const light = (
   left: number,
@@ -28,18 +33,20 @@ const light = (
   opacity,
 });
 
-// Northern lights drift behind thin digits, a living wallpaper while awake.
+// A drifting northern-light mesh behind thin digits: pastel in light theme, deep in dark.
 export default function Aurora({ m }: IDrawProps) {
-  const a1 = m.mc1;
-  const a2 = m.multi ? VIOLET : alpha(m.accent, 0x99);
-  const a3 = m.multi ? CYAN : m.t.track;
+  const k = m.night ? 'night' : 'light';
+  const a = ART[k];
+  const a1 = m.multi ? a.mint || m.lamp : m.accent;
+  const a2 = m.multi ? VIOLET[k] : alpha(m.accent, 0x99);
+  const a3 = m.multi ? CYAN[k] : m.t.track;
   return (
-    <div style={card(m, { background: SKY })}>
+    <div style={card(m, { background: a.base })}>
       <div className="afx-drift" style={light(-50, -70, 270, 270, a1, 42, 0.9)} />
       <div className="afx-drift2" style={light(130, 50, 270, 250, a2, 48, 0.85)} />
       <div className="afx-drift" data-delay="-6" style={light(30, 170, 230, 190, a3, 44, 0.7)} />
-      <div style={{ position: 'absolute', inset: 0, background: VEIL }} />
-      <div style={cardColumn(4, { color: '#FFFFFF' })}>
+      <div style={{ position: 'absolute', inset: 0, background: veil(a.shade) }} />
+      <div style={cardColumn(4, { color: a.ink })}>
         <span
           className={L}
           style={{
@@ -76,10 +83,10 @@ export default function Aurora({ m }: IDrawProps) {
           bottom: 28,
           height: 3,
           borderRadius: 2,
-          background: WHITE(0.22),
+          background: a.track,
         }}
       >
-        <div className="af-tr" style={{ height: 3, width: m.fracPct, borderRadius: 2, background: '#FFFFFF' }} />
+        <div className="af-tr" style={{ height: 3, width: m.fracPct, borderRadius: 2, background: a.ink }} />
       </div>
     </div>
   );

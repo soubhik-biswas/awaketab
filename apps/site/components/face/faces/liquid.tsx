@@ -1,19 +1,41 @@
-import { BLACK, WHITE } from '../art';
+import { BLACK, NAVY, WHITE } from '../art';
 import { alpha } from '../geometry';
 import { digitSize, type IDrawProps, L, lmin, MONO } from '../kit';
 
-const SPHERE = 'radial-gradient(circle at 50% 35%, #18213D, #070B18 75%)';
+// A clear glass sphere with a pastel fill and ink digits by day; a dark sphere of light at night.
+const ART = {
+  light: {
+    glass: 'radial-gradient(circle at 50% 35%, #FFFFFF, #E2E7F1 75%)',
+    shadow: `inset 0 0 0 2px ${WHITE(0.9)}, inset 0 -20px 50px ${NAVY(0.08)}, 0 26px 60px ${NAVY(0.14)}`,
+    bubble: NAVY(0.25),
+    ink: '#0B1020',
+    textShadow: 'none',
+  },
+  night: {
+    glass: 'radial-gradient(circle at 50% 35%, #18213D, #070B18 75%)',
+    shadow: `inset 0 0 0 2px ${WHITE(0.08)}, inset 0 -20px 50px ${BLACK(0.5)}, 0 26px 60px ${BLACK(0.45)}`,
+    bubble: WHITE(0.45),
+    ink: '#FFFFFF',
+    textShadow: `0 2px 16px ${BLACK(0.35)}`,
+  },
+};
 const CRESTS = Array.from({ length: 17 }, (_, k) => ` Q${k * 32 + 16} ${k % 2 ? 14 : 2} ${k * 32 + 32} 8`).join('');
 const WAVE = `M0 8${CRESTS} L520 16 L0 16 Z`;
 const BUBBLES = [
-  { left: 70, top: 120, d: 8, a: 0.5, delay: 0 },
-  { left: 160, top: 150, d: 6, a: 0.45, delay: -2 },
-  { left: 120, top: 170, d: 10, a: 0.4, delay: -3.4 },
+  { left: 70, top: 120, d: 8, delay: 0 },
+  { left: 160, top: 150, d: 6, delay: -2 },
+  { left: 120, top: 170, d: 10, delay: -3.4 },
 ] as const;
 
 // A glass sphere of light that drains as the session runs, with waves and bubbles.
 export default function Liquid({ m }: IDrawProps) {
+  const light = !m.night;
+  const a = light ? ART.light : ART.night;
   const hc = m.heat(m.frac);
+  const crest = light ? alpha(hc, 0x8c) : hc;
+  const fill = light
+    ? `linear-gradient(180deg, ${alpha(hc, 0x73)}, ${alpha(hc, 0x4d)} 60%, ${alpha(hc, 0x40)})`
+    : `linear-gradient(180deg, ${hc}, ${alpha(hc, 0xb3)} 60%, ${alpha(hc, 0x80)})`;
   const level = Math.round(260 * (1 - m.ringFrac));
   return (
     <div
@@ -25,8 +47,8 @@ export default function Liquid({ m }: IDrawProps) {
         height: 260,
         borderRadius: '50%',
         overflow: 'hidden',
-        background: SPHERE,
-        boxShadow: `inset 0 0 0 2px ${WHITE(0.08)}, inset 0 -20px 50px ${BLACK(0.5)}, 0 26px 60px ${BLACK(0.45)}, 0 0 0 1px ${m.t.line}`,
+        background: a.glass,
+        boxShadow: `${a.shadow}, 0 0 0 1px ${m.t.line}`,
       }}
     >
       <div
@@ -37,7 +59,7 @@ export default function Liquid({ m }: IDrawProps) {
           width: 260,
           top: level,
           height: 280,
-          background: `linear-gradient(180deg, ${hc}, ${alpha(hc, 0xb3)} 60%, ${alpha(hc, 0x80)})`,
+          background: fill,
         }}
       >
         <svg
@@ -48,7 +70,7 @@ export default function Liquid({ m }: IDrawProps) {
           viewBox="0 0 520 16"
           aria-hidden="true"
         >
-          <path d={WAVE} style={{ fill: hc }} />
+          <path d={WAVE} style={{ fill: crest }} />
         </svg>
         <svg
           className="afx-wl2"
@@ -58,7 +80,7 @@ export default function Liquid({ m }: IDrawProps) {
           viewBox="0 0 520 16"
           aria-hidden="true"
         >
-          <path d={WAVE} style={{ fill: hc }} />
+          <path d={WAVE} style={{ fill: crest }} />
         </svg>
         {BUBBLES.map((b) => (
           <span
@@ -72,7 +94,7 @@ export default function Liquid({ m }: IDrawProps) {
               width: b.d,
               height: b.d,
               borderRadius: '50%',
-              border: `1.5px solid ${WHITE(b.a)}`,
+              border: `1.5px solid ${a.bubble}`,
             }}
           />
         ))}
@@ -101,8 +123,8 @@ export default function Liquid({ m }: IDrawProps) {
           alignItems: 'center',
           justifyContent: 'center',
           gap: 4,
-          color: '#FFFFFF',
-          textShadow: `0 2px 16px ${BLACK(0.35)}`,
+          color: a.ink,
+          textShadow: a.textShadow,
         }}
       >
         <span

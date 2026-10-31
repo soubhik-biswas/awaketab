@@ -1,10 +1,11 @@
-import { SNOW } from '../art';
-import { arc, ticks } from '../geometry';
-import { DialLabel, hand, type IDrawProps, L, mono, MONO, Svg } from '../kit';
+import { BLACK, SNOW } from '../art';
+import { alpha, arc, ticks } from '../geometry';
+import { D, DialLabel, hand, type IDrawProps, L, mono, MONO, Svg } from '../kit';
 
+// The bezel stays dark in every theme, like the real object.
 const BEZEL = {
-  light: 'linear-gradient(180deg, #1D273F, #121A2E)',
-  dark: 'linear-gradient(180deg, #1A2238, #0A0F1C)',
+  light: 'linear-gradient(180deg, #1C1F29, #121A2E)',
+  dark: 'linear-gradient(180deg, #1A2238, #0A0B10)',
   oled: '#0B0F1A',
 };
 const BEZEL_INK = SNOW;
@@ -38,7 +39,14 @@ export default function Dive({ m }: IDrawProps) {
         <path d={BEZEL_TICKS} strokeWidth="2" strokeLinecap="round" opacity=".7" style={{ stroke: BEZEL_INK }} />
         <path d="M180 14 L172 28 H188 Z" style={{ fill: BEZEL_INK }} />
         <path d={DIAL} strokeWidth="6" strokeLinecap="round" style={{ stroke: t.ink }} />
-        <path d={MINOR} strokeWidth="1.2" strokeLinecap="round" opacity=".55" style={{ stroke: t.ink2 }} />
+        <path
+          className={D}
+          d={MINOR}
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          opacity=".55"
+          style={{ stroke: t.ink2 }}
+        />
       </Svg>
       {NUMS.map((n) => (
         <DialLabel
@@ -52,20 +60,6 @@ export default function Dive({ m }: IDrawProps) {
           extra={{ fontFamily: MONO, fontWeight: 500 }}
         />
       ))}
-      <span
-        className={L}
-        style={{
-          position: 'absolute',
-          left: 0,
-          width: 360,
-          top: 196,
-          textAlign: 'center',
-          ...mono(13, '.08em', accent),
-          fontVariantNumeric: 'tabular-nums',
-        }}
-      >
-        {m.digits} LEFT
-      </span>
       <div className="afx-h" style={hand(70, 14, 8, m.hourDeg, m.hourDeg0, t.ink, { borderRadius: 4 })} />
       <div className="afx-m" style={hand(110, 16, 6, m.minDeg, m.minDeg0, t.ink, { borderRadius: 3 })} />
       <div className="afx-s" style={hand(124, 30, 2, m.secDeg, m.secDeg0, accent)}>
@@ -94,6 +88,27 @@ export default function Dive({ m }: IDrawProps) {
           border: `3px solid ${accent}`,
         }}
       />
+      <span
+        className={L}
+        style={{
+          position: 'absolute',
+          left: 120,
+          width: 120,
+          top: 206,
+          height: 30,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: 10,
+          background: t.panel,
+          boxShadow: `0 0 0 1px ${alpha(accent, 0x40)}, 0 6px 16px ${BLACK(0.35)}`,
+          ...mono(13, '.06em', accent),
+          fontVariantNumeric: 'tabular-nums',
+          zIndex: 3,
+        }}
+      >
+        {`${m.digits} LEFT`}
+      </span>
     </>
   );
 }

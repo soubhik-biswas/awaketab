@@ -2684,7 +2684,6 @@
       "words": "Palabras",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "led": "LED",
       "dive": "Buceo",
       "chrono": "Cronógrafo",
       "gauge": "Indicador",
@@ -2714,8 +2713,6 @@
       "bauhaus": "Bauhaus",
       "poster": "Póster",
       "eink": "Tinta electrónica",
-      "terminal": "Terminal",
-      "pulse": "Pulso",
       "waveform": "Forma de onda",
       "blob": "Fluido",
       "hud": "HUD",
@@ -2735,7 +2732,6 @@
       "words": "La hora en una frase, escrita con naturalidad en cada uno de los ocho idiomas.",
       "nixie": "Tubos de vidrio con malla y ochos fantasma; el brillo toma el color de la luz.",
       "lcd": "Segmentos inclinados sobre un tenue 88:88, como un reloj de mesilla.",
-      "led": "Panel de matriz de puntos con una línea de estado que se desplaza. Mejor en OLED.",
       "dive": "Un bisel de reloj de buceo: el arco verde son los minutos que quedan y las agujas marcan la hora real.",
       "chrono": "Subesferas de minutos y segundos con una aguja de cronógrafo que barre.",
       "gauge": "Una aguja de instrumento con una zona de aviso de cinco minutos.",
@@ -2765,8 +2761,6 @@
       "bauhaus": "Formas primarias y un quesito con el tiempo que queda: un objeto de diseño para el escritorio.",
       "poster": "Minutos gigantes recortados en Archivo Expanded, editoriales y contundentes.",
       "eink": "Una pantalla de papel con cifras con serifa y un leve fantasma, tranquila a la luz del día.",
-      "terminal": "Una terminal que informa del bloqueo de pantalla con honestidad, con un cursor parpadeante.",
-      "pulse": "Un trazo de monitor cardíaco recorre la pantalla mientras está despierta.",
       "waveform": "Un anillo de barras de audio que baila mientras está despierta; las barras encendidas son el tiempo que queda.",
       "blob": "Una esfera degradada que cambia de forma, como un asistente de voz en reposo.",
       "hud": "Un arco de segmentos como el salpicadero de un coche, con cifras en cursiva y testigos.",
@@ -2822,9 +2816,6 @@
         "idle": "LISTA",
         "awake": "DESPIERTA",
         "end": "FIN {time}"
-      },
-      "led": {
-        "left": "quedan"
       },
       "board": {
         "left": "QUEDAN",
