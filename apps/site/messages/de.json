@@ -2684,7 +2684,6 @@
       "words": "Wörter",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "led": "LED",
       "dive": "Taucher",
       "chrono": "Chronograph",
       "gauge": "Anzeige",
@@ -2714,8 +2713,6 @@
       "bauhaus": "Bauhaus",
       "poster": "Plakat",
       "eink": "E-Ink",
-      "terminal": "Terminal",
-      "pulse": "Puls",
       "waveform": "Wellenform",
       "blob": "Fluid",
       "hud": "HUD",
@@ -2735,7 +2732,6 @@
       "words": "Die Zeit in einem Satz, in jeder der acht Sprachen natürlich formuliert.",
       "nixie": "Glasröhren mit Gitter und schwachen 8en; das Glühen nimmt die Lampenfarbe an.",
       "lcd": "Schräge Segmente über einer blassen 88:88, wie ein Wecker am Bett.",
-      "led": "Punktmatrix mit laufender Statuszeile. Am schönsten in OLED.",
       "dive": "Eine Taucheruhr-Lünette: Der grüne Bogen zeigt die übrigen Minuten, die Zeiger die echte Zeit.",
       "chrono": "Hilfszifferblätter für Minuten und Sekunden mit umlaufendem Stoppzeiger.",
       "gauge": "Eine Instrumentennadel mit einer Fünf-Minuten-Warnzone.",
@@ -2765,8 +2761,6 @@
       "bauhaus": "Grundformen und ein Tortenstück Restzeit — ein Designobjekt für den Schreibtisch.",
       "poster": "Riesige, angeschnittene Minuten in Archivo Expanded, redaktionell und kräftig.",
       "eink": "Eine Papieranzeige mit Serifenziffern und blassem Nachbild, ruhig bei Tageslicht.",
-      "terminal": "Eine Shell, die ehrlich über die Wach-Sperre berichtet, mit blinkendem Cursor.",
-      "pulse": "Eine EKG-Kurve läuft, solange der Bildschirm wach ist.",
       "waveform": "Ein Ring aus Audiobalken, der im Wachzustand tanzt; leuchtende Balken sind die Restzeit.",
       "blob": "Eine fließende Farbverlaufskugel, wie ein Sprachassistent in Ruhe.",
       "hud": "Ein Segmentbogen wie im Armaturenbrett, mit kursiven Ziffern und Kontrollleuchten.",
@@ -2822,9 +2816,6 @@
         "idle": "BEREIT",
         "awake": "WACH",
         "end": "ENDE {time}"
-      },
-      "led": {
-        "left": "übrig"
       },
       "board": {
         "left": "ÜBRIG",

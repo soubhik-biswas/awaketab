@@ -2684,7 +2684,6 @@
       "words": "Palavras",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "led": "LED",
       "dive": "Mergulho",
       "chrono": "Cronógrafo",
       "gauge": "Medidor",
@@ -2714,8 +2713,6 @@
       "bauhaus": "Bauhaus",
       "poster": "Pôster",
       "eink": "Tinta eletrônica",
-      "terminal": "Terminal",
-      "pulse": "Pulso",
       "waveform": "Forma de onda",
       "blob": "Fluido",
       "hud": "HUD",
@@ -2735,7 +2732,6 @@
       "words": "A hora numa frase, escrita com naturalidade em cada um dos oito idiomas.",
       "nixie": "Tubos de vidro com malha e oitos fantasmas; o brilho assume a cor da luz.",
       "lcd": "Segmentos inclinados sobre um 88:88 apagado, como um despertador de cabeceira.",
-      "led": "Painel de matriz de pontos com uma linha de status rolando. Melhor no OLED.",
       "dive": "Luneta de relógio de mergulho: o arco verde são os minutos que faltam, os ponteiros marcam a hora real.",
       "chrono": "Submostradores de minutos e segundos com um ponteiro de cronógrafo varrendo.",
       "gauge": "Uma agulha de instrumento com zona de alerta de cinco minutos.",
@@ -2765,8 +2761,6 @@
       "bauhaus": "Formas primárias e uma pizza com o tempo que falta: um objeto de design para a mesa.",
       "poster": "Minutos gigantes recortados em Archivo Expanded, editoriais e marcantes.",
       "eink": "Uma tela de papel com números serifados e um leve fantasma, tranquila à luz do dia.",
-      "terminal": "Um terminal que informa o bloqueio de tela com honestidade, com um cursor piscando.",
-      "pulse": "Um traçado de monitor cardíaco corre enquanto a tela está ligada.",
       "waveform": "Um anel de barras de áudio que dança enquanto a tela está ligada; as barras acesas são o tempo que falta.",
       "blob": "Uma esfera em degradê que muda de forma, como um assistente de voz em repouso.",
       "hud": "Um arco de segmentos como o painel de um carro, com números em itálico e luzes-espia.",
@@ -2822,9 +2816,6 @@
         "idle": "PRONTO",
         "awake": "LIGADA",
         "end": "FIM {time}"
-      },
-      "led": {
-        "left": "restantes"
       },
       "board": {
         "left": "FALTAM",

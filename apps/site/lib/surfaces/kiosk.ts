@@ -1,5 +1,5 @@
 import type { ILicenseRecord, ILicenseState, TFeatureGate, TPlanId } from '@awaketab/core';
-import type { TFaceId } from '@/components/face';
+import { type TFaceId, toFaceId } from '@/components/face';
 
 export type TKioskScreen = 'dark' | 'oled';
 type TKioskDays = 'weekdays' | 'everyday';
@@ -20,9 +20,9 @@ export interface IKioskConfig {
   logo: string | null;
 }
 
-// The seven faces the kiosk board offers, in its order.
+// The seven faces the kiosk board offers, in its order; LCD stands in for the retired LED face.
 export const KIOSK_FACES = [
-  'led',
+  'lcd',
   'luxe',
   'bold',
   'nixie',
@@ -85,8 +85,12 @@ function readLicHash(hash: string): string | null {
 }
 
 const isFace = (v: string | null): v is TKioskFace => (KIOSK_FACES as readonly string[]).includes(v ?? '');
+const kioskFace = (v: string | null): TKioskFace | null => {
+  const id = v ? toFaceId(v) : null;
+  return id && isFace(id) ? id : null;
+};
 
-// The kiosk link: ?face=led&screen=oled&days=weekdays&from=08-00&to=18-00&kicker=…&msg=…&line=…&logo=https://…
+// The kiosk link: ?face=lcd&screen=oled&days=weekdays&from=08-00&to=18-00&kicker=…&msg=…&line=…&logo=https://…
 // `days=always` keeps the screen awake all day; the texts default to the board's reception sign.
 export function parseKioskQuery(search: string, defaults: Pick<IKioskConfig, 'kicker' | 'msg' | 'line'>): IKioskConfig {
   const q = new URLSearchParams(search);
@@ -100,7 +104,7 @@ export function parseKioskQuery(search: string, defaults: Pick<IKioskConfig, 'ki
     schedule = { days, from: from ?? DEFAULT_SCHEDULE.from, to: to ?? DEFAULT_SCHEDULE.to };
   }
   return {
-    face: isFace(face) ? face : 'led',
+    face: kioskFace(face) ?? 'lcd',
     screen: q.get('screen') === 'oled' ? 'oled' : 'dark',
     kicker: cleanText(q.get('kicker')) || defaults.kicker,
     msg: cleanText(q.get('msg')) || defaults.msg,

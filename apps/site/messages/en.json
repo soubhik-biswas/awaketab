@@ -2684,7 +2684,6 @@
       "words": "Words",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "led": "LED",
       "dive": "Diver",
       "chrono": "Chronograph",
       "gauge": "Gauge",
@@ -2714,8 +2713,6 @@
       "bauhaus": "Bauhaus",
       "poster": "Poster",
       "eink": "E-ink",
-      "terminal": "Terminal",
-      "pulse": "Pulse",
       "waveform": "Waveform",
       "blob": "Fluid",
       "hud": "HUD",
@@ -2735,7 +2732,6 @@
       "words": "Time in a sentence, written natively in each of the eight languages.",
       "nixie": "Glass tubes with mesh and ghost 8s; the glow takes the lamp colour.",
       "lcd": "Slanted segments over a faint 88:88 ghost, like a bedside clock.",
-      "led": "Dot-matrix board with a scrolling status line. Best in OLED.",
       "dive": "A dive-watch bezel: the green arc is the minutes left, the hands keep real time.",
       "chrono": "Minute and second sub-dials with a sweeping chrono hand.",
       "gauge": "An instrument needle with a five-minute warning zone.",
@@ -2765,8 +2761,6 @@
       "bauhaus": "Primary shapes and a pie of time left — a design object on the desk.",
       "poster": "Giant cropped minutes in Archivo Expanded, editorial and bold.",
       "eink": "A paper display with serif digits and a faint ghost, calm by daylight.",
-      "terminal": "A shell that reports the wake lock honestly, with a blinking cursor.",
-      "pulse": "A heart-monitor trace sweeps while the screen is awake.",
       "waveform": "A ring of audio bars that dances while awake; lit bars are time left.",
       "blob": "A morphing gradient orb, like a voice assistant at rest.",
       "hud": "A car-dashboard arc of segments with italic digits and tell-tale lamps.",
@@ -2822,9 +2816,6 @@
         "idle": "READY",
         "awake": "AWAKE",
         "end": "END {time}"
-      },
-      "led": {
-        "left": "left"
       },
       "board": {
         "left": "LEFT",

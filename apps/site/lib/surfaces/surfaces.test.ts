@@ -100,10 +100,11 @@ describe('mirror', () => {
 describe('kiosk', () => {
   const defaults = { kicker: 'RECEPTION', msg: 'Please take a seat.', line: 'We’ll call your name.' };
 
-  it('defaults to the board: LED, Midnight, weekdays 8 AM to 6 PM', () => {
+  it('defaults to the board: LCD (for the retired LED), Midnight, weekdays 8 AM to 6 PM', () => {
     const cfg = parseKioskQuery('', defaults);
+    expect(parseKioskQuery('?face=led', defaults).face).toBe('lcd');
     expect(cfg).toMatchObject({
-      face: 'led',
+      face: 'lcd',
       screen: 'dark',
       schedule: { days: 'weekdays', from: '08:00', to: '18:00' },
     });
