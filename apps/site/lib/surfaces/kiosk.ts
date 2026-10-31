@@ -47,7 +47,7 @@ export const RELOCK_MS = 30_000;
 // The wall-mode board's TV, drawn at 1440 × 810 and scaled to the screen: a 600 px face 70 px from the top.
 export const KIOSK_STAGE = { width: 1440, height: 810, face: 600, faceTop: 70 } as const;
 // Night dimming: from 10 PM to 6 AM the screen runs at 40 %.
-export const NIGHT_DIM = { from: 22, to: 6, level: 0.4 } as const;
+const NIGHT_DIM = { from: 22, to: 6, level: 0.4 } as const;
 
 export function nightDim(now: number): number {
   const h = new Date(now).getHours();

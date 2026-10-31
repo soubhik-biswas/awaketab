@@ -29,7 +29,7 @@ const TONE: Record<TToastTone, { icon: LucideIcon; color: string }> = {
   info: { icon: CircleCheck, color: 'text-info' },
 };
 
-export const TOAST_DURATION = 6000;
+const TOAST_DURATION = 6000;
 
 interface IProductToastProps extends Omit<IProductToastOptions, 'id'> {
   toastId: string | number;

@@ -4,7 +4,6 @@ import { SETTINGS_KEY } from '@/lib/tool/settings';
 import { isRecord } from '@/lib/tool/store';
 import type { TDeviceKind, TDeviceStatus, TIdentity } from '@/components/product/device-presence';
 
-export type { TDeviceStatus };
 export type TMixKey = 'rain' | 'cafe' | 'fire' | 'brown';
 type TProPlan = 'monthly' | 'yearly' | 'lifetime';
 

@@ -26,8 +26,8 @@ export async function englishOnly(params: Promise<{ locale: string }>): Promise<
 
 // The share images of the marketing board: five fixed files in public/og, and three templates the /og route draws
 // per page from its H1 (use case on porcelain, guide on graphite, shared link with its clock).
-export type TOgImage = 'og-01' | 'og-02' | 'og-03' | 'og-04' | 'og-08';
-export type TOgTemplate = 'use' | 'guide' | 'shared';
+type TOgImage = 'og-01' | 'og-02' | 'og-03' | 'og-04' | 'og-08';
+type TOgTemplate = 'use' | 'guide' | 'shared';
 
 export interface IOgCard {
   image?: TOgImage;
@@ -43,7 +43,7 @@ export interface IOgCard {
   tone?: 'light' | 'dark';
 }
 
-export const OG_SIZE = { width: 1200, height: 630 } as const;
+const OG_SIZE = { width: 1200, height: 630 } as const;
 
 // The head icons and both theme colours from the marketing board, shared by every locale layout.
 export const SITE_ICONS: NonNullable<Metadata['icons']> = {

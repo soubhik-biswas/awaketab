@@ -33,7 +33,7 @@ export interface ICommandGroup {
   items: ICommandAction[];
 }
 
-export interface ICommandPaletteLabels {
+interface ICommandPaletteLabels {
   move: string;
   run: string;
   close: string;

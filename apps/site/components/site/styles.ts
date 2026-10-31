@@ -31,9 +31,6 @@ export const proseP = 'm-0 text-[17px] leading-[1.7] min-[700px]:text-[18px]';
 
 export const proseList = 'm-0 flex flex-col gap-2 pl-[22px] text-[17px] leading-[1.65] min-[700px]:text-[18px]';
 
-// Use with <Button> (default size): the board's 44 px button has a 12 px radius and 15 px label.
-export const btn = 'rounded-[12px] px-[18px] text-[15px]';
-
 // Use with <Button size="cta">: 54 px and full width on phones, 60 px from 700 px.
 export const btnXl =
   'h-[54px] w-full px-5 shadow-[0_12px_30px_var(--site-act-glow)] min-[700px]:h-15 min-[700px]:w-auto min-[700px]:px-[26px]';

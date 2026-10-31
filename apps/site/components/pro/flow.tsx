@@ -12,13 +12,12 @@ export const H1 =
   'm-0 font-display text-[36px] leading-[.98] font-bold tracking-[-0.04em] text-balance outline-none min-[700px]:text-[52px]';
 export const LEAD = 'm-0 text-[17px] leading-[1.55] text-pretty text-muted-foreground-strong min-[700px]:text-[18px]';
 export const PRIMARY = 'h-[52px] w-full gap-2 rounded-full px-[22px] text-[16px] font-bold min-[700px]:w-auto';
-export const OUTLINE =
+const OUTLINE =
   'h-[52px] w-full gap-2 rounded-full border-input px-[22px] text-[16px] font-semibold min-[700px]:w-auto';
 export const LINK =
   'inline-flex min-h-11 items-center border-0 bg-transparent px-1 text-[15px] font-bold text-lamp underline underline-offset-[3px] outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring';
 export const PANEL =
   'flex w-full flex-col gap-3.5 rounded-[24px] border border-border bg-card p-5 text-left min-[700px]:p-7';
-export const ROW = 'flex min-h-[60px] items-center gap-3.5 px-4 py-2.5 [&+&]:border-t [&+&]:border-border';
 
 const STEPS = ['s1', 's2', 's3', 's4'] as const;
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -123,7 +122,7 @@ export function FlowHeader({ step, backHref }: { step: number; backHref: string 
   );
 }
 
-export function Actions({ children }: { children: ReactNode }) {
+function Actions({ children }: { children: ReactNode }) {
   return <div className="flex w-full flex-wrap justify-center gap-2.5">{children}</div>;
 }
 

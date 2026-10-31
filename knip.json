@@ -12,7 +12,7 @@
       }
     },
     "apps/extension": {
-      "entry": ["scripts/*.{mjs,mts}", "test/**/*.test.ts", "e2e/**/*.spec.ts"],
+      "entry": ["scripts/*.{mjs,mts}", "test/**/*.test.ts", "e2e/**/*.spec.ts", "src/next-font.ts"],
       "project": [
         "entrypoints/**/*.{ts,tsx}",
         "src/**/*.{ts,tsx}",
@@ -50,7 +50,6 @@
         "react-day-picker",
         "react-hook-form",
         "react-resizable-panels",
-        "recharts",
         "tailwindcss",
         "tw-animate-css"
       ],

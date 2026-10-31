@@ -24,7 +24,7 @@ export type { TPauseReason, TWakeState } from '@/lib/tool/session';
 type TAnnounceKind = 'start' | 'extend' | 'lowtime' | 'hidden' | 'refused' | 'paused' | 'ended';
 type TFinishReason = 'completed' | 'user';
 
-export interface IAnnounce {
+interface IAnnounce {
   id: number;
   kind: TAnnounceKind;
   endsAt: number | null;

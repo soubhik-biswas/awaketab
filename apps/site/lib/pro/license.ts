@@ -86,7 +86,7 @@ export function isProActive(record: IStoredLicense | null = readLicense(), now =
   return Boolean(record && record.exp * 1000 > now);
 }
 
-export function renews(plan: string | undefined): boolean {
+function renews(plan: string | undefined): boolean {
   return plan === 'pro_yearly' || plan === 'pro_monthly';
 }
 

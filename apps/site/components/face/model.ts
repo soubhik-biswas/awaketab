@@ -230,7 +230,7 @@ const DAY_FILLS: ITones = { sky: '#3B7DD8', violet: '#7C5CE0', lime: '#4F9A1F', 
 
 const isHexColour = (c: unknown): c is string => typeof c === 'string' && /^#[0-9a-f]{6}$/iu.test(c);
 
-export function clock(sec: number, fmt: 12 | 24): string {
+function clock(sec: number, fmt: 12 | 24): string {
   const x = ((sec % 86_400) + 86_400) % 86_400;
   const hh = Math.floor(x / 3600);
   const mm = Math.floor((x % 3600) / 60);
