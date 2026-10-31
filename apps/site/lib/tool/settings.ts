@@ -3,6 +3,11 @@ import { createLocalStore, isRecord, useLocalStore } from '@/lib/tool/store';
 
 export type TChimeKind = 'two' | 'bell' | 'off';
 export type TThemeChoice = 'auto' | 'light' | 'dark' | 'oled';
+export type TVibe = 'aurora' | 'night' | 'rain' | 'sunset' | 'lava' | 'calm';
+export type TVibeMotion = 'still' | 'calm' | 'lively';
+
+export const VIBES: readonly TVibe[] = ['aurora', 'night', 'rain', 'sunset', 'lava', 'calm'];
+const MOTIONS: readonly TVibeMotion[] = ['still', 'calm', 'lively'];
 
 export interface IToolSettings {
   face: TFace;
@@ -13,6 +18,9 @@ export interface IToolSettings {
   chime: TChimeKind;
   dim: boolean;
   theme: TThemeChoice;
+  vibe: TVibe;
+  motion: TVibeMotion;
+  ambientOn: boolean;
 }
 
 export const SETTINGS_KEY = 'at.v1.settings';
@@ -28,6 +36,9 @@ const TOOL_DEFAULTS: IToolSettings = {
   chime: 'two',
   dim: false,
   theme: 'auto',
+  vibe: 'aurora',
+  motion: 'calm',
+  ambientOn: false,
 };
 
 const PRESET_SEC: Record<Exclude<TPresetId, 'custom' | 'until'>, number> = {
@@ -45,7 +56,13 @@ function presetIdFor(sec: number): TPresetId {
   return hit ? hit[0] : 'custom';
 }
 
-type TStored = ISettings & { dimAtNight?: boolean; faceStyles?: unknown };
+type TStored = ISettings & {
+  dimAtNight?: boolean;
+  faceStyles?: unknown;
+  vibe?: TVibe;
+  vibeMotion?: TVibeMotion;
+  ambientOn?: boolean;
+};
 
 function fromStored(raw: unknown): { stored: TStored | null; tool: IToolSettings } {
   if (!isRecord(raw)) return { stored: null, tool: { ...TOOL_DEFAULTS } };
@@ -73,6 +90,9 @@ function fromStored(raw: unknown): { stored: TStored | null; tool: IToolSettings
       chime: sound.id === 'none' ? 'off' : sound.id === 'bell' ? 'bell' : 'two',
       dim: s.dimAtNight === true,
       theme,
+      vibe: VIBES.find((v) => v === String(loose.vibe)) ?? 'aurora',
+      motion: MOTIONS.find((v) => v === String(loose.vibeMotion)) ?? 'calm',
+      ambientOn: loose.ambientOn === true,
     },
   };
 }
@@ -103,6 +123,9 @@ function toStored(tool: IToolSettings): TStored {
     },
     dimAtNight: tool.dim,
     theme: tool.theme,
+    vibe: tool.vibe,
+    vibeMotion: tool.motion,
+    ambientOn: tool.ambientOn,
   };
 }
 
