@@ -2684,7 +2684,6 @@
       "words": "Mots",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "led": "LED",
       "dive": "Plongée",
       "chrono": "Chronographe",
       "gauge": "Jauge",
@@ -2714,8 +2713,6 @@
       "bauhaus": "Bauhaus",
       "poster": "Affiche",
       "eink": "Encre électronique",
-      "terminal": "Terminal",
-      "pulse": "Pouls",
       "waveform": "Forme d’onde",
       "blob": "Fluide",
       "hud": "HUD",
@@ -2735,7 +2732,6 @@
       "words": "L’heure en une phrase, écrite naturellement dans chacune des huit langues.",
       "nixie": "Des tubes de verre avec grille et 8 fantômes ; la lueur prend la couleur de la lampe.",
       "lcd": "Des segments inclinés sur un léger 88:88 fantôme, comme un réveil de chevet.",
-      "led": "Un panneau à matrice de points avec une ligne d’état défilante. Idéal en OLED.",
       "dive": "Une lunette de montre de plongée : l’arc vert indique les minutes restantes, les aiguilles l’heure réelle.",
       "chrono": "Des compteurs de minutes et de secondes avec une trotteuse de chronographe.",
       "gauge": "Une aiguille d’instrument avec une zone d’alerte de cinq minutes.",
@@ -2765,8 +2761,6 @@
       "bauhaus": "Des formes primaires et un camembert du temps restant : un objet design pour le bureau.",
       "poster": "D’énormes minutes recadrées en Archivo Expanded, éditoriales et franches.",
       "eink": "Un écran façon papier avec chiffres à empattements et léger fantôme, apaisant à la lumière du jour.",
-      "terminal": "Un terminal qui rend compte honnêtement du verrouillage de veille, avec un curseur clignotant.",
-      "pulse": "Un tracé de moniteur cardiaque défile tant que l’écran est allumé.",
       "waveform": "Un anneau de barres audio qui danse tant que l’écran est allumé ; les barres allumées sont le temps restant.",
       "blob": "Une sphère en dégradé qui se transforme, comme un assistant vocal au repos.",
       "hud": "Un arc de segments façon tableau de bord, avec chiffres italiques et voyants.",
@@ -2822,9 +2816,6 @@
         "idle": "PRÊT",
         "awake": "ALLUMÉ",
         "end": "FIN {time}"
-      },
-      "led": {
-        "left": "restant"
       },
       "board": {
         "left": "RESTE",

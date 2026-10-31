@@ -15,10 +15,16 @@ import {
 } from './types.js';
 import { computeStreaks, exportStatsCsv, pruneDays } from './stats.js';
 
-// Clear Night face ids (before 30 Oct 2026) and the Solar Green face each one became.
-const OLD_FACES: Readonly<Record<string, TFace>> = { word: 'words', matrix: 'led' };
+// Renamed Clear Night ids, and the faces Glance retired (31 Oct 2026) with the closest face that stays.
+const OLD_FACES: Readonly<Record<string, TFace>> = {
+  word: 'words',
+  matrix: 'lcd',
+  led: 'lcd',
+  terminal: 'lcd',
+  pulse: 'waveform',
+};
 
-// A stored face id as a Solar Green face: renamed ids map across, Analog saved with the Luxe style becomes Luxe,
+// A stored face id as a Glance face: old and retired ids map across, Analog saved with the Luxe style becomes Luxe,
 // and anything unknown reads as Ring.
 export function migrateFace(face: unknown, styles?: unknown): TFace {
   if (face === 'analog' && (styles as { analog?: unknown } | undefined)?.analog === 'luxe') return 'luxe';

@@ -1,5 +1,5 @@
 import { alpha, dash, f1, P, ticks } from '../geometry';
-import { big, column, EndLine, type IDrawProps, Kicker, Svg, sweep } from '../kit';
+import { big, column, D, EndLine, type IDrawProps, Kicker, Svg, sweep } from '../kit';
 
 const C = 2 * Math.PI * 138;
 const MINOR = ticks(124, 129, 60, (i) => i % 5 !== 0);
@@ -13,7 +13,14 @@ export default function Ring({ m }: IDrawProps) {
   return (
     <>
       <Svg>
-        <path d={MINOR} strokeWidth="1.4" strokeLinecap="round" opacity=".35" style={{ stroke: t.ink2 }} />
+        <path
+          className={D}
+          d={MINOR}
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          opacity=".35"
+          style={{ stroke: t.ink2 }}
+        />
         <path d={MAJOR} strokeWidth="2.4" strokeLinecap="round" opacity=".55" style={{ stroke: t.ink }} />
         <circle cx="180" cy="155" r="138" fill="none" strokeWidth="7" style={{ stroke: t.track }} />
         <circle

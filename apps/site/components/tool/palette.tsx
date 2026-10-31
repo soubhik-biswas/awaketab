@@ -55,7 +55,6 @@ const PALETTE_FACES: TFace[] = [
   'gauge',
   'timeline',
   'nixie',
-  'led',
   'pilot',
   'dual',
   'radar',

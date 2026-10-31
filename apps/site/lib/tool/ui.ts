@@ -20,7 +20,7 @@ export type TToolView =
   | 'account';
 
 export type TBanner = 'none' | 'offline' | 'conflict' | 'update';
-export type TFaceCol = 'fresh' | 'signature' | 'digital' | 'analog' | 'ambient' | 'all';
+export type TFaceCol = 'featured' | 'digital' | 'analog' | 'ambient' | 'all';
 export type TDevice = 'desktop' | 'tabletL' | 'tabletP' | 'phone';
 
 export interface IQaOverrides {
@@ -45,7 +45,7 @@ const INITIAL: IToolUi = {
   palQuery: '',
   clearText: '',
   copied: false,
-  faceCol: 'signature',
+  faceCol: 'featured',
   update: false,
   qa: {},
 };
