@@ -3332,7 +3332,7 @@
       "start": "Start kiosk mode",
       "asleep": "Outside the schedule: the screen may sleep until {time}.",
       "licensed": "Kiosk licence active",
-      "invalid": "This kiosk licence link could not be verified. Open the kiosk link from your licence email again."
+      "invalid": "This kiosk licence link could not be verified. Open the kiosk link from Settings → Manage plan again."
     },
     "embedPage": {
       "eyebrow": "Website widget",
