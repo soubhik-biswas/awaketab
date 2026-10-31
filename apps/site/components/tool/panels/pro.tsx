@@ -5,8 +5,7 @@ import { Check, Laptop, Monitor, Smartphone, Sparkle, Tablet, Tv, type LucideIco
 import { RadioGroup } from 'radix-ui';
 import { Scene } from '@/components/scene/scene';
 import { cn } from '@/lib/utils';
-import { readAccount } from '@/lib/pro/account';
-import { ROUTES } from '@/lib/routes';
+import { portalUrl, priceLabel, yearlySaving } from '@/lib/pro/plans';
 import { isLatin } from '@/lib/tool/strings';
 import { pro, type IProDevice } from '@/lib/tool/pro';
 import { isAwake } from '@/lib/wake';
@@ -85,9 +84,11 @@ export function ProPanel() {
               >
                 <span className="flex items-center justify-between gap-2">
                   <strong className="text-[15px] font-semibold">{t(`pro.${p}`)}</strong>
-                  {p === 'yearly' ? <FreeBadge>{t('pro.save')}</FreeBadge> : null}
+                  {p === 'yearly' ? <FreeBadge>{t('pro.save', { n: yearlySaving() })}</FreeBadge> : null}
                 </span>
-                <span className="font-display text-[22px] font-bold tracking-[-0.02em]">{t(`pro.${p}Price`)}</span>
+                <span className="font-display text-[22px] font-bold tracking-[-0.02em]">
+                  {t(`pro.${p}Price`, { price: priceLabel(p) })}
+                </span>
                 <span className="text-[13px] leading-[1.45] text-(--tg-t2)">{t(`pro.${p}D`)}</span>
               </RadioGroup.Item>
             );
@@ -106,10 +107,10 @@ export function ProPanel() {
             </div>
           ))}
         </Group>
-        <Note>{t('pro.note')}</Note>
+        <Note>{t('pro.note', { price: priceLabel('yearly') })}</Note>
       </PanelBody>
       <PanelFoot
-        primary={{ label: t('pro.trial'), go: go(`${ROUTES.pro}?plan=${plan}`) }}
+        primary={{ label: t('pro.trial'), go: go(`/pro/checkout?plan=${plan}#account`) }}
         secondary={{ label: t('pro.later'), go: () => g.a.close() }}
       />
     </>
@@ -184,9 +185,11 @@ function PlanRow({
 export function PlanPanel() {
   const g = useGlance();
   const { t } = g;
-  const acct = readAccount();
+  const acct = g.pro.account;
   const via = t(`settings.via.${acct?.method ?? 'google'}`);
   const date = g.pro.account?.renewsOn || '[DATE]';
+  const plan = acct?.plan ?? 'yearly';
+  const price = plan === 'monthly' ? priceLabel('monthly') : priceLabel('yearly');
   const portal = () => window.location.assign(pro.billingUrl());
   return (
     <>
@@ -195,14 +198,14 @@ export function PlanPanel() {
           <span className="flex size-11 flex-none items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--tg-volt),var(--tg-violet))] text-[18px] font-bold text-(--tg-on-violet)">
             {(acct?.name || via).charAt(0).toUpperCase()}
           </span>
-          <RowText title={t('settings.signedIn', { via })} desc={t('plan.renews', { date })} />
+          <RowText title={t('settings.signedIn', { via })} desc={t(`plan.renews.${plan}`, { date })} />
           <FreeBadge>{t('plan.active')}</FreeBadge>
         </div>
         <SecLabel>{t('plan.plan')}</SecLabel>
         <Group>
           <PlanRow
-            title={t('plan.yearly')}
-            desc={t('plan.yearlyD', { date })}
+            title={t(`plan.${plan}`)}
+            desc={t(`plan.${plan}D`, { date, price })}
             value={t('plan.change')}
             onClick={portal}
           />
@@ -222,10 +225,22 @@ export function PlanPanel() {
           />
         </Group>
         <SecLabel>{t('plan.receipts')}</SecLabel>
-        <Group>
-          <PlanRow title="[DATE]" desc={t('plan.r1')} value={t('plan.download')} onClick={portal} />
-          <PlanRow title="[DATE]" desc={t('plan.r2')} value={t('plan.download')} onClick={portal} />
-        </Group>
+        {g.ui.qa.samples ? (
+          <Group>
+            <PlanRow title="[DATE]" desc={t('plan.r1')} value={t('plan.download')} onClick={portal} />
+            <PlanRow title="[DATE]" desc={t('plan.r2')} value={t('plan.download')} onClick={portal} />
+          </Group>
+        ) : (
+          // Receipts live with the payment provider, so the list is its portal rather than a copy kept here.
+          <Group>
+            <PlanRow
+              title={t('plan.allReceipts')}
+              desc={t('plan.allReceiptsD')}
+              value={t('plan.open')}
+              onClick={() => window.location.assign(portalUrl())}
+            />
+          </Group>
+        )}
         <Note>{t('plan.note')}</Note>
       </PanelBody>
       <PanelFoot
