@@ -12,8 +12,6 @@ import {
   type IPolarIds,
 } from './links';
 import { webhooks } from '@polar-sh/sdk/2026-10';
-import { billingEmail, portalUrl, type IBillingData } from './email/billing';
-import { sendEmail } from './email/send';
 
 interface IPolarData {
   id?: string;
@@ -203,11 +201,8 @@ async function resolveTargets(kv: IKv, found: IEventIds, keyHash: string): Promi
   return { keyHashes: await byCustomer(kv, found), pending: [] };
 }
 
-export async function polarWebhookRoute(
-  request: Request,
-  env: IEnv,
-  waitUntil: (promise: Promise<unknown>) => void,
-): Promise<Response> {
+// Licence bookkeeping only: AwakeTab sends no mail of its own, and Polar sends the receipts.
+export async function polarWebhookRoute(request: Request, env: IEnv): Promise<Response> {
   const raw = await request.text();
   const headerId = request.headers.get('webhook-id');
   const ts = Number(request.headers.get('webhook-timestamp') ?? NaN);
@@ -314,11 +309,5 @@ export async function polarWebhookRoute(
 
   // Mark the event only after it was handled: if a write above throws, Polar retries and the retry must run.
   await kv.put(`wh:${eventId}`, JSON.stringify({ at: Date.now() }), { expirationTtl: 30 * 86_400 });
-  // After the event is marked, so a retry never sends the same mail twice; a failed send never fails the hook.
-  waitUntil(
-    billingEmail(type, data as unknown as IBillingData, portalUrl(env.PUBLIC_POLAR_SERVER))
-      .then((mail) => (mail ? sendEmail(env, mail) : null))
-      .catch(() => undefined),
-  );
   return jsonOk({ ok: true });
 }

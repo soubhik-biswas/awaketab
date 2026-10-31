@@ -30,7 +30,6 @@
         "open-next.config.ts",
         "worker/sw.ts",
         "scripts/*.{mjs,mts}",
-        "emails/**/*.tsx",
         "**/*.test.{ts,tsx}"
       ],
       "project": ["**/*.{ts,tsx,mjs,mts}"],
@@ -46,7 +45,6 @@
         "react-hook-form",
         "react-resizable-panels",
         "recharts",
-        "@react-email/ui",
         "tailwindcss",
         "tw-animate-css"
       ],
