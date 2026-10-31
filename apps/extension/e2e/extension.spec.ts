@@ -1,27 +1,17 @@
 import AxeBuilder from '@axe-core/playwright';
 import type { Page } from '@playwright/test';
-import {
-  badge,
-  expect,
-  localStore,
-  mockLicenseApi,
-  openOptions,
-  openPopup,
-  powerLog,
-  syncStore,
-  test,
-} from './fixtures';
+import { badge, expect, localStore, openOptions, openPopup, powerLog, syncStore, test } from './fixtures';
 
 test.beforeEach(({ context }) => {
-  // docs/19 B1: never alert/confirm/prompt.
   context.on('dialog', () => {
     throw new Error('A dialog opened');
   });
 });
 
-const pill = (page: Page) => page.locator('[data-pill-text]');
+const pill = (page: Page) => page.locator('[data-pill]');
+const primary = (page: Page) => page.locator('[data-primary]');
 
-test('the built manifest asks for power, storage and alarms only — no host permissions', async ({
+test('the built manifest asks for exactly power, alarms, storage, offscreen and activeTab', async ({
   context,
   extensionId,
 }) => {
@@ -30,335 +20,90 @@ test('the built manifest asks for power, storage and alarms only — no host per
     string,
     unknown
   >;
-  expect(manifest.permissions).toEqual(['power', 'storage', 'alarms']);
-  expect(manifest.optional_permissions).toEqual(['notifications']);
+  expect(manifest.permissions).toEqual(['power', 'alarms', 'storage', 'offscreen', 'activeTab']);
+  expect(manifest.optional_host_permissions).toEqual(['https://*/*']);
+  expect(manifest.optional_permissions).toBeUndefined();
   expect(manifest.host_permissions ?? []).toEqual([]);
   expect(manifest.content_scripts).toBeUndefined();
   expect(manifest.name).toBe('__MSG_ext_name__');
 });
 
-test('popup opens fast in the Ready state with the web copy', async ({ context, extensionId }) => {
+test('popup opens Ready: the face, four lengths with 1h picked, and "Keep this tab awake"', async ({
+  context,
+  extensionId,
+}) => {
   const page = await openPopup(context, extensionId);
   await expect(pill(page)).toHaveText('Ready');
-  await expect(page.locator('[data-pill]')).toHaveAttribute('data-lock', 'idle');
-  // The lamp CTA names the default length (∞, "Until I stop") before anything starts (DESIGN.md §4).
-  await expect(page.locator('[data-toggle]')).toHaveText('Keep awake · ∞');
-  await expect(page.locator('[data-toggle]')).toHaveAttribute('aria-label', 'Keep awake until I stop');
-  await expect(page.locator('[data-chips] [data-preset]')).toHaveCount(7);
-  await expect(page.locator('[data-preset="pinf"]')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('[data-caption]')).toHaveText('until you stop');
-  const ready = Number(await page.evaluate(() => document.documentElement.dataset.ready));
-  // E11-T03 AC is < 100 ms on a real machine; the headless CI budget leaves room for a cold worker.
-  expect(ready).toBeLessThan(1_000);
+  await expect(pill(page)).toHaveAttribute('data-view', 'ready');
+  await expect(page.locator('[data-chips] [data-preset]')).toHaveCount(4);
+  await expect(page.locator('[data-preset="p60"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(primary(page)).toHaveText('Keep this tab awake');
+  await expect(page.locator('[role="timer"]')).toBeVisible();
+  await expect(page.getByText('Works in any tab')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open the full AwakeTab app in a new tab' })).toHaveAttribute(
+    'href',
+    'https://awaketab.com/?source=ext',
+  );
   expect(await badge(page)).toBe('');
 });
 
-test('start ∞ holds the display keep-awake, shows ON, and stop releases it', async ({ context, extensionId }) => {
+test('awake: the badge counts the minutes; Pause shows II and releases; Resume and Stop', async ({
+  context,
+  extensionId,
+}) => {
   const page = await openPopup(context, extensionId);
-  await page.locator('[data-preset="pinf"]').click();
-  await expect(pill(page)).toHaveText('Screen awake');
-  await expect(page.locator('[data-pill]')).toHaveAttribute('data-lock', 'held');
-  await expect(page.locator('[data-timer]')).toHaveText(/^00:0\d$/u);
-  await expect(page.locator('[data-kicker]')).toHaveText('Awake for');
-  await expect(page.locator('[data-meta]')).toHaveText('No end time. Stop when you are done.');
-  // Stop is the raised neutral (D-R20), not the lamp.
-  await expect(page.locator('[data-toggle]')).toHaveText('Stop');
-  await expect(page.locator('[data-toggle]')).toHaveAttribute('data-live', '1');
-  await expect.poll(() => badge(page)).toBe('ON');
-  await expect
-    .poll(async () => (await powerLog(page)).filter((c) => c.call === 'request').at(-1)?.level)
-    .toBe('display');
-  await page.locator('[data-toggle]').click();
+  await page.locator('[data-preset="p30"]').click();
+  await expect(page.locator('[data-preset="p30"]')).toHaveAttribute('aria-pressed', 'true');
+  await primary(page).click();
+  await expect(pill(page)).toHaveText(/^Awake · (30|29) min$/u);
+  await expect(primary(page)).toHaveText('Pause');
+  await expect.poll(() => badge(page)).toMatch(/^(30|29)$/u);
+  await expect.poll(async () => (await powerLog(page)).at(-1)).toMatchObject({ call: 'request', level: 'display' });
+  await primary(page).click();
+  await expect(pill(page)).toHaveText(/^Paused · (30|29) min left$/u);
+  await expect.poll(() => badge(page)).toBe('II');
+  await expect.poll(async () => (await powerLog(page)).at(-1)?.call).toBe('release');
+  await expect(primary(page)).toHaveText('Resume');
+  await primary(page).click();
+  await expect(pill(page)).toHaveAttribute('data-view', 'awake');
+  await primary(page).click();
+  await page.locator('[data-stop]').click();
   await expect(pill(page)).toHaveText('Ready');
   await expect.poll(() => badge(page)).toBe('');
-  await expect.poll(async () => (await powerLog(page)).at(-1)?.call).toBe('release');
 });
 
-test('a finite preset shows minutes left on the badge; keyboard shortcuts work', async ({ context, extensionId }) => {
-  const page = await openPopup(context, extensionId);
-  await page.locator('body').press('2');
-  await expect(pill(page)).toHaveText('Screen awake');
-  await expect(page.locator('[data-preset="p30"]')).toHaveAttribute('aria-pressed', 'true');
-  await expect.poll(() => badge(page)).toMatch(/^(30|29)m$/u);
-  await expect(page.locator('[data-timer]')).toHaveText(/^(30:00|29:5\d)$/u);
-  await page.locator('body').press(' ');
-  await expect(pill(page)).toHaveText('Ready');
-});
-
-test('System level: requestKeepAwake("system"), SYS badge, and the pill never says "Screen awake" (D-02)', async ({
+test('blocked: a refused request says so, shows the red badge and links to the fix', async ({
   context,
   extensionId,
 }) => {
   const page = await openPopup(context, extensionId);
-  await page.locator('input[name="level"][value="system"]').check({ force: true });
-  await expect(page.locator('[data-level-help]')).toHaveText(
-    'Keeps the computer awake. The screen may still dim or turn off.',
+  await page.evaluate(() => chrome.storage.session.set({ 'at.test.deny': true }));
+  await primary(page).click();
+  await expect(pill(page)).toHaveText('Blocked');
+  await expect(pill(page)).toHaveAttribute('data-view', 'blocked');
+  await expect.poll(() => badge(page)).toBe('!');
+  await expect(page.getByRole('link', { name: 'See the fix on awaketab.com, in a new tab' })).toHaveAttribute(
+    'href',
+    'https://awaketab.com/help?source=ext',
   );
-  await page.locator('[data-preset="pinf"]').click();
-  await expect(page.locator('[data-pill]')).toHaveAttribute('data-lock', 'held');
-  await expect(pill(page)).toHaveText('System awake');
-  await expect(page.locator('[data-pill-extra]')).toHaveText('Screen may dim or lock');
-  await expect(page.locator('[data-pill]')).not.toContainText('Screen awake');
-  await expect.poll(() => badge(page)).toBe('SYS');
-  await expect
-    .poll(async () => (await powerLog(page)).filter((c) => c.call === 'request').at(-1)?.level)
-    .toBe('system');
-  // Switching back to display level mid-session restores the shared held pill and drops the secondary line.
-  await page.locator('input[name="level"][value="display"]').check({ force: true });
-  await expect(pill(page)).toHaveText('Screen awake');
-  await expect(page.locator('[data-pill-extra]')).toBeHidden();
-  await expect.poll(() => badge(page)).toBe('ON');
-});
-
-test('until-time starts an until session from the 15-minute stepper', async ({ context, extensionId }) => {
-  const page = await openPopup(context, extensionId);
-  await page.locator('[data-until-open]').click();
-  await expect(page.locator('[data-until]')).toBeVisible();
-  // The panel replaces the chips and the Start button in place (inline, never a modal).
-  await expect(page.locator('[data-chips]')).toBeHidden();
-  await expect(page.locator('[data-toggle]')).toBeHidden();
-  const first = (await page.locator('[data-until-time]').textContent()) ?? '';
-  await page.locator('[data-until-more]').click();
-  const target = (await page.locator('[data-until-time]').textContent()) ?? '';
-  expect(target).not.toBe(first);
-  expect(target).toMatch(/^\d{1,2}:(00|15|30|45) (AM|PM)$/u);
-  await expect(page.locator('[data-until-summary]')).toContainText(`at ${target}`);
-  await page.locator('[data-until] button[type="submit"]').click();
-  await expect(pill(page)).toHaveText('Screen awake');
-  await expect(page.locator('[data-caption]')).toHaveText(new RegExp(`^left · until ${target}( tomorrow)?$`, 'u'));
-  await expect(page.locator('[data-until-open]')).toHaveText(target);
-  await expect(page.locator('[data-until-open]')).toHaveAttribute('aria-pressed', 'true');
-});
-
-test('+15 min on a running session adds to it; the badge follows', async ({ context, extensionId }) => {
-  const page = await openPopup(context, extensionId);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  // A length tap asks again once the browser allows it.
+  await page.evaluate(() => chrome.storage.session.set({ 'at.test.deny': false }));
   await page.locator('[data-preset="p15"]').click();
-  await expect(pill(page)).toHaveText('Screen awake');
-  await expect.poll(() => badge(page)).toMatch(/^(15|14)m$/u);
-  await page.locator('[data-add] [data-add-ms="900000"]').click();
-  await expect(page.locator('[data-timer]')).toHaveText(/^(30:00|29:5\d)$/u);
-  await expect.poll(() => badge(page)).toMatch(/^(30|29)m$/u);
+  await expect(pill(page)).toHaveAttribute('data-view', 'awake');
 });
 
-test('Blocked: a refused request says so, shows the fix, and Retry works once allowed', async ({
-  context,
-  extensionId,
-}) => {
+test('the popup fits Chrome’s 600 px frame in every state', async ({ context, extensionId }) => {
   const page = await openPopup(context, extensionId);
-  await page.evaluate(() => chrome.storage.session.set({ 'at.test.deny': true }));
-  await page.locator('[data-preset="p30"]').click();
-  await expect(page.locator('[data-pill]')).toHaveAttribute('data-lock', 'denied');
-  await expect(pill(page)).toHaveText("Blocked — here's the fix");
-  await expect(page.locator('[data-error]')).toBeVisible();
-  await expect(page.locator('[data-error] h2')).toHaveText(
-    'Your browser or organisation blocked keeping this device awake.',
-  );
-  await expect(page.locator('[data-meta2]')).toHaveText('Nothing is keeping this device awake.');
-  await expect(page.locator('[data-chips]')).toBeHidden();
-  await expect(page.locator('[data-toggle]')).toBeHidden();
-  expect(await badge(page)).toBe('');
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
-  await page.evaluate(() => chrome.storage.session.set({ 'at.test.deny': false }));
-  await page.locator('[data-retry]').click();
-  await expect(pill(page)).toHaveText('Screen awake');
-  await expect(page.locator('[data-error]')).toBeHidden();
-});
-
-// Chrome caps a popup at 600 px and scrolls anything taller, so every state has to fit the 360×600 frame (the
-// extension board) with its footer in view, and the frame itself must not change size between states.
-async function expectPopupFits(page: Page, state: string): Promise<void> {
-  const box = await page.evaluate(() => {
-    const blocks = [...document.querySelectorAll('[data-root] > *, .pp-body > *')].filter(
-      (block) => block.getClientRects().length > 0,
-    );
-    const body = document.querySelector('.pp-body');
-    return {
-      document: document.documentElement.scrollHeight,
-      frame: document.body.getBoundingClientRect().height,
-      content: Math.max(...blocks.map((block) => block.getBoundingClientRect().bottom)),
-      scroll: body ? body.scrollHeight - body.clientHeight : -1,
-    };
-  });
-  expect(box.frame, `${state}: frame`).toBe(600);
-  expect(box.document, `${state}: document`).toBeLessThanOrEqual(600);
-  expect(box.content, `${state}: content`).toBeLessThanOrEqual(600);
-  expect(box.scroll, `${state}: scroll`).toBe(0);
-}
-
-test('every popup state fits the 600 px popup without scrolling', async ({ context, extensionId }) => {
-  const page = await openPopup(context, extensionId);
-  await expect(page.locator('[data-tips]')).toBeVisible();
-  await expectPopupFits(page, 'first open');
-  await page.locator('[data-tips-ok]').click();
-  await expect(page.locator('[data-pro-row]')).toBeVisible();
-  await expectPopupFits(page, 'ready with the Pro row');
-  await page.locator('[data-pro-row]').click();
-  await expect(page.locator('[data-pro-price]')).toContainText('$12 a year');
-  await expectPopupFits(page, 'Pro panel');
-  await page.locator('[data-pro-close]').click();
-  await page.locator('[data-until-open]').click();
-  await expect(page.locator('[data-until]')).toBeVisible();
-  await expect(page.locator('[data-primary]')).toBeHidden();
-  await expectPopupFits(page, 'until stepper');
-  await page.locator('[data-until-cancel]').click();
-
-  await page.locator('[data-preset="p60"]').click();
-  await expect(pill(page)).toHaveText('Screen awake');
-  await expect(page.locator('[data-add]')).toBeVisible();
-  await expectPopupFits(page, 'awake, 1 h');
-  await page.locator('input[name="level"][value="system"]').check({ force: true });
-  await expect(pill(page)).toHaveText('System awake');
-  await expectPopupFits(page, 'system awake');
-  await page.locator('input[name="level"][value="display"]').check({ force: true });
-  await page.locator('[data-preset="pinf"]').click();
-  await expect(page.locator('[data-kicker]')).toHaveText('Awake for');
-  await expectPopupFits(page, 'no limit');
-  await page.locator('[data-toggle]').click();
-  await expect(page.locator('[data-meta]')).toHaveText(/^Held /u);
-  await expectPopupFits(page, 'receipt');
-
-  await page.evaluate(() => chrome.storage.session.set({ 'at.test.deny': true }));
-  await page.locator('[data-preset="p30"]').click();
-  await expect(page.locator('[data-error]')).toBeVisible();
-  await expectPopupFits(page, 'blocked');
-  await page.evaluate(() => chrome.storage.session.set({ 'at.test.deny': false }));
-  await page.locator('[data-retry]').click();
-  await expect(pill(page)).toHaveText('Screen awake');
-  await page.locator('[data-toggle]').click();
-  await expect(pill(page)).toHaveText('Ready');
-
-  await page.evaluate(() =>
-    chrome.storage.local.set({ 'at.v1.meta': { v: 1, installedAt: Date.now(), lastSeenVersion: '0.9.0' } }),
-  );
-  const updated = await openPopup(context, extensionId);
-  await expect(updated.locator('[data-new-label]')).toHaveText(/^New in \d+\.\d+$/u);
-  await expectPopupFits(updated, 'update chip');
-});
-
-test('Starting shows the picked length, Stop and the pressed chip until Chrome answers', async ({
-  context,
-  extensionId,
-}) => {
-  const page = await openPopup(context, extensionId);
-  await page.evaluate(() => {
-    const send = chrome.runtime.sendMessage.bind(chrome.runtime);
-    chrome.runtime.sendMessage = (message: unknown) =>
-      (message as { type?: string }).type === 'start' ? new Promise<never>(() => undefined) : send(message);
-  });
-  await page.locator('[data-preset="p60"]').click();
-  await expect(pill(page)).toHaveText('Starting…');
-  await expect(page.locator('[data-toggle]')).toHaveText('Stop');
-  await expect(page.locator('[data-toggle]')).toHaveAttribute('data-live', '1');
-  await expect(page.locator('[data-preset="p60"]')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('[data-timer]')).toHaveText('1:00:00');
-  await expect(page.locator('[data-caption]')).toHaveText('Starting');
-  // The per-second tick keeps the Starting view instead of falling back to the stored Ready state.
-  await page.waitForTimeout(1_200);
-  await expect(page.locator('[data-caption]')).toHaveText('Starting');
-  await expectPopupFits(page, 'starting');
-});
-
-test("a private window and Time's up both fit, and a private window offers no add-time row", async ({
-  context,
-  extensionId,
-}) => {
-  const page = await context.newPage();
-  await page.setViewportSize({ width: 360, height: 600 });
-  await page.addInitScript(() => {
-    Object.defineProperty(chrome.extension, 'inIncognitoContext', { value: true });
-  });
-  await page.goto(`chrome-extension://${extensionId}/popup.html`);
-  await expect(page.locator('[data-private]')).toBeVisible();
-  await page.locator('[data-preset="p60"]').click();
-  await expect(pill(page)).toHaveText('Screen awake');
-  await expect(page.locator('[data-add]')).toBeHidden();
-  await expectPopupFits(page, 'private window');
-  await page.locator('[data-toggle]').click();
-  await expect(pill(page)).toHaveText('Ready');
-
-  const ended = await context.newPage();
-  await ended.setViewportSize({ width: 360, height: 600 });
-  await ended.addInitScript(() => {
-    const send = chrome.runtime.sendMessage.bind(chrome.runtime);
-    chrome.runtime.sendMessage = (message: unknown) => {
-      if ((message as { type?: string }).type !== 'state') return send(message);
-      const endedAt = Date.now() - 20_000;
-      const startedAt = endedAt - 1_800_000;
-      return Promise.resolve({
-        lock: 'idle',
-        advice: null,
-        level: 'display',
-        origin: 'user',
-        extend: true,
-        features: [],
-        now: Date.now(),
-        session: {
-          v: 1,
-          id: 'e2e',
-          mode: 'standard',
-          plan: { type: 'duration', ms: 1_800_000 },
-          presetId: 'p30',
-          startedAt,
-          endsAt: endedAt,
-          pausedAt: null,
-          pausedMs: 0,
-          status: 'completed',
-          endedAt,
-          endReason: 'completed',
-          awakeSeconds: 1_800,
-          source: 'ext',
-          modeState: { level: 'display', origin: 'user' },
-        },
-      });
-    };
-  });
-  await ended.goto(`chrome-extension://${extensionId}/popup.html`);
-  await expect(ended.locator('[data-extend]')).toBeVisible();
-  await expectPopupFits(ended, "time's up");
-});
-
-test('first open: the tips card shows once; then free users get the inline Pro row', async ({
-  context,
-  extensionId,
-}) => {
-  const page = await openPopup(context, extensionId);
-  await expect(page.locator('[data-tips]')).toBeVisible();
-  await expect(page.locator('[data-tips]')).toContainText('starts or stops from any tab.');
-  await page.locator('[data-tips-ok]').click();
-  await expect(page.locator('[data-tips]')).toBeHidden();
-  await expect
-    .poll(
-      async () =>
-        ((await localStore(page))['at.v1.onboarding'] as { dismissedTips?: string[] } | undefined)?.dismissedTips,
-    )
-    .toContain('ext-first-open');
-  const again = await openPopup(context, extensionId);
-  await expect(again.locator('[data-tips]')).toBeHidden();
-  await again.locator('[data-pro-row]').click();
-  await expect(again.locator('[data-pro]')).toBeVisible();
-  await expect(again.locator('[data-pro] h2')).toHaveText('Schedules and auto-start are part of AwakeTab Pro.');
-  await again.locator('[data-pro-close]').click();
-  await expect(again.locator('[data-pro-row]')).toBeVisible();
-});
-
-test('install opens the welcome page once, and it has no axe violations', async ({ context, extensionId }) => {
-  const url = `chrome-extension://${extensionId}/welcome.html`;
-  await expect.poll(() => context.pages().filter((p) => p.url() === url).length).toBe(1);
-  const page = context.pages().find((p) => p.url() === url);
-  if (!page) throw new Error('welcome page not open');
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await expect(page.locator('h1')).toHaveText('AwakeTab is ready. Pin it where you can reach it.');
-  await expect(page.locator('[data-kicker]')).toHaveText('Installed · step 1 of 2');
-  // The toolbar menu mock and the pin step name the extension exactly as Chrome lists it (the manifest name).
-  await expect(page.locator('[data-store-name]')).toHaveText('AwakeTab: Keep Screen Awake');
-  await expect(page.locator('[data-step2]')).toHaveText('Click the pin next to AwakeTab: Keep Screen Awake.');
-  await page.locator('[data-pin-button]').click();
-  await expect(page.locator('[data-pin]')).toHaveAttribute('aria-pressed', 'true');
-  await page.getByRole('button', { name: 'I’ve pinned it' }).click();
-  await expect(page.locator('[data-kicker]')).toHaveText('Installed · step 2 of 2');
-  await expect(page.locator('h1')).toHaveText('Now click AwakeTab in your toolbar and press Keep awake.');
-  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  const height = () => page.evaluate(() => document.documentElement.scrollHeight);
+  expect(await height()).toBeLessThanOrEqual(600);
+  await primary(page).click();
+  await expect(pill(page)).toHaveAttribute('data-view', 'awake');
+  expect(await height()).toBeLessThanOrEqual(600);
+  await primary(page).click();
+  await expect(pill(page)).toHaveAttribute('data-view', 'paused');
+  expect(await height()).toBeLessThanOrEqual(600);
 });
 
 test('the session survives a forced service-worker restart and the keep-awake is re-issued', async ({
@@ -366,134 +111,74 @@ test('the session survives a forced service-worker restart and the keep-awake is
   extensionId,
 }) => {
   const page = await openPopup(context, extensionId);
-  await page.locator('[data-preset="p60"]').click();
-  await expect(pill(page)).toHaveText('Screen awake');
+  await primary(page).click();
+  await expect(pill(page)).toHaveAttribute('data-view', 'awake');
   const before = (await localStore(page))['at.v1.session'] as { id: string };
   const requestsBefore = (await powerLog(page)).filter((c) => c.call === 'request').length;
   const cdp = await context.newCDPSession(page);
   await cdp.send('ServiceWorker.enable');
   await cdp.send('ServiceWorker.stopAllWorkers');
-  // Any extension event wakes the worker again; the popup asking for state is one.
   const next = context.waitForEvent('serviceworker', { timeout: 3_000 }).catch(() => null);
   const reopened = await openPopup(context, extensionId);
   await next;
-  await expect(pill(reopened)).toHaveText('Screen awake');
+  await expect(pill(reopened)).toHaveAttribute('data-view', 'awake');
   await expect
     .poll(async () => (await powerLog(reopened)).filter((c) => c.call === 'request').length)
     .toBeGreaterThan(requestsBefore);
   const after = (await localStore(reopened))['at.v1.session'] as { id: string; status: string };
   expect(after.id).toBe(before.id);
   expect(after.status).toBe('active');
-  await expect.poll(() => badge(reopened)).toMatch(/^(60|59)m$/u);
+  await expect.poll(() => badge(reopened)).toMatch(/^(60|59)$/u);
 });
 
-test('options: telemetry is off by default and free users see honest Pro gates', async ({ context, extensionId }) => {
-  const page = await openOptions(context, extensionId);
-  await expect(page.locator('input[name="telemetry"]')).not.toBeChecked();
-  await expect(page.locator('input[name="notifications"]')).not.toBeChecked();
-  const schedules = page.locator('[data-gated="ext.schedules"]');
-  await expect(schedules.locator('[data-locked]')).toBeVisible();
-  await expect(schedules.locator('[data-locked] a')).toHaveAttribute('href', 'https://awaketab.com/pro');
-  await expect(schedules.locator('button[type="submit"]')).toBeDisabled();
-  await expect(schedules.locator('.op-day').first()).toBeDisabled();
-  // Times read 12-hour with AM/PM in English, and the week axis names noon (ExtOptions board).
-  await expect(schedules.locator('[data-schedules-intro]')).toHaveText(
-    'Keep awake during weekly windows, such as weekdays 9:00 AM to 6:00 PM. Overlapping windows merge into one.',
-  );
-  await expect(schedules.locator('[data-axis] span')).toHaveText(['12 AM', '6 AM', 'Noon', '6 PM', '12 AM']);
-  // No dead control: battery auto-stop cannot work in an MV3 worker (docs/10 §13), so none is offered.
-  await expect(page.locator('input[name="batteryAutoStop"]')).toHaveCount(0);
-  // Changing a default is saved to chrome.storage.local and reaches the popup.
-  await page.locator('label:has(input[name="defaultPreset"][value="p45"])').click();
-  await expect(page.locator('input[name="defaultPreset"][value="p45"]')).toBeChecked();
-  await expect(page.locator('[data-saved]')).toHaveText('Saved');
-  await expect
-    .poll(
-      async () => ((await localStore(page))['at.v1.settings'] as { defaultPreset?: string } | undefined)?.defaultPreset,
-    )
-    .toBe('p45');
-  const popup = await openPopup(context, extensionId);
-  await expect(popup.locator('[data-toggle]')).toHaveText('Keep awake · 45 min');
-});
-
-test('options: the language row stores settings.locale and switches the page in place', async ({
+test('options: three switches that save and sync, and an honest note when no site can be read', async ({
   context,
   extensionId,
 }) => {
   const page = await openOptions(context, extensionId);
-  await expect(page.locator('[data-lang-now]')).toHaveText('Browser language (English)');
-  await page.locator('[data-lang-toggle]').click();
-  await expect(page.locator('[data-lang-toggle]')).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('input[name="locale"]')).toHaveCount(9);
-  await page.locator('label:has(input[name="locale"][value="de"])').click();
-  await expect(page.locator('h1')).toHaveText('AwakeTab-Einstellungen');
-  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
-  await expect
-    .poll(async () => ((await localStore(page))['at.v1.settings'] as { locale?: string } | undefined)?.locale)
-    .toBe('de');
-  await page.keyboard.press('Escape');
-  await expect(page.locator('[data-lang-list]')).toBeHidden();
-  const popup = await openPopup(context, extensionId);
-  await expect(pill(popup)).toHaveText('Bereit');
-});
-
-test('licence activation against a mocked API: local only, never synced, unlocks schedules', async ({
-  context,
-  extensionId,
-}) => {
-  const calls = await mockLicenseApi(context, extensionId, ['ext.schedules', 'ext.autostart']);
-  const page = await openOptions(context, extensionId);
-  await page.locator('input[name="key"]').fill('ATAB-WRONG-KEY-0000000000');
-  await page.locator('[data-license-submit]').click();
-  await expect(page.locator('[data-license-error]')).toHaveText(
-    "That key doesn't match a purchase. Check the receipt email.",
+  const badgeSwitch = page.getByRole('switch', { name: /Show time left on the icon/u });
+  await expect(badgeSwitch).toHaveAttribute('aria-checked', 'true');
+  await expect(page.getByRole('switch', { name: /Wake automatically on chosen sites/u })).toHaveAttribute(
+    'aria-checked',
+    'true',
   );
-  await page.locator('input[name="key"]').fill('ATAB-E2E-KEY-1234567890');
-  await page.locator('[data-license-submit]').click();
-  await expect(page.locator('[data-license-active]')).toBeVisible();
-  await expect(page.locator('[data-license-active]')).toContainText('Pro is active on this device');
-  const body = JSON.parse(calls.at(-1) ?? '{}') as { deviceId: string; deviceLabel: string };
-  const local = await localStore(page);
-  expect((local['at.v1.device'] as { id: string }).id).toBe(body.deviceId);
-  expect(body.deviceLabel).toMatch(/^AwakeTab for Chrome · /u);
-  expect((local['at.v1.license'] as { deviceId: string }).deviceId).toBe(body.deviceId);
-  await expect(page.locator('[data-gated="ext.schedules"] [data-locked]')).toBeHidden();
-  await page.locator('[data-schedule-form] button[type="submit"]').click();
-  await expect(page.locator('[data-schedules] li')).toHaveCount(1);
-  await expect(page.locator('[data-schedules] li .op-li-sub')).toHaveText('9:00 AM to 6:00 PM');
-  // The worker mirrors settings to chrome.storage.sync after a short debounce; the licence never goes there.
-  await expect.poll(async () => Object.keys(await syncStore(page)), { timeout: 8_000 }).toContain('at.v1.ext');
-  const synced = await syncStore(page);
-  expect(synced).not.toHaveProperty('at.v1.license');
-  expect(synced).not.toHaveProperty('at.v1.device');
+  await expect(page.getByRole('switch', { name: /Release when the tab is hidden/u })).toHaveAttribute(
+    'aria-checked',
+    'false',
+  );
+  await badgeSwitch.click();
+  await expect(badgeSwitch).toHaveAttribute('aria-checked', 'false');
+  await expect.poll(async () => (await localStore(page))['at.v1.ext']).toMatchObject({ badge: false });
+  await expect
+    .poll(async () => (await syncStore(page))['at.v1.ext'], { timeout: 6_000 })
+    .toMatchObject({
+      badge: false,
+    });
+  await page.locator('[data-add]').click();
+  await expect(page.getByRole('status')).toHaveText(
+    'Click the AwakeTab icon while you are on the site, then add it here.',
+  );
 });
 
-for (const theme of ['light', 'dark'] as const) {
+for (const theme of ['light', 'dark', 'oled'] as const) {
   test(`axe: popup and options have no violations (${theme})`, async ({ context, extensionId }) => {
     const popup = await openPopup(context, extensionId);
-    // Colour transitions (0.45–0.9 s) would be sampled mid-way after the runtime theme flip below; with
-    // reduced motion every colour is final at once, which is what a reader sees.
     await popup.emulateMedia({ reducedMotion: 'reduce' });
     await popup.evaluate((value) => {
-      document.documentElement.setAttribute('data-theme', value);
+      document.documentElement.dataset.theme = value;
     }, theme);
     expect((await new AxeBuilder({ page: popup }).analyze()).violations).toEqual([]);
-    await popup.locator('[data-preset="p15"]').click();
-    await expect(pill(popup)).toHaveText('Screen awake');
+    await primary(popup).click();
+    await expect(pill(popup)).toHaveAttribute('data-view', 'awake');
     expect((await new AxeBuilder({ page: popup }).analyze()).violations).toEqual([]);
-    await popup.locator('[data-toggle]').click();
-    await expect(pill(popup)).toHaveText('Ready');
-    await popup.locator('[data-until-open]').click();
-    await expect(popup.locator('[data-until]')).toBeVisible();
+    await primary(popup).click();
+    await expect(pill(popup)).toHaveAttribute('data-view', 'paused');
     expect((await new AxeBuilder({ page: popup }).analyze()).violations).toEqual([]);
     const options = await openOptions(context, extensionId);
     await options.emulateMedia({ reducedMotion: 'reduce' });
     await options.evaluate((value) => {
-      document.documentElement.setAttribute('data-theme', value);
+      document.documentElement.dataset.theme = value;
     }, theme);
-    expect((await new AxeBuilder({ page: options }).analyze()).violations).toEqual([]);
-    await options.locator('[data-lang-toggle]').click();
-    await expect(options.locator('[data-lang-list]')).toBeVisible();
     expect((await new AxeBuilder({ page: options }).analyze()).violations).toEqual([]);
   });
 }

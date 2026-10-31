@@ -1,30 +1,37 @@
-import type { ISession, TAdviceCode, TFeatureGate, TLockState } from '@awaketab/core';
-import type { TPowerLevel } from './api';
-import { isHHMM, isExtPreset, isLevel, type TExtPreset } from './settings';
-import type { TOrigin } from './status';
+import type { ISession, TAdviceCode, TLockState } from '@awaketab/core';
+import { isExtPreset, type TExtPreset } from './settings';
+import type { TExtView, TOrigin } from './status';
+
+export interface ITabRef {
+  tabId: number;
+  windowId: number;
+}
 
 export type TExtRequest =
   | { type: 'state' }
-  | { type: 'start'; presetId: TExtPreset }
-  | { type: 'until'; wall: string }
+  | { type: 'start'; presetId: TExtPreset; tab?: ITabRef }
   | { type: 'stop' }
-  | { type: 'extend'; ms: number }
-  | { type: 'dismiss' }
-  | { type: 'level'; level: TPowerLevel }
+  | { type: 'pause' }
+  | { type: 'resume' }
   | { type: 'toggle' };
 
 export interface IExtState {
+  view: TExtView;
   lock: TLockState;
   advice: TAdviceCode | null;
-  level: TPowerLevel;
   session: ISession | null;
   origin: TOrigin | null;
-  extend: boolean;
-  features: TFeatureGate[];
+  hidden: boolean;
   now: number;
 }
 
-export const EXTEND_MS = [15 * 60_000, 30 * 60_000, 60 * 60_000] as const;
+const isId = (v: unknown): v is number => typeof v === 'number' && Number.isInteger(v) && v >= 0;
+
+function tabRef(raw: unknown): ITabRef | undefined {
+  if (typeof raw !== 'object' || raw === null) return undefined;
+  const t = raw as Record<string, unknown>;
+  return isId(t.tabId) && isId(t.windowId) ? { tabId: t.tabId, windowId: t.windowId } : undefined;
+}
 
 export function parseRequest(raw: unknown): TExtRequest | null {
   if (typeof raw !== 'object' || raw === null) return null;
@@ -32,19 +39,15 @@ export function parseRequest(raw: unknown): TExtRequest | null {
   switch (msg.type) {
     case 'state':
     case 'stop':
-    case 'dismiss':
+    case 'pause':
+    case 'resume':
     case 'toggle':
       return { type: msg.type };
-    case 'start':
-      return isExtPreset(msg.presetId) ? { type: 'start', presetId: msg.presetId } : null;
-    case 'until':
-      return isHHMM(msg.wall) ? { type: 'until', wall: msg.wall } : null;
-    case 'extend':
-      return typeof msg.ms === 'number' && (EXTEND_MS as readonly number[]).includes(msg.ms)
-        ? { type: 'extend', ms: msg.ms }
-        : null;
-    case 'level':
-      return isLevel(msg.level) ? { type: 'level', level: msg.level } : null;
+    case 'start': {
+      if (!isExtPreset(msg.presetId)) return null;
+      const tab = tabRef(msg.tab);
+      return tab ? { type: 'start', presetId: msg.presetId, tab } : { type: 'start', presetId: msg.presetId };
+    }
     default:
       return null;
   }

@@ -1,35 +1,26 @@
 # AwakeTab privacy form preparation
 
-Use these implementation facts when completing the store's current form. Opt-in collection must still be disclosed. Checkboxes and account certifications must match both the final package and the public privacy policy; do not select "no data" merely because usage statistics start off.
+Use these implementation facts when completing the store's current form. The answers must match what the build really sends and the public privacy policy. Have legal review the answers and the policy before submitting.
 
 ## Single purpose
 
-Keep the user's screen or computer awake for a chosen time, with clear controls and status.
+Keeps the computer's display awake for a length of time the user chooses, and shows how much time is left.
 
 ## Permission explanations
 
-| Permission | Purpose |
-| --- | --- |
-| power | Request and release Chrome's display or system keep-awake API after the user starts a session. |
-| storage | Store settings and session state locally. Chrome sync can copy settings, schedules and chosen auto-start sites between profiles; licence tokens and device identifiers never sync. |
-| alarms | End timers, restore session checks while the service worker sleeps, and run licence-gated schedules. |
-| notifications (optional) | Notify the user when a timer ends, only after the user enables the feature and grants permission. |
-| https://*/* (optional host access) | Licence-gated site auto-start requests one chosen origin at a time. No site is granted on install and page content is not read. |
+The justification text for each permission is in [the listing](listing.md#permission-justifications): `power`, `alarms`, `storage`, `offscreen`, `activeTab`, and optional host access requested one site at a time.
 
-Remote code: No. Scripts, styles, fonts and icons are bundled. API responses supply data, not executable code.
+Remote code: No. Scripts, styles, fonts and icons are bundled.
 
 ## Data inventory
 
-Local records: preferences, sessions, minute totals, install/update metadata, Screen/System choice, schedules, chosen auto-start sites and a random device identifier. An activated licence token is local-only. The browser may sync settings, schedules and chosen auto-start sites through Chrome sync; the developer does not receive those site choices.
+- **Data collected:** none by default. The extension sends no usage statistics and has no telemetry.
+- **Stored on this device only:** settings (theme, face, last length, chime), the current session, minute totals, install metadata, the badge, auto-wake and release-when-hidden switches, the chosen auto-wake sites and a random device identifier. Chrome sync can copy the settings and the chosen sites between the user's own Chrome profiles; the developer never receives them.
+- **Pro:** a licence an earlier version stored stays on the device and is checked against `https://awaketab.com/api/license/validate` about once a day, so a revoked one is dropped. Nothing in the extension depends on it. Pro sign-in (Google, GitHub or a passkey) happens on the website, not here.
+- **Sold or transferred to third parties:** No. **Used for anything unrelated to the single purpose:** No. **Used for creditworthiness or lending:** No.
 
-Optional usage statistics: if enabled, only session start/end, activation and error events go to `https://awaketab.com/api/e`. Payloads include plan/preset or duration/end reason, error code, locale, coarse browser/OS class, extension version, timestamp and a random in-memory session identifier. They exclude URLs, page titles, site names and page content. Map this behavior to the dashboard's current user-activity categories.
+Ordinary network requests expose IP addresses to the first-party hosting service. The public policy describes server and network handling.
 
-Licence actions: user-entered licence keys, random device ID and operating-system label go to `https://awaketab.com/api/license/activate`. Token validation and deactivation use the matching first-party API endpoints. Map keys/tokens and identifiers to the current authentication/identifier definitions in the form. New purchases are disabled; the licence controls remain implemented.
-
-Ordinary network requests expose IP addresses to the first-party hosting service. The public policy describes server and network handling. No data is sold or used for advertising, creditworthiness or lending. Limited Use certifications should be affirmed only after reviewing the live form and these facts.
-
-Public policy: https://awaketab.com/privacy#extension
-
-Account: verify the signed-in email against the owner's authorized publisher account, contact verification, 2-Step Verification and trader/legal status. No registration or account verification is claimed by this document.
+Public policy: [PRIVACY POLICY URL]
 
 Sources: [Privacy fields](https://developer.chrome.com/docs/webstore/cws-dashboard-privacy), [User data FAQ](https://developer.chrome.com/docs/webstore/program-policies/user-data-faq).

@@ -1,23 +1,19 @@
 import {
   createSession,
   createStorage,
-  hasFeature,
   planFromPreset,
-  planUntil,
   STORAGE_KEYS,
-  type ILicenseState,
   type ISession,
   type ISessionEngine,
   type TEndReason,
   type TPlan,
   type TPresetId,
 } from '@awaketab/core';
-import type { IAlarmInfo, IExtApi, IStorageChange, ITab, TPowerLevel } from './api';
+import type { IAlarmInfo, IExtApi, IStorageChange, ITab } from './api';
 import { format, resolveLocale, type TCatalog, type TLocale, type TVars } from './i18n';
-import { licenseState, NO_LICENSE, revalidate } from './license';
-import { EXTEND_MS, parseRequest, type IExtState } from './messages';
+import { revalidate } from './license';
+import { parseRequest, type IExtState, type ITabRef } from './messages';
 import { createPowerLock } from './power';
-import { activeWindow, SCHEDULE_ALARM_PREFIX, scheduleAlarms, wallOf, type IWindow } from './schedules';
 import {
   EXT_KEYS,
   matchSite,
@@ -30,31 +26,27 @@ import {
   type TExtPreset,
 } from './settings';
 import {
-  BADGE_COLORS,
-  BADGE_TEXT_COLOR,
-  badgeText,
-  formatClock,
+  badgeOf,
+  hiddenPause,
   isLive,
-  levelOf,
   originOf,
-  pillTextKey,
+  pillCopy,
   remainingMs,
+  tabOf,
+  viewOf,
+  type IBadge,
+  type TExtView,
   type TOrigin,
 } from './status';
 import { createChromeStorageAdapter } from './storage';
-import { createTelemetry } from './telemetry';
 
-// Alarm names, cadences and windows of the extension worker (docs/00 §13.9).
 export const ALARMS = { tick: 'at.tick', end: 'at.end', license: 'at.license' } as const;
 const TICK_PERIOD_MIN = 0.5;
 const LICENSE_PERIOD_MIN = 60;
-const EXTEND_WINDOW_MS = 5 * 60_000;
-const STALE_NOTIFY_MS = 5 * 60_000;
 const SYNC_DEBOUNCE_MS = 2_000;
-export const NOTIFICATION_ID = 'at-end';
-const ICON_LIT = { 16: 'icon-16.png', 32: 'icon-32.png' };
-const ICON_OFF = { 16: 'icon-off-16.png', 32: 'icon-off-32.png' };
-export const WELCOME_PAGE = 'welcome.html';
+const CHIME_MS = 3_000;
+const LEGACY_ALARM_PREFIX = 'at.sched.';
+export const OFFSCREEN_PAGE = 'offscreen.html';
 
 type TFetch = (input: string, init?: RequestInit) => Promise<Response>;
 
@@ -72,15 +64,15 @@ export interface IController {
   ready(): Promise<void>;
   state(): IExtState;
   onStartup(): Promise<void>;
-  onInstalled(reason: string, previousVersion?: string): Promise<void>;
+  onInstalled(reason: string): Promise<void>;
   onAlarm(name: string): Promise<void>;
   onCommand(command: string): Promise<void>;
   onMessage(raw: unknown): Promise<IExtState | null>;
   onStorageChanged(changes: Record<string, IStorageChange>, areaName: string): Promise<void>;
-  onNotificationButton(id: string, index: number): Promise<void>;
-  onNotificationClicked(id: string): Promise<void>;
   onTabUpdated(tabId: number, change: { status?: string; url?: string }, tab: ITab): Promise<void>;
   onTabRemoved(tabId: number): Promise<void>;
+  onTabActivated(info: { tabId: number; windowId: number }): Promise<void>;
+  onWindowFocus(windowId: number): Promise<void>;
   onPermissionsRemoved(): Promise<void>;
   dispose(): void;
 }
@@ -97,37 +89,31 @@ export function createController(opts: IControllerOptions): IController {
     ...(opts.coalesceMs !== undefined ? { coalesceMs: opts.coalesceMs } : {}),
   });
   const storage = createStorage(store);
-  let level: TPowerLevel = 'display';
-  const lock = createPowerLock({ power: api.power, level: () => level, now });
+  const lock = createPowerLock({ power: api.power, now });
   let engine: ISessionEngine | null = null;
-  let license: ILicenseState = NO_LICENSE;
   let boot: Promise<void> | null = null;
   let switching = false;
   let syncTimer: ReturnType<typeof setTimeout> | null = null;
-  let badge: { text: string; color: string; title: string; lit: boolean | null } = {
-    text: '\u0000',
-    color: '',
-    title: '',
-    lit: null,
-  };
+  let chimeTimer: ReturnType<typeof setTimeout> | null = null;
+  let shown: { text: string; bg: string; title: string } = { text: '\u0000', bg: '', title: '' };
 
   const settings = () => readSettings(store.raw(STORAGE_KEYS.settings));
   const ext = (): IExtSettings => readExt(store.raw(EXT_KEYS.ext));
   const locale = () => resolveLocale(settings().locale, api.i18n?.getUILanguage());
   const t = (key: string, vars?: TVars) =>
     format(opts.catalogs[locale()]?.[key] ?? opts.catalogs.en?.[key] ?? key, vars);
-  const telemetry = createTelemetry({
-    enabled: () => settings().telemetry,
-    locale,
-    version: api.runtime.getManifest().version,
-    path: '/ext',
-    fetchFn,
-    now,
-  });
-  const current = (): ISession | null => engine?.session ?? null;
 
-  // Every event handler runs one at a time: a popup click, an alarm and a tab event arriving together
-  // must not interleave half-started sessions (a schedule deciding while a user start is in flight).
+  // The live session: the engine's, or a paused one kept in storage after a worker restart. A paused session stays
+  // out of the engine until Resume, because loading it there would resume it.
+  const current = (): ISession | null => {
+    const live = engine?.session;
+    if (isLive(live)) return live;
+    const stored = storage.session();
+    return stored?.status === 'paused' ? stored : (live ?? null);
+  };
+
+  // Every event handler runs one at a time: a popup click, an alarm and a tab event arriving together must not
+  // interleave half-started sessions.
   let queue: Promise<unknown> = Promise.resolve();
   function serial<T>(task: () => Promise<T>): Promise<T> {
     const next = queue.then(task);
@@ -147,7 +133,6 @@ export function createController(opts: IControllerOptions): IController {
     await store.load();
     await seedFromSync();
     if (!store.raw(EXT_KEYS.device)) await store.put(EXT_KEYS.device, { v: 1, id: crypto.randomUUID() });
-    license = await licenseState(storage.license(), now());
     engine = createSession({
       lock,
       storage,
@@ -157,21 +142,18 @@ export function createController(opts: IControllerOptions): IController {
       setTimeout: st,
       clearTimeout: ct,
       resumeIndefiniteMs: Number.POSITIVE_INFINITY,
-      track: (event, params) => {
-        telemetry.track(event, params);
-      },
     });
-    engine.on('ended', ({ session, reason }) => {
-      // Captured synchronously: a preset switch stops the old session inside startPlan().
+    engine.on('ended', ({ reason }) => {
+      // A length switch stops the old session inside startPlan(); that is not an end.
       if (switching) return;
-      void serial(() => onEnded(session, reason));
+      void serial(() => onEnded(reason));
     });
     engine.on('tick', () => void render());
     engine.on('lock', () => void render());
     await rehydrate();
+    await clearLegacyAlarms();
     await ensureAlarm(ALARMS.license, { periodInMinutes: LICENSE_PERIOD_MIN });
     void serial(maybeRevalidate);
-    await syncSchedules();
     await render();
   }
 
@@ -194,13 +176,18 @@ export function createController(opts: IControllerOptions): IController {
       releasePower();
       return;
     }
-    level = levelOf(stored, ext().level);
+    if (stored.status === 'paused') {
+      releasePower();
+      await ensureSessionAlarms();
+      return;
+    }
     if (engine?.getResumable()) {
       await engine.resumeSession();
       await ensureSessionAlarms();
       return;
     }
-    await finalizeExpired(stored);
+    finalizeExpired(stored);
+    await clearSessionAlarms();
   }
 
   function releasePower() {
@@ -211,60 +198,43 @@ export function createController(opts: IControllerOptions): IController {
     }
   }
 
-  async function finalizeExpired(stored: ISession): Promise<void> {
+  function finalizeExpired(stored: ISession): void {
     const endedAt = stored.endsAt ?? now();
-    const done: ISession = { ...stored, status: 'completed', endReason: 'completed', endedAt };
-    storage.writeSession(done);
+    storage.writeSession({ ...stored, status: 'completed', endReason: 'completed', endedAt });
     const stats = storage.stats();
-    if (Math.floor(done.awakeSeconds / 60) >= 1) stats.sessions += 1;
+    if (Math.floor(stored.awakeSeconds / 60) >= 1) stats.sessions += 1;
     stats.lastSessionAt = endedAt;
     storage.writeStats(stats);
     releasePower();
-    telemetry.track('session_end', { reason: 'completed', durationMin: Math.round(done.awakeSeconds / 60) });
-    await clearSessionAlarms();
-    const origin = originOf(done);
-    if (now() - endedAt < STALE_NOTIFY_MS && (origin === 'user' || origin === 'command')) await notifyEnd(done);
   }
 
-  async function onEnded(session: ISession, reason: TEndReason): Promise<void> {
+  async function onEnded(reason: TEndReason): Promise<void> {
     await clearSessionAlarms();
     await render();
-    const origin = originOf(session);
-    if (reason === 'completed' && (origin === 'user' || origin === 'command')) await notifyEnd(session);
-    await evaluateSchedules();
+    if (reason === 'completed') await chime();
   }
 
-  function sessionLabel(session: ISession): string {
-    const id = session.presetId;
-    if (id === 'until') return session.plan.type === 'until' ? session.plan.wall : wallOf(session.endsAt ?? now());
-    if (id === 'pinf') return t('tool.preset.pinf.sr');
-    if (id === 'custom' || session.plan.type !== 'duration') {
-      const ms = session.plan.type === 'duration' ? session.plan.ms : 0;
-      return t('stats.minutes', { minutes: Math.round(ms / 60_000) });
-    }
-    return t(`tool.preset.${id}`);
-  }
-
-  async function notifyEnd(session: ISession): Promise<void> {
-    const s = settings();
-    const notifications = api.notifications;
-    if (!s.notifications || !notifications) return;
+  // The end-of-session chime plays in an offscreen document, the one place an MV3 extension can make a sound.
+  async function chime(): Promise<void> {
+    const sound = settings().sound;
+    const offscreen = api.offscreen;
+    if (sound.id === 'none' || !offscreen) return;
+    const kind = sound.id === 'bell' ? 'bell' : 'two';
+    const url = `${OFFSCREEN_PAGE}?kind=${kind}&volume=${String(sound.volume)}`;
     try {
-      if (!(await api.permissions.contains({ permissions: ['notifications'] }))) return;
-      await notifications.create(NOTIFICATION_ID, {
-        type: 'basic',
-        iconUrl: api.runtime.getURL('icon-ended-128.png'),
-        title: t('tool.kicker.timesup'),
-        message: t('end.notify.body', { label: sessionLabel(session) }),
-        ...(s.endBehaviour === 'prompt_extend'
-          ? { buttons: [{ title: t('tool.extend.add15') }, { title: t('tool.toast.dismiss') }] }
-          : {}),
-        // docs/10 §6 "sound": the extension has no audio of its own; `none` silences the system sound.
-        silent: s.sound.id === 'none',
-        priority: 1,
+      await offscreen.closeDocument().catch(() => undefined);
+      await offscreen.createDocument({
+        url,
+        reasons: ['AUDIO_PLAYBACK'],
+        justification: 'Plays the end-of-session chime the user chose.',
       });
+      if (chimeTimer) ct(chimeTimer);
+      chimeTimer = st(() => {
+        chimeTimer = null;
+        void offscreen.closeDocument().catch(() => undefined);
+      }, CHIME_MS);
     } catch {
-      // Notifications are best-effort; the popup still offers to extend.
+      // No audio is fine: the badge and the popup already say the session ended.
     }
   }
 
@@ -273,19 +243,31 @@ export function createController(opts: IControllerOptions): IController {
     if (!alarms.some((alarm) => alarm.name === name)) await api.alarms.create(name, info);
   }
 
+  async function clearLegacyAlarms(): Promise<void> {
+    for (const alarm of await api.alarms.getAll()) {
+      if (alarm.name.startsWith(LEGACY_ALARM_PREFIX)) await api.alarms.clear(alarm.name);
+    }
+  }
+
+  // A running session keeps a half-minute tick (re-asserting the keep-awake, refreshing the badge) and an alarm at
+  // its end; a paused one needs neither, since its time stands still.
   async function ensureSessionAlarms(): Promise<void> {
     const session = current();
-    if (!isLive(session)) return;
+    if (!isLive(session) || session.status === 'paused') {
+      await api.alarms.clear(ALARMS.tick);
+      await api.alarms.clear(ALARMS.end);
+      return;
+    }
     const alarms = await api.alarms.getAll();
     if (!alarms.some((alarm) => alarm.name === ALARMS.tick)) {
       await api.alarms.create(ALARMS.tick, { periodInMinutes: TICK_PERIOD_MIN });
     }
-    const rem = remainingMs(session, now());
-    if (rem === null) {
+    const left = remainingMs(session, now());
+    if (left === null) {
       if (alarms.some((alarm) => alarm.name === ALARMS.end)) await api.alarms.clear(ALARMS.end);
       return;
     }
-    const when = now() + rem;
+    const when = now() + left;
     const existing = alarms.find((alarm) => alarm.name === ALARMS.end);
     if (!existing || Math.abs(existing.scheduledTime - when) > 1_000) await api.alarms.create(ALARMS.end, { when });
   }
@@ -296,7 +278,7 @@ export function createController(opts: IControllerOptions): IController {
     await api.alarms.clear(ALARMS.end);
   }
 
-  async function startPlan(plan: TPlan, presetId: TPresetId, lvl: TPowerLevel, origin: TOrigin): Promise<void> {
+  async function startPlan(plan: TPlan, presetId: TPresetId, origin: TOrigin, tab: ITabRef | null): Promise<void> {
     if (!engine) return;
     if (!lock.supported) {
       // Surface `unsupported` honestly instead of starting a session nothing keeps awake.
@@ -312,164 +294,131 @@ export function createController(opts: IControllerOptions): IController {
         switching = false;
       }
     }
-    level = lvl;
     await engine.start(plan, { presetId, mode: 'standard', source: 'ext' });
-    if (isLive(engine.session)) engine.updateSession({ modeState: { level: lvl, origin } });
+    if (isLive(engine.session)) engine.updateSession({ modeState: { origin, ...(tab ?? {}) } });
     await ensureSessionAlarms();
     await render();
   }
 
-  function startPreset(presetId: TExtPreset, origin: TOrigin, lvl = ext().level): Promise<void> {
-    return startPlan(planFromPreset(presetId), presetId, lvl, origin);
+  async function activeTab(): Promise<ITabRef | null> {
+    try {
+      const [tab] = await api.tabs.query({ active: true, lastFocusedWindow: true });
+      return tab?.id !== undefined && tab.windowId !== undefined ? { tabId: tab.id, windowId: tab.windowId } : null;
+    } catch {
+      return null;
+    }
   }
 
-  async function startUntil(wall: string, origin: TOrigin): Promise<void> {
+  async function startPreset(presetId: TExtPreset, origin: TOrigin, tab: ITabRef | null): Promise<void> {
     const s = settings();
-    if (s.lastUntilWall !== wall) await store.put(STORAGE_KEYS.settings, { ...s, lastUntilWall: wall });
-    await startPlan(planUntil(wall, now()), 'until', ext().level, origin);
+    if (s.defaultPreset !== presetId) await store.put(STORAGE_KEYS.settings, { ...s, defaultPreset: presetId });
+    await startPlan(planFromPreset(presetId), presetId, origin, tab);
   }
 
   async function stop(): Promise<void> {
     if (!engine) return;
     if (isLive(engine.session)) engine.stop();
+    else if (current()?.status === 'paused') engine.discardResumable();
     else await lock.release();
+    await clearSessionAlarms();
+    await render();
+  }
+
+  async function pause(hidden = false): Promise<void> {
+    const live = engine?.session;
+    if (!engine || live?.status !== 'active') return;
+    engine.pause();
+    engine.updateSession({ modeState: { hidden } });
+    await ensureSessionAlarms();
+    await render();
+  }
+
+  async function resume(): Promise<void> {
+    if (!engine) return;
+    const live = engine.session;
+    if (live?.status === 'paused') {
+      await engine.resume();
+    } else {
+      const stored = storage.session();
+      if (stored?.status !== 'paused') return;
+      // Fold the pause into the end time so the engine's resume check sees the time that is really left.
+      const at = now();
+      const paused = stored.pausedAt ?? at;
+      const folded =
+        stored.plan.type === 'duration' && stored.endsAt !== null
+          ? { ...stored, endsAt: stored.endsAt + (at - paused) + stored.pausedMs, pausedMs: 0, pausedAt: at }
+          : stored;
+      storage.writeSession(folded);
+      if (engine.getResumable()) await engine.resumeSession();
+      else finalizeExpired(folded);
+    }
+    if (isLive(engine.session)) engine.updateSession({ modeState: { hidden: false } });
+    await ensureSessionAlarms();
     await render();
   }
 
   async function toggle(origin: TOrigin): Promise<void> {
-    if (isLive(current())) await stop();
-    else await startPreset(presetOf(settings()), origin);
+    const session = current();
+    if (session?.status === 'active') await stop();
+    else if (session?.status === 'paused') await resume();
+    else await startPreset(presetOf(settings()), origin, await activeTab());
   }
 
-  async function extend(ms: number): Promise<void> {
-    const live = current();
-    // +15 / +30 / +1 h on a running session adds to it (docs/10 §13 "Popup"); a schedule session keeps its
-    // window, so only sessions the user or an auto-start rule began can grow.
-    if (isLive(live) && originOf(live) !== 'schedule' && live.endsAt !== null) {
-      engine?.addTime(ms);
-      await ensureSessionAlarms();
-      await render();
-      return;
-    }
-    const last = live ?? storage.session();
-    await startPlan({ type: 'duration', ms }, 'custom', levelOf(last, ext().level), 'user');
-  }
-
-  async function installed(reason: string, previousVersion: string | undefined): Promise<void> {
-    const version = api.runtime.getManifest().version;
+  function installed(reason: string): void {
+    if (reason !== 'install') return;
     const meta = storage.meta();
-    if (reason === 'install') {
-      storage.writeMeta({ ...meta, installedAt: meta.installedAt || now(), lastSeenVersion: version });
-      try {
-        await api.tabs.create({ url: api.runtime.getURL(WELCOME_PAGE) });
-      } catch {
-        // No window to open a tab in (a headless start): the options page links the same content.
-      }
-    } else if (reason === 'update' && !meta.lastSeenVersion) {
-      storage.writeMeta({ ...meta, lastSeenVersion: previousVersion ?? '0' });
-    }
-  }
-
-  function dismiss(): void {
-    const session = current();
-    if (session) {
-      if (!isLive(session)) engine?.updateSession({ modeState: { dismissed: true } });
-      return;
-    }
-    // After a worker restart the engine holds no ended session; mark the stored one.
-    const stored = storage.session();
-    if (stored && !isLive(stored))
-      storage.writeSession({ ...stored, modeState: { ...stored.modeState, dismissed: true } });
-  }
-
-  async function setLevel(lvl: TPowerLevel): Promise<void> {
-    await store.put(EXT_KEYS.ext, { ...ext(), level: lvl });
-    const session = current();
-    if (isLive(session) && originOf(session) !== 'schedule') {
-      level = lvl;
-      engine?.updateSession({ modeState: { level: lvl } });
-      lock.reassert();
-    }
-    await render();
-  }
-
-  function planFor(win: IWindow): TPlan {
-    return { type: 'until', endsAt: win.end, wall: wallOf(win.end) };
-  }
-
-  async function evaluateSchedules(): Promise<void> {
-    if (!engine) return;
-    const session = engine.session;
-    const win = hasFeature(license, 'ext.schedules') ? activeWindow(ext().schedules, now()) : null;
-    if (isLive(session)) {
-      if (originOf(session) !== 'schedule') return; // a session the user started always wins
-      if (!win) {
-        engine.stop();
-        return;
-      }
-      if (session.endsAt !== win.end || levelOf(session, 'display') !== win.level) {
-        await startPlan(planFor(win), 'until', win.level, 'schedule');
-      }
-      return;
-    }
-    if (!win) return;
-    const last = session ?? storage.session();
-    // Stopped by hand inside this window: stay stopped until the window's next occurrence.
-    if (
-      last &&
-      originOf(last) === 'schedule' &&
-      last.endReason === 'user' &&
-      last.endsAt !== null &&
-      now() < last.endsAt
-    )
-      return;
-    await startPlan(planFor(win), 'until', win.level, 'schedule');
-  }
-
-  async function syncSchedules(): Promise<void> {
-    const list = hasFeature(license, 'ext.schedules') ? ext().schedules : [];
-    const wanted = scheduleAlarms(list, now());
-    const alarms = await api.alarms.getAll();
-    for (const alarm of alarms) {
-      if (!alarm.name.startsWith(SCHEDULE_ALARM_PREFIX)) continue;
-      if (!wanted.some((w) => w.name === alarm.name && Math.abs(w.when - alarm.scheduledTime) < 1_000)) {
-        await api.alarms.clear(alarm.name);
-      }
-    }
-    for (const w of wanted) {
-      if (!alarms.some((alarm) => alarm.name === w.name && Math.abs(alarm.scheduledTime - w.when) < 1_000)) {
-        await api.alarms.create(w.name, { when: w.when });
-      }
-    }
-    await evaluateSchedules();
+    const version = api.runtime.getManifest().version;
+    storage.writeMeta({ ...meta, installedAt: meta.installedAt || now(), lastSeenVersion: version });
   }
 
   async function checkAutostartStop(): Promise<void> {
     const session = current();
     if (!engine || !isLive(session) || originOf(session) !== 'autostart') return;
-    const sites = hasFeature(license, 'ext.autostart') ? ext().autostart.sites : [];
+    const { on, sites } = ext().autostart;
     let open: ITab[] = [];
-    if (sites.length) {
+    if (on && sites.length) {
       try {
         open = await api.tabs.query({ url: sites.map((site) => originPattern(site.host)) });
       } catch {
         open = [];
       }
     }
-    if (!open.some((tab) => matchSite(tab.url, sites))) engine.stop();
+    if (!open.some((tab) => matchSite(tab.url, sites))) await stop();
+  }
+
+  // Release when the tab is hidden: the session's own tab stops being the one on screen (another tab in its window,
+  // or the window minimised) and the keep-awake is released; it comes back with the tab.
+  async function tabVisible(ref: ITabRef): Promise<boolean> {
+    try {
+      const win = await api.windows?.get(ref.windowId);
+      if (win?.state === 'minimized') return false;
+      const [active] = await api.tabs.query({ active: true, windowId: ref.windowId });
+      return active?.id === undefined || active.id === ref.tabId;
+    } catch {
+      return true;
+    }
+  }
+
+  async function followVisibility(): Promise<void> {
+    const session = current();
+    const ref = tabOf(session);
+    if (!ref || !isLive(session)) return;
+    const releasing = ext().releaseHidden;
+    if (!releasing) {
+      if (hiddenPause(session)) await resume();
+      return;
+    }
+    const visible = await tabVisible(ref);
+    if (!visible && session.status === 'active') await pause(true);
+    else if (visible && hiddenPause(session)) await resume();
   }
 
   async function maybeRevalidate(): Promise<void> {
     const record = storage.license();
     if (!record) return;
     const result = await revalidate(record, fetchFn, now());
-    if (result.status === 'revoked') {
-      storage.writeLicense(null);
-      license = NO_LICENSE;
-      await syncSchedules();
-    } else if (result.status === 'ok' && result.record) {
-      storage.writeLicense(result.record);
-    }
+    if (result.status === 'revoked') storage.writeLicense(null);
+    else if (result.status === 'ok' && result.record) storage.writeLicense(result.record);
   }
 
   function queueSyncPush(): void {
@@ -480,8 +429,6 @@ export function createController(opts: IControllerOptions): IController {
       syncTimer = null;
       const items: Record<string, unknown> = {};
       for (const key of SYNC_KEYS) {
-        // docs/10 §6, docs/08 §3: the licence token never reaches chrome.storage.sync.
-        if (key === STORAGE_KEYS.license) continue;
         const value = store.raw(key);
         if (value !== undefined) items[key] = value;
       }
@@ -489,32 +436,25 @@ export function createController(opts: IControllerOptions): IController {
     }, SYNC_DEBOUNCE_MS);
   }
 
+  function pillText(view: TExtView, session: ISession | null, at: number): string {
+    const copy = pillCopy(view, lock.state, session, at);
+    return t(copy.key, copy.vars);
+  }
+
   async function render(): Promise<void> {
     const session = current();
-    const lvl = lock.level ?? level;
     const at = now();
-    const text = badgeText(lock.state, lvl, session, at);
-    const held = lock.state === 'held' && isLive(session);
-    const status =
-      held && lvl === 'system'
-        ? `${t('ext.pill.systemHeld')} · ${t('ext.pill.system')}`
-        : t(pillTextKey(lock.state, lvl));
-    const rem = held ? remainingMs(session, at) : null;
-    const left =
-      rem === null
-        ? ''
-        : ` · ${t('tool.timer.remaining', { time: rem >= 60_000 ? t('stats.minutes', { minutes: Math.ceil(rem / 60_000) }) : formatClock(rem) })}`;
-    const next = { text, color: BADGE_COLORS[lvl], title: `${t('app.name')} — ${status}${left}`, lit: held };
+    const view = viewOf(lock.state, session);
+    const badge: IBadge | null = badgeOf(view, session, at, ext().badge);
+    const next = { text: badge?.text ?? '', bg: badge?.bg ?? '', title: `AwakeTab — ${pillText(view, session, at)}` };
     try {
-      if (next.text !== badge.text) await api.action.setBadgeText({ text: next.text });
-      if (next.text && next.color !== badge.color) {
-        await api.action.setBadgeBackgroundColor({ color: next.color });
-        await api.action.setBadgeTextColor?.({ color: BADGE_TEXT_COLOR });
+      if (next.text !== shown.text) await api.action.setBadgeText({ text: next.text });
+      if (badge && next.bg !== shown.bg) {
+        await api.action.setBadgeBackgroundColor({ color: badge.bg });
+        await api.action.setBadgeTextColor?.({ color: badge.fg });
       }
-      if (next.title !== badge.title) await api.action.setTitle({ title: next.title });
-      // The toolbar lamp is lit only while the device is really kept awake, hollow otherwise.
-      if (next.lit !== badge.lit) await api.action.setIcon?.({ path: next.lit ? ICON_LIT : ICON_OFF });
-      badge = { ...next, color: next.text ? next.color : badge.color };
+      if (next.title !== shown.title) await api.action.setTitle({ title: next.title });
+      shown = { ...next, bg: badge ? next.bg : shown.bg };
     } catch {
       // The action API can reject while the browser shuts down; the next render retries.
     }
@@ -522,24 +462,13 @@ export function createController(opts: IControllerOptions): IController {
 
   function state(): IExtState {
     const session = current() ?? storage.session();
-    const s = settings();
-    const origin = originOf(session);
-    const extendable =
-      session?.status === 'completed' &&
-      session.endReason === 'completed' &&
-      (origin === 'user' || origin === 'command') &&
-      s.endBehaviour === 'prompt_extend' &&
-      session.endedAt !== null &&
-      now() - session.endedAt < EXTEND_WINDOW_MS &&
-      session.modeState.dismissed !== true;
     return {
+      view: viewOf(lock.state, session),
       lock: lock.state,
       advice: lock.advice,
-      level: isLive(session) ? levelOf(session, ext().level) : ext().level,
       session,
-      origin,
-      extend: extendable,
-      features: license.valid ? license.features : [],
+      origin: originOf(session),
+      hidden: hiddenPause(session),
       now: now(),
     };
   }
@@ -547,29 +476,21 @@ export function createController(opts: IControllerOptions): IController {
   const handlers: Omit<IController, 'ready' | 'state' | 'dispose'> = {
     async onStartup() {
       await ready();
-      if (isLive(current())) {
-        lock.reassert();
-        return;
-      }
-      // FR-EXT-04: Pro `ext.autostart` keeps the display awake whenever Chrome starts.
-      if (hasFeature(license, 'ext.autostart') && ext().autostart.browserStart)
-        await startPreset(presetOf(settings()), 'startup');
+      if (current()?.status === 'active') lock.reassert();
     },
-    async onInstalled(reason, previousVersion) {
+    async onInstalled(reason) {
       await ready();
-      await installed(reason, previousVersion);
+      installed(reason);
       lock.reassert();
       await render();
     },
     async onAlarm(name) {
       await ready();
       if (name === ALARMS.tick) {
-        if (isLive(current())) lock.reassert();
+        if (current()?.status === 'active') lock.reassert();
         else await api.alarms.clear(ALARMS.tick);
       } else if (name === ALARMS.license) {
         await maybeRevalidate();
-      } else if (name.startsWith(SCHEDULE_ALARM_PREFIX)) {
-        await syncSchedules();
       }
       // ALARMS.end needs no branch: waking the worker resumed (or finalised) the session above.
       await render();
@@ -585,25 +506,19 @@ export function createController(opts: IControllerOptions): IController {
       await ready();
       switch (req.type) {
         case 'start':
-          await startPreset(req.presetId, 'user');
-          break;
-        case 'until':
-          await startUntil(req.wall, 'user');
+          await startPreset(req.presetId, 'user', req.tab ?? (await activeTab()));
           break;
         case 'stop':
           await stop();
           break;
+        case 'pause':
+          await pause();
+          break;
+        case 'resume':
+          await resume();
+          break;
         case 'toggle':
           await toggle('user');
-          break;
-        case 'extend':
-          if ((EXTEND_MS as readonly number[]).includes(req.ms)) await extend(req.ms);
-          break;
-        case 'dismiss':
-          dismiss();
-          break;
-        case 'level':
-          await setLevel(req.level);
           break;
         case 'state':
           break;
@@ -623,44 +538,44 @@ export function createController(opts: IControllerOptions): IController {
       if (areaName !== 'local') return;
       const changed = store.apply(changes);
       if (!changed.length) return;
-      if (changed.includes(STORAGE_KEYS.license)) license = await licenseState(storage.license(), now());
-      if (changed.includes(STORAGE_KEYS.license) || changed.includes(EXT_KEYS.ext)) {
-        await syncSchedules();
+      if (changed.includes(EXT_KEYS.ext)) {
         await checkAutostartStop();
+        await followVisibility();
       }
       if (changed.some((key) => SYNC_KEYS.includes(key))) queueSyncPush();
       await render();
     },
-    async onNotificationButton(id, index) {
-      if (id !== NOTIFICATION_ID) return;
-      await ready();
-      await api.notifications?.clear(id).catch(() => false);
-      if (index === 0 && settings().endBehaviour === 'prompt_extend') await extend(15 * 60_000);
-      else dismiss();
-    },
-    async onNotificationClicked(id) {
-      if (id !== NOTIFICATION_ID) return;
-      await api.notifications?.clear(id).catch(() => false);
-    },
-    async onTabUpdated(_tabId, change, tab) {
+    async onTabUpdated(tabId, change, tab) {
       // Without host permission for the tab's site, Chrome withholds `tab.url`: nothing to match, no work.
       if (!tab.url || (change.status !== 'complete' && change.url === undefined)) return;
       await ready();
-      if (!engine || !hasFeature(license, 'ext.autostart')) return;
-      const site = matchSite(tab.url, ext().autostart.sites);
+      if (!engine) return;
+      const { on, sites } = ext().autostart;
+      const site = on ? matchSite(tab.url, sites) : null;
       if (!site) {
         await checkAutostartStop();
         return;
       }
-      if (isLive(engine.session)) return;
+      if (isLive(current())) return;
       const plan: TPlan = site.durationMin
         ? { type: 'duration', ms: site.durationMin * 60_000 }
         : { type: 'indefinite' };
-      await startPlan(plan, site.durationMin ? 'custom' : 'pinf', ext().level, 'autostart');
+      const ref = tab.windowId !== undefined ? { tabId, windowId: tab.windowId } : null;
+      await startPlan(plan, site.durationMin ? 'custom' : 'pinf', 'autostart', ref);
     },
-    async onTabRemoved() {
+    async onTabRemoved(tabId) {
       await ready();
+      const session = current();
+      if (ext().releaseHidden && tabOf(session)?.tabId === tabId && isLive(session)) await stop();
       await checkAutostartStop();
+    },
+    async onTabActivated() {
+      await ready();
+      await followVisibility();
+    },
+    async onWindowFocus() {
+      await ready();
+      await followVisibility();
     },
     async onPermissionsRemoved() {
       await ready();
@@ -672,22 +587,23 @@ export function createController(opts: IControllerOptions): IController {
     ready,
     state,
     onStartup: () => serial(() => handlers.onStartup()),
-    onInstalled: (reason, previousVersion) => serial(() => handlers.onInstalled(reason, previousVersion)),
+    onInstalled: (reason) => serial(() => handlers.onInstalled(reason)),
     onAlarm: (name) => serial(() => handlers.onAlarm(name)),
     onCommand: (command) => serial(() => handlers.onCommand(command)),
     onMessage: (raw) => serial(() => handlers.onMessage(raw)),
     onStorageChanged: (changes, areaName) => serial(() => handlers.onStorageChanged(changes, areaName)),
-    onNotificationButton: (id, index) => serial(() => handlers.onNotificationButton(id, index)),
-    onNotificationClicked: (id) => serial(() => handlers.onNotificationClicked(id)),
     // Chrome withholds `tab.url` without host permission: those events are dropped before queueing.
     onTabUpdated: (tabId, change, tab) =>
       !tab.url || (change.status !== 'complete' && change.url === undefined)
         ? Promise.resolve()
         : serial(() => handlers.onTabUpdated(tabId, change, tab)),
     onTabRemoved: (tabId) => serial(() => handlers.onTabRemoved(tabId)),
+    onTabActivated: (info) => serial(() => handlers.onTabActivated(info)),
+    onWindowFocus: (windowId) => serial(() => handlers.onWindowFocus(windowId)),
     onPermissionsRemoved: () => serial(() => handlers.onPermissionsRemoved()),
     dispose() {
       if (syncTimer) ct(syncTimer);
+      if (chimeTimer) ct(chimeTimer);
       engine?.destroy();
     },
   };

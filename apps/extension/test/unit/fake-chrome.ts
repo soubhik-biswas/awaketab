@@ -3,12 +3,10 @@ import type {
   IAlarmInfo,
   IExtApi,
   IExtEvent,
-  INotificationOptions,
   IPermissions,
   IStorageAreaApi,
   IStorageChange,
   ITab,
-  TPowerLevel,
 } from '../../src/api';
 
 function fakeEvent<TFn extends (...args: never[]) => unknown>(): IExtEvent<TFn> & {
@@ -83,27 +81,23 @@ export interface IFakeChrome {
   local: IFakeStorageArea;
   sync: IFakeStorageArea;
   session: IFakeStorageArea;
-  power: Array<{ call: 'request' | 'release'; level?: TPowerLevel }>;
+  power: Array<{ call: 'request' | 'release'; level?: 'display' }>;
   alarms: Map<string, IAlarm>;
-  badge: { text: string; color: string; textColor: string; title: string; icon: string };
-  notifications: Array<{ id: string; options: INotificationOptions }>;
+  badge: { text: string; color: string; textColor: string; title: string };
+  offscreen: string[];
   granted: { permissions: Set<string>; origins: Set<string> };
   tabs: ITab[];
+  windows: Map<number, string>;
   opened: string[];
-  commands: Array<{ name?: string; shortcut?: string }>;
   events: {
     storage: ReturnType<typeof fakeEvent<(changes: Record<string, IStorageChange>, area: string) => void>>;
     alarm: ReturnType<typeof fakeEvent<(alarm: IAlarm) => void>>;
-    button: ReturnType<typeof fakeEvent<(id: string, index: number) => void>>;
   };
 }
 
-export function createFakeChrome(
-  opts: { power?: boolean; notifications?: boolean; uiLanguage?: string } = {},
-): IFakeChrome {
+export function createFakeChrome(opts: { power?: boolean; deny?: boolean; uiLanguage?: string } = {}): IFakeChrome {
   const storageEvent = fakeEvent<(changes: Record<string, IStorageChange>, area: string) => void>();
   const alarmEvent = fakeEvent<(alarm: IAlarm) => void>();
-  const buttonEvent = fakeEvent<(id: string, index: number) => void>();
   const fire = (changes: Record<string, IStorageChange>, area: string) => {
     storageEvent.fire(changes, area);
   };
@@ -112,12 +106,15 @@ export function createFakeChrome(
   const session = fakeArea('session', fire);
   const power: IFakeChrome['power'] = [];
   const alarms = new Map<string, IAlarm>();
-  const badge = { text: '', color: '', textColor: '', title: '', icon: '' };
-  const notifications: IFakeChrome['notifications'] = [];
-  const granted = { permissions: new Set<string>(['power', 'storage', 'alarms']), origins: new Set<string>() };
+  const badge = { text: '', color: '', textColor: '', title: '' };
+  const offscreen: string[] = [];
+  const granted = {
+    permissions: new Set<string>(['power', 'alarms', 'storage', 'offscreen', 'activeTab']),
+    origins: new Set<string>(),
+  };
   const tabs: ITab[] = [];
+  const windows = new Map<number, string>();
   const opened: string[] = [];
-  const commands = [{ name: 'toggle', shortcut: 'Alt+Shift+A' }];
   const matches = (p: IPermissions) =>
     (p.permissions ?? []).every((x) => granted.permissions.has(x)) &&
     (p.origins ?? []).every((x) => granted.origins.has(x));
@@ -127,7 +124,8 @@ export function createFakeChrome(
       ? {}
       : {
           power: {
-            requestKeepAwake(level: TPowerLevel) {
+            requestKeepAwake(level: 'display') {
+              if (opts.deny) throw new Error('Blocked by policy');
               power.push({ call: 'request', level });
             },
             releaseKeepAwake() {
@@ -171,26 +169,16 @@ export function createFakeChrome(
         badge.title = title;
         return Promise.resolve();
       },
-      setIcon({ path }) {
-        badge.icon = path['16'] ?? '';
+    },
+    offscreen: {
+      createDocument({ url }) {
+        offscreen.push(url);
+        return Promise.resolve();
+      },
+      closeDocument() {
         return Promise.resolve();
       },
     },
-    ...(opts.notifications === false
-      ? {}
-      : {
-          notifications: {
-            create(id: string, options: INotificationOptions) {
-              notifications.push({ id, options });
-              return Promise.resolve(id);
-            },
-            clear() {
-              return Promise.resolve(true);
-            },
-            onButtonClicked: buttonEvent,
-            onClicked: fakeEvent<(id: string) => void>(),
-          },
-        }),
     permissions: {
       contains: (p) => Promise.resolve(matches(p)),
       request: (p) => {
@@ -214,19 +202,21 @@ export function createFakeChrome(
       onInstalled: fakeEvent(),
       onMessage: fakeEvent(),
       sendMessage: () => Promise.resolve(null),
-      openOptionsPage: () => Promise.resolve(),
     },
-    commands: { onCommand: fakeEvent(), getAll: () => Promise.resolve(commands) },
+    commands: { onCommand: fakeEvent() },
     tabs: {
       query: (q) =>
         Promise.resolve(
           tabs.filter((tab) =>
-            (q.url ?? []).some((pattern) => {
-              const host = pattern.replace(/^https:\/\//u, '').replace(/\/\*$/u, '');
-              if (!granted.origins.has(pattern) || !tab.url) return false;
-              const h = new URL(tab.url).hostname;
-              return host.startsWith('*.') ? h === host.slice(2) || h.endsWith(host.slice(1)) : h === host;
-            }),
+            q.url === undefined
+              ? (q.active === undefined || tab.active === q.active) &&
+                (q.windowId === undefined || tab.windowId === q.windowId)
+              : q.url.some((pattern) => {
+                  const host = pattern.replace(/^https:\/\//u, '').replace(/\/\*$/u, '');
+                  if (!granted.origins.has(pattern) || !tab.url) return false;
+                  const h = new URL(tab.url).hostname;
+                  return host.startsWith('*.') ? h === host.slice(2) || h.endsWith(host.slice(1)) : h === host;
+                }),
           ),
         ),
       create: (p) => {
@@ -235,6 +225,11 @@ export function createFakeChrome(
       },
       onUpdated: fakeEvent(),
       onRemoved: fakeEvent(),
+      onActivated: fakeEvent(),
+    },
+    windows: {
+      get: (id) => Promise.resolve({ id, state: windows.get(id) ?? 'normal' }),
+      onFocusChanged: fakeEvent(),
     },
     i18n: { getUILanguage: () => opts.uiLanguage ?? 'en-US' },
   };
@@ -246,12 +241,12 @@ export function createFakeChrome(
     power,
     alarms,
     badge,
-    notifications,
+    offscreen,
     granted,
     tabs,
+    windows,
     opened,
-    commands,
-    events: { storage: storageEvent, alarm: alarmEvent, button: buttonEvent },
+    events: { storage: storageEvent, alarm: alarmEvent },
   };
 }
 

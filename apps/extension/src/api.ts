@@ -1,5 +1,3 @@
-export type TPowerLevel = 'display' | 'system';
-
 export interface IExtEvent<TFn extends (...args: never[]) => unknown> {
   addListener(cb: TFn): void;
   removeListener(cb: TFn): void;
@@ -33,25 +31,30 @@ export interface IPermissions {
   origins?: string[];
 }
 
-export interface INotificationOptions {
-  type: 'basic';
-  iconUrl: string;
-  title: string;
-  message: string;
-  buttons?: Array<{ title: string }>;
-  silent?: boolean;
-  priority?: number;
-}
-
 export interface ITab {
   id?: number;
+  windowId?: number;
   url?: string;
   active?: boolean;
+  lastAccessed?: number;
+}
+
+export interface ITabQuery {
+  url?: string[];
+  active?: boolean;
+  currentWindow?: boolean;
+  lastFocusedWindow?: boolean;
+  windowId?: number;
+}
+
+export interface IWindow {
+  id?: number;
+  state?: string;
 }
 
 export interface IExtApi {
   power?: {
-    requestKeepAwake(level: TPowerLevel): void;
+    requestKeepAwake(level: 'display'): void;
     releaseKeepAwake(): void;
   };
   storage: {
@@ -71,13 +74,10 @@ export interface IExtApi {
     setBadgeBackgroundColor(details: { color: string }): Promise<void>;
     setBadgeTextColor?(details: { color: string }): Promise<void>;
     setTitle(details: { title: string }): Promise<void>;
-    setIcon?(details: { path: Record<string, string> }): Promise<void>;
   };
-  notifications?: {
-    create(id: string, options: INotificationOptions): Promise<string>;
-    clear(id: string): Promise<boolean>;
-    onButtonClicked: IExtEvent<(id: string, index: number) => void>;
-    onClicked: IExtEvent<(id: string) => void>;
+  offscreen?: {
+    createDocument(p: { url: string; reasons: string[]; justification: string }): Promise<void>;
+    closeDocument(): Promise<void>;
   };
   permissions: {
     contains(p: IPermissions): Promise<boolean>;
@@ -96,18 +96,20 @@ export interface IExtApi {
       (message: unknown, sender: unknown, sendResponse: (response: unknown) => void) => boolean | undefined
     >;
     sendMessage(message: unknown): Promise<unknown>;
-    openOptionsPage(): Promise<void>;
   };
   commands: {
     onCommand: IExtEvent<(command: string) => void>;
-    getAll(): Promise<Array<{ name?: string; shortcut?: string }>>;
   };
   tabs: {
-    query(q: { url?: string[] }): Promise<ITab[]>;
+    query(q: ITabQuery): Promise<ITab[]>;
     create(p: { url: string }): Promise<unknown>;
     onUpdated: IExtEvent<(tabId: number, change: { status?: string; url?: string }, tab: ITab) => void>;
     onRemoved: IExtEvent<(tabId: number) => void>;
+    onActivated: IExtEvent<(info: { tabId: number; windowId: number }) => void>;
+  };
+  windows?: {
+    get(windowId: number): Promise<IWindow>;
+    onFocusChanged: IExtEvent<(windowId: number) => void>;
   };
   i18n?: { getUILanguage(): string };
-  extension?: { inIncognitoContext?: boolean };
 }

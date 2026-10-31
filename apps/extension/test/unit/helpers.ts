@@ -1,7 +1,7 @@
 import { LICENSE_PUBLIC_KEYS, sha256Hex, type ILicenseRecord, type TFeatureGate } from '@awaketab/core';
 import { createController, type IController } from '../../src/controller';
 import type { IFakeChrome } from './fake-chrome';
-import en from '../../locales/shared/en.json';
+import en from '../../locales/en.json';
 
 const b64url = (bytes: Uint8Array) =>
   btoa(String.fromCharCode(...bytes))
@@ -48,7 +48,7 @@ export async function signToken(claims: {
 }
 
 export async function proRecord(
-  features: TFeatureGate[] = ['ext.schedules', 'ext.autostart'],
+  features: TFeatureGate[] = ['ext.autostart'],
   now = Date.now(),
   deviceId = '11111111-1111-4111-8111-111111111111',
 ): Promise<ILicenseRecord> {
@@ -78,9 +78,6 @@ export function wired(
   });
   fake.events.storage.addListener((changes, area) => {
     void ctl.onStorageChanged(changes, area);
-  });
-  fake.events.button.addListener((id, index) => {
-    void ctl.onNotificationButton(id, index);
   });
   return ctl;
 }

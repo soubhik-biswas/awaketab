@@ -1,9 +1,9 @@
 import { STORAGE_KEYS, type ISession } from '@awaketab/core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { ALARMS, NOTIFICATION_ID, WELCOME_PAGE } from '../../src/controller';
+import { ALARMS, OFFSCREEN_PAGE } from '../../src/controller';
 import { EXT_KEYS } from '../../src/settings';
-import { BADGE_COLORS } from '../../src/status';
-import { bodyOf, createFakeChrome, flush } from './fake-chrome';
+import { BADGE } from '../../src/status';
+import { createFakeChrome, flush } from './fake-chrome';
 import { proRecord, wired } from './helpers';
 
 const session = (fake: ReturnType<typeof createFakeChrome>) =>
@@ -20,100 +20,100 @@ afterEach(() => {
 });
 
 describe('background controller — keep-awake and badge', () => {
-  it('starts a display session from the popup: power request, ON badge, 0.5-min tick alarm', async () => {
+  it('starts from the popup: chrome.power display request, volt badge with minutes, 0.5-min tick, end alarm', async () => {
     const fake = createFakeChrome();
     const ctl = track(wired(fake));
-    const state = await ctl.onMessage({ type: 'start', presetId: 'pinf' });
+    const state = await ctl.onMessage({ type: 'start', presetId: 'p60', tab: { tabId: 7, windowId: 1 } });
+    expect(state?.view).toBe('awake');
     expect(state?.lock).toBe('held');
     expect(state?.session?.source).toBe('ext');
-    expect(state?.session?.modeState).toMatchObject({ level: 'display', origin: 'user' });
+    expect(state?.session?.modeState).toMatchObject({ origin: 'user', tabId: 7, windowId: 1 });
     expect(fake.power.at(-1)).toEqual({ call: 'request', level: 'display' });
-    expect(fake.badge.text).toBe('ON');
-    expect(fake.badge.color).toBe(BADGE_COLORS.display);
-    expect(fake.badge.title).toContain('Screen awake');
-    expect(fake.badge.icon).toBe('icon-16.png');
+    expect(fake.badge.text).toBe('60');
+    expect(fake.badge.color).toBe(BADGE.awake.bg);
+    expect(fake.badge.textColor).toBe(BADGE.awake.fg);
+    expect(fake.badge.title).toBe('AwakeTab — Awake · 60 min');
     expect(fake.alarms.get(ALARMS.tick)?.periodInMinutes).toBe(0.5);
-    expect(fake.alarms.has(ALARMS.end)).toBe(false);
-  });
-
-  it('shows remaining minutes for a finite plan and schedules the end alarm at endsAt', async () => {
-    const fake = createFakeChrome();
-    const ctl = track(wired(fake));
-    const state = await ctl.onMessage({ type: 'start', presetId: 'p15' });
-    expect(fake.badge.text).toBe('15m');
     expect(Math.abs((fake.alarms.get(ALARMS.end)?.scheduledTime ?? 0) - (state?.session?.endsAt ?? 0))).toBeLessThan(
       50,
     );
   });
 
-  it('maps the system level to requestKeepAwake("system"), a sky SYS badge and the secondary line', async () => {
+  it('no end reads ∞ on the badge and sets no end alarm; the badge timer switch shows ON instead', async () => {
     const fake = createFakeChrome();
     const ctl = track(wired(fake));
-    await ctl.onMessage({ type: 'level', level: 'system' });
-    const state = await ctl.onMessage({ type: 'start', presetId: 'pinf' });
-    expect(state?.level).toBe('system');
-    expect(fake.power.at(-1)).toEqual({ call: 'request', level: 'system' });
-    expect(fake.badge.text).toBe('SYS');
-    expect(fake.badge.color).toBe(BADGE_COLORS.system);
-    expect(fake.badge.title).toContain('System awake · Screen may dim or lock');
-    expect(fake.badge.title).not.toContain('Screen awake');
-    // Switching level mid-session re-issues the request at the new level.
-    await ctl.onMessage({ type: 'level', level: 'display' });
-    expect(fake.power.at(-1)).toEqual({ call: 'request', level: 'display' });
+    await ctl.onMessage({ type: 'start', presetId: 'pinf' });
+    expect(fake.badge.text).toBe('∞');
+    expect(fake.alarms.has(ALARMS.end)).toBe(false);
+    await fake.api.storage.local.set({ [EXT_KEYS.ext]: { v: 1, badge: false } });
+    await flush(20);
     expect(fake.badge.text).toBe('ON');
-    expect(fake.badge.title).toContain('Screen awake');
-    expect(fake.badge.title).not.toContain('System awake');
   });
 
-  it('stop releases the keep-awake, clears the badge and the session alarms', async () => {
+  it('pause releases the keep-awake and shows an amber II; resume asks again; stop clears everything', async () => {
     const fake = createFakeChrome();
     const ctl = track(wired(fake));
     await ctl.onMessage({ type: 'start', presetId: 'p30' });
-    const state = await ctl.onMessage({ type: 'stop' });
-    await flush();
-    expect(state?.lock).toBe('idle');
+    const paused = await ctl.onMessage({ type: 'pause' });
+    expect(paused?.view).toBe('paused');
     expect(fake.power.at(-1)).toEqual({ call: 'release' });
-    expect(fake.badge.text).toBe('');
+    expect(fake.badge.text).toBe('II');
+    expect(fake.badge.color).toBe(BADGE.paused.bg);
     expect(fake.alarms.has(ALARMS.tick)).toBe(false);
     expect(fake.alarms.has(ALARMS.end)).toBe(false);
-    expect(session(fake)?.endReason).toBe('user');
+    const resumed = await ctl.onMessage({ type: 'resume' });
+    expect(resumed?.view).toBe('awake');
+    expect(fake.power.at(-1)).toEqual({ call: 'request', level: 'display' });
+    expect(fake.alarms.has(ALARMS.end)).toBe(true);
+    const stopped = await ctl.onMessage({ type: 'stop' });
+    expect(stopped?.view).toBe('ready');
+    expect(fake.badge.text).toBe('');
+    expect(fake.alarms.has(ALARMS.tick)).toBe(false);
   });
 
-  it('Alt+Shift+A (the toggle command) starts the default preset and stops again', async () => {
-    const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.settings, { defaultPreset: 'p45' });
+  it('a refused request is blocked: red ! badge, no session left running', async () => {
+    const fake = createFakeChrome({ deny: true });
     const ctl = track(wired(fake));
-    await ctl.onCommand('toggle');
-    expect(ctl.state().session?.presetId).toBe('p45');
-    expect(ctl.state().origin).toBe('command');
-    await ctl.onCommand('toggle');
-    expect(ctl.state().lock).toBe('idle');
-    await ctl.onCommand('something-else');
-    expect(ctl.state().lock).toBe('idle');
-  });
-
-  it('switching preset mid-session replaces the plan without a second lock or an end notification', async () => {
-    const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.settings, { notifications: true });
-    fake.granted.permissions.add('notifications');
-    const ctl = track(wired(fake));
-    await ctl.onMessage({ type: 'start', presetId: 'p15' });
-    await ctl.onMessage({ type: 'start', presetId: 'p60' });
-    await flush();
-    expect(ctl.state().session?.presetId).toBe('p60');
-    expect(ctl.state().lock).toBe('held');
-    expect(fake.notifications).toHaveLength(0);
-    expect(fake.badge.text).toBe('60m');
+    const state = await ctl.onMessage({ type: 'start', presetId: 'p15' });
+    expect(state?.view).toBe('blocked');
+    expect(state?.lock).toBe('denied');
+    expect(session(fake)?.status).toBe('aborted');
+    expect(fake.badge.text).toBe('!');
+    expect(fake.badge.color).toBe(BADGE.blocked.bg);
+    expect(fake.badge.title).toBe('AwakeTab — Blocked');
   });
 
   it('reports unsupported honestly when chrome.power is missing and never starts a session', async () => {
     const fake = createFakeChrome({ power: false });
     const ctl = track(wired(fake));
     const state = await ctl.onMessage({ type: 'start', presetId: 'pinf' });
+    expect(state?.view).toBe('blocked');
     expect(state?.lock).toBe('unsupported');
-    expect(state?.advice).toBe('unsupported_browser');
     expect(state?.session).toBeNull();
-    expect(fake.badge.text).toBe('');
+  });
+
+  it('Alt+Shift+A (the toggle command) starts the last length and stops again', async () => {
+    const fake = createFakeChrome();
+    fake.local.data.set(STORAGE_KEYS.settings, { defaultPreset: 'p15' });
+    const ctl = track(wired(fake));
+    await ctl.onCommand('toggle');
+    expect(ctl.state().session?.presetId).toBe('p15');
+    expect(ctl.state().origin).toBe('command');
+    await ctl.onCommand('toggle');
+    expect(ctl.state().view).toBe('ready');
+  });
+
+  it('picking another length mid-session replaces the plan with one lock', async () => {
+    const fake = createFakeChrome();
+    const ctl = track(wired(fake));
+    await ctl.onMessage({ type: 'start', presetId: 'p15' });
+    const state = await ctl.onMessage({ type: 'start', presetId: 'p60' });
+    expect(state?.session?.plan).toEqual({ type: 'duration', ms: 3_600_000 });
+    expect(state?.lock).toBe('held');
+    expect(fake.offscreen).toEqual([]);
+    await flush();
+    // The popup opens on the length used last.
+    expect((fake.local.data.get(STORAGE_KEYS.settings) as { defaultPreset?: string }).defaultPreset).toBe('p60');
   });
 
   it('ignores malformed messages', async () => {
@@ -130,9 +130,8 @@ describe('background controller — service-worker lifecycle', () => {
   it('re-hydrates a live session after a worker restart and re-issues the keep-awake', async () => {
     const fake = createFakeChrome();
     const first = wired(fake);
-    const started = await first.onMessage({ type: 'start', presetId: 'p120' });
+    const started = await first.onMessage({ type: 'start', presetId: 'p60' });
     await flush();
-    // The worker dies: its timers stop, chrome.storage and chrome.power survive.
     first.dispose();
     fake.power.length = 0;
     const second = track(wired(fake));
@@ -140,27 +139,32 @@ describe('background controller — service-worker lifecycle', () => {
     expect(second.state().session?.id).toBe(started?.session?.id);
     expect(second.state().lock).toBe('held');
     expect(fake.power[0]).toEqual({ call: 'request', level: 'display' });
-    expect(fake.badge.text).toMatch(/^1\d\dm$|^2h$/u);
   });
 
-  it('resumes an indefinite session of any age (resumeIndefiniteMs: Infinity)', async () => {
+  it('a paused session stays paused across a restart, and Resume continues with the time that was left', async () => {
     const fake = createFakeChrome();
-    const t0 = Date.parse('2026-09-01T08:00:00Z');
-    const first = wired(fake, { now: () => t0 });
-    await first.onMessage({ type: 'start', presetId: 'pinf' });
+    let now = Date.parse('2026-10-31T10:00:00Z');
+    const first = wired(fake, { now: () => now });
+    await first.onMessage({ type: 'start', presetId: 'p30' });
+    now += 10 * 60_000;
+    await first.onMessage({ type: 'pause' });
     await flush();
     first.dispose();
-    const second = track(wired(fake, { now: () => t0 + 30 * 3_600_000 }));
-    await second.onStartup();
-    expect(second.state().lock).toBe('held');
-    expect(second.state().session?.startedAt).toBe(t0);
+    now += 60 * 60_000;
+    fake.power.length = 0;
+    const second = track(wired(fake, { now: () => now }));
+    await second.onAlarm(ALARMS.tick);
+    expect(second.state().view).toBe('paused');
+    expect(fake.power).not.toContainEqual(expect.objectContaining({ call: 'request' }));
+    expect(fake.badge.text).toBe('II');
+    const resumed = await second.onMessage({ type: 'resume' });
+    expect(resumed?.view).toBe('awake');
+    expect(fake.badge.text).toBe('20');
   });
 
-  it('finalises a session that ended while the worker slept and announces it once', async () => {
+  it('finalises a session that ended while the worker slept', async () => {
     const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.settings, { notifications: true });
-    fake.granted.permissions.add('notifications');
-    let now = Date.parse('2026-09-01T08:00:00Z');
+    let now = Date.parse('2026-10-31T08:00:00Z');
     const first = wired(fake, { now: () => now });
     await first.onMessage({ type: 'start', presetId: 'p15' });
     await flush();
@@ -172,59 +176,62 @@ describe('background controller — service-worker lifecycle', () => {
     expect(session(fake)?.status).toBe('completed');
     expect(fake.power).toContainEqual({ call: 'release' });
     expect(fake.power).not.toContainEqual(expect.objectContaining({ call: 'request' }));
-    expect(fake.notifications).toHaveLength(1);
-    expect(fake.notifications[0]?.options.message).toBe('Your 15 min session is done');
-    expect(second.state().extend).toBe(true);
-    await second.onMessage({ type: 'dismiss' });
-    expect(second.state().extend).toBe(false);
+    expect(second.state().view).toBe('ready');
   });
 
-  it('completes on time while alive, then +15 min from the notification starts a new session', async () => {
+  it('completes on time while alive, releases the keep-awake and plays the chosen chime offscreen', async () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
-    vi.setSystemTime(Date.parse('2026-09-01T08:00:00Z'));
+    vi.setSystemTime(Date.parse('2026-10-31T08:00:00Z'));
     const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.settings, { notifications: true, sound: { id: 'none', volume: 0.6 } });
-    fake.granted.permissions.add('notifications');
+    fake.local.data.set(STORAGE_KEYS.settings, { sound: { id: 'bell', volume: 0.4 } });
     const ctl = track(wired(fake));
     await ctl.onMessage({ type: 'start', presetId: 'p15' });
     await vi.advanceTimersByTimeAsync(15 * 60_000 + 1_000);
-    await flush();
+    await flush(30);
     expect(ctl.state().session?.status).toBe('completed');
     expect(fake.power.at(-1)).toEqual({ call: 'release' });
     expect(fake.badge.text).toBe('');
-    const note = fake.notifications.at(-1);
-    expect(note?.id).toBe(NOTIFICATION_ID);
-    expect(note?.options.title).toBe("Time's up");
-    expect(note?.options.buttons?.map((b) => b.title)).toEqual(['+15 min', 'Dismiss']);
-    expect(note?.options.silent).toBe(true);
-    fake.events.button.fire(NOTIFICATION_ID, 0);
-    await vi.advanceTimersByTimeAsync(10);
-    await flush(30);
-    expect(ctl.state().session?.plan).toEqual({ type: 'duration', ms: 15 * 60_000 });
-    expect(ctl.state().lock).toBe('held');
+    expect(fake.offscreen).toEqual([`${OFFSCREEN_PAGE}?kind=bell&volume=0.4`]);
   });
 
-  it('does not notify when notifications are off (the default) or the permission is missing', async () => {
+  it('stays silent when the sound is off', async () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
     const fake = createFakeChrome();
+    fake.local.data.set(STORAGE_KEYS.settings, { sound: { id: 'none', volume: 0.6 } });
     const ctl = track(wired(fake));
     await ctl.onMessage({ type: 'start', presetId: 'p15' });
     await vi.advanceTimersByTimeAsync(15 * 60_000 + 1_000);
-    await flush();
+    await flush(30);
     expect(ctl.state().session?.status).toBe('completed');
-    expect(fake.notifications).toHaveLength(0);
+    expect(fake.offscreen).toEqual([]);
+  });
+
+  it('clears the alarms an older version set for its schedules', async () => {
+    const fake = createFakeChrome();
+    await fake.api.alarms.create('at.sched.work.start', { when: Date.now() + 60_000 });
+    const ctl = track(wired(fake));
+    await ctl.ready();
+    expect([...fake.alarms.keys()].filter((n) => n.startsWith('at.sched.'))).toEqual([]);
+  });
+
+  it('opens no tab on install and records the install time', async () => {
+    const fake = createFakeChrome();
+    const ctl = track(wired(fake));
+    await ctl.onInstalled('install');
+    expect(fake.opened).toEqual([]);
+    expect((fake.local.data.get(STORAGE_KEYS.meta) as { installedAt?: number }).installedAt).toBeGreaterThan(0);
   });
 });
 
 describe('background controller — storage, sync and privacy', () => {
-  it('stores session and settings in chrome.storage.local under at.v1.* and never syncs the licence', async () => {
+  it('stores session and settings under at.v1.* and syncs settings, never the licence', async () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     const fake = createFakeChrome();
     fake.local.data.set(STORAGE_KEYS.license, await proRecord());
     const ctl = track(wired(fake));
     await ctl.onMessage({ type: 'start', presetId: 'pinf' });
     await fake.api.storage.local.set({ [STORAGE_KEYS.settings]: { theme: 'dark' } });
-    await ctl.onMessage({ type: 'level', level: 'system' });
+    await fake.api.storage.local.set({ [EXT_KEYS.ext]: { v: 1, badge: false } });
     await flush();
     await vi.advanceTimersByTimeAsync(3_000);
     expect(fake.local.data.has(STORAGE_KEYS.session)).toBe(true);
@@ -236,218 +243,99 @@ describe('background controller — storage, sync and privacy', () => {
     expect(synced).not.toContain(STORAGE_KEYS.session);
   });
 
-  it('seeds a fresh profile from chrome.storage.sync and adopts remote changes', async () => {
+  it('seeds a fresh profile from chrome.storage.sync', async () => {
     const fake = createFakeChrome();
-    fake.sync.data.set(EXT_KEYS.ext, {
-      v: 1,
-      level: 'system',
-      schedules: [],
-      autostart: { browserStart: false, sites: [] },
-    });
+    fake.sync.data.set(EXT_KEYS.ext, { v: 1, badge: false });
     const ctl = track(wired(fake));
     await ctl.ready();
-    expect(ctl.state().level).toBe('system');
-    await fake.sync.set({
-      [EXT_KEYS.ext]: { v: 1, level: 'display', schedules: [], autostart: { browserStart: false, sites: [] } },
-    });
-    await flush(20);
-    expect(ctl.state().level).toBe('display');
+    await ctl.onMessage({ type: 'start', presetId: 'p15' });
+    expect(fake.badge.text).toBe('ON');
   });
 
-  it('keeps telemetry off by default: no network request at all', async () => {
+  it('sends nothing over the network without a stored licence', async () => {
     const fetchFn = vi.fn(() => Promise.resolve(new Response('{}')));
     const fake = createFakeChrome();
     const ctl = track(wired(fake, { fetchFn }));
     await ctl.onMessage({ type: 'start', presetId: 'p15' });
     await ctl.onMessage({ type: 'stop' });
+    await ctl.onAlarm(ALARMS.license);
     expect(fetchFn).not.toHaveBeenCalled();
   });
 
-  it('sends opt-in telemetry with source ext and no hostnames', async () => {
-    const fetchFn = vi.fn((_url: string, _init?: RequestInit) => Promise.resolve(new Response('{}')));
+  it('drops a licence an earlier version stored once it is revoked; nothing depends on it', async () => {
+    const at = Date.parse('2026-10-31T10:00:00Z');
     const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.settings, { telemetry: true });
-    const ctl = track(wired(fake, { fetchFn }));
-    await ctl.onMessage({ type: 'start', presetId: 'p15' });
-    await ctl.onMessage({ type: 'stop' });
-    const bodies = fetchFn.mock.calls.map(
-      (call) => JSON.parse(bodyOf(call[1])) as { events: Array<Record<string, unknown>> },
-    );
-    const events = bodies.flatMap((b) => b.events);
-    expect(fetchFn.mock.calls.every((call) => call[0] === 'https://awaketab.com/api/e')).toBe(true);
-    expect(events.map((e) => e.event)).toEqual(['session_start', 'session_end']);
-    expect(events.every((e) => e.source === 'ext' && e.path === '/ext')).toBe(true);
-    expect(JSON.stringify(events)).not.toMatch(/lock_state|https?:/u);
-  });
-});
-
-describe('background controller — Pro schedules and auto-start', () => {
-  const weekdays = { id: 'work', days: [0, 1, 2, 3, 4, 5, 6], start: '09:00', end: '18:00', level: 'display' as const };
-
-  it('free users get no schedule alarms and no schedule session', async () => {
-    const at = new Date(2026, 8, 2, 10, 0).getTime();
-    const fake = createFakeChrome();
-    fake.local.data.set(EXT_KEYS.ext, {
-      v: 1,
-      level: 'display',
-      schedules: [weekdays],
-      autostart: { browserStart: true, sites: [] },
-    });
-    const ctl = track(wired(fake, { now: () => at }));
-    await ctl.onStartup();
-    expect([...fake.alarms.keys()].filter((n) => n.startsWith('at.sched.'))).toEqual([]);
-    expect(ctl.state().session).toBeNull();
-  });
-
-  it('with ext.schedules: two alarms per schedule, and a window in progress starts an until session', async () => {
-    const at = new Date(2026, 8, 2, 10, 0).getTime();
-    const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.license, await proRecord(['ext.schedules'], at));
-    fake.local.data.set(EXT_KEYS.ext, {
-      v: 1,
-      level: 'display',
-      schedules: [weekdays],
-      autostart: { browserStart: false, sites: [] },
-    });
-    const ctl = track(wired(fake, { now: () => at }));
-    await ctl.ready();
-    expect(fake.alarms.get('at.sched.work.end')?.scheduledTime).toBe(new Date(2026, 8, 2, 18, 0).getTime());
-    expect(fake.alarms.get('at.sched.work.start')?.scheduledTime).toBe(new Date(2026, 8, 3, 9, 0).getTime());
-    expect(ctl.state().origin).toBe('schedule');
-    expect(ctl.state().session?.plan).toEqual({
-      type: 'until',
-      endsAt: new Date(2026, 8, 2, 18, 0).getTime(),
-      wall: '18:00',
-    });
-    // Stopped by hand inside the window: the schedule does not restart it on the next alarm.
-    await ctl.onMessage({ type: 'stop' });
-    await ctl.onAlarm('at.sched.work.start');
-    expect(ctl.state().lock).toBe('idle');
-  });
-
-  it('a user session always wins over a schedule window', async () => {
-    const at = new Date(2026, 8, 2, 8, 59).getTime();
-    let now = at;
-    const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.license, await proRecord(['ext.schedules'], at));
-    fake.local.data.set(EXT_KEYS.ext, {
-      v: 1,
-      level: 'display',
-      schedules: [weekdays],
-      autostart: { browserStart: false, sites: [] },
-    });
-    const ctl = track(wired(fake, { now: () => now }));
-    await ctl.onMessage({ type: 'start', presetId: 'pinf' });
-    now = new Date(2026, 8, 2, 9, 0).getTime();
-    await ctl.onAlarm('at.sched.work.start');
-    expect(ctl.state().origin).toBe('user');
-  });
-
-  it('ext.autostart keeps the display awake when Chrome starts (FR-EXT-04)', async () => {
-    const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.license, await proRecord(['ext.autostart']));
-    fake.local.data.set(EXT_KEYS.ext, {
-      v: 1,
-      level: 'display',
-      schedules: [],
-      autostart: { browserStart: true, sites: [] },
-    });
-    const ctl = track(wired(fake));
-    await ctl.onStartup();
-    expect(ctl.state().lock).toBe('held');
-    expect(ctl.state().origin).toBe('startup');
-    expect(fake.badge.text).toBe('ON');
-  });
-
-  it('auto-start sites: a matching tab starts, closing the last one stops; other sites are ignored', async () => {
-    const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.license, await proRecord(['ext.autostart']));
-    fake.local.data.set(EXT_KEYS.ext, {
-      v: 1,
-      level: 'display',
-      schedules: [],
-      autostart: { browserStart: false, sites: [{ host: 'meet.example.com', durationMin: null }] },
-    });
-    fake.granted.origins.add('https://meet.example.com/*');
-    const ctl = track(wired(fake));
-    // No host permission → Chrome withholds the URL → nothing happens.
-    await ctl.onTabUpdated(1, { status: 'complete' }, { id: 1 });
-    await ctl.onTabUpdated(2, { status: 'complete' }, { id: 2, url: 'https://news.example.org/' });
-    expect(ctl.state().session).toBeNull();
-    const tab = { id: 3, url: 'https://meet.example.com/abc' };
-    fake.tabs.push(tab);
-    await ctl.onTabUpdated(3, { status: 'complete' }, tab);
-    expect(ctl.state().origin).toBe('autostart');
-    expect(ctl.state().lock).toBe('held');
-    fake.tabs.splice(0);
-    await ctl.onTabRemoved(3);
-    expect(ctl.state().lock).toBe('idle');
-  });
-
-  it('a revoked licence drops the record and stops schedule sessions', async () => {
-    const at = new Date(2026, 8, 2, 10, 0).getTime();
-    const record = await proRecord(['ext.schedules'], at - 2 * 86_400_000);
-    const fake = createFakeChrome();
-    fake.local.data.set(STORAGE_KEYS.license, record);
-    fake.local.data.set(EXT_KEYS.ext, {
-      v: 1,
-      level: 'display',
-      schedules: [weekdays],
-      autostart: { browserStart: false, sites: [] },
-    });
+    fake.local.data.set(STORAGE_KEYS.license, await proRecord(['ext.autostart'], at - 2 * 86_400_000));
     const fetchFn = vi.fn(() => Promise.resolve(Response.json({ revoked: true })));
     const ctl = track(wired(fake, { now: () => at, fetchFn }));
     await ctl.onAlarm(ALARMS.license);
     await flush(30);
     expect(fetchFn).toHaveBeenCalled();
     expect(fake.local.data.has(STORAGE_KEYS.license)).toBe(false);
-    expect(ctl.state().lock).toBe('idle');
   });
 });
 
-describe('background controller — Clear Night popup support (B9)', () => {
-  it('+15 / +30 / +1 h on a running session adds to it instead of starting a new one', async () => {
-    const fake = createFakeChrome();
-    const ctl = track(wired(fake));
-    const first = await ctl.onMessage({ type: 'start', presetId: 'p15' });
-    const firstId = first?.session?.id;
-    const firstEnd = first?.session?.endsAt ?? 0;
-    const next = await ctl.onMessage({ type: 'extend', ms: 15 * 60_000 });
-    expect(next?.session?.id).toBe(firstId);
-    expect((next?.session?.endsAt ?? 0) - firstEnd).toBe(15 * 60_000);
-    expect(next?.lock).toBe('held');
-    expect(fake.badge.text).toMatch(/^(30|29)m$/u);
-    expect(Math.abs((fake.alarms.get(ALARMS.end)?.scheduledTime ?? 0) - (next?.session?.endsAt ?? 0))).toBeLessThan(50);
+describe('background controller — auto-wake and release when hidden (free)', () => {
+  const sites = (on = true) => ({
+    v: 1,
+    autostart: { on, sites: [{ host: 'meet.example.com', durationMin: null }] },
   });
 
-  it('after time is up, the same buttons start a new session of that length (extend prompt)', async () => {
+  it('a matching tab starts with no licence, closing the last one stops; other sites are ignored', async () => {
     const fake = createFakeChrome();
+    fake.local.data.set(EXT_KEYS.ext, sites());
+    fake.granted.origins.add('https://meet.example.com/*');
     const ctl = track(wired(fake));
-    await ctl.onMessage({ type: 'start', presetId: 'p15' });
-    await ctl.onMessage({ type: 'stop' });
-    const next = await ctl.onMessage({ type: 'extend', ms: 30 * 60_000 });
-    expect(next?.session?.plan).toEqual({ type: 'duration', ms: 30 * 60_000 });
-    expect(next?.lock).toBe('held');
+    await ctl.onTabUpdated(1, { status: 'complete' }, { id: 1 });
+    await ctl.onTabUpdated(2, { status: 'complete' }, { id: 2, url: 'https://news.example.org/' });
+    expect(ctl.state().session).toBeNull();
+    const tab = { id: 3, windowId: 1, url: 'https://meet.example.com/abc' };
+    fake.tabs.push(tab);
+    await ctl.onTabUpdated(3, { status: 'complete' }, tab);
+    expect(ctl.state().origin).toBe('autostart');
+    expect(ctl.state().lock).toBe('held');
+    fake.tabs.splice(0);
+    await ctl.onTabRemoved(3);
+    expect(ctl.state().view).toBe('ready');
   });
 
-  it('first install records the version and opens the welcome page once; updates keep it for the "New in" chip', async () => {
+  it('the auto-wake switch turns it off without forgetting the sites', async () => {
     const fake = createFakeChrome();
+    fake.local.data.set(EXT_KEYS.ext, sites(false));
+    fake.granted.origins.add('https://meet.example.com/*');
     const ctl = track(wired(fake));
-    await ctl.onInstalled('install');
-    expect(fake.opened).toEqual([`chrome-extension://abcdefghijklmnopabcdefghijklmnop/${WELCOME_PAGE}`]);
-    await flush(20);
-    expect(fake.local.data.get(STORAGE_KEYS.meta)).toMatchObject({ lastSeenVersion: '1.0.0' });
-    await ctl.onInstalled('update', '0.9.0');
-    expect(fake.opened).toHaveLength(1);
-    expect(fake.local.data.get(STORAGE_KEYS.meta)).toMatchObject({ lastSeenVersion: '1.0.0' });
+    await ctl.onTabUpdated(3, { status: 'complete' }, { id: 3, url: 'https://meet.example.com/abc' });
+    expect(ctl.state().session).toBeNull();
   });
 
-  it('an update from a build that never recorded a version records the previous one', async () => {
+  it('release when hidden: another tab pauses it as "tab hidden", coming back resumes it', async () => {
     const fake = createFakeChrome();
+    fake.local.data.set(EXT_KEYS.ext, { v: 1, releaseHidden: true });
+    fake.tabs.push({ id: 7, windowId: 1, active: true }, { id: 8, windowId: 1, active: false });
     const ctl = track(wired(fake));
-    await ctl.onInstalled('update', '0.9.0');
-    await flush(20);
-    expect(fake.opened).toEqual([]);
-    expect(fake.local.data.get(STORAGE_KEYS.meta)).toMatchObject({ lastSeenVersion: '0.9.0' });
+    await ctl.onMessage({ type: 'start', presetId: 'p60', tab: { tabId: 7, windowId: 1 } });
+    fake.tabs[0] = { id: 7, windowId: 1, active: false };
+    fake.tabs[1] = { id: 8, windowId: 1, active: true };
+    await ctl.onTabActivated({ tabId: 8, windowId: 1 });
+    expect(ctl.state().view).toBe('paused');
+    expect(ctl.state().hidden).toBe(true);
+    expect(fake.badge.text).toBe('II');
+    expect(fake.badge.title).toBe('AwakeTab — Paused · tab hidden');
+    fake.tabs[0] = { id: 7, windowId: 1, active: true };
+    fake.tabs[1] = { id: 8, windowId: 1, active: false };
+    await ctl.onTabActivated({ tabId: 7, windowId: 1 });
+    expect(ctl.state().view).toBe('awake');
+    fake.windows.set(1, 'minimized');
+    await ctl.onWindowFocus(-1);
+    expect(ctl.state().view).toBe('paused');
+  });
+
+  it('with the switch off (the default) the session keeps the screen on in any tab', async () => {
+    const fake = createFakeChrome();
+    fake.tabs.push({ id: 7, windowId: 1, active: false }, { id: 8, windowId: 1, active: true });
+    const ctl = track(wired(fake));
+    await ctl.onMessage({ type: 'start', presetId: 'p60', tab: { tabId: 7, windowId: 1 } });
+    await ctl.onTabActivated({ tabId: 8, windowId: 1 });
+    expect(ctl.state().view).toBe('awake');
   });
 });
