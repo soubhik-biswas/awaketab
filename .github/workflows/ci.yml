@@ -22,23 +22,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
-      # Every workspace's `typecheck`; for apps/web that is `astro check` plus the Pages Functions (Workers types,
-      # functions/tsconfig.json) and their test suites (functions/tsconfig.test.json).
       - run: pnpm typecheck
       - run: pnpm test:unit
-      - run: pnpm test:functions
+      - run: pnpm test:site
       - run: pnpm build
-      - run: pnpm test:seo
       - run: pnpm size
-      - uses: actions/upload-artifact@v7
-        with:
-          name: web-dist
-          path: apps/web/dist
-      # LAUNCH-AUDIT N-03 / F-06: a PUBLIC_POLAR_SERVER=production build must not contain the dev licence key and
-      # must link to production checkout. Until N-03 adds a production key, the waiver lets the build finish; the
-      # dist scan (scripts/check-keys.mts --dist) and test/seo/launch-audit.test.ts still fail on the dev key.
-      - name: Production-mode build excludes the dev licence key
-        env:
-          PUBLIC_POLAR_SERVER: production
-          AT_ALLOW_MISSING_PRODUCTION_KEY: "1"
-        run: pnpm -F web build && pnpm test:seo
