@@ -22,3 +22,4 @@ docs/
 # Astro templates: formatting whitespace changes the rendered page text.
 *.astro
 **/next-env.d.ts
+apps/site/public/serwist/
