@@ -1059,7 +1059,7 @@
       },
       "faces": {
         "title": "Faces",
-        "sub": "Tap one — it applies live behind this panel. All {n} are free.",
+        "sub": "Tap one — it applies live behind this panel. {n} faces, new ones tagged.",
         "search": "Search {n} faces",
         "close": "Close faces",
         "collections": "Collections",
