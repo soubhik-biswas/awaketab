@@ -42,7 +42,8 @@ export function dayDate(ms: number, lang: TToolLang = 'en'): string {
   const month = d.getMonth() + 1;
   if (lang === 'ja') return `${month}月${day}日(${part(ms, lang, { weekday: 'short' })})`;
   if (lang === 'zh') return `${month}月${day}日 ${part(ms, lang, { weekday: 'long' })}`;
-  if (lang === 'es' || lang === 'fr' || lang === 'pt-br') return part(ms, lang, { weekday: 'long', day: 'numeric', month: 'long' });
+  if (lang === 'es' || lang === 'fr' || lang === 'pt-br')
+    return part(ms, lang, { weekday: 'long', day: 'numeric', month: 'long' });
   const weekday = part(ms, lang, { weekday: 'long' });
   const name = part(ms, lang, { month: 'long' });
   return lang === 'de' ? `${weekday}, ${day}. ${name}` : `${weekday}, ${day} ${name}`;

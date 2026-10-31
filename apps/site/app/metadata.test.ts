@@ -28,37 +28,38 @@ vi.mock('next-intl/server', async () => {
 });
 vi.mock('@/components/face/fonts', () => ({ SERIF: 'serif' }));
 
-type TModule = { generateMetadata: (props: { params: Promise<Record<string, string>> }) => Promise<Metadata> };
+type TModule = { generateMetadata: (props: never) => Promise<Metadata> };
+type TRoute = { path: string; load: () => Promise<unknown>; extra?: Record<string, string> };
 
 const en = (extra: Record<string, string> = {}) => ({ params: Promise.resolve({ locale: 'en', ...extra }) });
 
-const ROUTES: ReadonlyArray<readonly [string, () => Promise<TModule>, Record<string, string>?]> = [
-  ['/', () => import('./[locale]/(home)/page')],
-  ['/pro', () => import('./[locale]/(site)/pro/page')],
-  ['/pro/checkout', () => import('./[locale]/(site)/pro/checkout/page')],
-  ['/pro/manage', () => import('./[locale]/(site)/pro/manage/page')],
-  ['/pro/activate', () => import('./[locale]/(site)/pro/activate/page')],
-  ['/signin', () => import('./[locale]/(site)/signin/page')],
-  ['/signin/expired', () => import('./[locale]/(site)/signin/expired/page')],
-  ['/about', () => import('./[locale]/(site)/about/page')],
-  ['/help', () => import('./[locale]/(site)/help/page')],
-  ['/status', () => import('./[locale]/(site)/status/page')],
-  ['/changelog', () => import('./[locale]/(site)/changelog/page')],
-  ['/privacy', () => import('./[locale]/(site)/privacy/page')],
-  ['/terms', () => import('./[locale]/(site)/terms/page')],
-  ['/extension', () => import('./[locale]/(site)/extension/page')],
-  ['/embed', () => import('./[locale]/(site)/embed/page')],
-  ['/kiosk', () => import('./[locale]/(site)/kiosk/page')],
-  ['/library', () => import('./[locale]/(site)/library/page')],
-  ['/offline', () => import('./[locale]/(site)/offline/page')],
-  ['/s/removed', () => import('./[locale]/(site)/s/removed/page')],
-  ['/for', () => import('./[locale]/(site)/for/page')],
-  ['/on', () => import('./[locale]/(site)/on/page')],
-  ['/vs', () => import('./[locale]/(site)/vs/page')],
-  ['/guides', () => import('./[locale]/(site)/guides/page')],
-  ['/learn', () => import('./[locale]/(site)/learn/page')],
-  ['/1h', () => import('./[locale]/(site)/[preset]/page'), { preset: '1h' }],
-  ['/until/17-00', () => import('./[locale]/(site)/until/[time]/page'), { time: '17-00' }],
+const ROUTES: readonly TRoute[] = [
+  { path: '/', load: () => import('./[locale]/(home)/page') },
+  { path: '/pro', load: () => import('./[locale]/(site)/pro/page') },
+  { path: '/pro/checkout', load: () => import('./[locale]/(site)/pro/checkout/page') },
+  { path: '/pro/manage', load: () => import('./[locale]/(site)/pro/manage/page') },
+  { path: '/pro/activate', load: () => import('./[locale]/(site)/pro/activate/page') },
+  { path: '/signin', load: () => import('./[locale]/(site)/signin/page') },
+  { path: '/signin/expired', load: () => import('./[locale]/(site)/signin/expired/page') },
+  { path: '/about', load: () => import('./[locale]/(site)/about/page') },
+  { path: '/help', load: () => import('./[locale]/(site)/help/page') },
+  { path: '/status', load: () => import('./[locale]/(site)/status/page') },
+  { path: '/changelog', load: () => import('./[locale]/(site)/changelog/page') },
+  { path: '/privacy', load: () => import('./[locale]/(site)/privacy/page') },
+  { path: '/terms', load: () => import('./[locale]/(site)/terms/page') },
+  { path: '/extension', load: () => import('./[locale]/(site)/extension/page') },
+  { path: '/embed', load: () => import('./[locale]/(site)/embed/page') },
+  { path: '/kiosk', load: () => import('./[locale]/(site)/kiosk/page') },
+  { path: '/library', load: () => import('./[locale]/(site)/library/page') },
+  { path: '/offline', load: () => import('./[locale]/(site)/offline/page') },
+  { path: '/s/removed', load: () => import('./[locale]/(site)/s/removed/page') },
+  { path: '/for', load: () => import('./[locale]/(site)/for/page') },
+  { path: '/on', load: () => import('./[locale]/(site)/on/page') },
+  { path: '/vs', load: () => import('./[locale]/(site)/vs/page') },
+  { path: '/guides', load: () => import('./[locale]/(site)/guides/page') },
+  { path: '/learn', load: () => import('./[locale]/(site)/learn/page') },
+  { path: '/1h', load: () => import('./[locale]/(site)/[preset]/page'), extra: { preset: '1h' } },
+  { path: '/until/17-00', load: () => import('./[locale]/(site)/until/[time]/page'), extra: { time: '17-00' } },
 ];
 
 const HOME_TITLE = 'AwakeTab — Keep this screen awake';
@@ -102,16 +103,19 @@ function expectHead(path: string, m: Metadata) {
 }
 
 describe('page heads', () => {
-  it.each(ROUTES)('%s has its own title, description and share image', async (path, load, extra) => {
-    const page = await load();
-    expectHead(path, await page.generateMetadata(en(extra)));
+  it.each(ROUTES)('$path has its own title, description and share image', async ({ path, load, extra }) => {
+    const page = (await load()) as TModule;
+    expectHead(path, await page.generateMetadata(en(extra) as never));
   });
 
-  it.each(['for', 'on', 'vs', 'guides', 'learn'] as const)('every English %s article follows the same rules', async (kind) => {
-    for (const a of articles(kind).filter((x) => x.locale === 'en')) {
-      expectHead(`/${kind}/${a.enSlug}`, await articleMetadata(kind, 'en', a.enSlug));
-    }
-  });
+  it.each(['for', 'on', 'vs', 'guides', 'learn'] as const)(
+    'every English %s article follows the same rules',
+    async (kind) => {
+      for (const a of articles(kind).filter((x) => x.locale === 'en')) {
+        expectHead(`/${kind}/${a.enSlug}`, await articleMetadata(kind, 'en', a.enSlug));
+      }
+    },
+  );
 
   it('sets the theme colour for both schemes and the marketing icons', () => {
     expect(SITE_VIEWPORT.themeColor).toEqual([
