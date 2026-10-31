@@ -13,7 +13,7 @@ type TEmbedPreset = (typeof EMBED_PRESETS)[number];
 export type TEmbedLocale = (typeof EMBED_LOCALES)[number];
 
 export const EMBED_BOX: Record<TEmbedSize, { width: string; height: number; radius: number }> = {
-  compact: { width: '320px', height: 104, radius: 16 },
+  compact: { width: '320px', height: 104, radius: 18 },
   full: { width: '100%', height: 240, radius: 28 },
 };
 

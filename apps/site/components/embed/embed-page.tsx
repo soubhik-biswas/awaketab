@@ -28,9 +28,9 @@ import {
 } from '@/lib/embed/snippet';
 
 const LABEL = 'text-[14px] font-semibold';
-const H2 = 'm-0 font-display text-[22px] font-bold [font-stretch:112%]';
+const H2 = 'm-0 font-display text-[24px] font-bold tracking-[-0.03em]';
 const CODE =
-  'm-0 overflow-x-auto rounded-md border border-border bg-field p-4 font-mono text-[14px] leading-[1.6] whitespace-pre-wrap break-all';
+  'm-0 overflow-x-auto rounded-[18px] border border-border bg-field p-4 font-mono text-[14px] leading-[1.6] whitespace-pre-wrap break-all';
 const LENGTHS = EMBED_PRESETS.filter((p) => p !== 'until');
 
 const noop = () => () => undefined;
@@ -78,8 +78,8 @@ export function EmbedPage() {
   return (
     <div className="flex flex-col gap-10 px-5 py-10 min-[700px]:px-10 lg:px-16 xl:px-24">
       <header className="flex flex-col gap-3">
-        <span className="font-mono text-[13px] tracking-[.12em] text-lamp uppercase">{t('eyebrow')}</span>
-        <h1 className="m-0 font-display text-[40px] font-extrabold tracking-[-0.02em] [font-stretch:112%] min-[700px]:text-[56px]">
+        <span className="font-mono text-[13px] tracking-[.14em] text-lamp uppercase">{t('eyebrow')}</span>
+        <h1 className="m-0 font-display text-[36px] leading-[.98] font-bold tracking-[-0.04em] min-[700px]:text-[52px]">
           {t('h1')}
         </h1>
         <p className="m-0 max-w-[640px] text-[17px] text-muted-foreground-strong">{t('lead')}</p>
@@ -159,7 +159,7 @@ export function EmbedPage() {
           <div className="flex flex-col gap-3">
             <h2 className={H2}>{t('demo')}</h2>
             <p className="m-0 text-[15px] text-muted-foreground-strong">{t('demoNote')}</p>
-            <div className="rounded-lg border border-border bg-background p-5">
+            <div className="rounded-[28px] border border-border bg-background p-5">
               <iframe
                 key={src}
                 src={src}
