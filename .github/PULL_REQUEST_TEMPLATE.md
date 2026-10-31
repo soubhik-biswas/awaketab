@@ -30,6 +30,6 @@ What should users know? Describe configuration, migrations and rollback steps, o
 ## Contribution checklist
 
 - [ ] My change targets `play`, or this is the owner’s promotion from `play` to `main`.
-- [ ] The issue was approved by `SoubhikBiswas-gitHub` before implementation.
+- [ ] The issue was approved by `soubhik-biswas` before implementation.
 - [ ] Documentation and tests match the change; no credentials or personal data are included.
 - [ ] I understand that merge and deployment are tracked separately.

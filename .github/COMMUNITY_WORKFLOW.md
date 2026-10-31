@@ -5,7 +5,7 @@
 ## From an idea to production
 
 1. A contributor submits a bug, feature or documentation issue.
-2. Only `SoubhikBiswas-gitHub` may apply `approved`. The workflow verifies who last added that label using issue-event history. Approval from another account is removed and creates no task.
+2. Only `soubhik-biswas` may apply `approved`. The workflow verifies who last added that label using issue-event history. Approval from another account is removed and creates no task.
 3. The approved issue is added to the board as **Approved**. The owner can use `ready`, `in-progress`, `blocked`, `needs-information` or `not-planned` to change its stage.
 4. Contributors open focused PRs against `play`, linking approved issues using `Closes #123` or `Tracks: #123`. A draft means **In Progress**, a ready PR means **In review**, and owner-requested revisions mean **Changes requested**.
 5. A PR merged into `play` means **In testing**. The owner promotes tested changes from `play` to `main`; the promotion PR must list every delivered issue. Production merge means **Merged**.
@@ -21,7 +21,7 @@ The workflow checks out only the default branch, disables persisted checkout cre
 
 ## Deployment evidence
 
-AwakeTab accepts the **Cloudflare Pages** check from the `cloudflare-workers-and-pages` app only when its check suite identifies `main`. Passlore accepts the **Deploy** job from the **Passlore checks and deployment** workflow only on a `main` push and only when that job succeeds. Both also accept production deployment-status events for `main`. The revision must belong to `main` and be the merge commit of a linked production PR.
+AwakeTab accepts the **Workers Builds: awaketab-site** or legacy **Cloudflare Pages** check from the `cloudflare-workers-and-pages` app only when its check suite identifies `main`. Preview Worker checks cannot confirm production delivery. Passlore accepts the **Deploy** job from the **Passlore checks and deployment** workflow only on a `main` push and only when that job succeeds. Both also accept production deployment-status events for `main`. The revision must belong to `main` and be the merge commit of a linked production PR.
 
 Passlore's deployment job is conditional on deployment configuration; when it is skipped, work remains Merged. A docs-only change may therefore remain Merged, which accurately records that no application deployment was needed.
 

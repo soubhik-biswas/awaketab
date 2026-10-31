@@ -60,4 +60,4 @@ export const ROUTES = {
   rss: '/rss.xml',
 } as const;
 
-export const SOURCE_URL = 'https://github.com/SoubhikBiswas-gitHub/awaketab';
+export const SOURCE_URL = 'https://github.com/soubhik-biswas/awaketab';

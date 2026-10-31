@@ -19,7 +19,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertTrue(has_owner_approval(issue, [self.approval('other'), self.approval(event='unlabeled'), self.approval()]))
 
     def test_issue_links_are_scoped_to_this_repository(self):
-        body = 'Closes #12, #13 and other/repo#14\nTracks: SoubhikBiswas-gitHub/passlore#15\nUnrelated #99'
+        body = 'Closes #12, #13 and other/repo#14\nTracks: soubhik-biswas/passlore#15\nUnrelated #99'
         self.assertEqual(linked_numbers(body, OWNER + '/passlore'), [12, 13, 15])
 
     def test_issue_text_is_data(self):
@@ -66,6 +66,25 @@ class WorkflowTests(unittest.TestCase):
         self.assertIsNone(deployment_status('check_run', {'check_run': check}))
         check['app']['slug'] = 'cloudflare-workers-and-pages'
         check['check_suite']['head_branch'] = 'play'
+        self.assertIsNone(deployment_status('check_run', {'check_run': check}))
+
+    def test_only_production_worker_builds_can_confirm_delivery(self):
+        check = {'app': {'slug': 'cloudflare-workers-and-pages'}, 'name': 'Workers Builds: awaketab-site',
+                 'check_suite': {'head_branch': 'main'}, 'status': 'completed', 'conclusion': 'success'}
+        self.assertEqual(deployment_status('check_run', {'check_run': check}), 'Deployed')
+        check['conclusion'] = 'failure'
+        self.assertEqual(deployment_status('check_run', {'check_run': check}), 'Deployment failed')
+        check['status'] = 'in_progress'
+        self.assertEqual(deployment_status('check_run', {'check_run': check}), 'Deploying')
+        check['status'] = 'completed'
+        check['conclusion'] = 'success'
+        check['name'] = 'Workers Builds: awaketab-site-preview'
+        self.assertIsNone(deployment_status('check_run', {'check_run': check}))
+        check['name'] = 'Workers Builds: awaketab-site'
+        check['check_suite']['head_branch'] = 'play'
+        self.assertIsNone(deployment_status('check_run', {'check_run': check}))
+        check['check_suite']['head_branch'] = 'main'
+        check['app']['slug'] = 'untrusted'
         self.assertIsNone(deployment_status('check_run', {'check_run': check}))
 
     def test_unauthorized_approval_is_removed_without_project_access(self):
