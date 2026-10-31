@@ -39,7 +39,7 @@ export interface ITab {
   lastAccessed?: number;
 }
 
-export interface ITabQuery {
+interface ITabQuery {
   url?: string[];
   active?: boolean;
   currentWindow?: boolean;
@@ -47,7 +47,7 @@ export interface ITabQuery {
   windowId?: number;
 }
 
-export interface IWindow {
+interface IWindow {
   id?: number;
   state?: string;
 }

@@ -1,4 +1,4 @@
-export type TChime = 'two' | 'bell' | 'off';
+type TChime = 'two' | 'bell' | 'off';
 
 // The web tool's synthesised chimes (frequency, start, length in seconds), so there is no audio file to ship.
 const TONES: Record<Exclude<TChime, 'off'>, ReadonlyArray<readonly [number, number, number]>> = {

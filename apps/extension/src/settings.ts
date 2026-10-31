@@ -4,7 +4,7 @@ export const EXT_KEYS = { ext: 'at.v1.ext', device: 'at.v1.device' } as const;
 
 export const SYNC_KEYS: readonly string[] = [STORAGE_KEYS.settings, EXT_KEYS.ext];
 
-export const AUTOSTART_SITES_MAX = 50;
+const AUTOSTART_SITES_MAX = 50;
 
 export interface IAutostartSite {
   host: string;

@@ -1,6 +1,6 @@
 import { needsRevalidation, type ILicenseRecord } from '@awaketab/core';
 
-export const API_ORIGIN = 'https://awaketab.com';
+const API_ORIGIN = 'https://awaketab.com';
 
 type TFetch = (input: string, init?: RequestInit) => Promise<Response>;
 

@@ -111,7 +111,7 @@ function Popup({ ctx, first }: { ctx: IPageContext; first: IExtState | null }) {
   const left = live ? remainingMs(live, now) : null;
   const remain = live ? (indef ? elapsedSec(live, now) : Math.ceil((left ?? 0) / 1000)) : PRESET_SEC[chosen];
   const total = live ? Math.round((totalMs(live) ?? 3_600_000) / 1000) : PRESET_SEC[chosen] || 3600;
-  const pill = failed ? { key: 'ext.noAnswer' } : pillCopy(view, state?.lock ?? 'idle', live, now);
+  const pill = pillCopy(view, state?.lock ?? 'idle', live, now);
 
   const pick = (value: string) => {
     if (!isExtPreset(value)) return;
@@ -125,7 +125,7 @@ function Popup({ ctx, first }: { ctx: IPageContext; first: IExtState | null }) {
         <Mark size={24} />
         <strong className="xp-word">AwakeTab</strong>
         <span className="xp-pill-slot">
-          <span className="at-pill" data-view={failed ? 'blocked' : view} role="status" aria-live="polite" data-pill>
+          <span className="at-pill" data-view={view} role="status" aria-live="polite" data-pill>
             <span className="at-dot" aria-hidden="true" />
             {t(pill.key, pill.vars)}
           </span>
@@ -169,6 +169,12 @@ function Popup({ ctx, first }: { ctx: IPageContext; first: IExtState | null }) {
             </ToggleGroup.Item>
           ))}
         </ToggleGroup.Root>
+
+        {failed ? (
+          <p className="xp-alert" role="alert">
+            {t('ext.noAnswer')}
+          </p>
+        ) : null}
 
         {view === 'blocked' ? (
           <a className="xp-cta xp-cta-fix" href={FIX_URL} target="_blank" rel="noopener" aria-label={t('ext.fix.aria')}>

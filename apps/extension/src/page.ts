@@ -27,7 +27,7 @@ export interface IPageContext {
 
 const LIGHT = '(prefers-color-scheme: light)';
 
-export function resolveTheme(setting: ISettings['theme']): TPageTheme {
+function resolveTheme(setting: ISettings['theme']): TPageTheme {
   if (setting === 'light' || setting === 'dark' || setting === 'oled') return setting;
   return typeof matchMedia === 'function' && matchMedia(LIGHT).matches ? 'light' : 'dark';
 }
