@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { fullDate } from '@/lib/dates';
-import { CONTACT_EMAIL, CONTACT_MAILTO, SITE } from '@/lib/routes';
+import { panelHref, SITE } from '@/lib/routes';
 import { articleSchema } from '@/lib/seo';
 import { Block, Note, Prose } from './blocks';
 import { JsonLd } from './json-ld';
@@ -90,8 +90,8 @@ export function LegalPage({
         />
         <Note>
           Questions:{' '}
-          <a href={CONTACT_MAILTO} className={legalLink}>
-            {CONTACT_EMAIL}
+          <a href={panelHref('feedback')} className={legalLink}>
+            Settings → Send feedback
           </a>{' '}
           ·{' '}
           <a href={other[1]} className={legalLink}>

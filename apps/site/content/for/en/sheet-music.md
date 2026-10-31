@@ -1,6 +1,6 @@
 ---
 title: "Keep iPad on for sheet music — AwakeTab"
-description: "Keep an iPad on for sheet music: put AwakeTab beside the score app in a window. Low Power Mode still sets Auto-Lock to 30 seconds."
+description: "Keep an iPad on for sheet music: put AwakeTab beside the score app in a split window. Low Power Mode can still drop Auto-Lock to 30 seconds."
 h1: "Keep iPad on for sheet music"
 intent: "keep ipad screen on for sheet music"
 preset: p60

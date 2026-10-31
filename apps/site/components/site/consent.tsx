@@ -1,9 +1,7 @@
 'use client';
 
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { btn } from './styles';
 
 const SETTINGS = 'at.v1.settings';
 const ONBOARDING = 'at.v1.onboarding';
@@ -42,49 +40,67 @@ function answered(): boolean {
   return tips.includes(TIP) || readJson(SETTINGS)?.telemetry === false;
 }
 
-const choice = cn(btn, 'min-w-[110px] flex-1 border-input min-[700px]:flex-none');
+// Both answers look the same and neither is focused or preselected (brief: "No thanks" is equal in weight).
+const choice =
+  'inline-flex h-11 cursor-pointer items-center justify-center rounded-[12px] border border-border bg-transparent px-3.5 text-[14px] font-semibold text-foreground hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring';
 
+// The analytics question as a small floating card at the bottom left, never in the page flow (home board).
 export function Consent({
   title,
   body,
+  short,
   decline,
   allow,
 }: {
   title: string;
   body: string;
+  short: string;
   decline: string;
   allow: string;
 }) {
   const [done, setDone] = useState(false);
-  // A page React renders on the client (the 404) loses the boot script's mark on <html>, so the box checks too.
+  const reduced = useReducedMotion();
+  // A page React renders on the client (the 404) loses the boot script's mark on <html>, so the card checks too.
   useEffect(() => {
     if (answered()) setDone(true);
   }, []);
-  if (done) return null;
   const pick = (yes: boolean) => () => {
     answer(yes);
     setDone(true);
     document.getElementById('content')?.focus({ preventScroll: true });
   };
   return (
-    <section
-      aria-labelledby="site-consent-h"
-      className="site-consent relative z-[5] mx-3 mt-3 box-border flex flex-col items-stretch gap-4 rounded-[20px] border border-border bg-card px-5 py-[18px] shadow-[0_24px_60px_var(--site-consent-shadow)] min-[700px]:mx-10 min-[700px]:mt-4 min-[700px]:flex-row min-[700px]:items-center min-[1100px]:mx-16 min-[1300px]:mx-24"
-    >
-      <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <strong id="site-consent-h" className="text-[16px]">
-          {title}
-        </strong>
-        <span className="text-[14px] leading-normal text-muted-foreground-strong">{body}</span>
-      </span>
-      <span className="flex flex-wrap gap-2">
-        <Button variant="secondary" className={choice} onClick={pick(false)}>
-          {decline}
-        </Button>
-        <Button variant="secondary" className={choice} onClick={pick(true)}>
-          {allow}
-        </Button>
-      </span>
-    </section>
+    <AnimatePresence>
+      {!done && (
+        <motion.div
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="site-consent-h"
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 14 }}
+          transition={reduced ? { duration: 0 } : { duration: 0.42, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="site-consent site-consent-card fixed right-3 bottom-3 left-3 z-50 box-border flex items-center gap-3.5 rounded-[20px] p-4 min-[700px]:right-auto min-[700px]:left-6 min-[700px]:w-[440px]"
+        >
+          <span className="flex min-w-0 flex-1 flex-col gap-1">
+            <strong id="site-consent-h" className="text-[15px]">
+              {title}
+            </strong>
+            <span className="hidden text-[16px] leading-[1.55] text-muted-foreground-strong min-[700px]:inline">
+              {body}
+            </span>
+            <span className="text-[13px] text-muted-foreground-strong min-[700px]:hidden">{short}</span>
+          </span>
+          <span className="flex flex-none gap-2">
+            <button type="button" className={choice} onClick={pick(false)}>
+              {decline}
+            </button>
+            <button type="button" className={choice} onClick={pick(true)}>
+              {allow}
+            </button>
+          </span>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

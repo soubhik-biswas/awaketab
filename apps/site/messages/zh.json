@@ -4,218 +4,32 @@
     "tagline": "让屏幕保持常亮的标签页。"
   },
   "page": {
-    "home": {
-      "title": "让屏幕保持常亮 — AwakeTab",
-      "description": "在浏览器标签页里用 Wake Lock API 让屏幕保持常亮。状态真实、预设时长、定时至某一时刻。无需账号。",
-      "h1": "让屏幕保持常亮",
-      "what": {
-        "title": "AwakeTab 的功能"
-      },
-      "how": {
-        "title": "工作原理"
-      },
-      "limits": {
-        "title": "诚实的限制"
-      },
-      "intro": "只要此标签页可见，AwakeTab 就会使用浏览器的 Wake Lock API；只有浏览器确认锁定后，状态才会写屏幕已保持唤醒。",
-      "uses": {
-        "title": "What are you keeping awake?",
-        "lead": "Each one opens the tool already set for the job, with the length it needs.",
-        "all": "All {count} use cases",
-        "start": "Start · {length}",
-        "cooking": {
-          "_": "Cooking",
-          "body": "The recipe stays lit while your hands are floury, with kitchen timers beside it."
-        },
-        "reading": {
-          "_": "Reading",
-          "body": "A long article stays on screen while you read, with no tap to wake it."
-        },
-        "presentations": {
-          "_": "Presentations",
-          "body": "Set it to the end of your talk and keep it in a floating window beside the slides."
-        },
-        "dashboards": {
-          "_": "Dashboards",
-          "body": "A wall screen stays on all day, and a link can start the session as the page loads."
-        },
-        "videoCalls": {
-          "_": "Video calls",
-          "body": "The display stays on when the video pauses. Your chat status is left alone."
-        },
-        "downloads": {
-          "_": "Downloads",
-          "body": "The screen stays on through a long download, and a visible tab holds off idle sleep."
-        }
-      },
-      "final": {
-        "title": "One tap, and the screen stays on.",
-        "body": "The pill says {held} only after the browser confirms the lock. For a hidden tab or a minimised window, the extension keeps going.",
-        "start": "Keep this screen awake",
-        "extension": "Add extension",
-        "docs": "How it works, limits and FAQ in the docs"
-      },
-      "yours": {
-        "title": "Make it yours",
-        "lead": "Clock faces, colours, backgrounds, focus sounds and a notepad. Each one loads only when you pick it, and the status pill still tells you the truth.",
-        "compare": "Compare Free and Pro",
-        "faces": {
-          "title": "Twelve clock faces",
-          "tag": "All free",
-          "body": "Classic, retro and modern. Every face shows your session, follows your lamp colour and knows when the screen is paused. Swipe the clock or press C to switch.",
-          "list": "The twelve clock faces"
-        },
-        "looks": {
-          "title": "Themes, lamps and backgrounds",
-          "body": "Clear Night, Paper and Nord, four lamps, three backgrounds and three presets are free. Pro adds six themes, eight lamps, a colour of your own, five backgrounds and five presets.",
-          "themes": "Colour themes, each with a light and a dark version",
-          "lamps": "Lamp colours",
-          "patterns": "Backgrounds",
-          "try": "Previewing {name} · {time} left",
-          "tryNote": "Any Pro look can be tried for 5 minutes, as often as you like. Nothing is saved."
-        },
-        "sound": {
-          "title": "Sounds for focus",
-          "body": "Seven focus sounds made live in your browser, five end sounds, vibration and a quiet tick-tock, all free. Pro adds a mixer to layer them.",
-          "list": "Free focus sounds",
-          "mixer": "Mixer",
-          "honest": "Nothing plays until you ask, and sound never keeps the screen awake."
-        },
-        "notes": {
-          "title": "A notepad beside the clock",
-          "body": "Checklists, headings, export and voice typing. Notes stay in this browser and work offline. One note is free; Pro keeps as many as you like.",
-          "sample": {
-            "title": "Before the call",
-            "1": "Open the slides",
-            "2": "Share the agenda",
-            "3": "Ask about the launch date"
-          },
-          "listening": "Listening…"
-        },
-        "focus": {
-          "title": "Focus tools",
-          "body": "A Pomodoro with pause and skip, an intention under the clock, a breathing guide and a second time zone. With Pro the Pomodoro repeats on its own.",
-          "intention": "Writing the report",
-          "zone": "London",
-          "breathe": "Breathe in",
-          "cycles": "Focus block 2 of 4"
-        }
-      },
-      "ext": {
-        "kicker": "AwakeTab for Chrome",
-        "free": "Free",
-        "title": "Keep the screen awake with the tab out of sight",
-        "lead": "The extension asks the browser itself to keep the screen awake, so it keeps going behind other windows.",
-        "hidden": {
-          "title": "Tab hidden or window minimised",
-          "body": "It keeps going while the browser is running."
-        },
-        "system": {
-          "title": "Only the system, if you prefer",
-          "body": "System level keeps the computer awake and lets the screen dim or turn off."
-        },
-        "badge": {
-          "title": "Status in the toolbar",
-          "body": "The badge shows ON, SYS or the minutes left."
-        },
-        "shortcut": {
-          "title": "A shortcut from any tab",
-          "body": "{keys} starts or stops it without going back to the tab."
-        },
-        "cta": {
-          "get": "Get the extension",
-          "edge": "Add to Edge"
-        },
-        "note": "Works in {browsers}, version {version} or later. {others} have no power API for extensions.",
-        "more": "See everything the extension does",
-        "art": {
-          "tab": "Sales dashboard",
-          "tab2": "Inbox",
-          "started": "Started {time}"
-        }
-      },
-      "levels": {
-        "title": "Choose your level",
-        "lead": "Keeping a screen awake is free, in this tab and in the extension, and so are every clock face and focus sound. Pro adds more looks, a sound mixer, more notes and a longer memory.",
-        "free": "Free",
-        "web": {
-          "name": "Web tab",
-          "per": "nothing to install",
-          "sub": "Runs right here, in this tab.",
-          "g1": "Keeps the screen on while this tab is visible",
-          "g2": "15 min to 4 h, until a time, or a custom length up to 7 days",
-          "g3": "Phones, tablets and computers, and offline after the first visit",
-          "g4": "A status pill that says awake only once the browser confirms it",
-          "g5": "Twelve clock faces, three colour themes, seven focus sounds, a notepad and a Pomodoro",
-          "cta": "Start now"
-        },
-        "ext": {
-          "name": "Extension",
-          "tag": "Best on a computer",
-          "per": "one install",
-          "sub": "{browsers} {version} or later, on a computer.",
-          "g1": "Keeps going with the tab hidden or the window minimised",
-          "g2": "Screen or System: keep only the computer awake and let the screen sleep",
-          "g3": "A toolbar badge with ON, SYS or the minutes left",
-          "g4": "{keys} from any tab",
-          "cta": "Add extension"
-        },
-        "pro": {
-          "name": "Pro",
-          "per": "a year, or {once} once",
-          "sub": "5 devices, no account, 14-day refund.",
-          "g1": "Your own message, up to 80 characters, on the awake screen",
-          "g2": "Six more themes, eight more lamps, your own colour, five more backgrounds and five presets",
-          "g3": "12 weeks of history and a CSV export",
-          "g4": "Schedules and auto-start in the extension",
-          "g5": "A sound mixer, as many notes as you like and a Pomodoro that repeats",
-          "g6": "Try the looks, the mixer, more notes and the repeating Pomodoro for 5 minutes first",
-          "cta": "See Pro"
-        }
-      }
-    },
-    "preset": {
-      "title": "让屏幕常亮 {label} — AwakeTab",
-      "description": "开始一个 {label} 的 AwakeTab 会话。只有真正持有 Wake Lock 时，状态标签才会显示“屏幕保持常亮”。"
-    },
-    "until": {
-      "title": "让屏幕常亮至 {time} — AwakeTab"
-    },
+    "preset": {},
+    "until": {},
     "pip": {
       "title": "AwakeTab 悬浮计时器"
     },
     "404": {
-      "title": "页面未找到 — AwakeTab",
       "h1": "这个页面不在这里 — 但工具在。"
     },
     "hub": {
       "for": {
-        "title": "按任务保持屏幕唤醒 — AwakeTab",
-        "description": "烹饪、下载、演示等场景指南。屏幕只在活动标签页持有唤醒锁时保持点亮。",
         "h1": "为一项任务保持屏幕唤醒"
       },
       "on": {
-        "title": "在你的设备上保持屏幕唤醒 — AwakeTab",
-        "description": "按浏览器和系统设计的诚实说明，区分原生支持、电池限制和回退。",
         "h1": "在设备上使用 AwakeTab"
       },
       "vs": {
-        "title": "AwakeTab 与替代方案对比 — AwakeTab",
-        "description": "按机制、隐私、支持和诚实限制比较咖啡因类工具。",
         "h1": "比较屏幕唤醒工具",
         "pick": "Pick it when",
         "instead": "{name} instead when",
         "more": "Read the comparison"
       },
       "guides": {
-        "title": "唤醒锁故障排除 — AwakeTab",
-        "description": "修复省电和自动锁定。从不承诺后台标签或合盖仍有效。",
         "h1": "唤醒锁排除指南",
         "more": "Read the fix"
       },
       "learn": {
-        "title": "了解屏幕唤醒锁 — AwakeTab",
-        "description": "Screen Wake Lock API、支持、隐私、测试，以及网页能做到的边界。",
         "h1": "学习屏幕唤醒锁"
       },
       "start": "Start",
@@ -223,36 +37,26 @@
       "native": "Native wake lock"
     },
     "about": {
-      "title": "关于 AwakeTab 与测试 — AwakeTab",
-      "description": "了解独立作者，以及如何在不夸大网页能力的前提下测试唤醒锁。",
       "h1": "关于 AwakeTab"
     },
     "privacy": {
-      "title": "隐私 — AwakeTab",
-      "description": "设置和会话只存在本机，无 cookie、无指纹；遥测仅在你开启时发送。",
       "h1": "隐私"
     },
     "terms": {
-      "title": "条款 — AwakeTab",
-      "description": "使用 AwakeTab 的简明条款：服务限制、开源组件和省电使用。",
       "h1": "条款"
     },
     "changelog": {
-      "title": "更新日志 — AwakeTab",
-      "description": "跟踪网站、库、扩展和嵌入工具的发布说明。",
       "h1": "更新日志"
     },
     "pro": {
-      "title": "AwakeTab Pro plans and pricing — AwakeTab",
-      "description": "AwakeTab Pro adds colour themes, a sound mixer, more notes, a repeating Pomodoro and 12 weeks of stats. Yearly or once, 5 devices, 14-day refund.",
       "h1": "AwakeTab Pro",
       "devices": "5 devices",
       "lead": "Pro is optional. The awake screen stays honest and ad-free either way. Polar handles checkout; AwakeTab never stores a password.",
       "tax": "Charged in USD; taxes added at checkout where applicable.",
       "refund": {
-        "_": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key.",
+        "_": "14-day refund, no questions asked. Ask from Settings → Account → Manage plan, or use the payment provider’s customer portal. Refunds deactivate the licence key.",
         "lead": "14-day refund, no questions asked.",
-        "rest": "Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key."
+        "rest": "Ask from Settings → Account → Manage plan, or use the payment provider’s customer portal. Refunds deactivate the licence key."
       },
       "activate": {
         "title": "Activate AwakeTab Pro — AwakeTab",
@@ -390,7 +194,7 @@
         "success": {
           "h1": "Pro is active",
           "lead": "Thank you. The payment went through, and this browser is now one of your five Pro devices.",
-          "aside": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal.",
+          "aside": "14-day refund, no questions asked. Ask from Settings → Account → Manage plan, or use the payment provider’s customer portal.",
           "link": "Manage devices"
         },
         "next": "Next steps",
@@ -446,7 +250,7 @@
           "secondary": "Email support",
           "aside": {
             "title": "See a charge anyway?",
-            "text": "A declined payment can show as a pending hold for a few days, then drop off. If it doesn’t, email support@awaketab.com with the date and amount."
+            "text": "A declined payment can show as a pending hold for a few days, then drop off. If it doesn’t, send the date and amount from Settings → Send feedback."
           },
           "link": "Email support"
         },
@@ -457,7 +261,7 @@
           "l1": "Search your inbox for “Polar” and check spam or Promotions.",
           "l2": "Just paid? Polar takes a few seconds to create the key. The activation page keeps checking for about 20 seconds on its own.",
           "l3": "Keys and receipts are also in the Polar customer portal.",
-          "l4": "Still stuck? Email support@awaketab.com from the address you paid with.",
+          "l4": "Still stuck? Send your receipt number from Settings → Send feedback inside the tool.",
           "primary": "Enter licence key",
           "secondary": "Open the Polar customer portal",
           "callout": "Your purchase is still syncing. Retry in a minute.",
@@ -738,23 +542,15 @@
       }
     },
     "embed": {
-      "title": "网站屏幕常亮小组件 — AwakeTab",
-      "description": "为网站添加一个“烹饪模式”按钮,让读者的屏幕保持常亮:只需一个 script 标签,状态如实显示,不发出任何第三方请求。保留署名链接即可免费使用。",
       "h1": "让读者的屏幕保持常亮"
     },
     "kiosk": {
-      "title": "自助终端与数字标牌显示模式 — AwakeTab",
-      "description": "用一个网址让自助终端、仪表板或数字标牌屏幕保持常亮:可设置自动开始、消息和主题,购买 Kiosk 许可证还可显示自己的徽标。",
       "h1": "适用于自助终端和数字标牌的 AwakeTab"
     },
     "library": {
-      "title": "@awaketab/wake — Wake Lock 库 — AwakeTab",
-      "description": "开源的 Screen Wake Lock 库:七种如实的状态、小巧的视频后备方案和被拒绝时的建议。持续维护的 NoSleep.js 替代品。",
       "h1": "@awaketab/wake:诚实的唤醒锁库"
     },
     "extension": {
-      "title": "让屏幕保持常亮的 Chrome 扩展 — AwakeTab",
-      "description": "AwakeTab for Chrome 可从工具栏让屏幕或电脑保持唤醒，即使标签页被隐藏也有效。支持计时器和计划，状态诚实，不做追踪。",
       "h1": "AwakeTab for Chrome",
       "lead": "网页版只有在标签页可见时才能保持唤醒锁。扩展会直接请求 Chrome 让屏幕（或仅让电脑）保持唤醒，因此即使标签页被隐藏或窗口已最小化也能继续工作。",
       "cta": {
@@ -3491,27 +3287,6 @@
       "desc": "支持 Chrome、Edge、Firefox 和 Safari。"
     },
     "ctaShort": "打开计时器",
-    "consent": {
-      "title": "允许我们统计访问量吗？",
-      "body": "可选的、无 cookie 的统计 — 不建立画像，不做广告追踪。无论选择哪个，AwakeTab 都一样好用。",
-      "decline": "拒绝",
-      "allow": "允许"
-    },
-    "foot": {
-      "product": "产品",
-      "learn": "了解",
-      "company": "关于我们",
-      "timer": "打开计时器",
-      "changelog": "更新日志",
-      "help": "帮助中心",
-      "presenting": "演示指南",
-      "about": "关于",
-      "status": "状态页面",
-      "tagline": "在浏览器里让屏幕保持常亮，用完再让它恢复休眠。",
-      "contact": "联系",
-      "cookies": "不使用追踪 cookie",
-      "updated": "最后更新于 {date}"
-    },
     "tool": {
       "eyebrow": "在这里试试",
       "ends": "现在开始将于{time}结束。",
@@ -3561,20 +3336,15 @@
         "h1": "这个页面睡着了",
         "lead": "链接可能过时或输错了。计时器就在这里。",
         "guides": "热门指南",
-        "title": "找不到页面 — AwakeTab",
         "eyebrow": "404"
       },
       "offline": {
-        "title": "你已离线 — AwakeTab",
         "eyebrow": "离线",
         "h1": "你离线了，计时器没有。",
         "lead": "保持屏幕常亮不需要联网。同步和共享链接会等到你重新联网。",
-        "timer": "继续使用计时器",
-        "description": "保持屏幕常亮不需要联网。同步和共享链接会等到你重新联网。"
+        "timer": "继续使用计时器"
       },
       "status": {
-        "title": "服务状态 — AwakeTab",
-        "description": "AwakeTab 的登录和同步是否正常运行，以及何时计划维护。无论如何，计时器在每台设备上都能使用。",
         "eyebrow": "维护",
         "h1": "计划维护。",
         "lead": "登录和同步将暂停到大约{time}。计时器在每台设备上照常工作。",
@@ -3583,30 +3353,19 @@
         "okLead": "计时器、登录和同步都在正常工作。计划维护会先在这里公布。",
         "see": "查看状态"
       },
-      "expired": {
-        "title": "链接已过期 — AwakeTab",
-        "eyebrow": "链接已过期",
-        "h1": "此链接已过期。",
-        "lead": "登录链接只能使用一次，且仅在 [NUMBER] 分钟内有效。请重新获取一个 — 几秒就到。",
-        "send": "发送新链接"
-      },
       "removed": {
-        "title": "设置已移除 — AwakeTab",
         "eyebrow": "设置已移除",
         "h1": "这个共享设置已被关闭。",
         "lead": "分享者已移除这个链接。你仍然可以一键开始自己的会话。",
         "start": "开始我自己的"
       },
       "error": {
-        "title": "出错了 — AwakeTab",
         "eyebrow": "出了点问题",
         "h1": "我们这边出错了。",
         "lead": "页面无法加载。你的设备上没有任何改动。请重试，或打开计时器 — 它离线也能用。"
       }
     },
     "share": {
-      "title": "一个共享的 AwakeTab 会话",
-      "description": "有人分享了一个 AwakeTab 会话：时长、表盘和提示音。链接不携带任何个人信息。",
       "eyebrow": "共享的设置",
       "loading": "正在打开共享的会话…",
       "loadingLead": "正在从链接读取时长、表盘和提示音。",
@@ -3642,8 +3401,6 @@
       "installBody": "会话在这个标签页中运行。随时关闭它，屏幕就会照常休眠。"
     },
     "help": {
-      "title": "帮助中心 — AwakeTab",
-      "description": "屏幕仍然变暗、iPhone 和 iPad、演示、扩展、Pro 账单以及你的数据等问题的解答。",
       "eyebrow": "帮助中心",
       "h1": "需要什么帮助？",
       "lead": "大多数问题来自省电模式、隐藏的标签页或旧版浏览器。搜索一下，或从下面的主题开始。",
@@ -3657,107 +3414,7 @@
       "none": "没有与“{q}”匹配的内容。试试“电池”“iPad”或“账单”。",
       "popular": "热门主题",
       "stuck": "还没解决？",
-      "stuckBefore": "请写信至",
-      "stuckAfter": "，并注明你的浏览器和设备。每条消息我们都会阅读。",
       "allTopics": "全部主题"
-    },
-    "home": {
-      "faces": {
-        "title": "49 款表盘。挑一款隔着房间也能看清的。",
-        "sub": "全部免费。只在屏幕常亮时才会动，开启减弱动态效果时保持静止。",
-        "items": {
-          "aurora": {
-            "name": "极光",
-            "body": "屏幕常亮时，极光在时间背后飘动。"
-          },
-          "liquid": {
-            "name": "液体",
-            "body": "一个光的玻璃球，随会话流逝而减少。"
-          },
-          "eclipse": {
-            "name": "日食",
-            "body": "月亮滑过太阳；时间到时迎来全食。"
-          },
-          "skeleton": {
-            "name": "镂空",
-            "body": "镂空机芯 — 齿轮转动，摆轮摆动。"
-          },
-          "neon": {
-            "name": "霓虹",
-            "body": "暗墙上的霓虹招牌，常亮时嗡嗡作响。"
-          },
-          "halo": {
-            "name": "光环",
-            "body": "一个发光的渐变圆环，向 12 点逐渐闭合。"
-          }
-        }
-      },
-      "uses": {
-        "title": "为屏幕变暗碍事的时刻而生",
-        "cooking": {
-          "_": "做饭",
-          "body": "双手忙碌时，菜谱依然留在屏幕上。",
-          "link": "用于做饭"
-        },
-        "presenting": {
-          "_": "演示",
-          "body": "讲到最精彩的那页时不会变暗。",
-          "link": "用于演示"
-        },
-        "dashboards": {
-          "_": "仪表盘",
-          "body": "墙上的屏幕和状态看板始终亮着。",
-          "link": "用于仪表盘"
-        },
-        "nightdesk": {
-          "_": "夜间书桌",
-          "body": "阅读、学习，入夜后一只安静的时钟。",
-          "link": "用于夜间书桌"
-        }
-      },
-      "how": {
-        "1": {
-          "_": "选择时长",
-          "body": "15 分钟、1 小时、到某个时间 — 或者不限时。"
-        },
-        "2": {
-          "_": "按下“保持屏幕常亮”",
-          "body": "浏览器的 Screen Wake Lock 让显示屏保持开启。"
-        },
-        "3": {
-          "_": "专心做事",
-          "body": "时间到时一声轻柔的提示音；屏幕随后照常休眠。"
-        },
-        "title": "使用方法"
-      },
-      "limits": {
-        "title": "坦诚说明局限",
-        "body": "浏览器能让屏幕保持开启，但不能让整台电脑不休眠。省电模式、合上屏幕或公司的锁屏策略仍可能生效 — 一旦发生，AwakeTab 会告诉你，并说明如何解决。"
-      },
-      "faq": {
-        "1": {
-          "_": "在 iPhone 和 iPad 上能用吗？",
-          "a": "能，在 iOS 和 iPadOS 16.4 或更高版本的 Safari 中可用。更早的版本会使用无声视频备用方案。"
-        },
-        "2": {
-          "_": "需要账户吗？",
-          "a": "不需要。设置保存在这台设备上。Pro 只用账户来同步你的设备。"
-        },
-        "3": {
-          "_": "它能阻止我的工作电脑锁屏吗？",
-          "a": "标签页打开时，它会让显示屏保持常亮。公司的锁屏策略依然适用，这也是应该的。"
-        },
-        "4": {
-          "_": "免费吗？",
-          "a": "保持常亮是免费的。Pro 增加设备同步、完整历史记录和混音器。"
-        }
-      },
-      "cta": "立即保持常亮",
-      "og": {
-        "kicker": "免费 · 在浏览器中",
-        "title": "让屏幕常亮，也清楚何时结束。",
-        "sub": "无需账户，无需安装。"
-      }
     },
     "changelog": {
       "crumb": "更新日志",
@@ -3768,12 +3425,7 @@
     "pro": {
       "eyebrow": "AwakeTab Pro",
       "h1": "保持常亮一直免费。",
-      "lead": "Pro 适合在多台设备上运行屏幕的人，或想要额外功能的人。价格确定前均为占位内容。",
-      "og": {
-        "kicker": "AwakeTab Pro",
-        "title": "保持常亮免费。Pro 让一切更舒适。",
-        "sub": "外观、历史、笔记。"
-      }
+      "lead": "Pro 适合在多台设备上运行屏幕的人，或想要额外功能的人。价格确定前均为占位内容。"
     }
   }
 }
