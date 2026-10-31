@@ -28,3 +28,4 @@ kv-backups/
 
 # Python workflow caches
 __pycache__/
+.impeccable/

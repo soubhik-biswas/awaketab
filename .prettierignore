@@ -23,3 +23,4 @@ docs/
 *.astro
 **/next-env.d.ts
 apps/site/public/serwist/
+.impeccable/
