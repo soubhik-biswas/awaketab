@@ -1,32 +1,34 @@
 import type { ISession, TLockState } from '@awaketab/core';
-import type { TPowerLevel } from './api';
 
-// The light lamp green for Screen and the light sky (System's pill colour) for System, both with white text.
-export const BADGE_COLORS: Record<TPowerLevel, string> = { display: '#117A3B', system: '#1C64B8' };
-export const BADGE_TEXT_COLOR = '#FFFFFF';
+export type TOrigin = 'user' | 'command' | 'autostart';
 
-export type TOrigin = 'user' | 'command' | 'schedule' | 'autostart' | 'startup';
+// The four things the popup, the pill and the toolbar badge can say.
+export type TExtView = 'ready' | 'awake' | 'paused' | 'blocked';
 
-export function pillKey(lock: TLockState): `tool.pill.${TLockState}` {
-  return `tool.pill.${lock}`;
+export interface IBadge {
+  text: string;
+  bg: string;
+  fg: string;
 }
 
-export function pillTextKey(
-  lock: TLockState,
-  level: TPowerLevel | null,
-): `tool.pill.${TLockState}` | 'ext.pill.systemHeld' {
-  if (lock === 'unsupported') return pillKey('denied');
-  return lock === 'held' && level === 'system' ? 'ext.pill.systemHeld' : pillKey(lock);
-}
+// The extension board's badge colours: volt, amber and red, each with its own dark ink.
+export const BADGE: Record<Exclude<TExtView, 'ready'>, { bg: string; fg: string }> = {
+  awake: { bg: '#3DF58E', fg: '#04140A' },
+  paused: { bg: '#FFC53D', fg: '#1A1200' },
+  blocked: { bg: '#FF6B81', fg: '#1A0509' },
+};
 
-export function pillExtraKey(lock: TLockState, level: TPowerLevel | null): 'ext.pill.system' | null {
-  return lock === 'held' && level === 'system' ? 'ext.pill.system' : null;
-}
-
-export type TLiveSession = ISession & { status: 'active' | 'paused' };
+type TLiveSession = ISession & { status: 'active' | 'paused' };
 
 export function isLive(session: ISession | null | undefined): session is TLiveSession {
   return session?.status === 'active' || session?.status === 'paused';
+}
+
+export function viewOf(lock: TLockState, session: ISession | null | undefined): TExtView {
+  if (lock === 'denied' || lock === 'unsupported') return 'blocked';
+  if (session?.status === 'paused') return 'paused';
+  if (lock === 'held' && session?.status === 'active') return 'awake';
+  return 'ready';
 }
 
 export function remainingMs(session: ISession, now: number): number | null {
@@ -44,37 +46,56 @@ export function totalMs(session: ISession): number | null {
   return Math.max(1, session.endsAt - session.startedAt);
 }
 
-export function badgeText(lock: TLockState, level: TPowerLevel | null, session: ISession | null, now: number): string {
-  if (lock !== 'held' || !isLive(session)) return '';
+function minutesLeft(session: ISession, now: number): number | null {
   const rem = remainingMs(session, now);
-  if (rem === null) return level === 'system' ? 'SYS' : 'ON';
-  const minutes = Math.max(1, Math.ceil(rem / 60_000));
-  if (minutes < 100) return `${String(minutes)}m`;
-  return `${String(Math.floor(minutes / 60))}h`;
+  return rem === null ? null : Math.max(1, Math.ceil(rem / 60_000));
 }
 
-export function formatClock(ms: number): string {
-  const total = Math.max(0, Math.floor(ms / 1000));
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
-  const mm = String(m).padStart(2, '0');
-  const ss = String(s).padStart(2, '0');
-  return h > 0 ? `${String(h)}:${mm}:${ss}` : `${mm}:${ss}`;
+// Shape, colour and text together, never colour alone: minutes left (or ∞) while awake, II paused, ! blocked.
+export function badgeOf(view: TExtView, session: ISession | null, now: number, showTime: boolean): IBadge | null {
+  if (view === 'ready') return null;
+  if (view === 'paused') return { text: 'II', ...BADGE.paused };
+  if (view === 'blocked') return { text: '!', ...BADGE.blocked };
+  const minutes = session ? minutesLeft(session, now) : null;
+  let text = 'ON';
+  if (showTime)
+    text = minutes === null ? '∞' : minutes < 100 ? String(minutes) : `${String(Math.floor(minutes / 60))}h`;
+  return { text, ...BADGE.awake };
 }
 
 export function originOf(session: ISession | null | undefined): TOrigin | null {
   const origin = session?.modeState.origin;
-  return origin === 'user' ||
-    origin === 'command' ||
-    origin === 'schedule' ||
-    origin === 'autostart' ||
-    origin === 'startup'
-    ? origin
-    : null;
+  return origin === 'user' || origin === 'command' || origin === 'autostart' ? origin : null;
 }
 
-export function levelOf(session: ISession | null | undefined, fallback: TPowerLevel): TPowerLevel {
-  const level = session?.modeState.level;
-  return level === 'display' || level === 'system' ? level : fallback;
+// The tab a session belongs to, for release-when-hidden.
+export function tabOf(session: ISession | null | undefined): { tabId: number; windowId: number } | null {
+  const tabId = session?.modeState.tabId;
+  const windowId = session?.modeState.windowId;
+  return typeof tabId === 'number' && typeof windowId === 'number' ? { tabId, windowId } : null;
+}
+
+export function hiddenPause(session: ISession | null | undefined): boolean {
+  return session?.status === 'paused' && session.modeState.hidden === true;
+}
+
+// The pill's words for each view, shared by the popup and the toolbar title.
+export function pillCopy(
+  view: TExtView,
+  lock: TLockState,
+  session: ISession | null,
+  now: number,
+): { key: string; vars?: { minutes: number } } {
+  const minutes = session ? minutesLeft(session, now) : null;
+  switch (view) {
+    case 'awake':
+      return minutes === null ? { key: 'ext.pill.awakeOpen' } : { key: 'ext.pill.awake', vars: { minutes } };
+    case 'paused':
+      if (hiddenPause(session)) return { key: 'ext.pill.hidden' };
+      return minutes === null ? { key: 'ext.pill.pausedOpen' } : { key: 'ext.pill.paused', vars: { minutes } };
+    case 'blocked':
+      return { key: lock === 'unsupported' ? 'ext.pill.unsupported' : 'ext.pill.blocked' };
+    case 'ready':
+      return { key: 'ext.pill.ready' };
+  }
 }

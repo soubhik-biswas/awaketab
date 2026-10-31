@@ -1,6 +1,8 @@
-# 10 · Browser extension specification — AwakeTab: Keep Screen Awake
+# 10 · Browser extension specification — AwakeTab — Keep your screen awake
 
 Status: v1.2 · 2026-09-27 (Clear Night redesign, B9: §14) · Owner: Soubhik
+
+> **Glance rebuild (31 October 2026) supersedes the sections below wherever they differ.** The extension follows the Glance brief §9f and the extension board: the popup is the logo, the status pill, the user's Glance face at 220 px, four lengths (15m · 30m · 1h · ∞), one primary action (Keep this tab awake · Pause · Resume with Stop · See the fix) and "Works in any tab" / "Open full app ↗"; the toolbar badge is none, volt minutes, amber II or red !; the options page has the badge timer, auto-wake on chosen sites with "Add this site", and release when the tab is hidden. Permissions are exactly `power`, `alarms`, `storage`, `offscreen` (end chime) and `activeTab` (Add this site), plus optional site access one site at a time. Everything is free. Removed: the System level, until-time, add-time chips, schedules, browser-start auto-start, end notifications, telemetry, licence-key entry, the welcome page, the tips card and the store-image renderer. Identifiers: `00-conventions.md` (extension tables). Decisions: `docs/redesign/DECISIONS.md` → "Glance (31 Oct 2026)".
 
 **Purpose.** The web tool cannot keep a screen awake once its tab is hidden — the browser releases the wake lock. The extension is the honest answer to that limitation: it uses `chrome.power` to hold a display or system wake lock from a background service worker, shares the web app's vocabulary, settings and Pro licence, and never claims more than it does. This document specifies it for implementation with WXT (Manifest V3).
 

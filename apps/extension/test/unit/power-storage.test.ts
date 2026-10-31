@@ -1,38 +1,31 @@
 import { STORAGE_KEYS } from '@awaketab/core';
 import { describe, expect, it, vi } from 'vitest';
-import type { TPowerLevel } from '../../src/api';
 import { createPowerLock } from '../../src/power';
 import { createChromeStorageAdapter } from '../../src/storage';
 import { createFakeChrome, flush } from './fake-chrome';
 
 describe('chrome.power lock adapter', () => {
-  it('walks idle → requesting → held and back to idle, recording each chrome.power call', async () => {
+  it('walks idle → requesting → held and back to idle, always asking for the display', async () => {
     const calls: string[] = [];
-    let level: TPowerLevel = 'display';
     const lock = createPowerLock({
       power: {
         requestKeepAwake: (l) => calls.push(`request:${l}`),
         releaseKeepAwake: () => calls.push('release'),
       },
-      level: () => level,
     });
     const seen: string[] = [];
     lock.on('change', (e) => seen.push(`${e.from}>${e.to}:${e.reason}`));
     expect(lock.state).toBe('idle');
     expect(await lock.request()).toBe('held');
-    expect(lock.level).toBe('display');
-    level = 'system';
     lock.reassert();
-    expect(lock.level).toBe('system');
     await lock.release();
     expect(lock.state).toBe('idle');
-    expect(lock.level).toBeNull();
-    expect(calls).toEqual(['request:display', 'request:system', 'release']);
+    expect(calls).toEqual(['request:display', 'request:display', 'release']);
     expect(seen).toEqual(['idle>requesting:request', 'requesting>held:acquired', 'held>idle:user_release']);
   });
 
   it('reports unsupported with the shared advice code when chrome.power is absent', async () => {
-    const lock = createPowerLock({ power: undefined, level: () => 'display' });
+    const lock = createPowerLock({ power: undefined });
     expect(lock.supported).toBe(false);
     expect(await lock.request()).toBe('unsupported');
     expect(lock.advice).toBe('unsupported_browser');
@@ -46,7 +39,6 @@ describe('chrome.power lock adapter', () => {
         },
         releaseKeepAwake: () => undefined,
       },
-      level: () => 'display',
     });
     expect(await lock.request()).toBe('denied');
     expect(lock.advice).toBe('permissions_policy');
@@ -56,7 +48,6 @@ describe('chrome.power lock adapter', () => {
     const request = vi.fn();
     const lock = createPowerLock({
       power: { requestKeepAwake: request, releaseKeepAwake: vi.fn() },
-      level: () => 'display',
     });
     lock.reassert();
     expect(request).not.toHaveBeenCalled();

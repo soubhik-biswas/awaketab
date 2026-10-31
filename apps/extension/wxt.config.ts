@@ -3,16 +3,17 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'wxt';
 import { polarDefines } from '../web/scripts/polar-server.mjs';
 import { awaketabExtension, localeMessages } from './scripts/i18n.mjs';
-import { awaketabIcons } from './scripts/svg-icons.mjs';
 
 const TEST_BUILD = process.env.AT_EXT_TEST === '1';
 const here = (relative: string) => fileURLToPath(new URL(relative, import.meta.url));
 const { version } = JSON.parse(readFileSync(here('package.json'), 'utf8')) as { version: string };
 
-// FR-EXT-05 / docs/19 B7: the minimum version comes from the one support data file.
+// The minimum version comes from the one support data file.
 const matrix = JSON.parse(readFileSync(here('../web/src/data/support-matrix.json'), 'utf8')) as {
   extension: { minimumChromeVersion: string };
 };
+
+const TOOLBAR_ICONS = { 16: 'icons/extension-16.png', 32: 'icons/extension-32.png' };
 
 export default defineConfig({
   manifestVersion: 3,
@@ -27,16 +28,14 @@ export default defineConfig({
     default_locale: 'en',
     version,
     minimum_chrome_version: matrix.extension.minimumChromeVersion,
-    // docs/10 §2, FR-EXT-03: no host permissions by default; per-site access is requested only for Pro
-    // auto-start rules, one site at a time.
-    permissions: ['power', 'storage', 'alarms'],
-    optional_permissions: ['notifications'],
-    host_permissions: [],
+    // Exactly these, each justified in the store listing; site access is asked for one site at a time, only for
+    // the sites the user adds to auto-wake.
+    permissions: ['power', 'alarms', 'storage', 'offscreen', 'activeTab'],
     optional_host_permissions: ['https://*/*'],
     action: {
       default_popup: 'popup.html',
       default_title: 'AwakeTab',
-      default_icon: { 16: 'icon-off-16.png', 32: 'icon-off-32.png' },
+      default_icon: TOOLBAR_ICONS,
     },
     options_page: 'options.html',
     background: {
@@ -50,22 +49,24 @@ export default defineConfig({
       },
     },
     icons: {
-      16: 'icon-16.png',
-      32: 'icon-32.png',
-      48: 'icon-48.png',
-      128: 'icon-128.png',
+      ...TOOLBAR_ICONS,
+      48: 'icons/extension-48.png',
+      128: 'icons/extension-128.png',
     },
   },
   vite: () => ({
-    plugins: [awaketabExtension(), awaketabIcons()],
-    // PUBLIC_POLAR_SERVER=production (set by `pnpm -F extension zip`) drops the dev licence key (LAUNCH-AUDIT N-03).
+    plugins: [awaketabExtension()],
     define: { __AT_TEST__: JSON.stringify(TEST_BUILD), ...polarDefines() },
+    esbuild: { jsx: 'automatic' },
     resolve: {
       // Build from source like the unit tests do: the extension never depends on a stale package dist.
       alias: {
         '@awaketab/core': here('../../packages/core/src/index.ts'),
         '@awaketab/wake': here('../../packages/wake/src/index.ts'),
+        // The shared clock faces load IBM Plex Serif through next/font; here it is self-hosted (src/styles/fonts.css).
+        'next/font/google': here('src/next-font.ts'),
       },
+      dedupe: ['react', 'react-dom'],
     },
     build: {
       // Extension pages load from disk; the modulepreload polyfill is dead weight there.

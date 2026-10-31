@@ -250,7 +250,7 @@ As built in M7 (`00-conventions.md` §13.9, `10-extension-spec.md` §13):
 | Key (`chrome.storage.local`) | Contents | Synced |
 |---|---|---|
 | `at.v1.settings` | `ISettings`; extension defaults `telemetry: false`, `notifications: false` | yes |
-| `at.v1.ext` | `IExtSettings { v: 1, level, schedules: ISchedule[] (≤ 20), autostart: { browserStart, sites: IAutostartSite[] (≤ 50) } }` — sanitised on every read (synced data is untrusted) | yes |
+| `at.v1.ext` | `IExtSettings { v: 1, badge, releaseHidden, autostart: { on, sites: IAutostartSite[] (≤ 50) } }` (Glance, 31 Oct 2026; an older record with `level`, `schedules` or `browserStart` reads as the defaults) — sanitised on every read (synced data is untrusted) | yes |
 | `at.v1.session` | `ISession` with `source: 'ext'` and `modeState { level, origin, dismissed? }` | no |
 | `at.v1.stats` | `IStats` (the worker counts seconds only while it runs) | no |
 | `at.v1.license` | `ILicenseRecord`, `deviceLabel` "AwakeTab for Chrome · {OS}" | **never** |

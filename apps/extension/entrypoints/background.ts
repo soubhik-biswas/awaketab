@@ -23,7 +23,7 @@ export default defineBackground({
       run(ctl.onStartup());
     });
     api.runtime.onInstalled.addListener((details) => {
-      run(ctl.onInstalled(details.reason, details.previousVersion));
+      run(ctl.onInstalled(details.reason));
     });
     api.alarms.onAlarm.addListener((alarm) => {
       run(ctl.onAlarm(alarm.name));
@@ -48,25 +48,15 @@ export default defineBackground({
     api.tabs.onRemoved.addListener((tabId) => {
       run(ctl.onTabRemoved(tabId));
     });
+    api.tabs.onActivated.addListener((info) => {
+      run(ctl.onTabActivated(info));
+    });
+    api.windows?.onFocusChanged.addListener((windowId) => {
+      run(ctl.onWindowFocus(windowId));
+    });
     api.permissions.onRemoved.addListener(() => {
       run(ctl.onPermissionsRemoved());
     });
-
-    // `notifications` is optional: its events exist only once the permission is granted.
-    let notificationsBound = false;
-    const bindNotifications = () => {
-      const notifications = api.notifications;
-      if (!notifications || notificationsBound) return;
-      notificationsBound = true;
-      notifications.onButtonClicked.addListener((id, index) => {
-        run(ctl.onNotificationButton(id, index));
-      });
-      notifications.onClicked.addListener((id) => {
-        run(ctl.onNotificationClicked(id));
-      });
-    };
-    bindNotifications();
-    api.permissions.onAdded.addListener(bindNotifications);
 
     run(ctl.ready());
   },

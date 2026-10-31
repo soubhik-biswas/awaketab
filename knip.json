@@ -13,7 +13,13 @@
     },
     "apps/extension": {
       "entry": ["scripts/*.{mjs,mts}", "test/**/*.test.ts", "e2e/**/*.spec.ts"],
-      "project": ["entrypoints/**/*.ts", "src/**/*.ts", "scripts/**/*.{mjs,mts}", "test/**/*.ts", "e2e/**/*.ts"]
+      "project": [
+        "entrypoints/**/*.{ts,tsx}",
+        "src/**/*.{ts,tsx}",
+        "scripts/**/*.{mjs,mts}",
+        "test/**/*.ts",
+        "e2e/**/*.ts"
+      ]
     },
     "packages/wake": {
       "entry": ["src/adapters/*.ts", "test/**/*.test.ts"],

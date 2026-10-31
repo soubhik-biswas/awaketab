@@ -13,7 +13,8 @@ import { useFaceTheme, useMounted, useWindowNow } from '@/lib/surfaces/hooks';
 import { hostMirror } from '@/lib/surfaces/mirror';
 import { holdOwnLock, type TOwnLock } from '@/lib/surfaces/own-lock';
 import { dressWindow, openDocumentPip, openPopup, pipSupport } from '@/lib/surfaces/pip';
-import { EXTEND_SEC, surfaceView } from '@/lib/surfaces/session';
+import { surfaceView } from '@/lib/surfaces/session';
+import { toFaceId } from '@/components/face';
 import { isLive, useWake, wake } from '@/lib/wake';
 
 type TPipOpen = { kind: 'document'; win: Window } | { kind: 'popup'; win: Window } | null;
@@ -42,17 +43,28 @@ export function useOwnLock(win: Window | null, wanted: boolean): boolean {
   return wanted && own === 'held';
 }
 
+// Closes the mini clock once a session it showed has ended or stopped, as the extension board says.
+export function useCloseWithSession(live: boolean, close: () => void): void {
+  const was = useRef(live);
+  useEffect(() => {
+    if (was.current && !live) close();
+    was.current = live;
+  }, [live, close]);
+}
+
 // The mini clock inside the floating window: the tool's own session, with a wake lock held by that window.
 function FloatingClock({ win, onClose }: { win: Window; onClose: () => void }) {
   const snap = useWake();
   const now = useWindowNow(win);
   const locale = useLocale();
-  const { h12 } = useToolSettings();
+  const { h12, face } = useToolSettings();
   const theme = useFaceTheme();
-  const held = useOwnLock(win, isLive(snap.state) && snap.pausedAt === null);
+  const live = isLive(snap.state);
+  const held = useOwnLock(win, live && snap.pausedAt === null);
   const view = surfaceView({ ...snap, now }, { held, locale, fmt: h12 ? 12 : 24 });
   useEffect(() => pipKeys(win, () => wake.stop(), onClose), [win, onClose]);
-  return <MiniClock view={view} theme={theme} windowed onExtend={() => wake.extend(EXTEND_SEC)} onClose={onClose} />;
+  useCloseWithSession(live, onClose);
+  return <MiniClock view={view} theme={theme} face={toFaceId(face)} windowed onClose={onClose} />;
 }
 
 // Any part of the tool can open the mini clock by dispatching this event on window.

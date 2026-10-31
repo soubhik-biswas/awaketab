@@ -125,3 +125,13 @@ export function digits(sec: number): string {
   const p = (n: number) => String(n).padStart(2, '0');
   return h > 0 ? `${h}:${p(m)}:${p(total % 60)}` : `${p(m)}:${p(total % 60)}`;
 }
+
+type TUnitT = (key: 'unit.min' | 'unit.h') => string;
+
+// The tool's short length, "38 min" or "1 h 20 min", in the reader's language.
+export function shortDuration(sec: number, t: TUnitT): string {
+  const h = Math.floor(sec / 3600);
+  const m = Math.round((sec % 3600) / 60);
+  if (!h) return `${String(Math.max(m, sec > 0 ? 1 : 0))} ${t('unit.min')}`;
+  return m ? `${String(h)} ${t('unit.h')} ${String(m)} ${t('unit.min')}` : `${String(h)} ${t('unit.h')}`;
+}
