@@ -4,7 +4,7 @@ import { big, EndLine, type IDrawProps, L, lmin, MONO } from '../kit';
 
 const GLASS = {
   light: 'linear-gradient(90deg, #FFFFFF, #EFEFF6)',
-  dark: 'linear-gradient(90deg, #121A2E, #0E1424)',
+  dark: 'linear-gradient(90deg, #121A2E, #0F1117)',
   oled: '#000000',
 };
 const SCALE = [0, 0.25, 0.5, 0.75, 1];
