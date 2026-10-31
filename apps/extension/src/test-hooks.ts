@@ -1,10 +1,10 @@
-import type { IExtApi, IStorageAreaApi, TPowerLevel } from './api';
+import type { IExtApi, IStorageAreaApi } from './api';
 
 const POWER_LOG_KEY = 'at.test.power';
 
 interface IPowerCall {
   call: 'request' | 'release';
-  level?: TPowerLevel;
+  level?: 'display';
   at: number;
 }
 

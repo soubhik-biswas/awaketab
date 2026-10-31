@@ -124,7 +124,6 @@ export default {
         'apps/extension/src/styles/base.css',
         'apps/extension/entrypoints/popup/popup.css',
         'apps/extension/entrypoints/options/options.css',
-        'apps/extension/entrypoints/welcome/welcome.css',
         '**/styles/base.css',
         '**/styles/tool.css',
         '**/styles/tool-full.css',

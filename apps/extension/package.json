@@ -6,22 +6,27 @@
   "type": "module",
   "scripts": {
     "dev": "wxt",
-    "build": "node scripts/icons.mjs && wxt build",
-    "build:test": "node scripts/icons.mjs && AT_EXT_TEST=1 wxt build",
-    "zip": "node scripts/icons.mjs && PUBLIC_POLAR_SERVER=production pnpm exec tsx ../web/scripts/check-keys.mts && PUBLIC_POLAR_SERVER=production wxt build && PUBLIC_POLAR_SERVER=production pnpm exec tsx ../web/scripts/check-keys.mts --dist .output/chrome-mv3 && node scripts/zip.mjs",
+    "build": "wxt build",
+    "build:test": "AT_EXT_TEST=1 wxt build",
+    "zip": "PUBLIC_POLAR_SERVER=production pnpm exec tsx ../web/scripts/check-keys.mts && PUBLIC_POLAR_SERVER=production wxt build && PUBLIC_POLAR_SERVER=production pnpm exec tsx ../web/scripts/check-keys.mts --dist .output/chrome-mv3 && node scripts/zip.mjs",
     "zip:check": "node scripts/reproducible.mjs",
     "publish:package": "node --import tsx scripts/publish-package.mts",
-    "store:assets": "node scripts/icons.mjs && node --import tsx scripts/store-assets.mts",
     "typecheck": "wxt prepare && tsc --noEmit"
   },
   "dependencies": {
     "@awaketab/core": "workspace:*",
-    "@awaketab/wake": "workspace:*"
+    "@awaketab/wake": "workspace:*",
+    "@fontsource-variable/bricolage-grotesque": "5.3.0",
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource/ibm-plex-serif": "5.3.0",
+    "motion": "14.9.0",
+    "radix-ui": "1.8.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "@iconify-json/logos": "1.2.15",
-    "@resvg/resvg-js": "2.6.2",
-    "lucide-static": "0.460.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "typescript": "5.9.3",
     "wxt": "0.21.4"
   }

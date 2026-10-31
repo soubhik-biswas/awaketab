@@ -1,9 +1,7 @@
 import { STORAGE_KEYS, type ISettings } from '@awaketab/core';
 import { LOCALE_META } from '../../site/i18n/locales';
 import type { IExtApi } from './api';
-import { createTimeFormat, type TTimeFormat } from './format';
 import { createTranslator, resolveLocale, type TCatalog, type TLocale, type TTranslate } from './i18n';
-import { markSvg, type TMarkState } from './mark';
 import type { IExtState, TExtRequest } from './messages';
 import { readSettings } from './settings';
 
@@ -18,53 +16,48 @@ const CATALOGS: Record<TLocale, () => Promise<{ default: TCatalog }>> = {
   hi: () => import('virtual:at-catalog/hi'),
 };
 
+export type TPageTheme = 'light' | 'dark' | 'oled';
+
 export interface IPageContext {
   api: IExtApi;
   settings: ISettings;
   locale: TLocale;
-  lang: string;
   t: TTranslate;
-  time: TTimeFormat;
 }
 
-export function applyTheme(settings: ISettings, root: HTMLElement = document.documentElement): void {
-  if (settings.theme === 'auto') root.removeAttribute('data-theme');
-  else root.setAttribute('data-theme', settings.theme);
+const LIGHT = '(prefers-color-scheme: light)';
+
+export function resolveTheme(setting: ISettings['theme']): TPageTheme {
+  if (setting === 'light' || setting === 'dark' || setting === 'oled') return setting;
+  return typeof matchMedia === 'function' && matchMedia(LIGHT).matches ? 'light' : 'dark';
 }
 
-export function translateTree(root: ParentNode, t: TTranslate): void {
-  for (const el of root.querySelectorAll<HTMLElement>('[data-i18n]')) el.textContent = t(el.dataset.i18n ?? '');
-  for (const el of root.querySelectorAll<HTMLElement>('[data-i18n-aria]'))
-    el.setAttribute('aria-label', t(el.dataset.i18nAria ?? ''));
-  for (const el of root.querySelectorAll<HTMLElement>('[data-i18n-title]')) el.title = t(el.dataset.i18nTitle ?? '');
-}
-
-async function translatorFor(locale: TLocale): Promise<TTranslate> {
-  const [catalog, english] = await Promise.all([
-    CATALOGS[locale]().then((m) => m.default),
-    locale === 'en' ? Promise.resolve(null) : CATALOGS.en().then((m) => m.default),
-  ]);
-  return createTranslator(catalog, english ?? {});
-}
-
-export async function switchLocale(ctx: IPageContext, setting: string | null): Promise<void> {
-  const locale = resolveLocale(setting, ctx.api.i18n?.getUILanguage() ?? navigator.language);
-  ctx.locale = locale;
-  ctx.lang = LOCALE_META[locale].htmlLang;
-  ctx.t = await translatorFor(locale);
-  ctx.time = createTimeFormat({ lang: ctx.lang, clock24h: ctx.settings.ambient.clock24h, t: ctx.t });
-  document.documentElement.lang = ctx.lang;
+// The page follows the stored theme; Auto follows the system setting live.
+export function watchTheme(setting: ISettings['theme'], onTheme: (theme: TPageTheme) => void): () => void {
+  const apply = () => {
+    const theme = resolveTheme(setting);
+    document.documentElement.dataset.theme = theme;
+    onTheme(theme);
+  };
+  apply();
+  if (setting !== 'auto' || typeof matchMedia !== 'function') return () => undefined;
+  const mq = matchMedia(LIGHT);
+  mq.addEventListener('change', apply);
+  return () => {
+    mq.removeEventListener('change', apply);
+  };
 }
 
 export async function loadPage(api: IExtApi): Promise<IPageContext> {
   const stored = await api.storage.local.get(STORAGE_KEYS.settings);
   const settings = readSettings(stored[STORAGE_KEYS.settings]);
   const locale = resolveLocale(settings.locale, api.i18n?.getUILanguage() ?? navigator.language);
-  const t = await translatorFor(locale);
-  const lang = LOCALE_META[locale].htmlLang;
-  document.documentElement.lang = lang;
-  applyTheme(settings);
-  return { api, settings, locale, lang, t, time: createTimeFormat({ lang, clock24h: settings.ambient.clock24h, t }) };
+  const [catalog, english] = await Promise.all([
+    CATALOGS[locale]().then((m) => m.default),
+    locale === 'en' ? Promise.resolve(null) : CATALOGS.en().then((m) => m.default),
+  ]);
+  document.documentElement.lang = LOCALE_META[locale].htmlLang;
+  return { api, settings, locale, t: createTranslator(catalog, english ?? {}) };
 }
 
 export async function send(api: IExtApi, request: TExtRequest): Promise<IExtState | null> {
@@ -73,34 +66,4 @@ export async function send(api: IExtApi, request: TExtRequest): Promise<IExtStat
   } catch {
     return null;
   }
-}
-
-export function q<T extends Element = HTMLElement>(root: ParentNode, selector: string, type?: new () => T): T {
-  const el = root.querySelector(selector);
-  const expected = type ?? (HTMLElement as unknown as new () => T);
-  if (!(el instanceof expected)) throw new Error(`missing ${selector}`);
-  return el;
-}
-
-export function show(el: Element, on: boolean): boolean {
-  (el as HTMLElement).hidden = !on;
-  return on;
-}
-
-// The brand mark into every `[data-mark-slot]`: data-size, data-state, data-glow="0", data-small (the 84° cut).
-export function paintMark(slot: HTMLElement, state?: TMarkState): void {
-  const next = state ?? (slot.dataset.state as TMarkState | undefined) ?? 'awake';
-  if (slot.dataset.drawn === next) return;
-  slot.dataset.drawn = next;
-  const size = Number(slot.dataset.size ?? 26);
-  slot.innerHTML = markSvg({
-    size,
-    state: next,
-    glow: slot.dataset.glow !== '0',
-    small: slot.dataset.small !== undefined || size <= 20,
-  });
-}
-
-export function paintMarks(root: ParentNode): void {
-  for (const slot of root.querySelectorAll<HTMLElement>('[data-mark-slot]')) paintMark(slot);
 }
