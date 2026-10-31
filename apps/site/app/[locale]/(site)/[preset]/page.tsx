@@ -6,7 +6,7 @@ import { JsonLd } from '@/components/site/json-ld';
 import { PageHero } from '@/components/site/page-hero';
 import { ToolSlot } from '@/components/site/tool-slot';
 import { PRESET_ROUTES, SITE, startHref, type TPresetRoute } from '@/lib/routes';
-import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
+import { articleSchema, englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 const ROUTES: Record<
   TPresetRoute,
@@ -92,15 +92,10 @@ export async function generateMetadata({ params }: { params: TParams }): Promise
   const tt = await getTranslations({ locale: 'en', namespace: 'tool.preset' });
   const label = tt(r.key);
   return pageMetadata({
-    title: t('title', { label }),
+    title: titleFor(`Keep your screen awake for ${r.words}`),
     description: t('description', { label }),
     path: `/${preset}`,
-    og: {
-      kicker: `Keep awake · ${r.cta}`,
-      title: `Keep your screen awake for ${r.words}`,
-      scene: 'firstaction',
-      tone: 'dark',
-    },
+    og: { image: 'og-01', alt: 'AwakeTab clock showing 38:12 left' },
   });
 }
 
@@ -120,7 +115,7 @@ export default async function Page({ params }: { params: TParams }) {
       <JsonLd
         schema={articleSchema({
           canonical,
-          title: t('title', { label }).replace(' — AwakeTab', ''),
+          title: h1,
           description: t('description', { label }),
           locale: 'en',
           published: '2026-09-09',

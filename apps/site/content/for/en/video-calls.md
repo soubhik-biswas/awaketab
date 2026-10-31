@@ -1,6 +1,6 @@
 ---
 title: "Keep the screen on in a video call — AwakeTab"
-description: "Calls already try to hold the display while video plays. AwakeTab helps when the player pauses. It will not keep chat presence green."
+description: "Video calls already try to hold the display while video plays. AwakeTab helps when the player pauses, but it will not keep chat presence green."
 h1: "Keep the screen on in a video call"
 intent: "keep screen on during video call"
 preset: p60

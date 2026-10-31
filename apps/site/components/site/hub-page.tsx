@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { articleIn, articles, HUBS, useCaseScene, type IHubItem } from '@/lib/content';
 import { SITE, type TContentKind } from '@/lib/routes';
-import { articleSchema, pageMetadata, withItemList } from '@/lib/seo';
+import { articleSchema, pageMetadata, titleFor, withItemList } from '@/lib/seo';
 import { Block, Callout, Cards, type ICard } from './blocks';
 import { JsonLd } from './json-ld';
 import { PageHero } from './page-hero';
@@ -22,15 +22,16 @@ const PRESET_LABEL: Record<string, string> = {
 export async function hubMetadata(kind: TContentKind): Promise<Metadata> {
   const tp = await getTranslations({ locale: 'en', namespace: 'page' });
   const ts = await getTranslations({ locale: 'en', namespace: 'site' });
+  const h1 = kind === 'for' ? ts('hub.for.h1') : tp(`hub.${kind}.h1`);
   return pageMetadata({
-    title: tp(`hub.${kind}.title`),
+    title: titleFor(h1),
     description: tp(`hub.${kind}.description`),
     path: `/${kind}`,
     og: {
+      template: kind === 'for' ? 'use' : 'guide',
       kicker: ts(`hub.${kind}.eyebrow`),
-      title: tp(`hub.${kind}.h1`),
-      tone: kind === 'for' ? 'light' : 'dark',
-      ...(kind === 'for' ? { scene: 'cooking' as const } : {}),
+      title: h1,
+      scene: kind === 'for' ? 'cooking' : kind === 'on' ? 'firstaction' : 'maintenance',
     },
   });
 }

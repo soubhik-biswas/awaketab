@@ -1,22 +1,16 @@
 import type { Metadata } from 'next';
 import type { TSceneKey } from '@/lib/content';
-import { pageMetadata } from '@/lib/seo';
+import { pageMetadata, titleFor } from '@/lib/seo';
 import { HeroButtons, PageHero, type IHeroAction } from './page-hero';
 
-export function systemMetadata(
-  title: string,
-  description: string,
-  path: string,
-  eyebrow: string,
-  h1: string,
-  scene: TSceneKey,
-): Metadata {
+// System pages stay out of search and share the default image; the title is their H1.
+export function systemMetadata(h1: string, description: string, path: string): Metadata {
   return pageMetadata({
-    title,
+    title: titleFor(h1),
     description,
     path,
     noindex: true,
-    og: { kicker: eyebrow, title: h1, scene, tone: 'dark' },
+    og: { image: 'og-01', alt: 'AwakeTab clock showing 38:12 left' },
   });
 }
 
