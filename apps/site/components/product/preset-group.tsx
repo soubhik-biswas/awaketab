@@ -100,7 +100,7 @@ export function PresetGroup({
               type="button"
               aria-pressed={on}
               onClick={() => onValueChange?.(preset.id)}
-              className="group/preset flex min-h-[60px] w-full cursor-pointer items-center gap-3 rounded-[16px] border bg-secondary px-3 py-2 text-left text-foreground transition-colors duration-fast ease-glide outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-pressed:border-2 aria-pressed:border-lamp aria-pressed:bg-accent"
+              className="group/preset flex min-h-[60px] w-full cursor-pointer items-center gap-3 rounded-[16px] border bg-secondary px-3 py-2 text-left text-foreground transition-colors duration-fast ease-glide outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring aria-pressed:border-2 aria-pressed:border-lamp aria-pressed:bg-accent"
             >
               <span className={cn(tileBase, 'size-10 rounded-[12px] bg-card')}>
                 <Icon className="size-5" strokeWidth={1.75} aria-hidden="true" />
@@ -141,7 +141,7 @@ export function PresetGroup({
           <RadioGroupPrimitive.Item
             key={preset.id}
             value={preset.id}
-            className="group/preset flex min-h-14 min-w-0 cursor-pointer items-center gap-2.5 rounded-md border bg-secondary px-2.5 py-2 text-left text-foreground transition-colors duration-fast ease-glide outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring data-[state=checked]:border-2 data-[state=checked]:border-lamp data-[state=checked]:bg-accent"
+            className="group/preset flex min-h-14 min-w-0 cursor-pointer items-center gap-2.5 rounded-md border bg-secondary px-2.5 py-2 text-left text-foreground transition-colors duration-fast ease-glide outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring data-[state=checked]:border-2 data-[state=checked]:border-lamp data-[state=checked]:bg-accent"
           >
             <span
               className={cn(
@@ -162,7 +162,7 @@ export function PresetGroup({
         <button
           type="button"
           onClick={onCreate}
-          className="flex min-h-14 min-w-0 cursor-pointer items-center gap-2.5 rounded-md border-[1.5px] border-dashed border-input bg-transparent px-2.5 py-2 text-left text-foreground transition-colors duration-fast ease-glide outline-none hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className="flex min-h-14 min-w-0 cursor-pointer items-center gap-2.5 rounded-md border-[1.5px] border-dashed border-input bg-transparent px-2.5 py-2 text-left text-foreground transition-colors duration-fast ease-glide outline-none hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring"
         >
           <span className={cn(tileBase, 'size-[34px] rounded-sm bg-card')}>
             <Plus className="size-[18px]" aria-hidden="true" />

@@ -81,7 +81,7 @@ export function TypedConfirm({
             spellCheck={false}
             aria-describedby={`${id}-h`}
             className={cn(
-              'w-full rounded-sm border-2 bg-field px-3 font-mono font-bold tracking-[.08em] text-foreground transition-colors duration-fast ease-glide outline-none placeholder:font-normal placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+              'w-full rounded-sm border-2 bg-field px-3 font-mono font-bold tracking-[.08em] text-foreground transition-colors duration-fast ease-glide outline-none placeholder:font-normal placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring',
               compact ? 'h-11 text-[15px]' : 'h-12 text-[16px]',
               ok ? 'border-lamp pr-10' : 'border-input',
             )}

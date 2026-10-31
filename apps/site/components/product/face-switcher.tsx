@@ -61,7 +61,7 @@ export function FaceSwitcher({
               value={face.id}
               aria-label={mini ? face.name : undefined}
               className={cn(
-                'group/face min-w-0 cursor-pointer border-0 bg-transparent p-0 text-foreground outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+                'group/face min-w-0 cursor-pointer border-0 bg-transparent p-0 text-foreground outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring',
                 mini ? 'rounded-md' : 'flex flex-col items-stretch gap-1 rounded-md',
               )}
             >

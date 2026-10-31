@@ -74,7 +74,7 @@ function SheetContent({
         {showCloseButton && (
           <SheetPrimitive.Close
             aria-label={closeLabel}
-            className="absolute top-5 right-3.5 inline-flex size-11 cursor-pointer items-center justify-center rounded-sm text-muted-foreground-strong transition-colors duration-glide ease-glide outline-none group-data-[side=bottom]/sheet:top-[27px] group-data-[side=bottom]/sheet:right-2 hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring md:group-data-[side=bottom]/sheet:right-5"
+            className="absolute top-5 right-3.5 inline-flex size-11 cursor-pointer items-center justify-center rounded-sm text-muted-foreground-strong transition-colors duration-glide ease-glide outline-none group-data-[side=bottom]/sheet:top-[27px] group-data-[side=bottom]/sheet:right-2 hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring md:group-data-[side=bottom]/sheet:right-5"
           >
             <XIcon className="size-5" />
           </SheetPrimitive.Close>
