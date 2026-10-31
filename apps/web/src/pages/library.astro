@@ -12,7 +12,7 @@ import { LOCK_GLYPH, LOCK_STATES, type TPageLockState } from '../lib/page-glyphs
 import { codeTabs, highlight } from '../lib/library-code';
 import wakePkg from '../../../../packages/wake/package.json';
 import BrandIcon from '../components/icons/BrandIcon.astro';
-import Icon from '../components/icons/Icon.astro';
+import Lucide from '../components/icons/Lucide.astro';
 
 const site = Astro.site?.toString().replace(/\/$/u, '') ?? 'https://awaketab.com';
 const ogImage = '/og/library-en.png';
@@ -143,7 +143,7 @@ const pills = Object.fromEntries(LOCK_STATES.map((s) => [s, t(`tool.pill.${s}`)]
               <option value="denied">{t('library.demo.scenario.denied')}</option>
               <option value="unsupported">{t('library.demo.scenario.unsupported')}</option>
             </select>
-            <Icon name="caret-down" size={16} />
+            <Lucide name="chevron-down" size={16} />
           </div>
         </div>
       </div>
@@ -155,13 +155,13 @@ const pills = Object.fromEntries(LOCK_STATES.map((s) => [s, t(`tool.pill.${s}`)]
           <span class="at-lib-advice" data-demo-advice data-label={t('library.demo.advice', { code: '{code}' })} data-unknown={t('tool.advice.unknown')}></span>
         </div>
         <div class="at-lib-buttons">
-          <button class="at-button at-button-primary" type="button" data-demo-request disabled>
-            <svg class="at-button-glyph" viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path d="M32.8 11.4A16 16 0 1 1 15.2 11.4" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"></path><circle cx="24" cy="9" r="4.6" fill="currentColor"></circle></svg>
+          <button class="at-button at-button-primary at-button-default" type="button" data-demo-request disabled>
+            <Lucide name="play" size={20} />
             {t('library.demo.request')}
           </button>
-          <button class="at-button at-button-stop" type="button" data-demo-release disabled>{t('library.demo.release')}</button>
-          <button class="at-button at-lib-sim" type="button" data-demo-hide disabled aria-describedby="lib-sim-note">{t('library.demo.hide')}</button>
-          <button class="at-button at-lib-sim" type="button" data-demo-show disabled aria-describedby="lib-sim-note">{t('library.demo.show')}</button>
+          <button class="at-button at-button-destructive at-button-default" type="button" data-demo-release disabled>{t('library.demo.release')}</button>
+          <button class="at-button at-button-secondary at-button-default at-lib-sim" type="button" data-demo-hide disabled aria-describedby="lib-sim-note">{t('library.demo.hide')}</button>
+          <button class="at-button at-button-secondary at-button-default at-lib-sim" type="button" data-demo-show disabled aria-describedby="lib-sim-note">{t('library.demo.show')}</button>
         </div>
         <p id="lib-sim-note" class="at-pg-small">
           <span data-note="real">Uses this browser’s own Screen Wake Lock API. Switch tabs for real to see it pause. Simulate tab hidden and visible work in the second scenario.</span>
@@ -249,8 +249,8 @@ const pills = Object.fromEntries(LOCK_STATES.map((s) => [s, t(`tool.pill.${s}`)]
                 <code>{file}</code>
                 <div class="at-lib-codeactions">
                   <span class="at-pg-caption at-lib-copied" role="status" aria-live="polite"></span>
-                  <button class="at-button at-button-quiet at-button-sm at-pg-copy" type="button" data-copy-code aria-label={`Copy the ${label} example`}>
-                    <Icon name="copy" size={16} tone="ink" />
+                  <button class="at-button at-button-ghost at-button-sm at-pg-copy" type="button" data-copy-code aria-label={`Copy the ${label} example`}>
+                    <Lucide name="copy" size={16} />
                     {t('tool.share.copy')}
                   </button>
                 </div>
@@ -299,7 +299,7 @@ const pills = Object.fromEntries(LOCK_STATES.map((s) => [s, t(`tool.pill.${s}`)]
     </section>
 
     <div class="at-pg-note" role="note">
-      <Icon name="info" size={20} tone="ink" />
+      <Lucide name="info" size={20} />
       <div class="at-pg-stack-8">
         <span class="at-pg-kicker">What a wake lock cannot do</span>
         <p>
@@ -311,9 +311,9 @@ const pills = Object.fromEntries(LOCK_STATES.map((s) => [s, t(`tool.pill.${s}`)]
     </div>
 
     <nav class="at-pg-related" aria-label="Related">
-      <a class="at-pg-chiplink" href="/learn/how-we-tested">How AwakeTab is checked<Icon name="arrow-right" size={16} class="at-pg-arrow" /></a>
-      <a class="at-pg-chiplink" href="/learn/screen-wake-lock-api-guide">Screen Wake Lock API guide<Icon name="arrow-right" size={16} class="at-pg-arrow" /></a>
-      <a class="at-pg-chiplink" href="/vs/nosleep-js">NoSleep.js vs Wake Lock<Icon name="arrow-right" size={16} class="at-pg-arrow" /></a>
+      <a class="at-pg-chiplink" href="/learn/how-we-tested">How AwakeTab is checked<Lucide name="arrow-right" size={16} class="at-pg-arrow" /></a>
+      <a class="at-pg-chiplink" href="/learn/screen-wake-lock-api-guide">Screen Wake Lock API guide<Lucide name="arrow-right" size={16} class="at-pg-arrow" /></a>
+      <a class="at-pg-chiplink" href="/vs/nosleep-js">NoSleep.js vs Wake Lock<Lucide name="arrow-right" size={16} class="at-pg-arrow" /></a>
     </nav>
   </main>
   <script is:inline defer src="/library/awaketab-wake.iife.js" data-wake-iife></script>

@@ -11,13 +11,9 @@
   const KEY = 'at.v1.settings';
   // scripts/boot-inline.mjs swaps in the hashed URL of public/assets/themes.css.
   const THEMES = '__AT_THEMES__';
-  // The same for public/assets/faces.css, the Bold, Horizon and Tide art.
-  const FACES_CSS = '__AT_FACES__';
-  // FACE_ORDER in src/tool/packs/faces/order.ts; the island root's data-fnames lists their names in this order.
-  const FACES = 'ring bold horizon tide flip nixie lcd matrix rolling analog rings word'.split(' ');
   const dark = matchMedia('(prefers-color-scheme: dark)');
   /** @type {Record<string, string>} */
-  const GROUND = { light: '#F2F6FA', dark: '#0A0E16', oled: '#000000' };
+  const GROUND = { light: '#F6F4EF', dark: '#070B16', oled: '#000000' };
   /** @param {string} theme */
   const apply = (theme) => {
     const resolved = theme === 'auto' ? (dark.matches ? 'dark' : 'light') : theme;
@@ -34,7 +30,6 @@
     document.querySelector('meta[name="theme-color"]:not([media])')?.setAttribute('content', GROUND[resolved] ?? '');
   };
   let theme = 'auto';
-  let face = '';
   /** @type {boolean | null} */
   let c24 = null;
   let secs = true;
@@ -79,13 +74,15 @@
       document.write(`<link rel="stylesheet" href="${THEMES}" data-at-themes>`);
     // The remembered clock face (DESIGN.md §7) and the keyboard-hint switch paint before first frame too, so the
     // tool never flashes the Ring face or a keycap it is about to hide.
-    const f = saved && typeof saved.face === 'string' ? saved.face : '';
-    const at = FACES.indexOf(f);
-    if (at > 0) root.dataset.face = face = f;
-    // A tool page (BaseLayout puts its render-blocking link above this script) holds its first paint for that art.
-    if (at > 0 && at < 4 && document.querySelector('link[href="#at-tool-parsed"]'))
-      document.write(`<link rel="stylesheet" href="${FACES_CSS}" data-at-faces>`);
+    // The island maps an old or unknown id (migrateFace) and corrects the mark once the Face module loads.
+    const f = saved && typeof saved.face === 'string' && /^[a-z]{2,10}$/u.test(saved.face) ? saved.face : 'ring';
+    if (f !== 'ring') root.dataset.face = f;
     if (saved && saved.keyboardHints === false) root.dataset.hints = 'off';
+    // An answered analytics question (lib/consent.ts) never paints its inline panel.
+    const seen = localStorage.getItem('at.v1.onboarding');
+    const onboarding = seen === null ? null : /** @type {Record<string, unknown> | null} */ (JSON.parse(seen));
+    const tips = onboarding?.dismissedTips;
+    if ((Array.isArray(tips) && tips.includes('analytics')) || saved?.telemetry === false) root.dataset.consent = '';
     if (saved && saved.reduceMotion === 'on') root.dataset.motion = 'reduce';
     const clock = /** @type {{ clock24h?: unknown; showSeconds?: unknown } | undefined} */ (saved?.ambient);
     const h24 = clock?.clock24h;
@@ -294,8 +291,6 @@
           put('untilChip', (d.chip ?? '').replace('{time}', at));
         }
       }
-      // The face switch names the remembered face.
-      if (face) put('fn', (d.fnames ?? '').split('|')[FACES.indexOf(face)] ?? '');
     }
     if (document.readyState === 'loading') requestAnimationFrame(fill);
   };

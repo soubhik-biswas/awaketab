@@ -1,9 +1,14 @@
 ---
 name: awaketab-design
-description: Use for any AwakeTab UI or UX work (tool page, clock faces, states, settings, content pages, /pro, extension popup, embed). Applies the "Clear Night" design system from DESIGN.md and the product rules from PRODUCT.md.
+description: Use for any AwakeTab UI or UX work (tool page, clock faces, states, settings, content pages, /pro, extension popup, embed). Applies the "Volt" design system from DESIGN.md and the product rules from PRODUCT.md.
 ---
 
 # AwakeTab design skill
+
+Volt (31 Oct 2026) replaced Solar Green, which replaced Clear Night. Read `DESIGN.md`, then `docs/redesign/volt/HANDOFF.md` and `BRIEF.md`, then the Volt, Solar Green and Next.js sections of `docs/redesign/DECISIONS.md`. Build in `apps/site` (Next.js 16, Tailwind 4, shadcn/ui restyled through the tokens in `app/globals.css`). Match the handoff boards pixel for pixel: take every number and string from the board source (`prototype/*.dc.html`, `renderVals()`). Colour roles: green awake, electric violet act, amber paused, red blocked, sky needs-you/info/focus, neutral pearl ended. Archivo (width 112 %) for display type only, Geist for UI and digits. `/` is the tool: header, clock, one floating control bar, Menu; no sidebar or tab bar. Status is always icon + words + dot.
+
+The notes below describe the older Clear Night rules; where they disagree with Volt, Volt wins.
+
 
 Before designing or changing any user-facing UI in this repo:
 

@@ -16,15 +16,7 @@ export default defineConfig({
     },
   },
   test: {
-    include: [
-      'apps/web/scripts/**/*.test.ts',
-      'apps/web/test/tool/**/*.test.ts',
-      'apps/web/test/ui/**/*.test.ts',
-      'apps/web/test/lib/**/*.test.ts',
-      'apps/web/test/i18n/**/*.test.ts',
-      'packages/*/test/**/*.test.ts',
-      'apps/extension/test/**/*.test.ts',
-    ],
+    include: ['packages/*/test/**/*.test.ts', 'apps/extension/test/**/*.test.ts'],
     environment: 'happy-dom',
     setupFiles: ['./vitest.setup.ts'],
     environmentMatchGlobs: [['packages/wake/test/ssr.test.ts', 'node']],

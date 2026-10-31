@@ -125,10 +125,12 @@ function create(ctx: IToolCtx) {
     return t(`tool.sound.state.${state}`);
   };
 
+  const watchers = new Set<() => void>();
   const paint = () => {
     const f = focus();
     root.dataset.snd = state;
     root.toggleAttribute('data-snd-still', settings().reduceMotion === 'on');
+    for (const fn of watchers) fn();
     if (!dlg || !box) return;
     const q = (sel: string) => box.querySelector<HTMLElement>(sel);
     box.dataset.state = state;
@@ -440,8 +442,43 @@ function create(ctx: IToolCtx) {
   });
   syncTick();
 
+  let previewTimer: ReturnType<typeof setTimeout> | undefined;
   return {
     show: () => css.then(paint),
+    // The Pro sound view drives the same mix, chime and preview as the Customize sheet.
+    mixer: {
+      pro,
+      playing: live,
+      level: (g: TGen): number => {
+        const f = focus();
+        return mixing(f) ? (f.mix[g] ?? 0) : f.kind === g && live() ? 1 : 0;
+      },
+      set: (g: TGen, v: number) => {
+        remix(g, v);
+      },
+      tryPro: () => {
+        tryPro();
+      },
+      chime: (): ISettings['sound']['id'] => settings().sound.id,
+      setChime: (id: ISettings['sound']['id']) => {
+        const cur = settings();
+        const next: ISettings = { ...cur, sound: { ...cur.sound, id } };
+        ctx.storage.writeSettings(next);
+        store.set({ settings: next });
+        if (id !== 'none') api?.end();
+      },
+      preview: (ms: number) => {
+        if (live()) return;
+        clearTimeout(previewTimer);
+        void play().then(() => {
+          previewTimer = setTimeout(() => void pause(), ms);
+        });
+      },
+      watch: (fn: () => void): (() => void) => {
+        watchers.add(fn);
+        return () => watchers.delete(fn);
+      },
+    },
     preview() {
       const s = settings();
       if (s.vibrate && 'vibrate' in navigator) navigator.vibrate(BUZZ);
@@ -471,6 +508,13 @@ export function run(ctx: IToolCtx, what: TSoundAction, el?: Element | null): voi
   api ??= create(ctx);
   if (what === 'play') api.preview();
   else if (what === 'end') api.end();
+}
+
+export type TMixer = ReturnType<typeof create>['mixer'];
+
+export function soundMixer(ctx: IToolCtx): TMixer {
+  api ??= create(ctx);
+  return api.mixer;
 }
 
 // Customize → Sound shown: its stylesheet in, then every control drawn from the store.

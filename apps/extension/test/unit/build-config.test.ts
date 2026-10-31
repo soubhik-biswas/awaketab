@@ -12,7 +12,6 @@ import {
   pageCatalog,
   readCatalog,
   readExtCatalog,
-  tokensCss,
 } from '../../scripts/i18n.mjs';
 import config from '../../wxt.config';
 
@@ -59,7 +58,7 @@ describe('manifest (docs/10 §2, FR-EXT-03)', () => {
 });
 
 describe('i18n reuse (no duplicated English strings)', () => {
-  it("every key the extension uses exists in the catalogs (web + the extension's own locales/) of all eight locales", async () => {
+  it("every key the extension uses exists in the catalogs (shared + the extension's own) of all eight locales", async () => {
     const used = new Set<string>();
     for (const file of await sources(path.join(EXT, 'entrypoints')).then(async (a) => [
       ...a,
@@ -80,14 +79,14 @@ describe('i18n reuse (no duplicated English strings)', () => {
       for (const key of BG_KEYS) expect(readCatalog(locale), `${locale}:${key}`).toHaveProperty(key);
   });
 
-  it('the extension catalog only adds ext.* keys, never shadows a web key, and every locale has the same keys and placeholders', () => {
+  it('the extension catalog only adds ext.* keys, never shadows a shared key, and every locale has the same keys and placeholders', () => {
     const en = readExtCatalog('en');
-    const web = readCatalog('en');
+    const shared = readCatalog('en');
     const placeholders = (v: string) => [...v.matchAll(/\{(\w+)/gu)].map((m) => m[1]).sort();
     expect(Object.keys(en).length).toBeGreaterThan(100);
     for (const key of Object.keys(en)) {
       expect(key.startsWith('ext.'), key).toBe(true);
-      expect(web, `${key} is a web key`).not.toHaveProperty(key);
+      expect(shared, `${key} is a shared key`).not.toHaveProperty(key);
     }
     for (const locale of LOCALES) {
       const cat = readExtCatalog(locale);
@@ -141,29 +140,31 @@ describe('i18n reuse (no duplicated English strings)', () => {
     }
   });
 
-  it('takes the --at-* tokens from the web stylesheet without the Tailwind layer', () => {
-    const css = tokensCss();
+  it('carries its own --at-* tokens with no Tailwind layer', async () => {
+    const css = await readFile(path.join(EXT, 'src/styles/tokens.css'), 'utf8');
     expect(css.startsWith(':root,\n[data-theme="light"]')).toBe(true);
-    expect(css).toContain('--at-accent: #087b87;');
-    // Clear Night (DESIGN.md §2.1, §12): the extension gets the new ground, raised and spacing tokens too.
-    expect(css).toContain('--at-ground: #0a0e16;');
-    expect(css).toContain('--at-raised: #26324b;');
-    expect(css).toContain('--at-h-primary: 60px;');
+    expect(css).toContain('--at-accent: #117a3b;');
+    expect(css).toContain('--at-primary: #6633f5;');
+    expect(css).toContain('--at-primary: #9f7bff;');
+    expect(css).toContain('--at-ground: #f5f5fa;');
     expect(css).toContain('[data-theme="oled"]');
     expect(css).not.toMatch(/@import|@theme|@apply|@layer/u);
   });
 });
 
 describe('fonts (DESIGN.md §3, D-R26)', () => {
-  it('bundles Geist and Geist Mono with the OFL licence and requests no remote font', async () => {
+  it('bundles Archivo, Geist and Geist Mono with their OFL licences and requests no remote font', async () => {
     const files = await readdir(path.join(EXT, 'public/fonts'));
     expect(files.sort()).toEqual([
+      'OFL-Archivo.txt',
       'OFL-Geist.txt',
+      'archivo-latin-wdth-wght-normal.woff2',
       'geist-latin-wght-normal.woff2',
       'geist-mono-latin-wght-normal.woff2',
     ]);
     const base = await readFile(path.join(EXT, 'src/styles/base.css'), 'utf8');
     expect(base).toContain('url("/fonts/geist-latin-wght-normal.woff2")');
+    expect(base).toContain('url("/fonts/archivo-latin-wdth-wght-normal.woff2")');
     expect(base).toContain('font-family: "Geist Fallback"');
     for (const file of await sources(path.join(EXT, 'entrypoints'))) {
       expect(await readFile(file, 'utf8'), file).not.toMatch(/fonts\.(googleapis|gstatic)\.com/u);
@@ -185,12 +186,12 @@ describe('icons', () => {
 });
 
 describe('inline icons', () => {
-  it('inlines Phosphor duotone icons with the lamp fill layer and keeps their viewBox', () => {
-    const html = inlineIcons('<svg data-icon="gear-six" width="20" height="20" class="at-duo-bad" data-x></svg>');
-    expect(html).toMatch(/^<svg class="at-duo at-duo-bad" width="20" height="20" viewBox="0 0 256 256"/u);
+  it('inlines Lucide icons with the size-matched stroke and keeps their viewBox', () => {
+    const html = inlineIcons('<svg data-icon="settings" width="20" height="20" class="at-tone-bad" data-x></svg>');
+    expect(html).toMatch(/^<svg class="at-icon at-tone-bad" width="20" height="20" viewBox="0 0 24 24" fill="none"/u);
+    expect(html).toContain('stroke="currentColor" stroke-width="1.75"');
     expect(html).toContain(' data-x aria-hidden="true" focusable="false">');
-    expect(html).toMatch(/<path d="[^"]+" class="at-duo-f"\/>/u);
-    expect(html).not.toContain('opacity=');
+    expect(html).not.toContain('<!--');
   });
 
   it('inlines full-colour brand logos unaltered', () => {

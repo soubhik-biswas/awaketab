@@ -1,32 +1,27 @@
 ---
-// /pro/activate (docs/09 §2.3, §2.3a; canvas boards ProActivate.dc.html and Sys.dc.html kind="checkout"). One page,
-// two layouts, picked by `data-state` on the root (lib/activate-page.ts):
-// - the activation form: idle · checking · error · success ("Pro is active on this device", O-26) · ext-success;
-// - the checkout return: checkout-success (after the `checkout_id` auto-fill), cancelled, failed and help
-//   (`?checkout=cancelled|failed|help`, or reached from the auto-fill: invalid_key → failed, still syncing → help).
-// Zero hydration (docs/03 ADR-013); English only, like the rest of /pro (the switcher links other locales home).
+// /pro/activate (docs/09 §2.3, §2.3a): Polar's return URL and the licence key form, in the Pro flow chrome.
+// `data-state` on the root (lib/activate-page.ts): idle · checking · error · success · ext-success for the key
+// form; processing · checkout-success · failed · cancelled · help after checkout (`?checkout=` opens the last three).
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Button from '../../components/shell/Button.astro';
-import LogoGlyph from '../../components/shell/LogoGlyph.astro';
+import Lucide from '../../components/icons/Lucide.astro';
+import ProFlowHeader from '../../components/pro/ProFlowHeader.astro';
+import ProScene from '../../components/pro/ProScene.astro';
 import { t } from '../../i18n/load';
-import { articleSchema } from '../../lib/seo';
+import { CONTACT_MAILTO } from '../../lib/contact';
 import { PLAN_PRICES, PRO_LAUNCH_END } from '../../lib/license';
 import { POLAR_PORTAL_URL, usd } from '../../lib/pro-common';
 import '../../styles/pro.css';
-import Icon from '../../components/icons/Icon.astro';
 
 const a = (key: string, vars?: Record<string, string | number>) => t(`page.pro.activate.${key}`, vars);
 const c = (key: string, vars?: Record<string, string | number>) => t(`page.pro.checkout.${key}`, vars);
+const d = (key: string, vars?: Record<string, string | number>) => t(`proflow.done.${key}`, vars);
 const site = Astro.site?.toString().replace(/\/$/u, '') ?? 'https://awaketab.com';
-const ogImage = '/og/pro-en.png';
-const canonical = `${site}/pro/activate`;
 const launch = Date.now() < PRO_LAUNCH_END;
 const yearly = usd(PLAN_PRICES.pro_yearly);
 const lifeLaunch = usd(PLAN_PRICES.pro_lifetime_launch);
 const lifeFull = usd(PLAN_PRICES.pro_lifetime);
 
-// docs/09 §2.10 — API error code → copy and tone. The `data-err` text doubles as the copy source for
-// activate-page.ts, so each message exists exactly once in the DOM.
+// docs/09 §2.10: API error code → copy and tone. Each row's text is also the copy source for the error card.
 const ERRORS = [
   ['invalid_key', 'license.error.invalid', 'bad'],
   ['activation_limit', 'license.error.limit', 'bad'],
@@ -35,170 +30,101 @@ const ERRORS = [
   ['offline', 'license.error.offline', 'warn'],
   ['bad_token', 'license.error.token', 'warn'],
 ] as const;
-const UNLOCKED = [1, 7, 2, 3, 4, 5, 6].map((n) => a(`ok.u${n}`));
-const GLYPH_TRI = 'M6 1L11.2 10.5H.8z';
-const GLYPH_PAUSE = 'M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z';
-
-type TCo = {
-  id: 'cancelled' | 'failed' | 'help';
-  glyph: string;
-  list: string[];
-  primary: [string, string];
-  secondary: [string, string];
-  asideLink: [string, string];
-};
-const CO: TCo[] = [
-  { id: 'cancelled', glyph: 'x-circle', list: [], primary: [c('cancelled.primary'), '/'], secondary: [c('cancelled.secondary'), '/pro#plans'], asideLink: [c('cancelled.link'), 'mailto:support@awaketab.com'] },
-  {
-    id: 'failed',
-    glyph: 'warning',
-    list: [1, 2, 3].map((n) => c(`failed.l${n}`)),
-    primary: [c('failed.primary'), '/pro#plans'],
-    secondary: [c('failed.secondary'), 'mailto:support@awaketab.com'],
-    asideLink: [c('failed.link'), 'mailto:support@awaketab.com'],
-  },
-  {
-    id: 'help',
-    glyph: 'envelope-simple',
-    list: [1, 2, 3, 4].map((n) => c(`help.l${n}`)),
-    primary: [c('help.primary'), '/pro/activate'],
-    secondary: [c('help.secondary'), POLAR_PORTAL_URL],
-    asideLink: [c('help.link'), '/pro/activate'],
-  },
-];
+const UNLOCKED = [1, 2, 3, 4, 5].map((n) => d(`u${n}`));
+const HELP = [1, 2, 3, 4].map((n) => c(`help.l${n}`));
 ---
 
-<BaseLayout
-  title={t('page.pro.activate.title')}
-  description={t('page.pro.activate.description')}
-  canonical={canonical}
-  noindex
-  ogImage={ogImage}
-  schema={articleSchema({
-    canonical,
-    title: t('page.pro.activate.h1'),
-    description: t('page.pro.activate.description'),
-    locale: 'en',
-    image: `${site}${ogImage}`,
-    published: '2026-09-09',
-    breadcrumbs: [
-      { name: 'AwakeTab', url: site },
-      { name: t('page.pro.h1'), url: `${site}/pro` },
-      { name: t('page.pro.activate.h1'), url: canonical },
-    ],
-  })}
->
-  <div class="at-pro at-pro-act" data-activate-root data-state="idle" data-launch={launch ? 'on' : 'off'} data-launch-end={String(PRO_LAUNCH_END)}>
-    <div class="at-pro-aura at-pro-aura-act" aria-hidden="true"></div>
+<BaseLayout title={a('title')} description={a('description')} canonical={`${site}/pro/activate`} noindex bare>
+  <div class="at-pro at-pro-flow" data-activate-root data-state="idle" data-launch={launch ? 'on' : 'off'} data-launch-end={String(PRO_LAUNCH_END)}>
+    <div class="at-pro-flow-glow at-pro-flow-glow-a" aria-hidden="true"></div>
+    <div class="at-pro-flow-glow at-pro-flow-glow-b" aria-hidden="true"></div>
+    <ProFlowHeader step={2} />
 
-    <main class="at-pro-act-main" data-view="activate">
-      <div class="at-pro-act-col">
-        <a class="at-pro-back" href="/pro">
-          <Icon name="arrow-left" size={16} class="at-flip-rtl" />
-          {a('back')}
-        </a>
-        <div class="at-pro-act-head">
-          <h1 class="at-pro-h1">{t('page.pro.activate.h1')}</h1>
-          <p class="at-pro-lead" data-activate-mode="web">{t('page.pro.activate.lead')}</p>
-          <p class="at-pro-lead" data-activate-mode="ext" hidden>{t('page.pro.activate.ext.lead')}</p>
+    <main class="at-pro-flow-col" data-view="activate" aria-labelledby="act-h1">
+      <h1 id="act-h1" class="at-pro-flow-h1">{a('h1')}</h1>
+      <p class="at-pro-flow-lead" data-activate-mode="web">{a('lead')}</p>
+      <p class="at-pro-flow-lead" data-activate-mode="ext" hidden>{a('ext.lead')}</p>
+
+      <form class="at-pro-flow-form" data-activate aria-busy="false">
+        <label class="at-pro-flow-label" for="license-key"><span class="at-pro-flow-label-text">{t('pro.activate')}</span></label>
+        <input
+          id="license-key"
+          class="at-pro-input at-pro-input-flow at-pro-key"
+          name="key"
+          type="text"
+          autocomplete="off"
+          spellcheck="false"
+          minlength="20"
+          maxlength="80"
+          placeholder={a('placeholder')}
+          aria-describedby="key-hint activate-msg"
+          required
+        />
+        <span id="key-hint" class="at-pro-flow-hint">
+          <span data-activate-mode="web">{a('hint')}</span>
+          <span data-activate-mode="ext" hidden>{a('hint.ext')}</span>
+        </span>
+        <button type="submit" class="at-button at-button-primary at-button-lg at-pro-btn-wide at-pro-submit">
+          <Lucide name="loader-circle" size={20} class="at-pro-spin at-pro-submit-spin" />
+          <span data-activate-mode="web" data-label-idle>{a('submit')}</span>
+          <span data-activate-mode="ext" data-label-idle hidden>{a('ext.submit')}</span>
+          <span data-label-checking>{a('checking')}</span>
+        </button>
+      </form>
+
+      <div id="activate-msg" class="at-pro-act-msg" aria-live="polite">
+        <p role="status" class="at-pro-flow-small at-pro-act-checking" data-checking>{a('checking.status')}</p>
+
+        <div role="alert" id="activate-error" class="at-pro-err" data-activate-error hidden>
+          <p class="at-pro-err-title">
+            <Lucide name="circle-alert" size={18} class="at-pro-err-icon at-pro-err-icon-bad" />
+            <Lucide name="triangle-alert" size={18} class="at-pro-err-icon at-pro-err-icon-warn" />
+            <span data-activate-error-title></span>
+          </p>
+          <p class="at-pro-err-text" data-activate-error-text></p>
+          <div class="at-pro-err-actions">
+            <button type="button" class="at-button at-button-outline" data-retry><Lucide name="refresh-cw" size={18} />{a('retry')}</button>
+            <a class="at-button at-button-secondary" href="/pro/manage" data-err-manage hidden>{a('manage')}</a>
+          </div>
         </div>
 
-        <form class="at-card at-pro-act-form" data-activate aria-busy="false">
-          <label for="license-key">{t('pro.activate')}</label>
-          <input
-            id="license-key"
-            class="at-input at-pro-key"
-            name="key"
-            type="text"
-            autocomplete="off"
-            spellcheck="false"
-            minlength="20"
-            maxlength="80"
-            placeholder={a('placeholder')}
-            aria-describedby="key-hint activate-msg"
-            required
-          />
-          <p id="key-hint" class="at-pro-caption">
-            <span data-activate-mode="web">{a('hint')}</span>
-            <span data-activate-mode="ext" hidden>{a('hint.ext')}</span>
-          </p>
-          <Button variant="primary" type="submit" glyph={false} class="at-pro-submit">
-            <LogoGlyph />
-            <Icon name="circle-notch" size={20} tone="ink" class="at-pro-spin" />
-            <span data-activate-mode="web" data-label-idle>{t('page.pro.activate.submit')}</span>
-            <span data-activate-mode="ext" data-label-idle hidden>{t('page.pro.activate.ext.submit')}</span>
-            <span data-label-checking>{a('checking')}</span>
-          </Button>
-        </form>
-
-        <div id="activate-msg" class="at-pro-act-msg" aria-live="polite">
-          <p role="status" class="at-pro-act-checking" data-checking>{a('checking.status')}</p>
-
-          <div role="alert" id="activate-error" class="at-pro-err" data-activate-error hidden>
-            <p class="at-pro-err-title">
-              <svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path class="at-pro-err-tri" d={GLYPH_TRI}></path><path class="at-pro-err-pause" d={GLYPH_PAUSE}></path></svg>
-              <span data-activate-error-title></span>
-            </p>
-            <p class="at-pro-err-text" data-activate-error-text></p>
-            <div class="at-pro-err-actions">
-              <Button variant="stop" size="md" data-retry>{a('retry')}</Button>
-              <Button variant="secondary" href="/pro/manage" data-err-manage hidden>{a('manage')}</Button>
-            </div>
+        <div role="status" class="at-pro-ok" data-ok>
+          <div class="at-pro-ok-top">
+            <span class="at-pro-ok-mark" aria-hidden="true"><Lucide name="circle-check" size={24} /></span>
+            <span class="at-pro-ok-title">
+              <h2 class="at-pro-card-h3" tabindex="-1">{t('pro.activated')}</h2>
+              <span class="at-pro-help-txt" data-ok-key data-tpl={a('ok.key')}>{a('ok.key', { tail: '····' })}</span>
+            </span>
           </div>
-
-          <div role="status" class="at-card at-pro-ok" data-ok>
-            <div class="at-pro-ok-top">
-              <svg class="at-pro-ok-ring" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">
-                <circle class="at-pro-ok-track" cx="24" cy="24" r="20"></circle>
-                <circle class="at-pro-ok-arc" cx="24" cy="24" r="20" transform="rotate(-90 24 24)"></circle>
-                <circle class="at-pro-ring-halo" cx="24" cy="4" r="3.5"></circle>
-                <circle class="at-pro-ring-bead" cx="24" cy="4" r="3"></circle>
-                <path class="at-pro-ok-check" d="M16.5 24.5l5 5 10-10.5"></path>
-              </svg>
-              <div class="at-pro-ok-title">
-                <h2 class="at-pro-h3" tabindex="-1">{t('pro.activated')}</h2>
-                <p class="at-pro-small at-pro-muted" data-ok-key data-tpl={a('ok.key')}>{a('ok.key', { tail: '····' })}</p>
-              </div>
-            </div>
-            <div class="at-pro-ok-list">
-              <h3 class="at-pro-kicker">{a('ok.unlocked')}</h3>
-              <ul>
-                {
-                  UNLOCKED.map((u) => (
-                    <li>
-                      <Icon name="check-circle" size={16} />
-                      {u}
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-            <div class="at-pro-ok-actions">
-              <Button variant="primary" href="/" data-ok-open>{a('ok.open')}</Button>
-              <Button variant="secondary" href="/pro/manage">{a('manage')}</Button>
-            </div>
-            <button type="button" class="at-pro-reset" data-reset>{a('reset')}</button>
+          <p class="at-pro-flow-label-text">{a('ok.unlocked')}</p>
+          <ul class="at-pro-feats at-pro-feats-sm">
+            {UNLOCKED.map((u) => <li><Lucide name="check" size={16} class="at-pro-feat-icon" />{u}</li>)}
+          </ul>
+          <div class="at-pro-row-actions">
+            <a class="at-button at-button-primary" href="/" data-ok-open>{a('ok.open')}</a>
+            <a class="at-button at-button-outline" href="/pro/manage">{a('manage')}</a>
           </div>
+          <button type="button" class="at-pro-link-btn" data-reset>{a('reset')}</button>
+        </div>
 
-          <div role="status" class="at-pro-ext" data-ext-panel hidden>
-            <h2 id="ext-title" class="at-pro-h3" tabindex="-1">{t('page.pro.activate.ext.title')}</h2>
-            <p id="ext-copy" class="at-pro-ext-copy">{t('page.pro.activate.ext')}</p>
-            <div class="at-pro-ext-row">
-              <input class="at-input at-pro-key" type="text" readonly data-ext-key aria-labelledby="ext-title" aria-describedby="ext-copy" />
-              <button type="button" class="at-button at-button-primary at-button-sm at-pro-copy" data-ext-copy>
-                <Icon name="copy" size={16} tone="ink" class="at-pro-copy-icon" />
-                <Icon name="check" size={16} tone="ink" class="at-pro-copied-icon" />
-                <span aria-live="polite"><span class="at-pro-copy-label">{a('copy')}</span><span class="at-pro-copied-label">{a('copied')}</span></span>
-              </button>
-            </div>
-            <p class="at-pro-small at-pro-muted">{a('ext.note')}</p>
-            <button type="button" class="at-pro-reset" data-reset>{a('reset')}</button>
+        <div role="status" class="at-pro-ok" data-ext-panel hidden>
+          <h2 id="ext-title" class="at-pro-card-h3" tabindex="-1">{a('ext.title')}</h2>
+          <p id="ext-copy" class="at-pro-body-txt">{a('ext')}</p>
+          <div class="at-pro-copy-row">
+            <input class="at-pro-input at-pro-key" type="text" readonly data-ext-key aria-labelledby="ext-title" aria-describedby="ext-copy" />
+            <button type="button" class="at-button at-button-primary at-pro-copy" data-ext-copy>
+              <Lucide name="copy" size={18} class="at-pro-copy-icon" />
+              <Lucide name="check" size={18} class="at-pro-copied-icon" />
+              <span aria-live="polite"><span class="at-pro-copy-label">{a('copy')}</span><span class="at-pro-copied-label">{a('copied')}</span></span>
+            </button>
           </div>
+          <p class="at-pro-help-txt">{a('ext.note')}</p>
+          <button type="button" class="at-pro-link-btn" data-reset>{a('reset')}</button>
         </div>
       </div>
 
-      <aside class="at-pro-act-aside" aria-labelledby="fails-h">
-        <h2 id="fails-h" class="at-pro-h3">{t('page.pro.activate.errors')}</h2>
+      <section class="at-pro-fails-wrap" aria-labelledby="fails-h">
+        <h2 id="fails-h" class="at-pro-flow-label-text">{a('errors')}</h2>
         <ul class="at-pro-fails">
           {
             ERRORS.map(([code, key, tone]) => (
@@ -209,154 +135,94 @@ const CO: TCo[] = [
             ))
           }
         </ul>
-        <div class="at-pro-act-links">
-          <a class="at-pro-link" href="/pro/manage">{a('manage')}</a>
-          <a class="at-pro-link at-pro-link-quiet" href="/pro">{a('plans')}</a>
-        </div>
-      </aside>
+        <p class="at-pro-links">
+          <a class="at-pro-inline-link" href="/pro/manage">{a('manage')}</a>
+          <a class="at-pro-inline-link" href="/pro">{a('plans')}</a>
+        </p>
+      </section>
     </main>
 
-    <main class="at-pro-co" data-view="checkout" hidden>
-      <div class="at-pro-co-grid" data-co="success">
-        <div class="at-pro-co-col">
-          <ol class="at-pro-rail" aria-label={c('rail')}>
-            {
-              [1, 2, 3].map((n) => (
-                <li>
-                  <span aria-hidden="true">
-                    <Icon name="check" size={12} tone="ink" />
-                  </span>
-                  {c(`rail.${n}`)}
-                </li>
-              ))
-            }
-          </ol>
-          <div class="at-pro-co-head">
-            <h1 class="at-pro-h1">{c('success.h1')}</h1>
-            <p class="at-pro-lead">{c('success.lead')}</p>
-          </div>
-          <section class="at-pro-co-steps" aria-labelledby="co-next">
-            <h2 id="co-next" class="at-pro-h3">{c('next')}</h2>
-            <ol>
-              <li>
-                <span class="at-pro-co-n" aria-hidden="true">1</span>
-                <div>
-                  <p>{c('step1')}</p>
-                  <Button variant="primary" href="/">{c('open')}</Button>
-                </div>
-              </li>
-              <li>
-                <span class="at-pro-co-n" aria-hidden="true">2</span>
-                <div>
-                  <p>{c('step2')}</p>
-                  <button type="button" class="at-button at-button-sm" aria-expanded="false" aria-controls="co-key" data-co-show data-show={c('showKey')} data-hide={c('hideKey')}>
-                    {c('showKey')}
-                  </button>
-                  <div id="co-key" class="at-pro-co-key" data-co-key-panel hidden>
-                    <p class="at-pro-key-out"><span class="sr-only">{c('keyLabel')}: </span><code data-co-key></code></p>
-                    <button type="button" class="at-button at-button-sm at-pro-copy" data-co-copy>
-                      <span aria-live="polite"><span class="at-pro-copy-label">{a('copy')}</span><span class="at-pro-copied-label">{a('copied')}</span></span>
-                    </button>
-                  </div>
-                  <p class="at-pro-caption" data-co-key-missing hidden>{c('keyMissing')}</p>
-                </div>
-              </li>
-              <li>
-                <span class="at-pro-co-n" aria-hidden="true">3</span>
-                <div><p>{c('step3')}</p></div>
-              </li>
-            </ol>
-          </section>
-        </div>
-        <aside class="at-card at-pro-co-aside" aria-labelledby="co-aside-success">
-          <h2 id="co-aside-success">{c('purchase')}</h2>
-          <dl>
-            <div>
-              <dt>{c('row.plan')}</dt>
-              <dd data-co-plan data-pro_yearly={c('plan.yearly')} data-pro_lifetime={c('plan.lifetime')}>{c('plan.yearly')}</dd>
-            </div>
-            <div>
-              <dt>{c('row.price')}</dt>
-              <dd data-co-price data-pro_yearly={c('price.yearly', { price: yearly })} data-pro_lifetime={c('price.lifetime', { price: launch ? lifeLaunch : lifeFull })} data-lifetime-after={c('price.lifetime', { price: lifeFull })}>
-                {c('price.yearly', { price: yearly })}
-              </dd>
-            </div>
-            <div>
-              <dt>{c('row.renews')}</dt>
-              <dd data-co-renews data-never={c('renews.never')}></dd>
-            </div>
-            <div data-co-devices-row hidden>
-              <dt>{c('row.devices')}</dt>
-              <dd data-co-devices data-tpl={c('devices')}></dd>
-            </div>
-            <div data-co-tail-row hidden>
-              <dt>{c('row.key')}</dt>
-              <dd data-co-tail data-tpl={c('key')}></dd>
-            </div>
-          </dl>
-          <p>{c('success.aside')}</p>
-          <a class="at-pro-co-link" href="/pro/manage">{c('success.link')}</a>
-        </aside>
+    <main data-view="checkout" hidden>
+      <div class="at-pro-flow-col" data-co="processing" role="status" aria-live="polite">
+        <Lucide name="loader-circle" size={24} class="at-pro-spin at-pro-spin-xl" />
+        <h1 class="at-pro-flow-h1" tabindex="-1">{d('processing.h1')}</h1>
+        <p class="at-pro-flow-lead">{d('processing.lead')}</p>
       </div>
 
-      {
-        CO.map((co) => (
-          <div class="at-pro-co-grid" data-co={co.id}>
-            <div class="at-pro-co-col">
-              <div class="at-pro-co-head">
-                <span class="at-pro-co-glyph" aria-hidden="true">
-                  <Icon name={co.glyph} size={20} tone="ink" />
-                </span>
-                <h1 class="at-pro-h1">{c(`${co.id}.h1`)}</h1>
-                <p class="at-pro-lead">{c(`${co.id}.lead`)}</p>
-              </div>
-              {co.list.length > 0 && (
-                <section class="at-pro-co-list" aria-labelledby={`co-list-${co.id}`}>
-                  <h2 id={`co-list-${co.id}`} class="at-pro-h3">
-                    {c(`${co.id}.listTitle`)}
-                  </h2>
-                  <ul>
-                    {co.list.map((item) => (
-                      <li>
-                        <Icon name="caret-right" size={16} class="at-flip-rtl" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              )}
-              <div class="at-pro-co-actions">
-                <Button variant="primary" href={co.primary[1]} glyph={false}>
-                  {co.primary[0]}
-                </Button>
-                <Button variant="secondary" href={co.secondary[1]}>
-                  {co.secondary[0]}
-                </Button>
-              </div>
-            </div>
-            <aside class="at-card at-pro-co-aside" aria-labelledby={`co-aside-${co.id}`}>
-              <h2 id={`co-aside-${co.id}`}>{c(`${co.id}.aside.title`)}</h2>
-              {co.id === 'help' && (
-                <p role="note" class="at-pro-co-callout">
-                  <Icon name="info" size={16} />
-                  {c('help.callout')}
-                </p>
-              )}
-              {co.id === 'cancelled' ? (
-                <p>
-                  <span data-launch-only>{c('cancelled.aside.launch', { yearly, price: lifeLaunch, after: lifeFull })}</span>
-                  <span data-after-only>{c('cancelled.aside', { yearly, price: lifeFull })}</span>
-                </p>
-              ) : (
-                <p>{c(`${co.id}.aside.text`)}</p>
-              )}
-              <a class="at-pro-co-link" href={co.asideLink[1]}>
-                {co.asideLink[0]}
-              </a>
-            </aside>
+      <div class="at-pro-flow-col at-pro-rise" data-co="success" role="status">
+        <ProScene scene="success" width={300} />
+        <h1 class="at-pro-flow-h1" tabindex="-1">{d('success.h1')}</h1>
+        <p class="at-pro-flow-lead">{d('success.lead')}<span data-co-email-line hidden> {d('success.to')} <strong data-co-email></strong></span>{d('success.next')}</p>
+        <div class="at-pro-row-actions">
+          <a class="at-button at-button-primary at-button-lg" href="/">{d('success.open')}</a>
+          <button type="button" class="at-button at-button-outline at-button-lg" aria-expanded="false" aria-controls="co-key" data-co-show data-show={d('success.add')} data-hide={c('hideKey')}>
+            {d('success.add')}
+          </button>
+        </div>
+        <div id="co-key" class="at-pro-co-key" data-co-key-panel hidden>
+          <p class="at-pro-help-txt">{c('step2')}</p>
+          <div class="at-pro-copy-row">
+            <code class="at-pro-key-out"><span class="sr-only">{c('keyLabel')}: </span><span data-co-key></span></code>
+            <button type="button" class="at-button at-button-outline at-pro-copy" data-co-copy>
+              <span aria-live="polite"><span class="at-pro-copy-label">{a('copy')}</span><span class="at-pro-copied-label">{a('copied')}</span></span>
+            </button>
           </div>
-        ))
-      }
+        </div>
+        <p class="at-pro-help-txt" data-co-key-missing hidden>{c('keyMissing')}</p>
+        <dl class="at-pro-summary" aria-label={c('purchase')}>
+          <div class="at-pro-summary-row"><dt>{c('row.plan')}</dt><dd data-co-plan data-pro_yearly={c('plan.yearly')} data-pro_lifetime={c('plan.lifetime')}>{c('plan.yearly')}</dd></div>
+          <div class="at-pro-summary-row">
+            <dt>{c('row.price')}</dt>
+            <dd data-co-price data-pro_yearly={c('price.yearly', { price: yearly })} data-pro_lifetime={c('price.lifetime', { price: launch ? lifeLaunch : lifeFull })} data-lifetime-after={c('price.lifetime', { price: lifeFull })}>{c('price.yearly', { price: yearly })}</dd>
+          </div>
+          <div class="at-pro-summary-row"><dt>{c('row.renews')}</dt><dd data-co-renews data-never={c('renews.never')}></dd></div>
+          <div class="at-pro-summary-row" data-co-devices-row hidden><dt>{c('row.devices')}</dt><dd data-co-devices data-tpl={c('devices')}></dd></div>
+          <div class="at-pro-summary-row" data-co-tail-row hidden><dt>{c('row.key')}</dt><dd data-co-tail data-tpl={c('key')}></dd></div>
+        </dl>
+        <p class="at-pro-flow-small">{c('success.aside')} <a class="at-pro-inline-link" href="/pro/manage">{c('success.link')}</a></p>
+      </div>
+
+      <div class="at-pro-flow-col at-pro-rise" data-co="failed" role="alert">
+        <ProScene scene="error" width={260} />
+        <h1 class="at-pro-flow-h1" tabindex="-1">{c('failed.h1')}</h1>
+        <p class="at-pro-flow-lead">{d('failed.lead')}</p>
+        <div class="at-pro-row-actions">
+          <a class="at-button at-button-primary at-button-lg at-pro-btn-glow" href="/pro/checkout#pay">{d('failed.again')}</a>
+          <a class="at-button at-button-outline at-button-lg" href="/pro/checkout#plans">{d('failed.plans')}</a>
+        </div>
+        <p class="at-pro-flow-small">{c('failed.aside.text')} <a class="at-pro-inline-link" href={CONTACT_MAILTO}>{c('failed.link')}</a></p>
+      </div>
+
+      <div class="at-pro-flow-col at-pro-rise" data-co="cancelled">
+        <h1 class="at-pro-flow-h1" tabindex="-1">{c('cancelled.h1')}</h1>
+        <p class="at-pro-flow-lead">{c('cancelled.lead')}</p>
+        <div class="at-pro-row-actions">
+          <a class="at-button at-button-primary at-button-lg" href="/">{c('cancelled.primary')}</a>
+          <a class="at-button at-button-outline at-button-lg" href="/pro/checkout#plans">{c('cancelled.secondary')}</a>
+        </div>
+        <p class="at-pro-flow-small">
+          <span data-launch-only>{c('cancelled.aside.launch', { yearly, price: lifeLaunch, after: lifeFull })}</span>
+          <span data-after-only>{c('cancelled.aside', { yearly, price: lifeFull })}</span>
+          <a class="at-pro-inline-link" href={CONTACT_MAILTO}>{c('cancelled.link')}</a>
+        </p>
+      </div>
+
+      <div class="at-pro-flow-col at-pro-rise" data-co="help">
+        <span class="at-pro-tile-xl" aria-hidden="true"><Lucide name="mail" size={24} /></span>
+        <h1 class="at-pro-flow-h1" tabindex="-1">{c('help.h1')}</h1>
+        <p class="at-pro-flow-lead">{c('help.lead')}</p>
+        <p class="at-pro-callout at-pro-callout-info" role="note">
+          <Lucide name="info" size={20} class="at-pro-callout-icon" />
+          <span class="at-pro-callout-text"><span>{c('help.callout')}</span></span>
+        </p>
+        <ul class="at-pro-feats at-pro-feats-sm at-pro-left">
+          {HELP.map((h) => <li><Lucide name="chevron-right" size={16} class="at-pro-feat-icon at-flip-rtl" />{h}</li>)}
+        </ul>
+        <div class="at-pro-row-actions">
+          <a class="at-button at-button-primary at-button-lg" href="/pro/activate">{c('help.primary')}</a>
+          <a class="at-button at-button-outline at-button-lg" href={POLAR_PORTAL_URL}>{c('help.secondary')}<Lucide name="external-link" size={16} /></a>
+        </div>
+      </div>
     </main>
   </div>
   <script>

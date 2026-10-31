@@ -1,14 +1,15 @@
 ---
-// /about (B6, canvas board PageAbout): intro, author card, how it is checked (the seven lock states and what the
-// browser journeys verify), what AwakeTab will not claim, contact. Build-time markup only, no page script.
+// /about (the about board): why it exists, how it makes money, who makes it, then how it is checked, what it will not
+// claim, credits and contact. Build-time markup only, no page script.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Crumbs from '../components/pages/Crumbs.astro';
-import '../styles/pages.css';
+import PageHero from '../components/site/PageHero.astro';
+import Block from '../components/site/Block.astro';
+import DataTable from '../components/site/DataTable.astro';
+import Steps from '../components/site/Steps.astro';
 import { t } from '../i18n/load';
 import { CONTACT_EMAIL, CONTACT_MAILTO } from '../lib/contact';
 import { personSchema } from '../lib/seo';
-import { LOCK_GLYPH, LOCK_STATES } from '../lib/page-glyphs';
-import Icon from '../components/icons/Icon.astro';
+import { LOCK_STATES } from '../lib/page-glyphs';
 
 const site = Astro.site?.toString().replace(/\/$/u, '') ?? 'https://awaketab.com';
 const COFFEE = 'https://buymeacoffee.com/awaketab';
@@ -19,22 +20,22 @@ const LICENCES = {
   'CC BY 4.0': 'https://creativecommons.org/licenses/by/4.0/',
   'SIL OFL 1.1': 'https://openfontlicense.org/',
   'CC0 1.0': 'https://creativecommons.org/publicdomain/zero/1.0/',
+  ISC: 'https://opensource.org/license/isc-license-txt',
 } as const;
 const credits = [
   { name: 'Tone.js', href: 'https://tonejs.github.io/', use: 'Focus sounds and end sounds, made live in your browser', licence: 'MIT' },
   { name: 'howler.js', href: 'https://howlerjs.com/', use: 'Plays recorded tracks in the lo-fi library', licence: 'MIT' },
-  { name: 'NumberFlow', href: 'https://number-flow.barvian.me/', use: 'The rolling digits of the Rolling face', licence: 'MIT' },
   { name: 'Embla Carousel', href: 'https://www.embla-carousel.com/', use: 'Swiping between clock faces', licence: 'MIT' },
   { name: 'Tiptap and ProseMirror', href: 'https://tiptap.dev/', use: 'The notepad editor', licence: 'MIT' },
   { name: 'idb-keyval', href: 'https://github.com/jakearchibald/idb-keyval', use: 'Keeps notes in this browser', licence: 'Apache 2.0' },
   { name: 'annyang', href: 'https://github.com/TalAter/annyang', use: 'Voice commands while you dictate a note', licence: 'MIT' },
   { name: 'vanilla-colorful', href: 'https://github.com/web-padawan/vanilla-colorful', use: 'The custom lamp colour picker', licence: 'MIT' },
   { name: 'Hero Patterns', href: 'https://heropatterns.com/', use: 'The Dots, Grid and Waves backgrounds, by Steve Schoger', licence: 'CC BY 4.0' },
-  { name: 'Nixie One', href: 'https://fonts.google.com/specimen/Nixie+One', use: 'The Nixie face, by Jovanny Lemonad', licence: 'SIL OFL 1.1' },
-  { name: 'DSEG', href: 'https://www.keshikan.net/fonts-e.html', use: 'The LCD face, by keshikan', licence: 'SIL OFL 1.1' },
+  { name: 'IBM Plex Serif', href: 'https://github.com/IBM/plex', use: 'The Analog luxe and Words faces, by IBM', licence: 'SIL OFL 1.1' },
+  { name: 'DotGothic16', href: 'https://github.com/fontworks-fonts/DotGothic16', use: 'The LED face, by Fontworks', licence: 'SIL OFL 1.1' },
   { name: 'Geist and Geist Mono', href: 'https://vercel.com/font', use: 'The interface type, by Vercel', licence: 'SIL OFL 1.1' },
   { name: 'Space Grotesk', href: 'https://github.com/floriankarsten/space-grotesk', use: 'The numerals of the Bold face, by Florian Karsten', licence: 'SIL OFL 1.1' },
-  { name: 'Phosphor Icons', href: 'https://phosphoricons.com/', use: 'The interface icons, by Helena Zhang and Tobias Fried', licence: 'MIT' },
+  { name: 'Lucide', href: 'https://lucide.dev/', use: 'The interface icons, by the Lucide contributors', licence: 'ISC' },
   { name: 'SVG Logos', href: 'https://svglogos.dev/', use: 'The browser and platform logos, by Gil Barbara; logos are trademarks of their owners', licence: 'CC0 1.0' },
 ] as const;
 const principles = [
@@ -51,136 +52,109 @@ const principles = [
   canonical={`${site}/about`}
   ogImage="/og/about-en.png"
   schema={personSchema()}
+  site
 >
-  <main class="at-page at-about">
-    <div class="at-pg-intro at-about-intro">
-      <Crumbs current={t('page.about.h1')} />
-      <h1 class="at-pg-h1">{t('page.about.h1')}</h1>
-      <p class="at-pg-lead">
-        AwakeTab is an independent project built and maintained by Soubhik Biswas. Its purpose is narrow: request a
-        browser wake lock, show the result honestly, and make the common timer and until-time workflows fast without
-        requiring an account.
-      </p>
-    </div>
-
-    <aside class="at-card at-about-card" aria-label="Author">
-      <div class="at-about-who">
-        <div class="at-about-avatar" aria-hidden="true">SB<span></span></div>
-        <div class="at-about-name">
-          <span>Soubhik Biswas</span>
-          <span>Builds AwakeTab</span>
+  <main class="at-sp at-about">
+    <PageHero
+      crumbs={[{ href: '/', label: t('app.name') }, { label: t('page.about.h1') }]}
+      eyebrow="About"
+      h1="A small tool with one job."
+      lead="AwakeTab keeps a screen on while you need it and lets it sleep when you don’t. We would rather do that one thing honestly than do many things loudly."
+      scene="nightdesk"
+    />
+    <Block id="ab-why" label="About AwakeTab">
+      <div class="at-sp-prose">
+        <div>
+          <h2>Why it exists</h2>
+          <p>
+            Screens go dark at the worst moments — mid-recipe, mid-slide, mid-download. Browsers can now ask to keep the
+            display on, but nothing made that simple, visible and honest. AwakeTab requests a browser wake lock, shows the
+            result honestly, and makes the common timer and until-time workflows fast without requiring an account.
+          </p>
+        </div>
+        <div>
+          <h2>How we make money</h2>
+          <ul>
+            <li>Pro, for people who sync devices or want the extras. Keeping awake stays free.</li>
+            <li>One clearly labelled ad slot on content pages — never on the timer, never animated.</li>
+            <li>No selling of data. There is very little data to sell, and we keep it that way.</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Who we are</h2>
+          <p>
+            AwakeTab is an independent project built and maintained by Soubhik Biswas. Say hello at{' '}
+            <a href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a>; messages go to Soubhik directly. If AwakeTab is useful, you can{' '}
+            <a href={COFFEE} rel="noopener" target="_blank">buy Soubhik a coffee</a> — no widget, account or extra script,
+            just a link.
+          </p>
         </div>
       </div>
-      <p class="at-pg-ui">Messages go to Soubhik directly.</p>
-      <div class="at-about-links">
-        <a href={CONTACT_MAILTO}>
-          <Icon name="envelope-simple" size={20} />{CONTACT_EMAIL}
-        </a>
-        <a href={COFFEE} rel="noopener" target="_blank">
-          <Icon name="coffee" size={20} />Buy Soubhik a coffee<Icon name="arrow-up-right" size={16} class="at-pg-arrow" />
-        </a>
-        <a href="/changelog">
-          <Icon name="list-bullets" size={20} />Changelog
-        </a>
-      </div>
-    </aside>
+    </Block>
 
-    <div class="at-about-body">
-      <section class="at-pg-stack-20" aria-labelledby="ab-test">
-        <h2 id="ab-test" class="at-pg-h2">How AwakeTab is checked</h2>
-        <p class="at-pg-body at-pg-measure">
+    <Block id="ab-test" h="How AwakeTab is checked" sub="Real-device results are pending until the manual run is recorded.">
+      <div class="at-sp-prose">
+        <p>
           The lock layer is tested as a seven-state transition machine. Browser journeys inject a controllable Wake Lock
           implementation and verify acquisition, denial, release on hidden tabs, reacquisition, fallback behaviour and
           multi-tab warnings. Device claims are kept in the support matrix and are refreshed separately from application
-          code.
+          code. <a href="/learn/how-we-tested">How AwakeTab is checked</a>
         </p>
-        <ol class="at-about-states" aria-label="The seven lock states">
-          {
-            LOCK_STATES.map((id) => (
-              <li data-lock={id}>
-                <span class="at-about-state-id">
-                  <svg class="at-pg-glyph" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
-                    <path d={LOCK_GLYPH[id]} />
-                  </svg>
-                  <code>{id}</code>
-                </span>
-                <span class="at-about-state-pill">{t(`tool.pill.${id}`)}</span>
-              </li>
-            ))
-          }
-        </ol>
-        <ul class="at-about-journeys" aria-label="What the browser journeys verify">
-          {
-            journeys.map((label) => (
-              <li class="at-tag at-pg-tag">
-                <Icon name="check" size={16} />
-                {label}
-              </li>
-            ))
-          }
-        </ul>
-        <p class="at-pg-ui at-pg-muted at-pg-measure">
-          Real-device results are pending until the manual run is recorded. <a class="at-pg-link" href="/learn/how-we-tested">How AwakeTab is checked</a>
-        </p>
-      </section>
+      </div>
+      <DataTable
+        label="The seven lock states"
+        cols={['Lock state', 'What the pill says']}
+        template="1fr 1.6fr"
+        rows={LOCK_STATES.map((id) => [{ t: id }, { t: t(`tool.pill.${id}`) }])}
+      />
+      <DataTable
+        label="What the browser journeys verify"
+        cols={['Journey', 'Checked']}
+        template="1.6fr 1fr"
+        rows={journeys.map((label) => [{ t: label }, { t: 'Yes', tone: 'yes' as const }])}
+      />
+    </Block>
 
-      <section class="at-pg-stack-24" aria-labelledby="ab-claims">
-        <div class="at-pg-stack-8">
-          <span class="at-pg-kicker">Principles</span>
-          <h2 id="ab-claims" class="at-pg-h2">What AwakeTab will not claim</h2>
-        </div>
-        <ol class="at-about-principles">
-          {
-            principles.map(([head, body], i) => (
-              <li>
-                <span class="at-about-n" aria-hidden="true">{`0${String(i + 1)}`}</span>
-                <div class="at-pg-stack-8">
-                  <h3 class="at-pg-h3">{head}</h3>
-                  <p class="at-pg-body">{body}</p>
-                </div>
-              </li>
-            ))
-          }
-        </ol>
-        <p class="at-pg-body at-pg-measure">
-          If AwakeTab is useful, you can <a class="at-pg-link" href={COFFEE} rel="noopener" target="_blank">buy Soubhik a coffee</a>.
-          There is no widget, account or extra script: just a link.
-        </p>
-      </section>
+    <Block id="ab-claims" h="What AwakeTab will not claim">
+      <Steps items={principles.map(([title, body]) => ({ title, body }))} cols={2} />
+    </Block>
 
-      <section class="at-pg-stack-16" id="credits" aria-labelledby="ab-credits">
-        <h2 id="ab-credits" class="at-pg-h2">Credits</h2>
-        <p class="at-pg-body at-pg-measure">
-          AwakeTab stands on open-source work. Each of these loads only with the feature that uses it.
-        </p>
-        <dl class="at-about-credits">
-          {
-            credits.map((c) => (
-              <div>
-                <dt>
-                  <a class="at-pg-link" href={c.href} rel="noopener" target="_blank">{c.name}</a>
-                </dt>
-                <dd>{c.use}</dd>
-                <dd class="at-about-licence">
-                  <a class="at-pg-link" href={LICENCES[c.licence]} rel="noopener" target="_blank">{c.licence}</a>
-                </dd>
-              </div>
-            ))
-          }
-        </dl>
-        <p class="at-pg-ui at-pg-muted at-pg-measure">
-          Icons: Phosphor (MIT); brand logos: SVG Logos (CC0); logos are trademarks of their owners.
-        </p>
-      </section>
+    <Block id="credits" h="Credits" sub="AwakeTab stands on open-source work. Each of these loads only with the feature that uses it.">
+      <DataTable
+        label="Credits"
+        cols={['Project', 'Used for', 'Licence']}
+        template="1fr 2fr 0.8fr"
+        rows={credits.map((c) => [{ t: c.name }, { t: c.use }, { t: c.licence }])}
+      />
+      <ul class="at-sp-chips" role="list" aria-label="Project and licence links">
+        {
+          credits.map((c) => (
+            <li>
+              <a class="at-sp-chip" href={c.href} rel="noopener" target="_blank">
+                {c.name}
+              </a>
+            </li>
+          ))
+        }
+        {
+          Object.entries(LICENCES).map(([name, href]) => (
+            <li>
+              <a class="at-sp-chip" href={href} rel="noopener" target="_blank">
+                {name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </Block>
 
-      <section class="at-pg-stack-16" id="contact" aria-labelledby="ab-contact">
-        <h2 id="ab-contact" class="at-pg-h2">Contact</h2>
-        <p class="at-pg-body at-pg-measure">
-          Email <a class="at-pg-link" href={CONTACT_MAILTO} data-contact>{CONTACT_EMAIL}</a> for support, refunds, bug reports,
-          device results that differ from the support matrix, or a request to delete your licence data. Messages go to
-          Soubhik directly.
+    <Block id="contact" h="Contact">
+      <div class="at-sp-prose">
+        <p>
+          Email <a href={CONTACT_MAILTO} data-contact>{CONTACT_EMAIL}</a> for support, refunds, bug reports, device results
+          that differ from the support matrix, or a request to delete your licence data. Messages go to Soubhik directly.
         </p>
-      </section>
-    </div>
+      </div>
+    </Block>
   </main>
 </BaseLayout>

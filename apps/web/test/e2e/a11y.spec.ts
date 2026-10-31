@@ -128,15 +128,15 @@ const SURFACES: Array<{ name: string; open: (page: Page, theme: TTheme) => Promi
     name: 'Customize, Face',
     open: async (page) => {
       await openTool(page, '/?autostart=0');
-      await page.locator('#awaketab-tool .at-fc-open:visible').first().click();
-      await expect(page.locator('dialog[data-dialog="customize"] [data-pick="analog"] .at-fx')).toBeVisible();
+      await page.locator('#awaketab-tool .at-cz-btn:visible').first().click();
+      await expect(page.locator('dialog[data-dialog="customize"] .af-cell[data-face="analog"] .af')).toBeVisible();
     },
   },
   {
     name: 'Customize, Look',
     open: async (page) => {
       await openTool(page, '/?autostart=0');
-      await page.locator('#awaketab-tool .at-fc-open:visible').first().click();
+      await page.locator('#awaketab-tool .at-cz-btn:visible').first().click();
       const sheet = page.locator('dialog[data-dialog="customize"]');
       await sheet.locator('[data-cz-tab="look"]').click();
       await expect(sheet.locator('input[name="lk-accent"][value="violet"]')).toBeAttached();

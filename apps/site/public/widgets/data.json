@@ -1,0 +1,16 @@
+{
+  "live": false,
+  "awake": false,
+  "status": "Not awake",
+  "line": "start in AwakeTab",
+  "digits": "60:00",
+  "label": "Keeping the screen awake",
+  "extend": "+15 min",
+  "stop": "Stop",
+  "presetsTitle": "Presets",
+  "presets": [
+    { "name": "Presenting", "length": "1 h", "preset": "p60" },
+    { "name": "Cooking", "length": "45 m", "preset": "p45" },
+    { "name": "Reading", "length": "30 m", "preset": "p30" }
+  ]
+}

@@ -1,0 +1,122 @@
+---
+title: "iPhone Safari 保持屏幕常亮不锁屏 — AwakeTab"
+description: "iPhone 上的 Safari 自 16.4 起支持原生屏幕唤醒锁；但低电量模式会强制 30 秒自动锁定，离开 Safari 或切换应用也会让常亮立即失效。"
+h1: "在 iPhone 的 Safari 里让屏幕保持常亮"
+intent: "iphone safari 屏幕常亮"
+secondaryQueries: ["iphone 屏幕常亮", "iphone 不自动锁屏", "苹果手机 屏幕常亮 网页", "safari 防止屏幕休眠", "iphone 保持屏幕唤醒"]
+preset: p30
+mode: standard
+locale: zh
+reviewed: false
+translationOf: "iphone-safari"
+lastVerified: 2026-09-09
+browsers: ["safari"]
+os: ["ios"]
+crumb: "iPhone Safari"
+toc:
+  低电量模式是最常见的拦路虎: "低电量模式"
+  切换应用切换标签页都会暂停: "切换应用、切换标签页"
+lead: "从 Safari 16.4 开始，iPhone 上的网页也能请求原生的屏幕唤醒锁（Wake Lock）。在 Safari 中打开 AwakeTab，默认时长为 30 分钟，点按开始后，只要状态标签显示“屏幕保持常亮”，iPhone 就不会按“自动锁定”的时间熄屏。但有两条硬性限制：低电量模式开启时会强制 30 秒自动锁定，“永不”也会变灰；一旦离开 Safari，锁就会被收回。"
+facts:
+  - label: "Safari"
+    value: "16.4 及以上"
+  - label: "主屏幕 App"
+    value: "iOS 18.4 及以上"
+steps:
+  - title: "用 Safari 打开 awaketab.com"
+    path: "Safari › awaketab.com"
+    text: "必须是 HTTPS 地址。"
+    shot: "在 Safari 中打开的 AwakeTab"
+  - title: "选择时长"
+    text: "本页预设 30 分钟，也可以选“∞”（直到我停止）或自定义时长。"
+    shot: "AwakeTab 的时长选项"
+  - title: "点按开始"
+    text: "等状态标签变成“屏幕保持常亮”再放下手机。"
+    shot: "点按开始后的状态标签"
+  - title: "需要更久时，在提示中延长"
+    text: "在“时间到。要继续吗？”提示中延长，不要以为选了 30 分钟也会一直常亮。"
+    shot: "“时间到。要继续吗？”提示"
+matrix:
+  label: "iPhone 支持情况（2026年9月9日的支持矩阵）"
+  cols: ["环境", "结果", "说明"]
+  rows:
+    - what: "Safari 16.4 及以上"
+      result: works
+      label: "支持"
+      text: "点按开始后，只要状态标签显示“屏幕保持常亮”，iPhone 就不会按“自动锁定”的时间熄屏。"
+    - what: "回到主屏幕、打开其他 App、切换到 Safari 的另一个标签页，或者锁屏"
+      result: pauses
+      label: "暂停"
+      text: "回到这个标签页后，状态恢复为“屏幕保持常亮”，计时才会继续。"
+    - what: "低电量模式"
+      result: untested
+      label: "还没有记录到真机结果"
+      text: "低电量模式开启后，iOS 会把自动锁定强制设为 30 秒，并让“设置 → 显示与亮度 → 自动锁定”里的“永不”无法选择。"
+    - what: "主屏幕 App，iOS 18.4 及以上"
+      result: works
+      label: "支持"
+      text: "通过 Safari 的“添加到主屏幕”安装后，主屏幕 App 在 iOS 18.4 及以上版本可以使用原生唤醒锁；更早的版本请继续在 Safari 标签页里使用。"
+    - what: "低于 Safari 16.4"
+      result: fallback
+      label: "视频备用方案"
+      text: "你可以更新系统，或点按“开始”使用视频备用方案——它需要你亲手点按一次才能启动，并且比原生唤醒锁更耗电。"
+rows:
+  myths:
+    - title: "“屏幕亮着，App 就在后台运行”"
+      text: "不是。AwakeTab 只让屏幕不熄灭，不会让其他 App 在后台保持活跃，也不会让 Teams、Slack 显示“在线”——它们看的是输入空闲时间。"
+    - title: "“按一下侧边按钮也没关系”"
+      text: "按下侧边按钮锁屏后，Safari 就不可见了，锁随即被收回。"
+    - title: "“设成 30 分钟就一直有效”"
+      text: "时间到了会停止并提示你是否延长，想要不限时长请选择“∞”。"
+faq:
+  - q: "我的 iPhone 还是 iOS 16.2，能用吗？"
+    a: "原生屏幕唤醒锁需要 Safari 16.4（随 iOS 16.4 提供）或更高版本。版本更旧时，可以点按“开始”改用视频备用方案，状态会显示“通过视频备用方案常亮”，但它更耗电。条件允许的话，建议先更新系统。"
+  - q: "把 AwakeTab 添加到主屏幕后，还能保持常亮吗？"
+    a: "可以，但主屏幕 App 需要 iOS 18.4 或更高版本才能使用原生唤醒锁。更早的系统请直接在 Safari 里打开 AwakeTab 使用。"
+  - q: "回个微信再切回来，屏幕还会常亮吗？"
+    a: "切走的那一刻，Safari 就会收回唤醒锁，状态显示“已暂停 — 标签页已隐藏”，计时也随之停止。回到 Safari 中的这个标签页，等状态重新变成“屏幕保持常亮”，常亮才会继续。在后台时它不会让屏幕保持常亮。"
+  - q: "开着低电量模式还能保持常亮吗？"
+    a: "目前还说不准。iPhone 的低电量模式会强制 30 秒自动锁定，连“自动锁定”里的“永不”都会变灰。Safari 没有因为低电量模式而拒绝唤醒锁的机制，但这种状态下屏幕能否保持常亮，我们还没有记录到真机结果。如果 30 秒就熄屏，可在“设置 → 电池”中关闭低电量模式。"
+honestLimit: "仅支持 Safari 16.4 及以上版本；低电量模式会强制 30 秒自动锁定；切换到其他应用会让 Safari 收回唤醒锁，状态标签随即显示“已暂停 — 标签页已隐藏”。"
+related:
+  - "/guides/iphone-auto-lock-never-greyed-out"
+  - "/on/ios-home-screen"
+  - "/on/ipad"
+  - "/for/cooking"
+  - "/learn/low-power-mode-and-wake-locks"
+author: soubhik
+published: 2026-09-26
+updated: 2026-09-27
+---
+
+## 在 iPhone 上怎么用
+
+::steps
+
+::matrix
+
+::ad
+
+## 添加到主屏幕
+
+通过 Safari 的“添加到主屏幕”安装后，主屏幕 App 在 iOS 18.4 及以上版本可以使用原生唤醒锁；更早的版本请继续在 Safari 标签页里使用。
+
+## 系统太旧怎么办
+
+低于 Safari 16.4 时，AwakeTab 会提示“Safari 需要 iOS 16.4 或更高版本”。你可以更新系统，或点按“开始”使用视频备用方案——它需要你亲手点按一次才能启动，并且比原生唤醒锁更耗电。
+
+## 低电量模式是最常见的“拦路虎”
+
+低电量模式开启后，iOS 会把自动锁定强制设为 30 秒，并让“设置 → 显示与亮度 → 自动锁定”里的“永不”无法选择。Safari 本身没有因为低电量模式而拒绝唤醒锁的机制，但在这种状态下 AwakeTab 能否让屏幕保持常亮，我们还没有记录到真机结果。如果屏幕仍在 30 秒后熄灭，可以到“设置 → 电池”中关闭低电量模式。状态显示“已被阻止 — 这样解决”时，原因通常是 Safari 还没有收到你的点按，提示里会写明。完整排查步骤见[自动锁定“永不”变灰怎么办](/zh/guides/iphone-auto-lock-never-greyed-out)。
+
+## 切换应用、切换标签页都会暂停
+
+iOS 不允许后台网页持有屏幕唤醒锁。回到主屏幕、打开其他 App、切换到 Safari 的另一个标签页，或者锁屏，都会让状态变为“已暂停 — 标签页已隐藏”。这是平台规则，不是 AwakeTab 出了问题。回到这个标签页后，状态恢复为“屏幕保持常亮”，计时才会继续。如果要边看菜谱边做饭，参见[做饭时屏幕常亮](/zh/for/cooking)里的摆放建议。
+
+## 三个常见误区
+
+::rows myths
+
+## 电量与屏幕
+
+屏幕常亮会明显增加耗电，长时间使用最好插上电源。iPhone 的 OLED 屏幕长时间显示静止画面有烧屏风险，夜间模式的像素微移可以减轻但不能消除。也不要把无人看管的 iPhone 当作安全监控设备使用。

@@ -19,12 +19,10 @@ const hashed = (file, name) => {
 
 export const themesHref = () => hashed(THEMES_FILE, 'themes.css');
 
-// The Bold, Horizon and Tide art (docs/05 §3.33): linked by boot.js before first paint when one is the saved face.
+// The clock faces' sheet: art palette, motion, picker and fonts, linked by the Face module with a face's code.
 export const facesHref = () => hashed(FACES_FILE, 'faces.css');
 
 export function bootInline(source = readFileSync(BOOT_FILE, 'utf8')) {
-  const code = source
-    .replace("'__AT_THEMES__'", JSON.stringify(themesHref()))
-    .replace("'__AT_FACES__'", JSON.stringify(facesHref()));
+  const code = source.replace("'__AT_THEMES__'", JSON.stringify(themesHref()));
   return transformSync(code, { loader: 'js', minify: true, target: 'es2020', legalComments: 'none' }).code.trim();
 }

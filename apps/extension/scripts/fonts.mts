@@ -1,4 +1,4 @@
-// The store images draw their text with the repo's own font files (apps/web/public/fonts). Those are variable
+// The store images draw their text with the extension's own font files (public/fonts). Those are variable
 // WOFF2, which satori cannot read, so this module unpacks WOFF2 to a TrueType font (the W3C WOFF2 format,
 // glyf and hmtx transforms included) and pins the weight axis with HarfBuzz's subsetter, the one satori
 // already depends on. Output bytes depend only on the input file and the weight.

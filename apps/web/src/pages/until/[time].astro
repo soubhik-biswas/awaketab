@@ -3,6 +3,7 @@ import '../../styles/tool-until.css';
 import '../../styles/tool-page.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ToolIsland from '../../components/ToolIsland.astro';
+import Lucide from '../../components/icons/Lucide.astro';
 import '../../styles/tool-full.css';
 import { t } from '../../i18n/load';
 
@@ -68,18 +69,7 @@ const near = [-30, -15, 15, 30].map((d) => {
         wake lock.
       </p>
       <div class="at-honest" role="note">
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          aria-hidden="true"
-          ><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7.5v.01"
-          ></path></svg
-        >
+        <Lucide name="info" size={20} />
         <div>
           <span class="at-kicker">Honest limit</span>
           {

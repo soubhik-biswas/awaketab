@@ -41,6 +41,7 @@ export function catalogFor(locale: TLocale): TCatalog {
 
 export const ISLAND_PREFIXES = [
   'tool.',
+  'face.',
   'ambient.',
   'stats.',
   'settings.',
@@ -57,6 +58,7 @@ export const ISLAND_PREFIXES = [
 
 // Rendered at build time by ToolIsland.astro, so the client never needs them.
 const ISLAND_EXCLUDED_PREFIXES = [
+  'face.blurb.',
   'pro.lapse.',
   'pro.sheet.',
   'stats.view.',

@@ -28,7 +28,7 @@ export interface ISettings {
   v: 1;
   theme: 'auto' | 'light' | 'dark' | 'oled';        // default 'auto'
   accent: string;                                   // lamp light-theme hex, default '#087B87'; one of '#087B87' (aqua) · '#5A47CF' (violet) · '#167A50' (mint, ambient.packs) · '#255FBD' (sky, ambient.packs); legacy values migrate on read: '#B86E00' amber → aqua, '#4F46E5' indigo → violet, '#0F766E' teal → mint, '#BE123C' rose → sky; unknown or unlicensed values render as aqua; the next settings save writes the lamp hex — dark variants come from tokens.css (05-frontend-spec.md §1.1a)
-  face: TFace;                                      // 'ring' | 'bold' | 'horizon' | 'tide' | 'flip' | 'rolling' | 'analog' | 'rings' | 'word' | 'nixie' | 'lcd' | 'matrix'; default 'ring' — the remembered clock face (DESIGN.md §7); the face tabs and Settings → Clock face write it, src/boot/boot.js paints <html data-face> from it before first frame (absent for ring); an unknown value shows the Ring face
+  face: TFace;                                      // one of FACE_IDS in packages/core/src/types.ts (the 33 Solar Green faces: ring · bold · horizon · tide · flip · rolling · analog · luxe · rings · words · nixie · lcd · led · dive · chrono · gauge · type · bars · timeline · pilot · dual · radar · dots · hourglass · battery · stack · board · orbit · disc · clocks · wordgrid · tape · moon); default 'ring' — the remembered clock face (HANDOFF §7); the faces sheet writes it. Read through migrateFace (30 Oct 2026): Clear Night ids map to their Solar Green face ('word' → 'words', 'matrix' → 'led', 'analog' saved with faceStyles.analog 'luxe' → 'luxe'); any other unknown value reads as 'ring'; faceStyles is dropped on read
 
   accent: string;                                   // lamp light-theme hex, default '#087B87' (aqua); the twelve lamps are LAMPS in src/tool/packs/themes/looks.ts (free: aqua, violet '#5A47CF', amber '#A34F00', teal '#0A7565'); any other '#RRGGBB' is a custom lamp (ambient.packs, fitted for AA before it is stored); legacy values migrate on read: '#B86E00' amber → aqua, '#4F46E5' indigo → violet, '#0F766E' teal → mint, '#BE123C' rose → sky; invalid or unlicensed values render as aqua and stay stored; dark variants come from tokens.css / public/assets/themes.css (05-frontend-spec.md §1.1a)
   face: 'ring' | 'bold' | 'horizon' | 'tide';       // default 'ring' — the remembered clock face (DESIGN.md §7); the face tabs and Settings → Clock face write it, src/boot/boot.js paints <html data-face> from it before first frame (absent for ring); an unknown value shows the Ring face
@@ -57,7 +57,7 @@ export interface ISettings {
 }
 ```
 
-Additive fields (28 September 2026; still `v: 1`, missing fields read as their defaults): `faceStyles` (per-face style id, `{}`; today only `analog`: `minimal` (read when absent) or `luxe`) · `palette` (`clear-night` | `paper` | `nord` | `solarized` | `midnight` | `forest` | `sunset` | `mono` | `contrast`, default `clear-night`) · `pattern` (`none` | `grain` | `dots` | `grid` | `topo` | `waves` | `aurora` | `stars` | `drift`, default `none`) · `vibrate` (`true`) · `tick` (`false`) · `focusSound { kind, volume 0.5, mix {}, stopAtEnd true }` (`kind`: `none` | `brown` | `pink` | `white` | `rain` | `cafe` | `fire` | `lofi` | `track:<id>`) · `intention` (≤ 80 chars, `''`) · `worldClock` (IANA zone or `null`) · `pomodoro { autoCycle false, longBreakMin 15 }` (`autoCycle` needs `ambient.packs`; `longBreakMin` 5–45, free) · `breathe` (`'478'` \| `'box'`, optional: absent reads as `'478'`, so it has no default entry). `intention` and `worldClock` are read defensively (an unknown zone or a non-string reads as unset). `face` gains `flip` · `rolling` · `analog` · `rings` · `word` · `nixie` · `lcd` · `matrix`; `sound.id` gains `digital` · `birds`; `ambient.mode` gains `breathe`. A Pro item being previewed is never written here. How the sound fields are used (28 September 2026, `05-frontend-spec.md` §3.34): `sound.volume` is written by Settings → End sound volume; `focusSound.kind` is the last chosen focus sound (it never starts playing on load); a non-empty `focusSound.mix` (Pro) plays instead of `kind` and is cleared by picking a single sound; the pack reads every nested `focusSound` field defensively (`readFocus`: unknown kinds read as `none`, out-of-range levels and volumes are dropped).
+Additive fields (28 September 2026; still `v: 1`, missing fields read as their defaults): `faceStyles` (per-face style id; retired 30 Oct 2026: Luxe is its own face, and `migrateFace` folds `analog` + `luxe` into it and drops the field on read) · `palette` (`clear-night` | `paper` | `nord` | `solarized` | `midnight` | `forest` | `sunset` | `mono` | `contrast`, default `clear-night`) · `pattern` (`none` | `grain` | `dots` | `grid` | `topo` | `waves` | `aurora` | `stars` | `drift`, default `none`) · `vibrate` (`true`) · `tick` (`false`) · `focusSound { kind, volume 0.5, mix {}, stopAtEnd true }` (`kind`: `none` | `brown` | `pink` | `white` | `rain` | `cafe` | `fire` | `lofi` | `track:<id>`) · `intention` (≤ 80 chars, `''`) · `worldClock` (IANA zone or `null`) · `pomodoro { autoCycle false, longBreakMin 15 }` (`autoCycle` needs `ambient.packs`; `longBreakMin` 5–45, free) · `breathe` (`'478'` \| `'box'`, optional: absent reads as `'478'`, so it has no default entry). `intention` and `worldClock` are read defensively (an unknown zone or a non-string reads as unset). `face` gains `flip` · `rolling` · `analog` · `rings` · `word` · `nixie` · `lcd` · `matrix`; `sound.id` gains `digital` · `birds`; `ambient.mode` gains `breathe`. A Pro item being previewed is never written here. How the sound fields are used (28 September 2026, `05-frontend-spec.md` §3.34): `sound.volume` is written by Settings → End sound volume; `focusSound.kind` is the last chosen focus sound (it never starts playing on load); a non-empty `focusSound.mix` (Pro) plays instead of `kind` and is cleared by picking a single sound; the pack reads every nested `focusSound` field defensively (`readFocus`: unknown kinds read as `none`, out-of-range levels and volumes are dropped).
 
 ### 2.1a `at.v1.notes` (IndexedDB)
 
@@ -207,6 +207,25 @@ Writes are debounced 250 ms except `session.status` changes (immediate). If `loc
 
 Settings → "Delete all local data": removes every `at.*` key and `sessionStorage['at.tabId']`, unregisters the service worker's caches, reloads. The licence is included (the user is warned and shown the key-recovery link — keys are recoverable from the Polar receipt email).
 
+### 2.9a `at.v1.account`, `at.v1.studio` and sessionStorage `at.v1.checkout` (Solar Green, 30 October 2026)
+
+```ts
+interface IAccount { v: 1; email: string; signedInAt: number } // at.v1.account — written by /signin after a verified magic link
+interface IStudio { v: 1; lamp: '' | `#${string}`; glow: number } // at.v1.studio — Face studio (Pro); glow 0–100, step 5, default 70
+interface ICheckoutFlow { plan: 'pro_yearly' | 'pro_lifetime'; email: string } // sessionStorage at.v1.checkout — this tab's Pro checkout
+```
+
+All three are read defensively (damage reads as signed out, the default look or a fresh flow). The email stays on the device: sign-in proves the address once and nothing syncs yet, so no server keeps an account; Sign out and Delete account remove `at.v1.account`. `at.v1.studio` applies only while the licence has Pro; without it the face keeps the default green. `at.v1.checkout` is cleared when the checkout activates Pro, and its email is passed to Polar's checkout as `customer_email` and nowhere else. Account → Export my data writes every `at.v1.*` localStorage key except `at.v1.license` to a JSON file.
+
+### 2.9b `at.v1.presets` and `at.v1.history` (Next.js tool, 30 October 2026)
+
+```ts
+interface IPresets { v: 1; items: Array<{ id: string; label: string; icon: 'presentation' | 'chef' | 'reading' | 'coffee' | 'infinity' | 'night' | 'timer'; totalSec: number; face: TFace; chime: boolean }> } // ≤ 20, saved from the tool; 0 s = no end
+interface IHistory { v: 1; items: Array<{ id: string; label: string; icon: string; face: TFace; startedAt: number; endedAt: number; totalSec: number; awakeSec: number; reason: 'completed' | 'user' }> } // ≤ 200, 365 days, sessions of a minute or more
+```
+
+Both are read defensively (bad entries are dropped) and live only on this device. Settings → Clear history removes `at.v1.history` only. The tool also stores `dimAtNight: boolean` in `at.v1.settings` (additive, default `false`) and records the first-visit welcome as the `welcome` tip in `at.v1.onboarding`.
+
 ### 2.10 `at.v1.embed.settings` (embed widget, M8)
 
 The `/embed/cook` iframe's only persistent key (`11-embed-spec.md` §7, `00-conventions.md` §13.10). It lives in the awaketab.com origin's storage *as partitioned by the embedding site* in current browsers, so one recipe blog's widget never sees another's.
@@ -254,6 +273,8 @@ Values are stored as objects, not JSON strings. `chrome.storage.sync` receives o
 | `sub:{subscriptionId}` | `string[]` of Polar licence-key ids | 3 years from the last write |
 | `embed:{domain}` | `{ keyHash, attribution: false, theme: { accent, scheme }, expiresAt }` | until `expiresAt + 30 d` |
 | `rl:{route}:{ipHash}:{bucket}` | counter | 120 s |
+| `auth:{sha256(token)}` | `{ v: 1, email, exp }` — a magic sign-in link; deleted by its first verify | 15 minutes (900 s) |
+| `authmail:{sha256(email)}` | `'1'` — one sign-in email per address per minute | 60 s |
 | `rating:{id}` | `{ stars, text?, locale, ver, at }` | 2 years; exported nightly to `data/ratings.json` (aggregate only) |
 
 `canceled` = the subscription will not renew; tokens keep working until `exp` (docs/09 §2.7). `revoked` and `refunded` are terminal.
@@ -318,6 +339,7 @@ Columns: `date,awake_minutes,sessions` (one row per local day, ISO dates; the ro
 | Licence token + random `deviceId` | localStorage / chrome.storage.local | Prove a Pro purchase; count activations (max 5) | Token only, to `/api/license/*` |
 | Anonymous usage events | Analytics Engine, 90 days | Reliability (does the lock hold?) and product decisions | Yes — no IP stored, no ids beyond a per-tab random `sid`; toggle in Settings |
 | Licence record | KV | Fulfil purchases, handle refunds, stop abuse | Held by us; purchase details are with Polar (merchant of record) |
+| Sign-in email (`at.v1.account`, KV `auth:`) | localStorage; KV for 15 minutes while a link is open | Prove the Pro email for sync and receipts | The address goes to the email provider once a provider is chosen; the KV record expires in 15 minutes or on first use |
 | Ratings | KV → aggregate | Show a real rating in search results | Stars + optional text; no identity |
 | Ad cookies (content pages only, with consent) | Google / network | Ads fund the free content pages | Governed by the CMP; never on the tool |
 

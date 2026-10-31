@@ -364,9 +364,9 @@ test.describe('layout stability', { tag: '@stability' }, () => {
             ...(['bold', 'horizon', 'tide', 'ring'] as const).map((name): [string, () => Promise<void>] => [
               `face ${name}`,
               async () => {
-                await page.locator('#awaketab-tool .at-fc-open:visible').first().click();
+                await page.locator('#awaketab-tool .at-cz-btn:visible').first().click();
                 await expect(gallery).toBeVisible();
-                await gallery.locator(`[data-pick="${name}"]`).click();
+                await gallery.locator(`.af-cell[data-face="${name}"]`).click();
                 // The sheet stays open while the clock behind it changes; Esc closes it.
                 if (name === 'ring') await expect(html).not.toHaveAttribute('data-face');
                 else await expect(html).toHaveAttribute('data-face', name);

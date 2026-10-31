@@ -1,0 +1,36 @@
+---
+interface IStep {
+  title: string;
+  body?: string | undefined;
+  html?: string | undefined;
+  id?: string | undefined;
+}
+
+interface Props {
+  items: readonly IStep[];
+  cols?: number;
+  level?: 3 | 4;
+}
+
+const { items, cols, level = 3 } = Astro.props;
+const Tag = level === 3 ? 'h3' : 'h4';
+const n = Math.min(cols ?? items.length, 4);
+---
+
+<ol class="at-sp-grid at-sp-steps" role="list" style={`--at-sp-cols: ${String(n)}`}>
+  {
+    items.map((item, i) => (
+      <li class="at-sp-step" id={item.id}>
+        <span class="at-sp-step-no" aria-hidden="true">
+          {i + 1}
+        </span>
+        <Tag class="at-sp-h3">{item.title}</Tag>
+        {item.html ? (
+          <div class="at-sp-body" set:html={item.html} />
+        ) : (
+          item.body && <p class="at-sp-body">{item.body}</p>
+        )}
+      </li>
+    ))
+  }
+</ol>

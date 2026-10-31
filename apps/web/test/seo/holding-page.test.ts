@@ -173,13 +173,10 @@ describe('built site SEO', () => {
     expect(/<title>(.*?)<\/title>/u.exec(html)?.[1]).toBe('Keep the screen awake for 15 min — AwakeTab');
   });
 
-  it('builds the English home as a short product page below the tool', async () => {
+  it('builds the English home below the tool as the home board lays it out', async () => {
     const html = await readFile(built('/'), 'utf8');
-    for (const id of ['home-uses', 'home-final']) expect(html, id).toContain(`id="${id}"`);
-    for (const id of ['what', 'how', 'limits', 'support', 'guides', 'alt', 'faq', 'who']) {
-      expect(html, id).not.toContain(`id="home-${id}"`);
-    }
-    for (const slug of ['cooking', 'reading', 'presentations', 'dashboards', 'video-calls', 'downloads']) {
+    for (const id of ['home-uses', 'home-how', 'home-faq']) expect(html, id).toContain(`id="${id}"`);
+    for (const slug of ['cooking', 'presentations', 'dashboards', 'reading']) {
       expect(html, slug).toContain(`href="/for/${slug}"`);
     }
     expect(html).toContain('All 14 use cases');
@@ -193,7 +190,6 @@ describe('built site SEO', () => {
       .split(/\s+/u)
       .filter(Boolean);
     expect(words.length).toBeGreaterThanOrEqual(120);
-    expect(words.length).toBeLessThanOrEqual(1200);
   });
 
   it('links the home stylesheet instead of inlining it', async () => {

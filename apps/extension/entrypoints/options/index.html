@@ -7,15 +7,14 @@
   </head>
   <body>
     <div class="op" data-root hidden>
-      <div class="op-aura" aria-hidden="true"></div>
       <header class="op-head">
         <div class="at-logo">
-          <img src="/icon.svg" width="26" height="26" alt="" aria-hidden="true" />
+          <span data-mark-slot data-size="26"></span>
           <span data-i18n="app.name"></span><span class="at-logo-sub"><svg data-logo="chrome" width="16" height="16"></svg><span data-i18n="ext.options.forChrome"></span></span>
         </div>
         <div class="op-head-end">
           <output class="op-saved" data-saved aria-live="polite"></output>
-          <a class="at-link op-open" href="https://awaketab.com/?source=ext" target="_blank" rel="noopener"><span data-i18n="ext.popup.open"></span><svg data-icon="arrow-square-out" width="16" height="16"></svg></a>
+          <a class="at-link op-open" href="https://awaketab.com/?source=ext" target="_blank" rel="noopener"><span data-i18n="ext.popup.open"></span><svg data-icon="external-link" width="16" height="16"></svg></a>
         </div>
       </header>
 
@@ -140,7 +139,7 @@
                   </span>
                   <span class="op-lang-now">
                     <span data-lang-now></span>
-                    <svg data-icon="caret-down" width="16" height="16" class="op-chev"></svg>
+                    <svg data-icon="chevron-down" width="16" height="16" class="op-chev"></svg>
                   </span>
                 </button>
                 <div class="op-lang-list at-in" id="lang-list" role="radiogroup" aria-labelledby="lang-btn" data-lang-list hidden></div>
@@ -232,7 +231,7 @@
                   <div class="op-new-actions">
                     <p class="at-error" data-schedule-error role="alert" hidden></p>
                     <span class="op-help op-tight" data-schedule-note hidden></span>
-                    <button class="at-btn at-btn-lamp at-btn-medium op-add" type="submit" data-i18n="ext.schedules.add"></button>
+                    <button class="at-btn at-btn-primary op-add" type="submit" data-i18n="ext.schedules.add"></button>
                   </div>
                 </div>
               </form>
@@ -284,7 +283,7 @@
             <h2 id="h-license" data-i18n="ext.license.title"></h2>
             <div class="op-card op-card-pad">
               <div class="op-licence at-in" data-license-active hidden>
-                <span class="op-licence-icon" aria-hidden="true"><svg data-icon="seal-check" width="24" height="24" class="at-duo-good"></svg></span>
+                <span class="op-licence-icon" aria-hidden="true"><svg data-icon="badge-check" width="24" height="24" class="at-tone-good"></svg></span>
                 <div class="op-text">
                   <div class="op-label" data-i18n="pro.activated"></div>
                   <div class="op-help op-tight" data-license-plan></div>
@@ -302,7 +301,7 @@
                 <p class="op-help" id="license-devices" data-i18n="ext.license.devices"></p>
                 <p class="at-error" id="license-error" data-license-error role="alert" hidden></p>
                 <div class="op-licform-actions">
-                  <button class="at-btn at-btn-stop at-btn-medium" type="submit" data-license-submit data-i18n="ext.license.activate"></button>
+                  <button class="at-btn at-btn-primary" type="submit" data-license-submit data-i18n="ext.license.activate"></button>
                   <a class="at-link op-pad-link" href="https://awaketab.com/pro/activate?ext=1" target="_blank" rel="noopener" data-i18n="ext.license.get"></a>
                   <span class="op-help op-tight" data-license-status role="status" aria-live="polite"></span>
                 </div>

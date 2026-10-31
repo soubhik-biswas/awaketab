@@ -1,6 +1,5 @@
 ---
-import Crumbs from './Crumbs.astro';
-import Icon from '../icons/Icon.astro';
+import PageHero from '../site/PageHero.astro';
 import { changelogLongDate } from '../../lib/changelog';
 
 interface Props {
@@ -13,70 +12,37 @@ interface Props {
   email: string;
   mailto: string;
 }
+// The legal board: hero with the dates, a chip row of sections, then the sections as prose.
 const { title, updated, effective, lede, toc, other, email, mailto } = Astro.props;
 ---
 
-<main class="at-page at-legal">
-  <div class="at-pg-intro at-legal-head">
-    <Crumbs current={title} />
-    <h1 class="at-pg-h1">{title}</h1>
-    <div class="at-legal-dates">
-      <span class="at-tag at-pg-tag">
-        <Icon name="calendar-check" size={16} />Last updated <time datetime={updated}>{changelogLongDate(updated)}</time>
-      </span>
-      <span class="at-pg-small"><span>Effective <time datetime={effective}>{changelogLongDate(effective)}</time></span></span>
-    </div>
-    <p class="at-pg-lead at-legal-lede">{lede}</p>
-  </div>
-
-  <nav class="at-legal-toc" aria-label="On this page">
-    <span class="at-pg-kicker">On this page</span>
-    <ol>
-      {
-        toc.map(([id, label], i) => (
-          <li>
-            <a href={`#${id}`} aria-current={i === 0 ? 'location' : undefined}>
-              <span aria-hidden="true" />
-              {label}
-            </a>
-          </li>
-        ))
-      }
-    </ol>
-  </nav>
-
-  <article class="at-legal-body">
-    <slot />
-    <p class="at-legal-foot">
-      Questions: <a class="at-pg-link" href={mailto}>{email}</a> · <a class="at-pg-link" href={other[1]}>{other[0]}</a>
+<main class="at-sp at-legal">
+  <PageHero crumbs={[{ href: '/', label: 'AwakeTab' }, { label: title }]} eyebrow="Legal" h1={title} lead={lede}>
+    <p slot="meta" class="at-sp-meta">
+      <span>Last updated <time datetime={updated}>{changelogLongDate(updated)}</time></span>
+      <span>Effective <time datetime={effective}>{changelogLongDate(effective)}</time></span>
     </p>
+    <nav class="at-toc" aria-label="On this page">
+      <ul class="at-sp-chips" role="list">
+        {
+          toc.map(([id, label]) => (
+            <li>
+              <a class="at-sp-chip" href={`#${id}`}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </PageHero>
+
+  <article class="at-sp-block">
+    <div class="at-sp-prose at-legal-body">
+      <slot />
+      <p class="at-sp-note">
+        Questions: <a href={mailto}>{email}</a> · <a href={other[1]}>{other[0]}</a>
+      </p>
+    </div>
   </article>
 </main>
-
-<script>
-  // "On this page": the section nearest the top of the viewport is the current one (aria-current="location").
-  const links = [...document.querySelectorAll<HTMLAnchorElement>('.at-legal-toc a')];
-  const mark = (id: string) => {
-    for (const a of links) {
-      if (a.hash === `#${id}`) a.setAttribute('aria-current', 'location');
-      else a.removeAttribute('aria-current');
-    }
-  };
-  const sections = links.map((a) => document.getElementById(a.hash.slice(1))).filter((s): s is HTMLElement => s !== null);
-  if ('IntersectionObserver' in window && sections.length) {
-    const seen = new Set<string>();
-    const io = new IntersectionObserver(
-      (records) => {
-        for (const r of records) {
-          if (r.isIntersecting) seen.add(r.target.id);
-          else seen.delete(r.target.id);
-        }
-        const first = sections.find((s) => seen.has(s.id));
-        if (first) mark(first.id);
-      },
-      { rootMargin: '0px 0px -60% 0px' },
-    );
-    for (const s of sections) io.observe(s);
-  }
-  for (const a of links) a.addEventListener('click', () => mark(a.hash.slice(1)));
-</script>

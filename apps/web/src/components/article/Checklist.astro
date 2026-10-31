@@ -1,5 +1,5 @@
 ---
-import Icon from '../icons/Icon.astro';
+import Lucide from '../icons/Lucide.astro';
 import { inline } from '../../lib/article';
 
 interface Props {
@@ -15,7 +15,7 @@ const { items } = Astro.props;
         <label>
           <input type="checkbox" />
           <span class="at-box" aria-hidden="true">
-            <Icon name="check" size={16} tone="ink" />
+            <Lucide name="check" size={16} />
           </span>
           <span set:html={inline(item)} />
         </label>

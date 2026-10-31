@@ -1,26 +1,9 @@
 @layer properties, theme, base, components, utilities, content;
 
 @layer content {
-  .at-cp {
+  .at-sp-ad {
     --at-ad-w: 300px;
     --at-ad-h: 250px;
-    --at-rail-w: 320px;
-    --at-rail-h: 50px;
-  }
-
-  .at-ad {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--at-s-2);
-    min-inline-size: 0;
-  }
-
-  .at-ad-label {
-    color: var(--at-muted);
-    font: var(--at-type-kicker);
-    letter-spacing: var(--at-trk-k, 0.14em);
-    text-transform: uppercase;
   }
 
   .at-ad-box {
@@ -30,58 +13,30 @@
     max-inline-size: 100%;
     block-size: var(--at-ad-h);
     overflow: hidden;
-    border: var(--at-border) solid var(--at-line);
-    border-radius: var(--at-r-lg);
-    background: var(--at-hatch), color-mix(in srgb, var(--at-surface) 58%, transparent);
+    border-radius: var(--at-r-sm);
+    background: var(--at-surface);
   }
 
   .at-ad-box:empty::after {
     content: attr(data-size-sm);
-    color: var(--at-muted);
-    font: var(--at-type-caption);
+    color: var(--at-ink-2);
+    font: var(--at-type-small);
     font-variant-numeric: tabular-nums;
   }
 
-  .at-ad-rail {
-    grid-area: auto;
-  }
-
-  .at-ad-rail .at-ad-box {
-    inline-size: var(--at-rail-w);
-    block-size: var(--at-rail-h);
+  .at-ad-box * {
+    animation: none !important;
+    transition: none !important;
   }
 
   @media (width >= 600px) {
-    .at-cp {
+    .at-sp-ad {
       --at-ad-w: 336px;
       --at-ad-h: 280px;
     }
 
-    .at-ad-inline .at-ad-box:empty::after {
+    .at-ad-box:empty::after {
       content: attr(data-size);
-    }
-  }
-
-  @media (width >= 1024px) {
-    .at-cp {
-      --at-rail-w: 160px;
-      --at-rail-h: 600px;
-    }
-
-    .at-cp .at-art {
-      grid-template-columns: minmax(0, var(--at-col-toc)) minmax(0, var(--at-col-main)) var(--at-col-rail);
-    }
-
-    .at-ad-rail .at-ad-box:empty::after {
-      content: attr(data-size);
-    }
-
-    .at-ad-rail {
-      position: sticky;
-      inset-block-start: var(--at-s-6);
-      grid-area: rail;
-      align-items: flex-start;
-      align-self: start;
     }
   }
 }

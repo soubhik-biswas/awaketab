@@ -7,7 +7,7 @@ import matrix from '../../data/support-matrix.json';
 // Linked, not scoped: inline styles on / count against the tool CSS budget.
 import sheet from '../../styles/home-extension.css?url';
 import BrandIcon from '../icons/BrandIcon.astro';
-import Icon from '../icons/Icon.astro';
+import Lucide from '../icons/Lucide.astro';
 
 interface Props {
   locale?: TLocale;
@@ -27,9 +27,9 @@ const withKeys = (key: string): [string, string] => {
 const shortcut = withKeys('page.home.ext.shortcut.body');
 
 const benefits = [
-  { id: 'hidden', icon: 'browsers' },
+  { id: 'hidden', icon: 'app-window' },
   { id: 'system', icon: 'cpu' },
-  { id: 'badge', icon: 'puzzle-piece' },
+  { id: 'badge', icon: 'puzzle' },
 ] as const;
 
 const clock = new Intl.DateTimeFormat(lang, { hour: 'numeric', minute: '2-digit', timeZone: 'UTC', numberingSystem: 'latn' });
@@ -163,7 +163,7 @@ const badge = [roll(TENS, 1, 600, 281), roll(UNITS, 4, 60, 41)];
       {
         benefits.map((b) => (
           <li>
-            <Icon name={b.icon} size={24} />
+            <Lucide name={b.icon} size={24} />
             <span class="at-hx-item">
               <strong>{t(`page.home.ext.${b.id}.title`)}</strong>
               <span>{t(`page.home.ext.${b.id}.body`)}</span>
@@ -172,7 +172,7 @@ const badge = [roll(TENS, 1, 600, 281), roll(UNITS, 4, 60, 41)];
         ))
       }
       <li>
-        <Icon name="keyboard" size={24} />
+        <Lucide name="keyboard" size={24} />
         <span class="at-hx-item">
           <strong>{t('page.home.ext.shortcut.title')}</strong>
           <span>{shortcut[0]}<span class="at-hx-keys">{KEYS.map((k, i) => <>{i > 0 && '+'}<kbd class="at-kbd">{k}</kbd></>)}</span>{shortcut[1]}</span>
@@ -189,7 +189,7 @@ const badge = [roll(TENS, 1, 600, 281), roll(UNITS, 4, 60, 41)];
                 <BrandIcon name="chrome" size={20} />
                 {t('page.extension.cta.chrome')}
               </a>
-              <a class="at-button at-hx-edge" href={EXTENSION_STORE_URLS.edge} rel="noopener" target="_blank">
+              <a class="at-button at-button-secondary at-button-lg at-hx-edge" href={EXTENSION_STORE_URLS.edge} rel="noopener" target="_blank">
                 <BrandIcon name="microsoft-edge" size={20} />
                 {t('page.home.ext.cta.edge')}
               </a>
@@ -212,7 +212,7 @@ const badge = [roll(TENS, 1, 600, 281), roll(UNITS, 4, 60, 41)];
         EXTENSION_LISTED && (
           <a class="at-hx-more" href="/extension">
             {t('page.home.ext.more')}
-            <Icon name="arrow-right" size={16} />
+            <Lucide name="arrow-right" size={16} />
           </a>
         )
       }

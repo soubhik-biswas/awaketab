@@ -495,7 +495,7 @@ test('Customize: S opens Sound, arrow keys move between the tabs, a pick keeps t
   await page.keyboard.press('Home');
   await expect(tab('face')).toHaveAttribute('aria-selected', 'true');
   // Enter on a face picks it and the clock behind changes while the sheet stays open.
-  await dlg.locator('[data-pick="bold"]').focus();
+  await dlg.locator('.af-cell[data-face="bold"]').focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('html')).toHaveAttribute('data-face', 'bold', { timeout: 10_000 });
   await expect(dlg).toBeVisible();

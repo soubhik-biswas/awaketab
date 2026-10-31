@@ -36,7 +36,7 @@ export default defineConfig({
     action: {
       default_popup: 'popup.html',
       default_title: 'AwakeTab',
-      default_icon: { 16: 'icon-16.png', 32: 'icon-32.png' },
+      default_icon: { 16: 'icon-off-16.png', 32: 'icon-off-32.png' },
     },
     options_page: 'options.html',
     background: {

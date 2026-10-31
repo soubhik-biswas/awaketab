@@ -1,6 +1,6 @@
 ---
 import Button from '../shell/Button.astro';
-import Icon from '../icons/Icon.astro';
+import Lucide from '../icons/Lucide.astro';
 import { tokenize } from '../../lib/article';
 
 interface Props {
@@ -20,7 +20,7 @@ const lines = code
   <div class="at-codeb-bar">
     <code>{file}</code>
     <Button
-      variant="quiet"
+      variant="ghost"
       size="sm"
       class="at-copy"
       data-copy
@@ -28,8 +28,8 @@ const lines = code
       aria-label={t('content.copyFile', { file })}
       hidden
     >
-      <Icon name="copy" size={16} />
-      <Icon name="check" size={16} />
+      <Lucide name="copy" size={16} />
+      <Lucide name="check" size={16} />
       <span aria-live="polite">{t('content.copy')}</span>
     </Button>
   </div>

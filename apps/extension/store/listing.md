@@ -26,7 +26,7 @@ AwakeTab keeps your display — or just your computer — awake while Chrome is 
 - The same presets as the AwakeTab web app: 15 minutes to 4 hours, until a time, or until you stop.
 - The toolbar badge shows ON, SYS or the minutes left. Alt+Shift+A toggles it from any tab.
 - An honest status: the popup says "Screen awake" only after Chrome has accepted the request, and "System awake" when only the computer is kept awake.
-- Optional notification when a timer ends, with +30 min and Stop buttons.
+- Optional notification when a timer ends, with +15 min and Dismiss buttons.
 
 The keep-awake features above are free and require no account or licence. Pro purchases are not available at launch. Weekly schedules and auto-start are licence-gated extras, not included in the free feature set. The settings include a licence field for activation when Pro becomes available.
 
@@ -49,7 +49,7 @@ Prevent the device from sleeping for a chosen time.
 | `power` | Hold the display or system keep-awake the user starts (`chrome.power.requestKeepAwake`). |
 | `storage` | Save the user's settings, the current session and an optional Pro licence in `chrome.storage.local`; settings, schedules and auto-start sites also sync through `chrome.storage.sync`. The licence never syncs. |
 | `alarms` | Run timers, the 30-second keep-alive check and weekly schedules while the service worker sleeps. |
-| `notifications` (optional) | Tell the user a timer ended, with +30 min / Stop buttons. Requested only when the user turns notifications on. |
+| `notifications` (optional) | Tell the user a timer ended, with +15 min / Dismiss buttons. Requested only when the user turns notifications on. |
 | Host permissions (optional, `https://*/*` declared, one site requested at a time) | Start automatically when a tab on a site the user adds loads, and stop when the last one closes (Pro auto-start). No host access is granted at install; the prompt names the one site. Page content is never read. |
 
 Remote code: none. All scripts are bundled in the package.
