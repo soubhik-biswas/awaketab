@@ -1,4 +1,5 @@
 import { FACE_IDS, migrateFace, type TFace } from '@awaketab/core';
+import { VIBES, type TVibe } from '@/lib/tool/settings';
 import { createLocalStore, isRecord, uid, useLocalStore } from '@/lib/tool/store';
 
 export type TPresetIcon = 'presentation' | 'chef' | 'reading' | 'coffee' | 'infinity' | 'night' | 'timer';
@@ -10,19 +11,19 @@ export interface IPreset {
   totalSec: number;
   face: TFace;
   chime: boolean;
+  vibe?: TVibe;
 }
 
 const PRESETS_KEY = 'at.v1.presets';
 const MAX_PRESETS = 20;
 const ICONS: readonly TPresetIcon[] = ['presentation', 'chef', 'reading', 'coffee', 'infinity', 'night', 'timer'];
 
-// The five presets the boards draw; the dev tray seeds them, a first visit starts with none saved.
+// The four presets the boards draw; the dev tray shows them, a first visit starts with none saved.
 export const SAMPLE_PRESETS: IPreset[] = [
-  { id: 'sample-presenting', label: 'Presenting', icon: 'presentation', totalSec: 3600, face: 'ring', chime: true },
-  { id: 'sample-cooking', label: 'Cooking', icon: 'chef', totalSec: 2700, face: 'bold', chime: true },
-  { id: 'sample-reading', label: 'Reading', icon: 'reading', totalSec: 1800, face: 'words', chime: false },
-  { id: 'sample-break', label: 'Break', icon: 'coffee', totalSec: 900, face: 'flip', chime: true },
-  { id: 'sample-nostop', label: 'Until I stop', icon: 'infinity', totalSec: 0, face: 'nixie', chime: false },
+  { id: 'sample-kitchen', label: 'Kitchen', icon: 'chef', totalSec: 2700, face: 'bold', chime: true },
+  { id: 'sample-slides', label: 'Slides', icon: 'presentation', totalSec: 3600, face: 'pilot', chime: true },
+  { id: 'sample-night', label: 'Night desk', icon: 'night', totalSec: 0, face: 'moon', chime: false },
+  { id: 'sample-wall', label: 'Wall board', icon: 'timer', totalSec: 14400, face: 'hud', chime: false },
 ];
 
 function parsePreset(v: unknown): IPreset | null {
@@ -36,6 +37,7 @@ function parsePreset(v: unknown): IPreset | null {
     totalSec: Math.round(sec),
     face: (FACE_IDS as readonly string[]).includes(String(v.face)) ? (v.face as TFace) : migrateFace(v.face),
     chime: v.chime !== false,
+    vibe: VIBES.find((x) => x === v.vibe),
   };
 }
 
@@ -72,7 +74,13 @@ function iconFor(label: string, sec: number): TPresetIcon {
   return 'timer';
 }
 
-export function savePreset(input: { label: string; totalSec: number; face: TFace; chime: boolean }): IPreset {
+export function savePreset(input: {
+  label: string;
+  totalSec: number;
+  face: TFace;
+  chime: boolean;
+  vibe: TVibe;
+}): IPreset {
   const list = presetsStore.get();
   const label = input.label.trim() || `Preset ${list.length + 1}`;
   const preset: IPreset = {
@@ -82,6 +90,7 @@ export function savePreset(input: { label: string; totalSec: number; face: TFace
     totalSec: input.totalSec,
     face: input.face,
     chime: input.chime,
+    vibe: input.vibe,
   };
   presetsStore.set([...list, preset].slice(-MAX_PRESETS));
   return preset;

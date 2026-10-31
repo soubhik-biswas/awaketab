@@ -1,51 +1,77 @@
 import { useSyncExternalStore } from 'react';
+import type { TFilter } from '@/lib/tool/collections';
 
-export type TToolView =
-  | 'timer'
+export type TPanel =
+  | 'none'
   | 'faces'
-  | 'presets'
-  | 'history'
-  | 'clear'
-  | 'settings'
-  | 'devices'
-  | 'fix'
-  | 'share'
-  | 'extend'
-  | 'more'
-  | 'welcome'
   | 'palette'
-  | 'focus'
-  | 'sound'
+  | 'recents'
+  | 'settings'
+  | 'help'
   | 'studio'
-  | 'account';
+  | 'feedback'
+  | 'vibes'
+  | 'share'
+  | 'devices'
+  | 'sound'
+  | 'clear'
+  | 'language'
+  | 'pro'
+  | 'proDone'
+  | 'plan';
 
-export type TBanner = 'none' | 'offline' | 'conflict' | 'update';
-export type TFaceCol = 'featured' | 'digital' | 'analog' | 'ambient' | 'all';
+export type TDrawerPanel = Exclude<TPanel, 'none' | 'faces' | 'palette'>;
+type TBanner = 'none' | 'offline' | 'conflict' | 'update';
 export type TDevice = 'desktop' | 'tabletL' | 'tabletP' | 'phone';
+export type TRating = 'love' | 'good' | 'bad';
+export type TBlockReason = 'battery' | 'unknown' | 'insecure' | 'policy';
 
+const DRAWER_PANELS: readonly TDrawerPanel[] = [
+  'recents',
+  'settings',
+  'help',
+  'studio',
+  'feedback',
+  'vibes',
+  'share',
+  'devices',
+  'sound',
+  'clear',
+  'language',
+  'pro',
+  'proDone',
+  'plan',
+];
+
+export const isDrawerPanel = (p: TPanel): p is TDrawerPanel => (DRAWER_PANELS as readonly string[]).includes(p);
+
+// Dev-only overrides the QA tray sets so every drawn frame can be reached without waiting for it to happen.
 export interface IQaOverrides {
   banner?: TBanner;
-  emptyPresets?: boolean;
+  empty?: boolean;
   samples?: boolean;
   offsetMs?: number;
+  controls?: 'shown' | 'hidden';
+  first?: boolean;
+  nudge?: boolean;
+  reason?: TBlockReason;
+  pro?: boolean;
 }
 
 export interface IToolUi {
-  view: TToolView;
-  palQuery: string;
-  clearText: string;
-  copied: boolean;
-  faceCol: TFaceCol;
+  panel: TPanel;
+  filter: TFilter;
+  rating: TRating | null;
+  first: boolean;
   update: boolean;
   qa: IQaOverrides;
 }
 
 const INITIAL: IToolUi = {
-  view: 'timer',
-  palQuery: '',
-  clearText: '',
-  copied: false,
-  faceCol: 'featured',
+  panel: 'none',
+  filter: 'featured',
+  rating: null,
+  first: false,
   update: false,
   qa: {},
 };
@@ -65,11 +91,11 @@ export const toolUi = {
       subs.delete(cb);
     };
   },
-  go(view: TToolView) {
-    toolUi.set({ view, palQuery: '', clearText: view === 'clear' ? state.clearText : '', copied: false });
+  open(panel: TPanel) {
+    toolUi.set({ panel });
   },
   close() {
-    toolUi.set({ view: 'timer', palQuery: '', clearText: '' });
+    toolUi.set({ panel: 'none' });
   },
   qa(patch: IQaOverrides) {
     toolUi.set({ qa: { ...state.qa, ...patch } });
