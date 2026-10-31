@@ -953,7 +953,7 @@ Accepted on 2026-10-30. Spec: `docs/redesign/volt/HANDOFF.md` §7 (Volt, 31 Oct 
 
 ### Glance clock faces (31 Oct 2026)
 
-Accepted on 2026-10-31. Spec: `docs/redesign/glance/BRIEF.md` §6 and the handoff's `prototype/Face.dc.html` (v3.1) and faces board. Replaces the two face sections above wherever they disagree.
+Accepted on 2026-10-31. Spec: `docs/plan/glance/AGENT_PROMPT.md` §6 and the handoff's `prototype/Face.dc.html` (v3.1) and faces board. Replaces the two face sections above wherever they disagree.
 
 | Identifier | Decision |
 |---|---|

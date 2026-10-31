@@ -410,7 +410,7 @@ The owner's refined handoff (`awaketab-volt-handoff.zip`, spec in `docs/redesign
 
 ## Glance (31 Oct 2026)
 
-The owner's v3.1 handoff ("Glance": `AGENT_PROMPT.md`, now `docs/redesign/glance/BRIEF.md`, plus `LISTING_COPY.md` and the handoff zip) replaces Volt. The brief wins over older docs and code; the Next.js app, wake engine, content and licence backend carry over underneath.
+The owner's v3.1 handoff ("Glance": `AGENT_PROMPT.md`, now `docs/plan/glance/AGENT_PROMPT.md`, plus `LISTING_COPY.md` and the handoff zip) replaces Volt. The brief wins over older docs and code; the Next.js app, wake engine, content and licence backend carry over underneath.
 
 - **Sign-in (owner, 31 Oct).** Continue with Google, Continue with GitHub and Use a passkey. The brief's Apple button is replaced by GitHub at the owner's request; there is still no email field, no magic link and no transactional email.
 - **Fonts.** Bricolage Grotesque (display), Inter (all UI and clock digits), Instrument Serif italic (one accent word per headline) and Geist Mono (labels) through `next/font/google`, shared from `app/fonts.ts`; Archivo stays for the faces that draw with it.
@@ -465,7 +465,7 @@ The owner's v3.1 handoff ("Glance": `AGENT_PROMPT.md`, now `docs/redesign/glance
 - **Pro page lead.** "Prices are placeholders until they are set" and "or want the extras" are dropped: the yearly price is real and the extras are free.
 - **Checkout account step.** The account step is the three sign-in buttons, skipped when already signed in or when sign-in is not set up. The signed-in account id goes to the payment provider as `external_customer_id`; no address is sent.
 - **Receipts.** Manage plan → Receipts is one row that opens the payment provider's portal; the dev tray's samples still show the board's two rows.
-- **Launch free, Pro later (owner, 31 Oct).** The first release has no Pro and no sign-in: `NEXT_PUBLIC_PRO_ENABLED` (off by default) hides the Pro page, checkout, sign-in, the account section, the Pro card and the nudge, and those routes answer 404. All Pro code stays; `docs/PREMIUM-LAUNCH.md` is the checklist for switching it on.
+- **Launch free, Pro later (owner, 31 Oct).** The first release has no Pro and no sign-in: `NEXT_PUBLIC_PRO_ENABLED` (off by default) hides the Pro page, checkout, sign-in, the account section, the Pro card and the nudge, and those routes answer 404. All Pro code stays; `docs/plan/PREMIUM-LAUNCH.md` is the checklist for switching it on.
 - **New, Hot, Staff pick and Night tags (owner, 31 Oct).** "Free" badges are gone; engagement tags take their place: New on the newest faces, Face studio and the ambient mixer, a dot on the Vibe button; Hot, Staff pick and Night on a few faces each (one tag per tile, `lib/tool/face-tags.ts`). Tags use violet, sky and neutral tints so volt stays reserved for "awake".
 - **Extension scope.** The popup and options draw exactly the extension board. The System level, until-time, add-time chips, schedules, browser-start auto-start, end notifications, telemetry, licence-key entry, the welcome page, the tips card and the "New in" chip are gone; no tab opens on install. Older `at.v1.ext` records read as the new defaults, and any old schedule alarm is cleared.
 - **Extension face.** The popup renders the website's own `Face` component (React in the extension, `next/font` aliased, fonts self-hosted through Fontsource), so every face matches the tool. It shows the person's chosen face, Ring by default; the board's Halo in the awake frame is the board's sample.

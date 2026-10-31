@@ -1,6 +1,6 @@
 # AwakeTab design system — "Glance"
 
-Status: **current design (v3.1, 31 October 2026), being implemented.** It replaces Volt and Solar Green. The build brief is `docs/redesign/glance/BRIEF.md` (it wins over every older doc and over old code); store and share copy is `docs/redesign/glance/LISTING_COPY.md`; reference tokens are `docs/redesign/glance/reference-tokens.css`. The visual source of truth is the handoff bundle (`awaketab-glance-handoff.zip`: `prototype/Tool.dc.html`, `Site.dc.html`, `Page.dc.html`, `Face.dc.html`, `Scene.dc.html` and boards G00–G15, plus `assets/marketing/`).
+Status: **current design (v3.1, 31 October 2026), being implemented.** It replaces Volt and Solar Green. The build brief is `docs/plan/glance/AGENT_PROMPT.md` (it wins over every older doc and over old code); store and share copy is `docs/plan/glance/LISTING_COPY.md`; reference tokens are `docs/plan/glance/reference-tokens.css`. The visual source of truth is the handoff bundle (`awaketab-glance-handoff.zip`: `prototype/Tool.dc.html`, `Site.dc.html`, `Page.dc.html`, `Face.dc.html`, `Scene.dc.html` and boards G00–G15, plus `assets/marketing/`).
 
 Decisions that differ from the brief are recorded in `docs/redesign/DECISIONS.md` under "Glance (31 Oct 2026)".
 

@@ -1,6 +1,6 @@
 # Launch kit
 
-The launch images from the marketing board, used as exported, with their copy word for word from `docs/redesign/glance/LISTING_COPY.md`. Placeholders stay in [BRACKETS]. No email address anywhere. The Chrome Web Store kit is in `apps/extension/store/glance/` with its listing in `apps/extension/store/listing.md`; the share images are in `apps/site/public/og/`.
+The launch images from the marketing board, used as exported, with their copy word for word from `docs/plan/glance/LISTING_COPY.md`. Placeholders stay in [BRACKETS]. No email address anywhere. The Chrome Web Store kit is in `apps/extension/store/glance/` with its listing in `apps/extension/store/listing.md`; the share images are in `apps/site/public/og/`.
 
 | File | Size | Where it goes |
 |---|---|---|
