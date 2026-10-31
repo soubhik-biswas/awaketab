@@ -798,6 +798,12 @@
       "hero": "Mantén esta pantalla despierta.",
       "heroSub": "Un toque. Vuelve a dormir cuando se acaba el tiempo, sin instalar nada y sin cuenta.",
       "heroSubPhone": "Un toque. Vuelve a dormir cuando se acaba el tiempo."
+    },
+    "glance": {
+      "tagNew": "Nuevo",
+      "tagHot": "Popular",
+      "tagPick": "Selección",
+      "tagNight": "Noche"
     }
   },
   "ambient": {

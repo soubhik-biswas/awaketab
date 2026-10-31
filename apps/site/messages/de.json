@@ -965,7 +965,11 @@
         "paused": "Pausiert. {dur} gemerkt.",
         "ended": "Zeit um. Der Bildschirm darf jetzt schlafen.",
         "face": "Ziffernblatt: {face}."
-      }
+      },
+      "tagNew": "Neu",
+      "tagHot": "Beliebt",
+      "tagPick": "Empfohlen",
+      "tagNight": "Nacht"
     }
   },
   "ambient": {

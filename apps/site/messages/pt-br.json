@@ -798,6 +798,12 @@
       "hero": "Mantenha esta tela ligada.",
       "heroSub": "Um toque. Ela volta a dormir quando o tempo acaba, sem instalar nada e sem conta.",
       "heroSubPhone": "Um toque. Ela volta a dormir quando o tempo acaba."
+    },
+    "glance": {
+      "tagNew": "Novo",
+      "tagHot": "Em alta",
+      "tagPick": "Escolha",
+      "tagNight": "Noite"
     }
   },
   "ambient": {

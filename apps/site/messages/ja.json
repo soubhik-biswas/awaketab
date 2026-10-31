@@ -965,7 +965,11 @@
         "paused": "一時停止しました。残り{dur}。",
         "ended": "時間です。画面はスリープできます。",
         "face": "文字盤：{face}。"
-      }
+      },
+      "tagNew": "新着",
+      "tagHot": "人気",
+      "tagPick": "おすすめ",
+      "tagNight": "夜向け"
     }
   },
   "ambient": {

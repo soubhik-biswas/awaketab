@@ -1415,7 +1415,11 @@
         "move": "move",
         "run": "run",
         "count": "{n, plural, one {# command} other {# commands}}"
-      }
+      },
+      "tagNew": "New",
+      "tagHot": "Hot",
+      "tagPick": "Staff pick",
+      "tagNight": "Night"
     }
   },
   "ambient": {

@@ -107,7 +107,7 @@ export function MobileMenu({
   menuLabel: string;
   navLabel: string;
   languageLabel: string;
-  signin: INavLink;
+  signin?: INavLink | undefined;
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -125,7 +125,7 @@ export function MobileMenu({
           <SheetDescription className="sr-only">{navLabel}</SheetDescription>
         </SheetHeader>
         <nav aria-label={navLabel} className="flex flex-col gap-1 p-3">
-          {[...links, signin].map((l) => (
+          {(signin ? [...links, signin] : links).map((l) => (
             <a
               key={l.href}
               href={l.href}

@@ -965,7 +965,11 @@
         "paused": "已暂停。保留 {dur}。",
         "ended": "时间到。屏幕现在可以休眠。",
         "face": "表盘：{face}。"
-      }
+      },
+      "tagNew": "新",
+      "tagHot": "热门",
+      "tagPick": "精选",
+      "tagNight": "夜间"
     }
   },
   "ambient": {

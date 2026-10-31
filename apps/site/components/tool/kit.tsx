@@ -52,9 +52,24 @@ export function Note({ children }: { children: ReactNode }) {
   return <span className="mt-2 text-[13px] text-(--tg-t2)">{children}</span>;
 }
 
-export function FreeBadge({ children }: { children: ReactNode }) {
+// New and Hot tags draw people to fresh and popular things; status colours stay reserved for session states.
+export type TTag = 'new' | 'hot' | 'pick' | 'night';
+
+const TAG_TONE: Record<TTag, string> = {
+  new: 'bg-(--tg-volt-soft) text-(--tg-free)',
+  hot: 'bg-[color-mix(in_srgb,var(--tg-violet)_16%,transparent)] text-(--tg-violet)',
+  pick: 'bg-[color-mix(in_srgb,var(--tg-sky)_16%,transparent)] text-(--tg-sky)',
+  night: 'bg-[color-mix(in_srgb,var(--tg-t2)_14%,transparent)] text-(--tg-text)',
+};
+
+export function Tag({ kind = 'new', children }: { kind?: TTag; children: ReactNode }) {
   return (
-    <span className="flex-none rounded-full bg-(--tg-volt-soft) px-2.5 py-1 font-mono text-[12px] font-bold text-(--tg-free)">
+    <span
+      className={cn(
+        'flex-none rounded-full px-2.5 py-1 font-mono text-[12px] font-bold tracking-[.06em] uppercase',
+        TAG_TONE[kind],
+      )}
+    >
       {children}
     </span>
   );

@@ -6,12 +6,14 @@ import { jsonError, rateLimited } from '@/lib/server/http';
 import { checkoutPlan, checkoutTarget, siteOrigin } from '@/lib/server/checkout';
 import { polarServer } from '@/lib/server/polar';
 import { clientIp, rateLimit } from '@/lib/server/ratelimit';
+import { PRO_ENABLED } from '@/lib/features';
 
 export const dynamic = 'force-dynamic';
 
 // GET /api/checkout?plan=yearly|monthly opens Polar checkout for a Pro plan. Only the plan travels from the browser;
 // a signed-in person's account id goes along from the session, so the purchase belongs to the account that syncs it.
 export const GET = api(async (request, { env }) => {
+  if (!PRO_ENABLED) return new Response('Not found', { status: 404 });
   if (!(await rateLimit(env, 'checkout', clientIp(request), 10))) return rateLimited();
   const url = new URL(request.url);
   const plan = checkoutPlan(url.searchParams.get('plan'));

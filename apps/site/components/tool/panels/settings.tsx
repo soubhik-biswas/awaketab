@@ -10,7 +10,8 @@ import { ROUTES } from '@/lib/routes';
 import type { TChimeKind, TThemeChoice } from '@/lib/tool/settings';
 import type { TPanel } from '@/lib/tool/ui';
 import { useGlance } from '../context';
-import { AVATAR, CARD, Chevron, FreeBadge, GHOST_BTN, Group, ROW, RowText, SecLabel, SwitchRow } from '../kit';
+import { AVATAR, CARD, Chevron, GHOST_BTN, Group, ROW, RowText, SecLabel, SwitchRow, Tag } from '../kit';
+import { PRO_ENABLED } from '@/lib/features';
 import { PanelBody } from './shell';
 
 const THEMES: Array<[TThemeChoice, string, string]> = [
@@ -185,22 +186,16 @@ export function SettingsPanel() {
         </div>
         <button type="button" onClick={go('sound')} className={cn('tg-btn', ROW)}>
           <RowText title={t('settings.mixer')} desc={t('settings.mixerD')} />
-          <FreeBadge>{t('free')}</FreeBadge>
+          <Tag>{t('tagNew')}</Tag>
         </button>
         <button type="button" onClick={go('studio')} className={cn('tg-btn', ROW)}>
           <RowText title={t('settings.studio')} desc={t('settings.studioD')} />
-          <FreeBadge>{t('free')}</FreeBadge>
+          <Tag>{t('tagNew')}</Tag>
         </button>
       </Group>
       <SecLabel>{t('settings.more')}</SecLabel>
       <Group>
-        <MoreRow
-          icon={Headphones}
-          title={t('settings.ambient')}
-          desc={t('settings.ambientD')}
-          value={t('free')}
-          go={go('sound')}
-        />
+        <MoreRow icon={Headphones} title={t('settings.ambient')} desc={t('settings.ambientD')} go={go('sound')} />
         <MoreRow
           icon={Globe}
           title={t('settings.language')}
@@ -211,8 +206,12 @@ export function SettingsPanel() {
         <MoreRow icon={Share} title={t('settings.share')} desc={t('settings.shareD')} go={go('share')} />
         <MoreRow icon={Trash2} title={t('settings.clear')} desc={t('settings.clearD')} danger go={go('clear')} />
       </Group>
-      <SecLabel>{t('settings.account')}</SecLabel>
-      <AccountCard />
+      {PRO_ENABLED ? (
+        <>
+          <SecLabel>{t('settings.account')}</SecLabel>
+          <AccountCard />
+        </>
+      ) : null}
       <button
         type="button"
         onClick={() => g.a.feedback()}
@@ -224,31 +223,33 @@ export function SettingsPanel() {
         <RowText title={t('settings.feedback')} desc={t('settings.feedbackD')} />
         <Chevron size={18} />
       </button>
-      <div className="relative mt-1 overflow-hidden rounded-[22px] p-[1.5px]">
-        <BorderBeam size={160} duration={6} borderWidth={1.5} colorFrom="var(--tg-violet)" colorTo="var(--tg-volt)" />
-        <div
-          className="relative flex flex-col gap-2 rounded-[21px] p-[18px]"
-          style={{ background: 'var(--tg-pro-card)' }}
-        >
-          <span className="inline-flex items-center gap-1.5 font-mono text-[12px] tracking-[.14em] text-(--tg-violet)">
-            <Sparkle className="size-3.5" fill="currentColor" strokeWidth={0} aria-hidden="true" />
-            {t('pro.kicker')}
-          </span>
-          <strong className="font-display text-[22px] font-bold tracking-[-0.02em]">
-            {g.pro.isPro ? t('settings.proCardOn') : t('settings.proCard')}
-          </strong>
-          <span className="text-[13px] leading-[1.45] text-(--tg-t2)">
-            {g.pro.isPro ? t('settings.proCardOnD') : t('settings.proCardD', { price: priceLabel('yearly') })}
-          </span>
-          <button
-            type="button"
-            onClick={go(g.pro.isPro ? 'plan' : 'pro')}
-            className="tg-btn mt-1 h-11 self-start rounded-[14px] border-0 bg-(--tg-violet) px-[18px] text-[15px] font-bold text-(--tg-on-violet)"
+      {PRO_ENABLED ? (
+        <div className="relative mt-1 overflow-hidden rounded-[22px] p-[1.5px]">
+          <BorderBeam size={160} duration={6} borderWidth={1.5} colorFrom="var(--tg-violet)" colorTo="var(--tg-volt)" />
+          <div
+            className="relative flex flex-col gap-2 rounded-[21px] p-[18px]"
+            style={{ background: 'var(--tg-pro-card)' }}
           >
-            {g.pro.isPro ? t('settings.manage') : t('settings.seePro')}
-          </button>
+            <span className="inline-flex items-center gap-1.5 font-mono text-[12px] tracking-[.14em] text-(--tg-violet)">
+              <Sparkle className="size-3.5" fill="currentColor" strokeWidth={0} aria-hidden="true" />
+              {t('pro.kicker')}
+            </span>
+            <strong className="font-display text-[22px] font-bold tracking-[-0.02em]">
+              {g.pro.isPro ? t('settings.proCardOn') : t('settings.proCard')}
+            </strong>
+            <span className="text-[13px] leading-[1.45] text-(--tg-t2)">
+              {g.pro.isPro ? t('settings.proCardOnD') : t('settings.proCardD', { price: priceLabel('yearly') })}
+            </span>
+            <button
+              type="button"
+              onClick={go(g.pro.isPro ? 'plan' : 'pro')}
+              className="tg-btn mt-1 h-11 self-start rounded-[14px] border-0 bg-(--tg-violet) px-[18px] text-[15px] font-bold text-(--tg-on-violet)"
+            >
+              {g.pro.isPro ? t('settings.manage') : t('settings.seePro')}
+            </button>
+          </div>
         </div>
-      </div>
+      ) : null}
     </PanelBody>
   );
 }
