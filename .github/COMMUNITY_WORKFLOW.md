@@ -1,6 +1,6 @@
 # AwakeTab contribution workflow
 
-[Project board](https://github.com/users/SoubhikBiswas-gitHub/projects/2) · [Issue forms](https://github.com/SoubhikBiswas-gitHub/awaketab/issues/new/choose)
+[Project board](https://github.com/users/soubhik-biswas/projects/2) · [Issue forms](https://github.com/soubhik-biswas/awaketab/issues/new/choose)
 
 ## From an idea to production
 

@@ -19,11 +19,11 @@
   <a href="https://awaketab.com/"><b>Try AwakeTab</b></a> ·
   <a href="https://play.awaketab.com/">Testing environment</a> ·
   <a href="#documentation">Documentation</a> ·
-  <a href="https://github.com/SoubhikBiswas-gitHub/awaketab/issues/new/choose">Report an issue</a>
+  <a href="https://github.com/soubhik-biswas/awaketab/issues/new/choose">Report an issue</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/SoubhikBiswas-gitHub/awaketab/actions/workflows/ci.yml"><img src="https://github.com/SoubhikBiswas-gitHub/awaketab/actions/workflows/ci.yml/badge.svg?branch=main" alt="Main branch CI status"></a>
+  <a href="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml"><img src="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml/badge.svg?branch=main" alt="Main branch CI status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-087B87" alt="MIT licence"></a>
   <a href=".nvmrc"><img src="https://img.shields.io/badge/Node.js-22-087B87" alt="Development requires Node.js 22"></a>
 </p>
@@ -143,7 +143,7 @@ Install the resulting `.tgz` in your project. Inside this monorepo use `"@awaket
 Install **Git** and **Node.js 22**. Setup checks the Node version, prepares **pnpm 9.15.9** through Corepack when needed, installs dependencies and copies sandbox example settings without overwriting an existing file.
 
 ```bash
-git clone https://github.com/SoubhikBiswas-gitHub/awaketab.git
+git clone https://github.com/soubhik-biswas/awaketab.git
 cd awaketab
 node scripts/setup.mjs
 pnpm dev
@@ -304,13 +304,13 @@ CI checks `main`, `play` and pull requests. Chromium and extension journeys run 
 | Browser tests cannot find Chromium | Run `node scripts/setup.mjs --with-browsers`, build, then retry. |
 | A production build fails a key or checkout check | Check production settings and the payment flag. Keep dummy keys out and purchases closed until checkout is configured. |
 
-More help: [browser support](https://awaketab.com/support-matrix), [device guides](https://awaketab.com/on), [existing issues](https://github.com/SoubhikBiswas-gitHub/awaketab/issues).
+More help: [browser support](https://awaketab.com/support-matrix), [device guides](https://awaketab.com/on), [existing issues](https://github.com/soubhik-biswas/awaketab/issues).
 
 ## Contributing
 
 A small documentation correction, accessibility improvement or reproducible bug is a useful first contribution. Read [Contributing](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md), then follow the current `play` promotion flow above.
 
-- **Bug:** use the [issue forms](https://github.com/SoubhikBiswas-gitHub/awaketab/issues/new/choose). Include the URL, browser, OS, exact status text, reproduction steps and expected result. Leave out private data and licence keys.
+- **Bug:** use the [issue forms](https://github.com/soubhik-biswas/awaketab/issues/new/choose). Include the URL, browser, OS, exact status text, reproduction steps and expected result. Leave out private data and licence keys.
 - **Feature:** describe the problem and who it helps before starting a large change.
 - **Pull request:** keep one topic, explain the change, list checks run, and include real screenshots for visible changes. Use plain-English commits without attribution trailers.
 
@@ -324,7 +324,7 @@ For branch routing, follow [the current Play workflow](docs/14-devops.md#testing
 | **Implemented, limited distribution** | Unpacked extension, workspace library builds, licence-based extras and sandbox checkout |
 | **Pending release work** | Approved store listings, npm publication and production payment launch |
 
-This is a snapshot, not a delivery promise. Follow [open issues](https://github.com/SoubhikBiswas-gitHub/awaketab/issues) and the [product changelog](https://awaketab.com/changelog). Specifications may include future or historical work; they are not release announcements.
+This is a snapshot, not a delivery promise. Follow [open issues](https://github.com/soubhik-biswas/awaketab/issues) and the [product changelog](https://awaketab.com/changelog). Specifications may include future or historical work; they are not release announcements.
 
 ## Documentation
 
@@ -341,6 +341,6 @@ This is a snapshot, not a delivery promise. Follow [open issues](https://github.
 
 ## Support, security and licence
 
-Use [GitHub issues](https://github.com/SoubhikBiswas-gitHub/awaketab/issues) for ordinary questions and bugs. Report vulnerabilities privately to [support@awaketab.com](mailto:support@awaketab.com), with **Security** in the subject, as described in [SECURITY.md](SECURITY.md). Do not post security reports in public issues.
+Use [GitHub issues](https://github.com/soubhik-biswas/awaketab/issues) for ordinary questions and bugs. Report vulnerabilities privately to [support@awaketab.com](mailto:support@awaketab.com), with **Security** in the subject, as described in [SECURITY.md](SECURITY.md). Do not post security reports in public issues.
 
 Released under the **[MIT License](LICENSE)**. © 2026 Soubhik Biswas. The hosted product has its own [privacy information](https://awaketab.com/privacy) and [terms](https://awaketab.com/terms).

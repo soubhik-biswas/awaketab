@@ -107,7 +107,7 @@ test.describe('header and footer on every surface', () => {
         '/privacy',
         '/terms',
         `${home}#keys`,
-        'https://github.com/SoubhikBiswas-gitHub/awaketab',
+        'https://github.com/soubhik-biswas/awaketab',
         'https://buymeacoffee.com/awaketab',
       ]);
       await expect(footer.locator('h2.at-foot-h')).toHaveCount(5);
@@ -132,7 +132,7 @@ test.describe('header and footer on every surface', () => {
       await expect(footer.locator('.at-foot-mark')).toHaveAttribute('aria-hidden', 'true');
       await expect(footer.locator('a.at-foot-badge')).toHaveAttribute(
         'href',
-        'https://github.com/SoubhikBiswas-gitHub/awaketab',
+        'https://github.com/soubhik-biswas/awaketab',
       );
       await page.evaluate(() => {
         window.scrollTo(0, document.documentElement.scrollHeight);

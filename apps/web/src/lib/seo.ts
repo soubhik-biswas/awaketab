@@ -57,7 +57,7 @@ export function homeSchema(locale: TLocale, ratings: IRatingsSummary): TSchemaNo
         },
         founder: { '@id': `${SITE}/about#person` },
         // Only profiles that exist: add the npm package once it is published (docs/06 §7.1).
-        sameAs: ['https://github.com/SoubhikBiswas-gitHub/awaketab'],
+        sameAs: ['https://github.com/soubhik-biswas/awaketab'],
       },
       {
         '@type': 'WebSite',

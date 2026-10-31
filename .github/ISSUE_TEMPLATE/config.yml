@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: Report a security vulnerability privately
-    url: https://github.com/SoubhikBiswas-gitHub/awaketab/security/advisories/new
+    url: https://github.com/soubhik-biswas/awaketab/security/advisories/new
     about: Keep exploit details, credentials and personal data out of public issues.
   - name: Use AwakeTab
     url: https://awaketab.com
