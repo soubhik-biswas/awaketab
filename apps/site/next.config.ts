@@ -6,6 +6,8 @@ import { securityHeaders } from './lib/server/security-headers';
 
 const config: NextConfig = {
   reactStrictMode: true,
+  // Review screenshots must never show the dev badge.
+  devIndicators: false,
   poweredByHeader: false,
   transpilePackages: ['@awaketab/wake', '@awaketab/core'],
   headers: () =>

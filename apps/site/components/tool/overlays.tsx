@@ -95,16 +95,16 @@ function ToastBody({
   undoLabel: string;
 }) {
   return (
-    <div className="tg-glass mx-auto flex h-12 w-max max-w-[calc(100vw-24px)] items-center gap-3 rounded-full bg-(--tg-toast)! pr-2 pl-4 text-[15px] font-semibold whitespace-nowrap text-(--tg-text) shadow-(--tg-shadow)">
+    <div className="tg-glass mx-auto flex min-h-12 w-max max-w-[calc(100vw-24px)] items-center gap-3 rounded-full bg-(--tg-toast)! py-0.5 pr-2 pl-4 text-[15px] font-semibold text-(--tg-text) shadow-(--tg-shadow)">
       <span aria-hidden="true" className="size-2 flex-none rounded-full bg-(--tg-volt)" />
-      <span className="min-w-0 overflow-hidden text-ellipsis">{text}</span>
+      <span className="min-w-0">{text}</span>
       <button
         type="button"
         onClick={() => {
           undo();
           toast.dismiss(id);
         }}
-        className="tg-btn h-11 rounded-full border-0 bg-(--tg-s2) px-3.5 text-[14px] font-bold text-(--tg-text)"
+        className="tg-btn h-11 flex-none rounded-full border-0 bg-(--tg-s2) px-3.5 text-[14px] font-bold whitespace-nowrap text-(--tg-text)"
       >
         {undoLabel}
       </button>

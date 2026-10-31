@@ -22,7 +22,7 @@ export async function SiteShell({ locale, top, children }: { locale: TLocale; to
         href={top ? `#${STAGE_ID}` : '#content'}
         className="sr-only z-50 inline-flex h-11 items-center rounded-[12px] border border-border bg-card px-4 text-[15px] font-semibold text-foreground no-underline shadow-e2 focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
       >
-        {tt('skip')}
+        {top ? tt('skipTimer') : tt('skip')}
       </a>
       {top ?? <SiteHeader locale={locale} />}
       <Body

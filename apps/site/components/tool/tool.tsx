@@ -33,7 +33,7 @@ import { ControlsHint, Nudge, showExtended, showNote, ToolToaster } from './over
 import { Panels } from './panels';
 import { Palette } from './palette';
 import { Stage } from './stage';
-import { TopBar } from './top-bar';
+import { TopBar, TopPlaces } from './top-bar';
 import './glance.css';
 
 const QaBridge = dynamic(() => import('./qa-bridge').then((m) => m.QaBridge), { ssr: false });
@@ -446,6 +446,7 @@ function ToolApp({ lang, frame, root, initialView, readQuery, qa }: IAppProps) {
       <Banner />
       <Stage />
       <Dock />
+      <TopPlaces />
       <ControlsHint />
       {nudge ? (
         <Nudge sessions={ui.qa.nudge ? 12 : journey.sessions} presets={ui.qa.nudge ? 2 : presets.length} />

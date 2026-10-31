@@ -10,7 +10,7 @@
       "ogAlt": "AwakeTab clock showing 38:12 left"
     },
     "preset": {
-      "description": "Start a {label} AwakeTab session in one tap. The pill says Screen awake only while the browser holds the wake lock, then the screen sleeps again."
+      "description": "Start a {label} AwakeTab session in one tap. The pill says Awake only while the browser really holds the wake lock, then the screen sleeps again."
     },
     "until": {
       "description": "Keep this screen awake until {time} with one tap. A calm clock counts down the time left, and the screen sleeps normally again when it is done."
@@ -170,6 +170,7 @@
   },
   "tool": {
     "skip": "Skip to content",
+    "skipTimer": "Skip to the timer",
     "header": {
       "settings": "Settings",
       "share": "Share",
@@ -200,7 +201,6 @@
       "word": "Words",
       "nixie": "Nixie",
       "lcd": "LCD",
-      "matrix": "LED",
       "prev": "Previous face",
       "next": "Next face"
     },
@@ -1318,6 +1318,8 @@
         "zh": "Chinese",
         "hi": "Hindi",
         "es": "Spanish",
+        "fr": "French",
+        "pt-br": "Portuguese (Brazil)",
         "note": "Times follow the language: 11:42 AM in English, 11:42 in German, 午前11:42 in Japanese."
       },
       "pro": {
@@ -2711,7 +2713,7 @@
       }
     },
     "checkout": {
-      "description": "Choose yearly or monthly Pro, sign in with Google, GitHub or a passkey, and pay on the payment provider’s secure page. 14 days free.",
+      "description": "Choose yearly or monthly AwakeTab Pro, sign in with Google, GitHub or a passkey, and pay on the payment provider’s secure page. The first 14 days are free.",
       "kicker": "AWAKETAB PRO",
       "h1a": "One setup.",
       "h1b": "Every screen.",
@@ -2790,7 +2792,7 @@
       }
     },
     "activate": {
-      "description": "Enter the licence key from your receipt to turn on AwakeTab Pro on this screen.",
+      "description": "Enter the licence key from your receipt to turn on AwakeTab Pro on this screen. Keeping the screen awake works without it, on every screen, for good.",
       "h1": "Turn on Pro here.",
       "lead": "Your key is on your [PAYMENT PROVIDER] receipt. This screen counts as one of five.",
       "label": "Licence key",
@@ -2838,7 +2840,7 @@
       }
     },
     "manage": {
-      "description": "The screens that share your AwakeTab Pro, with a way to remove the ones you no longer use.",
+      "description": "The screens that share your AwakeTab Pro, up to five at once, with a way to remove the ones you no longer use. Keeping awake stays free on every screen.",
       "h1": "Your screens.",
       "lead": "Every screen that shares your Pro. Removing one signs it out straight away.",
       "kicker": "YOUR SCREENS · {n} OF {max}",

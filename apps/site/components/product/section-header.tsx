@@ -37,7 +37,7 @@ export function SectionLink({ className, type = 'button', ...props }: React.Comp
       type={type}
       data-slot="section-link"
       className={cn(
-        'min-h-11 cursor-pointer border-0 bg-transparent px-0.5 text-[14px] font-semibold text-lamp underline underline-offset-3 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+        'min-h-11 cursor-pointer border-0 bg-transparent px-0.5 text-[14px] font-semibold text-lamp underline underline-offset-3 outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring',
         className,
       )}
       {...props}

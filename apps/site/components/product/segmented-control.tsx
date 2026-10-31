@@ -32,7 +32,7 @@ export function SegmentedControl({ options, className, ...props }: ISegmentedCon
           key={value}
           value={value}
           disabled={disabled}
-          className="inline-flex h-11 min-w-0 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-[9px] border-0 bg-transparent px-2 text-[14px] font-medium text-muted-foreground-strong transition-[background-color,color,box-shadow] duration-fast ease-glide outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:text-muted-foreground data-[state=checked]:bg-raised data-[state=checked]:font-bold data-[state=checked]:text-foreground data-[state=checked]:shadow-[0_1px_2px_rgba(0,0,0,.2)]"
+          className="inline-flex h-11 min-w-0 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-[9px] border-0 bg-transparent px-2 text-[14px] font-medium text-muted-foreground-strong transition-[background-color,color,box-shadow] duration-fast ease-glide outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring disabled:cursor-not-allowed disabled:text-muted-foreground data-[state=checked]:bg-raised data-[state=checked]:font-bold data-[state=checked]:text-foreground data-[state=checked]:shadow-[0_1px_2px_rgba(0,0,0,.2)]"
         >
           {Icon ? <Icon className="size-4 shrink-0" aria-hidden="true" /> : null}
           {label}

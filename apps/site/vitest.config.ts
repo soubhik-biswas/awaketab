@@ -10,6 +10,7 @@ export default defineConfig({
       '@awaketab/wake/video': here('../../packages/wake/src/video.ts'),
       '@awaketab/wake': here('../../packages/wake/src/index.ts'),
       '@awaketab/core': here('../../packages/core/src/index.ts'),
+      'content-collections': here('.content-collections/generated'),
       '@': here('.'),
     },
   },

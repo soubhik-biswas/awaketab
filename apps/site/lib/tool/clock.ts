@@ -2,7 +2,19 @@ import type { TToolLang } from '@/lib/tool/strings';
 
 export type TClockFmt = 12 | 24;
 
-const LOCALE: Record<TToolLang, string> = { en: 'en-GB', de: 'de-DE', ja: 'ja-JP', zh: 'zh-CN', hi: 'hi-IN' };
+const LOCALE: Record<TToolLang, string> = {
+  en: 'en-GB',
+  de: 'de-DE',
+  ja: 'ja-JP',
+  zh: 'zh-CN',
+  hi: 'hi-IN',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  'pt-br': 'pt-BR',
+};
+
+// German, Spanish, French and Portuguese write the clock on a 24-hour dial even when 12-hour is chosen.
+const DIAL_24: readonly TToolLang[] = ['de', 'es', 'fr', 'pt-br'];
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -13,7 +25,7 @@ export function clockTime(ms: number, lang: TToolLang = 'en', fmt: TClockFmt = 1
   const m = pad(d.getMinutes());
   if (fmt === 24) return lang === 'en' ? `${pad(h)}:${m}` : `${h}:${m}`;
   const h12 = h % 12 || 12;
-  if (lang === 'de') return `${h}:${m}`;
+  if (DIAL_24.includes(lang)) return `${h}:${m}`;
   if (lang === 'ja') return `${h < 12 ? '午前' : '午後'}${h12}:${m}`;
   if (lang === 'zh') return `${h < 12 ? '上午' : '下午'}${h12}:${m}`;
   if (lang === 'hi') return `${h < 12 ? 'सुबह' : 'दोपहर'} ${h12}:${m}`;
@@ -30,6 +42,8 @@ export function dayDate(ms: number, lang: TToolLang = 'en'): string {
   const month = d.getMonth() + 1;
   if (lang === 'ja') return `${month}月${day}日(${part(ms, lang, { weekday: 'short' })})`;
   if (lang === 'zh') return `${month}月${day}日 ${part(ms, lang, { weekday: 'long' })}`;
+  if (lang === 'es' || lang === 'fr' || lang === 'pt-br')
+    return part(ms, lang, { weekday: 'long', day: 'numeric', month: 'long' });
   const weekday = part(ms, lang, { weekday: 'long' });
   const name = part(ms, lang, { month: 'long' });
   return lang === 'de' ? `${weekday}, ${day}. ${name}` : `${weekday}, ${day} ${name}`;

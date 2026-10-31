@@ -1,6 +1,6 @@
 ---
 title: "Garder l’écran allumé sous Windows 11 et 10 — AwakeTab"
-description: "Sous Windows 11 et 10, Chrome et Edge 84+ gardent l’écran allumé dans un onglet visible. Fermer le capot endort quand même le PC."
+description: "Sous Windows 11 et 10, Chrome et Edge 84+ gardent l’écran allumé tant que l’onglet reste visible. Fermer le capot endort quand même le PC portable."
 h1: "Empêcher l’écran de s’éteindre sous Windows 11 et 10"
 ogTitle: "Écran allumé sous Windows 11"
 intent: "garder l'écran allumé windows 11"
