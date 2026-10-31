@@ -8,7 +8,8 @@ interface ILicenseActivation {
 
 export type TLicenseStatus = 'active' | 'canceled' | 'revoked' | 'refunded' | 'expired';
 
-export type TPlanId = 'pro_yearly' | 'pro_lifetime' | 'biz_embed_site_yearly' | 'biz_kiosk_site' | 'biz_kiosk_5';
+export type TPlanId =
+  'pro_yearly' | 'pro_monthly' | 'pro_lifetime' | 'biz_embed_site_yearly' | 'biz_kiosk_site' | 'biz_kiosk_5';
 
 export type TFeatureId =
   | 'ambient.packs'
@@ -58,6 +59,7 @@ const PRO_GATES: TFeatureId[] = [
 
 export const PLAN_FEATURES: Record<TPlanId, TFeatureId[]> = {
   pro_yearly: PRO_GATES,
+  pro_monthly: PRO_GATES,
   pro_lifetime: PRO_GATES,
   biz_embed_site_yearly: ['embed.noattrib', 'ads.free'],
   biz_kiosk_site: ['kiosk.branding', 'ambient.message', 'ambient.logo', 'ads.free'],

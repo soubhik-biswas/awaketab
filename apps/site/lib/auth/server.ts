@@ -1,10 +1,8 @@
-import { betterAuth } from 'better-auth';
-import { APIError } from 'better-auth/api';
-import { magicLink } from 'better-auth/plugins/magic-link';
-import { signinEmail } from '@/emails';
+import { passkey } from '@better-auth/passkey';
+import { betterAuth, generateId } from 'better-auth';
+import { lastLoginMethod } from 'better-auth/plugins';
 import type { IEnv } from '@/lib/server/env';
-import { emailConfigured, sendEmail } from '@/lib/server/email/send';
-import { AUTH_BASE_PATH, SIGNIN_MINUTES, type IAuthStatus } from './shared';
+import { AUTH_BASE_PATH, PASSKEY_USER_DOMAIN, type IAuthStatus } from './shared';
 
 export function authStatus(env: IEnv): IAuthStatus {
   const ready = Boolean(env.AUTH_DB && env.BETTER_AUTH_SECRET);
@@ -12,8 +10,7 @@ export function authStatus(env: IEnv): IAuthStatus {
     ready,
     google: ready && Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
     github: ready && Boolean(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET),
-    email: ready && emailConfigured(env),
-    minutes: SIGNIN_MINUTES,
+    passkey: ready,
   };
 }
 
@@ -43,20 +40,26 @@ function createAuth(env: IEnv, origin: string) {
     telemetry: { enabled: false },
     advanced: { ipAddress: { ipAddressHeaders: ['cf-connecting-ip', 'x-forwarded-for'] } },
     plugins: [
-      magicLink({
-        expiresIn: SIGNIN_MINUTES * 60,
-        storeToken: 'hashed',
-        // The emailed link only hands the token to /signin in the URL fragment (see app/auth/[token]), so a mail
-        // scanner that opens the link cannot spend it.
-        sendMagicLink: async ({ email, token }) => {
-          const mail = await signinEmail(email, `${base}/auth/${encodeURIComponent(token)}`);
-          const sent = await sendEmail(env, mail);
-          if (!sent.ok)
-            throw new APIError('SERVICE_UNAVAILABLE', {
-              message: sent.reason === 'not_configured' ? 'email_unavailable' : 'email_failed',
-              code: sent.reason === 'not_configured' ? 'EMAIL_UNAVAILABLE' : 'EMAIL_FAILED',
-            });
+      passkey({
+        rpID: new URL(base).hostname,
+        rpName: 'AwakeTab',
+        origin: base,
+        // A passkey can start an account on its own, so nobody has to sign in somewhere else first.
+        registration: {
+          requireSession: false,
+          resolveUser: () => ({ id: generateId(), name: 'AwakeTab' }),
+          afterVerification: async ({ ctx, user }) => {
+            if (ctx.context.session?.user.id) return;
+            const created = await ctx.context.internalAdapter.createUser(
+              { name: '', email: `${user.id.toLowerCase()}@${PASSKEY_USER_DOMAIN}`, emailVerified: false },
+              { method: 'passkey' },
+            );
+            return { userId: created.id, name: 'AwakeTab' };
+          },
         },
+      }),
+      lastLoginMethod({
+        customResolveMethod: (ctx) => (ctx.path === '/passkey/verify-registration' ? 'passkey' : null),
       }),
     ],
   });
@@ -76,4 +79,16 @@ export function getAuth(env: IEnv, origin: string): TAuth | null {
     instances.set(key, auth);
   }
   return auth;
+}
+
+// The signed-in user's id, if any, so checkout can tie a purchase to the account that syncs it.
+export async function sessionUserId(env: IEnv, request: Request): Promise<string | null> {
+  const auth = getAuth(env, new URL(request.url).origin);
+  if (!auth) return null;
+  try {
+    const session = await auth.api.getSession({ headers: request.headers });
+    return session?.user.id ?? null;
+  } catch {
+    return null;
+  }
 }

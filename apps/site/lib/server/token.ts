@@ -4,8 +4,10 @@ import { PLAN_FEATURES, type ILicenseRecord, type TPlanId } from './license';
 
 const DAY_S = 86_400;
 
+const RENEWING: ReadonlySet<TPlanId> = new Set<TPlanId>(['pro_yearly', 'pro_monthly', 'biz_embed_site_yearly']);
+
 export function tokenExp(plan: TPlanId, periodEnd: number | null, nowSec: number): number {
-  if (plan === 'pro_yearly' || plan === 'biz_embed_site_yearly') {
+  if (RENEWING.has(plan)) {
     return (periodEnd ?? nowSec + 30 * DAY_S) + 7 * DAY_S;
   }
   if (plan === 'pro_lifetime') return nowSec + 90 * DAY_S;
@@ -13,7 +15,7 @@ export function tokenExp(plan: TPlanId, periodEnd: number | null, nowSec: number
 }
 
 function currentExp(record: ILicenseRecord, nowSec: number): number {
-  if (record.plan === 'pro_yearly' || record.plan === 'biz_embed_site_yearly') return record.exp;
+  if (RENEWING.has(record.plan)) return record.exp;
   return tokenExp(record.plan, null, nowSec);
 }
 

@@ -1,14 +1,14 @@
-import { validEmail } from '@/lib/auth/shared';
+import { isSignInMethod, type TSignInMethod } from '@/lib/auth/shared';
 
 const ACCOUNT_KEY = 'at.v1.account';
 
-export type TSignInMethod = 'email' | 'google' | 'github';
+export type { TSignInMethod };
 
+// This device's note that it is signed in, and how. No address or provider id is kept here.
 export interface IAccount {
   v: 1;
-  email: string;
-  name: string;
   method: TSignInMethod;
+  name: string;
   signedInAt: number;
 }
 
@@ -22,17 +22,15 @@ const store = (): TStore | null => {
   }
 };
 
-const METHODS: readonly TSignInMethod[] = ['email', 'google', 'github'];
-
+// Records from the email-link sign-in still hold an address; they read as signed out until the session is checked.
 export function readAccount(s: TStore | null = store()): IAccount | null {
   try {
     const row = JSON.parse(s?.getItem(ACCOUNT_KEY) ?? 'null') as Partial<IAccount> | null;
-    if (row && row.v === 1 && typeof row.email === 'string' && validEmail(row.email))
+    if (row && row.v === 1 && isSignInMethod(row.method))
       return {
         v: 1,
-        email: row.email,
+        method: row.method,
         name: typeof row.name === 'string' ? row.name : '',
-        method: METHODS.includes(row.method as TSignInMethod) ? (row.method as TSignInMethod) : 'email',
         signedInAt: Number(row.signedInAt) || 0,
       };
   } catch {
@@ -41,14 +39,16 @@ export function readAccount(s: TStore | null = store()): IAccount | null {
   return null;
 }
 
-export function writeAccount(
-  email: string,
-  method: TSignInMethod = 'email',
-  name = '',
-  now = Date.now(),
-  s: TStore | null = store(),
-): IAccount {
-  const row: IAccount = { v: 1, email, name, method, signedInAt: now };
+export function hasAccountRecord(s: TStore | null = store()): boolean {
+  try {
+    return Boolean(s?.getItem(ACCOUNT_KEY));
+  } catch {
+    return false;
+  }
+}
+
+export function writeAccount(method: TSignInMethod, name = '', now = Date.now(), s: TStore | null = store()): IAccount {
+  const row: IAccount = { v: 1, method, name, signedInAt: now };
   try {
     s?.setItem(ACCOUNT_KEY, JSON.stringify(row));
     window.dispatchEvent(new Event('at:account'));

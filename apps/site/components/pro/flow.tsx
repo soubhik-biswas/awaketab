@@ -1,30 +1,79 @@
 'use client';
 
-import { ArrowRight, Check, LoaderCircle, X } from 'lucide-react';
+import { Check, LoaderCircle, Sparkle, X } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 import { useTranslations } from 'next-intl';
-import type { ComponentProps, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Scene } from '@/components/scene/scene';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-export const RISE = 'animate-[at-rise_520ms_cubic-bezier(0.16,1,0.3,1)_both]';
-export const H1 = 'm-0 text-[34px] leading-[1.05] font-extrabold tracking-[-0.035em] min-[700px]:text-[44px]';
-export const LEAD = 'm-0 text-[17px] leading-[1.55] text-muted-foreground-strong';
-export const PRIMARY =
-  'h-13 rounded-md px-[22px] text-[16px] font-bold shadow-[0_12px_30px_var(--site-act-glow)] [&_svg:not([class*=size-])]:size-[18px]';
-const PRIMARY_FLAT = 'h-13 rounded-md px-[22px] text-[16px] font-bold';
-const OUTLINE = 'h-13 rounded-md px-[22px] text-[16px] font-bold';
+export const H1 =
+  'm-0 font-display text-[36px] leading-[.98] font-bold tracking-[-0.04em] text-balance outline-none min-[700px]:text-[52px]';
+export const LEAD = 'm-0 text-[17px] leading-[1.55] text-pretty text-muted-foreground-strong min-[700px]:text-[18px]';
+export const PRIMARY = 'h-[52px] w-full gap-2 rounded-full px-[22px] text-[16px] font-bold min-[700px]:w-auto';
+export const OUTLINE =
+  'h-[52px] w-full gap-2 rounded-full border-input px-[22px] text-[16px] font-semibold min-[700px]:w-auto';
 export const LINK =
-  'min-h-11 border-0 bg-transparent px-1 text-[15px] font-semibold text-lamp underline underline-offset-[3px] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+  'inline-flex min-h-11 items-center border-0 bg-transparent px-1 text-[15px] font-bold text-lamp underline underline-offset-[3px] outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring';
+export const PANEL =
+  'flex w-full flex-col gap-3.5 rounded-[24px] border border-border bg-card p-5 text-left min-[700px]:p-7';
+export const ROW = 'flex min-h-[60px] items-center gap-3.5 px-4 py-2.5 [&+&]:border-t [&+&]:border-border';
 
 const STEPS = ['s1', 's2', 's3', 's4'] as const;
+const EASE = [0.16, 1, 0.3, 1] as const;
 
-// The Pro flow's bar from the purchase board: Pro badge, the four steps, and the way back to the timer. Inside the
-// site's header it sits flush under it in place of the board's own logo row.
+// The Pro accent: one serif-italic word in the volt → mint → violet gradient, as on the Pro panels.
+export function Accent({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-block bg-clip-text pr-[.06em] font-accent text-[1.08em] font-normal tracking-[-0.01em] whitespace-nowrap text-transparent italic [background-image:linear-gradient(100deg,var(--lamp),#0e8f6a_45%,var(--primary))] dark:[background-image:linear-gradient(100deg,var(--lamp),#7cf0c8_45%,var(--primary))]">
+      {children}
+    </span>
+  );
+}
+
+export function Kicker({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 font-mono text-[12px] tracking-[.14em] text-primary uppercase">
+      <Sparkle className="size-3.5" fill="currentColor" strokeWidth={0} aria-hidden="true" />
+      {children}
+    </span>
+  );
+}
+
+// Each step arrives with the system's 420 ms rise; reduced motion shows it in place.
+export function Rise({
+  children,
+  className,
+  role,
+}: {
+  children: ReactNode;
+  className?: string;
+  role?: 'status' | 'alert';
+}) {
+  const still = useReducedMotion();
+  return (
+    <motion.section
+      role={role}
+      aria-live={role ? 'polite' : undefined}
+      initial={still ? false : { opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.42, ease: EASE }}
+      className={cn(
+        'relative mx-auto flex w-full max-w-[600px] flex-col items-center gap-[18px] px-5 pt-10 pb-16 text-center min-[700px]:pt-16',
+        className,
+      )}
+    >
+      {children}
+    </motion.section>
+  );
+}
+
+// The Pro flow's bar: the Pro badge, the four steps and the way back to the timer.
 export function FlowHeader({ step, backHref }: { step: number; backHref: string }) {
   const t = useTranslations('proflow');
   return (
-    <div className="relative -mt-7 flex h-[72px] items-center gap-4 border-b border-border px-4 min-[700px]:-mt-[72px] min-[700px]:px-10">
+    <div className="flex min-h-[72px] items-center gap-3 border-b border-border px-4 min-[700px]:px-10">
       <span className="rounded-full bg-primary-soft px-2.5 py-[3px] text-[13px] font-bold text-primary">
         {t('flow.pro')}
       </span>
@@ -52,7 +101,7 @@ export function FlowHeader({ step, backHref }: { step: number; backHref: string 
                     ? 'bg-lamp text-lamp-foreground'
                     : cur
                       ? 'bg-foreground text-background'
-                      : 'bg-surface-3 text-muted-foreground-strong',
+                      : 'bg-secondary text-muted-foreground-strong',
                 )}
               >
                 {done ? <Check className="size-3" strokeWidth={3.5} /> : i + 1}
@@ -74,121 +123,73 @@ export function FlowHeader({ step, backHref }: { step: number; backHref: string 
   );
 }
 
-// The board's centred column: 520 px wide, 70 px from the bar, 18 px between items.
-export function FlowColumn({ className, children, ...props }: ComponentProps<'section'>) {
-  return (
-    <section
-      className={cn(
-        'relative mx-auto flex w-full max-w-[560px] flex-col items-center gap-[18px] px-5 pt-10 text-center min-[700px]:pt-[70px]',
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </section>
-  );
-}
-
 export function Actions({ children }: { children: ReactNode }) {
-  return <div className="flex flex-wrap justify-center gap-2.5">{children}</div>;
+  return <div className="flex w-full flex-wrap justify-center gap-2.5">{children}</div>;
 }
 
 export function Processing({ title, lead }: { title: string; lead: string }) {
   return (
-    <FlowColumn role="status" aria-live="polite">
-      <LoaderCircle className="size-14 animate-spinner text-lamp" strokeWidth={2} aria-hidden="true" />
+    <Rise role="status">
+      <LoaderCircle
+        className="size-14 animate-spin text-lamp motion-reduce:animate-none"
+        strokeWidth={2}
+        aria-hidden="true"
+      />
       <h1 className={H1} tabIndex={-1}>
         {title}
       </h1>
       <p className={LEAD}>{lead}</p>
-    </FlowColumn>
+    </Rise>
   );
 }
 
-export function Success({
+export interface IFlowAction {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+}
+
+function ActionButton({ action, primary }: { action: IFlowAction; primary: boolean }) {
+  const cls = primary ? PRIMARY : OUTLINE;
+  const variant = primary ? 'default' : 'outline';
+  return action.href ? (
+    <Button asChild variant={variant} className={cls}>
+      <a href={action.href}>{action.label}</a>
+    </Button>
+  ) : (
+    <Button type="button" variant={variant} className={cls} onClick={action.onClick}>
+      {action.label}
+    </Button>
+  );
+}
+
+// A finished or failed step: its scene, a headline, one line and at most two ways on.
+export function Outcome({
+  scene,
   title,
   lead,
-  open,
-  openHref,
-  add,
-  addHref,
+  primary,
+  secondary,
+  tone = 'status',
 }: {
-  title: string;
+  scene: 'success' | 'error' | 'noitems' | 'expired';
+  title: ReactNode;
   lead: ReactNode;
-  open: string;
-  openHref: string;
-  add: string;
-  addHref: string;
+  primary: IFlowAction;
+  secondary?: IFlowAction;
+  tone?: 'status' | 'alert';
 }) {
   return (
-    <FlowColumn className={RISE} role="status">
-      <Scene scene="success" width={300} decorative />
+    <Rise role={tone}>
+      <Scene scene={scene} width={260} decorative />
       <h1 className={H1} tabIndex={-1}>
         {title}
       </h1>
       <p className={LEAD}>{lead}</p>
       <Actions>
-        <Button asChild size="lg" className={PRIMARY_FLAT}>
-          <a href={openHref}>{open}</a>
-        </Button>
-        <Button asChild variant="outline" size="lg" className={OUTLINE}>
-          <a href={addHref}>{add}</a>
-        </Button>
+        <ActionButton action={primary} primary />
+        {secondary ? <ActionButton action={secondary} primary={false} /> : null}
       </Actions>
-    </FlowColumn>
+    </Rise>
   );
-}
-
-export function Declined({
-  title,
-  lead,
-  again,
-  onAgain,
-  againHref,
-  plans,
-  plansHref,
-  onPlans,
-}: {
-  title: string;
-  lead: string;
-  again: string;
-  onAgain?: () => void;
-  againHref?: string;
-  plans: string;
-  plansHref?: string;
-  onPlans?: () => void;
-}) {
-  return (
-    <FlowColumn className={RISE} role="alert">
-      <Scene scene="error" width={260} decorative />
-      <h1 className={H1} tabIndex={-1}>
-        {title}
-      </h1>
-      <p className={LEAD}>{lead}</p>
-      <Actions>
-        {againHref ? (
-          <Button asChild size="lg" className={PRIMARY}>
-            <a href={againHref}>{again}</a>
-          </Button>
-        ) : (
-          <Button type="button" size="lg" className={PRIMARY} onClick={onAgain}>
-            {again}
-          </Button>
-        )}
-        {plansHref ? (
-          <Button asChild variant="outline" size="lg" className={OUTLINE}>
-            <a href={plansHref}>{plans}</a>
-          </Button>
-        ) : (
-          <Button type="button" variant="outline" size="lg" className={OUTLINE} onClick={onPlans}>
-            {plans}
-          </Button>
-        )}
-      </Actions>
-    </FlowColumn>
-  );
-}
-
-export function ContinueIcon() {
-  return <ArrowRight className="size-[18px]" strokeWidth={2} aria-hidden="true" />;
 }

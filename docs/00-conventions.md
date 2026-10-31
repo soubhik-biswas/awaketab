@@ -158,11 +158,11 @@ Timing rules: ticks every 1000 ms aligned to the wall clock; all arithmetic uses
 | `at.v1.license` | `{ token, plan, exp, features[], lastValidatedAt, deviceId }` | Token = ES256 JWT signed by our Worker |
 | `at.v1.meta` | `{ installedAt, sessionCount, ratingPrompt: { shownAt, action, stars?, rearmAt? }, lastSeenVersion }` | `rearmAt` since v1.3 (§13.8) |
 | `at.v1.onboarding` | `{ dismissedTips: [] }` | |
-| `at.v1.account` | `{ v: 1, email, signedInAt }` | Written by `/signin` after a magic link is verified; removed by Sign out or Delete account. Never sent anywhere (§13.30) |
+| `at.v1.account` | `{ v: 1, method, name, signedInAt }` | `method` is `google`, `github` or `passkey`. Written when a sign-in session is confirmed; removed by Sign out, Delete account or a session the server no longer backs. Holds no address. Never sent anywhere (§13.30) |
 | `at.v1.studio` | `{ v: 1, lamp, glow }` | Face studio (Pro): `lamp` `''` or `#RRGGBB`, `glow` 0–100 in steps of 5 (default 70) (§13.30) |
 | `at.v1.notes` | IndexedDB, not localStorage: database `awaketab`, store `notes`, this key. `{ v: 1, notes: [{ id, title, doc, createdAt, updatedAt, pinned? }], current?, voiceOk? }` | Never leaves the device; schema in `08-data-storage.md` §2.1a |
 
-sessionStorage also holds `at.v1.checkout` (`{ plan, email }`, the Pro checkout flow for this tab; cleared when Pro turns on) beside `at.tabId`.
+sessionStorage also holds `at.v1.signin` (the sign-in button pressed, for the trip to Google or GitHub and back; read once) beside `at.tabId`.
 
 `BroadcastChannel('awaketab')` coordinates multiple tabs (second-tab warning, single active lock). Migrations: `migrate(fromVersion)` in `@awaketab/core/storage`; bump prefix to `at.v2.` only for breaking changes.
 
