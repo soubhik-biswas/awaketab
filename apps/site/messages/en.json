@@ -5,217 +5,45 @@
   },
   "page": {
     "home": {
-      "title": "Keep Your Screen Awake — AwakeTab",
-      "description": "Keep your screen awake in this browser tab with the Wake Lock API. Honest status, presets, until-time. No account.",
-      "h1": "Keep your screen awake",
-      "what": {
-        "title": "What AwakeTab does"
-      },
-      "how": {
-        "title": "How it works"
-      },
-      "limits": {
-        "title": "Honest limits"
-      },
-      "intro": "AwakeTab uses the browser's Wake Lock API while this tab is visible, and its status only says the screen is awake after the browser confirms the lock.",
-      "uses": {
-        "title": "What are you keeping awake?",
-        "lead": "Each one opens the tool already set for the job, with the length it needs.",
-        "all": "All {count} use cases",
-        "start": "Start · {length}",
-        "cooking": {
-          "_": "Cooking",
-          "body": "The recipe stays lit while your hands are floury, with kitchen timers beside it."
-        },
-        "reading": {
-          "_": "Reading",
-          "body": "A long article stays on screen while you read, with no tap to wake it."
-        },
-        "presentations": {
-          "_": "Presentations",
-          "body": "Set it to the end of your talk and keep it in a floating window beside the slides."
-        },
-        "dashboards": {
-          "_": "Dashboards",
-          "body": "A wall screen stays on all day, and a link can start the session as the page loads."
-        },
-        "videoCalls": {
-          "_": "Video calls",
-          "body": "The display stays on when the video pauses. Your chat status is left alone."
-        },
-        "downloads": {
-          "_": "Downloads",
-          "body": "The screen stays on through a long download, and a visible tab holds off idle sleep."
-        }
-      },
-      "final": {
-        "title": "One tap, and the screen stays on.",
-        "body": "The pill says {held} only after the browser confirms the lock. For a hidden tab or a minimised window, the extension keeps going.",
-        "start": "Keep this screen awake",
-        "extension": "Add extension",
-        "docs": "How it works, limits and FAQ in the docs"
-      },
-      "yours": {
-        "title": "Make it yours",
-        "lead": "Clock faces, colours, backgrounds, focus sounds and a notepad. Each one loads only when you pick it, and the status pill still tells you the truth.",
-        "compare": "Compare Free and Pro",
-        "faces": {
-          "title": "Twelve clock faces",
-          "tag": "All free",
-          "body": "Classic, retro and modern. Every face shows your session, follows your lamp colour and knows when the screen is paused. Swipe the clock or press C to switch.",
-          "list": "The twelve clock faces"
-        },
-        "looks": {
-          "title": "Themes, lamps and backgrounds",
-          "body": "Clear Night, Paper and Nord, four lamps, three backgrounds and three presets are free. Pro adds six themes, eight lamps, a colour of your own, five backgrounds and five presets.",
-          "themes": "Colour themes, each with a light and a dark version",
-          "lamps": "Lamp colours",
-          "patterns": "Backgrounds",
-          "try": "Previewing {name} · {time} left",
-          "tryNote": "Any Pro look can be tried for 5 minutes, as often as you like. Nothing is saved."
-        },
-        "sound": {
-          "title": "Sounds for focus",
-          "body": "Seven focus sounds made live in your browser, five end sounds, vibration and a quiet tick-tock, all free. Pro adds a mixer to layer them.",
-          "list": "Free focus sounds",
-          "mixer": "Mixer",
-          "honest": "Nothing plays until you ask, and sound never keeps the screen awake."
-        },
-        "notes": {
-          "title": "A notepad beside the clock",
-          "body": "Checklists, headings, export and voice typing. Notes stay in this browser and work offline. One note is free; Pro keeps as many as you like.",
-          "sample": {
-            "title": "Before the call",
-            "1": "Open the slides",
-            "2": "Share the agenda",
-            "3": "Ask about the launch date"
-          },
-          "listening": "Listening…"
-        },
-        "focus": {
-          "title": "Focus tools",
-          "body": "A Pomodoro with pause and skip, an intention under the clock, a breathing guide and a second time zone. With Pro the Pomodoro repeats on its own.",
-          "intention": "Writing the report",
-          "zone": "London",
-          "breathe": "Breathe in",
-          "cycles": "Focus block 2 of 4"
-        }
-      },
-      "ext": {
-        "kicker": "AwakeTab for Chrome",
-        "free": "Free",
-        "title": "Keep the screen awake with the tab out of sight",
-        "lead": "The extension asks the browser itself to keep the screen awake, so it keeps going behind other windows.",
-        "hidden": {
-          "title": "Tab hidden or window minimised",
-          "body": "It keeps going while the browser is running."
-        },
-        "system": {
-          "title": "Only the system, if you prefer",
-          "body": "System level keeps the computer awake and lets the screen dim or turn off."
-        },
-        "badge": {
-          "title": "Status in the toolbar",
-          "body": "The badge shows ON, SYS or the minutes left."
-        },
-        "shortcut": {
-          "title": "A shortcut from any tab",
-          "body": "{keys} starts or stops it without going back to the tab."
-        },
-        "cta": {
-          "get": "Get the extension",
-          "edge": "Add to Edge"
-        },
-        "note": "Works in {browsers}, version {version} or later. {others} have no power API for extensions.",
-        "more": "See everything the extension does",
-        "art": {
-          "tab": "Sales dashboard",
-          "tab2": "Inbox",
-          "started": "Started {time}"
-        }
-      },
-      "levels": {
-        "title": "Choose your level",
-        "lead": "Keeping a screen awake is free, in this tab and in the extension, and so are every clock face and focus sound. Pro adds more looks, a sound mixer, more notes and a longer memory.",
-        "free": "Free",
-        "web": {
-          "name": "Web tab",
-          "per": "nothing to install",
-          "sub": "Runs right here, in this tab.",
-          "g1": "Keeps the screen on while this tab is visible",
-          "g2": "15 min to 4 h, until a time, or a custom length up to 7 days",
-          "g3": "Phones, tablets and computers, and offline after the first visit",
-          "g4": "A status pill that says awake only once the browser confirms it",
-          "g5": "Twelve clock faces, three colour themes, seven focus sounds, a notepad and a Pomodoro",
-          "cta": "Start now"
-        },
-        "ext": {
-          "name": "Extension",
-          "tag": "Best on a computer",
-          "per": "one install",
-          "sub": "{browsers} {version} or later, on a computer.",
-          "g1": "Keeps going with the tab hidden or the window minimised",
-          "g2": "Screen or System: keep only the computer awake and let the screen sleep",
-          "g3": "A toolbar badge with ON, SYS or the minutes left",
-          "g4": "{keys} from any tab",
-          "cta": "Add extension"
-        },
-        "pro": {
-          "name": "Pro",
-          "per": "a year, or {once} once",
-          "sub": "5 devices, no account, 14-day refund.",
-          "g1": "Your own message, up to 80 characters, on the awake screen",
-          "g2": "Six more themes, eight more lamps, your own colour, five more backgrounds and five presets",
-          "g3": "12 weeks of history and a CSV export",
-          "g4": "Schedules and auto-start in the extension",
-          "g5": "A sound mixer, as many notes as you like and a Pomodoro that repeats",
-          "g6": "Try the looks, the mixer, more notes and the repeating Pomodoro for 5 minutes first",
-          "cta": "See Pro"
-        }
-      }
+      "title": "AwakeTab — Keep this screen awake",
+      "description": "Keep your screen on with one click. A calm clock shows the time left. 46 faces, six living backgrounds, free — no install, no account.",
+      "ogAlt": "AwakeTab clock showing 38:12 left"
     },
     "preset": {
-      "title": "Keep the screen awake for {label} — AwakeTab",
-      "description": "Start a {label} AwakeTab session. The pill only says Screen awake when the wake lock is actually held."
+      "description": "Start a {label} AwakeTab session in one tap. The pill says Screen awake only while the browser holds the wake lock, then the screen sleeps again."
     },
     "until": {
-      "title": "Keep the screen awake until {time} — AwakeTab"
+      "description": "Keep this screen awake until {time} with one tap. A calm clock counts down the time left, and the screen sleeps normally again when it is done."
     },
     "pip": {
       "title": "AwakeTab floating timer"
     },
     "404": {
-      "title": "Page not found — AwakeTab",
       "h1": "That page isn't here, but the tool is."
     },
     "hub": {
       "for": {
-        "title": "Keep your screen awake for any task — AwakeTab",
         "description": "Choose an AwakeTab guide for cooking, downloads, presentations and other tasks. The screen stays awake only while the active tab holds a wake lock.",
         "h1": "Keep your screen awake for a task"
       },
       "on": {
-        "title": "Keep your screen awake on your device — AwakeTab",
-        "description": "Pick your phone, tablet, computer or browser: the version that works, the steps, and the limits your system still sets.",
+        "description": "Pick your phone, tablet, computer or browser to see the version that works, the steps to keep the screen awake, and the limits your system still sets.",
         "h1": "Keep the screen awake on your device"
       },
       "vs": {
-        "title": "AwakeTab alternatives compared — AwakeTab",
-        "description": "Compare AwakeTab with caffeine apps and other screen-awake tools by mechanism, privacy, browser support and honest operating limits.",
+        "description": "Compare AwakeTab with Caffeine, Amphetamine, mouse jigglers and other screen-awake tools by mechanism, privacy, browser support and honest limits.",
         "h1": "Compare tools that keep a screen awake",
         "pick": "Pick it when",
         "instead": "{name} instead when",
         "more": "Read the comparison"
       },
       "guides": {
-        "title": "Screen wake lock troubleshooting guides — AwakeTab",
-        "description": "Step-by-step fixes for screen timeouts, greyed-out Auto-Lock and screens that go dark, with what AwakeTab can and cannot change.",
+        "description": "Step-by-step fixes for screen timeouts, a greyed-out Auto-Lock and screens that still go dark, with what AwakeTab can and cannot change for you.",
         "h1": "Fix the settings that turn your screen off",
         "more": "Read the fix"
       },
       "learn": {
-        "title": "Docs: how AwakeTab and screen wake locks work — AwakeTab",
-        "description": "How AwakeTab keeps a screen awake, where a web page stops, the browser support matrix and how each support claim is checked.",
+        "description": "How AwakeTab keeps a screen awake, where a web page has to stop, the full browser support matrix, and how every support claim on this site is checked.",
         "h1": "AwakeTab docs"
       },
       "start": "Start",
@@ -223,36 +51,31 @@
       "native": "Native wake lock"
     },
     "about": {
-      "title": "About AwakeTab and its testing — AwakeTab",
       "description": "Meet AwakeTab's independent maker and learn how browser wake-lock behavior is tested across devices without overstating what a web page can do.",
       "h1": "About AwakeTab"
     },
     "privacy": {
-      "title": "Privacy — AwakeTab",
       "description": "AwakeTab stores settings and session data locally, uses no cookies or fingerprinting, and sends optional first-party telemetry only when enabled.",
       "h1": "Privacy"
     },
     "terms": {
-      "title": "Terms — AwakeTab",
-      "description": "Plain-language terms for using AwakeTab, including service limitations, open-source components and responsible battery-aware use.",
+      "description": "Plain-language terms for using AwakeTab: what a browser can and cannot promise, responsible battery-aware use, open-source parts and Pro subscriptions.",
       "h1": "Terms"
     },
     "changelog": {
-      "title": "Changelog — AwakeTab",
-      "description": "Track AwakeTab releases and production changes across the web app, wake-lock library, browser extension and embeddable tools.",
+      "description": "Every AwakeTab release, newest first: new clock faces, living backgrounds, fixes and improvements across the web app, the extension and the library.",
       "h1": "Changelog"
     },
     "pro": {
-      "title": "AwakeTab Pro plans and pricing — AwakeTab",
-      "description": "AwakeTab Pro adds colour themes, a sound mixer, more notes, a repeating Pomodoro and 12 weeks of stats. Yearly or once, 5 devices, 14-day refund.",
+      "description": "AwakeTab Pro keeps one setup in sync on up to five screens, starts or stops them all from one and adds priority help. Keeping awake stays free.",
       "h1": "AwakeTab Pro",
       "devices": "5 devices",
       "lead": "Pro is optional. The awake screen stays honest and ad-free either way. Polar handles checkout; AwakeTab never stores a password.",
       "tax": "Charged in USD; taxes added at checkout where applicable.",
       "refund": {
-        "_": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key.",
+        "_": "14-day refund, no questions asked. Ask from Settings → Account → Manage plan, or use the payment provider’s customer portal. Refunds deactivate the licence key.",
         "lead": "14-day refund, no questions asked.",
-        "rest": "Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key."
+        "rest": "Ask from Settings → Account → Manage plan, or use the payment provider’s customer portal. Refunds deactivate the licence key."
       },
       "activate": {
         "title": "Activate AwakeTab Pro — AwakeTab",
@@ -390,7 +213,7 @@
         "success": {
           "h1": "Pro is active",
           "lead": "Thank you. The payment went through, and this browser is now one of your five Pro devices.",
-          "aside": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal.",
+          "aside": "14-day refund, no questions asked. Ask from Settings → Account → Manage plan, or use the payment provider’s customer portal.",
           "link": "Manage devices"
         },
         "next": "Next steps",
@@ -446,7 +269,7 @@
           "secondary": "Email support",
           "aside": {
             "title": "See a charge anyway?",
-            "text": "A declined payment can show as a pending hold for a few days, then drop off. If it doesn’t, email support@awaketab.com with the date and amount."
+            "text": "A declined payment can show as a pending hold for a few days, then drop off. If it doesn’t, send the date and amount from Settings → Send feedback."
           },
           "link": "Email support"
         },
@@ -457,7 +280,7 @@
           "l1": "Search your inbox for “Polar” and check spam or Promotions.",
           "l2": "Just paid? Polar takes a few seconds to create the key. The activation page keeps checking for about 20 seconds on its own.",
           "l3": "Keys and receipts are also in the Polar customer portal.",
-          "l4": "Still stuck? Email support@awaketab.com from the address you paid with.",
+          "l4": "Still stuck? Send your receipt number from Settings → Send feedback inside the tool.",
           "primary": "Enter licence key",
           "secondary": "Open the Polar customer portal",
           "callout": "Your purchase is still syncing. Retry in a minute.",
@@ -738,22 +561,18 @@
       }
     },
     "embed": {
-      "title": "Keep-screen-on widget for websites — AwakeTab",
       "description": "Add a Cook Mode button that keeps your readers' screens awake: one script tag, an honest status and no third-party requests. Free with a credit link.",
       "h1": "Keep your readers' screens awake"
     },
     "kiosk": {
-      "title": "Kiosk and signage display mode — AwakeTab",
-      "description": "Keep a kiosk, dashboard or signage screen awake from one URL: autostart, message and theme options, plus a Kiosk licence for your own logo.",
+      "description": "Keep a kiosk, dashboard or signage screen awake from one URL, with autostart, message and theme options, plus a Kiosk licence for your own logo.",
       "h1": "AwakeTab for kiosks and signage"
     },
     "library": {
-      "title": "@awaketab/wake — Wake Lock library — AwakeTab",
       "description": "An open-source Screen Wake Lock library with seven honest states, a tiny video fallback and denial advice. The maintained NoSleep.js replacement.",
       "h1": "@awaketab/wake: the honest wake lock library"
     },
     "extension": {
-      "title": "Chrome extension to keep your screen awake — AwakeTab",
       "description": "AwakeTab for Chrome keeps your screen or computer awake from the toolbar, even when the tab is hidden. Timers, schedules, an honest status and no tracking.",
       "h1": "AwakeTab for Chrome",
       "lead": "The web app can hold a wake lock only while its tab is visible. The extension asks Chrome itself to keep the display awake, or just the computer, so it keeps working when the tab is hidden or the window is minimised.",
@@ -3906,25 +3725,53 @@
     },
     "ctaShort": "Open timer",
     "consent": {
-      "title": "Help us count visits?",
-      "body": "Optional, cookie-free analytics — no profile, no ad tracking. AwakeTab works the same either way.",
-      "decline": "Decline",
+      "title": "Count this visit?",
+      "body": "Cookie-free and anonymous. AwakeTab works the same either way.",
+      "short": "Cookie-free, anonymous",
+      "decline": "No thanks",
       "allow": "Allow"
     },
     "foot": {
+      "kicker": "MADE BY HUMANS · READ BY HUMANS",
+      "ctaH": "Tell us what would make it",
+      "ctaAccent": "yours.",
+      "ctaLine": "Two taps inside the tool — Settings → Send feedback. We read every message.",
+      "timer": "Open the timer",
+      "feedback": "Send feedback",
+      "tagline": "Keeps a screen awake from the browser, then lets it sleep again. Free, for good.",
+      "status": "All systems normal · wake lock API healthy",
+      "statusDown": "Maintenance planned · the timer still works",
+      "social": {
+        "github": "AwakeTab on GitHub",
+        "x": "Share AwakeTab on X",
+        "rss": "Changelog feed (RSS)"
+      },
       "product": "Product",
+      "uses": "Use cases",
       "learn": "Learn",
       "company": "Company",
-      "timer": "Open the timer",
-      "changelog": "Changelog",
+      "faces": "Faces",
+      "vibes": "Vibes",
+      "pro": "Pro",
+      "new": "NEW",
+      "cooking": "Cooking",
+      "presenting": "Presenting",
+      "dashboards": "Dashboards",
+      "nightdesk": "Night desk",
       "help": "Help centre",
-      "presenting": "Presenting guide",
+      "support": "Browser support",
+      "guides": "Guides",
+      "changelog": "Changelog",
       "about": "About",
-      "status": "Status pages",
-      "tagline": "Keeps a screen awake from the browser, then lets it sleep again.",
-      "contact": "Contact",
+      "statusLink": "Status",
+      "copyright": "© [YEAR] [COMPANY NAME]",
       "cookies": "No tracking cookies",
-      "updated": "Last updated {date}"
+      "theme": {
+        "label": "Theme",
+        "system": "System",
+        "light": "Light",
+        "dark": "Dark"
+      }
     },
     "tool": {
       "eyebrow": "Try it here",
@@ -3975,20 +3822,18 @@
         "h1": "This page fell asleep",
         "lead": "The link may be old or mistyped. The timer is still right here.",
         "guides": "Popular guides",
-        "title": "Page not found — AwakeTab",
-        "eyebrow": "404"
+        "eyebrow": "404",
+        "description": "This AwakeTab page fell asleep: the link may be old or mistyped. The timer still works right here, and the help centre and guides are one tap away."
       },
       "offline": {
-        "title": "You’re offline — AwakeTab",
         "eyebrow": "Offline",
         "h1": "You’re offline. The timer isn’t.",
         "lead": "Keeping the screen awake doesn’t need the internet. Sync and shared links wait until you reconnect.",
         "timer": "Keep using the timer",
-        "description": "Keeping the screen awake doesn’t need the internet. Sync and shared links wait until you reconnect."
+        "description": "You are offline, but keeping the screen awake does not need the internet. The timer keeps working; sync and shared links wait until you reconnect."
       },
       "status": {
-        "title": "Service status — AwakeTab",
-        "description": "Whether AwakeTab sign-in and sync are running, and when maintenance is planned. The timer works on every device either way.",
+        "description": "Whether AwakeTab sign-in and sync are running right now, and when maintenance is planned. The timer keeps working on every device either way.",
         "eyebrow": "Maintenance",
         "h1": "Scheduled maintenance.",
         "lead": "Sign-in and sync are paused until about {time}. The timer works as normal on every device.",
@@ -3998,29 +3843,27 @@
         "see": "See status"
       },
       "expired": {
-        "title": "Link expired — AwakeTab",
-        "eyebrow": "Link expired",
-        "h1": "This link has expired.",
-        "lead": "Sign-in links work once and only for [NUMBER] minutes. Ask for a fresh one — it takes seconds.",
-        "send": "Send a new link"
+        "eyebrow": "Session expired",
+        "h1": "Please sign in again.",
+        "lead": "For your safety, sync sign-ins expire after a while. One tap with Google, GitHub or a passkey and you are back.",
+        "send": "Sign in again",
+        "description": "For your safety, AwakeTab sync sign-ins expire after a while. Sign in again with Google, GitHub or a passkey and your screens pick up where they were."
       },
       "removed": {
-        "title": "Setup removed — AwakeTab",
         "eyebrow": "Setup removed",
         "h1": "This shared setup was turned off.",
         "lead": "Whoever shared it removed the link. You can still start your own session in one click.",
-        "start": "Start my own"
+        "start": "Start my own",
+        "description": "Whoever shared this AwakeTab setup has turned the link off. Nothing personal was ever in it, and you can still start your own session in one tap."
       },
       "error": {
-        "title": "Something went wrong — AwakeTab",
         "eyebrow": "Something broke",
         "h1": "Something went wrong on our side.",
         "lead": "The page couldn’t load. Nothing on your device was changed. Try again, or open the timer — it works offline."
       }
     },
     "share": {
-      "title": "A shared AwakeTab session",
-      "description": "Someone shared an AwakeTab session: its length, clock face and chime. Nothing personal travels with the link.",
+      "description": "Someone shared an AwakeTab session with you: its length, clock face and chime. Press start to keep this screen awake. Nothing personal is in the link.",
       "eyebrow": "A shared setup",
       "loading": "Opening a shared session…",
       "loadingLead": "Reading the length, face and chime from the link.",
@@ -4053,11 +3896,12 @@
       "chimeOn": "On · two notes",
       "chimeOff": "Off",
       "install": "Nothing to install",
-      "installBody": "The session runs in this tab. Close it whenever you like and the screen sleeps normally again."
+      "installBody": "The session runs in this tab. Close it whenever you like and the screen sleeps normally again.",
+      "ogTitle": "Someone sent you a ready clock.",
+      "ogSub": "Opens ready to start. Nothing personal inside."
     },
     "help": {
-      "title": "Help centre — AwakeTab",
-      "description": "Answers for a screen that still goes dark, iPhone and iPad, presenting, the extension, Pro billing and your data.",
+      "description": "Answers for a screen that still goes dark, iPhone and iPad, presenting, the extension, Pro billing and your data, plus how to send us feedback.",
       "eyebrow": "Help centre",
       "h1": "How can we help?",
       "lead": "Most problems come from battery saver, a hidden tab or an older browser. Search, or start with a topic below.",
@@ -4071,124 +3915,179 @@
       "none": "Nothing matches “{q}”. Try “battery”, “iPad” or “billing”.",
       "popular": "Popular topics",
       "stuck": "Still stuck?",
-      "stuckBefore": "Write to",
-      "stuckAfter": "with your browser and device. We read every message.",
-      "allTopics": "All topics"
-    },
-    "home": {
-      "faces": {
-        "title": "49 faces. Pick the one you can read from across the room.",
-        "sub": "All free. They move only while the screen is awake, and stand still for reduced motion.",
-        "items": {
-          "aurora": {
-            "name": "Aurora",
-            "body": "Northern lights drift behind the time while the screen is awake."
-          },
-          "liquid": {
-            "name": "Liquid",
-            "body": "A glass sphere of light that drains as the session runs."
-          },
-          "eclipse": {
-            "name": "Eclipse",
-            "body": "The moon slides over the sun; totality when time’s up."
-          },
-          "skeleton": {
-            "name": "Skeleton",
-            "body": "An open movement — gears turn, the balance wheel swings."
-          },
-          "neon": {
-            "name": "Neon",
-            "body": "A neon sign on a dark wall, humming while awake."
-          },
-          "halo": {
-            "name": "Halo",
-            "body": "A glowing gradient ring that closes toward 12."
-          }
-        }
-      },
-      "uses": {
-        "title": "Made for the moments a dark screen gets in the way",
-        "cooking": {
-          "_": "Cooking",
-          "body": "Recipes stay on screen while your hands are busy.",
-          "link": "For cooking"
-        },
-        "presenting": {
-          "_": "Presenting",
-          "body": "No dimming halfway through your best slide.",
-          "link": "For presenting"
-        },
-        "dashboards": {
-          "_": "Dashboards",
-          "body": "Wall screens and status boards that stay lit.",
-          "link": "For dashboards"
-        },
-        "nightdesk": {
-          "_": "Night desk",
-          "body": "Reading, studying, a calm clock after dark.",
-          "link": "For the night desk"
-        }
-      },
-      "how": {
-        "1": {
-          "_": "Pick a length",
-          "body": "15 minutes, an hour, until a time — or no end at all."
-        },
-        "2": {
-          "_": "Press Keep awake",
-          "body": "Your browser’s Screen Wake Lock keeps the display on."
-        },
-        "3": {
-          "_": "Get on with it",
-          "body": "A soft chime when time’s up; the screen sleeps normally again."
-        },
-        "title": "How it works"
-      },
-      "limits": {
-        "title": "Honest about limits",
-        "body": "A browser can keep the screen on, not the whole computer. Battery saver, closing the lid or a company lock policy can still win — AwakeTab tells you when that happens and how to fix it."
-      },
-      "faq": {
-        "1": {
-          "_": "Does it work on iPhone and iPad?",
-          "a": "Yes, in Safari on iOS and iPadOS 16.4 or later. Older versions use a silent video fallback."
-        },
-        "2": {
-          "_": "Do I need an account?",
-          "a": "No. Settings stay on this device. Pro uses an account only to sync your devices."
-        },
-        "3": {
-          "_": "Will it stop my work laptop from locking?",
-          "a": "It keeps the display awake while the tab is open. Company lock policies still apply, and they should."
-        },
-        "4": {
-          "_": "Is it free?",
-          "a": "Keeping awake is free. Pro adds device sync, full history and the sound mixer."
-        }
-      },
-      "cta": "Keep awake now",
-      "og": {
-        "kicker": "Free · in your browser",
-        "title": "Keep the screen on. Know when it is.",
-        "sub": "No account, nothing to install."
-      }
+      "stuckBefore": "Open the timer →",
+      "stuckAfter": ", and pick “Something broke”. Your browser and device are attached automatically; we read every message.",
+      "allTopics": "All topics",
+      "stuckLink": "Settings → Send feedback",
+      "ogSub": "Answers for a screen that still goes dark"
     },
     "changelog": {
       "crumb": "Changelog",
       "eyebrow": "CHANGELOG",
       "h1": "What’s new",
-      "lead": "Every release, newest first. Version numbers and dates are placeholders until release."
+      "lead": "Every release, newest first. Version numbers and dates are placeholders until release.",
+      "ogAlt": "What’s new in AwakeTab: 46 clock faces and six living backgrounds"
     },
     "pro": {
       "eyebrow": "AwakeTab Pro",
       "h1": "Keeping awake stays free.",
       "lead": "Pro is for people who run screens on more than one device or want the extras. Prices are placeholders until they are set.",
-      "og": {
-        "kicker": "AwakeTab Pro",
-        "title": "Keeping awake is free. Pro is for comfort.",
-        "sub": "Looks, history, notes."
+      "ogAlt": "AwakeTab Pro: one setup, every screen"
+    },
+    "story": {
+      "cue": "Scroll — what makes it different",
+      "faces": {
+        "eyebrow": "46 FACES · ALL FREE",
+        "h": "A clock for every room",
+        "accent": "you work in.",
+        "lead": "Pick one the way you pick a wallpaper. They move only while the screen is awake, and stand still for reduced motion."
+      },
+      "vibes": {
+        "eyebrow": "VIBES · NEW",
+        "h": "Set the mood.",
+        "accent": "Six living backgrounds.",
+        "lead": "Aurora, a night sky with shooting stars, rain on glass, a slow sunset, a melting lava lamp — or perfectly calm. They pause on battery saver, and the clock always stays readable.",
+        "items": {
+          "aurora": {
+            "name": "Aurora",
+            "line": "Soft light, drifting"
+          },
+          "night": {
+            "name": "Night sky",
+            "line": "Stars and the odd shooting star"
+          },
+          "rain": {
+            "name": "Rain on glass",
+            "line": "A calm, rainy window"
+          },
+          "sunset": {
+            "name": "Sunset",
+            "line": "Warm light for the evening"
+          },
+          "lava": {
+            "name": "Lava lamp",
+            "line": "Bold colour, slowly melting"
+          },
+          "calm": {
+            "name": "Calm",
+            "line": "Nothing moves but the clock"
+          }
+        }
+      },
+      "bento": {
+        "eyebrow": "BUILT FOR THE GLANCE",
+        "h": "Touch it for three seconds.",
+        "accent": "Trust it for an hour.",
+        "read": {
+          "h": "Readable from across the room",
+          "d": "Huge digits, high contrast, a single colour for time left. No squinting at a laptop from the stove."
+        },
+        "tap": {
+          "h": "One tap. That’s it.",
+          "d": "No install, no account, no settings first.",
+          "cta": "Keep awake · 1 h"
+        },
+        "honest": {
+          "h": "It never pretends",
+          "d": "If the browser says no, you see it in words — and the fix.",
+          "awake": "Awake · until 12:26 PM",
+          "paused": "Paused · 57 min left",
+          "blocked": "Not awake · battery saver"
+        },
+        "free": {
+          "h": "Free. All of it.",
+          "d": "Every face, theme, preset and sound. Pro only syncs many screens.",
+          "zero": "$0"
+        },
+        "devices": {
+          "h": "Phone, tablet, laptop, wall",
+          "d": "The same calm clock on every screen you prop up."
+        },
+        "palette": {
+          "h": "⌘K for everything",
+          "d": "Extend, switch face, open a preset — without the mouse.",
+          "q": "ext",
+          "r1": "Extend 15 minutes",
+          "r2": "Extend 1 hour"
+        }
+      },
+      "how": {
+        "eyebrow": "HOW IT WORKS",
+        "h": "Three steps.",
+        "accent": "Two are optional.",
+        "1": {
+          "t": "Pick a length",
+          "d": "15 minutes, an hour, or no end at all. One hour is ready when you land."
+        },
+        "2": {
+          "t": "Tap Keep awake",
+          "d": "Your browser’s Screen Wake Lock keeps the display on. The pill turns green."
+        },
+        "3": {
+          "t": "Get on with it",
+          "d": "A soft chime when time is up, then the screen sleeps normally again."
+        }
+      },
+      "uses": {
+        "eyebrow": "MADE FOR",
+        "h": "The moments a dark screen",
+        "accent": "gets in the way.",
+        "cooking": {
+          "t": "Cooking",
+          "d": "Recipes stay lit while your hands are busy.",
+          "l": "For cooking"
+        },
+        "presenting": {
+          "t": "Presenting",
+          "d": "No dimming halfway through your best slide.",
+          "l": "For presenting"
+        },
+        "dashboards": {
+          "t": "Dashboards",
+          "d": "Wall screens and status boards that stay on.",
+          "l": "For dashboards"
+        },
+        "nightdesk": {
+          "t": "Night desk",
+          "d": "Reading, studying — a calm clock after dark.",
+          "l": "For the night desk"
+        }
+      },
+      "faq": {
+        "eyebrow": "QUESTIONS",
+        "h": "Straight answers.",
+        "before": "Something else? Tap ",
+        "link": "Settings → Send feedback",
+        "after": " inside the tool. We read every message.",
+        "1": {
+          "q": "Does it work on iPhone and iPad?",
+          "a": "Yes — in Safari on iOS and iPadOS 16.4 or later. Older versions use a silent video fallback, and the pill tells you which one is running."
+        },
+        "2": {
+          "q": "Do I need an account?",
+          "a": "No. Settings, presets and history stay on this device."
+        },
+        "3": {
+          "q": "Will it stop my work laptop from locking?",
+          "a": "It keeps the display awake while the tab is open. Company lock policies still apply, and they should."
+        },
+        "4": {
+          "q": "Is it really free?",
+          "a": "Yes. Every face, theme, preset and sound. Pro is optional and only syncs several screens."
+        },
+        "5": {
+          "q": "What happens when time is up?",
+          "a": "A soft chime, then your screen sleeps the way it normally would."
+        }
+      },
+      "cta": {
+        "h": "Your screen, awake",
+        "accent": "in one tap.",
+        "lead": "Works in Chrome, Edge, Firefox and Safari. Nothing to install.",
+        "button": "Keep this screen awake"
       }
-    }
+    },
+    "signinMeta": "Sign in with Google, GitHub or a passkey to keep AwakeTab Pro in sync on up to five screens. Everything else works without an account, for good."
   },
   "surfaces": {
     "status": {
