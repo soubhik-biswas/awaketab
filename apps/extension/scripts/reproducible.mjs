@@ -22,7 +22,6 @@ function run(args, env = {}) {
 }
 
 export async function buildZip(outDir) {
-  run([path.join(ROOT, 'scripts/icons.mjs')]);
   run([WXT_CLI, 'build'], { AT_EXT_OUT: outDir, AT_EXT_TEST: '0' });
   return zipDirectory(path.join(outDir, 'chrome-mv3'));
 }

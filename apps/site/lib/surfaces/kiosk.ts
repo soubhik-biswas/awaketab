@@ -34,17 +34,25 @@ type TKioskFace = (typeof KIOSK_FACES)[number];
 
 export const KIOSK_SCREENS: readonly TKioskScreen[] = ['dark', 'oled'];
 
-// Burn-in care: the layout steps through these offsets, one a minute.
+// Burn-in care: the layout steps through these offsets, one every three minutes.
 const DRIFT: ReadonlyArray<readonly [number, number]> = [
   [0, 0],
   [6, -4],
   [-5, 5],
   [4, 6],
 ];
-export const DRIFT_MS = 60_000;
+export const DRIFT_MS = 180_000;
 export const HOLD_MS = 3000;
 export const RELOCK_MS = 30_000;
-export const KIOSK_STAGE = { width: 960, height: 540, face: 420 } as const;
+// The wall-mode board's TV, drawn at 1440 × 810 and scaled to the screen: a 600 px face 70 px from the top.
+export const KIOSK_STAGE = { width: 1440, height: 810, face: 600, faceTop: 70 } as const;
+// Night dimming: from 10 PM to 6 AM the screen runs at 40 %.
+export const NIGHT_DIM = { from: 22, to: 6, level: 0.4 } as const;
+
+export function nightDim(now: number): number {
+  const h = new Date(now).getHours();
+  return h >= NIGHT_DIM.from || h < NIGHT_DIM.to ? NIGHT_DIM.level : 1;
+}
 
 const DEFAULT_SCHEDULE: IKioskSchedule = { days: 'weekdays', from: '08:00', to: '18:00' };
 
@@ -90,7 +98,7 @@ const kioskFace = (v: string | null): TKioskFace | null => {
   return id && isFace(id) ? id : null;
 };
 
-// The kiosk link: ?face=lcd&screen=oled&days=weekdays&from=08-00&to=18-00&kicker=…&msg=…&line=…&logo=https://…
+// The kiosk link: ?face=bold&screen=oled&days=weekdays&from=08-00&to=18-00&kicker=…&msg=…&line=…&logo=https://…
 // `days=always` keeps the screen awake all day; the texts default to the board's reception sign.
 export function parseKioskQuery(search: string, defaults: Pick<IKioskConfig, 'kicker' | 'msg' | 'line'>): IKioskConfig {
   const q = new URLSearchParams(search);
@@ -104,8 +112,8 @@ export function parseKioskQuery(search: string, defaults: Pick<IKioskConfig, 'ki
     schedule = { days, from: from ?? DEFAULT_SCHEDULE.from, to: to ?? DEFAULT_SCHEDULE.to };
   }
   return {
-    face: kioskFace(face) ?? 'lcd',
-    screen: q.get('screen') === 'oled' ? 'oled' : 'dark',
+    face: kioskFace(face) ?? 'bold',
+    screen: q.get('screen') === 'dark' ? 'dark' : 'oled',
     kicker: cleanText(q.get('kicker')) || defaults.kicker,
     msg: cleanText(q.get('msg')) || defaults.msg,
     line: cleanText(q.get('line')) || defaults.line,

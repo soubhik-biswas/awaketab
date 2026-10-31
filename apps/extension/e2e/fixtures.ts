@@ -1,6 +1,5 @@
 import { test as base, chromium, expect, type BrowserContext, type Page, type Worker } from '@playwright/test';
-import { createHash, webcrypto } from 'node:crypto';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,7 +9,7 @@ const EXTENSION_DIR = path.resolve(HERE, '../.output-test/chrome-mv3');
 
 export interface IPowerCall {
   call: 'request' | 'release';
-  level?: 'display' | 'system';
+  level?: 'display';
   at: number;
 }
 
@@ -69,60 +68,4 @@ export async function localStore(page: Page): Promise<Record<string, unknown>> {
 
 export async function syncStore(page: Page): Promise<Record<string, unknown>> {
   return page.evaluate(() => chrome.storage.sync.get(null));
-}
-
-async function devToken(claims: { plan: string; features: string[]; deviceId: string; exp: number }): Promise<string> {
-  const vars = await readFile(path.resolve(HERE, '../../web/.dev.vars.example'), 'utf8');
-  const line = vars.split('\n').find((l) => l.startsWith('LICENSE_SIGNING_KEY='));
-  if (!line) throw new Error('dev signing key missing');
-  const jwk = JSON.parse(line.slice('LICENSE_SIGNING_KEY='.length)) as JsonWebKey;
-  const key = await webcrypto.subtle.importKey('jwk', jwk, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']);
-  const enc = (obj: unknown) => Buffer.from(JSON.stringify(obj)).toString('base64url');
-  const header = enc({ alg: 'ES256', typ: 'JWT', ver: 1 });
-  const dev = createHash('sha256').update(claims.deviceId).digest('hex');
-  const payload = enc({
-    sub: 'e2e',
-    plan: claims.plan,
-    features: claims.features,
-    dev,
-    iat: Math.floor(Date.now() / 1000),
-    exp: claims.exp,
-    ver: 1,
-  });
-  const sig = Buffer.from(
-    await webcrypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, key, Buffer.from(`${header}.${payload}`)),
-  );
-  return `${header}.${payload}.${sig.toString('base64url')}`;
-}
-
-export async function mockLicenseApi(
-  context: BrowserContext,
-  extensionId: string,
-  features: string[],
-): Promise<string[]> {
-  const origin = `chrome-extension://${extensionId}`;
-  const cors = {
-    'access-control-allow-origin': origin,
-    'access-control-allow-methods': 'POST, OPTIONS',
-    'access-control-allow-headers': 'content-type',
-    vary: 'Origin',
-  };
-  const seen: string[] = [];
-  await context.route('https://awaketab.com/api/license/**', async (route) => {
-    const request = route.request();
-    if (request.method() === 'OPTIONS') {
-      await route.fulfill({ status: 204, headers: cors });
-      return;
-    }
-    const body = JSON.parse(request.postData() ?? '{}') as { key?: string; deviceId?: string; deviceLabel?: string };
-    seen.push(JSON.stringify(body));
-    if (body.key !== 'ATAB-E2E-KEY-1234567890') {
-      await route.fulfill({ status: 404, headers: cors, json: { error: 'invalid_key' } });
-      return;
-    }
-    const exp = Math.floor(Date.now() / 1000) + 30 * 86_400;
-    const token = await devToken({ plan: 'pro_yearly', features, deviceId: body.deviceId ?? '', exp });
-    await route.fulfill({ headers: cors, json: { token, plan: 'pro_yearly', features, exp, activations: [] } });
-  });
-  return seen;
 }

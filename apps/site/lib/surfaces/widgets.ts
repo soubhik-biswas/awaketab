@@ -12,7 +12,7 @@ export interface IWidgetPreset {
   sec: number;
 }
 
-// The three presets the widgets board draws, in its order.
+// The presets a widget tap may start; the quick-start widget starts the first, one hour.
 export const WIDGET_PRESETS: readonly IWidgetPreset[] = [
   { key: 'presenting', len: 'hour', preset: 'p60', sec: 3600 },
   { key: 'cooking', len: 'min45', preset: 'p45', sec: 2700 },
@@ -26,9 +26,12 @@ export interface IWidgetData {
   live: boolean;
   awake: boolean;
   status: string;
+  pill: string;
   line: string;
+  ends: string;
   digits: string;
   label: string;
+  quick: string;
   extend: string;
   stop: string;
   presetsTitle: string;
@@ -37,23 +40,29 @@ export interface IWidgetData {
 
 export interface IWidgetStrings {
   status: string;
+  pill: string;
   line: string;
+  ends: string;
   label: string;
+  quick: string;
   extend: string;
   stop: string;
   presetsTitle: string;
   presets: Array<{ name: string; length: string }>;
 }
 
-// What the installed app's Windows widgets show, built from the same reading of the engine as the mini clock.
+// What the installed app's Windows widgets (large, small, quick start) show, from the same reading as the mini clock.
 export function widgetData(view: ISurfaceView, s: IWidgetStrings): IWidgetData {
   return {
     live: view.live,
     awake: view.awake,
     status: s.status,
+    pill: s.pill,
     line: s.line,
+    ends: s.ends,
     digits: view.indef ? '∞' : digits(view.remain),
     label: s.label,
+    quick: s.quick,
     extend: s.extend,
     stop: s.stop,
     presetsTitle: s.presetsTitle,

@@ -5,7 +5,6 @@ import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { TLockState } from '@awaketab/wake';
 import { Mark, type TMarkLamp } from '@/components/brand/mark';
-import { StatusPill, type TStatusState } from '@/components/product/status-pill';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { TEmbedMode, TEmbedSize } from '@/lib/embed/protocol';
@@ -13,15 +12,20 @@ import { COOK_MAX_TIMERS, COOK_QUICK_MIN, type ICookTimer } from '@/lib/embed/ti
 
 const EMBED_FIX_URL = 'https://awaketab.com/embed#allow';
 
-const PILL: Record<TLockState, TStatusState> = {
-  idle: 'idle',
-  requesting: 'starting',
-  held: 'awake',
-  lost: 'paused',
-  denied: 'blocked',
-  unsupported: 'unsupported',
-  fallback: 'fallback',
+// The Glance status pill's colour per lock state; at rest it is hollow and quiet.
+const PILL_TONE: Record<TLockState, string> = {
+  idle: 'text-muted-foreground-strong',
+  requesting: 'text-info',
+  held: 'text-lamp',
+  lost: 'text-warning',
+  denied: 'text-destructive',
+  unsupported: 'text-muted-foreground-strong',
+  fallback: 'text-lamp',
 };
+const SOLID: ReadonlySet<TLockState> = new Set<TLockState>(['requesting', 'held', 'lost', 'denied', 'fallback']);
+const VIOLET =
+  'border-0 bg-[linear-gradient(180deg,#7A4DFF,#6633F5_45%,#5124E0)] text-white shadow-[0_12px_30px_var(--primary-glow)] dark:bg-[linear-gradient(180deg,#B39BFF,#9F7BFF_45%,#7C5CFF)] dark:text-[#0B0718]';
+const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring';
 
 const BEAD: Record<TLockState, TMarkLamp> = {
   idle: 'off',
@@ -72,13 +76,28 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
       ? { background: p.accent.bg, borderColor: p.accent.bg, color: p.accent.fg }
       : undefined;
   const label = p.action === 'stop' ? ts('stop') : p.action === 'retry' ? ts('retry') : t('start');
+  const solid = SOLID.has(p.lock);
   const pill = (
-    <StatusPill
-      state={PILL[p.lock]}
-      label={pillLabel}
-      live
-      className={full ? 'h-8 px-3 text-[14px]' : 'h-[26px] gap-1.5 px-2.5 text-[13px] [&_svg]:size-3!'}
-    />
+    <span
+      role="status"
+      aria-live="polite"
+      data-slot="status-pill"
+      className={cn(
+        'inline-flex h-[30px] max-w-full items-center gap-2 rounded-full border bg-glass pr-3 pl-2.5 text-[13px] font-semibold whitespace-nowrap',
+        PILL_TONE[p.lock],
+        solid ? 'border-[color-mix(in_srgb,currentColor_33%,transparent)]' : 'border-border',
+      )}
+    >
+      <span
+        aria-hidden="true"
+        className={cn(
+          'box-border size-2 flex-none rounded-full',
+          solid ? 'bg-current' : 'border-2 border-current',
+          p.lock === 'held' && 'motion-safe:animate-pulse',
+        )}
+      />
+      <span className="truncate">{pillLabel}</span>
+    </span>
   );
   const button = (
     <Button
@@ -87,10 +106,10 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
       onClick={p.onAction}
       style={accent}
       className={cn(
-        'shrink-0 gap-2 font-bold',
-        p.action !== 'start' && 'border-input bg-surface-3 text-foreground',
-        full ? 'h-[60px] w-[104px] rounded-md text-[16px] @min-[600px]:w-[120px]' : 'h-11 w-24 rounded-sm text-[15px]',
-        full && p.mode === 'cook' && 'h-16',
+        'shrink-0 gap-2 rounded-full font-bold',
+        p.action === 'start' ? VIOLET : 'border border-border-hi bg-glass text-foreground hover:bg-surface-3',
+        full ? 'h-[52px] w-[112px] text-[16px] @min-[600px]:w-[128px]' : 'h-11 w-24 text-[15px]',
+        full && p.mode === 'cook' && 'h-14',
       )}
     >
       {label}
@@ -106,10 +125,9 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
         aria-label={p.digitsLabel}
         aria-pressed={p.mode === 'cook' && live ? p.paused : undefined}
         className={cn(
-          'cursor-pointer self-start rounded-xs text-left font-light tabular-nums focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-          full
-            ? 'text-[28px] @min-[360px]:text-[48px] @min-[600px]:text-[64px] @min-[600px]:font-extralight'
-            : 'text-[28px]',
+          'cursor-pointer self-start rounded-[12px] text-left font-light tracking-[-0.04em] tabular-nums',
+          FOCUS,
+          full ? 'text-[28px] @min-[360px]:text-[48px] @min-[600px]:text-[64px]' : 'text-[28px]',
           p.muted ? 'text-muted-foreground-strong' : 'text-foreground',
         )}
       >
@@ -124,8 +142,8 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
       data-size={p.size}
       className={cn(
         p.theme,
-        '@container relative flex w-full flex-col overflow-hidden border border-border bg-card text-foreground',
-        full ? 'min-h-[240px] rounded-[28px]' : 'min-h-[104px] rounded-[16px]',
+        '@container relative flex w-full flex-col overflow-hidden border border-border bg-card text-foreground shadow-panel',
+        full ? 'min-h-[240px] rounded-[28px]' : 'min-h-[104px] rounded-[18px]',
         p.className,
       )}
     >
@@ -145,7 +163,7 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
               <span aria-hidden="true" className="inline-flex">
                 <Mark size={24} lampState={BEAD[p.lock]} tone="auto" glow={false} />
               </span>
-              <strong className="font-display text-[16px] font-bold [font-stretch:112%]">{t('frame.title')}</strong>
+              <strong className="font-display text-[17px] font-bold tracking-[-0.02em]">{t('frame.title')}</strong>
               <span className="ml-auto">{pill}</span>
             </div>
             <div className="flex items-end justify-between gap-4">
@@ -191,7 +209,7 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
               target="_blank"
               rel="noopener"
               aria-label={ts('fixLabel')}
-              className="font-semibold text-link underline underline-offset-3"
+              className="inline-flex min-h-11 items-center font-semibold text-foreground underline underline-offset-3"
             >
               {t('advice.fix')}
             </a>
@@ -229,7 +247,7 @@ export function KitchenTimers({ timers, now, format, onAdd, onRemove }: IKitchen
             <li
               key={x.id}
               className={cn(
-                'flex h-[46px] items-center gap-2 rounded-sm border border-border px-3',
+                'flex h-[46px] items-center gap-2 rounded-[12px] border border-border bg-glass px-3',
                 done && 'border-lamp bg-accent',
                 flashing && 'motion-safe:animate-pulse',
               )}
@@ -242,7 +260,10 @@ export function KitchenTimers({ timers, now, format, onAdd, onRemove }: IKitchen
                 type="button"
                 onClick={() => onRemove(x.id)}
                 aria-label={ts('remove', { name: x.name })}
-                className="inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground-strong hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className={cn(
+                  'inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-[12px] text-muted-foreground-strong hover:bg-secondary',
+                  FOCUS,
+                )}
               >
                 <X className="size-4" strokeWidth={2} aria-hidden="true" />
               </button>
@@ -258,7 +279,10 @@ export function KitchenTimers({ timers, now, format, onAdd, onRemove }: IKitchen
               type="button"
               onClick={() => onAdd(min)}
               aria-label={t('addLabel', { minutes: min })}
-              className="inline-flex h-11 min-w-11 cursor-pointer items-center justify-center rounded-full border border-dashed border-input px-3 text-[13px] font-semibold hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className={cn(
+                'inline-flex h-11 min-w-11 cursor-pointer items-center justify-center rounded-[12px] border-[1.5px] border-dashed border-border-hi px-3 text-[13px] font-semibold text-muted-foreground-strong hover:text-foreground',
+                FOCUS,
+              )}
             >
               {ts('quick', { minutes: min })}
             </button>

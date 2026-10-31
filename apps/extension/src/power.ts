@@ -1,22 +1,18 @@
 import type { TAdviceCode, TLockState } from '@awaketab/core';
 import type { IChangeEvent, IWakeLockHandle } from '@awaketab/wake';
-import type { IExtApi, TPowerLevel } from './api';
+import type { IExtApi } from './api';
 
 export interface IPowerLock extends IWakeLockHandle {
-  readonly level: TPowerLevel | null;
   reassert(): void;
 }
 
-export function createPowerLock(opts: {
-  power: IExtApi['power'];
-  level: () => TPowerLevel;
-  now?: () => number;
-}): IPowerLock {
+// chrome.power as a wake-lock handle for the session engine: one display request per extension, held from the
+// service worker, so it works in any tab and while other apps are in front.
+export function createPowerLock(opts: { power: IExtApi['power']; now?: () => number }): IPowerLock {
   const now = opts.now ?? Date.now;
   const listeners = new Set<(e: IChangeEvent) => void>();
   let state: TLockState = opts.power ? 'idle' : 'unsupported';
   let advice: TAdviceCode | null = opts.power ? null : 'unsupported_browser';
-  let held: TPowerLevel | null = null;
 
   function go(to: TLockState, reason: IChangeEvent['reason'], nextAdvice: TAdviceCode | null = null) {
     const from = state;
@@ -29,13 +25,10 @@ export function createPowerLock(opts: {
   }
 
   function issue(): boolean {
-    const level = opts.level();
     try {
-      opts.power?.requestKeepAwake(level);
-      held = level;
+      opts.power?.requestKeepAwake('display');
       return true;
     } catch {
-      held = null;
       go('denied', 'denied', 'permissions_policy');
       return false;
     }
@@ -55,16 +48,12 @@ export function createPowerLock(opts: {
     get advice() {
       return advice;
     },
-    get level() {
-      return held;
-    },
     request() {
       if (!opts.power) {
         go('unsupported', 'unsupported', 'unsupported_browser');
         return Promise.resolve(state);
       }
       if (state === 'held') {
-        // chrome.power keeps one request per extension; asking again replaces the level.
         issue();
         return Promise.resolve(state);
       }
@@ -77,7 +66,6 @@ export function createPowerLock(opts: {
         try {
           opts.power?.releaseKeepAwake();
         } finally {
-          held = null;
           go('idle', 'user_release');
         }
       }

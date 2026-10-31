@@ -3306,7 +3306,12 @@
       "extend": "+15 min",
       "extendLabel": "Add 15 minutes",
       "stop": "Stop",
-      "start": "Start"
+      "start": "Start",
+      "left": "{dur} left",
+      "ends": "Ends {time} · tap to extend",
+      "quick": "Keep awake · 1 h",
+      "quickLabel": "Keep this screen awake for 1 hour",
+      "name": "This screen"
     },
     "kiosk": {
       "section": "Kiosk mode on a shared screen",
@@ -3331,7 +3336,7 @@
       "everyday": "Every day",
       "alwaysBody": "Every day, all day. The screen stays awake until you leave kiosk mode.",
       "burn": "Burn-in care",
-      "burnBody": "The whole layout drifts a few pixels every minute and OLED uses pure black. Try “Shift now”.",
+      "burnBody": "The whole layout drifts a few pixels every 3 minutes, OLED uses pure black and the screen dims to 40% after 10 PM. Try “Shift now”.",
       "shift": "Shift now",
       "start": "Start kiosk mode",
       "asleep": "Outside the schedule: the screen may sleep until {time}.",
@@ -3402,6 +3407,10 @@
         "left": "{time} left",
         "finished": "Done"
       }
+    },
+    "unit": {
+      "min": "min",
+      "h": "h"
     }
   }
 }
