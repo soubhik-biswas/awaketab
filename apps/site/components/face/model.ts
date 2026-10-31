@@ -24,7 +24,7 @@ export interface IFaceProps {
   className?: string;
 }
 
-// The sheet order of the 49 faces (the same list as FACE_IDS in @awaketab/core).
+// The gallery order of the 46 Glance faces (the same list as FACE_IDS in @awaketab/core).
 export const FACE_IDS = [
   'ring',
   'bold',
@@ -38,7 +38,6 @@ export const FACE_IDS = [
   'words',
   'nixie',
   'lcd',
-  'led',
   'dive',
   'chrono',
   'gauge',
@@ -68,8 +67,6 @@ export const FACE_IDS = [
   'bauhaus',
   'poster',
   'eink',
-  'terminal',
-  'pulse',
   'waveform',
   'blob',
   'hud',
@@ -94,6 +91,13 @@ export const FACE_STATES: readonly TFaceState[] = [
 export const FACE_DEFAULTS = { remain: 2538, total: 3600, nowSec: 38_862, size: 360 } as const;
 
 export const isFaceId = (id: unknown): id is TFaceId => (FACE_IDS as readonly unknown[]).includes(id);
+
+// Faces Glance retired, and the face a stored id draws instead (the same map as migrateFace in @awaketab/core).
+export const RETIRED_FACES: Readonly<Record<string, TFaceId>> = { led: 'lcd', terminal: 'lcd', pulse: 'waveform' };
+
+// Any stored or linked id as a face that exists: retired ids move to their closest face, anything else is Ring.
+export const toFaceId = (id: unknown): TFaceId =>
+  isFaceId(id) ? id : typeof id === 'string' ? (RETIRED_FACES[id] ?? 'ring') : 'ring';
 
 const LAMP = 'var(--fl)';
 const ACCENT = 'var(--fa)';
@@ -184,7 +188,7 @@ export interface IFaceOptions {
 }
 
 export function faceModel(p: IFaceProps, opts: IFaceOptions = {}) {
-  const face: TFaceId = isFaceId(p.face) ? p.face : 'ring';
+  const face: TFaceId = toFaceId(p.face);
   const theme: TFaceTheme = p.theme === 'light' || p.theme === 'oled' ? p.theme : 'dark';
   const st: TFaceState = p.state && p.state in STATUS ? p.state : 'running';
   const total = p.total ?? FACE_DEFAULTS.total;
