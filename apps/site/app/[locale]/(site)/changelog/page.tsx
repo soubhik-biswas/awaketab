@@ -6,7 +6,7 @@ import { PageHero } from '@/components/site/page-hero';
 import { changelog } from '@/lib/content';
 import { fullDate } from '@/lib/dates';
 import { ROUTES, SITE } from '@/lib/routes';
-import { articleSchema, englishOnly, pageMetadata } from '@/lib/seo';
+import { articleSchema, englishOnly, pageMetadata, titleFor } from '@/lib/seo';
 
 const TAG = { new: 'New', fixed: 'Fixed', changed: 'Changed' } as const;
 
@@ -14,10 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.changelog' });
   const ts = await getTranslations({ locale: 'en', namespace: 'site.changelog' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor(ts('h1')),
     description: t('description'),
     path: ROUTES.changelog,
-    og: { kicker: ts('eyebrow'), title: ts('h1'), sub: ts('lead'), scene: 'history', tone: 'dark' },
+    og: { image: 'og-08', alt: ts('ogAlt') },
   });
 }
 

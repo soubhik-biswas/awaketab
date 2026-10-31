@@ -11,14 +11,7 @@ const down = until !== '';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'site.sys.status' });
-  return systemMetadata(
-    t('title'),
-    t('description'),
-    '/status',
-    t(down ? 'eyebrow' : 'okEyebrow'),
-    t(down ? 'h1' : 'okH1'),
-    down ? 'maintenance' : 'success',
-  );
+  return systemMetadata(t(down ? 'h1' : 'okH1'), t('description'), '/status');
 }
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {

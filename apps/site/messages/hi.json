@@ -4,218 +4,32 @@
     "tagline": "वह टैब जो आपकी स्क्रीन को ऑन रखता है।"
   },
   "page": {
-    "home": {
-      "title": "अपनी स्क्रीन ऑन रखें — AwakeTab",
-      "description": "Wake Lock API की मदद से इसी ब्राउज़र टैब में अपनी स्क्रीन ऑन रखें। ईमानदार स्टेटस, प्रीसेट, तय समय तक। कोई अकाउंट नहीं।",
-      "h1": "अपनी स्क्रीन ऑन रखें",
-      "what": {
-        "title": "AwakeTab क्या करता है"
-      },
-      "how": {
-        "title": "यह कैसे काम करता है"
-      },
-      "limits": {
-        "title": "ईमानदार सीमाएं"
-      },
-      "intro": "जब यह टैब दिख रहा हो तब AwakeTab ब्राउज़र की Wake Lock API इस्तेमाल करता है, और लॉक की पुष्टि के बाद ही स्थिति स्क्रीन जगे होने की बात कहती है।",
-      "uses": {
-        "title": "What are you keeping awake?",
-        "lead": "Each one opens the tool already set for the job, with the length it needs.",
-        "all": "All {count} use cases",
-        "start": "Start · {length}",
-        "cooking": {
-          "_": "Cooking",
-          "body": "The recipe stays lit while your hands are floury, with kitchen timers beside it."
-        },
-        "reading": {
-          "_": "Reading",
-          "body": "A long article stays on screen while you read, with no tap to wake it."
-        },
-        "presentations": {
-          "_": "Presentations",
-          "body": "Set it to the end of your talk and keep it in a floating window beside the slides."
-        },
-        "dashboards": {
-          "_": "Dashboards",
-          "body": "A wall screen stays on all day, and a link can start the session as the page loads."
-        },
-        "videoCalls": {
-          "_": "Video calls",
-          "body": "The display stays on when the video pauses. Your chat status is left alone."
-        },
-        "downloads": {
-          "_": "Downloads",
-          "body": "The screen stays on through a long download, and a visible tab holds off idle sleep."
-        }
-      },
-      "final": {
-        "title": "One tap, and the screen stays on.",
-        "body": "The pill says {held} only after the browser confirms the lock. For a hidden tab or a minimised window, the extension keeps going.",
-        "start": "Keep this screen awake",
-        "extension": "Add extension",
-        "docs": "How it works, limits and FAQ in the docs"
-      },
-      "yours": {
-        "title": "Make it yours",
-        "lead": "Clock faces, colours, backgrounds, focus sounds and a notepad. Each one loads only when you pick it, and the status pill still tells you the truth.",
-        "compare": "Compare Free and Pro",
-        "faces": {
-          "title": "Twelve clock faces",
-          "tag": "All free",
-          "body": "Classic, retro and modern. Every face shows your session, follows your lamp colour and knows when the screen is paused. Swipe the clock or press C to switch.",
-          "list": "The twelve clock faces"
-        },
-        "looks": {
-          "title": "Themes, lamps and backgrounds",
-          "body": "Clear Night, Paper and Nord, four lamps, three backgrounds and three presets are free. Pro adds six themes, eight lamps, a colour of your own, five backgrounds and five presets.",
-          "themes": "Colour themes, each with a light and a dark version",
-          "lamps": "Lamp colours",
-          "patterns": "Backgrounds",
-          "try": "Previewing {name} · {time} left",
-          "tryNote": "Any Pro look can be tried for 5 minutes, as often as you like. Nothing is saved."
-        },
-        "sound": {
-          "title": "Sounds for focus",
-          "body": "Seven focus sounds made live in your browser, five end sounds, vibration and a quiet tick-tock, all free. Pro adds a mixer to layer them.",
-          "list": "Free focus sounds",
-          "mixer": "Mixer",
-          "honest": "Nothing plays until you ask, and sound never keeps the screen awake."
-        },
-        "notes": {
-          "title": "A notepad beside the clock",
-          "body": "Checklists, headings, export and voice typing. Notes stay in this browser and work offline. One note is free; Pro keeps as many as you like.",
-          "sample": {
-            "title": "Before the call",
-            "1": "Open the slides",
-            "2": "Share the agenda",
-            "3": "Ask about the launch date"
-          },
-          "listening": "Listening…"
-        },
-        "focus": {
-          "title": "Focus tools",
-          "body": "A Pomodoro with pause and skip, an intention under the clock, a breathing guide and a second time zone. With Pro the Pomodoro repeats on its own.",
-          "intention": "Writing the report",
-          "zone": "London",
-          "breathe": "Breathe in",
-          "cycles": "Focus block 2 of 4"
-        }
-      },
-      "ext": {
-        "kicker": "AwakeTab for Chrome",
-        "free": "Free",
-        "title": "Keep the screen awake with the tab out of sight",
-        "lead": "The extension asks the browser itself to keep the screen awake, so it keeps going behind other windows.",
-        "hidden": {
-          "title": "Tab hidden or window minimised",
-          "body": "It keeps going while the browser is running."
-        },
-        "system": {
-          "title": "Only the system, if you prefer",
-          "body": "System level keeps the computer awake and lets the screen dim or turn off."
-        },
-        "badge": {
-          "title": "Status in the toolbar",
-          "body": "The badge shows ON, SYS or the minutes left."
-        },
-        "shortcut": {
-          "title": "A shortcut from any tab",
-          "body": "{keys} starts or stops it without going back to the tab."
-        },
-        "cta": {
-          "get": "Get the extension",
-          "edge": "Add to Edge"
-        },
-        "note": "Works in {browsers}, version {version} or later. {others} have no power API for extensions.",
-        "more": "See everything the extension does",
-        "art": {
-          "tab": "Sales dashboard",
-          "tab2": "Inbox",
-          "started": "Started {time}"
-        }
-      },
-      "levels": {
-        "title": "Choose your level",
-        "lead": "Keeping a screen awake is free, in this tab and in the extension, and so are every clock face and focus sound. Pro adds more looks, a sound mixer, more notes and a longer memory.",
-        "free": "Free",
-        "web": {
-          "name": "Web tab",
-          "per": "nothing to install",
-          "sub": "Runs right here, in this tab.",
-          "g1": "Keeps the screen on while this tab is visible",
-          "g2": "15 min to 4 h, until a time, or a custom length up to 7 days",
-          "g3": "Phones, tablets and computers, and offline after the first visit",
-          "g4": "A status pill that says awake only once the browser confirms it",
-          "g5": "Twelve clock faces, three colour themes, seven focus sounds, a notepad and a Pomodoro",
-          "cta": "Start now"
-        },
-        "ext": {
-          "name": "Extension",
-          "tag": "Best on a computer",
-          "per": "one install",
-          "sub": "{browsers} {version} or later, on a computer.",
-          "g1": "Keeps going with the tab hidden or the window minimised",
-          "g2": "Screen or System: keep only the computer awake and let the screen sleep",
-          "g3": "A toolbar badge with ON, SYS or the minutes left",
-          "g4": "{keys} from any tab",
-          "cta": "Add extension"
-        },
-        "pro": {
-          "name": "Pro",
-          "per": "a year, or {once} once",
-          "sub": "5 devices, no account, 14-day refund.",
-          "g1": "Your own message, up to 80 characters, on the awake screen",
-          "g2": "Six more themes, eight more lamps, your own colour, five more backgrounds and five presets",
-          "g3": "12 weeks of history and a CSV export",
-          "g4": "Schedules and auto-start in the extension",
-          "g5": "A sound mixer, as many notes as you like and a Pomodoro that repeats",
-          "g6": "Try the looks, the mixer, more notes and the repeating Pomodoro for 5 minutes first",
-          "cta": "See Pro"
-        }
-      }
-    },
-    "preset": {
-      "title": "{label} के लिए स्क्रीन ऑन रखें — AwakeTab",
-      "description": "{label} का AwakeTab सेशन शुरू करें। पिल पर “स्क्रीन ऑन है” तभी दिखता है जब Wake Lock सचमुच मिला हुआ हो।"
-    },
-    "until": {
-      "title": "{time} तक स्क्रीन ऑन रखें — AwakeTab"
-    },
+    "preset": {},
+    "until": {},
     "pip": {
       "title": "AwakeTab फ़्लोटिंग टाइमर"
     },
     "404": {
-      "title": "पेज नहीं मिला — AwakeTab",
       "h1": "यह पेज यहाँ नहीं है — पर टूल यहीं है।"
     },
     "hub": {
       "for": {
-        "title": "हर काम के लिए स्क्रीन जगाए रखें — AwakeTab",
-        "description": "खाना, डाउनलोड, प्रस्तुति जैसे कामों के गाइड। स्क्रीन तभी जगी रहती है जब सक्रिय टैब के पास वेक लॉक हो।",
         "h1": "एक काम के लिए स्क्रीन जगाए रखें"
       },
       "on": {
-        "title": "अपने डिवाइस पर स्क्रीन जगाए रखें — AwakeTab",
-        "description": "ब्राउज़र और सिस्टम के लिए ईमानदार निर्देश: मूल समर्थन, बैटरी सीमा और फॉलबैक।",
         "h1": "अपने डिवाइस पर AwakeTab चलाएँ"
       },
       "vs": {
-        "title": "AwakeTab के विकल्पों की तुलना — AwakeTab",
-        "description": "तंत्र, गोपनीयता, समर्थन और ईमानदार सीमाओं से कैफीन ऐप्स की तुलना करें।",
         "h1": "स्क्रीन-जाग उपकरण तुलना",
         "pick": "Pick it when",
         "instead": "{name} instead when",
         "more": "Read the comparison"
       },
       "guides": {
-        "title": "वेक लॉक समस्या समाधान — AwakeTab",
-        "description": "बैटरी सेवर और ऑटो-लॉक ठीक करें। छिपा टैब या बंद ढक्कन का वादा नहीं।",
         "h1": "वेक लॉक गाइड",
         "more": "Read the fix"
       },
       "learn": {
-        "title": "वेक लॉक कैसे काम करते हैं — AwakeTab",
-        "description": "Screen Wake Lock API, समर्थन, गोपनीयता, परीक्षण और वेब पेज की सीमाएँ।",
         "h1": "वेक लॉक सीखें"
       },
       "start": "Start",
@@ -223,36 +37,26 @@
       "native": "Native wake lock"
     },
     "about": {
-      "title": "AwakeTab और इसके परीक्षण — AwakeTab",
-      "description": "स्वतंत्र लेखक और यह कि वेक लॉक का परीक्षण बिना बढ़ा-चढ़ाकर कैसे होता है।",
       "h1": "AwakeTab के बारे में"
     },
     "privacy": {
-      "title": "गोपनीयता — AwakeTab",
-      "description": "सेटिंग और सत्र यहीं रहते हैं, कुकी या फिंगरप्रिंट नहीं, टेलीमेट्री तभी जब आप चालू करें।",
       "h1": "गोपनीयता"
     },
     "terms": {
-      "title": "नियम — AwakeTab",
-      "description": "AwakeTab के सादे नियम: सेवा सीमाएँ, ओपन सोर्स भाग और बैटरी का जिम्मेदार उपयोग।",
       "h1": "नियम"
     },
     "changelog": {
-      "title": "परिवर्तन सूची — AwakeTab",
-      "description": "वेब ऐप, लाइब्रेरी, एक्सटेंशन और एम्बेड टूल के रिलीज़ देखें।",
       "h1": "परिवर्तन सूची"
     },
     "pro": {
-      "title": "AwakeTab Pro plans and pricing — AwakeTab",
-      "description": "AwakeTab Pro adds colour themes, a sound mixer, more notes, a repeating Pomodoro and 12 weeks of stats. Yearly or once, 5 devices, 14-day refund.",
       "h1": "AwakeTab Pro",
       "devices": "5 devices",
       "lead": "Pro is optional. The awake screen stays honest and ad-free either way. Polar handles checkout; AwakeTab never stores a password.",
       "tax": "Charged in USD; taxes added at checkout where applicable.",
       "refund": {
-        "_": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key.",
+        "_": "14-day refund, no questions asked. Ask from Settings → Account → Manage plan, or use the payment provider’s customer portal. Refunds deactivate the licence key.",
         "lead": "14-day refund, no questions asked.",
-        "rest": "Email support@awaketab.com with your receipt or use the Polar customer portal. Refunds deactivate the licence key."
+        "rest": "Ask from Settings → Account → Manage plan, or use the payment provider’s customer portal. Refunds deactivate the licence key."
       },
       "activate": {
         "title": "Activate AwakeTab Pro — AwakeTab",
@@ -390,7 +194,7 @@
         "success": {
           "h1": "Pro is active",
           "lead": "Thank you. The payment went through, and this browser is now one of your five Pro devices.",
-          "aside": "14-day refund, no questions asked. Email support@awaketab.com with your receipt or use the Polar customer portal.",
+          "aside": "14-day refund, no questions asked. Ask from Settings → Account → Manage plan, or use the payment provider’s customer portal.",
           "link": "Manage devices"
         },
         "next": "Next steps",
@@ -446,7 +250,7 @@
           "secondary": "Email support",
           "aside": {
             "title": "See a charge anyway?",
-            "text": "A declined payment can show as a pending hold for a few days, then drop off. If it doesn’t, email support@awaketab.com with the date and amount."
+            "text": "A declined payment can show as a pending hold for a few days, then drop off. If it doesn’t, send the date and amount from Settings → Send feedback."
           },
           "link": "Email support"
         },
@@ -457,7 +261,7 @@
           "l1": "Search your inbox for “Polar” and check spam or Promotions.",
           "l2": "Just paid? Polar takes a few seconds to create the key. The activation page keeps checking for about 20 seconds on its own.",
           "l3": "Keys and receipts are also in the Polar customer portal.",
-          "l4": "Still stuck? Email support@awaketab.com from the address you paid with.",
+          "l4": "Still stuck? Send your receipt number from Settings → Send feedback inside the tool.",
           "primary": "Enter licence key",
           "secondary": "Open the Polar customer portal",
           "callout": "Your purchase is still syncing. Retry in a minute.",
@@ -738,23 +542,15 @@
       }
     },
     "embed": {
-      "title": "वेबसाइटों के लिए स्क्रीन-ऑन विजेट — AwakeTab",
-      "description": "ऐसा कुकिंग मोड बटन जोड़ें जो पाठकों की स्क्रीन जगाए रखे: एक script टैग, सच्ची स्थिति और कोई थर्ड-पार्टी अनुरोध नहीं। क्रेडिट लिंक के साथ मुफ़्त।",
       "h1": "अपने पाठकों की स्क्रीन जगाए रखें"
     },
     "kiosk": {
-      "title": "कियोस्क और साइनेज डिस्प्ले मोड — AwakeTab",
-      "description": "एक URL से कियोस्क, डैशबोर्ड या साइनेज स्क्रीन जगाए रखें: ऑटो-स्टार्ट, संदेश और थीम के विकल्प, और अपने लोगो के लिए Kiosk लाइसेंस।",
       "h1": "कियोस्क और साइनेज के लिए AwakeTab"
     },
     "library": {
-      "title": "@awaketab/wake — Wake Lock लाइब्रेरी — AwakeTab",
-      "description": "ओपन-सोर्स Screen Wake Lock लाइब्रेरी: सात सच्ची स्थितियाँ, छोटा वीडियो फ़ॉलबैक और मना होने पर सलाह। NoSleep.js का सक्रिय रूप से संभाला गया विकल्प।",
       "h1": "@awaketab/wake: ईमानदार वेक लॉक लाइब्रेरी"
     },
     "extension": {
-      "title": "स्क्रीन जागी रखने वाला Chrome एक्सटेंशन — AwakeTab",
-      "description": "AwakeTab for Chrome टूलबार से स्क्रीन या कंप्यूटर को जागा रखता है, टैब छिपा हो तब भी। टाइमर, शेड्यूल, ईमानदार स्टेटस और कोई ट्रैकिंग नहीं।",
       "h1": "AwakeTab for Chrome",
       "lead": "वेब ऐप वेक लॉक तभी रख सकता है जब उसका टैब दिख रहा हो। एक्सटेंशन खुद Chrome से डिस्प्ले — या सिर्फ़ कंप्यूटर — को जागा रखने को कहता है, इसलिए टैब छिपा हो या विंडो मिनिमाइज़ हो तब भी काम करता रहता है।",
       "cta": {
@@ -3491,27 +3287,6 @@
       "desc": "Chrome, Edge, Firefox और Safari में काम करता है।"
     },
     "ctaShort": "टाइमर खोलें",
-    "consent": {
-      "title": "क्या हम विज़िट गिन सकते हैं?",
-      "body": "वैकल्पिक, बिना कुकी वाले आँकड़े — कोई प्रोफ़ाइल नहीं, कोई विज्ञापन ट्रैकिंग नहीं। AwakeTab दोनों तरह से एक जैसा काम करता है।",
-      "decline": "मना करें",
-      "allow": "अनुमति दें"
-    },
-    "foot": {
-      "product": "प्रोडक्ट",
-      "learn": "जानें",
-      "company": "कंपनी",
-      "timer": "टाइमर खोलें",
-      "changelog": "बदलाव सूची",
-      "help": "सहायता केंद्र",
-      "presenting": "प्रस्तुति गाइड",
-      "about": "हमारे बारे में",
-      "status": "स्थिति पेज",
-      "tagline": "ब्राउज़र से स्क्रीन जगाए रखता है, फिर उसे दोबारा सोने देता है।",
-      "contact": "संपर्क",
-      "cookies": "कोई ट्रैकिंग कुकी नहीं",
-      "updated": "आखिरी अपडेट {date}"
-    },
     "tool": {
       "eyebrow": "यहाँ आज़माएँ",
       "ends": "अभी शुरू करें तो {time} पर समाप्त होगा।",
@@ -3561,20 +3336,15 @@
         "h1": "यह पेज सो गया",
         "lead": "लिंक पुराना हो सकता है या गलत टाइप हुआ हो। टाइमर यहीं है।",
         "guides": "लोकप्रिय गाइड",
-        "title": "पेज नहीं मिला — AwakeTab",
         "eyebrow": "404"
       },
       "offline": {
-        "title": "आप ऑफ़लाइन हैं — AwakeTab",
         "eyebrow": "ऑफ़लाइन",
         "h1": "आप ऑफ़लाइन हैं। टाइमर नहीं।",
         "lead": "स्क्रीन जगाए रखने के लिए इंटरनेट नहीं चाहिए। सिंक और साझा लिंक दोबारा जुड़ने तक इंतज़ार करते हैं।",
-        "timer": "टाइमर इस्तेमाल करते रहें",
-        "description": "स्क्रीन जगाए रखने के लिए इंटरनेट नहीं चाहिए। सिंक और साझा लिंक दोबारा जुड़ने तक इंतज़ार करते हैं।"
+        "timer": "टाइमर इस्तेमाल करते रहें"
       },
       "status": {
-        "title": "सेवा की स्थिति — AwakeTab",
-        "description": "AwakeTab का साइन इन और सिंक चल रहा है या नहीं, और रखरखाव कब तय है। टाइमर हर डिवाइस पर दोनों हालात में काम करता है।",
         "eyebrow": "रखरखाव",
         "h1": "तय रखरखाव।",
         "lead": "साइन इन और सिंक लगभग {time} तक रुके रहेंगे। टाइमर हर डिवाइस पर सामान्य रूप से काम करता है।",
@@ -3583,30 +3353,19 @@
         "okLead": "टाइमर, साइन इन और सिंक काम कर रहे हैं। रखरखाव तय होने पर सबसे पहले यहाँ बताया जाता है।",
         "see": "स्थिति देखें"
       },
-      "expired": {
-        "title": "लिंक की अवधि खत्म — AwakeTab",
-        "eyebrow": "लिंक की अवधि खत्म",
-        "h1": "इस लिंक की अवधि खत्म हो चुकी है।",
-        "lead": "साइन-इन लिंक एक बार और सिर्फ़ [NUMBER] मिनट तक चलते हैं। नया लिंक माँगें — इसमें कुछ सेकंड लगते हैं।",
-        "send": "नया लिंक भेजें"
-      },
       "removed": {
-        "title": "सेटअप हटाया गया — AwakeTab",
         "eyebrow": "सेटअप हटाया गया",
         "h1": "यह साझा सेटअप बंद कर दिया गया।",
         "lead": "जिसने इसे साझा किया था, उसने लिंक हटा दिया। आप फिर भी एक क्लिक में अपना सत्र शुरू कर सकते हैं।",
         "start": "अपना शुरू करें"
       },
       "error": {
-        "title": "कुछ गड़बड़ हुई — AwakeTab",
         "eyebrow": "कुछ टूट गया",
         "h1": "हमारी तरफ़ कुछ गड़बड़ हुई।",
         "lead": "पेज लोड नहीं हो सका। आपके डिवाइस पर कुछ नहीं बदला। फिर से कोशिश करें, या टाइमर खोलें — यह ऑफ़लाइन भी काम करता है।"
       }
     },
     "share": {
-      "title": "एक साझा AwakeTab सत्र",
-      "description": "किसी ने एक AwakeTab सत्र साझा किया है: इसकी अवधि, डायल और झंकार। लिंक के साथ कुछ भी निजी नहीं जाता।",
       "eyebrow": "एक साझा सेटअप",
       "loading": "साझा सत्र खुल रहा है…",
       "loadingLead": "लिंक से अवधि, डायल और झंकार पढ़ी जा रही है।",
@@ -3642,8 +3401,6 @@
       "installBody": "सत्र इसी टैब में चलता है। जब चाहें इसे बंद करें और स्क्रीन फिर से सामान्य रूप से सो जाएगी।"
     },
     "help": {
-      "title": "सहायता केंद्र — AwakeTab",
-      "description": "स्क्रीन फिर भी अँधेरी हो जाए, iPhone और iPad, प्रस्तुति, एक्सटेंशन, Pro बिलिंग और आपके डेटा से जुड़े जवाब।",
       "eyebrow": "सहायता केंद्र",
       "h1": "हम कैसे मदद करें?",
       "lead": "ज़्यादातर समस्याएँ बैटरी सेवर, छिपे टैब या पुराने ब्राउज़र से आती हैं। खोजें, या नीचे किसी विषय से शुरू करें।",
@@ -3657,107 +3414,7 @@
       "none": "“{q}” से कुछ मेल नहीं खाता। “बैटरी”, “iPad” या “बिलिंग” आज़माएँ।",
       "popular": "लोकप्रिय विषय",
       "stuck": "अब भी अटके हैं?",
-      "stuckBefore": "अपने ब्राउज़र और डिवाइस की जानकारी के साथ लिखें",
-      "stuckAfter": "पर। हम हर संदेश पढ़ते हैं।",
       "allTopics": "सभी विषय"
-    },
-    "home": {
-      "faces": {
-        "title": "49 डायल। वह चुनें जो आप कमरे के उस पार से पढ़ सकें।",
-        "sub": "सभी मुफ़्त। ये सिर्फ़ स्क्रीन जागृत रहने पर चलते हैं, और कम गति सेटिंग में स्थिर रहते हैं।",
-        "items": {
-          "aurora": {
-            "name": "ऑरोरा",
-            "body": "स्क्रीन जागृत रहने तक समय के पीछे ध्रुवीय रोशनी बहती है।"
-          },
-          "liquid": {
-            "name": "तरल",
-            "body": "रोशनी का काँच का गोला जो सत्र चलते-चलते खाली होता है।"
-          },
-          "eclipse": {
-            "name": "ग्रहण",
-            "body": "चाँद सूरज के ऊपर सरकता है; समय पूरा होने पर पूर्ण ग्रहण।"
-          },
-          "skeleton": {
-            "name": "स्केलेटन",
-            "body": "खुला मूवमेंट — गियर घूमते हैं, बैलेंस व्हील झूलता है।"
-          },
-          "neon": {
-            "name": "नियॉन",
-            "body": "अँधेरी दीवार पर नियॉन साइन, जागृत रहते हुए गुनगुनाता।"
-          },
-          "halo": {
-            "name": "हेलो",
-            "body": "चमकता ग्रेडिएंट वलय जो 12 की ओर बंद होता है।"
-          }
-        }
-      },
-      "uses": {
-        "title": "उन पलों के लिए जब अँधेरी स्क्रीन रुकावट बनती है",
-        "cooking": {
-          "_": "खाना बनाना",
-          "body": "हाथ व्यस्त हों तब भी रेसिपी स्क्रीन पर रहती है।",
-          "link": "खाना बनाने के लिए"
-        },
-        "presenting": {
-          "_": "प्रस्तुति",
-          "body": "आपकी सबसे अच्छी स्लाइड के बीच स्क्रीन धीमी नहीं होगी।",
-          "link": "प्रस्तुति के लिए"
-        },
-        "dashboards": {
-          "_": "डैशबोर्ड",
-          "body": "दीवार की स्क्रीनें और स्थिति बोर्ड जो रोशन रहें।",
-          "link": "डैशबोर्ड के लिए"
-        },
-        "nightdesk": {
-          "_": "रात की मेज़",
-          "body": "पढ़ाई, किताबें, अँधेरा होने के बाद एक शांत घड़ी।",
-          "link": "रात की मेज़ के लिए"
-        }
-      },
-      "how": {
-        "1": {
-          "_": "अवधि चुनें",
-          "body": "15 मिनट, एक घंटा, किसी समय तक — या बिल्कुल बिना अंत।"
-        },
-        "2": {
-          "_": "स्क्रीन जगाए रखें दबाएँ",
-          "body": "आपके ब्राउज़र का Screen Wake Lock डिस्प्ले चालू रखता है।"
-        },
-        "3": {
-          "_": "अपना काम करें",
-          "body": "समय पूरा होने पर हल्की झंकार; फिर स्क्रीन सामान्य रूप से सो जाती है।"
-        },
-        "title": "यह कैसे काम करता है"
-      },
-      "limits": {
-        "title": "सीमाओं के बारे में ईमानदार",
-        "body": "ब्राउज़र स्क्रीन चालू रख सकता है, पूरा कंप्यूटर नहीं। बैटरी सेवर, ढक्कन बंद करना या कंपनी की लॉक नीति फिर भी हावी हो सकती है — ऐसा होने पर AwakeTab आपको बताता है और ठीक करने का तरीका भी।"
-      },
-      "faq": {
-        "1": {
-          "_": "क्या यह iPhone और iPad पर काम करता है?",
-          "a": "हाँ, iOS और iPadOS 16.4 या बाद वाले Safari में। पुराने वर्ज़न एक साइलेंट वीडियो विकल्प इस्तेमाल करते हैं।"
-        },
-        "2": {
-          "_": "क्या मुझे खाता चाहिए?",
-          "a": "नहीं। सेटिंग्स इसी डिवाइस पर रहती हैं। Pro खाते का इस्तेमाल सिर्फ़ आपके डिवाइस सिंक करने के लिए करता है।"
-        },
-        "3": {
-          "_": "क्या यह मेरे ऑफ़िस लैपटॉप को लॉक होने से रोकेगा?",
-          "a": "टैब खुला रहने तक यह डिस्प्ले जागृत रखता है। कंपनी की लॉक नीतियाँ फिर भी लागू रहती हैं, और रहनी चाहिए।"
-        },
-        "4": {
-          "_": "क्या यह मुफ़्त है?",
-          "a": "स्क्रीन जगाए रखना मुफ़्त है। Pro डिवाइस सिंक, पूरा इतिहास और साउंड मिक्सर जोड़ता है।"
-        }
-      },
-      "cta": "अभी जगाए रखें",
-      "og": {
-        "kicker": "मुफ़्त · आपके ब्राउज़र में",
-        "title": "स्क्रीन चालू रखें। और जानें कब तक।",
-        "sub": "न खाता, न इंस्टॉल।"
-      }
     },
     "changelog": {
       "crumb": "बदलाव सूची",
@@ -3768,12 +3425,7 @@
     "pro": {
       "eyebrow": "AwakeTab Pro",
       "h1": "स्क्रीन जगाए रखना मुफ़्त रहेगा।",
-      "lead": "Pro उनके लिए है जो एक से ज़्यादा डिवाइस पर स्क्रीन चलाते हैं या अतिरिक्त सुविधाएँ चाहते हैं। कीमतें तय होने तक प्लेसहोल्डर हैं।",
-      "og": {
-        "kicker": "AwakeTab Pro",
-        "title": "जगाए रखना मुफ़्त है। Pro आराम के लिए है।",
-        "sub": "रूप, इतिहास, नोट्स।"
-      }
+      "lead": "Pro उनके लिए है जो एक से ज़्यादा डिवाइस पर स्क्रीन चलाते हैं या अतिरिक्त सुविधाएँ चाहते हैं। कीमतें तय होने तक प्लेसहोल्डर हैं।"
     }
   }
 }

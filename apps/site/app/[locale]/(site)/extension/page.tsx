@@ -4,7 +4,7 @@ import { Block, Callout, DataTable, Faq, Prose, Steps, tx } from '@/components/s
 import { JsonLd } from '@/components/site/json-ld';
 import { HeroButtons, PageHero } from '@/components/site/page-hero';
 import { ROUTES, SITE, toolHref } from '@/lib/routes';
-import { englishOnly, pageMetadata, softwareSchema } from '@/lib/seo';
+import { englishOnly, pageMetadata, softwareSchema, titleFor } from '@/lib/seo';
 
 // Until the stores approve the listing the links are store searches, and the note under the buttons says so.
 const STORE = {
@@ -16,15 +16,15 @@ const LISTED = false as boolean;
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.extension' });
   return pageMetadata({
-    title: t('title'),
+    title: titleFor(t('h1')),
     description: t('description'),
     path: ROUTES.extension,
     og: {
+      template: 'guide',
       kicker: 'Chrome & Edge',
       title: 'Stays awake when the tab isn’t in front.',
-      sub: 'Time left on your toolbar.',
+      sub: 'Time left on your toolbar',
       scene: 'welcome',
-      tone: 'dark',
     },
   });
 }

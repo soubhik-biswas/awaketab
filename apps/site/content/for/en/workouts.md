@@ -1,6 +1,6 @@
 ---
 title: "Keep the screen on for a workout — AwakeTab"
-description: "Keep a workout timer on screen with clock mode. Lock the orientation and plug in; a sweaty tap can stop the session, so glance at the pill."
+description: "Keep a workout timer on screen with clock mode. Lock the orientation and plug in; a sweaty tap can stop the session, so glance at the status pill."
 h1: "Keep the screen on for a workout"
 intent: "keep screen on during workout timer"
 preset: p45
