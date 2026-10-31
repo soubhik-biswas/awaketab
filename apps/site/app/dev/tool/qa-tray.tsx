@@ -4,7 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { FACE_IDS, faceName } from '@/components/face';
 import { cn } from '@/lib/utils';
 import type { TQaMessage } from '@/components/tool/qa-bridge';
+import { VIBES } from '@/lib/tool/settings';
 import { TOOL_LANGS, type TToolLang } from '@/lib/tool/strings';
+import type { TBlockReason, TPanel } from '@/lib/tool/ui';
 import type { TWakeState } from '@/lib/wake';
 
 type TPayload = TQaMessage extends infer M ? (M extends { type: 'at-qa' } ? Omit<M, 'type'> : never) : never;
@@ -25,39 +27,30 @@ const STATES: Array<[TWakeState, string]> = [
   ['needsyou', 'Needs you'],
   ['blocked', 'Blocked'],
   ['unsupported', 'Unsupported'],
-  ['ended', 'Ended'],
+  ['ended', 'Time’s up'],
 ];
 
-const VIEWS: Array<[string, string, TPayload]> = [
-  ['welcome', 'First visit', { action: 'view', view: 'welcome' }],
-  ['timer', 'Timer', { action: 'view', view: 'timer' }],
-  ['faces', 'Faces', { action: 'view', view: 'faces' }],
-  ['presets', 'Presets', { action: 'view', view: 'presets' }],
-  ['presetsEmpty', 'No presets', { action: 'view', view: 'presets', emptyPresets: true }],
-  ['history', 'History', { action: 'view', view: 'history' }],
-  ['clear', 'Clear history', { action: 'view', view: 'clear' }],
-  ['settings', 'Settings', { action: 'view', view: 'settings' }],
-  ['devices', 'Devices', { action: 'view', view: 'devices' }],
-  ['fix', 'Fix', { action: 'view', view: 'fix' }],
-  ['share', 'Share', { action: 'view', view: 'share' }],
-  ['extend', 'Extend', { action: 'view', view: 'extend' }],
-  ['more', 'More', { action: 'view', view: 'more' }],
-  ['studio', 'Face studio', { action: 'view', view: 'studio' }],
-  ['sound', 'Sound', { action: 'view', view: 'sound' }],
-  ['account', 'Account', { action: 'view', view: 'account' }],
-  ['palette', '⌘K palette', { action: 'view', view: 'palette' }],
-  ['paletteExt', '⌘K · “ext”', { action: 'view', view: 'palette', query: 'ext' }],
-  ['paletteFace', '⌘K · “face”', { action: 'view', view: 'palette', query: 'face' }],
-  ['paletteNone', '⌘K · no match', { action: 'view', view: 'palette', query: 'zzz' }],
-  ['focus', 'Fullscreen', { action: 'view', view: 'focus' }],
+const PANELS: Array<[TPanel, string]> = [
+  ['none', 'None'],
+  ['faces', 'Faces'],
+  ['recents', 'Recents'],
+  ['settings', 'Settings'],
+  ['help', 'Help & fixes'],
+  ['studio', 'Face studio'],
+  ['feedback', 'Feedback'],
+  ['vibes', 'Vibe'],
+  ['share', 'Share'],
+  ['devices', 'Your screens'],
+  ['sound', 'Ambient sound'],
+  ['clear', 'Clear history'],
+  ['language', 'Language'],
+  ['pro', 'Pro offer'],
+  ['proDone', 'Pro is on'],
+  ['plan', 'Manage plan'],
+  ['palette', '⌘K palette'],
 ];
 
-const TIMES: Array<[string, TPayload]> = [
-  ['5 min left', { action: 'time', remain: 302 }],
-  ['3 s left', { action: 'time', remain: 3 }],
-  ['Extend toast', { action: 'extend' }],
-  ['No end', { action: 'state', state: 'running', total: 0, remain: 1335 }],
-];
+const REASONS: TBlockReason[] = ['battery', 'unknown', 'insecure', 'policy'];
 
 function Pill({ on, children, onClick }: { on?: boolean; children: React.ReactNode; onClick: () => void }) {
   return (
@@ -84,13 +77,13 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
-// Review tooling, not product UI: the design's dashed "Prototype controls" tray, driving the tool in a device-sized frame.
+// Review tooling, not product UI: the design's "Prototype controls", driving the tool in a device-sized frame.
 export function QaTray() {
   const frame = useRef<HTMLIFrameElement>(null);
   const [device, setDevice] = useState<(typeof DEVICES)[number][0]>('desktop');
   const [lang, setLang] = useState<TToolLang>('en');
   const [on, setOn] = useState<Record<string, string>>({});
-  const [flags, setFlags] = useState({ boardTime: true, samples: true });
+  const [flags, setFlags] = useState({ boardTime: true, samples: true, empty: false, first: false, nudge: false });
   const [face, setFace] = useState('ring');
   const [ready, setReady] = useState(0);
 
@@ -109,13 +102,17 @@ export function QaTray() {
   useEffect(() => {
     if (!ready) return;
     send({ action: 'boardTime', on: flags.boardTime });
-    send({ action: 'samples', on: flags.samples });
+    send({
+      action: 'qa',
+      patch: { samples: flags.samples, empty: flags.empty, first: flags.first, nudge: flags.nudge || undefined },
+    });
   }, [ready, flags, send]);
 
   const pick = (group: string, key: string, payload: TPayload) => {
     setOn((o) => ({ ...o, [group]: key }));
     send(payload);
   };
+  const flag = (k: keyof typeof flags) => setFlags((f) => ({ ...f, [k]: !f[k] }));
   const dv = DEVICES.find((d) => d[0] === device) ?? DEVICES[0];
 
   return (
@@ -127,7 +124,8 @@ export function QaTray() {
         <div className="flex flex-wrap items-baseline gap-3">
           <strong className="text-[16px]">Prototype controls</strong>
           <span className="text-[13px] text-muted-foreground-strong">
-            Not part of the product. Jump to any state, view, device, banner or theme; the clock ticks in real seconds.
+            Not part of the product. Jump to any state, panel, banner, theme, vibe and device; the clock ticks in real
+            seconds.
           </span>
           <button
             type="button"
@@ -157,48 +155,101 @@ export function QaTray() {
               <Pill
                 key={k}
                 on={on.state === k}
-                onClick={() =>
-                  pick('state', k, { action: 'state', state: k, total: 3600, remain: k === 'idle' ? 3600 : 2292 })
-                }
+                onClick={() => {
+                  if (k === 'blocked') send({ action: 'qa', patch: { reason: 'battery' } });
+                  pick('state', k, {
+                    action: 'state',
+                    state: k,
+                    total: 3600,
+                    remain: k === 'idle' || k === 'starting' ? 3600 : 2292,
+                  });
+                }}
               >
                 {label}
               </Pill>
             ))}
           </Row>
+          <Row label="BLOCKED REASON">
+            {REASONS.map((r) => (
+              <Pill
+                key={r}
+                on={on.reason === r}
+                onClick={() => pick('reason', r, { action: 'qa', patch: { reason: r } })}
+              >
+                {r}
+              </Pill>
+            ))}
+          </Row>
           <Row label="BANNER">
-            {(['none', 'offline', 'conflict', 'update'] as const).map((k) => (
-              <Pill key={k} on={on.banner === k} onClick={() => pick('banner', k, { action: 'banner', banner: k })}>
-                {k === 'none' ? 'None' : k === 'offline' ? 'Offline' : k === 'conflict' ? 'Other tab' : 'Update ready'}
+            {(['none', 'conflict', 'offline', 'update'] as const).map((k) => (
+              <Pill
+                key={k}
+                on={on.banner === k}
+                onClick={() => pick('banner', k, { action: 'qa', patch: { banner: k } })}
+              >
+                {k === 'none'
+                  ? 'None'
+                  : k === 'offline'
+                    ? 'Offline'
+                    : k === 'conflict'
+                      ? 'Another tab'
+                      : 'Update ready'}
               </Pill>
             ))}
           </Row>
           <Row label="THEME">
             {(['system', 'light', 'dark', 'oled'] as const).map((k) => (
               <Pill key={k} on={on.theme === k} onClick={() => pick('theme', k, { action: 'theme', theme: k })}>
-                {k === 'system' ? 'Auto' : k === 'oled' ? 'OLED' : k.charAt(0).toUpperCase() + k.slice(1)}
+                {k === 'system' ? 'System' : k === 'oled' ? 'OLED' : k.charAt(0).toUpperCase() + k.slice(1)}
               </Pill>
             ))}
           </Row>
-          <Row label="VIEW">
-            {VIEWS.map(([k, label, payload]) => (
-              <Pill key={k} on={on.view === k} onClick={() => pick('view', k, payload)}>
+          <Row label="VIBE">
+            {VIBES.map((k) => (
+              <Pill key={k} on={on.vibe === k} onClick={() => pick('vibe', k, { action: 'vibe', vibe: k })}>
+                {k}
+              </Pill>
+            ))}
+            {(['still', 'calm', 'lively'] as const).map((k) => (
+              <Pill key={k} on={on.motion === k} onClick={() => pick('motion', k, { action: 'motion', motion: k })}>
+                Motion: {k}
+              </Pill>
+            ))}
+          </Row>
+          <Row label="PANEL">
+            {PANELS.map(([k, label]) => (
+              <Pill key={k} on={on.panel === k} onClick={() => pick('panel', k, { action: 'panel', panel: k })}>
                 {label}
               </Pill>
             ))}
           </Row>
-          <Row label="TIME">
-            {TIMES.map(([label, payload]) => (
-              <Pill key={label} onClick={() => send(payload)}>
-                {label}
+          <Row label="CONTROLS AND MOMENTS">
+            {(['shown', 'hidden'] as const).map((k) => (
+              <Pill
+                key={k}
+                on={on.controls === k}
+                onClick={() => pick('controls', k, { action: 'qa', patch: { controls: k } })}
+              >
+                Controls {k}
               </Pill>
             ))}
+            <Pill onClick={() => send({ action: 'extend' })}>Extended toast</Pill>
+            <Pill on={flags.first} onClick={() => flag('first')}>
+              First session card
+            </Pill>
+            <Pill on={flags.nudge} onClick={() => flag('nudge')}>
+              Pro nudge
+            </Pill>
           </Row>
           <Row label="SAMPLE DATA">
-            <Pill on={flags.boardTime} onClick={() => setFlags((f) => ({ ...f, boardTime: !f.boardTime }))}>
-              Board time 11:03 AM
+            <Pill on={flags.boardTime} onClick={() => flag('boardTime')}>
+              Board time 11:23 AM
             </Pill>
-            <Pill on={flags.samples} onClick={() => setFlags((f) => ({ ...f, samples: !f.samples }))}>
-              Sample presets and history
+            <Pill on={flags.samples} onClick={() => flag('samples')}>
+              Sample presets, history and screens
+            </Pill>
+            <Pill on={flags.empty} onClick={() => flag('empty')}>
+              No presets
             </Pill>
             <label className="flex items-center gap-2 text-[13px]">
               Face
@@ -226,6 +277,7 @@ export function QaTray() {
           key={lang}
           title={`The tool at ${dv[1]}`}
           src={`/dev/tool?frame=1&lang=${lang}`}
+          allow="screen-wake-lock; fullscreen"
           className="block rounded-[18px] border-0 shadow-e3"
           style={{ width: dv[2], height: dv[3] }}
         />
