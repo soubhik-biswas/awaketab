@@ -22,7 +22,7 @@ describe('the device account note', () => {
 
   it('reads an old email-link record as signed out', () => {
     const s = memory();
-    s.setItem('at.v1.account', JSON.stringify({ v: 1, email: 'sam@example.com', method: 'email', signedInAt: 1 }));
+    s.setItem('at.v1.account', JSON.stringify({ v: 1, email: '[ADDRESS]', method: 'email', signedInAt: 1 }));
     expect(readAccount(s)).toBeNull();
   });
 });
