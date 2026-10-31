@@ -169,10 +169,7 @@ export function ManageDevices({ activateHref, plansHref }: { activateHref: strin
                       <span className="inline-flex items-center gap-2 text-[13px] text-muted-foreground-strong">
                         <span
                           aria-hidden="true"
-                          className={cn(
-                            'size-2 rounded-full',
-                            isHere ? 'bg-lamp' : 'border-2 border-muted-foreground',
-                          )}
+                          className={cn('size-2 rounded-full', isHere ? 'bg-lamp' : 'border-2 border-muted-foreground')}
                         />
                         {isHere ? t('here') : t('added', { date: longDate(row.at) })}
                       </span>

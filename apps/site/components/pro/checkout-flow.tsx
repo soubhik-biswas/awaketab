@@ -174,7 +174,10 @@ export function CheckoutFlow({ backHref }: { backHref: string }) {
               [t('pay.trial'), t('pay.trialV', { days: TRIAL_DAYS })],
               [t('pay.account'), signed ? t('pay.signed') : t('pay.none')],
             ].map(([k, v]) => (
-              <div key={k} className="flex min-h-[52px] items-center justify-between gap-4 px-5 text-[15px] [&+&]:border-t [&+&]:border-border">
+              <div
+                key={k}
+                className="flex min-h-[52px] items-center justify-between gap-4 px-5 text-[15px] [&+&]:border-t [&+&]:border-border"
+              >
                 <dt className="font-semibold">{k}</dt>
                 <dd className="m-0 text-right text-muted-foreground-strong">{v}</dd>
               </div>

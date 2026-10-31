@@ -87,7 +87,8 @@ export function ActivateFlow({
     const result: TActivateResult = await whileSyncing(() =>
       activateLicense({ checkoutId: id, deviceId: deviceId(), deviceLabel: deviceLabel() || 'This browser' }),
     );
-    if (result.ok) setState('checkout-success'); else if (result.error === 'polar_unavailable') setState('help');
+    if (result.ok) setState('checkout-success');
+    else if (result.error === 'polar_unavailable') setState('help');
     else if (result.error === 'invalid_key') setState('failed');
     else {
       setError(ERR_CODE[result.error] ?? 'invalid_key');
