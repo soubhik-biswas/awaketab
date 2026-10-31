@@ -5,7 +5,7 @@ import { LoaderCircle } from 'lucide-react';
 import { Slot } from 'radix-ui';
 
 const buttonVariants = cva(
-  "relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 border font-semibold whitespace-nowrap no-underline transition-[background-color,border-color,color,box-shadow,transform,text-decoration-thickness] duration-glide ease-glide outline-none select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:translate-y-0 disabled:cursor-not-allowed aria-disabled:translate-y-0 aria-disabled:cursor-not-allowed aria-busy:cursor-progress aria-busy:[&>svg:not([data-spinner])]:hidden [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 border font-semibold whitespace-nowrap no-underline transition-[background-color,border-color,color,box-shadow,transform,text-decoration-thickness] duration-glide ease-glide outline-none select-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring disabled:translate-y-0 disabled:cursor-not-allowed aria-disabled:translate-y-0 aria-disabled:cursor-not-allowed aria-busy:cursor-progress aria-busy:[&>svg:not([data-spinner])]:hidden [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {

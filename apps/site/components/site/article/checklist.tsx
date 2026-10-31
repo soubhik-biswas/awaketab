@@ -26,7 +26,7 @@ export function Checklist({ items, counter }: { items: readonly string[]; counte
               <span
                 aria-hidden="true"
                 className={cn(
-                  'mt-0.5 inline-flex size-[22px] flex-none items-center justify-center rounded-[6px] border-2 border-input text-lamp-foreground peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring',
+                  'mt-0.5 inline-flex size-[22px] flex-none items-center justify-center rounded-[6px] border-2 border-input text-lamp-foreground peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring',
                   done[i] && 'border-lamp bg-lamp',
                 )}
               >
