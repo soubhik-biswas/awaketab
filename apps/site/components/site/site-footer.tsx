@@ -117,7 +117,7 @@ export async function SiteFooter({ locale }: { locale: TLocale }) {
             href={ROUTES.status}
             hrefLang={english ? undefined : 'en'}
             className={cn(
-              'inline-flex h-9 items-center gap-2.5 rounded-full border pr-3.5 pl-3 text-[13px] font-semibold no-underline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#7CBBFF]',
+              'relative inline-flex h-9 items-center gap-2.5 rounded-full border pr-3.5 pl-3 text-[13px] font-semibold no-underline after:absolute after:inset-x-0 after:-inset-y-1 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#7CBBFF]',
               maintenance
                 ? 'border-[#FFC53D]/25 bg-[#FFC53D]/[.08] text-[#FFC53D]'
                 : 'border-[#3DF58E]/25 bg-[#3DF58E]/[.08] text-[#3DF58E]',
