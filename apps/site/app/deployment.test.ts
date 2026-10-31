@@ -7,6 +7,16 @@ import { securityHeaders } from '@/lib/server/security-headers';
 
 afterEach(() => vi.unstubAllEnvs());
 
+interface IDeploymentEnvironment {
+  name: string;
+  routes: unknown[];
+  services: unknown[];
+  vars: Record<string, string>;
+  d1_databases: [Record<string, string>];
+  kv_namespaces: [Record<string, string>];
+  analytics_engine_datasets: [Record<string, string>];
+}
+
 describe('deployment search visibility', () => {
   const meta = { title: 'AwakeTab', description: 'Keep this screen awake', path: '/', og: {} };
 
@@ -79,7 +89,7 @@ describe('deployment isolation', () => {
       readFileSync(`${import.meta.dirname}/../wrangler.jsonc`, 'utf8'),
     );
     expect(parsed.error).toBeUndefined();
-    const production = parsed.config;
+    const production = parsed.config as IDeploymentEnvironment & { env: { preview: IDeploymentEnvironment } };
     const preview = production.env.preview;
     expect(production.name).toBe('awaketab-site');
     expect(production.routes).toEqual([
