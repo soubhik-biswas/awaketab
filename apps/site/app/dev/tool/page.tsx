@@ -18,6 +18,9 @@ const LOADERS: Record<Exclude<TToolLang, 'en'>, () => Promise<{ default: TTree }
   ja: () => import('@/messages/ja.json'),
   zh: () => import('@/messages/zh.json'),
   hi: () => import('@/messages/hi.json'),
+  es: () => import('@/messages/es.json'),
+  fr: () => import('@/messages/fr.json'),
+  'pt-br': () => import('@/messages/pt-br.json'),
 };
 
 function merge(base: TTree, over: TTree): TTree {
