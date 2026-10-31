@@ -1495,6 +1495,174 @@
       "hero": "Bildschirm wach halten.",
       "heroSub": "Ein Tippen. Danach darf er wieder schlafen — ohne Installation, ohne Konto.",
       "heroSubPhone": "Ein Tippen. Danach schläft er wieder."
+    },
+    "glance": {
+      "free": "Gratis",
+      "unit": {
+        "h": "Std.",
+        "min": "Min.",
+        "hour": "Std."
+      },
+      "len": {
+        "0": "15 Min.",
+        "1": "30 Min.",
+        "2": "1 Std.",
+        "3": "2 Std.",
+        "4": "Ohne Ende"
+      },
+      "top": {
+        "search": "Suchen",
+        "searchLabel": "Suchen und Befehle",
+        "vibe": "Stimmung",
+        "faces": "Ziffernblätter",
+        "recents": "Verlauf",
+        "settings": "Einstellungen"
+      },
+      "pill": {
+        "idle": "Nicht aktiv",
+        "starting": "Browser wird gefragt…",
+        "awake": "Wach · bis {time}",
+        "awakeOpen": "Wach · bis du stoppst",
+        "fallback": "Wach per Video · bis {time}",
+        "fallbackOpen": "Wach per Video · bis du stoppst",
+        "paused": "Pausiert · noch {dur}",
+        "needsyou": "Antippen zum Fortsetzen · Tab war verdeckt",
+        "blocked": "Nicht wach · {reason}",
+        "unsupported": "Kein Wake Lock in diesem Browser",
+        "ended": "Zeit um · geschlafen ab {time}"
+      },
+      "reason": {
+        "battery": "Energiesparen",
+        "unknown": "Browser hat abgelehnt",
+        "insecure": "braucht eine sichere Seite",
+        "policy": "hier nicht erlaubt"
+      },
+      "set": {
+        "h1a": "Dieser Bildschirm bleibt",
+        "h1b": "wach.",
+        "howLong": "Wie lange",
+        "cta": "Wach halten · {len}",
+        "noEnd": "ohne Ende",
+        "noEndCap": "Ohne Ende",
+        "starting": "Startet…",
+        "note": "Endet um {time} · ohne Installation, ohne Konto",
+        "noteOpen": "Läuft, bis du stoppst · ohne Installation, ohne Konto"
+      },
+      "stage": {
+        "label": "Timer"
+      },
+      "face": {
+        "aria": "Ziffernblatt: {face}",
+        "ready": "BEREIT",
+        "left": "NOCH",
+        "ends": "Endet um {time}"
+      },
+      "first": {
+        "kicker": "ERSTE SITZUNG FERTIG · {dur}",
+        "h": "Wie war’s?"
+      },
+      "rate": {
+        "love": "Super",
+        "good": "Hat geklappt",
+        "bad": "Etwas ging schief"
+      },
+      "dock": {
+        "label": "Sitzungssteuerung",
+        "addTime": "Zeit hinzufügen",
+        "add": "+{n} {unit}",
+        "addAria": "{dur} hinzufügen",
+        "pause": "Pause",
+        "resume": "Fortsetzen",
+        "again": "Neu starten",
+        "fix": "Lösung ansehen",
+        "video": "Video nutzen",
+        "stop": "Stopp",
+        "stopAria": "Stoppen und Bildschirm schlafen lassen",
+        "faceAria": "Ziffernblatt: {face}. Wechseln",
+        "full": "Vollbild",
+        "exitFull": "Vollbild verlassen"
+      },
+      "hint": {
+        "move": "Zeiger bewegen für die Steuerung",
+        "tap": "Irgendwo tippen für die Steuerung",
+        "show": "Steuerung zeigen"
+      },
+      "banner": {
+        "blocked": {
+          "battery": {
+            "t": "Energiesparen blockiert den Wake Lock.",
+            "d": "Der Bildschirm kann trotzdem dunkel werden.",
+            "btn": "Lösung ansehen"
+          },
+          "unknown": {
+            "t": "Der Browser hat den Wake Lock abgelehnt.",
+            "d": "Der Bildschirm kann trotzdem dunkel werden.",
+            "btn": "Lösung ansehen"
+          },
+          "insecure": {
+            "t": "Wake Locks brauchen eine sichere Seite.",
+            "d": "Der Bildschirm kann trotzdem dunkel werden.",
+            "btn": "Lösung ansehen"
+          },
+          "policy": {
+            "t": "Diese Seite erlaubt keinen Wake Lock.",
+            "d": "Der Bildschirm kann trotzdem dunkel werden.",
+            "btn": "Lösung ansehen"
+          }
+        },
+        "unsupported": {
+          "t": "Dieser Browser hat keinen Wake Lock.",
+          "d": "Ein stummes, unsichtbares Video hält den Bildschirm stattdessen an.",
+          "btn": "Video nutzen"
+        },
+        "fallback": {
+          "t": "Wach per stummem Video.",
+          "d": "Funktioniert hier; lass diesen Tab sichtbar.",
+          "btn": ""
+        },
+        "needsyou": {
+          "t": "Der Tab war verdeckt, der Browser hat losgelassen.",
+          "d": "Ein Tippen, und der Bildschirm bleibt wieder an.",
+          "btn": "Fortsetzen"
+        },
+        "conflict": {
+          "t": "Ein anderer Tab hält den Bildschirm schon wach.",
+          "d": "Einer reicht.",
+          "btn": "Übernehmen"
+        },
+        "offline": {
+          "t": "Du bist offline.",
+          "d": "Der Timer läuft weiter; die Synchronisierung wartet.",
+          "btn": ""
+        },
+        "update": {
+          "t": "Eine neue Version ist bereit.",
+          "d": "Deine Sitzung läuft nach dem Neuladen weiter.",
+          "btn": "Neu laden"
+        }
+      },
+      "toast": {
+        "extended": "{dur} hinzugefügt · jetzt bis {time}",
+        "undo": "Rückgängig"
+      },
+      "tab": {
+        "left": "noch {t}",
+        "awake": "Wach",
+        "paused": "Pausiert",
+        "blocked": "Nicht wach",
+        "up": "Zeit um"
+      },
+      "an": {
+        "start": "Bildschirm wach bis {time}.",
+        "startOpen": "Bildschirm wach, bis du stoppst.",
+        "extend": "{dur} hinzugefügt. Jetzt bis {time}.",
+        "low": "Noch 5 Minuten. 15 Minuten hinzufügen?",
+        "hidden": "Der Tab war verdeckt, der Browser hat losgelassen.",
+        "refused": "Nicht wach — {reason}. Lösung ansehen.",
+        "paused": "Pausiert. {dur} gemerkt.",
+        "ended": "Zeit um. Der Bildschirm darf jetzt schlafen.",
+        "face": "Ziffernblatt: {face}."
+      }
     }
   },
   "ambient": {

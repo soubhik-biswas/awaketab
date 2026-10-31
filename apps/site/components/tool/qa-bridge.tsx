@@ -3,28 +3,27 @@
 import { useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { isFaceId } from '@/components/face';
-import { updateSettings } from '@/lib/tool/settings';
-import { toolUi, type TBanner, type TToolView } from '@/lib/tool/ui';
+import { updateSettings, VIBES, type TVibe, type TVibeMotion } from '@/lib/tool/settings';
+import { toolUi, type IQaOverrides, type TPanel } from '@/lib/tool/ui';
 import { wake, type TWakeState } from '@/lib/wake';
 
 export type TQaMessage =
   | { type: 'at-qa'; action: 'state'; state: TWakeState; total?: number; remain?: number }
-  | { type: 'at-qa'; action: 'view'; view: TToolView; emptyPresets?: boolean; query?: string }
-  | { type: 'at-qa'; action: 'banner'; banner: TBanner }
+  | { type: 'at-qa'; action: 'panel'; panel: TPanel }
+  | { type: 'at-qa'; action: 'qa'; patch: IQaOverrides }
   | { type: 'at-qa'; action: 'theme'; theme: 'system' | 'light' | 'dark' | 'oled' }
   | { type: 'at-qa'; action: 'face'; face: string }
-  | { type: 'at-qa'; action: 'time'; remain: number }
+  | { type: 'at-qa'; action: 'vibe'; vibe: TVibe }
+  | { type: 'at-qa'; action: 'motion'; motion: TVibeMotion }
   | { type: 'at-qa'; action: 'extend' }
   | { type: 'at-qa'; action: 'boardTime'; on: boolean }
-  | { type: 'at-qa'; action: 'samples'; on: boolean }
   | { type: 'at-qa'; action: 'reset' };
 
-// The boards' sample moment: Thursday, 29 October 2026 at 11:03:48 AM.
-const BOARD_NOW = new Date(2026, 9, 29, 11, 3, 48).getTime();
-const BOARD_LABEL = 'Presenting to the board';
+// The boards' moment: Saturday, 31 October 2026 at 11:23 AM.
+const BOARD_NOW = new Date(2026, 9, 31, 11, 23, 0).getTime();
 
 // Puts the session in a drawn state the way the design's prototype controls do, without asking the browser.
-export function qaState(state: TWakeState, total = 3600, remain = 2292) {
+function qaState(state: TWakeState, total = 3600, remain = 2292) {
   const now = Date.now();
   const live = state !== 'idle' && state !== 'unsupported' && state !== 'ended';
   const noEnd = total === 0;
@@ -40,11 +39,11 @@ export function qaState(state: TWakeState, total = 3600, remain = 2292) {
     mode: state === 'fallback' ? 'video' : live ? 'native' : null,
     supported: state !== 'unsupported',
     advice: null,
+    checkedAt: state === 'blocked' ? now - 180_000 : null,
     lastExtendSec: 0,
     announce: null,
   });
   if (!live) updateSettings({ totalSec: total });
-  if (state === 'ended') wake.qaEnded();
 }
 
 export function QaBridge() {
@@ -57,13 +56,12 @@ export function QaBridge() {
         case 'state':
           qaState(msg.state, msg.total, msg.remain);
           break;
-        case 'view':
-          toolUi.qa({ emptyPresets: msg.emptyPresets === true });
-          toolUi.go(msg.view);
-          if (msg.query) toolUi.set({ palQuery: msg.query });
+        case 'panel':
+          toolUi.open(msg.panel);
           break;
-        case 'banner':
-          toolUi.qa({ banner: msg.banner });
+        case 'qa':
+          toolUi.qa(msg.patch);
+          if (msg.patch.first !== undefined) toolUi.set({ first: msg.patch.first });
           break;
         case 'theme':
           setTheme(msg.theme);
@@ -72,18 +70,17 @@ export function QaBridge() {
         case 'face':
           if (isFaceId(msg.face)) updateSettings({ face: msg.face });
           break;
-        case 'time':
-          qaState('running', Math.max(3600, msg.remain), msg.remain);
+        case 'vibe':
+          if (VIBES.includes(msg.vibe)) updateSettings({ vibe: msg.vibe });
+          break;
+        case 'motion':
+          updateSettings({ motion: msg.motion });
           break;
         case 'extend':
           wake.extend(900);
           break;
         case 'boardTime':
           toolUi.qa({ offsetMs: msg.on ? BOARD_NOW - Date.now() : 0 });
-          if (msg.on) updateSettings({ label: BOARD_LABEL });
-          break;
-        case 'samples':
-          toolUi.qa({ samples: msg.on });
           break;
         case 'reset':
           for (const k of Object.keys(localStorage)) if (k.startsWith('at.')) localStorage.removeItem(k);

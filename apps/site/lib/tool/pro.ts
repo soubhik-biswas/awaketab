@@ -41,8 +41,7 @@ export interface IProSnapshot {
   mix: TSoundMix;
 }
 
-// What the tool needs from Pro. The placeholder below keeps everything on this device; the Pro build
-// replaces it with setProSource() and the views do not change.
+// What the tool needs from Pro. Until the Pro client connects, nothing is claimed: no plan, no account, no screens.
 export interface IProSource {
   getSnapshot(): IProSnapshot;
   subscribe(cb: () => void): () => void;
@@ -61,35 +60,6 @@ export const MIX_KEYS: readonly TMixKey[] = ['rain', 'cafe', 'fire', 'brown'];
 
 const DEFAULT_STUDIO: IStudioSettings = { lamp: '', glow: 70 };
 const DEFAULT_MIX: TSoundMix = { rain: 40, cafe: 0, fire: 25, brown: 0 };
-
-const PLACEHOLDER_DEVICES: IProDevice[] = [
-  { id: 'this', name: 'Work laptop', kind: 'laptop', identity: 'cobalt', status: 'awake', detail: '', current: true },
-  {
-    id: 'ipad',
-    name: 'Kitchen iPad',
-    kind: 'tablet',
-    identity: 'bubblegum',
-    status: 'awake',
-    detail: 'Cooking · until 6:00 PM',
-    current: false,
-  },
-  {
-    id: 'phone',
-    name: 'Phone',
-    kind: 'phone',
-    identity: 'denim',
-    status: 'paused',
-    detail: 'Tab hidden since 10:58 AM',
-    current: false,
-  },
-];
-
-const PLACEHOLDER_ACCOUNT: IProAccount = {
-  name: '[YOUR NAME]',
-  email: '[YOUR EMAIL]',
-  plan: 'monthly',
-  renewsOn: '[DATE]',
-};
 
 function readJson(key: string): unknown {
   try {
@@ -143,9 +113,9 @@ function createPlaceholder(): IProSource {
   let snap: IProSnapshot | null = null;
   const load = (): IProSnapshot => {
     snap ??= {
-      isPro: true,
-      account: PLACEHOLDER_ACCOUNT,
-      devices: PLACEHOLDER_DEVICES,
+      isPro: false,
+      account: null,
+      devices: [],
       maxDevices: 5,
       studio: typeof window === 'undefined' ? DEFAULT_STUDIO : readStudio(),
       mix: typeof window === 'undefined' ? DEFAULT_MIX : readMix(),
@@ -201,7 +171,8 @@ export function setProSource(next: IProSource) {
 
 export const pro = {
   setStudio: (patch: Partial<IStudioSettings>) => source.setStudio(patch),
-  saveStudio: () => source.saveStudio(),
+  // Face studio is free: the look is saved on this device whatever the plan.
+  saveStudio: () => writeJson(STUDIO_KEY, { v: 1, ...source.getSnapshot().studio }),
   setMix: (key: TMixKey, value: number) => source.setMix(key, value),
   addDevice: () => source.addDevice(),
   signOut: () => source.signOut(),
@@ -211,9 +182,9 @@ export const pro = {
 };
 
 const SERVER: IProSnapshot = {
-  isPro: true,
-  account: PLACEHOLDER_ACCOUNT,
-  devices: PLACEHOLDER_DEVICES,
+  isPro: false,
+  account: null,
+  devices: [],
   maxDevices: 5,
   studio: DEFAULT_STUDIO,
   mix: DEFAULT_MIX,
