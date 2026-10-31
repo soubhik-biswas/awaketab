@@ -41,11 +41,13 @@ function pillText(g: IGlance): string {
 export function StatusPill({ className }: { className?: string }) {
   const g = useGlance();
   return (
+    // A focus stop right after the skip link; the announcer in the tool speaks the changes, so the pill stays quiet.
     <span
       role="status"
-      aria-live="polite"
+      aria-live="off"
+      tabIndex={0}
       className={cn(
-        'tg-glass tg-pill inline-flex h-[38px] items-center gap-2.5 rounded-full pr-4 pl-[13px] text-[14px] font-semibold tracking-[-0.005em] whitespace-nowrap',
+        'tg-glass tg-pill inline-flex min-h-[38px] max-w-full items-center gap-2.5 rounded-full py-1 pr-4 pl-[13px] text-[14px] font-semibold tracking-[-0.005em]',
         className,
       )}
     >
