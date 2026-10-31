@@ -1,0 +1,57 @@
+import {
+  EMBED_BOX,
+  EMBED_CREDIT_CLASS,
+  EMBED_CREDIT_LINK_STYLE,
+  EMBED_CREDIT_STYLE,
+  EMBED_CREDIT_URL,
+  embedPath,
+  embedQuery,
+  type IEmbedOptions,
+  type TEmbedLocale,
+} from './protocol';
+
+const SITE_ORIGIN = 'https://awaketab.com';
+
+export const SNIPPET_SANDBOX = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox';
+
+export interface ISnippetOptions extends Omit<IEmbedOptions, 'lang'> {
+  lang: TEmbedLocale | null;
+}
+
+export const DEFAULT_SNIPPET: ISnippetOptions = {
+  mode: 'cook',
+  theme: 'auto',
+  lang: null,
+  size: 'compact',
+  preset: 'pinf',
+  until: null,
+};
+
+export function loaderSnippet(opts: ISnippetOptions, origin = SITE_ORIGIN): string {
+  const attrs = [`data-mode="${opts.mode}"`, `data-theme="${opts.theme}"`, `data-size="${opts.size}"`];
+  if (opts.lang) attrs.push(`data-lang="${opts.lang}"`);
+  if (opts.preset !== 'pinf') attrs.push(`data-preset="${opts.preset}"`);
+  if (opts.preset === 'until' && opts.until) attrs.push(`data-until="${opts.until}"`);
+  return `<script async src="${origin}/embed.js" ${attrs.join(' ')}></script>`;
+}
+
+const escapeHtml = (text: string) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
+
+function creditSnippet(text = 'Keep awake by AwakeTab'): string {
+  return `<div class="${EMBED_CREDIT_CLASS}" style="${EMBED_CREDIT_STYLE}"><a href="${EMBED_CREDIT_URL}" rel="nofollow" style="${EMBED_CREDIT_LINK_STYLE}">${escapeHtml(text)}</a></div>`;
+}
+
+export function iframeSnippet(opts: ISnippetOptions, title: string, origin = SITE_ORIGIN, credit?: string): string {
+  const box = EMBED_BOX[opts.size];
+  const query = embedQuery({ ...opts, lang: opts.lang ?? 'en' }, '');
+  return [
+    `<iframe src="${origin}${embedPath(opts.lang ?? 'en')}?${query}"`,
+    `  title="${escapeHtml(title)}"`,
+    '  allow="screen-wake-lock"',
+    '  loading="lazy"',
+    '  referrerpolicy="strict-origin"',
+    `  sandbox="${SNIPPET_SANDBOX}"`,
+    `  style="width:${box.width};max-width:100%;height:${String(box.height)}px;border:0;border-radius:${String(box.radius)}px;display:block"></iframe>`,
+    creditSnippet(credit),
+  ].join('\n');
+}

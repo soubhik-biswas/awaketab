@@ -3,10 +3,18 @@ import type { CollectionEntry } from 'astro:content';
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ToolIsland from './ToolIsland.astro';
 import Button from './shell/Button.astro';
+import AdSlot from './AdSlot.astro';
 import Limit from './article/Limit.astro';
-import Icon from './icons/Icon.astro';
+import Lucide from './icons/Lucide.astro';
 import Brand from './icons/Brand.astro';
 import ArticleParts from './article/ArticleParts.astro';
+import PageHero from './site/PageHero.astro';
+import ToolCard from './site/ToolCard.astro';
+import Faq from './site/Faq.astro';
+import Cards from './site/Cards.astro';
+import { shouldRenderAdSlots } from '../lib/ads';
+import { useCaseScene, type TSceneKey } from '../lib/scenes';
+import { fullDate as formatFullDate } from '../lib/full-date';
 import { createT, t as tEn } from '../i18n/load';
 import '../styles/tool-embed.css';
 import { LOCALE_META } from '../i18n/locales';
@@ -80,19 +88,7 @@ const hubCrumb = HUBS[kind].crumb;
 // Locale homes are the one page URL with a trailing slash, `/es/` (`es/index.html`, docs/14 §2.1).
 const homeHref = english ? '/' : `/${locale}/`;
 const published = data.published.toISOString().slice(0, 10);
-// Full dates everywhere ("Saturday, 26 September 2026"); other locales use their own full style.
-const fullDate = (date: Date): string => {
-  if (!english)
-    return new Intl.DateTimeFormat(meta.htmlLang, { dateStyle: 'full', timeZone: 'UTC', numberingSystem: 'latn' }).format(
-      date,
-    );
-  const part = Object.fromEntries(
-    new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
-      .formatToParts(date)
-      .map((p) => [p.type, p.value]),
-  );
-  return `${part.weekday ?? ''}, ${part.day ?? ''} ${part.month ?? ''} ${part.year ?? ''}`;
-};
+const fullDate = (date: Date): string => formatFullDate(date, english ? 'en' : meta.htmlLang);
 const verified = data.lastVerified ? fullDate(data.lastVerified) : null;
 const updated = verified ? null : fullDate(data.updated ?? data.published);
 const minutes = readingMinutes(entry.body, data);
@@ -121,7 +117,7 @@ const breadcrumbs = english
       { name: 'AwakeTab', url: `${site}${homeHref}` },
       { name: crumbLabel, url: canonical },
     ];
-const crumbs: Array<{ href?: string; label: string }> = [
+const crumbs: Array<{ href?: string | undefined; label: string }> = [
   { href: homeHref, label: t('app.name') },
   ...(english ? [{ href: `/${kind}`, label: hubCrumb }] : []),
   { label: crumbLabel },
@@ -165,11 +161,10 @@ const relatedTitle = kind === 'for' ? t('content.related.for') : t('content.rela
 // Device pages show the system and browser they are about beside the family label, as their hub card does.
 const headLogos = kind === 'on' ? deviceLogos(enSlug, data.browsers, data.os) : [];
 
-// Body: the rendered Markdown cut into sections and page-level markers (lib/article.ts).
-const parts: TArticlePart[] = splitArticle(entry.rendered?.html ?? '');
-const adAt = parts.findIndex((part) => part.kind === 'ad');
-const before = adAt < 0 ? parts : parts.slice(0, adAt);
-const after = adAt < 0 ? [] : parts.slice(adAt + 1);
+// Body: the rendered Markdown cut into sections (lib/article.ts). The one ad slot sits below the tool now, so an
+// `::ad` marker in the body only splits the list.
+const parts: TArticlePart[] = splitArticle(entry.rendered?.html ?? '').filter((part) => part.kind !== 'ad');
+const showAds = shouldRenderAdSlots();
 
 const stepVariant = data.steps?.some((st) => st.shot)
   ? 'shots'
@@ -204,6 +199,23 @@ const toc: Array<{ href: string; label: string }> = [
 ];
 const author = 'Soubhik Biswas';
 const toolLine = data.toolNote ?? t(`content.${toolCopy}.body`);
+// Hero art as on the content boards: the use case's own scene, the first-action scene on device guides, the
+// maintenance scene on fixes; comparisons and docs carry none.
+const scene: TSceneKey | undefined =
+  kind === 'for' ? useCaseScene(enSlug) : kind === 'on' ? 'firstaction' : kind === 'guides' ? 'maintenance' : undefined;
+const heroAction =
+  kind === 'on'
+    ? { href: homeHref, label: t('site.article.open') }
+    : kind === 'guides'
+      ? { href: startHref, label: startLabel }
+      : null;
+const relatedCards = related.map((link) => ({
+  href: link.href,
+  title: link.label,
+  link: t('site.article.read'),
+  lang: link.lang,
+}));
+const faqItems = data.faq.map((item) => ({ q: item.q, html: `<p>${inline(item.a)}</p>` }));
 ---
 
 <ContentLayout
@@ -217,7 +229,6 @@ const toolLine = data.toolNote ?? t(`content.${toolCopy}.body`);
   alternates={alternates}
   localeLinks={translations}
   family={kind}
-  toolFirst={toolFirst}
   schema={articleSchema({
     canonical,
     title: data.h1,
@@ -232,140 +243,22 @@ const toolLine = data.toolNote ?? t(`content.${toolCopy}.body`);
   {blockCss && <style is:inline slot="styles" set:html={blockCss} />}
   {tableCss && <style is:inline slot="styles" set:html={tableCss} />}
 
-  {
-    tracked && data.steps ? (
-      <nav
-        slot="toc"
-        class="at-toc at-toc-steps"
-        aria-label={t('content.stepsNav')}
-        data-progress
-      >
-        <div class="at-toc-list">
-          <span class="at-kicker" aria-hidden="true">
-            {t('content.progress')}
-          </span>
-          <span class="at-progress" aria-hidden="true">
-            <span data-bar />
-          </span>
-          <span
-            class="at-prog"
-            aria-live="polite"
-            data-prog
-            data-count={t('content.progressCount', {
-              n: '{n}',
-              total: '{total}',
-            })}
-            data-next={t('content.progressNext', {
-              n: '{n}',
-              total: '{total}',
-              next: '{next}',
-            })}
-            data-all={t('content.progressAll', { total: '{total}' })}
-          >
-            {t('content.progressNext', {
-              n: 0,
-              total: data.steps.length,
-              next: 1,
-            })}
-          </span>
-        </div>
-        <ol>
-          {data.steps.map((step, i) => (
-            <li>
-              <a
-                href={`#step-${i + 1}`}
-                aria-current={i === 0 ? 'step' : undefined}
-              >
-                <span class="at-step-n" aria-hidden="true">
-                  <span>{i + 1}</span>
-                  <Icon name="check" size={16} tone="ink" />
-                </span>
-                <span>{step.short ?? step.title}</span>
-              </a>
-            </li>
-          ))}
-        </ol>
-        <a class="at-jump-tool" href="#s-tool">
-          {t('content.jumpTool')} <Icon name="arrow-down" size={16} />
-        </a>
-      </nav>
-    ) : (
-      <nav slot="toc" class="at-toc" aria-label={t('content.toc')} data-spy>
-        <div class="at-toc-list">
-          <span class="at-kicker" aria-hidden="true">
-            {t('content.toc')}
-          </span>
-          {toc.map((item, i) => (
-            <a href={item.href} aria-current={i === 0 ? 'location' : undefined}>
-              <span class="at-toc-dot" aria-hidden="true" />
-              {item.label}
-            </a>
-          ))}
-        </div>
-        <a class="at-toc-card" href="#s-tool" data-tool-mirror>
-          <span class="at-pill at-pill-bare" data-lock="idle" data-mirror-pill>
-            <svg
-              class="at-pill-glyph"
-              viewBox="0 0 12 12"
-              width="12"
-              height="12"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                class="at-g-dot"
-                d="M6 1.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 1 1 0-9z"
-              />
-              <path class="at-g-pause" d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z" />
-              <path class="at-g-tri" d="M6 1L11.2 10.5H.8z" />
-              <path
-                class="at-g-ring"
-                d="M6 3.4a2.6 2.6 0 1 1 0 5.2a2.6 2.6 0 1 1 0-5.2zM6 .6a5.4 5.4 0 1 1 0 10.8a5.4 5.4 0 1 1 0-10.8zm0 1.4a4 4 0 1 0 0 8a4 4 0 1 0 0-8z"
-              />
-            </svg>
-            <span data-mirror-text>{t('tool.pill.idle')}</span>
-          </span>
-          <span class="at-toc-digits" data-mirror-digits aria-hidden="true">
-            00:00
-          </span>
-          <span class="at-toc-back">
-            {t('content.jumpTool')} <Icon name="arrow-down" size={16} />
-          </span>
-        </a>
-      </nav>
-    )
-  }
-
-  <Fragment slot="head">
-    <nav class="at-crumbs" aria-label={english ? 'Breadcrumb' : t('content.breadcrumb')}>
-      <ol>
-        {
-          crumbs.map((crumb, i) => (
-            <li aria-current={crumb.href ? undefined : 'page'} data-crumb={i}>
-              {i > 0 && (
-                <span class="at-crumb-sep" data-slot="breadcrumb-separator" aria-hidden="true">
-                  <Icon name="caret-right" size={16} tone="ink" />
-                </span>
-              )}
-              {crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span>{crumb.label}</span>}
-            </li>
-          ))
-        }
-      </ol>
-    </nav>
-    <p class="at-family">
-      {headLogos.map((logo) => (
-        <Brand logo={logo} size={24} />
-      ))}
-      <span class="at-kicker">{family}</span>
+  <PageHero
+    crumbs={crumbs}
+    crumbLabel={english ? 'Breadcrumb' : t('content.breadcrumb')}
+    h1={data.h1}
+    leadHtml={data.lead ? inline(data.lead) : undefined}
+    scene={scene}
+  >
+    <p class="at-family" slot="kicker">
+      {headLogos.map((logo) => <Brand logo={logo} size={24} />)}
+      <span class="at-sp-eyebrow">{family}</span>
     </p>
-    <h1 class="at-h1-page">{data.h1}</h1>
-    {data.lead && <p class="at-lead" set:html={inline(data.lead)} />}
-    <div class="at-meta">
+    <div class="at-meta" slot="meta">
       {
         verified && (
           <span class="at-meta-verified">
-            <Icon name="seal-check" size={16} />
+            <Lucide name="badge-check" size={16} />
             {t('content.verified', { date: verified })}
           </span>
         )
@@ -373,7 +266,7 @@ const toolLine = data.toolNote ?? t(`content.${toolCopy}.body`);
       {
         updated && (
           <span class="at-meta-verified">
-            <Icon name="calendar-check" size={16} />
+            <Lucide name="calendar-check" size={16} />
             {t('content.updated', { date: updated })}
           </span>
         )
@@ -381,7 +274,7 @@ const toolLine = data.toolNote ?? t(`content.${toolCopy}.body`);
       {
         minutes !== null && (
           <span class="at-meta-read">
-            <Icon name="clock" size={16} />
+            <Lucide name="clock" size={16} />
             {t('content.readTime', { n: minutes })}
           </span>
         )
@@ -390,7 +283,7 @@ const toolLine = data.toolNote ?? t(`content.${toolCopy}.body`);
       {
         stale && (
           <span class="at-meta-stale">
-            <Icon name="clock-counter-clockwise" size={16} tone="state" />
+            <Lucide name="rotate-ccw" size={16} />
             {t('content.stale')}
           </span>
         )
@@ -398,7 +291,7 @@ const toolLine = data.toolNote ?? t(`content.${toolCopy}.body`);
       {
         !english && !data.reviewed && (
           <p class="at-meta-pending" role="note" data-translation-pending>
-            <Icon name="translate" size={16} />
+            <Lucide name="languages" size={16} />
             <span>
               {t('content.translation.pending')}{' '}
               {englishHref && (
@@ -411,6 +304,13 @@ const toolLine = data.toolNote ?? t(`content.${toolCopy}.body`);
         )
       }
     </div>
+    {
+      heroAction && (
+        <Button slot="actions" variant="primary" size="xl" icon="play" href={heroAction.href}>
+          {heroAction.label}
+        </Button>
+      )
+    }
     {
       data.facts && (
         <ul class="at-facts">
@@ -426,97 +326,115 @@ const toolLine = data.toolNote ?? t(`content.${toolCopy}.body`);
         </ul>
       )
     }
-  </Fragment>
-
-  <details slot="contents" class="at-toc-m">
-    <summary>
-      <span>{t('content.toc')}</span>
-      <Icon name="caret-down" size={16} tone="ink" />
-    </summary>
-    <ol>
-      {toc.map((item) => (
-        <li>
-          <a href={item.href}>{item.label}</a>
-        </li>
-      ))}
-    </ol>
-  </details>
-
-  <Fragment slot="intro"
-    ><ArticleParts
-      list={before}
-      data={data}
-      t={t}
-      id={entry.id}
-      kind={kind}
-    /></Fragment
-  >
-  <ArticleParts list={after} data={data} t={t} id={entry.id} kind={kind} />
-  <slot name="after" slot="after" />
-
-  <Limit slot="limit" text={data.honestLimit} label={t('content.limit')} />
-
-  <section slot="tool" id="s-tool" class="at-tool-area" aria-labelledby="h-tool">
-    <h2 id="h-tool">{t(`content.${toolCopy}.title`)}</h2>
-    <p set:html={inline(toolLine)} />
-    <div id="tool" class="at-tool-card">
-      <ToolIsland embed heading={data.h1} autostart="0" preset={data.preset} mode={data.mode} locale={locale} />
-    </div>
-    <Button class="at-start" href={startHref} glyph>
-      {startLabel}
-    </Button>
-  </section>
-
-  <Fragment slot="tail">
-    <section class="at-faq-sec" aria-labelledby="faq">
-      <h2 id="faq">{t('content.faq')}</h2>
-      <div class="at-faq">
-        {
-          data.faq.map((item, i) => (
-            <details open={i === 0}>
-              <summary>
-                <h3 class="at-faq-q">{item.q}</h3>
-                <span class="at-faq-icon" aria-hidden="true">
-                  <span>
-                    <Icon name="plus" size={16} tone="ink" />
-                  </span>
-                </span>
-              </summary>
-              <p set:html={inline(item.a)} />
-            </details>
-          ))
-        }
-      </div>
-    </section>
-
     {
-      related.length > 0 && (
-        <section id="s-related" class="at-related-sec" aria-labelledby="h-related">
-          <h2 id="h-related">{relatedTitle}</h2>
-          <ul class="at-rows">
-            {related.map((link) => (
+      tracked && data.steps ? (
+        <nav class="at-toc at-toc-steps" aria-label={t('content.stepsNav')} data-progress>
+          <span class="at-toc-k">
+            <span class="at-sp-small">{t('content.progress')}</span>
+            <span class="at-progress" aria-hidden="true">
+              <span data-bar />
+            </span>
+            <span
+              class="at-prog at-sp-small"
+              aria-live="polite"
+              data-prog
+              data-count={t('content.progressCount', { n: '{n}', total: '{total}' })}
+              data-next={t('content.progressNext', { n: '{n}', total: '{total}', next: '{next}' })}
+              data-all={t('content.progressAll', { total: '{total}' })}
+            >
+              {t('content.progressNext', { n: 0, total: data.steps.length, next: 1 })}
+            </span>
+          </span>
+          <ol class="at-sp-chips" role="list">
+            {data.steps.map((step, i) => (
               <li>
-                <a class="at-link-row" href={link.href} hreflang={link.lang} lang={link.lang}>
-                  <span>{link.label}</span>
-                  <Icon name="arrow-right" size={20} class="at-go" />
+                <a class="at-sp-chip" href={`#step-${String(i + 1)}`} aria-current={i === 0 ? 'step' : undefined}>
+                  <span class="at-step-n" aria-hidden="true">
+                    <span>{i + 1}</span>
+                    <Lucide name="check" size={16} />
+                  </span>
+                  <span>{step.short ?? step.title}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      ) : (
+        <nav class="at-toc" aria-label={t('content.toc')} data-spy>
+          <span class="at-sp-small at-toc-k">{t('content.toc')}</span>
+          <ul class="at-sp-chips" role="list">
+            {toc.map((item, i) => (
+              <li>
+                <a class="at-sp-chip" href={item.href} aria-current={i === 0 ? 'location' : undefined}>
+                  {item.label}
                 </a>
               </li>
             ))}
           </ul>
-        </section>
+        </nav>
       )
     }
+  </PageHero>
 
-    <div class="at-author">
-      <span class="at-avatar" aria-hidden="true">SB</span>
-      <div>
-        <p class="at-author-name">{author}</p>
-        <p class="at-author-role">
-          {t('content.author.role')}
-          {verified && <>{t('content.verified', { date: verified })}.</>}
-          <a href="/about">{t('content.author.about')}</a>
-        </p>
-      </div>
+  {
+    toolFirst && (
+      <ToolCard
+        eyebrow={t('site.tool.eyebrow')}
+        title={t(`content.${toolCopy}.title`)}
+        descHtml={inline(toolLine)}
+        href={startHref}
+        label={startLabel}
+      >
+        <ToolIsland embed heading={data.h1} autostart="0" preset={data.preset} mode={data.mode} locale={locale} />
+      </ToolCard>
+    )
+  }
+  {toolFirst && showAds && <div class="at-sp-block"><AdSlot /></div>}
+
+  <div class="at-body">
+    <ArticleParts list={parts} data={data} t={t} id={entry.id} kind={kind} />
+    <slot name="after" />
+    <div class="at-sp-block">
+      <Limit text={data.honestLimit} label={t('content.limit')} />
     </div>
-  </Fragment>
+  </div>
+
+  {
+    !toolFirst && (
+      <ToolCard
+        eyebrow={t('site.tool.eyebrow')}
+        title={t(`content.${toolCopy}.title`)}
+        descHtml={inline(toolLine)}
+        href={startHref}
+        label={startLabel}
+      >
+        <ToolIsland embed heading={data.h1} autostart="0" preset={data.preset} mode={data.mode} locale={locale} />
+      </ToolCard>
+    )
+  }
+  {!toolFirst && showAds && <div class="at-sp-block"><AdSlot /></div>}
+
+  <section class="at-faq-sec at-sp-block" aria-labelledby="faq">
+    <h2 id="faq" class="at-sp-h2">{t('content.faq')}</h2>
+    <Faq items={faqItems} openFirst />
+  </section>
+
+  {
+    related.length > 0 && (
+      <section id="s-related" class="at-sp-block" aria-labelledby="h-related">
+        <h2 id="h-related" class="at-sp-h2">{relatedTitle}</h2>
+        <Cards items={relatedCards} cols={2} />
+      </section>
+    )
+  }
+
+  <div class="at-author">
+    <span class="at-avatar" aria-hidden="true">SB</span>
+    <p class="at-sp-small">
+      <strong class="at-author-name">{author}</strong>
+      {t('content.author.role')}
+      {verified && <>{t('content.verified', { date: verified })}.</>}
+      <a href="/about">{t('content.author.about')}</a>
+    </p>
+  </div>
 </ContentLayout>

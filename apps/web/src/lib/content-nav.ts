@@ -1,5 +1,5 @@
 function spy(nav: HTMLElement): void {
-  const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]:not([data-tool-mirror])')];
+  const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
   const targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
   const mark = (index: number): void => {
     links.forEach((a, i) => {
@@ -47,31 +47,6 @@ function spy(nav: HTMLElement): void {
     { passive: true },
   );
   update();
-}
-
-function mirror(card: HTMLElement): void {
-  const pill = document.querySelector<HTMLElement>('#awaketab-tool [data-pill]');
-  const text = pill?.querySelector('[data-pill-text]');
-  const digits = document.querySelector('#awaketab-tool [data-timer-digits]');
-  const outPill = card.querySelector<HTMLElement>('[data-mirror-pill]');
-  const outText = card.querySelector('[data-mirror-text]');
-  const outDigits = card.querySelector('[data-mirror-digits]');
-  if (!pill || !text || !outPill || !outText) return;
-  const copy = (): void => {
-    outPill.dataset.lock = pill.dataset.lock ?? 'idle';
-    outText.textContent = text.textContent;
-    if (digits && outDigits) outDigits.textContent = digits.textContent;
-  };
-  copy();
-  const mo = new MutationObserver(copy);
-  mo.observe(pill, {
-    attributes: true,
-    attributeFilter: ['data-lock'],
-    childList: true,
-    subtree: true,
-    characterData: true,
-  });
-  if (digits) mo.observe(digits, { childList: true, subtree: true, characterData: true });
 }
 
 function count(section: Element | null, n: number): void {
@@ -175,7 +150,6 @@ function copy(button: HTMLButtonElement): void {
 
 export function initContentNav(): void {
   for (const nav of document.querySelectorAll<HTMLElement>('[data-spy]')) spy(nav);
-  for (const card of document.querySelectorAll<HTMLElement>('[data-tool-mirror]')) mirror(card);
   for (const list of document.querySelectorAll<HTMLElement>('[data-check]')) checklist(list);
   for (const list of document.querySelectorAll<HTMLElement>('[data-steps]')) steps(list);
   for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) copy(button);

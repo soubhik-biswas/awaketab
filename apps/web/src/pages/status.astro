@@ -1,0 +1,20 @@
+---
+import SystemPage from '../components/site/SystemPage.astro';
+import { t } from '../i18n/load';
+
+// Set PUBLIC_MAINTENANCE_UNTIL (for example "2:00 PM") for the build that announces a maintenance window; without
+// it the page says everything is running, so it never claims an outage that is not happening.
+const until = import.meta.env.PUBLIC_MAINTENANCE_UNTIL?.trim() ?? '';
+const down = until !== '';
+---
+
+<SystemPage
+  title={t('site.sys.status.title')}
+  description={t('site.sys.status.description')}
+  eyebrow={t(down ? 'site.sys.status.eyebrow' : 'site.sys.status.okEyebrow')}
+  h1={t(down ? 'site.sys.status.h1' : 'site.sys.status.okH1')}
+  lead={down ? t('site.sys.status.lead', { time: until }) : t('site.sys.status.okLead')}
+  scene={down ? 'maintenance' : 'success'}
+  primary={{ href: '/', label: t('site.cta') }}
+  secondary={{ href: '/help', label: t('site.sys.help'), icon: 'life-buoy' }}
+/>

@@ -1,15 +1,17 @@
 ---
 import { createT } from '../../i18n/load';
 import { LOCALE_META, LOCALES, localePath, type TLocale } from '../../i18n/locales';
-import Icon from '../icons/Icon.astro';
+import Lucide from '../icons/Lucide.astro';
 import Drawer from '../ui/Drawer.astro';
 
 interface Props {
   locale: TLocale;
   links?: Partial<Record<TLocale, string>> | undefined;
+  idBase?: string;
 }
 
-const { locale, links = {} } = Astro.props;
+// Two switchers can share a page (header and footer), so every id carries its own base.
+const { locale, links = {}, idBase = 'at-lang' } = Astro.props;
 const t = createT(locale);
 const here = LOCALE_META[locale];
 const pageLang = here.htmlLang;
@@ -19,20 +21,20 @@ const pageLang = here.htmlLang;
   <button
     class="at-lang-btn"
     type="button"
-    id="at-lang-btn"
+    id={`${idBase}-btn`}
     aria-expanded="false"
-    aria-controls="at-lang-list"
+    aria-controls={`${idBase}-list`}
     aria-label={`${t('footer.language')}: ${here.label}`}
   >
-    <Icon name="globe" size={16} />
+    <Lucide name="globe" size={16} />
     {here.label}
-    <Icon name="caret-down" size={16} class="at-lang-chev" />
+    <Lucide name="chevron-down" size={16} class="at-lang-chev" />
   </button>
   <Drawer
     class="at-lang-panel"
-    id="at-lang-list"
+    id={`${idBase}-list`}
     title={t('footer.language')}
-    titleId="at-lang-h"
+    titleId={`${idBase}-h`}
     closeLabel={t('footer.language.close')}
     closeAttrs={{ 'data-lang-close': '' }}
   >

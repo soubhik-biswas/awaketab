@@ -1,0 +1,23 @@
+---
+import Mark from './Mark.astro';
+import type { TMarkState } from '../../lib/mark';
+
+interface Props {
+  size?: number;
+  state?: TMarkState;
+  stacked?: boolean;
+  class?: string;
+}
+
+const { size = 32, state = 'awake', stacked = false, class: className } = Astro.props;
+const fontSize = Math.round(size * (stacked ? 0.42 : 0.62));
+const gap = Math.round(size * (stacked ? 0.14 : 0.22));
+---
+
+<span
+  class:list={['at-wordmark', stacked && 'at-wordmark-stacked', className]}
+  style={`--at-type-wordmark: 800 ${String(fontSize)}px/1 var(--at-font); --at-gap-wordmark: ${String(gap)}px`}
+>
+  <Mark size={size} state={state} />
+  <span class="at-wordmark-text">Awake<span class="at-wordmark-tab">Tab</span></span>
+</span>

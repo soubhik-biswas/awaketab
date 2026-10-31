@@ -1,0 +1,25 @@
+---
+interface Props {
+  id?: string | undefined;
+  h?: string | undefined;
+  sub?: string | undefined;
+  level?: 2 | 3;
+  label?: string | undefined;
+  class?: string;
+}
+
+const { id, h, sub, level = 2, label, class: className } = Astro.props;
+const Tag = level === 2 ? 'h2' : 'h3';
+const headId = id && h ? `${id}-h` : undefined;
+---
+
+<section
+  class:list={['at-sp-block', className]}
+  id={id}
+  aria-labelledby={headId}
+  aria-label={headId ? undefined : label}
+>
+  {h && <Tag id={headId} class="at-sp-h2">{h}</Tag>}
+  {sub && <p class="at-sp-sub">{sub}</p>}
+  <slot />
+</section>

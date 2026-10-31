@@ -99,7 +99,6 @@ export function bootManagePage(root: HTMLElement, now = Date.now()): void {
     return;
   }
 
-  const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   const hereHash = record.deviceId ? sha256Hex(record.deviceId).catch(() => '') : Promise.resolve('');
   let lapse: 'grace' | 'lapsed' | null = null;
 
@@ -164,7 +163,7 @@ export function bootManagePage(root: HTMLElement, now = Date.now()): void {
       const offTag = tr.querySelector<HTMLElement>('[data-device-off]');
       if (offTag) offTag.hidden = lapse !== 'lapsed';
       if (at && Number.isFinite(row.at)) {
-        at.textContent = dateFmt.format(row.at);
+        at.textContent = longDate(row.at);
         at.setAttribute('datetime', new Date(row.at).toISOString());
       }
       if (!btn) {
@@ -234,12 +233,18 @@ export function bootManagePage(root: HTMLElement, now = Date.now()): void {
           setState('empty');
           return;
         }
+        // An error answer (502 while Polar is down, 429) has no device list: that is "try again", not "no devices".
+        if (!Array.isArray(data.activations)) {
+          setState('offline');
+          if (retry) offline?.focus();
+          return;
+        }
         // The validate answer carries the fresh plan and exp (docs/09 §2.5); fall back to the stored record.
         const fresh = data as { plan?: string; exp?: number };
         const expSec = typeof fresh.exp === 'number' ? fresh.exp : record.exp;
         lapse = lapseState(fresh.plan ?? record.plan, expSec, now);
         if (lapse && typeof expSec === 'number') paintLapse(lapse, expSec);
-        void paint(Array.isArray(data.activations) ? data.activations : []).then(() => {
+        void paint(data.activations).then(() => {
           if (retry) focusAfter(0);
         });
       },

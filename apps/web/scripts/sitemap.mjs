@@ -25,9 +25,15 @@ export const PAGE_SOURCES = {
     ...TOOL,
   ],
   ...Object.fromEntries(PRESETS.map((p) => [p, ['src/pages/[preset].astro', ...TOOL]])),
-  ...Object.fromEntries(HUBS.map((p) => [p, [`src/pages${p}.astro`, 'src/components/HubPage.astro']])),
+  ...Object.fromEntries(
+    HUBS.map((p) => [
+      p,
+      [`src/pages${p}.astro`, `src/components/${['/vs', '/guides'].includes(p) ? 'HubGallery' : 'HubPage'}.astro`],
+    ]),
+  ),
   '/learn': ['src/pages/learn.astro', 'src/components/DocsHub.astro', 'src/lib/docs-hub.ts'],
   '/about': ['src/pages/about.astro'],
+  '/help': ['src/pages/help.astro', 'src/lib/help-topics.ts'],
   '/privacy': ['src/pages/privacy.astro', 'src/components/pages/LegalDoc.astro'],
   '/terms': ['src/pages/terms.astro', 'src/components/pages/LegalDoc.astro'],
   '/changelog': ['src/pages/changelog.astro', '../../changelog'],

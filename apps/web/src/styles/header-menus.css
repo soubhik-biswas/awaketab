@@ -1,81 +1,156 @@
 /* stylelint-disable no-descending-specificity -- hover, open and per-group rules refine the base rule above them. */
 
 @layer components {
-  .at-nav {
-    display: none;
+  .at-sh {
+    --at-sh-h: 76px;
+    --at-sh-max: 1440px;
+    --at-s-sh-pad: var(--at-s-12);
+    --at-s-sh-pad-end: var(--at-s-12);
+    --at-s-sh-10: 10px;
+    --at-s-sh-6: 6px;
+    --at-pg-type-sh-word: 800 21px/1 var(--at-font);
+
+    position: relative;
+    z-index: 10;
+    border-block-end: var(--at-border) solid var(--at-line);
   }
 
-  .at-nav-list {
+  .at-sh-in {
     display: flex;
     align-items: center;
+    gap: var(--at-s-2);
+    max-inline-size: var(--at-sh-max);
+    block-size: var(--at-sh-h);
+    margin-inline: auto;
+    padding-inline: var(--at-s-sh-pad) var(--at-s-sh-pad-end);
+  }
+
+  .at-sh-logo {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--at-s-sh-10);
+    min-block-size: var(--at-h-control);
+    color: var(--at-ink);
+    text-decoration: none;
+  }
+
+  .at-sh-word {
+    font: var(--at-pg-type-sh-word);
+    letter-spacing: -0.03em;
+  }
+
+  .at-sh-nav {
+    display: none;
+    margin-inline-start: var(--at-s-6);
+  }
+
+  .at-sh-nav ul {
+    display: flex;
     gap: var(--at-s-1);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .at-nav-link {
+  .at-sh-link {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: var(--at-gap-tight);
     min-block-size: var(--at-h-control);
-    min-inline-size: var(--at-h-control);
     padding-block: 0;
     padding-inline: var(--at-s-3);
-    border: 0;
-    border-radius: var(--at-r-md);
-    background: transparent;
-    color: var(--at-ink-2);
+    border-radius: var(--at-r-sm);
+    color: var(--at-ink);
     font: var(--at-type-ui);
     text-decoration: none;
     white-space: nowrap;
-    cursor: pointer;
+    transition: background-color var(--at-d-glide) var(--at-ease-glide);
   }
 
-  .at-nav-link:hover {
-    color: var(--at-ink);
+  .at-sh-link:hover,
+  .at-sh-link[aria-current="page"] {
+    background: var(--at-surface-2);
   }
 
-  :is(.at-nav-link[aria-current="page"], .at-hm-trigger[aria-current="true"]) {
-    color: var(--at-ink);
-    font-weight: 600;
+  .at-sh-link[aria-current="page"] {
+    font-weight: 700;
   }
 
-  :is(.at-nav-link[aria-current="page"], .at-hm-trigger[aria-current="true"])::before {
-    content: "";
-    inline-size: 6px;
-    block-size: 6px;
-    border-radius: var(--at-r-pill);
-    background: var(--at-accent);
+  .at-sh-fill {
+    flex: 1;
   }
 
-  .at-hm-trigger,
+  .at-sh-lang,
+  .at-sh-signin {
+    display: none;
+  }
+
+  .at-sh .at-lang-btn {
+    gap: var(--at-s-sh-6);
+    min-block-size: var(--at-h-control);
+    padding-block: 0;
+    padding-inline: var(--at-s-sh-10);
+    border: 0;
+    background: transparent;
+    color: var(--at-ink-2);
+    font: var(--at-type-small);
+  }
+
+  .at-sh .at-lang-chev {
+    display: none;
+  }
+
+  .at-sh-cta-short {
+    display: none;
+  }
+
   .at-hm-open,
   .at-hm-panel {
     display: none;
     visibility: visible;
   }
 
-  .at-hm-chev {
-    inline-size: var(--at-icon-sm);
-    block-size: var(--at-icon-sm);
-    color: var(--at-muted);
-    transition: transform var(--at-d-slide) var(--at-ease);
+  @supports selector(:popover-open) {
+    .at-sh-menu.at-hm-open {
+      display: inline-flex;
+    }
   }
 
-  .at-hm-open:has(+ .at-hm-panel:popover-open),
-  .at-site-header:has(#at-hm-for:popover-open) [popovertarget="at-hm-for"],
-  .at-site-header:has(#at-hm-on:popover-open) [popovertarget="at-hm-on"],
-  .at-site-header:has(#at-hm-res:popover-open) [popovertarget="at-hm-res"] {
-    background: var(--at-raised);
-    color: var(--at-ink);
+  .at-hm-open:has(+ .at-hm-panel:popover-open) {
+    background: var(--at-surface-2);
   }
 
-  .at-site-header:has(#at-hm-for:popover-open) [popovertarget="at-hm-for"] .at-hm-chev,
-  .at-site-header:has(#at-hm-on:popover-open) [popovertarget="at-hm-on"] .at-hm-chev,
-  .at-site-header:has(#at-hm-res:popover-open) [popovertarget="at-hm-res"] .at-hm-chev {
-    transform: rotate(180deg);
+  @media (width >= 700px) {
+    .at-sh-lang,
+    .at-sh-signin {
+      display: inline-flex;
+    }
+  }
+
+  @media (width >= 1180px) {
+    .at-sh-nav {
+      display: block;
+    }
+
+    .at-sh-menu.at-hm-open {
+      display: none;
+    }
+  }
+
+  @media (width < 700px) {
+    .at-sh {
+      --at-sh-h: 60px;
+      --at-s-sh-pad: var(--at-s-4);
+      --at-s-sh-pad-end: var(--at-s-3);
+    }
+
+    .at-sh-cta-long {
+      display: none;
+    }
+
+    .at-sh-cta-short {
+      display: inline;
+    }
   }
 
   .at-hm-add {
@@ -161,15 +236,6 @@
     font: var(--at-type-kicker);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-  }
-
-  .at-hm-drop .at-hm-kicker {
-    position: absolute;
-    inline-size: var(--at-tl-clip);
-    block-size: var(--at-tl-clip);
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 
   .at-hm-list {
@@ -531,62 +597,7 @@
     }
   }
 
-  @supports selector(:popover-open) {
-    .at-hm-hub {
-      display: none;
-    }
-
-    .at-hm-trigger {
-      display: inline-flex;
-    }
-
-    .at-hm-open {
-      display: inline-grid;
-    }
-  }
-
-  @supports (position-area: block-end) {
-    .at-hm-drop {
-      inset: auto;
-      margin-block: var(--at-s-2) 0;
-      margin-inline: 0;
-      position-area: block-end span-inline-end;
-      position-try-fallbacks: flip-inline;
-    }
-  }
-
-  @container at-header (width >= 1000px) {
-    .at-site-header:not([data-tool]) .at-nav {
-      display: flex;
-    }
-
-    .at-site-header:not([data-tool]) .at-hm-open {
-      display: none;
-    }
-  }
-
   @media (width < 600px) {
-    .at-site-header:not([data-tool]) .at-theme,
-    .at-site-header:not([data-tool]) .at-header-end > .at-hm-add .at-button-glyph,
-    .at-header-end > .at-hm-add .at-hm-add-long {
-      display: none;
-    }
-
-    .at-header-end > .at-hm-add .at-hm-add-short {
-      display: inline;
-    }
-
-    .at-site-header:not([data-tool]) .at-header-end {
-      flex-shrink: 1;
-      min-inline-size: 0;
-    }
-
-    .at-site-header:not([data-tool]) .at-header-end > .at-hm-add {
-      min-inline-size: 0;
-      white-space: normal;
-      overflow-wrap: break-word;
-    }
-
     .at-hm-menu {
       position: fixed;
       inset-block: auto 0;
@@ -641,10 +652,6 @@
   }
 
   @media (width >= 600px) {
-    .at-hm-theme {
-      display: none;
-    }
-
     @supports (position-area: block-end) {
       .at-hm-menu {
         inset: auto;

@@ -4,6 +4,10 @@ apps/web/public/
 **/.wxt/
 **/.output/
 **/.output-test/
+**/.next/
+**/.open-next/
+**/.content-collections/
+**/.wrangler/
 **/node_modules/
 pnpm-lock.yaml
 *.md
@@ -17,3 +21,4 @@ docs/
 .gstack/
 # Astro templates: formatting whitespace changes the rendered page text.
 *.astro
+**/next-env.d.ts

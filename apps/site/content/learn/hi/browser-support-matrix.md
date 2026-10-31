@@ -1,0 +1,113 @@
+---
+title: "वेक लॉक ब्राउज़र सपोर्ट तालिका — AwakeTab"
+description: "Chrome 84, Edge 84, Firefox 126, Safari 16.4, Samsung Internet 14, Opera 70 और iOS होम स्क्रीन ऐप 18.4 से नेटिव वेक लॉक; तालिका 9 सितंबर 2026 की है।"
+h1: "किन ब्राउज़र में Wake Lock चलता है: पूरी सपोर्ट तालिका"
+ogTitle: "Wake Lock ब्राउज़र सपोर्ट तालिका"
+intent: "wake lock ब्राउज़र सपोर्ट"
+secondaryQueries: ["कौन से ब्राउज़र स्क्रीन ऑन रख सकते हैं", "wake lock kis browser me chalta hai", "screen wake lock api सपोर्ट", "safari firefox वेक लॉक वर्ज़न", "स्क्रीन ऑन रखें"]
+preset: p15
+mode: standard
+locale: hi
+reviewed: false
+translationOf: "browser-support-matrix"
+lastVerified: 2026-09-09
+browsers: []
+os: []
+lead: "हमारी सपोर्ट मैट्रिक्स (9 सितंबर 2026) के अनुसार Screen Wake Lock API, यानी स्क्रीन जगाए रखने का ब्राउज़र वाला तरीका, इन वर्ज़न से नेटिव रूप में मिलता है: Chrome 84, Edge 84, Firefox 126, Safari 16.4, Samsung Internet 14 और Opera 70। iPhone और iPad पर होम स्क्रीन पर जोड़े गए वेब ऐप को iOS 18.4 चाहिए। पुराना Firefox फ़ॉलबैक पर चलता है। ये वर्ज़न ब्राउज़र के दस्तावेज़ और सोर्स कोड से हैं (26 सितंबर 2026 को जाँचे गए); डिवाइस परीक्षण के नतीजे अभी दर्ज नहीं हैं।"
+crumb: "ब्राउज़र सपोर्ट तालिका"
+rows:
+  refusals:
+    - title: "छिपा टैब"
+    - title: "`screen-wake-lock` को रोकने वाली Permissions-Policy"
+    - title: "Safari में पहले टैप न होना"
+    - title: "Firefox में चार्जर के बिना 5 % या कम बैटरी"
+  os:
+    - title: "Windows"
+      text: "“Energy saver” (24H2 से पहले “Battery saver”) लॉक को मना नहीं करता, पर स्क्रीन धीमी कर सकता है।"
+    - title: "Windows और macOS"
+      text: "Chrome और Edge जब तक डिस्प्ले ऑन रखते हैं, मशीन आइडल स्लीप नहीं करती; पर ढक्कन बंद करने से लैपटॉप सो जाता है।"
+    - title: "iPhone"
+      text: "Low Power Mode चालू होने पर Never वाला ऑटो-लॉक चुना नहीं जा सकता।"
+    - title: "Android"
+      text: "Settings → Display (Pixel पर Display & touch) → Screen timeout और कंपनी की sleeping-apps सूची दोनों मायने रखते हैं।"
+    - title: "Linux"
+      text: "Chrome और Firefox डेस्कटॉप से स्लीप न करने को कहते हैं; यह टिकता है या नहीं, यह डेस्कटॉप पर निर्भर है।"
+notes:
+  savers:
+    kicker: "ध्यान दें"
+    text: "बैटरी सेवर और Low Power Mode लॉक को मना नहीं करते।"
+faq:
+  - q: "मेरा ब्राउज़र तालिका के वर्ज़न से पुराना है, तो क्या होगा?"
+    a: "नेटिव वेक लॉक नहीं मिलेगा। पिल “फ़ॉलबैक इस्तेमाल करने के लिए टैप करें” दिखाएगा; टैप करने पर एक छोटा बिना आवाज़ वाला वीडियो स्क्रीन को ऑन रखता है और पिल “वीडियो फ़ॉलबैक से स्क्रीन ऑन है” कहता है। यह नेटिव लॉक से ज़्यादा बैटरी खर्च करता है।"
+  - q: "सपोर्टेड ब्राउज़र में भी टैब छिपाने पर लॉक क्यों छूट जाता है?"
+    a: "यह हर ब्राउज़र का नियम है: छिपा टैब वेक लॉक नहीं थाम सकता। टैब बदलने, मिनिमाइज़ करने या फोन पर दूसरा ऐप खोलने से लॉक छूटता है और पिल “रुका हुआ — टैब छिपा है” दिखाता है। वीडियो फ़ॉलबैक पर भी यही लागू है।"
+  - q: "iPhone पर होम स्क्रीन ऐप और Safari में क्या फ़र्क है?"
+    a: "Safari टैब में नेटिव लॉक Safari 16.4 से मिलता है। होम स्क्रीन पर इंस्टॉल किए गए वेब ऐप में यह iOS 18.4 से मिलता है। पुराने iOS पर AwakeTab को Safari में ही चलाएँ।"
+  - q: "इस तालिका के वर्ज़न कितने ताज़ा हैं?"
+    a: "वर्ज़न और सीमाएँ ब्राउज़र के दस्तावेज़ और सोर्स कोड से ली गई हैं, जिन्हें 26 सितंबर 2026 को जाँचा गया। किसी भी डिवाइस पर हमारा अपना परीक्षण अभी दर्ज नहीं है; नतीजे [How AwakeTab is checked](/learn/how-we-tested) पर आएँगे।"
+honestLimit: "यह तालिका ब्राउज़र के दस्तावेज़ और सोर्स कोड पर आधारित है, डिवाइस परीक्षण पर नहीं; इन वर्ज़न से पुराने ब्राउज़र नेटिव लॉक के बजाय फ़ॉलबैक पर चलते हैं, और टैब छिपते ही हर ब्राउज़र लॉक छोड़ देता है।"
+related:
+  - "/learn/how-we-tested"
+  - "/learn/screen-wake-lock-api-guide"
+  - "/on/ios-home-screen"
+  - "/on/iphone-safari"
+  - "/on/android-chrome"
+  - "/for/kiosk"
+author: soubhik
+published: 2026-09-26
+updated: 2026-09-27
+---
+
+## सपोर्ट तालिका
+
+| ब्राउज़र | न्यूनतम वर्ज़न | तरीका | प्लेटफ़ॉर्म | ध्यान देने की बात |
+|---|---|---|---|---|
+| Chrome | 84 | नेटिव | Windows, macOS, Linux, Android, ChromeOS | टैब दिखता रहे; बैटरी सेवर के लिए कोई जाँच नहीं |
+| Edge | 84 | नेटिव | Windows, macOS, Linux, Android | टैब दिखता रहे |
+| Firefox | 126 | नेटिव | Windows, macOS, Linux, Android | चार्जर के बिना 5 % या कम बैटरी पर लॉक मना; पुराने वर्ज़न टैप के बाद वीडियो फ़ॉलबैक पर |
+| Safari | 16.4 | नेटिव | macOS, iOS, iPadOS | पहले एक टैप चाहिए; टैब दिखता रहे; iPhone पर Low Power Mode ऑटो-लॉक 30 सेकंड कर देता है |
+| Samsung Internet | 14 | नेटिव | Android | फोन की “स्लीपिंग ऐप्स” सेटिंग आपके जाने के बाद टैब बंद कर सकती है |
+| Opera | 70 | नेटिव | Windows, macOS, Linux, Android | Chromium आधारित; टैब दिखता रहे |
+| iOS होम स्क्रीन ऐप | 18.4 | नेटिव | iOS | पुराने वर्ज़न पर Safari में चलाएँ |
+| वीडियो फ़ॉलबैक | — | फ़ॉलबैक | — | आपका टैप चाहिए; नेटिव लॉक से ज़्यादा बिजली |
+
+## तालिका को कैसे पढ़ें
+
+“न्यूनतम वर्ज़न” का मतलब है कि उससे नया ब्राउज़र हो तो AwakeTab सीधे `navigator.wakeLock.request('screen')` से लॉक माँगता है। पुराना हो, तो पिल “फ़ॉलबैक इस्तेमाल करने के लिए टैप करें” दिखाता है, और आपके टैप के बाद एक-फ़्रेम वाला बिना आवाज़ का वीडियो स्क्रीन जगाए रखता है।
+
+नेटिव सपोर्ट का मतलब यह नहीं कि लॉक हर हाल में मिलेगा। इनमें से कोई भी हो तो नतीजा denied या lost होगा:
+
+::rows refusals
+
+बिना HTTPS वाले पेज पर वेक लॉक होता ही नहीं (unsupported)। तब पिल इनकार या रुकावट की असली हालत दिखाता है, कभी नकली “स्क्रीन ऑन है” नहीं।
+
+::note savers
+
+::ad
+
+## OS की सेटिंग्स का असर
+
+ब्राउज़र सपोर्ट करे, फिर भी ऑपरेटिंग सिस्टम की नीतियाँ ऊपर रहती हैं।
+
+::rows os
+
+डिवाइस के हिसाब से: [iPhone Safari](/hi/on/iphone-safari), [Android Chrome](/hi/on/android-chrome)।
+
+## पिल की सात हालतें
+
+AwakeTab का पिल सात में से किसी एक हालत में होता है: idle (“तैयार”), requesting (“शुरू हो रहा है…”), held (“स्क्रीन ऑन है”), lost (“रुका हुआ — टैब छिपा है”), denied (“ब्लॉक है — ठीक करने का तरीका यह है”), unsupported (“फ़ॉलबैक इस्तेमाल करने के लिए टैप करें”) और fallback (“वीडियो फ़ॉलबैक से स्क्रीन ऑन है”)। टाइमर सिर्फ़ held और fallback में चलता है, और आँकड़े भी उन्हीं दो हालतों में जुड़ते हैं।
+
+## स्रोत और तारीख़
+
+तालिका की हर पंक्ति ब्राउज़र के दस्तावेज़ और सोर्स कोड पर आधारित है, जिन्हें 26 सितंबर 2026 को जाँचा गया।
+
+- [MDN browser-compat-data, WakeLock](https://github.com/mdn/browser-compat-data/blob/main/api/WakeLock.json)
+- [New in Chrome 84](https://developer.chrome.com/blog/new-in-chrome-84/)
+- [Firefox 126 release notes for developers](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/126)
+- [WebKit features in Safari 18.4](https://webkit.org/blog/16574/webkit-features-in-safari-18-4/)
+- [Chromium wake_lock.cc](https://chromium.googlesource.com/chromium/src/+/main/third_party/blink/renderer/modules/wake_lock/wake_lock.cc)
+- [WebKit WakeLock.cpp](https://github.com/WebKit/WebKit/blob/main/Source/WebCore/Modules/screen-wake-lock/WakeLock.cpp)
+- [Firefox WakeLockJS.cpp](https://github.com/mozilla-firefox/firefox/blob/main/dom/power/WakeLockJS.cpp)
+
+डिवाइस पर हमारा अपना परीक्षण अभी दर्ज नहीं है। ब्राउज़र बदलते रहते हैं, इसलिए कोई नया वर्ज़न व्यवहार बदल दे तो पिल ही असली सच बताएगा, तालिका नहीं। डिवाइस परीक्षण के नतीजे [How AwakeTab is checked](/learn/how-we-tested) पर आएँगे।
+

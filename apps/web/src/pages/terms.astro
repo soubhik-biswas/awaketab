@@ -3,7 +3,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LegalDoc from '../components/pages/LegalDoc.astro';
 import LegalSection from '../components/pages/LegalSection.astro';
-import '../styles/pages.css';
 import { t } from '../i18n/load';
 import { CONTACT_EMAIL, CONTACT_MAILTO } from '../lib/contact';
 import { articleSchema } from '../lib/seo';
@@ -23,6 +22,7 @@ const toc = [
   description={t('page.terms.description')}
   canonical={canonical}
   ogImage={ogImage}
+  site
   schema={articleSchema({
     canonical,
     title: t('page.terms.h1'),
@@ -47,27 +47,27 @@ const toc = [
     mailto={CONTACT_MAILTO}
   >
     <LegalSection id="guarantee" title={toc[0][1]} summary="trust the live status pill, not a promise. Do not rely on AwakeTab for safety-critical monitoring.">
-      <p class="at-pg-body">
+      <p>
         AwakeTab cannot guarantee operation in a hidden tab, after closing a laptop lid, during low-power modes, after browser
         suspension, or when a device administrator blocks the API. Use the live status pill as the current result and do not rely
         on AwakeTab for safety-critical monitoring.
       </p>
     </LegalSection>
     <LegalSection id="use" title={toc[1][1]} summary="use the shortest session you need, and do not use AwakeTab to fake activity or availability.">
-      <p class="at-pg-body">
+      <p>
         Keeping a display on uses battery and may cause image retention on some screens. Follow device guidance, use the shortest
         suitable duration and stop a session when it is no longer needed. You must not use the service to misrepresent activity or
         availability.
       </p>
     </LegalSection>
     <LegalSection id="licences" title={toc[2][1]} summary="the website is provided as-is, open-source packages keep their own licence, and paid licences have a 14-day refund.">
-      <p class="at-pg-body">
+      <p>
         The public website is provided as-is. Open-source packages are governed by the licence included with their source. Paid
         product terms, activation limits and refund information shown at checkout apply in addition to these terms. Features and
         browser support may change as platforms change.
       </p>
-      <p class="at-pg-body">
-        Paid licences include a 14-day refund, no questions asked. Email <a class="at-pg-link" href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a>
+      <p>
+        Paid licences include a 14-day refund, no questions asked. Email <a href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a>
         with your receipt or use the Polar customer portal. Refunds deactivate the licence key.
       </p>
     </LegalSection>

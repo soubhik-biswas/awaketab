@@ -15,8 +15,8 @@ export interface IOgInput {
   fonts: IOgFont[];
 }
 
-// Clear Night light tokens from tokens.css; page-colours.test.ts keeps them equal.
-const COLOURS = { ground: '#F2F6FA', ink: '#0E1726', muted: '#5B6779', track: '#E3E9F1', lamp: '#087B87' };
+// Solar Green light tokens from tokens.css; page-colours.test.ts keeps them equal.
+const COLOURS = { ground: '#F6F4EF', ink: '#0B1020', muted: '#626777', track: '#E6E2D9', lamp: '#117A3B' };
 
 const FULL_WIDTH = /[\u1100-\u115F\u2E80-\uA4CF\uAC00-\uD7A3\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFF60\uFFE0-\uFFE6]/u;
 

@@ -11,40 +11,6 @@
         "config": ["playwright.config.ts"]
       }
     },
-    "apps/web": {
-      "entry": [
-        "src/pages/**/*.{astro,ts,md,mdx}",
-        "src/sw.ts",
-        "src/boot/boot.js",
-        "src/tool/main.ts",
-        "src/tool/pip-mirror.ts",
-        "src/tool/embed/loader-entry.ts",
-        "scripts/*.{mjs,mts}",
-        "scripts/kv/*.ts",
-        "functions/**/*.ts",
-        "test/**/*.{test,spec}.ts",
-        "scripts/**/*.test.ts"
-      ],
-      "project": [
-        "src/**/*.{astro,ts,tsx,js,mjs,css}",
-        "scripts/**/*.{mjs,mts,ts}",
-        "functions/**/*.ts",
-        "test/**/*.ts"
-      ],
-      "ignore": ["src/components/icons/BrandIcon.astro"],
-      "ignoreDependencies": [
-        "@iconify-json/logos",
-        "@phosphor-icons/core",
-        "@fontsource/inter",
-        "@fontsource/noto-sans-devanagari",
-        "@fontsource/noto-sans-jp",
-        "@fontsource/noto-sans-sc"
-      ],
-      "ignoreIssues": {
-        "src/components/ui/*.tsx": ["exports"],
-        "src/lib/ads.ts": ["exports"]
-      }
-    },
     "apps/extension": {
       "entry": ["scripts/*.{mjs,mts}", "test/**/*.test.ts", "e2e/**/*.spec.ts"],
       "project": ["entrypoints/**/*.ts", "src/**/*.ts", "scripts/**/*.{mjs,mts}", "test/**/*.ts", "e2e/**/*.ts"]
@@ -57,6 +23,37 @@
     "packages/core": {
       "entry": ["test/**/*.test.ts"],
       "project": ["src/**/*.ts", "test/**/*.ts"]
+    },
+    "apps/site": {
+      "entry": [
+        "content-collections.ts",
+        "open-next.config.ts",
+        "worker/sw.ts",
+        "scripts/*.{mjs,mts}",
+        "emails/**/*.tsx",
+        "**/*.test.{ts,tsx}"
+      ],
+      "project": ["**/*.{ts,tsx,mjs,mts}"],
+      "ignore": ["components/ui/**", "hooks/use-mobile.ts"],
+      "ignoreDependencies": [
+        "@base-ui/react",
+        "@hookform/resolvers",
+        "@shadcn/react",
+        "date-fns",
+        "embla-carousel-react",
+        "input-otp",
+        "react-day-picker",
+        "react-hook-form",
+        "react-resizable-panels",
+        "recharts",
+        "@react-email/ui",
+        "tailwindcss",
+        "tw-animate-css"
+      ],
+      "ignoreIssues": {
+        "components/ui/*.tsx": ["exports", "types"]
+      }
     }
-  }
+  },
+  "ignoreWorkspaces": ["apps/web"]
 }

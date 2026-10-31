@@ -31,6 +31,7 @@ describe('background controller — keep-awake and badge', () => {
     expect(fake.badge.text).toBe('ON');
     expect(fake.badge.color).toBe(BADGE_COLORS.display);
     expect(fake.badge.title).toContain('Screen awake');
+    expect(fake.badge.icon).toBe('icon-16.png');
     expect(fake.alarms.get(ALARMS.tick)?.periodInMinutes).toBe(0.5);
     expect(fake.alarms.has(ALARMS.end)).toBe(false);
   });
@@ -45,7 +46,7 @@ describe('background controller — keep-awake and badge', () => {
     );
   });
 
-  it('maps the system level to requestKeepAwake("system"), an indigo SYS badge and the secondary line', async () => {
+  it('maps the system level to requestKeepAwake("system"), a sky SYS badge and the secondary line', async () => {
     const fake = createFakeChrome();
     const ctl = track(wired(fake));
     await ctl.onMessage({ type: 'level', level: 'system' });
@@ -178,7 +179,7 @@ describe('background controller — service-worker lifecycle', () => {
     expect(second.state().extend).toBe(false);
   });
 
-  it('completes on time while alive, then +30 from the notification starts a new session', async () => {
+  it('completes on time while alive, then +15 min from the notification starts a new session', async () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
     vi.setSystemTime(Date.parse('2026-09-01T08:00:00Z'));
     const fake = createFakeChrome();
@@ -193,12 +194,13 @@ describe('background controller — service-worker lifecycle', () => {
     expect(fake.badge.text).toBe('');
     const note = fake.notifications.at(-1);
     expect(note?.id).toBe(NOTIFICATION_ID);
-    expect(note?.options.buttons?.map((b) => b.title)).toEqual(['+30 min', 'Stop']);
+    expect(note?.options.title).toBe("Time's up");
+    expect(note?.options.buttons?.map((b) => b.title)).toEqual(['+15 min', 'Dismiss']);
     expect(note?.options.silent).toBe(true);
     fake.events.button.fire(NOTIFICATION_ID, 0);
     await vi.advanceTimersByTimeAsync(10);
     await flush(30);
-    expect(ctl.state().session?.plan).toEqual({ type: 'duration', ms: 30 * 60_000 });
+    expect(ctl.state().session?.plan).toEqual({ type: 'duration', ms: 15 * 60_000 });
     expect(ctl.state().lock).toBe('held');
   });
 

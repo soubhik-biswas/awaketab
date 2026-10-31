@@ -3,6 +3,11 @@
 
 @layer content {
   .at-steps {
+    --at-steps-n: 40px;
+    --at-steps-min: 15rem;
+    --at-pg-type-steps-n: 800 20px/1 var(--at-font);
+    --at-pg-type-steps-t: 700 22px/1.2 var(--at-font);
+
     display: flex;
     flex-direction: column;
     gap: var(--at-s-5);
@@ -21,31 +26,54 @@
     place-items: center;
     inline-size: var(--at-s-8);
     block-size: var(--at-s-8);
-    border: var(--at-border) solid color-mix(in srgb, var(--at-accent) 45%, transparent);
     border-radius: var(--at-r-pill);
-    color: var(--at-ink);
+    background: var(--at-accent);
+    color: var(--at-on-accent);
     font: var(--at-type-small);
-    font-weight: 600;
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
   }
 
-  .at-steps:not(.at-steps-shots, .at-steps-track) > li {
+  .at-steps:not(.at-steps-shots, .at-steps-track) {
     display: grid;
-    grid-template-columns: var(--at-s-8) minmax(0, 1fr);
-    align-items: start;
-    column-gap: var(--at-s-3);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--at-steps-min)), 1fr));
+    gap: var(--at-s-site-grid);
+  }
+
+  .at-steps:not(.at-steps-shots, .at-steps-track) > li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--at-s-site-10);
+    padding: var(--at-s-site-step);
+    border: var(--at-border) solid var(--at-line);
+    border-radius: var(--at-r-site22);
+    background: var(--at-surface);
+  }
+
+  .at-steps:not(.at-steps-shots, .at-steps-track) .at-step-n {
+    inline-size: var(--at-steps-n);
+    block-size: var(--at-steps-n);
+    font: var(--at-pg-type-steps-n);
   }
 
   .at-steps > li > span:last-child {
     display: flex;
     flex-direction: column;
-    gap: var(--at-s-1);
+    gap: var(--at-s-2);
     min-inline-size: 0;
+    color: var(--at-ink-2);
+    font: var(--at-type-body);
+  }
+
+  .at-cp .at-steps:not(.at-steps-shots, .at-steps-track) strong {
+    color: var(--at-ink);
+    font: var(--at-pg-type-steps-t);
+    letter-spacing: -0.02em;
   }
 
   .at-cp .at-steps strong {
     color: var(--at-ink);
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .at-steps :is(p, h3) {

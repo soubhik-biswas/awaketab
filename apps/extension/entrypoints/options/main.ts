@@ -1,4 +1,4 @@
-import 'virtual:at-tokens.css';
+import '../../src/styles/tokens.css';
 import '../../src/styles/base.css';
 import './options.css';
 import {
@@ -10,7 +10,7 @@ import {
   type TFeatureGate,
 } from '@awaketab/core';
 import { browser } from 'wxt/browser';
-import { LOCALE_META } from '../../../web/src/i18n/locales';
+import { LOCALE_META } from '../../../site/i18n/locales';
 import type { IExtApi } from '../../src/api';
 import { keyCaps } from '../../src/format';
 import { LOCALES, resolveLocale } from '../../src/i18n';
@@ -23,7 +23,7 @@ import {
   NO_LICENSE,
   osLabel,
 } from '../../src/license';
-import { applyTheme, loadPage, q, switchLocale, translateTree } from '../../src/page';
+import { applyTheme, loadPage, paintMarks, q, switchLocale, translateTree } from '../../src/page';
 import { minutesOf } from '../../src/schedules';
 import {
   AUTOSTART_SITES_MAX,
@@ -760,6 +760,7 @@ async function boot(): Promise<void> {
   });
 
   translateTree(root, ctx.t);
+  paintMarks(root);
   render();
   root.hidden = false;
   if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();

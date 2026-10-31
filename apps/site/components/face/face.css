@@ -1,0 +1,50 @@
+.af {
+  position: relative;
+  overflow: hidden;
+  direction: ltr;
+  font-family: var(--font-geist), var(--font-script, system-ui), system-ui, sans-serif;
+  line-height: normal;
+  color: var(--foreground);
+  text-align: start;
+}
+
+.af * {
+  box-sizing: border-box;
+}
+
+.af-a {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 360px;
+  height: 360px;
+  transform-origin: 0 0;
+}
+
+.af-tr {
+  transition:
+    stroke-dasharray 0.95s linear,
+    width 0.95s linear,
+    height 0.95s linear,
+    top 0.95s linear,
+    left 0.95s linear,
+    transform 0.95s linear;
+}
+
+.af-still *,
+.af-still *::before,
+.af-still *::after {
+  transition: none !important;
+}
+
+.af-compact .af-l {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .af *,
+  .af *::before,
+  .af *::after {
+    transition: none !important;
+  }
+}

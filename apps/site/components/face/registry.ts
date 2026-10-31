@@ -1,0 +1,405 @@
+import type { ComponentType } from 'react';
+import Ring from './faces/ring';
+import type { IDrawProps } from './kit';
+import type { TFaceId } from './model';
+
+export interface IFaceInfo {
+  id: TFaceId;
+  num: string;
+  name: string;
+  blurb: string;
+}
+
+// The faces board's numbers, names and descriptions, in sheet order.
+export const FACES: readonly IFaceInfo[] = [
+  {
+    id: 'ring',
+    num: '01',
+    name: 'Ring',
+    blurb: 'The signature. The lamp rides the end of the arc and turns amber the moment the lock pauses.',
+  },
+  {
+    id: 'bold',
+    num: '02',
+    name: 'Bold',
+    blurb: 'Heavy display digits for across-the-room reading, with a slim progress rail.',
+  },
+  { id: 'horizon', num: '03', name: 'Horizon', blurb: 'A lamp-sun sets toward the horizon as the session runs down.' },
+  { id: 'tide', num: '04', name: 'Tide', blurb: 'The water level is the time left. Calm and glanceable.' },
+  { id: 'flip', num: '05', name: 'Flip', blurb: 'Split-flap cards with a real hinge gap.' },
+  { id: 'rolling', num: '06', name: 'Rolling', blurb: 'Odometer drums — the next digit is always just visible.' },
+  {
+    id: 'analog',
+    num: '07a',
+    name: 'Analog',
+    blurb: 'Real time on the hands; the lamp arc on the bezel runs to the end time.',
+  },
+  {
+    id: 'luxe',
+    num: '07b',
+    name: 'Analog luxe',
+    blurb: 'A deeper dial with serif numerals, a minute track and a lamp sector.',
+  },
+  { id: 'rings', num: '08', name: 'Rings', blurb: 'Session, minutes and seconds as three concentric rings.' },
+  {
+    id: 'words',
+    num: '09',
+    name: 'Words',
+    blurb: 'Time in a sentence, written natively in each of the eight languages.',
+  },
+  {
+    id: 'nixie',
+    num: '10',
+    name: 'Nixie',
+    blurb: 'Glass tubes with mesh and ghost 8s; the glow takes the lamp colour.',
+  },
+  { id: 'lcd', num: '11', name: 'LCD', blurb: 'Slanted segments over a faint 88:88 ghost, like a bedside clock.' },
+  { id: 'led', num: '12', name: 'LED', blurb: 'Dot-matrix board with a scrolling status line. Best in OLED.' },
+  {
+    id: 'dive',
+    num: '13',
+    name: 'Diver',
+    blurb: 'A dive-watch bezel: the green arc is the minutes left, the hands keep real time.',
+  },
+  { id: 'chrono', num: '14', name: 'Chronograph', blurb: 'Minute and second sub-dials with a sweeping chrono hand.' },
+  { id: 'gauge', num: '15', name: 'Gauge', blurb: 'An instrument needle with a five-minute warning zone.' },
+  { id: 'type', num: '16', name: 'Type', blurb: 'Minutes in huge type, seconds in green, a progress hairline.' },
+  {
+    id: 'bars',
+    num: '17',
+    name: 'Bars',
+    blurb: 'The whole session as bars — spent fades, the current one breathes.',
+  },
+  {
+    id: 'timeline',
+    num: '18',
+    name: 'Timeline',
+    blurb: 'Now → Ends, like a boarding pass. The most literal way to read time left.',
+  },
+  {
+    id: 'pilot',
+    num: '19',
+    name: 'Pilot',
+    blurb: 'Aviator dial with a triangle at 12, sword hands and a green minutes-left sector.',
+  },
+  {
+    id: 'dual',
+    num: '20',
+    name: 'Dual time',
+    blurb: 'Two small dials side by side: the time now and the time it ends.',
+  },
+  { id: 'radar', num: '21', name: 'Radar', blurb: 'A sweeping scope; the blip marks the end time on the rings.' },
+  { id: 'dots', num: '22', name: 'Dots', blurb: 'Sixty dots around the dial; each minute left keeps one lit.' },
+  {
+    id: 'hourglass',
+    num: '23',
+    name: 'Hourglass',
+    blurb: 'Sand falls from top to bottom as the session runs; a fine stream moves while awake.',
+  },
+  {
+    id: 'battery',
+    num: '24',
+    name: 'Battery',
+    blurb: 'Time left as a charge level, with a gentle sheen across the cell.',
+  },
+  {
+    id: 'stack',
+    num: '25',
+    name: 'Stack',
+    blurb: 'Minutes over seconds in a tight editorial stack, end time underneath.',
+  },
+  {
+    id: 'board',
+    num: '26',
+    name: 'Departure board',
+    blurb: 'Split-flap tiles like a station board; the seconds tile flaps each tick.',
+  },
+  {
+    id: 'orbit',
+    num: '27',
+    name: 'Orbit',
+    blurb: 'Three orbits: the session in green, minutes in sky, a violet moon sweeping the seconds.',
+  },
+  {
+    id: 'disc',
+    num: '28',
+    name: 'Time disc',
+    blurb: 'A solid disc that shrinks toward 12, warming from green to ember in the last minutes.',
+  },
+  {
+    id: 'clocks',
+    num: '29',
+    name: 'Clock of clocks',
+    blurb: 'Twenty-four tiny clocks whose hands swing into place to spell the time left.',
+  },
+  {
+    id: 'wordgrid',
+    num: '30',
+    name: 'Word grid',
+    blurb: 'A letter grid that lights the words — “about forty minutes left”.',
+  },
+  {
+    id: 'tape',
+    num: '31',
+    name: 'Tape',
+    blurb: 'A minute ruler glides under a fixed needle; the heat strip shows the final stretch.',
+  },
+  {
+    id: 'moon',
+    num: '32',
+    name: 'Moon phase',
+    blurb: 'The moon wanes from full to new as the session runs down, under an aurora sky.',
+  },
+  {
+    id: 'aurora',
+    num: '33',
+    name: 'Aurora',
+    blurb: 'Northern lights drift behind thin digits — a living wallpaper while awake.',
+  },
+  {
+    id: 'glass',
+    num: '34',
+    name: 'Glass',
+    blurb: 'A frosted pane floats over soft colour orbs; the time sits on the glass.',
+  },
+  { id: 'neon', num: '35', name: 'Neon', blurb: 'A neon sign on a dark wall, with a humming flicker while awake.' },
+  {
+    id: 'liquid',
+    num: '36',
+    name: 'Liquid',
+    blurb: 'A glass sphere of light that drains as the session runs, with waves and bubbles.',
+  },
+  {
+    id: 'eclipse',
+    num: '37',
+    name: 'Eclipse',
+    blurb: 'The moon slides across the sun; totality arrives when time is up.',
+  },
+  {
+    id: 'skeleton',
+    num: '38',
+    name: 'Skeleton',
+    blurb: 'An open movement: brass gears turn and the balance wheel swings.',
+  },
+  {
+    id: 'bauhaus',
+    num: '39',
+    name: 'Bauhaus',
+    blurb: 'Primary shapes and a pie of time left — a design object on the desk.',
+  },
+  { id: 'poster', num: '40', name: 'Poster', blurb: 'Giant cropped minutes in Archivo Expanded, editorial and bold.' },
+  {
+    id: 'eink',
+    num: '41',
+    name: 'E-ink',
+    blurb: 'A paper display with serif digits and a faint ghost, calm by daylight.',
+  },
+  {
+    id: 'terminal',
+    num: '42',
+    name: 'Terminal',
+    blurb: 'A shell that reports the wake lock honestly, with a blinking cursor.',
+  },
+  { id: 'pulse', num: '43', name: 'Pulse', blurb: 'A heart-monitor trace sweeps while the screen is awake.' },
+  {
+    id: 'waveform',
+    num: '44',
+    name: 'Waveform',
+    blurb: 'A ring of audio bars that dances while awake; lit bars are time left.',
+  },
+  { id: 'blob', num: '45', name: 'Fluid', blurb: 'A morphing gradient orb, like a voice assistant at rest.' },
+  {
+    id: 'hud',
+    num: '46',
+    name: 'HUD',
+    blurb: 'A car-dashboard arc of segments with italic digits and tell-tale lamps.',
+  },
+  {
+    id: 'constellation',
+    num: '47',
+    name: 'Constellation',
+    blurb: 'Each minute left is a star; they join into a constellation.',
+  },
+  { id: 'halo', num: '48', name: 'Halo', blurb: 'A glowing gradient ring that closes toward 12.' },
+];
+
+export const faceName = (id: TFaceId): string => FACES.find((f) => f.id === id)?.name ?? id;
+
+export type TFaceDrawing = ComponentType<IDrawProps>;
+type TLoader = () => Promise<{ default: TFaceDrawing }>;
+
+// Ring ships with the page; every other face is its own chunk, loaded the first time it is drawn.
+export const FACE_LOADERS: Readonly<Record<Exclude<TFaceId, 'ring'>, TLoader>> = {
+  bold: () => import('./faces/bold'),
+  horizon: () => import('./faces/horizon'),
+  tide: () => import('./faces/tide'),
+  flip: () => import('./faces/flip'),
+  rolling: () => import('./faces/rolling'),
+  analog: () => import('./faces/analog'),
+  luxe: () => import('./faces/luxe'),
+  rings: () => import('./faces/rings'),
+  words: () => import('./faces/words'),
+  nixie: () => import('./faces/nixie'),
+  lcd: () => import('./faces/lcd'),
+  led: () => import('./faces/led'),
+  dive: () => import('./faces/dive'),
+  chrono: () => import('./faces/chrono'),
+  gauge: () => import('./faces/gauge'),
+  type: () => import('./faces/type'),
+  bars: () => import('./faces/bars'),
+  timeline: () => import('./faces/timeline'),
+  pilot: () => import('./faces/pilot'),
+  dual: () => import('./faces/dual'),
+  radar: () => import('./faces/radar'),
+  dots: () => import('./faces/dots'),
+  hourglass: () => import('./faces/hourglass'),
+  battery: () => import('./faces/battery'),
+  stack: () => import('./faces/stack'),
+  board: () => import('./faces/board'),
+  orbit: () => import('./faces/orbit'),
+  disc: () => import('./faces/disc'),
+  clocks: () => import('./faces/clocks'),
+  wordgrid: () => import('./faces/wordgrid'),
+  tape: () => import('./faces/tape'),
+  moon: () => import('./faces/moon'),
+  aurora: () => import('./faces/aurora'),
+  glass: () => import('./faces/glass'),
+  neon: () => import('./faces/neon'),
+  liquid: () => import('./faces/liquid'),
+  eclipse: () => import('./faces/eclipse'),
+  skeleton: () => import('./faces/skeleton'),
+  bauhaus: () => import('./faces/bauhaus'),
+  poster: () => import('./faces/poster'),
+  eink: () => import('./faces/eink'),
+  terminal: () => import('./faces/terminal'),
+  pulse: () => import('./faces/pulse'),
+  waveform: () => import('./faces/waveform'),
+  blob: () => import('./faces/blob'),
+  hud: () => import('./faces/hud'),
+  constellation: () => import('./faces/constellation'),
+  halo: () => import('./faces/halo'),
+};
+
+const loaded = new Map<TFaceId, TFaceDrawing>([['ring', Ring]]);
+const pending = new Map<TFaceId, Promise<TFaceDrawing>>();
+
+export const loadedFace = (id: TFaceId): TFaceDrawing | undefined => loaded.get(id);
+
+// Loads a face's drawing once; later calls share the same promise, so React's use() can wait on it.
+export function loadFace(id: TFaceId): Promise<TFaceDrawing> {
+  const have = loaded.get(id);
+  if (have) return Promise.resolve(have);
+  let p = pending.get(id);
+  if (!p) {
+    const load = FACE_LOADERS[id as Exclude<TFaceId, 'ring'>];
+    p = load().then(
+      (mod) => {
+        loaded.set(id, mod.default);
+        return mod.default;
+      },
+      (err: unknown) => {
+        pending.delete(id);
+        throw err;
+      },
+    );
+    pending.set(id, p);
+  }
+  return p;
+}
+
+export const preloadFaces = (ids: readonly TFaceId[] = FACES.map((f) => f.id)): Promise<unknown> =>
+  Promise.allSettled(ids.map(loadFace));
+
+export type TFaceCollection = 'fresh' | 'signature' | 'digital' | 'analog' | 'ambient';
+
+// The faces sheet's tabs; "All 49" is FACES itself.
+export const FACE_COLLECTIONS: Readonly<Record<TFaceCollection, readonly TFaceId[]>> = {
+  fresh: [
+    'aurora',
+    'liquid',
+    'eclipse',
+    'neon',
+    'skeleton',
+    'halo',
+    'glass',
+    'blob',
+    'hud',
+    'pulse',
+    'waveform',
+    'constellation',
+    'poster',
+    'bauhaus',
+    'eink',
+    'terminal',
+  ],
+  signature: [
+    'aurora',
+    'liquid',
+    'eclipse',
+    'skeleton',
+    'halo',
+    'ring',
+    'dive',
+    'chrono',
+    'pilot',
+    'glass',
+    'flip',
+    'orbit',
+  ],
+  digital: [
+    'bold',
+    'type',
+    'stack',
+    'poster',
+    'flip',
+    'rolling',
+    'nixie',
+    'neon',
+    'lcd',
+    'led',
+    'board',
+    'terminal',
+    'hud',
+    'eink',
+    'clocks',
+    'timeline',
+    'dual',
+  ],
+  analog: [
+    'skeleton',
+    'analog',
+    'luxe',
+    'dive',
+    'chrono',
+    'pilot',
+    'dual',
+    'gauge',
+    'dots',
+    'radar',
+    'rings',
+    'orbit',
+    'ring',
+    'halo',
+    'bauhaus',
+  ],
+  ambient: [
+    'aurora',
+    'liquid',
+    'eclipse',
+    'glass',
+    'blob',
+    'constellation',
+    'pulse',
+    'waveform',
+    'horizon',
+    'tide',
+    'hourglass',
+    'battery',
+    'bars',
+    'words',
+    'wordgrid',
+    'tape',
+    'moon',
+    'disc',
+  ],
+};

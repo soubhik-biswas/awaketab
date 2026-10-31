@@ -1,0 +1,198 @@
+.at-scene {
+  --at-sc-w: #fff;
+  --at-sc-w2: #efece5;
+  --at-sc-p: #e6e2d9;
+  --at-sc-m: #1d273f;
+  --at-sc-t: #3be47f;
+  --at-sc-o: #ff6b2c;
+  --at-sc-a: #ffc53d;
+  --at-sc-s: #b4d8fe;
+  --at-sc-v: #d8cffe;
+  --at-sc-k: #0b1020;
+  --at-sc-r: #ff6b81;
+  --at-sc-g: #58de8d;
+  --at-sc-ink: #0b1020;
+  --at-sc-shadow-c: #0b1020;
+  --at-sc-blob-c: #e2f6e8;
+  --at-sc-blob2-c: #fdece3;
+  --at-sc-lamp-c: #3be47f;
+  --at-sc-ring-c: #eef2fa;
+  --at-sc-screen: #3be47f;
+  --at-sc-spark: #ff6b2c;
+
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+  overflow: visible;
+}
+
+:is([data-theme="dark"], [data-theme="oled"]) .at-scene {
+  --at-sc-w: #e7eaf0;
+  --at-sc-w2: #c9d4ec;
+  --at-sc-p: #b0bcd3;
+  --at-sc-m: #151d31;
+  --at-sc-s: #7cbbff;
+  --at-sc-v: #c1b1fe;
+  --at-sc-k: #0b0f1a;
+  --at-sc-g: #3be47f;
+  --at-sc-ink: #04060c;
+  --at-sc-shadow-c: #000;
+  --at-sc-blob-c: #151d31;
+  --at-sc-blob2-c: #3a1a0c;
+  --at-sc-spark: #ffc53d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .at-scene {
+    --at-sc-w: #e7eaf0;
+    --at-sc-w2: #c9d4ec;
+    --at-sc-p: #b0bcd3;
+    --at-sc-m: #151d31;
+    --at-sc-s: #7cbbff;
+    --at-sc-v: #c1b1fe;
+    --at-sc-k: #0b0f1a;
+    --at-sc-g: #3be47f;
+    --at-sc-ink: #04060c;
+    --at-sc-shadow-c: #000;
+    --at-sc-blob-c: #151d31;
+    --at-sc-blob2-c: #3a1a0c;
+    --at-sc-spark: #ffc53d;
+  }
+}
+
+.at-sc-blob {
+  fill: var(--at-sc-blob-c);
+}
+
+.at-sc-blob2 {
+  fill: var(--at-sc-blob2-c);
+}
+
+.at-sc-shadow {
+  fill: var(--at-sc-shadow-c);
+}
+
+.at-sc-l {
+  stroke: var(--at-sc-ink);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.at-sc-w {
+  fill: var(--at-sc-w);
+}
+
+.at-sc-w2 {
+  fill: var(--at-sc-w2);
+}
+
+.at-sc-p {
+  fill: var(--at-sc-p);
+}
+
+.at-sc-m {
+  fill: var(--at-sc-m);
+}
+
+.at-sc-t {
+  fill: var(--at-sc-t);
+}
+
+.at-sc-o {
+  fill: var(--at-sc-o);
+}
+
+.at-sc-a,
+.at-sc-a2 {
+  fill: var(--at-sc-a);
+}
+
+.at-sc-s {
+  fill: var(--at-sc-s);
+}
+
+.at-sc-v {
+  fill: var(--at-sc-v);
+}
+
+.at-sc-k {
+  fill: var(--at-sc-k);
+}
+
+.at-sc-r {
+  fill: var(--at-sc-r);
+}
+
+.at-sc-g {
+  fill: var(--at-sc-g);
+}
+
+.at-sc-ring,
+.at-sc-ln,
+.at-sc-lnl,
+.at-sc-sp {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.at-sc-ring {
+  stroke: var(--at-sc-ring-c);
+  stroke-width: 8;
+}
+
+.at-sc-ln {
+  stroke: var(--at-sc-ink);
+  stroke-width: 3;
+}
+
+.at-sc-lnl {
+  stroke: var(--at-sc-screen);
+  stroke-width: 3;
+}
+
+.at-sc-sp {
+  stroke: var(--at-sc-spark);
+  stroke-width: 3.5;
+}
+
+.at-sc-halo {
+  fill: var(--at-sc-lamp-c);
+  opacity: 0.35;
+}
+
+.at-sc-lamp {
+  fill: var(--at-sc-lamp-c);
+  stroke: var(--at-sc-ink);
+  stroke-width: 3;
+}
+
+.at-sc-hi {
+  fill: #fff;
+  opacity: 0.85;
+}
+
+@keyframes at-scene-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.at-scene-float {
+  animation: at-scene-float 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-scene-float {
+    animation: none;
+  }
+}
+
+:root[data-motion="reduce"] .at-scene-float {
+  animation: none;
+}

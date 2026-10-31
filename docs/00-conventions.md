@@ -158,7 +158,11 @@ Timing rules: ticks every 1000 ms aligned to the wall clock; all arithmetic uses
 | `at.v1.license` | `{ token, plan, exp, features[], lastValidatedAt, deviceId }` | Token = ES256 JWT signed by our Worker |
 | `at.v1.meta` | `{ installedAt, sessionCount, ratingPrompt: { shownAt, action, stars?, rearmAt? }, lastSeenVersion }` | `rearmAt` since v1.3 (§13.8) |
 | `at.v1.onboarding` | `{ dismissedTips: [] }` | |
+| `at.v1.account` | `{ v: 1, email, signedInAt }` | Written by `/signin` after a magic link is verified; removed by Sign out or Delete account. Never sent anywhere (§13.30) |
+| `at.v1.studio` | `{ v: 1, lamp, glow }` | Face studio (Pro): `lamp` `''` or `#RRGGBB`, `glow` 0–100 in steps of 5 (default 70) (§13.30) |
 | `at.v1.notes` | IndexedDB, not localStorage: database `awaketab`, store `notes`, this key. `{ v: 1, notes: [{ id, title, doc, createdAt, updatedAt, pinned? }], current?, voiceOk? }` | Never leaves the device; schema in `08-data-storage.md` §2.1a |
+
+sessionStorage also holds `at.v1.checkout` (`{ plan, email }`, the Pro checkout flow for this tab; cleared when Pro turns on) beside `at.tabId`.
 
 `BroadcastChannel('awaketab')` coordinates multiple tabs (second-tab warning, single active lock). Migrations: `migrate(fromVersion)` in `@awaketab/core/storage`; bump prefix to `at.v2.` only for breaking changes.
 
@@ -178,11 +182,17 @@ Timing rules: ticks every 1000 ms aligned to the wall clock; all arithmetic uses
 | `/learn/{slug}` | 8 docs pages: how AwakeTab works, honest limits, FAQ, reference and developer pages (§13.24) |
 | Retired content URLs (OD-3, §13.20) | `/for/second-monitor` → `/guides/second-monitor-turns-off`, `/on/windows-10` → `/on/windows-11`, `/guides/modern-standby` → `/guides/lock-screen-vs-sleep`, `/learn/nosleep-js-vs-wake-lock` → `/vs/nosleep-js` (all 301, `_redirects`). Cut, no redirect (404): `/for/navigation`, `/for/live-streams`, `/for/exams-proctoring`, `/for/baby-monitor` |
 | `/pro` · `/pro/activate` · `/pro/manage` | Pricing, key entry, device list |
+| `/pro/checkout` | Pro purchase flow before Polar: `#plans` · `#account` · `#check` · `#pay`, `?plan=lifetime` (noindex) |
+| `/signin` · `/auth/{token}` | Magic-link sign-in (noindex). `/auth/{token}` is a Pages Function that answers 303 to `/signin#token=…` (or `/signin?link=expired`) and spends nothing |
 | `/extension` · `/embed` · `/kiosk` · `/library` | Product landing pages |
 | `/embed/cook` | Iframe app for the Cook Mode widget (noindex) |
 | `/pip` · `/{lang}/pip` | Popup fallback for Document Picture-in-Picture, in the opener's language (noindex, `Disallow`ed, not in any sitemap, no cards or ads) |
 | `/about` · `/privacy` · `/terms` · `/changelog` · `/support-matrix` · `/how-we-tested` | Trust and freshness pages |
-| `/404` | Offers the tool |
+| `/help` | Help centre: search over its topics and every English article, popular topics, contact (indexable, in the sitemap) |
+| `/s/{face}-{minutes}-{chime\|quiet}` | Shared setup (length, face and chime only, e.g. `/s/flip-45-chime`); every `/s/*` is served by `/s` through a 200 rewrite in `_redirects`, and an unreadable or removed code shows the "setup removed" view. Lengths: 15, 30, 45, 60, 120, 240 or 0 (no end). Its buttons open `/?preset=p45&face=flip&chime=on` (plus `autostart=0` for "Change it first"). noindex |
+| `/status` | Service status: "Everything is running", or the maintenance page when the build sets `PUBLIC_MAINTENANCE_UNTIL`. noindex |
+| `/offline` · `/signin/expired` · `/s/removed` · `/500` | System pages (offline, link expired, setup removed, server error), noindex. The service worker caches `/offline` with the English shell and shows it for an uncached page that is not a tool address (`src/sw-fallback.ts`) |
+| `/404` | The not-found system page: the timer button, the help centre and the popular guides (noindex) |
 | `/api/*` | Pages Functions (see §9) |
 
 Spelling: page URLs have no trailing slash (`/30m`, `/for/cooking`, `/es/for/cocinar`), except `/` and the locale homes `/{lang}/` (`/es/`). Canonicals, hreflang, sitemaps and links use exactly these spellings. The build writes each page where Cloudflare Pages serves it without a redirect (`x.html`, and `{lang}/index.html` for the homes; `14-devops.md` §2.1).
@@ -240,7 +250,9 @@ Ad rules (non-negotiable): Google ads never on the awake screen, `/pip`, `/embed
 | `POST /api/license/activate` | `{ key, deviceId, deviceLabel }` → `{ token, plan, features, exp, activations }` | licence key |
 | `POST /api/license/validate` | `{ token }` → fresh token or `{ revoked: true }` | token |
 | `POST /api/license/deactivate` | `{ token, deviceId }` | token |
-| `POST /api/webhooks/polar` | Polar events (`order.created`, `subscription.*`, `benefit_grant.*`) → KV | HMAC signature |
+| `POST /api/webhooks/polar` | Polar events (`order.created`, `subscription.*`, `benefit_grant.*`) → KV; `order.paid` (first purchase) and `subscription.past_due` also queue the receipt and renewal-failed emails | HMAC signature |
+| `POST /api/auth/signin` | `{ email }` → 202 `{ sent, minutes }`; 400 `bad_email`; 429 `rate_limited` (5/min/IP hash, one per address per minute); 503 `email_unavailable` while no email provider is configured | none |
+| `POST /api/auth/verify` | `{ token }` → `{ ok, email }` once; 410 `expired` for unknown, used or expired links | single-use token |
 | `GET /api/embed/config?domain=` | `{ licensed, attribution, theme, expiresAt }` for the widget | none (public, cached 5 min) |
 | `GET /api/health` | `{ ok, version, polar }` (`polar`: `sandbox` \| `production`, §13.14) | none |
 | `POST /api/csp` | CSP violation reports (Reporting API or legacy `report-uri` body, ≤ 8 KB) → `client_error {code:'csp'}` | none; rate-limited by IP hash (§13.14) |
@@ -921,6 +933,25 @@ Accepted on 2026-09-28. Spec: `05-frontend-spec.md` §3.33 (Faces) and §5, `DES
 | i18n keys | New in all 8 locales (English values until translated): `tool.face.prev` · `tool.face.next` · `tool.gallery.title` · `tool.gallery.lead` · `tool.gallery.classic` · `tool.gallery.retro` · `tool.gallery.modern` · `tool.gallery.current` · `tool.shortcuts.face`. Removed: `tool.face.more` · `tool.face.moreLabel` · `tool.face.moreTitle` |
 | Removed | The `.at-faces` tab rules, `--at-tl-tabs`, `--at-tl-tabs-late`, `--at-tl-fm`, the view's `[data-face]` click branch |
 
+### Solar Green clock faces (30 Oct 2026)
+
+Accepted on 2026-10-30. Spec: `docs/redesign/volt/HANDOFF.md` §7 (Volt, 31 Oct 2026, grows the set to 49) and the faces board (`prototype/Face.dc.html`, `S14-Faces.dc.html`). Replaces the two face sections above wherever they disagree: the twelve Clear Night faces, their pack (`src/tool/packs/faces/`), the face switch and the gallery are gone.
+
+| Identifier | Decision |
+|---|---|
+| Face ids | `FACE_IDS` in `packages/core/src/types.ts` (`TFace`), sheet order: `ring` · `bold` · `horizon` · `tide` · `flip` · `rolling` · `analog` · `luxe` · `rings` · `words` · `nixie` · `lcd` · `led` · `dive` · `chrono` · `gauge` · `type` · `bars` · `timeline` · `pilot` · `dual` · `radar` · `dots` · `hourglass` · `battery` · `stack` · `board` · `orbit` · `disc` · `clocks` · `wordgrid` · `tape` · `moon` |
+| Migration | `migrateFace(face, faceStyles)` in `packages/core/src/storage.ts`, applied by `storage.settings()`: `word` → `words`, `matrix` → `led`, `analog` with `faceStyles.analog === 'luxe'` → `luxe`, unknown → `ring`; `faceStyles` is dropped on read |
+| Face API | `src/tool/face/index.ts`: `TFaceId`, `IFaceProps` (`face`, `theme`, `state`, `remain`, `total`, `nowSec`, `size`, `lamp?`, `bare?`, `indef?`, `motion?`, `lblTop?`, `lblEnd?`, `fmt?`), `FACES` (id, name, blurb), `mountFace(el, props)` → `{ update, destroy }`, `faceSvg(props)`, `loadFace(id)`, `loadAllFaces()`, `faceSheet()`, `registerFaces(group)`, `setFaceText(strings)` |
+| Modules | `base.ts` (props → values, frame, caption, Ring's helpers) · `ring.ts` · `face.css` (critical: root, sweep, pulse, transitions, compact, reduced motion) · `kit.ts` (helpers for the lazy groups) · `faces/classic.ts` (bold horizon tide type stack bars battery hourglass) · `faces/retro.ts` (flip rolling nixie lcd led board) · `faces/dials.ts` (analog luxe dive chrono pilot dual gauge) · `faces/orbits.ts` (rings radar dots orbit disc moon tape timeline) · `faces/words.ts` (words wordgrid clocks) · `all.ts` (registers every group, build time only) · `sheet.ts` (`renderFaceGrid`) · `stage.ts` (the current tool's bridge: `paintStage`, `faceAct`, `showFaceGrid`, `armSwipe`) · `swipe.ts` |
+| Chunks | Ring ships with whatever imports `face/index.ts`; `pack-faces-<classic\|retro\|dials\|orbits\|words\|kit\|stage\|sheet\|swipe>` (`astro.config.mjs` `manualChunks`), all counted toward the `faces` pack budget (30 KB gz) |
+| Root markup | `.af[role="timer"][aria-label]` (label in whole minutes, so it changes at most once a minute) > `.af-a[aria-hidden="true"]` (the 360 × 360 artboard, `transform: scale(size / 360)`); classes `af-live` (running or fallback with motion on), `af-still` (`motion: 'off'`), `af-compact` (size < 170: labels hidden, full text in the label); custom properties `--lmin` (label floor, 12 × 360 / size from 240 to 359 px), `--fl` (lamp: `lamp` prop or `--at-accent`), `--fa` (state accent) |
+| Motion classes | `afx-s` · `afx-m` · `afx-h` (60 s / 1 h / 12 h sweeps from `--a`), `afx-blink`, `afx-pulse`, `afx-pulse-d`, `afx-breath`, `afx-wave`, `afx-wave2`, `afx-rise`, `afx-flap`, `afx-roll`, `afx-flick`, `afx-marq`, `afx-shim`, `afx-twinkle`, `afx-jit`, `afx-scan`, `afx-radar`, `afx-stream`, `afx-sheen`; `af-tr` (0.95 s linear transitions); keyframes `af-*` |
+| Colour | Page tokens (`--at-ink`, `--at-ink-2`, `--at-line`, `--at-surface*`, `--at-ground`, `--at-accent`, `--at-warn`, `--at-bad`, `--at-info`, `--at-ended`, `--at-face-*`, `--at-face-fill-*`) plus the face-art palette `--at-fc-*`: plate gradients and shadows (`--at-fc-plate-l/d/o`, `--at-fc-plate-shadow-l/d/o`) in `tokens.css` for Ring, every other face-art colour in `public/assets/faces.css` (one marked block). The `theme` prop picks the `-l`, `-d` or `-o` variant and OLED's line, track and panel roles |
+| `public/assets/faces.css` | Face-art palette, the lazy faces' motion, the picker grid (`.af-grid`, `.af-grid-mini`, `.af-grid-night`, `.af-cell[role="radio"][data-face][aria-checked]`, `.af-thumb`, `.af-name`), the swipe (`.at-fsw*`), and the font faces; linked by `faceSheet()` from `__AT_FACES__` (no longer by `boot.js`) |
+| Fonts | `public/fonts/ibm-plex-serif-latin-300-normal.woff2`, `ibm-plex-serif-latin-300-italic.woff2` (Luxe numerals, Words; `OFL-IBMPlexSerif.txt`) and `dotgothic16-latin-400-normal.woff2` (LED; `OFL-DotGothic16.txt`), copied from `@fontsource`, declared in `faces.css` with `font-display: swap`. Nixie One and DSEG7 are removed |
+| `<html data-face>` | `boot.js` writes the saved id when it is not `ring`; `stage.ts` corrects or clears it once the Face module loads |
+| i18n keys | `face.name.<id>` (33), `face.blurb.<id>` (33, build time only, excluded from the island catalog), `face.t.*` (the words drawn on the faces, fed to `setFaceText`); `face.` joins `ISLAND_PREFIXES` |
+
 ### 13.25 Colour themes, lamps, patterns, presets and Pro previews
 
 Accepted on 2026-09-28. Spec: `05-frontend-spec.md` §1.1a–§1.1d; storage fields: `08-data-storage.md` §2.1. Budgets: no critical tool JS added and total tool JS about flat (the old lamp code left `settings.ts` and `accent.ts`); the pack has its own budget (`themes` ≤ 25 KB gz) and its own stylesheet; the inlined tool CSS is unchanged and the lazy `tool-more.css` lost the old lamp swatch rules.
@@ -1035,6 +1066,20 @@ Accepted on 2026-09-29. Spec: `05-frontend-spec.md` §3.18. The seven lock state
 | Reset | `details.at-sg-reset` with `summary[data-settings-reset]`, `.at-sg-confirm`, `[data-reset="yes"]` · `[data-reset="no"]` and a `p[data-reset-done][role=status]` |
 | Reduce motion | switch `name="reduceMotion"` (`on` or `system`); `<html data-motion="reduce">` painted by `boot.js` and set by `settings.ts`; `tool.css` turns every transition and animation off under it, as under `prefers-reduced-motion` |
 | i18n keys | `settings.lead` · `settings.looks` · `settings.looks.help` · `settings.g.timer` · `settings.g.clock` · `settings.g.focus` · `settings.g.device` · `settings.sum.*` (`soundHelp`, `soundOpen`, `soundNow`, `untilStop`, `ends`, `endsTomorrow`, `endsDay`, `silent`, `notifyOn`, `notifyOff`, `secondsOn`, `secondsOff`, `focus`, `autoOn`, `autoOff`, `focusIdle`, `battOn`, `battOff`, `keysOn`, `keysOff`, `usageOn`, `usageOff`) · `settings.hints.help` · `settings.motion` · `settings.motion.help` · `settings.pro.help` · `settings.reset.ask` · `settings.reset.yes` · `settings.reset.no` · `settings.reset.done`. Removed: `settings.reset.confirm`, `settings.time`, `settings.privacy` |
+
+### 13.30 Solar Green Pro, sign-in and emails
+
+Accepted on 2026-10-30 (Solar Green redesign).
+
+| Identifier | Decision |
+|---|---|
+| KV `auth:{sha256(token)}` | `{ v: 1, email, exp }`, `expirationTtl` 900 s (`SIGNIN_TTL_S`, 15 minutes). The raw token (32 random bytes, base64url, 43 chars) exists only in the email; deleted on first verify |
+| KV `authmail:{sha256(email)}` | `'1'`, `expirationTtl` 60 s: one sign-in email per address per minute |
+| Rate-limit buckets | `auth` (sign-in, 5/min/IP hash) · `auth-verify` (10/min/IP hash) |
+| Email | `functions/_lib/email/send.ts` `sendEmail()` (the only sender; answers `not_configured` until a provider is chosen) · `templates.ts` (`signinEmail`, `receiptEmail`, `renewalFailedEmail`: HTML + plain text, 600 px, 16 px body, one action also written as a link, no images or redirects) · `billing.ts` (`billingEmail()` from Polar events) |
+| Client modules | `src/lib/account.ts` · `signin-page.ts` · `checkout-page.ts` (`checkoutUrl()` adds only `customer_email` to the Polar link) · `src/tool/studio.ts` (`readStudio`, `applyStudio`, `STUDIO_EVENT` `at:studio`, `--at-room-glow` on `<html>`, `<html data-studio-lamp>`) · `src/tool/packs/pro/` (`mountProView(ctx, host, 'studio' \| 'sound' \| 'devices' \| 'account', go?)`, `exportMyData`, `exportHistoryCsv`) |
+| Tokens | `--at-id-{cobalt,grape,plum,bubblegum,denim,sand,slate,mauve}` and `--at-on-id-*`: device identity colours, never green, amber or red |
+| i18n keys | `account.signin.*` · `proflow.*` (`steps`, `checkout`, `page`, `done`) · `pro.view.*` (island) |
 
 ## 14. Writing conventions for these docs
 

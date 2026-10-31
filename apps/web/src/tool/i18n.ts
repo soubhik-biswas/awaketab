@@ -11,6 +11,15 @@ export function setCatalog(next: Record<string, string>): void {
   catalog = { ...catalog, ...next };
 }
 
+// Every loaded string under a prefix, the prefix dropped (the clock faces' drawn words: face.t.*).
+export function strings(prefix: string): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(catalog)
+      .filter(([k]) => k.startsWith(prefix))
+      .map(([k, v]) => [k.slice(prefix.length), v]),
+  );
+}
+
 export function t(key: string, vars?: TVars): string {
   const raw = catalog[key] ?? key;
   if (!vars) return raw;

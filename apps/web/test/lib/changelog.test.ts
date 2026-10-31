@@ -43,8 +43,8 @@ describe('changelog order (F-07)', () => {
 
 describe('/changelog layout helpers (B6)', () => {
   it('writes the long date with the full month name, in any time zone', () => {
-    expect(changelogLongDate('2026-09-26')).toBe('26 September 2026');
-    expect(changelogLongDate('2026-01-01')).toBe('1 January 2026');
+    expect(changelogLongDate('2026-09-26')).toBe('Saturday, 26 September 2026');
+    expect(changelogLongDate('2026-01-01')).toBe('Thursday, 1 January 2026');
   });
 
   it('splits a release body into its lede and its labelled paragraphs', () => {

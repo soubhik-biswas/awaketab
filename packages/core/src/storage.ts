@@ -4,14 +4,28 @@ import {
   DEFAULT_ONBOARDING,
   DEFAULT_SETTINGS,
   DEFAULT_STATS,
+  FACE_IDS,
   type ILicenseRecord,
   type IMeta,
   type IOnboarding,
   type ISession,
   type ISettings,
   type IStats,
+  type TFace,
 } from './types.js';
 import { computeStreaks, exportStatsCsv, pruneDays } from './stats.js';
+
+// Clear Night face ids (before 30 Oct 2026) and the Solar Green face each one became.
+const OLD_FACES: Readonly<Record<string, TFace>> = { word: 'words', matrix: 'led' };
+
+// A stored face id as a Solar Green face: renamed ids map across, Analog saved with the Luxe style becomes Luxe,
+// and anything unknown reads as Ring.
+export function migrateFace(face: unknown, styles?: unknown): TFace {
+  if (face === 'analog' && (styles as { analog?: unknown } | undefined)?.analog === 'luxe') return 'luxe';
+  if (typeof face !== 'string') return 'ring';
+  if ((FACE_IDS as readonly string[]).includes(face)) return face as TFace;
+  return OLD_FACES[face] ?? 'ring';
+}
 
 export interface IStorageAdapter {
   get(k: string): string | null;
@@ -104,7 +118,13 @@ export function createStorage(adapter?: IStorageAdapter): {
     get persistent() {
       return persistent;
     },
-    settings: () => read(STORAGE_KEYS.settings, DEFAULT_SETTINGS),
+    settings: () => {
+      const { faceStyles, ...s } = read(STORAGE_KEYS.settings, DEFAULT_SETTINGS) as ISettings & {
+        faceStyles?: unknown;
+      };
+      s.face = migrateFace(s.face, faceStyles);
+      return s;
+    },
     writeSettings: (s) => {
       write(STORAGE_KEYS.settings, s);
     },
