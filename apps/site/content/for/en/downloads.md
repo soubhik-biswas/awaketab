@@ -1,6 +1,6 @@
 ---
 title: "Keep the screen on while downloading — AwakeTab"
-description: "Keep the screen on during a long download. A visible tab also stops Windows and macOS idle sleep; closing the lid still sleeps the laptop."
+description: "Keep the screen on during a long download. A visible tab also stops Windows and macOS idle sleep, but closing the lid still sleeps the laptop."
 h1: "Keep the screen on while downloading"
 intent: "keep computer awake while downloading"
 preset: pinf

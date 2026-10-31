@@ -12,7 +12,7 @@ import { toolHref } from '@/lib/routes';
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const t = useTranslations('site');
   useEffect(() => {
-    document.title = t('sys.error.title');
+    document.title = `${t('sys.error.h1').replace(/\.$/u, '')} · AwakeTab`;
   }, [error, t]);
   return (
     <PageHero

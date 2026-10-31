@@ -1,6 +1,6 @@
 ---
 title: "Keep the screen on in Samsung Internet — AwakeTab"
-description: "Samsung Internet 14 and later keep the screen on from a visible tab. Power-saving settings can close the browser after you leave it."
+description: "Samsung Internet 14 and later keep the screen on from a visible tab. Its power-saving settings can still close the browser after you leave it."
 h1: "Keep your screen on in Samsung Internet"
 crumb: "Samsung Internet"
 intent: "keep screen on samsung internet"
