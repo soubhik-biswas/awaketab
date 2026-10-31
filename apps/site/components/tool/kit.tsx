@@ -1,128 +1,118 @@
 'use client';
 
-import type { ReactNode } from 'react';
-import {
-  ChefHat,
-  Coffee,
-  Infinity as InfinityGlyph,
-  MoonStar,
-  NotebookPen,
-  Presentation,
-  Timer,
-  X,
-  type LucideIcon,
-} from 'lucide-react';
+import type { ComponentProps, ReactNode } from 'react';
+import { ChevronRight } from 'lucide-react';
+import { Switch as SwitchPrimitive } from 'radix-ui';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { SegmentedControl } from '@/components/product/segmented-control';
-import { SwitchRow } from '@/components/product/switch-row';
-import type { TPresetIcon } from '@/lib/tool/presets';
 
-export const PRESET_ICONS: Record<TPresetIcon, LucideIcon> = {
-  presentation: Presentation,
-  chef: ChefHat,
-  reading: NotebookPen,
-  coffee: Coffee,
-  infinity: InfinityGlyph,
-  night: MoonStar,
-  timer: Timer,
-};
+export const EASE = [0.16, 1, 0.3, 1] as const;
 
-// The tool's button geometry from the design: 44 px, 10 px corners, 15 px semibold, 18 px icons.
-export const BTN = 'h-11 gap-2 rounded-[10px] px-4 text-[15px] font-semibold [&_svg:not([class*=size-])]:size-[18px]';
-export const BTN_FULL = cn(BTN, 'w-full shrink-0');
-export const BTN_PRIMARY_FULL = cn(BTN, 'h-13 w-full shrink-0 rounded-[14px]');
-export const BTN_DANGER_OUT =
-  'h-11 gap-2 self-start rounded-[10px] border-destructive bg-transparent px-4 text-[15px] font-semibold text-destructive hover:bg-destructive-soft [&_svg:not([class*=size-])]:size-4';
-export const DASH_BTN = cn(BTN, 'h-13 w-full rounded-[16px] border-dashed');
-export const HELP = 'text-[12px] leading-[1.45] text-muted-foreground-strong';
-const GROUP = 'flex flex-col gap-2';
-export const SEC_LABEL = 'font-mono text-[12px] tracking-[.08em] text-muted-foreground-strong uppercase';
-export const H3 = 'font-display text-[20px] font-extrabold tracking-[-0.02em] [font-stretch:112%]';
-export const FIELD =
-  'flex h-11 min-w-0 items-center gap-2 rounded-[10px] border border-input bg-field px-3 text-[15px] text-foreground';
-export const LINK_BTN =
-  'min-h-11 cursor-pointer border-0 bg-transparent px-0.5 text-[14px] font-semibold text-lamp underline underline-offset-3';
-export const ROW = 'flex min-h-[53px] items-center gap-3 border-b border-border';
-export const ROW_BTN = cn(
-  ROW,
-  'w-full cursor-pointer border-x-0 border-t-0 bg-transparent p-0 text-left text-foreground',
-);
-export const TILE =
-  'inline-flex size-[38px] shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary';
-export const KBD =
-  'h-[22px] min-w-[22px] rounded-[6px] border border-b-2 border-border bg-background px-1.5 font-mono text-[12px] font-normal text-muted-foreground-strong';
-export const PRO_CHIP = 'rounded-full bg-primary-soft px-2 py-0.5 text-[12px] font-bold text-primary';
-
-export function SecLabel({ children, className }: { children: ReactNode; className?: string }) {
-  return <span className={cn(SEC_LABEL, className)}>{children}</span>;
+export function Kbd({ className, children }: { className?: string; children: ReactNode }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex h-6 min-w-[26px] items-center justify-center rounded-[7px] border border-(--tg-border) bg-(--tg-s2) px-1.5 font-mono text-[12px] text-(--tg-t2)',
+        className,
+      )}
+    >
+      {children}
+    </span>
+  );
 }
 
-export function Group({ label, children, aside }: { label?: ReactNode; children: ReactNode; aside?: ReactNode }) {
+export function SecLabel({ children, first = false }: { children: ReactNode; first?: boolean }) {
   return (
-    <div className={GROUP}>
-      {label !== undefined && aside ? (
-        <span className="flex items-baseline justify-between">
-          <SecLabel>{label}</SecLabel>
-          {aside}
-        </span>
-      ) : label !== undefined ? (
-        <SecLabel>{label}</SecLabel>
-      ) : null}
+    <span className={cn('font-mono text-[12px] tracking-[.14em] text-(--tg-t2) uppercase', !first && 'mt-2.5')}>
+      {children}
+    </span>
+  );
+}
+
+export function Group({ children, className, ...props }: ComponentProps<'div'>) {
+  return (
+    <div
+      className={cn('flex flex-col overflow-hidden rounded-[18px] border border-(--tg-border) bg-(--tg-s1)', className)}
+      {...props}
+    >
       {children}
     </div>
   );
 }
 
-export function CloseButton({ label, onClick }: { label: string; onClick: () => void }) {
+export const ROW =
+  'flex w-full min-h-16 items-center gap-3.5 border-0 bg-transparent px-4 py-3 text-(--tg-text) [&+&]:border-t [&+&]:border-(--tg-border)';
+
+export function RowText({ title, desc, className }: { title: ReactNode; desc?: ReactNode; className?: string }) {
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      size="icon"
-      className="-mr-2 size-11 rounded-[10px] text-muted-foreground-strong [&_svg]:size-5!"
-      onClick={onClick}
-      aria-label={label}
-    >
-      <X strokeWidth={2} aria-hidden="true" />
-    </Button>
+    <span className={cn('flex min-w-0 flex-1 flex-col gap-0.5 text-left', className)}>
+      <strong className="text-[15px] font-semibold text-(--tg-text)">{title}</strong>
+      {desc ? <span className="text-[13px] leading-[1.45] text-(--tg-t2)">{desc}</span> : null}
+    </span>
   );
 }
 
-export function Segments<T extends string>({
-  options,
-  value,
-  onChange,
-  label,
-}: {
-  options: ReadonlyArray<[T, string]>;
-  value: T;
-  onChange: (v: T) => void;
-  label: string;
-}) {
+export function Note({ children }: { children: ReactNode }) {
+  return <span className="mt-2 text-[13px] text-(--tg-t2)">{children}</span>;
+}
+
+export function FreeBadge({ children }: { children: ReactNode }) {
   return (
-    <SegmentedControl
-      aria-label={label}
-      value={value}
-      onValueChange={(v) => {
-        const hit = options.find(([k]) => k === v);
-        if (hit) onChange(hit[0]);
-      }}
-      options={options.map(([v, text]) => ({ value: v, label: text }))}
-    />
+    <span className="flex-none rounded-full bg-(--tg-volt-soft) px-2.5 py-1 font-mono text-[12px] font-bold text-(--tg-free)">
+      {children}
+    </span>
   );
 }
 
-export function SwitchLine({
-  label,
+export const GHOST_BTN =
+  'tg-btn inline-flex h-11 flex-none items-center justify-center rounded-[12px] border border-(--tg-border-hi) bg-(--tg-s2) px-4 text-[14px] font-bold text-(--tg-text)';
+
+export const AVATAR =
+  'flex size-11 flex-none items-center justify-center rounded-full border border-(--tg-border) bg-(--tg-s2) text-(--tg-t2)';
+
+export const CARD = 'rounded-[18px] border border-(--tg-border) bg-(--tg-s1)';
+
+export function StepNo({ children }: { children: ReactNode }) {
+  return (
+    <span className="flex size-8 flex-none items-center justify-center rounded-full border border-(--tg-border-hi) bg-(--tg-s2) text-[15px] font-bold text-(--tg-text)">
+      {children}
+    </span>
+  );
+}
+
+// A 64 px settings row that is itself the switch: the whole row toggles, the track shows the state.
+export function SwitchRow({
+  title,
   desc,
-  on,
-  onToggle,
+  checked,
+  onChange,
 }: {
-  label: string;
-  desc: string;
-  on: boolean;
-  onToggle: () => void;
+  title: ReactNode;
+  desc?: ReactNode;
+  checked: boolean;
+  onChange: (on: boolean) => void;
 }) {
-  return <SwitchRow label={label} description={desc} checked={on} onCheckedChange={onToggle} />;
+  return (
+    <SwitchPrimitive.Root checked={checked} onCheckedChange={onChange} className={cn('tg-btn', ROW)}>
+      <RowText title={title} desc={desc} />
+      <span
+        className={cn(
+          'relative h-7 w-12 flex-none rounded-full',
+          checked ? 'bg-(--tg-volt)' : 'bg-(--tg-s3) shadow-[inset_0_0_0_1px_var(--tg-border-hi)]',
+        )}
+      >
+        <SwitchPrimitive.Thumb
+          className={cn(
+            'absolute top-[3px] size-[22px] rounded-full shadow-[0_2px_6px_rgba(0,0,0,.3)] transition-[left] duration-200 ease-[cubic-bezier(.2,.9,.3,1.2)]',
+            checked ? 'left-[23px] bg-(--tg-on-volt)' : 'left-[3px] bg-white dark:bg-[#F2F4FA]',
+          )}
+        />
+      </span>
+    </SwitchPrimitive.Root>
+  );
+}
+
+export function Chevron({ size = 16 }: { size?: number }) {
+  return (
+    <ChevronRight className="flex-none" style={{ width: size, height: size }} strokeWidth={2} aria-hidden="true" />
+  );
 }
