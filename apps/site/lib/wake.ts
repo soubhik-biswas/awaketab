@@ -1,17 +1,21 @@
 import { useSyncExternalStore } from 'react';
-import { createStorage, creditMinutes, countDay, type ISession, type TEndReason } from '@awaketab/core';
+import { createStorage, creditMinutes, countDay, type ISession as IStoredSession, type TEndReason } from '@awaketab/core';
+import { createWakeLock, type IChangeEvent, type IWakeLockHandle, type TLockState } from '@awaketab/wake';
 import {
-  createWakeLock,
-  type IChangeEvent,
-  type IWakeLockHandle,
-  type TAdviceCode,
-  type TLockState,
-} from '@awaketab/wake';
+  IDLE_SESSION,
+  isAwake,
+  isDue,
+  isLive,
+  reduce,
+  type ISession,
+  type TLockMode,
+  type TSessionEvent,
+} from '@/lib/tool/session';
 
-export type TWakeState =
-  'idle' | 'starting' | 'running' | 'fallback' | 'paused' | 'needsyou' | 'blocked' | 'unsupported' | 'ended';
-export type TPauseReason = 'user' | 'hidden';
-type TAnnounceKind = 'start' | 'extend' | 'lowtime' | 'hidden' | 'refused' | 'ended';
+export { elapsedSec, isAwake, isLive, remainSec } from '@/lib/tool/session';
+export type { TPauseReason, TWakeState } from '@/lib/tool/session';
+
+type TAnnounceKind = 'start' | 'extend' | 'lowtime' | 'hidden' | 'refused' | 'paused' | 'ended';
 type TFinishReason = 'completed' | 'user';
 
 export interface IAnnounce {
@@ -21,20 +25,7 @@ export interface IAnnounce {
   extendSec: number;
 }
 
-export interface IWakeSnapshot {
-  state: TWakeState;
-  now: number;
-  totalSec: number;
-  startedAt: number | null;
-  endsAt: number | null;
-  pausedAt: number | null;
-  pausedMs: number;
-  pauseReason: TPauseReason | null;
-  endedAt: number | null;
-  advice: TAdviceCode | null;
-  mode: 'native' | 'video' | null;
-  supported: boolean;
-  lastExtendSec: number;
+export interface IWakeSnapshot extends ISession {
   peerHolds: boolean;
   announce: IAnnounce | null;
 }
@@ -51,52 +42,17 @@ type TEvents = {
   lowtime: { endsAt: number };
   ended: { endedAt: number };
   extended: { sec: number; endsAt: number };
-  refused: { advice: TAdviceCode | null };
+  refused: { advice: IWakeSnapshot['advice'] };
   finished: IFinished;
 };
 
 type TListener<K extends keyof TEvents> = (ev: TEvents[K]) => void;
 
 const LOW_TIME_SEC = 300;
-const MAX_SEC = 7 * 24 * 3600;
 const RESUME_NO_END_MS = 12 * 3_600_000;
 const CHANNEL = 'awaketab';
 
-const INITIAL: IWakeSnapshot = {
-  state: 'idle',
-  now: 0,
-  totalSec: 3600,
-  startedAt: null,
-  endsAt: null,
-  pausedAt: null,
-  pausedMs: 0,
-  pauseReason: null,
-  endedAt: null,
-  advice: null,
-  mode: null,
-  supported: true,
-  lastExtendSec: 0,
-  peerHolds: false,
-  announce: null,
-};
-
-const LIVE: readonly TWakeState[] = ['starting', 'running', 'fallback', 'paused', 'needsyou', 'blocked'];
-
-export const isLive = (s: TWakeState): boolean => LIVE.includes(s);
-export const isAwake = (s: TWakeState): boolean => s === 'running' || s === 'fallback';
-
-// Seconds left, derived from the end timestamp so sleep, a hidden tab or a clock change never drift it.
-export function remainSec(s: Pick<IWakeSnapshot, 'state' | 'now' | 'totalSec' | 'endsAt' | 'pausedAt'>): number {
-  if (s.state === 'idle' || s.state === 'unsupported') return s.totalSec;
-  if (s.state === 'ended') return 0;
-  if (s.endsAt === null) return 0;
-  return Math.max(0, Math.ceil((s.endsAt - (s.pausedAt ?? s.now)) / 1000));
-}
-
-export function elapsedSec(s: Pick<IWakeSnapshot, 'now' | 'startedAt' | 'pausedAt' | 'pausedMs'>): number {
-  if (s.startedAt === null) return 0;
-  return Math.max(0, Math.floor(((s.pausedAt ?? s.now) - s.startedAt - s.pausedMs) / 1000));
-}
+const INITIAL: IWakeSnapshot = { ...IDLE_SESSION, peerHolds: false, announce: null };
 
 class WakeController {
   private snap: IWakeSnapshot = { ...INITIAL };
@@ -144,14 +100,30 @@ class WakeController {
     for (const cb of this.events[type]) cb(ev);
   }
 
-  private set(patch: Partial<IWakeSnapshot>) {
-    this.snap = { ...this.snap, ...patch };
+  private notify() {
     for (const cb of this.subs) cb();
   }
 
-  private say(kind: TAnnounceKind, extendSec = 0) {
+  private send(e: TSessionEvent, extra: Partial<IWakeSnapshot> = {}) {
+    const before = this.snap;
+    const next = reduce(before, e);
+    if (next === before && Object.keys(extra).length === 0) return;
+    this.snap = { ...before, ...next, ...extra };
+    this.notify();
+  }
+
+  private patch(extra: Partial<IWakeSnapshot>) {
+    this.snap = { ...this.snap, ...extra };
+    this.notify();
+  }
+
+  private say(kind: TAnnounceKind, extendSec = 0): Pick<IWakeSnapshot, 'announce'> {
     this.announceId += 1;
     return { announce: { id: this.announceId, kind, endsAt: this.snap.endsAt, extendSec } };
+  }
+
+  private holding(): boolean {
+    return this.native?.state === 'held' || this.video?.state === 'fallback';
   }
 
   private boot() {
@@ -159,12 +131,8 @@ class WakeController {
     this.started = true;
     this.native = createWakeLock({ fallback: 'none', reacquireOnVisible: false });
     this.video = createWakeLock({ wakeLock: null, fallback: 'video', reacquireOnVisible: false });
-    this.native.on('change', (e) => {
-      this.onLock('native', e);
-    });
-    this.video.on('change', (e) => {
-      this.onLock('video', e);
-    });
+    this.native.on('change', (e) => this.onLock('native', e));
+    this.video.on('change', (e) => this.onLock('video', e));
     document.addEventListener('visibilitychange', this.onVisibility);
     window.addEventListener('pagehide', this.onPageHide);
     this.openChannel();
@@ -181,40 +149,41 @@ class WakeController {
   private tick = () => {
     const now = Date.now();
     const s = this.snap;
-    const patch: Partial<IWakeSnapshot> = { now };
     if (isAwake(s.state)) {
       this.awakeSec += 1;
       if (this.awakeSec % 60 === 0) this.creditMinute(now);
     }
-    const counting = isLive(s.state) && s.pausedAt === null && s.endsAt !== null;
-    if (counting && s.endsAt !== null) {
+    if (isDue(s, now)) {
+      this.send({ type: 'tick', now });
+      void this.finish('completed');
+      this.schedule();
+      return;
+    }
+    let extra: Partial<IWakeSnapshot> = {};
+    if (isAwake(s.state) && s.pausedAt === null && s.endsAt !== null) {
       const before = Math.ceil((s.endsAt - s.now) / 1000);
       const left = Math.ceil((s.endsAt - now) / 1000);
-      if (left <= 0) {
-        this.set(patch);
-        void this.finish('completed');
-        this.schedule();
-        return;
-      }
-      if (before > LOW_TIME_SEC && left <= LOW_TIME_SEC && isAwake(s.state)) {
-        Object.assign(patch, this.say('lowtime'));
+      if (before > LOW_TIME_SEC && left <= LOW_TIME_SEC) {
+        extra = this.say('lowtime');
         this.emit('lowtime', { endsAt: s.endsAt });
       }
     }
-    this.set(patch);
+    this.send({ type: 'tick', now }, extra);
     if (isLive(this.snap.state) && now % 15_000 < 1000) this.persist();
     this.schedule();
   };
 
+  // The lock is asked for again whenever the tab comes back into view.
   private onVisibility = () => {
-    const hidden = document.visibilityState === 'hidden';
-    const s = this.snap;
-    if (hidden) {
-      if (isAwake(s.state)) this.set({ state: 'paused', pauseReason: 'hidden', ...this.say('hidden') });
+    const now = Date.now();
+    if (document.visibilityState === 'hidden') {
+      if (isAwake(this.snap.state)) this.send({ type: 'hidden', now }, this.say('hidden'));
       return;
     }
-    this.set({ now: Date.now() });
-    if (s.state === 'paused' && s.pauseReason === 'hidden') {
+    this.send({ type: 'tick', now });
+    const s = this.snap;
+    const wasHidden = s.state === 'paused' && s.pauseReason === 'hidden';
+    if (wasHidden || (s.state === 'needsyou' && s.pausedAt === null)) {
       void this.acquire(s.mode === 'video' ? 'video' : 'native', true);
     }
   };
@@ -224,52 +193,39 @@ class WakeController {
     this.post({ type: 'bye', tabId: this.tabId, ts: Date.now() });
   };
 
-  private onLock(which: 'native' | 'video', e: IChangeEvent) {
+  private onLock(which: TLockMode, e: IChangeEvent) {
     const s = this.snap;
     if (!isLive(s.state)) return;
     if (s.mode !== null && s.mode !== which && e.to !== 'held' && e.to !== 'fallback') return;
     this.post({ type: 'lock', tabId: this.tabId, ts: Date.now(), state: e.to });
     if (s.pausedAt !== null) return;
+    const now = Date.now();
     if (e.to === 'held' || e.to === 'fallback') {
       const wasStarting = s.state === 'starting';
-      this.set({
-        state: e.to === 'held' ? 'running' : 'fallback',
-        mode: which,
-        pauseReason: null,
-        advice: null,
-        ...(wasStarting ? this.say('start') : {}),
-      });
+      this.send({ type: 'held', mode: which, now }, wasStarting ? this.say('start') : {});
       this.persist();
       return;
     }
     if (e.to === 'lost' && e.reason === 'released_hidden') {
-      if (isAwake(s.state)) this.set({ state: 'paused', pauseReason: 'hidden', ...this.say('hidden') });
+      if (isAwake(s.state)) this.send({ type: 'hidden', now }, this.say('hidden'));
       return;
     }
     if (e.to === 'denied' || e.to === 'unsupported') this.refused(which, e.to, e.advice ?? null);
   }
 
-  private refused(which: 'native' | 'video', to: TLockState, advice: TAdviceCode | null) {
-    const s = this.snap;
-    if (s.pauseReason === 'hidden' || advice === 'hidden_document') {
-      this.set({ state: 'needsyou', advice });
-      this.persist();
-      return;
+  private refused(which: TLockMode, to: 'denied' | 'unsupported', advice: IWakeSnapshot['advice']) {
+    const before = this.snap.state;
+    this.send({ type: 'refused', mode: which, to, advice, held: this.holding(), now: Date.now() });
+    const after = this.snap.state;
+    if (after === before) return;
+    if (after === 'blocked') {
+      this.patch(this.say('refused'));
+      this.emit('refused', { advice });
     }
-    if (which === 'native' && to === 'unsupported') {
-      this.set({ state: 'unsupported', advice, mode: null });
-      return;
-    }
-    if (which === 'video') {
-      this.set({ state: s.state === 'starting' ? 'unsupported' : 'needsyou', advice, mode: null });
-      return;
-    }
-    this.set({ state: 'blocked', advice, mode: null, ...this.say('refused') });
-    this.emit('refused', { advice });
     this.persist();
   }
 
-  private async acquire(which: 'native' | 'video', fromHidden = false) {
+  private async acquire(which: TLockMode, fromHidden = false) {
     const handle = which === 'native' ? this.native : this.video;
     if (!handle) return;
     if (which === 'video') void this.native?.release();
@@ -284,8 +240,8 @@ class WakeController {
       return;
     }
     if (result === 'denied' || result === 'unsupported') {
-      if (fromHidden) {
-        this.set({ state: 'needsyou', advice: handle.advice });
+      if (fromHidden && !this.holding()) {
+        this.patch({ state: 'needsyou', advice: handle.advice, checkedAt: Date.now() });
         this.persist();
         return;
       }
@@ -305,55 +261,38 @@ class WakeController {
     const s = this.snap;
     if (s.state === 'starting' || isAwake(s.state)) return;
     const now = Date.now();
-    const sec = clampSec(totalSec);
     this.sessionId = typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : String(now);
     this.awakeSec = 0;
-    this.set({
-      state: 'starting',
-      now,
-      totalSec: sec,
-      startedAt: now,
-      endsAt: sec > 0 ? now + sec * 1000 : null,
-      pausedAt: null,
-      pausedMs: 0,
-      pauseReason: null,
-      endedAt: null,
-      advice: null,
-      mode: null,
-      lastExtendSec: 0,
-      peerHolds: false,
-    });
-    if (this.native && !this.native.supported) {
-      this.set({ state: 'unsupported', advice: this.native.advice });
-      return;
-    }
-    void this.acquire('native');
+    this.send(
+      { type: 'start', now, totalSec, supported: this.native ? this.native.supported : true },
+      { peerHolds: false },
+    );
+    if (this.snap.state === 'starting') void this.acquire('native');
   }
 
   useFallback() {
     this.boot();
     const s = this.snap;
-    const now = Date.now();
     if (s.state === 'unsupported' || s.state === 'idle' || s.state === 'ended') {
-      const sec = s.totalSec;
-      this.sessionId = String(now);
+      this.sessionId = String(Date.now());
       this.awakeSec = 0;
-      this.set({ startedAt: now, endsAt: sec > 0 ? now + sec * 1000 : null, pausedAt: null, pausedMs: 0 });
     }
-    this.set({ state: 'starting', mode: 'video', pauseReason: null, now });
+    this.send({ type: 'fallback', now: Date.now() });
     void this.acquire('video');
   }
 
   checkAgain() {
     const s = this.snap;
     if (s.state !== 'blocked' && s.state !== 'needsyou') return;
+    this.patch({ checkedAt: Date.now() });
     void this.acquire('native');
   }
 
   pause() {
-    const s = this.snap;
-    if (!isAwake(s.state) && s.state !== 'blocked' && s.state !== 'needsyou') return;
-    this.set({ state: 'paused', pauseReason: 'user', pausedAt: Date.now() });
+    const before = this.snap.state;
+    this.send({ type: 'pause', now: Date.now() });
+    if (this.snap.state === before) return;
+    this.patch(this.say('paused'));
     void this.releaseAll();
     this.persist();
   }
@@ -361,15 +300,7 @@ class WakeController {
   resume() {
     const s = this.snap;
     if (s.state !== 'paused' && s.state !== 'needsyou') return;
-    const now = Date.now();
-    const patch: Partial<IWakeSnapshot> = { now, pauseReason: null };
-    if (s.pausedAt !== null) {
-      const gap = now - s.pausedAt;
-      patch.pausedMs = s.pausedMs + gap;
-      patch.endsAt = s.endsAt === null ? null : s.endsAt + gap;
-      patch.pausedAt = null;
-    }
-    this.set(patch);
+    this.send({ type: 'resume', now: Date.now() });
     void this.acquire(s.mode === 'video' ? 'video' : 'native');
   }
 
@@ -384,17 +315,7 @@ class WakeController {
     const s = this.snap;
     if (isLive(s.state)) this.record('user', Date.now());
     void this.releaseAll();
-    this.set({
-      state: 'idle',
-      startedAt: null,
-      endsAt: null,
-      pausedAt: null,
-      pausedMs: 0,
-      pauseReason: null,
-      endedAt: null,
-      mode: null,
-      advice: null,
-    });
+    this.send({ type: 'stop', now: Date.now() });
     this.clearSession();
   }
 
@@ -403,58 +324,46 @@ class WakeController {
     const s = this.snap;
     if (sec <= 0) return;
     if (s.state === 'ended' || s.state === 'idle') {
-      this.start(sec);
-      this.set({ lastExtendSec: sec });
+      this.sessionId = String(Date.now());
+      this.awakeSec = 0;
+      this.send({ type: 'extend', sec, now: Date.now() }, { peerHolds: false });
+      void this.acquire('native');
       this.announceExtend(sec);
       return;
     }
-    if (s.endsAt === null) return;
-    const left = remainSec(s);
-    if (left + sec > MAX_SEC) return;
-    this.set({ endsAt: s.endsAt + sec * 1000, totalSec: Math.max(s.totalSec, left + sec), lastExtendSec: sec });
+    const before = this.snap.endsAt;
+    this.send({ type: 'extend', sec, now: Date.now() });
+    if (this.snap.endsAt === before) return;
     this.announceExtend(sec);
     this.persist();
   }
 
   private announceExtend(sec: number) {
     const endsAt = this.snap.endsAt ?? Date.now();
-    this.set(this.say('extend', sec));
+    this.patch(this.say('extend', sec));
     this.emit('extended', { sec, endsAt });
   }
 
   undoExtend() {
-    const s = this.snap;
-    if (!s.lastExtendSec || s.endsAt === null) return;
-    const floor = (s.pausedAt ?? Date.now()) + 60_000;
-    this.set({ endsAt: Math.max(floor, s.endsAt - s.lastExtendSec * 1000), lastExtendSec: 0 });
+    this.send({ type: 'undo', now: Date.now() });
     this.persist();
   }
 
   // Keep awake until a wall-clock time: moves a live session's end, or starts one from idle.
   until(endsAt: number) {
     const s = this.snap;
-    const now = Date.now();
-    const sec = Math.round((endsAt - now) / 1000);
-    if (sec <= 0) return;
     if (!isLive(s.state) || s.endsAt === null) {
-      this.start(sec);
+      const sec = Math.round((endsAt - Date.now()) / 1000);
+      if (sec > 0) this.start(sec);
       return;
     }
-    const from = s.pausedAt ?? now;
-    this.set({ endsAt: from + sec * 1000, totalSec: Math.max(s.totalSec, sec), lastExtendSec: 0 });
+    this.send({ type: 'until', endsAt, now: Date.now() });
     this.persist();
   }
 
   setLength(totalSec: number) {
-    const s = this.snap;
-    const sec = clampSec(totalSec);
-    if (!isLive(s.state)) {
-      this.set({ totalSec: sec, state: s.state === 'ended' ? 'idle' : s.state, endedAt: null });
-      return;
-    }
-    const from = s.pausedAt ?? Date.now();
-    this.set({ totalSec: sec, endsAt: sec > 0 ? from + sec * 1000 : null });
-    this.persist();
+    this.send({ type: 'length', sec: totalSec, now: Date.now() });
+    if (isLive(this.snap.state)) this.persist();
   }
 
   takeOver() {
@@ -462,12 +371,12 @@ class WakeController {
       this.post({ type: 'intent', tabId: this.tabId, ts: Date.now(), target, action: 'stop' });
     }
     this.peers.clear();
-    this.set({ peerHolds: false });
+    this.patch({ peerHolds: false });
     this.start();
   }
 
   dismissPeer() {
-    this.set({ peerHolds: false });
+    this.patch({ peerHolds: false });
   }
 
   private async finish(reason: TFinishReason) {
@@ -475,15 +384,7 @@ class WakeController {
     const endedAt = s.endsAt ?? Date.now();
     this.record(reason, endedAt);
     await this.releaseAll();
-    this.set({
-      state: 'ended',
-      endedAt,
-      pausedAt: null,
-      pauseReason: null,
-      mode: null,
-      lastExtendSec: 0,
-      ...this.say('ended'),
-    });
+    this.send({ type: 'end', now: Date.now() }, this.say('ended'));
     this.emit('ended', { endedAt });
     this.clearSession();
   }
@@ -516,7 +417,7 @@ class WakeController {
     const s = this.snap;
     if (!this.store || s.startedAt === null || !isLive(s.state)) return;
     const status = s.pausedAt !== null ? 'paused' : 'active';
-    const session: ISession = {
+    const session: IStoredSession = {
       v: 1,
       id: this.sessionId || String(s.startedAt),
       plan: s.endsAt === null ? { type: 'indefinite' } : { type: 'duration', ms: s.endsAt - s.pausedMs - s.startedAt },
@@ -596,7 +497,7 @@ class WakeController {
       if (msg.type === 'bye') this.peers.delete(msg.tabId);
       if (msg.type === 'intent' && msg.target === this.tabId && msg.action === 'stop') this.stop();
       const holds = this.peers.size > 0 && !isAwake(this.snap.state);
-      if (holds !== this.snap.peerHolds) this.set({ peerHolds: holds });
+      if (holds !== this.snap.peerHolds) this.patch({ peerHolds: holds });
     });
     this.post({ type: 'hello', tabId: this.tabId, ts: Date.now() });
   }
@@ -614,7 +515,7 @@ class WakeController {
     this.boot();
     void this.releaseAll();
     this.awakeSec = 0;
-    this.set({ now: Date.now(), ...patch });
+    this.patch({ now: Date.now(), ...patch });
   }
 
   qaEnded() {
@@ -628,13 +529,8 @@ type TTabMessage =
   | { type: 'intent'; tabId: string; ts: number; target: string; action: 'stop' | 'add'; ms?: number }
   | { type: 'bye'; tabId: string; ts: number };
 
-function clampSec(sec: number): number {
-  if (!Number.isFinite(sec) || sec <= 0) return 0;
-  return Math.min(MAX_SEC, Math.round(sec));
-}
-
-function presetIdOf(sec: number): ISession['presetId'] {
-  const map: Record<number, ISession['presetId']> = {
+function presetIdOf(sec: number): IStoredSession['presetId'] {
+  const map: Record<number, IStoredSession['presetId']> = {
     0: 'pinf',
     900: 'p15',
     1800: 'p30',
@@ -651,3 +547,4 @@ export const wake = new WakeController();
 export function useWake(): IWakeSnapshot {
   return useSyncExternalStore(wake.subscribe, wake.getSnapshot, wake.getServerSnapshot);
 }
+
