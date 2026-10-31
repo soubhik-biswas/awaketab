@@ -1,3 +1,13 @@
+# AwakeTab design system — "Glance"
+
+Status: **current design (v3.1, 31 October 2026), being implemented.** It replaces Volt and Solar Green. The build brief is `docs/redesign/glance/BRIEF.md` (it wins over every older doc and over old code); store and share copy is `docs/redesign/glance/LISTING_COPY.md`; reference tokens are `docs/redesign/glance/reference-tokens.css`. The visual source of truth is the handoff bundle (`awaketab-glance-handoff.zip`: `prototype/Tool.dc.html`, `Site.dc.html`, `Page.dc.html`, `Face.dc.html`, `Scene.dc.html` and boards G00–G15, plus `assets/marketing/`).
+
+Decisions that differ from the brief are recorded in `docs/redesign/DECISIONS.md` under "Glance (31 Oct 2026)".
+
+---
+
+The sections below describe Volt and are kept for history until the Glance build replaces them.
+
 # AwakeTab design system — "Volt"
 
 Status: **approved final design (31 October 2026), being implemented.** It replaces Solar Green (30 October), which replaced Clear Night. The full spec is `docs/redesign/volt/HANDOFF.md`; the build brief is `docs/redesign/volt/BRIEF.md`; the reference tokens are `docs/redesign/volt/reference-tokens.css`. The visual source of truth is the handoff bundle (`awaketab-volt-handoff.zip`: `prototype/*.dc.html` with their `renderVals()` logic, and `html/*.html`, a static snapshot of every board). Product context lives in `PRODUCT.md`; decisions in `docs/redesign/DECISIONS.md` (Volt section, then Solar Green and Next.js build).

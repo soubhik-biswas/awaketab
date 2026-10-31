@@ -1,0 +1,31 @@
+:root {
+  --bg:#F4F4F9; --surface:#FFFFFF; --s2:#ECECF4; --s3:#E3E3EE; --border:rgba(11,16,32,.09); --border-hi:rgba(11,16,32,.18);
+  --text:#0B1020; --text-2:#4B5165; --text-3:#5C6275;
+  --volt:#117A3B;
+  --violet:#6633F5; --on-violet:#FFFFFF;
+  --amber:#8A5A00; --red:#C21D3E; --sky:#1C64B8; --ring:#1C64B8;
+  --panel:rgba(255,255,255,.9); --shadow:0 30px 70px rgba(11,16,32,.14);
+  --radius-control:12px; --radius-row:18px; --radius-panel:28px; --radius-pill:999px;
+  --font-display:"Bricolage Grotesque", Inter, sans-serif;
+  --font-sans:Inter, system-ui, sans-serif;
+  --font-accent:"Instrument Serif", Georgia, serif;
+  --font-mono:"Geist Mono", ui-monospace, monospace;
+  --ease-out:cubic-bezier(.16,1,.3,1); --dur-arrive:420ms; --dur-drawer:360ms; --dur-thumb:350ms;
+}
+.dark {
+  --bg:#05060A; --surface:#0E1016; --s2:#15171E; --s3:#1C1F29; --border:rgba(255,255,255,.09); --border-hi:rgba(255,255,255,.18);
+  --text:#F2F4FA; --text-2:#A6AFC2; --text-3:#99A1B5;
+  --volt:#3DF58E; --violet:#9F7BFF; --on-violet:#0B0718;
+  --amber:#FFC53D; --red:#FF6B81; --sky:#7CBBFF; --ring:#7CBBFF;
+  --panel:rgba(13,16,30,.86); --shadow:0 30px 80px rgba(0,0,0,.55);
+
+  --face-plate:radial-gradient(circle at 50% 30%, #1B1E28 0%, #0E1016 60%, #08090D 100%);
+  --face-line:#2A2D38; --face-track:#1C1F29; --face-panel:#0F1117;
+}
+.oled {
+
+  --bg:#000000; --surface:#05060A; --panel:rgba(6,7,12,.94); --glass:rgba(255,255,255,.035); --grid:rgba(255,255,255,.03);
+  --vibe-opacity:.3;
+  --face-plate:#000000; --face-outline:#1A2236;
+}
+

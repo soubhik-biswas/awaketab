@@ -407,3 +407,13 @@ The owner's refined handoff (`awaketab-volt-handoff.zip`, spec in `docs/redesign
 - **axe check.** `@axe-core/react` does not support React 19, so a small client component runs `axe-core` directly when `NEXT_PUBLIC_AXE=1` and logs WCAG 2.2 A/AA violations once each; without the flag nothing loads.
 - **Settings footer links.** The board writes "Privacy · Terms · …" as plain grey text; the product makes Privacy and Terms real links in the same grey with an underline, so they are links without relying on colour.
 - **Mini clock entry.** No tool board draws a mini clock button, so the stage shows none; while a session runs the command palette's search offers "Pop out mini clock", and the idle palette list stays as drawn.
+
+## Glance (31 Oct 2026)
+
+The owner's v3.1 handoff ("Glance": `AGENT_PROMPT.md`, now `docs/redesign/glance/BRIEF.md`, plus `LISTING_COPY.md` and the handoff zip) replaces Volt. The brief wins over older docs and code; the Next.js app, wake engine, content and licence backend carry over underneath.
+
+- **Sign-in (owner, 31 Oct).** Continue with Google, Continue with GitHub and Use a passkey. The brief's Apple button is replaced by GitHub at the owner's request; there is still no email field, no magic link and no transactional email.
+- **Fonts.** Bricolage Grotesque (display), Inter (all UI and clock digits), Instrument Serif italic (one accent word per headline) and Geist Mono (labels) through `next/font/google`, shared from `app/fonts.ts`; Archivo stays for the faces that draw with it.
+- **Tokens.** Glance values sit on the existing token names (graphite `#05060A`, porcelain `#F4F4F9`, OLED `#000` with its own panel, glass and grid values and `--vibe-opacity: .3`), plus `--panel`, `--glass`, `--grid`, `--border-hi` and the 12 / 18 / 28 radii.
+- **Logo.** The v3.1 progress ring (track, 300° arc, bead on the arc's end) replaces the lamp mark; `Mark` and `AppMark` keep their props.
+- **Motion.** `motion/react` drives UI transitions as the brief asks; the faces keep their GSAP loops, which already honour reduced motion.
