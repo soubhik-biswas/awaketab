@@ -9,6 +9,7 @@ import { GridPattern } from '@/components/ui-effects/grid-pattern';
 import { FooterTheme } from './footer-theme';
 import { LangMenu } from './header-client';
 import { display, pad } from './styles';
+import { PRO_ENABLED } from '@/lib/features';
 
 // The same build that announces a maintenance window on /status also turns the footer pill amber.
 const maintenance = (process.env.NEXT_PUBLIC_MAINTENANCE_UNTIL?.trim() ?? '') !== '';
@@ -33,7 +34,7 @@ export async function SiteFooter({ locale }: { locale: TLocale }) {
         { label: t('timer'), href: toolHref(locale) },
         { label: t('faces'), href: panelHref('faces', locale), tag: t('new') },
         { label: t('vibes'), href: panelHref('vibes', locale), tag: t('new') },
-        { label: t('pro'), href: ROUTES.pro, en: true },
+        ...(PRO_ENABLED ? [{ label: t('pro'), href: ROUTES.pro, en: true }] : []),
       ],
     },
     {

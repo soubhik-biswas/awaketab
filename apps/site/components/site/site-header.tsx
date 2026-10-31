@@ -5,6 +5,7 @@ import { ROUTES, toolHref } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { LangMenu, MobileMenu, NavLinks, type INavLink } from './header-client';
 import { display } from './styles';
+import { PRO_ENABLED } from '@/lib/features';
 
 // The floating glass pill of every website page: logo, the five links, language and sign-in from 1100 px, the
 // violet "Open the timer" pill always, and a menu below 1100 px.
@@ -17,9 +18,9 @@ export async function SiteHeader({ locale }: { locale: TLocale }) {
     { href: ROUTES.guides, label: t('nav.guides') },
     { href: ROUTES.support, label: t('nav.support') },
     { href: ROUTES.help, label: t('nav.help') },
-    { href: ROUTES.pro, label: t('nav.pro') },
+    ...(PRO_ENABLED ? [{ href: ROUTES.pro, label: t('nav.pro') }] : []),
   ];
-  const signin: INavLink = { href: ROUTES.signin, label: t('signin') };
+  const signin: INavLink | undefined = PRO_ENABLED ? { href: ROUTES.signin, label: t('signin') } : undefined;
   const target = locale === 'en' ? undefined : 'en';
   return (
     <header className="site-nav relative z-[3] mx-2.5 mt-2.5 flex h-[60px] items-center gap-2 rounded-full pr-2 pl-[14px] min-[700px]:mx-auto min-[700px]:mt-4 min-[700px]:h-16 min-[700px]:max-w-[calc(100%-96px)] min-[700px]:pr-2.5 min-[700px]:pl-5">
@@ -37,13 +38,15 @@ export async function SiteHeader({ locale }: { locale: TLocale }) {
       <span className="flex-1" />
       <div className="hidden items-center gap-2 min-[1100px]:flex">
         <LangMenu locale={locale} label={tf('language._')} />
-        <a
-          href={signin.href}
-          hrefLang={target}
-          className="inline-flex h-11 items-center justify-center rounded-[12px] px-[18px] text-[15px] font-semibold text-foreground no-underline hover:bg-secondary"
-        >
-          {signin.label}
-        </a>
+        {signin ? (
+          <a
+            href={signin.href}
+            hrefLang={target}
+            className="inline-flex h-11 items-center justify-center rounded-[12px] px-[18px] text-[15px] font-semibold text-foreground no-underline hover:bg-secondary"
+          >
+            {signin.label}
+          </a>
+        ) : null}
       </div>
       <a
         href={toolHref(locale)}

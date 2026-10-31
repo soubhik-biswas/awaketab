@@ -1,6 +1,7 @@
 import { allChangelogs, allComparisons, allDevices, allDocs, allGuides, allUseCases } from 'content-collections';
 import type { TSceneKey } from '@/components/scene/scene-data';
 import slugsJson from '@/i18n/slugs.json';
+import { PRO_ENABLED } from '@/lib/features';
 import { LOCALE_META, LOCALES, TRANSLATED_SLUG_LOCALES, type TLocale } from '@/i18n/locales';
 import { SITE, type TContentKind } from '@/lib/routes';
 
@@ -471,7 +472,7 @@ export interface IHelpTopic {
   link?: string;
 }
 
-export const HELP_TOPICS: readonly IHelpTopic[] = [
+const ALL_HELP_TOPICS: readonly IHelpTopic[] = [
   {
     title: 'My screen still goes dark',
     line: 'The three causes, and one fix for each.',
@@ -534,10 +535,14 @@ export const HELP_TOPICS: readonly IHelpTopic[] = [
   },
 ];
 
-export const HELP_CHIPS: ReadonlyArray<readonly [string, string]> = [
+const ALL_HELP_CHIPS: ReadonlyArray<readonly [string, string]> = [
   ['Screen still sleeps', '/learn/honest-limits'],
   ['Battery saver', '/learn/low-power-mode-and-wake-locks'],
   ['iPhone and iPad', '/on/iphone-safari'],
   ['Extension', '/extension'],
   ['Billing', '/pro'],
 ];
+
+// Billing help exists only while Pro is on.
+export const HELP_TOPICS = ALL_HELP_TOPICS.filter((x) => PRO_ENABLED || x.href !== '/pro');
+export const HELP_CHIPS = ALL_HELP_CHIPS.filter(([, href]) => PRO_ENABLED || href !== '/pro');

@@ -1,5 +1,6 @@
 import { FACE_IDS, type TFace } from '@awaketab/core';
 import { VIBES, type TVibe } from '@/lib/tool/settings';
+import { PRO_ENABLED } from '@/lib/features';
 
 interface IToolQuery {
   totalSec?: number;
@@ -49,7 +50,7 @@ export function readToolQuery(search: string, now = Date.now()): IToolQuery {
     out.untilAt = d.getTime();
   }
   const open = OPEN_PANELS.find((x) => x === q.get('open'));
-  if (open) out.open = open;
+  if (open && (open !== 'pro' || PRO_ENABLED)) out.open = open;
   return out;
 }
 

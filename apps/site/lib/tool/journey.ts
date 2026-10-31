@@ -1,3 +1,4 @@
+import { PRO_ENABLED } from '@/lib/features';
 import { dayDiff } from '@/lib/tool/clock';
 import { createLocalStore, isRecord, useLocalStore } from '@/lib/tool/store';
 
@@ -53,6 +54,7 @@ export function quietNudge(now = Date.now()) {
 
 // One gentle Pro nudge, only after real use: 10 sessions, 2 presets or a second screen; never on the first day.
 export function nudgeDue(j: IJourney, presets: number, screens: number, now = Date.now()): boolean {
+  if (!PRO_ENABLED) return false;
   if (j.firstSeen === 0 || dayDiff(j.firstSeen, now) < 1 || j.sessions < 1) return false;
   if (now < j.quietUntil) return false;
   return j.sessions >= 10 || presets >= 2 || screens >= 2;

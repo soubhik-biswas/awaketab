@@ -10,7 +10,7 @@ import { isLatin } from '@/lib/tool/strings';
 import { pro, type IProDevice } from '@/lib/tool/pro';
 import { isAwake } from '@/lib/wake';
 import { useGlance } from '../context';
-import { FreeBadge, Group, Note, RowText, SecLabel, StepNo } from '../kit';
+import { Group, Note, RowText, SecLabel, StepNo, Tag } from '../kit';
 import { PanelBody, PanelFoot } from './shell';
 
 type TPlan = 'yearly' | 'monthly';
@@ -84,7 +84,7 @@ export function ProPanel() {
               >
                 <span className="flex items-center justify-between gap-2">
                   <strong className="text-[15px] font-semibold">{t(`pro.${p}`)}</strong>
-                  {p === 'yearly' ? <FreeBadge>{t('pro.save', { n: yearlySaving() })}</FreeBadge> : null}
+                  {p === 'yearly' ? <Tag>{t('pro.save', { n: yearlySaving() })}</Tag> : null}
                 </span>
                 <span className="font-display text-[22px] font-bold tracking-[-0.02em]">
                   {t(`pro.${p}Price`, { price: priceLabel(p) })}
@@ -199,7 +199,7 @@ export function PlanPanel() {
             {(acct?.name || via).charAt(0).toUpperCase()}
           </span>
           <RowText title={t('settings.signedIn', { via })} desc={t(`plan.renews.${plan}`, { date })} />
-          <FreeBadge>{t('plan.active')}</FreeBadge>
+          <Tag>{t('plan.active')}</Tag>
         </div>
         <SecLabel>{t('plan.plan')}</SecLabel>
         <Group>

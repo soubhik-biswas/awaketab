@@ -17,7 +17,7 @@ const PLACES: Array<[TPanel, string, LucideIcon]> = [
 ];
 
 const iconBtn =
-  'tg-btn inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-full border-0 text-[14px] font-semibold tracking-[-0.005em]';
+  'tg-btn relative inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-full border-0 text-[14px] font-semibold tracking-[-0.005em]';
 
 // Logo, the status pill (in the stage on phone and tablet portrait) and one glass capsule: Search, Vibe, Faces,
 // Recents, Settings. Labels show from 1300 px; below that the buttons are icons, still 44 px.
@@ -80,6 +80,15 @@ export function TopBar() {
               >
                 <Icon className="size-[19px]" strokeWidth={1.9} aria-hidden="true" />
                 {desk ? <span>{t(label)}</span> : null}
+                {key === 'vibes' ? (
+                  <>
+                    <span
+                      aria-hidden="true"
+                      className="absolute top-2 right-2 size-2 rounded-full bg-(--tg-violet) shadow-[0_0_0_2px_var(--tg-panel)]"
+                    />
+                    <span className="sr-only">{t('tagNew')}</span>
+                  </>
+                ) : null}
               </button>
             );
           })}

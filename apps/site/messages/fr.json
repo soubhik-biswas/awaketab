@@ -798,6 +798,12 @@
       "hero": "Gardez cet écran allumé.",
       "heroSub": "Un geste. Il se remet en veille quand le temps est écoulé, sans installation ni compte.",
       "heroSubPhone": "Un geste. Il se remet en veille à la fin."
+    },
+    "glance": {
+      "tagNew": "Nouveau",
+      "tagHot": "Populaire",
+      "tagPick": "Coup de cœur",
+      "tagNight": "Nuit"
     }
   },
   "ambient": {

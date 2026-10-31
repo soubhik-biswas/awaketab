@@ -10,7 +10,8 @@ import { cn } from '@/lib/utils';
 import { COLLECTIONS, FILTERS, faceLabel, tagOf, type TFilter, type TGlanceFace } from '@/lib/tool/collections';
 import { toolUi } from '@/lib/tool/ui';
 import { useGlance } from '../context';
-import { EASE } from '../kit';
+import { EASE, Tag } from '../kit';
+import { faceTag, TAG_LABEL_KEY } from '@/lib/tool/face-tags';
 import { CloseButton } from './shell';
 
 const SCRIM = 'absolute inset-0 z-[7] bg-(--tg-scrim) backdrop-blur-[6px]';
@@ -178,6 +179,11 @@ function Gallery({ title: Title, desc: Desc }: { title: TText; desc: TText }) {
                         : t(`faces.filter.${tagOf(k)}`)}
                     </span>
                   </span>
+                  {faceTag(k) ? (
+                    <span className="absolute top-3 left-3">
+                      <Tag kind={faceTag(k) ?? 'new'}>{t(TAG_LABEL_KEY[faceTag(k) ?? 'new'])}</Tag>
+                    </span>
+                  ) : null}
                   {on ? (
                     <span className="absolute top-3 right-3 flex size-[26px] items-center justify-center rounded-full bg-(--tg-volt) text-(--tg-on-volt)">
                       <Check className="size-3.5" strokeWidth={3} aria-hidden="true" />
