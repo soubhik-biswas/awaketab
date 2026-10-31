@@ -106,7 +106,7 @@ export function SettingsPanel() {
   const go = (p: TPanel) => () => g.a.open(p);
   return (
     <PanelBody>
-      <SecLabel first>{t('settings.appearance')}</SecLabel>
+      <SecLabel>{t('settings.appearance')}</SecLabel>
       <RadioGroup.Root
         value={g.themeChoice}
         onValueChange={(v) => g.a.setTheme(v as TThemeChoice)}
