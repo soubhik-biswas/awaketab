@@ -19,7 +19,7 @@ const UNKNOWN: IAuthStatus = { ready: true, google: true, github: true, passkey:
 
 export const FORM_CARD =
   'flex w-full max-w-[562px] flex-col gap-[14px] rounded-[24px] border border-border bg-card p-5 min-[700px]:max-w-[578px] min-[700px]:p-7';
-export const LINK_BTN =
+const LINK_BTN =
   'min-h-11 border-0 bg-transparent px-1 text-[15px] font-bold text-lamp underline underline-offset-[3px] outline-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring';
 
 // /signin: the content board's sign-in page. Default, cancelled and done are the drawn states; the note under the

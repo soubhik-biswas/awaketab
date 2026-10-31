@@ -1,7 +1,7 @@
 export type TProPlan = 'yearly' | 'monthly';
 
 // The yearly price is the product's real one; monthly has no product price yet, so it stays a placeholder.
-export const PLAN_PRICES: Record<TProPlan, number | null> = { yearly: 12, monthly: null };
+const PLAN_PRICES: Record<TProPlan, number | null> = { yearly: 12, monthly: null };
 
 export const MAX_DEVICES = 5;
 export const TRIAL_DAYS = 14;

@@ -253,7 +253,3 @@ export function createFakeChrome(opts: { power?: boolean; deny?: boolean; uiLang
 export async function flush(times = 10): Promise<void> {
   for (let i = 0; i < times; i += 1) await Promise.resolve();
 }
-
-export function bodyOf(init: RequestInit | undefined): string {
-  return typeof init?.body === 'string' ? init.body : '';
-}

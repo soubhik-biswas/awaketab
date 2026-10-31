@@ -463,7 +463,7 @@ const USE_CASE_SCENE: Record<string, TSceneKey> = {
 
 export const useCaseScene = (slug: string): TSceneKey => USE_CASE_SCENE[slug] ?? 'hero';
 
-export interface IHelpTopic {
+interface IHelpTopic {
   title: string;
   line: string;
   href: string;

@@ -99,7 +99,8 @@
 
 .xo-chip::before {
   position: absolute;
-  inset: -3px 0;
+  inset-block: -3px;
+  inset-inline: 0;
   content: "";
 }
 

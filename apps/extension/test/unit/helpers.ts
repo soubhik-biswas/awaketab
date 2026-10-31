@@ -20,7 +20,7 @@ async function testKeys(): Promise<CryptoKeyPair> {
   return pair;
 }
 
-export async function signToken(claims: {
+async function signToken(claims: {
   plan: string;
   features: TFeatureGate[];
   exp: number;

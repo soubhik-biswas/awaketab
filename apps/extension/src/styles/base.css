@@ -76,8 +76,8 @@ button {
 
 .at-sr {
   position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
+  inline-size: var(--at-border);
+  block-size: var(--at-border);
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
