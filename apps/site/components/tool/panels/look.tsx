@@ -177,7 +177,7 @@ export function StudioPanel() {
           max={100}
           step={5}
           aria-label={t('studio.glow')}
-          className="relative mx-1 my-3 flex h-[26px] touch-none items-center select-none"
+          className="relative mx-1 my-[3px] flex h-11 touch-none items-center select-none"
         >
           <Slider.Track className="relative h-2 grow rounded-full bg-(--tg-s3)">
             <Slider.Range className="absolute h-full rounded-full bg-[linear-gradient(90deg,var(--tg-violet),#C1B1FE)]" />
@@ -290,7 +290,7 @@ export function SoundPanel() {
               max={100}
               step={5}
               aria-labelledby={`tg-mix-${k}`}
-              className="relative flex h-5 touch-none items-center select-none"
+              className="relative -my-3 flex h-11 touch-none items-center select-none"
             >
               <Slider.Track className="relative h-1.5 grow rounded-full bg-(--tg-s3)">
                 <Slider.Range className="absolute h-full rounded-full bg-[linear-gradient(90deg,var(--tg-violet),#C1B1FE)]" />
