@@ -2,10 +2,14 @@ packages:
   - apps/*
   - packages/*
 
-onlyBuiltDependencies:
-  - esbuild
-  - sharp
-  - workerd
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
+  '@parcel/watcher': false
+  '@swc/core': false
+
+saveExact: true
 
 overrides:
   typescript: 5.9.3
