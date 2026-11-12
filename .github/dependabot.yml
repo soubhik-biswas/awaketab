@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - github_actions
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns: ['*']
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    # Waits for new releases to settle before proposing them.
+    cooldown:
+      default-days: 14
+    labels:
+      - dependencies
+    commit-message:
+      prefix: build
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]

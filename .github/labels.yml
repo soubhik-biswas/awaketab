@@ -1,0 +1,63 @@
+- name: needs-triage
+  color: 'ededed'
+  description: New and not yet reviewed by the maintainer.
+- name: approved
+  color: '0e8a16'
+  description: Accepted by the maintainer. Only the repository owner applies this.
+- name: ready
+  color: '1d76db'
+  description: Approved and clear enough for someone to start.
+- name: in-progress
+  color: 'fbca04'
+  description: Someone is working on this now.
+- name: blocked
+  color: 'b60205'
+  description: Cannot move until something else is resolved. The thread says what.
+- name: needs-information
+  color: 'd876e3'
+  description: Waiting on the reporter for details. Closes if there is no reply.
+- name: not-planned
+  color: '6a737d'
+  description: Outside the project's scope or not something we will do. The thread explains why.
+- name: bug
+  color: 'd73a4a'
+  description: Something does not work as documented.
+- name: enhancement
+  color: 'a2eeef'
+  description: A new feature or an improvement to an existing one.
+- name: documentation
+  color: '0075ca'
+  description: Guides, READMEs, specifications or code docs.
+- name: question
+  color: 'cc317c'
+  description: A question rather than a bug. Usually better in Discussions.
+- name: security
+  color: '5319e7'
+  description: Security hardening or a disclosed fix. Report vulnerabilities privately, never in an issue.
+- name: dependencies
+  color: '0366d6'
+  description: Updates a dependency. Used by Dependabot.
+- name: github_actions
+  color: '000000'
+  description: Updates a GitHub Actions workflow dependency. Used by Dependabot.
+- name: good first issue
+  color: '7057ff'
+  description: A small, well-described task for a first contribution.
+- name: help wanted
+  color: '008672'
+  description: The maintainer would welcome a pull request for this.
+- name: first-timers-only
+  color: 'c2e0c6'
+  description: Kept for someone who has never contributed to open source before.
+- name: duplicate
+  color: 'cfd3d7'
+  description: Already reported. The thread links the original.
+- name: wontfix
+  color: 'ffffff'
+  description: Reproduced and understood, but will not be changed. The thread explains why.
+- name: pinned
+  color: '0052cc'
+  description: Kept open on purpose and never closed automatically.
+- name: stale
+  color: 'e4e669'
+  description: No reply to a request for information. Closes in 7 days unless someone replies.
