@@ -135,7 +135,10 @@ export const Dock = memo(function Dock() {
           className={cn(KEY, 'justify-start gap-2.5 rounded-[18px] pl-1.5', desk ? 'pr-4' : 'pr-1.5')}
           style={{ height: key }}
         >
-          <span className="flex h-[39px] w-11 flex-none items-center justify-center overflow-hidden rounded-[12px]">
+          <span
+            aria-hidden="true"
+            className="flex h-[39px] w-11 flex-none items-center justify-center overflow-hidden rounded-[12px]"
+          >
             <Face
               face={g.face}
               theme={g.faceTheme}

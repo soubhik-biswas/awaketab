@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocale, useTranslations } from 'next-intl';
 import screenfull from 'screenfull';
@@ -76,6 +76,8 @@ function previewView(schedule: IKioskSchedule | null, now: number): ISurfaceView
 }
 
 // Keeps the screen awake inside the schedule's window and lets it sleep outside it, while kiosk mode runs; it checks
+const subscribeNever = () => () => undefined;
+
 // again every half minute and whenever the session changes.
 function useKioskWake(running: boolean, schedule: IKioskSchedule | null, now: number) {
   const snap = useWake();
@@ -109,6 +111,12 @@ export function KioskPage() {
   const [licence, setLicence] = useState<ILicenseRecord | null>(null);
   const loaded = useRef(false);
   const now = useWindowNow(null);
+  // The page is prerendered at build time, so anything drawn from the clock waits for the browser.
+  const live = useSyncExternalStore(
+    subscribeNever,
+    () => true,
+    () => false,
+  );
   const snap = useKioskWake(running, config.schedule, now);
 
   useEffect(() => {
@@ -170,7 +178,21 @@ export function KioskPage() {
         {t('section')}
       </h1>
       <div className="grid items-start gap-8 xl:grid-cols-[minmax(0,960px)_1fr]">
-        <KioskScreen config={shown} view={view} shift={shift} dim={nightDim(now)} fmt={fmt} onLeave={() => undefined} />
+        {live ? (
+          <KioskScreen
+            config={shown}
+            view={view}
+            shift={shift}
+            dim={nightDim(now)}
+            fmt={fmt}
+            onLeave={() => undefined}
+          />
+        ) : (
+          <div
+            aria-hidden="true"
+            className="box-border aspect-[16/9] w-full max-w-[1440px] rounded-[22px] border-[14px] border-[#15171E] bg-background"
+          />
+        )}
         <div className="flex flex-col gap-[14px]">
           <div className="flex flex-col gap-2">
             <span className={LABEL} id="kiosk-face">
@@ -200,11 +222,13 @@ export function KioskPage() {
             <strong>{t('schedule')}</strong>
             <span className="text-muted-foreground-strong">
               {s
-                ? t('scheduleBody', {
-                    days,
-                    from: formatTime(wallToday(s.from, now), locale, fmt),
-                    to: formatTime(wallToday(s.to, now), locale, fmt),
-                  })
+                ? live
+                  ? t('scheduleBody', {
+                      days,
+                      from: formatTime(wallToday(s.from, now), locale, fmt),
+                      to: formatTime(wallToday(s.to, now), locale, fmt),
+                    })
+                  : null
                 : t('alwaysBody')}
             </span>
           </div>

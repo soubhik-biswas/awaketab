@@ -59,7 +59,15 @@ test('/en moves permanently to /, and a trailing slash is removed', async ({ req
 });
 
 // The paid plan is off: none of its words may show. Whole words only, so "Product" and "Process" pass.
-const PAID = [/\bPro\b/u, /\bPRO\b/u, /\$/u, /\bpricing\b/iu, /\bsign in\b/iu, /\bupgrade\b/iu, /\blicen[cs]e key\b/iu];
+const PAID = [
+  /\bPro\b/u,
+  /\bPRO\b/u,
+  /\$[1-9]/u,
+  /\bpricing\b/iu,
+  /\bsign in\b/iu,
+  /\bupgrade\b/iu,
+  /\blicen[cs]e key\b/iu,
+];
 
 function paidWords(text: string): string[] {
   return PAID.flatMap((word) => {

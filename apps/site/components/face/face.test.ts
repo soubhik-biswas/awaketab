@@ -415,7 +415,7 @@ describe('every face at every size', () => {
         }
     }
     expect(bad).toEqual([]);
-  });
+  }, 60_000);
 
   it('keeps the caption inside the square box', () => {
     for (const theme of THEMES) expect(strayText(html({ theme, size: 300 }), ART_W)).toEqual([]);

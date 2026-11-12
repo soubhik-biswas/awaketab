@@ -136,7 +136,7 @@ export default async function Page({ params }: { params: TParams }) {
           minutes={r.minutes}
           eyebrow={ts('tool.eyebrow')}
           title={`A ${r.job} session`}
-          desc={`Trust the pill, not the button. It starts with “${tt('glance.tab.awake')}” and names the end time only after the browser confirms the wake lock, and it turns to “${tt('glance.tab.paused')}” the moment you switch away.`}
+          desc={`Trust the pill, not the button. It starts with “${tt('glance.tab.awake')}” and names the end time only after the browser confirms the wake lock, and it turns to “${tt('glance.pill.needsyou')}” the moment you switch away.`}
           href={
             r.preset === 'custom'
               ? `${startHref(r.preset, 'standard')}&minutes=${String(r.minutes)}`
