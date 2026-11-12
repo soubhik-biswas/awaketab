@@ -115,7 +115,7 @@ So a browser or Cloudflare may keep a page but must ask the site before reusing 
    - **Labels** match `.github/labels.yml`. The issue forms, Dependabot and the stale workflow rely on them, and GitHub drops a label that does not exist without a warning. No workflow reads the file, so after changing it, change the label on GitHub too: `gh label create <name> --color <hex> --description "<text>" --force`.
    - **Private vulnerability reporting** is on (Settings → Code security). `SECURITY.md` and the issue chooser send every security report there.
    - **Discussions** are on, with the Q&A category that the issue chooser and `SUPPORT.md` link to.
-   - **Dependabot alerts and security updates** are on. The weekly version updates are configured in `.github/dependabot.yml`.
+   - **Dependabot alerts** are on. Automatic update pull requests are off: the maintainer applies updates, so the repository keeps only the `main` and `play` branches.
    - **Secret scanning with push protection** is on.
    - The ruleset **Protect main** applies to `main` (Settings → Rules → Rulesets shows what it requires).
    - **Still to do:** Settings → Actions → General → Workflow permissions → tick "Allow GitHub Actions to create and approve pull requests". Without it the `version` job in `release.yml` cannot open the "version packages" pull request, and fails as soon as a changeset is pending.
