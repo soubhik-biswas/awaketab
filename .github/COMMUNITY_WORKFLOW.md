@@ -4,27 +4,24 @@
 
 ## From an idea to production
 
-1. A contributor submits a bug, feature or documentation issue.
-2. Only `soubhik-biswas` may apply `approved`. The workflow verifies who last added that label using issue-event history. Approval from another account is removed and creates no task.
-3. The approved issue is added to the board as **Approved**. The owner can use `ready`, `in-progress`, `blocked`, `needs-information` or `not-planned` to change its stage.
-4. Contributors open focused PRs against `main`, linking approved issues using `Closes #123` or `Tracks: #123`. A draft means **In Progress**, a ready PR means **In review**, and owner-requested revisions mean **Changes requested**.
-5. Before merging, the owner can deploy any branch to the preview at play.awaketab.com with a manually run workflow and set **In testing** by hand while it is checked there. A PR merged into `main` means **Merged**.
-6. A successful production deployment for that exact merge revision means **Deployed**. Preview deployment, skipped deployment and passing validation alone cannot complete a task. Failure means **Deployment failed**.
+1. A contributor opens a bug, feature or documentation issue with the issue forms.
+2. The maintainer triages it. Only `soubhik-biswas` applies the `approved` label; work on an issue starts after that label is there. An approval from any other account does not count.
+3. The maintainer uses `ready`, `in-progress`, `blocked`, `needs-information` or `not-planned` to show where an approved issue stands.
+4. Contributors open focused pull requests against `main` and link the approved issue with `Closes #123` or `Tracks: #123`. A draft means work in progress; a ready pull request means it can be reviewed.
+5. CI must pass. Before merging, the maintainer can deploy the branch to the preview at play.awaketab.com (`pnpm -F site run deploy:preview`) to check it there.
+6. A merge into `main` is built and deployed to production by Cloudflare; the **Workers Builds: awaketab-site** check on the merge commit shows the result. See [Deployment](../docs/DEPLOYMENT.md).
 
-The complete board vocabulary is Inbox, Needs information, Approved, Ready, In Progress, In review, Changes requested, Blocked, In testing, Merged, Deploying, Deployment failed, Deployed and Not planned. Owners may use Inbox for triage; unapproved issues are not automatically added to the board. Removing `approved` returns an existing task to Inbox and stops subsequent automatic updates until the owner approves it again.
+## The board
 
-## Connect the board
+The project board is updated by GitHub's built-in project workflows, switched on in the board's **Workflows** menu: new issues and pull requests from this repository are added automatically, and closed issues and merged pull requests move to Done. No token or custom automation is involved; the maintainer sets the stages in between by hand.
 
-The repository variable `PROJECT_NUMBER` must be `2`. Set a repository Actions secret named `PROJECTS_TOKEN` using an owner credential with Projects write access and access to this repository. For user-owned Projects, GitHub documents a classic token with `project` and `repo` scopes. Store it only as an Actions secret, never in a source file, issue or PR. Rotate it before its expiry. GitHub's repository-scoped `GITHUB_TOKEN` cannot write user Projects.
+## Labels
 
-The workflow checks out only the default branch, disables persisted checkout credentials and treats issue/PR bodies as data. It never checks out or executes contributor code with the Projects credential. Only the owner can run manual reconciliation. Built-in board rules that mark closed issues or merged PRs as done must remain disabled.
-
-## Deployment evidence
-
-AwakeTab accepts the **Workers Builds: awaketab-site** or legacy **Cloudflare Pages** check from the `cloudflare-workers-and-pages` app only when its check suite identifies `main`. Preview Worker checks cannot confirm production delivery. Passlore accepts the **Deploy** job from the **Passlore checks and deployment** workflow only on a `main` push and only when that job succeeds. Both also accept production deployment-status events for `main`. The revision must belong to `main` and be the merge commit of a linked production PR.
-
-Passlore's deployment job is conditional on deployment configuration; when it is skipped, work remains Merged. A docs-only change may therefore remain Merged, which accurately records that no application deployment was needed.
-
-## Verify or troubleshoot
-
-Run `python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v` for the lifecycle contract tests. Review the **Contribution lifecycle** Actions run when a task does not move. Missing credentials or statuses fail visibly; they do not imply successful synchronization. The owner can use **Run workflow** to reconcile already approved open issues. The workflow is event-driven, so it does not silently start implementation or merge a PR.
+| Label | Meaning |
+| --- | --- |
+| `approved` | The maintainer has accepted the issue; work can start |
+| `ready` | Approved and specified well enough to pick up |
+| `in-progress` | Someone is working on it |
+| `blocked` | Waiting on something else |
+| `needs-information` | Waiting for a reply from the reporter |
+| `not-planned` | Will not be done; the issue says why |
