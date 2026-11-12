@@ -11,7 +11,7 @@ import {
   LICENSE_PUBLIC_KEYS,
   PRODUCTION_LICENSE_PUBLIC_KEYS,
   TRUSTS_DEV_LICENSE_KEY,
-} from '@awaketab/core';
+} from '../packages/core/src/index.ts';
 
 import { devPublicKey, distProblems, keyProblems, runCheck } from './check-keys.mts';
 import { generateProdKeyPair, instructions, nextVer } from './keys-prod.mts';
