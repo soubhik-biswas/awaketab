@@ -14,7 +14,7 @@ Status: **approved final design (31 October 2026), being implemented.** It repla
 
 **Match the boards pixel for pixel.** Every size, gap, radius, weight, colour and string comes from the board source. When the board and this file disagree, the board wins and this file is fixed.
 
-Stack: **Next.js 16 (App Router) + Tailwind CSS 4 + shadcn/ui + TypeScript** in `apps/site`, `next-themes` with `light`, `dark`, `oled` and system, fonts via `next/font/google`, `lucide-react` 0.460. `apps/web` (Astro) stays live until `apps/site` reaches parity, then retires.
+Stack: **Next.js 16 (App Router) + Tailwind CSS 4 + shadcn/ui + TypeScript** in `apps/site`, `next-themes` with `light`, `dark`, `oled` and system, fonts via `next/font/google`, `lucide-react` 0.460.
 
 ---
 

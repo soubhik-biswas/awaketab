@@ -8,6 +8,8 @@ Status: v1.2 · 2026-09-27 (Clear Night redesign, B9: §14) · Owner: Soubhik
 
 Related docs: `00-conventions.md` §5, §6, §8, §9 · `04-engine-spec.md` (session layer reused) · `08-data-storage.md` §3 · `09-monetization-impl.md` §2 (licence reuse) · `13-testing-strategy.md` §7 · `17-launch-checklist.md` (store submission).
 
+> **Implementation note.** §13 and §14 describe the extension while it read tokens, strings and fonts from the Astro site (`apps/web`), which was removed in November 2026. Since the Volt rebuild (§15) the extension is self-contained.
+
 ---
 
 ## 1. Scope and non-goals
@@ -230,9 +232,9 @@ Times follow the extension clock setting (12-hour with AM/PM in English, `00-con
 
 ## 15. Volt redesign (31 Oct 2026)
 
-Built from the extension board of the Volt handoff (install → pin → popup → badge, the notification and the store assets), carrying over the Solar Green rework of the same board; decisions are in `docs/redesign/DECISIONS.md` under Volt. The extension no longer reads anything from the retiring Astro site at run time.
+Built from the extension board of the Volt handoff (install → pin → popup → badge, the notification and the store assets), carrying over the Solar Green rework of the same board; decisions are in `docs/redesign/DECISIONS.md` under Volt. The extension no longer reads anything from the website's code.
 
-**Self-contained.** Tokens: `src/styles/tokens.css` holds every `--at-*` token the pages use, in Volt values (light porcelain `#F5F5FA` with `#D9D9E5` lines, midnight dark, OLED), plus the welcome scene palette (`--at-scene-*`) and the app tile (`--at-app-*`). Strings: `locales/shared/<locale>.json` holds the strings shared with the website's tool (pill copy, presets, settings, Pro), `locales/<locale>.json` the extension's own `ext.*` copy; `scripts/i18n.mjs` merges them as before. Mark: `src/mark.ts` (64 grid, r 21, 70° gap, 84° small cut), painted into `[data-mark-slot]` (`data-size`, `data-state`, `data-glow="0"`, `data-small`). Icons: Lucide 0.460 inlined from the extension's own `lucide-static`. The locale list and Pro prices come from `apps/site` (`i18n/locales.ts`, `lib/pro/plans.ts`). Build tooling that still reads `apps/web`: the Polar build switch and support matrix in `wxt.config.ts`, the key check in `zip`, the e2e licence fixture and the store-image renderer's satori and Noto packages.
+**Self-contained.** Tokens: `src/styles/tokens.css` holds every `--at-*` token the pages use, in Volt values (light porcelain `#F5F5FA` with `#D9D9E5` lines, midnight dark, OLED), plus the welcome scene palette (`--at-scene-*`) and the app tile (`--at-app-*`). Strings: `locales/shared/<locale>.json` holds the strings shared with the website's tool (pill copy, presets, settings, Pro), `locales/<locale>.json` the extension's own `ext.*` copy; `scripts/i18n.mjs` merges them as before. Mark: `src/mark.ts` (64 grid, r 21, 70° gap, 84° small cut), painted into `[data-mark-slot]` (`data-size`, `data-state`, `data-glow="0"`, `data-small`). Icons: Lucide 0.460 inlined from the extension's own `lucide-static`. The locale list and Pro prices come from `apps/site` (`i18n/locales.ts`, `lib/pro/plans.ts`). Shared build inputs live outside the website: the Polar build switch in `scripts/polar-server.mjs` and the support matrix in `apps/extension/data/support-matrix.json` (both read by `wxt.config.ts`), and the key check `scripts/check-keys.mts`, which `zip` runs.
 
 **Type.** Geist for UI and digits, Geist Mono for kickers, Archivo (variable, wdth 62–125, self-hosted with its OFL licence) at 112 % width for the wordmark (800, −2 %), the welcome headline (60 / 1.02, 800, −4 %), section heads and the options title. No page requests a font server.
 

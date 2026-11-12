@@ -8,6 +8,8 @@ Status: v1.0 · 2026-09-07 · Owner: Soubhik
 
 Identifiers not present in `00-conventions.md` are marked **PROPOSED** and collected in §9 at the end.
 
+> **Implementation note.** This spec was first built in the Astro site (`apps/web`), removed in November 2026; the live site is Next.js in `apps/site` on Cloudflare Workers (`03-architecture.md` ADR-015). Paths under `apps/web` or its `src/`, `.astro` components, Pages Functions and `pnpm -F web` commands below describe that old implementation; the behaviour, identifiers and copy they specify still apply. The licence, checkout and webhook code is now in `apps/site/lib/server` and `apps/site/app/api`; the ad slot is `apps/site/components/site/ad-slot.tsx`.
+
 ---
 
 ## 1. Principles that bind every section
@@ -198,7 +200,7 @@ export async function signES256(claims: LicenseClaims, privateJwk: JsonWebKey): 
 
 The private key is the secret `LICENSE_SIGNING_KEY` (JWK JSON, **PROPOSED**) and its version `LICENSE_SIGNING_VER` (**PROPOSED**). Public keys ship in `@awaketab/core` as `LICENSE_PUBLIC_KEYS: Record<number, JsonWebKey>` (**PROPOSED**); rotation is in `14-devops.md` §10.
 
-**Production never trusts the dev key (as built, M9, `LAUNCH-AUDIT.md` N-03).** The dev pair (`ver` 1) has its private half committed in `apps/web/.dev.vars.example`, so anyone could sign a Pro token with it. `LICENSE_PUBLIC_KEYS` is `PRODUCTION_LICENSE_PUBLIC_KEYS` plus the dev key only when the bundler defines `__AT_LICENSE_DEV_KEY__` as true: dev, test and `PUBLIC_POLAR_SERVER=sandbox` builds. Web, embed and extension bundles built with `PUBLIC_POLAR_SERVER=production` contain no trace of it. `scripts/check-keys.mts` fails a production build that has no production key, lists the dev key, or ships its coordinates anywhere in the output. `pnpm keys:prod` prints a fresh pair (next `ver`, 2 for the first) without writing it to disk: the public JWK goes into `PRODUCTION_LICENSE_PUBLIC_KEYS`, the private JWK into the `LICENSE_SIGNING_KEY` secret, the `ver` into `LICENSE_SIGNING_VER` (steps in `14-devops.md` §10).
+**Production never trusts the dev key (as built, M9, `LAUNCH-AUDIT.md` N-03).** The dev pair (`ver` 1) has its private half committed in `scripts/dev-license-key.json`, so anyone could sign a Pro token with it. `LICENSE_PUBLIC_KEYS` is `PRODUCTION_LICENSE_PUBLIC_KEYS` plus the dev key only when the bundler defines `__AT_LICENSE_DEV_KEY__` as true: dev, test and `PUBLIC_POLAR_SERVER=sandbox` builds. Web, embed and extension bundles built with `PUBLIC_POLAR_SERVER=production` contain no trace of it. `scripts/check-keys.mts` fails a production build that has no production key, lists the dev key, or ships its coordinates anywhere in the output. `pnpm keys:prod` prints a fresh pair (next `ver`, 2 for the first) without writing it to disk: the public JWK goes into `PRODUCTION_LICENSE_PUBLIC_KEYS`, the private JWK into the `LICENSE_SIGNING_KEY` secret, the `ver` into `LICENSE_SIGNING_VER` (steps in `14-devops.md` §10).
 
 Offline verification (`@awaketab/core/license.ts`, shared by web and extension):
 

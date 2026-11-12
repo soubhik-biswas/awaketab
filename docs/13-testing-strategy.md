@@ -6,7 +6,7 @@ Status: v1.4 · 2026-09-28 · Owner: Soubhik
 
 Related docs: `04-engine-spec.md` (what is being tested) · `08-data-storage.md` §8 (fixtures) · `06-content-seo-spec.md` (SEO rules) · `09-monetization-impl.md` (licence/ads) · `14-devops.md` (CI gating) · `00-conventions.md` §11 (budgets).
 
-> **Current scope (31 October 2026).** [Deployment](DEPLOYMENT.md) and the [README testing section](../README.md#testing-and-quality) describe the active Next.js site and current CI. Astro-specific checks and the site browser matrix below describe the retained `apps/web` implementation; the site browser matrix is paused. The current Lighthouse targets are in §7 and the Glance extension checks are in §10.
+> **Scope.** The site is the Next.js app in `apps/site`; the Astro site (`apps/web`) was removed in November 2026. §1 lists the suites that run now. Sections that describe the Astro suites (its DOM tests under `apps/web/test`, the site browser matrix in §5, the SEO checks over `dist/` in §8, the Pages Functions tests in §9 and the zero-hydration size check) record that old implementation; the site browser matrix returns with the Next site's own end-to-end suite. The current Lighthouse targets are in §7 and the Glance extension checks are in §10.
 
 ---
 
@@ -14,17 +14,15 @@ Related docs: `04-engine-spec.md` (what is being tested) · `08-data-storage.md`
 
 | Layer | Tool | Runs on | Blocks merge? |
 |---|---|---|---|
-| Types | `pnpm typecheck` (`pnpm -r typecheck`): `tsc --noEmit` per package; for `apps/web`, `astro check` plus `tsc -p functions/tsconfig.json` (Pages Functions against `@cloudflare/workers-types` only, no DOM or Node) and `tsc -p functions/tsconfig.test.json` (the Functions suites and `test/functions/harness.ts`, Workers + Node + DOM) | every PR | yes |
-| Dead code | `pnpm knip` (Knip, config in `knip.json`; part of `pnpm lint`): unused files, exports, types and dependencies in every workspace. Entry points are the Astro pages, the Pages Functions, the build scripts, the tests and the published package exports; files read by path (the OG fonts) and the vendored shadcn/ui and ad-config exports are the only ignores | every PR | yes |
-| Unit (`packages/*`, `apps/web/src/lib`) | Vitest + fake timers | every PR | yes |
-| DOM/component (`apps/web/src/tool`) | Vitest + happy-dom | every PR | yes |
-| Pages Functions | Vitest (node) against the handlers with in-memory KV / Analytics Engine / Polar fakes (`apps/web/test/functions/harness.ts`; §9 says why not Miniflare) | every PR | yes |
-| E2E (chromium) | Playwright | every PR (preview URL) | yes |
-| E2E (firefox, webkit) + visual regression | Playwright | nightly + release | release only |
-| Accessibility | axe-core in Playwright + manual SR checklist | every PR (axe) | yes (axe) |
-| Performance | Lighthouse CI + `size-limit` (packages) + `pnpm size` (`apps/web/scripts/size.mjs` over `dist/`, incl. the zero-hydration check) | every PR (size) / preview (LHCI) | yes |
-| SEO build checks | custom Vitest suite over `dist/` | every PR | yes |
-| Extension | Vitest + Playwright (extension loaded) | PR touching `apps/extension` | yes |
+| Types | `pnpm typecheck` (`pnpm -r typecheck`): `tsc --noEmit` per package and for `apps/site`; `wxt prepare && tsc --noEmit` for the extension | every PR | yes |
+| Dead code | `pnpm knip` (Knip, config in `knip.json`; part of `pnpm lint`): unused files, exports, types and dependencies in every workspace. Entry points are the Next.js routes, the scripts, the tests and the published package exports; the vendored shadcn/ui files and the dependencies only they use are the only ignores | every PR | yes |
+| Unit (`packages/*`, `scripts/`, `apps/extension/test`) | Vitest + fake timers + happy-dom (root `vitest.config.ts`, `pnpm test:unit`) | every PR | yes |
+| Site (`apps/site`) | Vitest + happy-dom (`apps/site/vitest.config.ts`, `pnpm test:site`): faces, session, surfaces, embed, Pro plans, auth helpers, metadata and deployment settings, and the API route handlers against in-memory fakes (`lib/server/api.test.ts`, `checkout.test.ts`) | every PR | yes |
+| E2E (extension, chromium) | Playwright (`pnpm test:e2e:ext`, `.github/workflows/e2e.yml`) with axe-core, plus `pnpm -F extension zip:check` | every PR | yes |
+| E2E (site) | None yet; check visible changes by hand against the boards | — | — |
+| Accessibility | axe-core in the extension Playwright suite; `NEXT_PUBLIC_AXE=1` logs WCAG 2.2 AA violations in the site during development; manual SR checklist | every PR (extension axe) | yes (extension axe) |
+| Performance | Lighthouse CI (`lighthouserc.cjs`) + `size-limit` (packages, `pnpm size`) | every PR (size) / deployed site (LHCI) | yes (size) |
+| Dependencies | `pnpm audit --audit-level high` | nightly | — |
 | Device matrix | manual, templated | before each phase exit and each browser major | gate |
 
 Coverage targets: `@awaketab/wake` 100% of transition rows; `@awaketab/core` ≥ 90% lines; functions ≥ 90%; UI components ≥ 70%.
@@ -106,6 +104,8 @@ E6 additions (as built, 2026-09-26):
 
 ## 4. DOM/component tests (happy-dom)
 
+> Records the removed Astro site's suites (`apps/web`); the suites that run now are listed in §1.
+
 Pill copy for each of the seven states equals `en.json`; ring `stroke-dashoffset` math for 0/50/100% and indefinite; `CustomDurationDialog` validation (0 → error; 7 d + 1 min → max error); `UntilTimePicker` shows "Tomorrow" when the wall time already passed; `ExtendPrompt` default 30 min and auto-stop after 5 min; `SecondTabWarning` appears when a fake `BroadcastChannel` peer says `held`; `RatingPrompt` shows only when `meta.sessionCount ≥ 5` and `ratingPrompt.action` is null.
 
 M6 engagement-layer files (Vitest + happy-dom; `apps/web/test/tool/ctx-helper.ts` builds a fake `IToolCtx`; `vitest.setup.ts` loads the English catalog into `setCatalog()` because the island no longer bundles strings):
@@ -156,6 +156,8 @@ Pro pages (`/pro/activate`, `/pro/manage`; Vitest + happy-dom over the pages' ma
 ---
 
 ## 5. End-to-end (Playwright)
+
+> Records the removed Astro site's suites (`apps/web`); the suites that run now are listed in §1.
 
 Setup: `playwright.config.ts` sets `serviceWorkers: 'block'` for every test, because `page.route()` cannot see requests a service worker makes and an active SW would silently bypass every API mock; the offline journey opts back in with `test.use({ serviceWorkers: 'allow' })`. `page.addInitScript` installs a controllable fake `navigator.wakeLock` (exposes `window.__at.releaseAll()`, `window.__at.rejectNext('NotAllowedError')`) and a `document.visibilityState` override with a `window.__at.setVisibility('hidden')` helper that also dispatches `visibilitychange`.
 
@@ -219,7 +221,7 @@ axe-core on every template (home, preset page, one per collection, `/pro`, `/emb
 ## 7. Performance
 
 - `size-limit`: `@awaketab/wake` ≤ 3.4 KB gz; tool island critical path ≤ 15 KB gz; total JS on `/` ≤ 40 KB gz; content pages ≤ 60 KB before ads.
-- `pnpm size` (`apps/web/scripts/size.mjs`, after `pnpm -F web build`) prints one JSON report and exits non-zero on any breach: `criticalJs` ≤ 15,360 B gz (the `<script src>` chunks `index.html` loads), `totalJs` ≤ 40,960 B gz (every `dist/_astro/*.js`), `totalCss` ≤ 20,480 B gz (inlined `<style>`), and — since `03-architecture.md` ADR-013 — `hydrated: []` (no built HTML anywhere under `dist/` contains `<astro-island`) and `reactChunks: []` (no `dist/_astro/` file matches `react.*.js`, `jsx-runtime.*.js` or `client.*.js`). A non-empty `hydrated` or `reactChunks` list is a failure even when the byte budgets pass: shadcn/ui is a build-time renderer and React must never ship. Reference values after adoption: `criticalJs` 14,876, `totalJs` 30,428, `totalCss` ≈ 7,300. Since M6 `criticalJs` is the entry scripts **plus their static-import closure** (`from"./x.js"` / `import"./x.js"`; dynamic `import()` excluded), and the report's `files` lists that closure — previously split-out shared chunks were not counted. Values at M6 close: `criticalJs` 14,415, `totalJs` 39,777, `totalCss` 12,303.
+- Removed with the Astro site: `pnpm size` used to run `apps/web/scripts/size.mjs` after `pnpm -F web build`; it now runs only the packages' `size-limit` checks. The old gate printed one JSON report and exited non-zero on any breach: `criticalJs` ≤ 15,360 B gz (the `<script src>` chunks `index.html` loads), `totalJs` ≤ 40,960 B gz (every `dist/_astro/*.js`), `totalCss` ≤ 20,480 B gz (inlined `<style>`), and — since `03-architecture.md` ADR-013 — `hydrated: []` (no built HTML anywhere under `dist/` contains `<astro-island`) and `reactChunks: []` (no `dist/_astro/` file matches `react.*.js`, `jsx-runtime.*.js` or `client.*.js`). A non-empty `hydrated` or `reactChunks` list is a failure even when the byte budgets pass: shadcn/ui is a build-time renderer and React must never ship. Reference values after adoption: `criticalJs` 14,876, `totalJs` 30,428, `totalCss` ≈ 7,300. Since M6 `criticalJs` is the entry scripts **plus their static-import closure** (`from"./x.js"` / `import"./x.js"`; dynamic `import()` excluded), and the report's `files` lists that closure — previously split-out shared chunks were not counted. Values at M6 close: `criticalJs` 14,415, `totalJs` 39,777, `totalCss` 12,303.
 - **Since M8** (`00-conventions.md` §13.10) the gate measures pages, not the chunk folder. Entries are a page's same-origin `<script type="module" src>` tags. `totalJs` ≤ 40,960 is the closure over static **and** dynamic `import("./x.js")` edges from `index.html`'s entries — everything the tool page can ever load — instead of every `dist/_astro/*.js` (which charged `/pro` scripts, and would have charged the embed app, to the tool page). New gates: `embedJs` ≤ 25,600 (full closure from `embed/cook.html`) and `loaderJs` ≤ 3,072 (`dist/embed.js`). The report adds `lazyFiles` and `embedFiles`; closure helpers live in `scripts/size-lib.mjs` (tested by `scripts/size.test.ts`). Old vs new on the M8 build: `totalJs` 39,805 (old rule, pre-M8 build) → 37,877 (new rule, same pre-M8 build) → 39,111 (M8: + the lazy kiosk module and the core licence verifier it shares); `criticalJs` 14,453 → 14,508 (+55 B: the lazy `#lic=`/`logo=` hook in `main.ts`); `embedJs` 13,843; `loaderJs` 2,356; `totalCss` 12,679.
 - `AT_DIST=<dir>` makes `size.mjs`, `prune-unreferenced.mjs`, `sitemap.mjs` and the SEO suite read an alternate output directory (`apps/web/dist-*`, git-ignored), so parallel verification builds can be measured without clobbering `dist/`; wrap concurrent builds in `node scripts/locked.mjs -- <cmd>` (`14-devops.md` §6).
 - Lighthouse CI (mobile, `--preset=desktop` also) on the preview URL for `/`, `/30m`, `/for/cooking`, `/guides/lock-screen-vs-sleep`, `/es/`: performance ≥ 95, a11y 100, best practices 100, SEO 100; budgets JSON asserts LCP ≤ 1.2 s (lab), TBT ≤ 100 ms, CLS = 0, zero third-party requests on tool routes.
@@ -232,6 +234,8 @@ axe-core on every template (home, preset page, one per collection, `/pro`, `/emb
 ---
 
 ## 8. SEO build checks (run over `dist/`)
+
+> Records the removed Astro site's suites (`apps/web`); the suites that run now are listed in §1.
 
 Every indexable HTML file has exactly one `<h1>`; `<title>` ≤ 60 chars (CJK ≤ 30), description 50–155; one canonical; hreflang set is reciprocal and includes self + `x-default`; JSON-LD parses and matches `schema-dts` types for the page type; `aggregateRating` present only when `data/ratings.json` has ≥ 25 ratings; `sitemap-index.xml` lists every indexable URL and no `noindex` URL; `robots.txt` has the Sitemap line; no page links to a 404 (internal link check); `/until/*` canonicalises to `/`; `/pip`, `/embed/*` carry `noindex`.
 
@@ -247,6 +251,8 @@ Translated content (E6-T05/T06, `apps/web/test/seo/i18n-content.test.ts`): 70 lo
 
 ## 9. Pages Functions tests (`pnpm test:functions`)
 
+> Records the removed Astro site's API suites (`apps/web/functions`); the site's route handlers are now tested by `apps/site/lib/server/*.test.ts` (§1).
+
 **Approach.** `@cloudflare/vitest-pool-workers` (0.22.0, latest as of 2026-09-26) peers `vitest ^4.1`; the repo pins vitest 5.0.0, so the suites call each `onRequest*` handler in Node with a realistic `EventContext` and faithful fakes from `apps/web/test/functions/harness.ts`: `MemoryKv` (Cloudflare validation — `expirationTtl ≥ 60`, key ≤ 512 bytes, string values, TTL expiry on the fake clock, injectable put failures, full write log), `MemoryAnalytics` (1 index ≤ 96 B, ≤ 20 blobs ≤ 16 KB total, ≤ 20 doubles), and `FakePolar` (stateful sandbox: validate / activate with the activation limit / deactivate; checkouts shaped like Polar's `Checkout`, with no licence key; `GET /v1/orders/?checkout_id=`, `GET /v1/benefit-grants/?customer_id=`, `GET /v1/license-keys/{id}` as `ListResource` / `LicenseKeyWithActivations`; grants that are `missing` or `keyless` until Polar "catches up"; bearer + organisation checks; HTTP and network outages, or a 5xx on one path via `failPath`) behind a stubbed `fetch`. Secrets come from `apps/web/.dev.vars.example`; its signing pair matches `LICENSE_PUBLIC_KEYS[1]`, so minted tokens are verified with `verifyLicenseToken` from `@awaketab/core`. `ipTraces()` scans every KV key/value written (including overwritten ones) and every AE point for the request IP and its unsalted SHA-256. Revisit Miniflare when the pool supports vitest 5. No devDependencies were added.
 
 | Route | File | Covered |
@@ -261,7 +267,7 @@ Translated content (E6-T05/T06, `apps/web/test/seo/i18n-content.test.ts`): 70 lo
 | `GET /api/health` | `api/health.test.ts` | `{ ok, version }`, `no-store` |
 | `GET /api/embed/config` | `api/embed/config.test.ts` | owned by the embed suite (unknown domain → `{ licensed: false }` cached) |
 
-**KV ops scripts (F-02).** `apps/web/scripts/kv/test/kv-ops.test.ts` and `cloudflare.test.ts` (in `pnpm test:unit`, node environment) cover the backup format (round-trip, truncated / duplicate / malformed rejection), the AES-GCM backup envelope (wrong key and tampering fail closed, no plaintext in the bytes), the export across listing pages (durable prefixes only, `expiration` and metadata kept, verified after encryption), the restore plan (create / same / conflict / expired / prefix filter; writes only missing keys unless `--overwrite`; never deletes), `kv:reencrypt` (dry run writes nothing; only `keyEnc` changes; second run is a no-op; resumes after an interrupted batch; unknown-key and non-JSON records never written; a record changed between read and write is skipped), the CLI guards (dry run by default, production refused without `--yes-production`, `KV_LICENSES_ID` is always production, exit codes 0/1/2, no record counts in backup logs) and the REST client against a fake Cloudflare API (cursor pages, bulk reads with per-key fallback, key encoding, 429 `Retry-After` / 5xx / network retries, a missing namespace is an error and never an empty KV, rejected bulk writes, backup → restore drill). They use their own in-memory store (`test/memory-store.ts`) rather than the harness `MemoryKv`, which fakes the Workers binding and keeps no metadata or expirations in its listing. `apps/web/functions/_lib/kv-ops-interop.test.ts` (in `pnpm test:functions`) checks that the script's `keyEnc` format and the functions' `encryptUtf8` / `decryptUtf8` open each other's output.
+**KV ops scripts (F-02).** `scripts/kv/test/kv-ops.test.ts` and `cloudflare.test.ts` (in `pnpm test:unit`, node environment) cover the backup format (round-trip, truncated / duplicate / malformed rejection), the AES-GCM backup envelope (wrong key and tampering fail closed, no plaintext in the bytes), the export across listing pages (durable prefixes only, `expiration` and metadata kept, verified after encryption), the restore plan (create / same / conflict / expired / prefix filter; writes only missing keys unless `--overwrite`; never deletes), `kv:reencrypt` (dry run writes nothing; only `keyEnc` changes; second run is a no-op; resumes after an interrupted batch; unknown-key and non-JSON records never written; a record changed between read and write is skipped), the CLI guards (dry run by default, production refused without `--yes-production`, `KV_LICENSES_ID` is always production, exit codes 0/1/2, no record counts in backup logs) and the REST client against a fake Cloudflare API (cursor pages, bulk reads with per-key fallback, key encoding, 429 `Retry-After` / 5xx / network retries, a missing namespace is an error and never an empty KV, rejected bulk writes, backup → restore drill). They use their own in-memory store (`test/memory-store.ts`) rather than the harness `MemoryKv`, which fakes the Workers binding and keeps no metadata or expirations in its listing. `scripts/kv/test/interop.test.ts` (in `pnpm test:unit`) checks that the script's `keyEnc` format and the site's `encryptUtf8` / `decryptUtf8` (`apps/site/lib/server/license.ts`) open each other's output.
 
 **Typecheck (F-08 follow-up).** Until 2026-09-26 `astro check` excluded `functions/` and nothing else typechecked it, which is how the fictional `checkout.license_key` (F-08) and two `exactOptionalPropertyTypes` errors in `validate.ts` / `deactivate.ts` went unnoticed. `apps/web/functions/tsconfig.json` and `tsconfig.test.json` now run in `pnpm -F web typecheck` and so in CI (§1).
 

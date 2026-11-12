@@ -75,12 +75,10 @@ def linked_numbers(body, repo):
 
 
 def pr_status(pr, action, review=None):
-    if pr['base']['ref'] not in ('play', 'main'):
+    if pr['base']['ref'] != 'main':
         return None
     if action == 'closed':
-        if pr.get('merged'):
-            return 'Merged' if pr['base']['ref'] == 'main' else 'In testing'
-        return None
+        return 'Merged' if pr.get('merged') else None
     if review and review.get('state') == 'changes_requested':
         return 'Changes requested'
     if pr.get('draft'):

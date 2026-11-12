@@ -8,6 +8,8 @@ Status: v1.0 · 2026-09-07 · Owner: Soubhik
 
 **Reading the tables.** "Pri" is the requirement priority (`P0` launch blocker · `P1` launch · `P2` phase P3 · `P3` later). "Phase" is the roadmap phase from `00-conventions.md` §12 (`P1` weeks 1–2 · `P2` weeks 3–5 · `P3` weeks 6–9 · `P4` ongoing). The two schemes share letters but are independent columns.
 
+> **Implementation note.** This spec was first built in the Astro site (`apps/web`), removed in November 2026; the live site is Next.js in `apps/site` on Cloudflare Workers (`03-architecture.md` ADR-015). Paths under `apps/web` or its `src/`, `.astro` components, Pages Functions and `pnpm -F web` commands below describe that old implementation; the behaviour, identifiers and copy they specify still apply. Acceptance criteria that name Astro files apply to their `apps/site` successors.
+
 ---
 
 ## 1 Overview, goals and non-goals
@@ -143,7 +145,7 @@ Each flow lists the visible steps and the state or event changes that must occur
 |---|---|---|---|---|
 | FR-UI-01 | The status pill must render the exact copy in Table 4.3.1 for each state, expose state through text and icon (never colour alone), use the pill colour tokens from `00-conventions.md` §5.1, and announce changes via `aria-live="polite"`. Only `held` and `fallback` may display a running countdown. | P0 | P1 | Given each of the seven states, when rendered, then the visible text equals the table row and the `data-state` attribute equals the state name.<br>Given `lost`, when rendered, then the countdown is visible but marked paused (no running ring animation). |
 | FR-UI-02 | The ring (progress ring with glowing dot) must be inline SVG in the static HTML so it is the LCP element, must show progress for `duration`/`until` plans and a slow idle pulse for `indefinite`, and must respect `prefers-reduced-motion`. | P0 | P1 | Given a Lighthouse mobile run, when LCP is measured, then the LCP element is the ring SVG and LCP ≤ 1.2 s.<br>Given reduced motion, when `held`, then the dot does not animate and progress updates once per minute. |
-| FR-UI-03 | All feedback must use non-blocking toasts (bottom on mobile, bottom-right on desktop), never `alert()`/`confirm()`; informational toasts auto-dismiss after 5 s (warnings 8 s) plus 60 ms per character, paused while hovered, focused or the tab is hidden; error toasts and toasts with an action persist until dismissed; at most 3 stacked (docs/05 §3.7). | P0 | P1 | Given a code search for `alert(`, when CI runs, then zero matches in `apps/web`.<br>Given 4 toasts fired, when displayed, then the oldest informational toast is removed. |
+| FR-UI-03 | All feedback must use non-blocking toasts (bottom on mobile, bottom-right on desktop), never `alert()`/`confirm()`; informational toasts auto-dismiss after 5 s (warnings 8 s) plus 60 ms per character, paused while hovered, focused or the tab is hidden; error toasts and toasts with an action persist until dismissed; at most 3 stacked (docs/05 §3.7). | P0 | P1 | Given a code search for `alert(`, when CI runs, then zero matches in `apps/site`.<br>Given 4 toasts fired, when displayed, then the oldest informational toast is removed. |
 | FR-UI-04 | Keyboard shortcuts must be exactly: `Space` toggle · `1`–`6` presets `p15`…`p240` · `0` indefinite · `U` until… · `F` fullscreen · `D` cycle theme · `M` cycle ambient mode · `P` PiP · `S` Sounds sheet · `Esc` stop/close · `?` shortcuts overlay. Shortcuts must be inert while focus is in an input, and the overlay must list them with translated labels. | P1 | P1 | Given focus on the body, when `3` is pressed, then preset `p45` starts.<br>Given focus in the custom-duration input, when `1` is pressed, then the digit is typed and no preset changes. |
 | FR-UI-05 | Themes `auto`, `light`, `dark`, `oled` must be selectable via settings, `D`, and `theme=`; `auto` follows `prefers-color-scheme`; `oled` uses `#000000` backgrounds; the choice persists in `at.v1.settings.theme`; the first paint must use the stored theme (no flash). | P1 | P1 | Given `theme: oled` stored, when the page loads, then the first painted background is `#000000` (inline script before CSS).<br>Given `auto` and OS dark, when loaded, then dark tokens apply. |
 | FR-UI-06 | Fullscreen (`F` or button) must use the Fullscreen API on the tool container; `Esc` exits; the pill and countdown remain visible in fullscreen; on iOS Safari (no Fullscreen API for non-video) the button is hidden and the PWA install tip shown instead. | P1 | P1 | Given desktop Chrome, when `F` is pressed, then `document.fullscreenElement` is the tool container and the pill is visible. |
@@ -277,7 +279,7 @@ Each flow lists the visible steps and the state or event changes that must occur
 | FR-CONTENT-03 | The 12 `/on/`, 7 `/vs/`, 8 `/guides/` and 6 `/learn/` pages must exist with the slugs in `00-conventions.md` §7, each 600–1,000 words (`/learn/` may exceed), with tested statements marked by the test date and device. | P1 | P2–P3 | Given `/vs/nosleep-page`, when reviewed, then every claim about nosleep.page cites the observed source line or behaviour and date. |
 | FR-CONTENT-04 | `/learn/does-a-wake-lock-keep-teams-green` must state that presence follows input idle, that no source shows a wake lock resets it, and that AwakeTab ships no jiggler; the home FAQ links to it. | P1 | P2 | Given the page, when read, then it contains the test method, date and result, and no workaround suggestion. |
 | FR-CONTENT-05 | Trust pages `/about` (real name, testing setup, contact), `/privacy` (every `at.v1.*` key and every event listed; "no ads on the awake screen" statement), `/terms`, `/changelog` (monthly entries), `/support-matrix` (refreshed per major browser release), `/how-we-tested` (≥ 14 browser/OS combos) must ship. | P1 | P1–P3 | Given `/privacy`, when diffed against `00-conventions.md` §6 and §10, then every key and event is described. |
-| FR-CONTENT-06 | Content lives in Astro content collections (MDX) per locale with frontmatter `title`, `description`, `preset`, `mode`, `lastVerified`, `hub`, `translationOf`; the build fails on missing required fields. | P1 | P2 | Given a `/for/` MDX file without `lastVerified`, when built, then the build errors with the file path. |
+| FR-CONTENT-06 | Content lives in content collections (Markdown in `apps/site/content`, schema in `apps/site/content-collections.ts`) per locale with frontmatter `title`, `description`, `preset`, `mode`, `lastVerified`, `hub`, `translationOf`; the build fails on missing required fields. | P1 | P2 | Given a `/for/` MDX file without `lastVerified`, when built, then the build errors with the file path. |
 
 ### 4.11 PRO — plans, licences, gates
 
@@ -336,7 +338,7 @@ Each flow lists the visible steps and the state or event changes that must occur
 | FR-LIB-03 | `/library` must host a live demo, the README support matrix, install snippets, a comparison with NoSleep.js (`/learn/nosleep-js-vs-wake-lock`), and GitHub Sponsors link; releases use changesets and semantic versioning with a CHANGELOG. | P2 | P3 | Given a version bump, when released, then npm, GitHub release and `/changelog` all show the same version. |
 | FR-LIB-04 | Both packages must ship unit tests (Vitest) and browser tests (Playwright chromium/firefox/webkit) covering all transitions, with ≥ 90 % line coverage on the state machine. | P2 | P3 | Given CI, when tests run, then the transition matrix in `04-engine-spec.md` is fully exercised. |
 
-### 4.16 API — Pages Functions
+### 4.16 API — route handlers
 
 | ID | Requirement | Pri | Phase | Acceptance criteria |
 |---|---|---|---|---|
@@ -378,7 +380,7 @@ Each flow lists the visible steps and the state or event changes that must occur
 | NFR-COMPAT-02 | Document PiP: Chrome/Edge ≥ 116; Battery API: Chromium only; Notification API: not in iOS Safari tabs (installed web apps only); each feature is detected, never sniffed by UA for behaviour (UA class is used for copy only). | Feature-detection review |
 | NFR-I18N-01 | Every string externalised; 100 % key parity across 8 locales enforced in CI; native review sign-off before indexability; no text in images; layouts survive 200 % text length (de, hi) and CJK line breaking. | i18n lint; visual regression at 200 % |
 | NFR-SEO-01 | Static HTML for all indexable pages; canonical, hreflang and `x-default` reciprocal; sitemap index with `lastmod`; per-page OG image; no indexable URL with query parameters; 301 from all alternate domains and `www`. | SEO lint in CI; Screaming Frog crawl monthly |
-| NFR-OPS-01 | Preview deploy per PR; production via Cloudflare Pages Git integration; rollback within 5 minutes by redeploying the previous build; release notes in `/changelog`. | `14-devops.md` runbook |
+| NFR-OPS-01 | Preview deploy of any branch on demand (play.awaketab.com); production deploys from `main` to Cloudflare Workers; rollback within 5 minutes by redeploying the previous version; release notes in `/changelog`. | `DEPLOYMENT.md` |
 
 ---
 
@@ -504,7 +506,7 @@ Dashboards are SQL over Workers Analytics Engine, reviewed weekly; Search Consol
 |---|---|---|---|---|
 | Q1 | Confirm product name AwakeTab (vs NeverDim) and register domains | AwakeTab / NeverDim | Soubhik | P0 day 1 |
 | Q2 | Open-source scope: engine + library MIT only, or whole repo | Packages only / whole repo | Soubhik | P1 |
-| Q3 | Stack confirmation: Astro 5 + Cloudflare (canonical) vs Next.js + Vercel | Keep canonical | Soubhik | P0 |
+| Q3 | Stack confirmation: Astro 5 + Cloudflare (canonical) vs Next.js + Vercel | Resolved 30 Oct 2026: Next.js 16 on Cloudflare Workers (`03-architecture.md` ADR-015) | Soubhik | P0 |
 | Q4 | Analytics: first-party beacon (canonical) vs Cloudflare Web Analytics vs Plausible | Keep canonical; revisit at G3 | Soubhik | P1 |
 | Q5 | `lost_timeout` threshold (PRD proposes 6 h) | 2 h / 6 h / 24 h | Soubhik | P1 |
 | Q6 | `custom` maximum (PRD proposes 7 days) | 24 h / 7 d / 30 d | Soubhik | P1 |

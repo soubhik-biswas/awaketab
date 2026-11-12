@@ -7,8 +7,8 @@ import { createRequire } from 'node:module';
 const ts = createRequire(import.meta.url)('typescript');
 
 const FIX = process.argv.includes('--fix');
-const EXT = /\.(?:ts|tsx|mts|cts|js|mjs|cjs|astro|css)$/u;
-const SKIP = /^apps\/web\/public\/|\/(?:dist|\.astro|\.wxt|\.output)\//u;
+const EXT = /\.(?:ts|tsx|mts|cts|js|mjs|cjs|css)$/u;
+const SKIP = /\/(?:dist|\.wxt|\.output)\//u;
 const DIRECTIVE =
   /^\/\*[*!]?\s*(?:eslint|stylelint|global\s|globals\s|istanbul|c8\s|v8\signore|@ts-|@vitest-environment|prettier-ignore|@vite-ignore|[#@]__PURE__|@license|@preserve)/u;
 const CONFIG_TYPE = /^\/\*\*\s*@type\s*\{[^\n]*\}\s*\*\/$/u;
@@ -79,37 +79,6 @@ function cssComments(text) {
   return out;
 }
 
-function markupComments(text) {
-  const out = [];
-  for (const m of text.matchAll(/<!--[\s\S]*?-->/gu)) out.push([m.index, m.index + m[0].length]);
-  for (const m of text.matchAll(/\{\s*\/\*[\s\S]*?\*\/\s*\}/gu)) out.push([m.index, m.index + m[0].length]);
-  return out;
-}
-
-function astroComments(text) {
-  const ranges = [];
-  const shift = (list, offset) => list.map(([a, b]) => [a + offset, b + offset]);
-  let body = 0;
-  const fm = /^---\r?\n([\s\S]*?)\r?\n---/u.exec(text);
-  if (fm) {
-    const start = text.indexOf(fm[1]);
-    ranges.push(...shift(scriptComments(fm[1], ts.ScriptKind.TS), start));
-    body = fm.index + fm[0].length;
-  }
-  const blocks = [];
-  for (const m of text.slice(body).matchAll(/<(script|style)(\s[^>]*)?>([\s\S]*?)<\/\1>/gu)) {
-    const [whole, tag, attrs = '', inner] = m;
-    const start = body + m.index + whole.indexOf('>') + 1;
-    blocks.push([body + m.index, body + m.index + whole.length]);
-    if (tag === 'style') ranges.push(...shift(cssComments(inner), start));
-    else if (!/type="application\/(?:ld\+)?json"/u.test(attrs))
-      ranges.push(...shift(scriptComments(inner, ts.ScriptKind.TS), start));
-  }
-  const inBlock = ([a]) => blocks.some(([s, e]) => a >= s && a < e);
-  ranges.push(...shift(markupComments(text.slice(body)), body).filter((r) => !inBlock(r)));
-  return ranges;
-}
-
 // A comment that is the only content of a block keeps its meaning as one `//` line.
 function asLineComment(comment) {
   return `// ${comment
@@ -163,11 +132,7 @@ let total = 0;
 const report = [];
 for (const file of files) {
   const text = readFileSync(file, 'utf8');
-  const all = file.endsWith('.astro')
-    ? astroComments(text)
-    : file.endsWith('.css')
-      ? cssComments(text)
-      : scriptComments(text, scriptKind(file));
+  const all = file.endsWith('.css') ? cssComments(text) : scriptComments(text, scriptKind(file));
   const ranges = all.filter(([a, b]) => !keep(text.slice(a, b), file));
   if (ranges.length === 0) continue;
   total += ranges.length;
@@ -179,7 +144,7 @@ if (FIX) {
   console.log(`comments: removed ${String(total)} from ${String(report.length)} files`);
 } else if (total > 0) {
   console.error(
-    `comments: ${String(total)} block, JSDoc or HTML comments; only // comments are allowed (run node scripts/comments.mjs --fix)`,
+    `comments: ${String(total)} block or JSDoc comments; only // comments are allowed (run node scripts/comments.mjs --fix)`,
   );
   console.error(report.join('\n'));
   process.exit(1);

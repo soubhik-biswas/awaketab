@@ -29,10 +29,10 @@ class WorkflowTests(unittest.TestCase):
         pr = {'base': {'ref': 'main'}, 'merged': True}
         self.assertEqual(pr_status(pr, 'closed'), 'Merged')
         pr['base']['ref'] = 'play'
-        self.assertEqual(pr_status(pr, 'closed'), 'In testing')
+        self.assertIsNone(pr_status(pr, 'closed'))
 
     def test_draft_review_and_abandoned_prs(self):
-        pr = {'base': {'ref': 'play'}, 'draft': True, 'merged': False}
+        pr = {'base': {'ref': 'main'}, 'draft': True, 'merged': False}
         self.assertEqual(pr_status(pr, 'opened'), 'In Progress')
         pr['draft'] = False
         self.assertEqual(pr_status(pr, 'ready_for_review'), 'In review')

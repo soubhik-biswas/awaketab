@@ -4,24 +4,26 @@ Status: v1.2 · 2026-09-26 · Owner: Soubhik
 
 **Purpose.** This document describes how AwakeTab is put together: the systems it talks to, the packages in the monorepo and what each owns, the runtime shape of the tool island, the build pipeline that turns MDX into ~60 × 8 static pages, the request flows for licences and analytics, the environments and their secrets, the security and performance models, and the fourteen architecture decisions (ADR-001…ADR-014) that explain why it looks this way. It is written so that a solo developer can open Cursor and scaffold the repo from it without guessing. Identifiers follow `00-conventions.md` exactly; anything new is marked **PROPOSED — add to 00-conventions.md**.
 
+> **Implementation.** This architecture was first built as an Astro site on Cloudflare Pages (`apps/web`), removed in November 2026. The live site is Next.js 16 in `apps/site`, deployed to Cloudflare Workers through OpenNext (ADR-015; `00-conventions.md` §3–§4 for the stack and layout, `DEPLOYMENT.md` for hosting). The system context, engine, packages, request flows and security rules still hold; the Astro-specific parts (the `apps/web` rows in §2–§4, the tool island internals, the §5 build pipeline and ADR-001, ADR-003, ADR-012, ADR-013 and ADR-014) record the old implementation. §1 and §7 describe the current one.
+
 **Related docs.** `00-conventions.md` (canonical names; wins on conflict) · `04-engine-spec.md` (lock and session state machines) · `08-data-storage.md` (storage keys, KV, Analytics Engine schema) · `12-library-spec.md` (`@awaketab/wake` as a public package) · `13-testing-strategy.md` · `14-devops.md`.
 
 ---
 
 ## 1. System context
 
-AwakeTab is a static site with a small serverless edge. Nothing in the product requires an account, a database, or a cookie. The browser does the real work (holding the Screen Wake Lock); the edge exists for three narrow jobs: accept anonymous analytics beacons, issue and re-validate Pro licence tokens, and answer embed-config lookups.
+AwakeTab is a website with a small serverless edge. Nothing in the free product requires an account or a cookie; sign-in exists only for Pro, which ships switched off. The browser does the real work (holding the Screen Wake Lock); the edge exists for three narrow jobs: accept anonymous analytics beacons, issue and re-validate Pro licence tokens, and answer embed-config lookups.
 
 | Actor / system | Role | Talks to us via |
 |---|---|---|
-| Visitor's browser tab | Runs the tool island; holds the wake lock; stores state in `localStorage` | HTML/JS from Cloudflare Pages; `POST /api/e` |
-| Installed PWA | Same code as the tab, launched standalone; Workbox precache makes tool pages work offline | Same as above |
+| Visitor's browser tab | Runs the tool; holds the wake lock; stores state in `localStorage` | HTML/JS from the Cloudflare Worker; `POST /api/e` |
+| Installed PWA | Same code as the tab, launched standalone; the service worker (`apps/site/worker/sw.ts`) precaches the offline pages | Same as above |
 | Document Picture-in-Picture window | Chromium-only floating pill; a same-origin document created by the tool island (`/pip` is the popup fallback content) | In-process |
 | Embed iframe (`/embed/cook`) | Cook Mode widget on third-party recipe sites; needs `allow="screen-wake-lock"` on the host `<iframe>` | `GET /api/embed/config?domain=` |
 | AwakeTab for Chrome (MV3) | Keeps the display awake with `chrome.power` even when the tab is hidden; shares `@awaketab/core` | `POST /api/license/*` (Pro), `POST /api/e` |
-| Cloudflare Pages | Static hosting, CDN, `_headers`, `_redirects`, preview deploys per PR | — |
-| Cloudflare Pages Functions | `/api/*` handlers (§7 of `00-conventions.md` §9) | — |
-| Cloudflare KV (binding `LICENSES`) | Licence records, embed configs, webhook idempotency keys, rate-limit counters | From Functions only |
+| Cloudflare Workers (`awaketab-site`, preview `awaketab-site-preview`) | The Next.js site through OpenNext: pages, static assets, `_headers`, and the `/api/*` route handlers (`00-conventions.md` §9) | — |
+| Cloudflare D1 (binding `AUTH_DB`) | Sign-in accounts and sessions (Better Auth) | From the route handlers only |
+| Cloudflare KV (binding `LICENSES`) | Licence records, embed configs, webhook idempotency keys, rate-limit counters | From the route handlers only |
 | Workers Analytics Engine (dataset `EVENTS`) | Append-only event store, 90-day retention, SQL API | From `/api/e` only |
 | Polar.sh | Merchant of record: hosted checkout, licence-key issuance, customer portal, webhooks | `POST /api/webhooks/polar`; server-to-server licence-key validation |
 | Ad networks (AdSense → Journey → Raptive/Mediavine) | Display ads on content pages only, after gate G1 | Loader module in the content layout |
@@ -39,8 +41,8 @@ flowchart LR
     Ext["AwakeTab for Chrome<br/>(MV3, chrome.power)"]
   end
   subgraph CF["Cloudflare"]
-    Pages["Pages (static)<br/>HTML · CSS · JS · _headers · _redirects"]
-    Fn["Pages Functions<br/>/api/*"]
+    Pages["Worker (Next.js via OpenNext)<br/>HTML · CSS · JS · _headers"]
+    Fn["Route handlers<br/>/api/*"]
     KV[("KV · LICENSES")]
     AE[("Analytics Engine · EVENTS")]
   end
@@ -308,9 +310,9 @@ The client never retries a 4xx. Events are dropped, not queued, when `settings.t
 
 | Environment | URL | How | Data |
 |---|---|---|---|
-| Local | `http://localhost:4321` (Astro dev) and `http://localhost:8788` (`wrangler pages dev` for Functions) | `pnpm dev` runs both; `.dev.vars` holds local secrets; Polar **sandbox** | Local KV namespace preview; AE writes are no-ops locally |
-| Preview | `https://<branch>.awaketab.pages.dev` | Cloudflare Pages Git integration per PR | Preview KV namespace; AE dataset `EVENTS` with `env='preview'` blob |
-| Production | `https://awaketab.com` | Merge to `main` → Pages production deploy | Production KV; AE `EVENTS` |
+| Local | `http://localhost:3000` | `pnpm dev` (`next dev`; `initOpenNextCloudflareForDev()` in `next.config.ts` gives it the Worker bindings from `wrangler.jsonc`); `apps/site/.dev.vars` holds local secrets; `pnpm -F site preview` runs the built Worker locally; Polar **sandbox** | Local wrangler bindings |
+| Preview | `https://play.awaketab.com` | Worker `awaketab-site-preview` (`env.preview` in `wrangler.jsonc`); the owner deploys any branch to it by hand (`DEPLOYMENT.md`) | Preview KV namespace, AE dataset `awaketab_events_preview`, D1 `awaketab-auth-preview`; Polar sandbox |
+| Production | `https://awaketab.com` | Merge to `main` → Worker `awaketab-site` deploy (`DEPLOYMENT.md`) | Production KV, AE `awaketab_events`, D1 `awaketab-auth` |
 
 `isSecureContext` is true on `localhost`, so the wake lock works in local development without HTTPS; the fallback video path is tested by launching Chromium with `--disable-features=WakeLock` or by injecting a fake (`04-engine-spec.md` §14).
 
@@ -318,21 +320,25 @@ Configuration (canonical list in `00-conventions.md` §13.3):
 
 | Name | Kind | Where | Purpose |
 |---|---|---|---|
-| `POLAR_ACCESS_TOKEN` | secret | Pages Functions (production, preview = sandbox token) | Server-to-server licence-key validation |
-| `POLAR_WEBHOOK_SECRET` | secret | Pages Functions | HMAC verification of `POST /api/webhooks/polar` |
-| `LICENSE_SIGNING_KEY` | secret (private JWK, ES256 / P-256) + `LICENSE_SIGNING_VER` (integer `ver` claim) | Pages Functions | Signs licence JWTs |
-| `LICENSE_KEY_ENC_KEY` | secret (32-byte base64) | Pages Functions | AES-GCM encrypts the raw Polar key at rest in KV |
-| `POLAR_ORGANIZATION_ID`, `POLAR_BENEFIT_MAP` | secret / config | Pages Functions | Organisation scope and benefit-id → plan map |
-| `RATE_LIMIT_SALT` | secret (32 random bytes, rotated quarterly) | Pages Functions | Salts the IP hash used for rate limiting |
-| `LICENSES` | KV namespace binding | `wrangler.toml` / Pages settings | Licence, embed, webhook and rate-limit records |
-| `EVENTS` | Analytics Engine dataset binding | Pages settings | Analytics events |
-| `PUBLIC_SITE_URL` | build-time public var | Astro `import.meta.env` | Canonical URLs, sitemap, OG |
-| `LICENSE_PUBLIC_KEYS` | code constant in `@awaketab/core` (`Record<ver, JsonWebKey>`) | web + extension | Offline token verification; ships current and previous key |
-| `PUBLIC_ADS_ENABLED` | build-time var (`'0'`/`'1'`) | Astro | Emits the ads loader in the content layout (gate G1) |
-| `PUBLIC_SPONSOR_ENABLED` | build-time var | Astro | Emits the sponsor card slot (gate G5) |
-| `PUBLIC_POLAR_SERVER` | build-time var (`production`/`sandbox`) | Astro | Checkout host selection |
+| `POLAR_ACCESS_TOKEN` | secret | Worker (production; preview = sandbox token) | Server-to-server licence-key validation |
+| `POLAR_WEBHOOK_SECRET` | secret | Worker | HMAC verification of `POST /api/webhooks/polar` |
+| `LICENSE_SIGNING_KEY` | secret (private JWK, ES256 / P-256) + `LICENSE_SIGNING_VER` (integer `ver` claim) | Worker | Signs licence JWTs |
+| `LICENSE_KEY_ENC_KEY` | secret (32-byte base64) | Worker | AES-GCM encrypts the raw Polar key at rest in KV |
+| `POLAR_ORGANIZATION_ID`, `POLAR_BENEFIT_MAP` | secret / config | Worker | Organisation scope and benefit-id → plan map |
+| `RATE_LIMIT_SALT` | secret (32 random bytes, rotated quarterly) | Worker | Salts the IP hash used for rate limiting |
+| `BETTER_AUTH_SECRET`, `GOOGLE_CLIENT_*`, `GITHUB_CLIENT_*` | secrets | Worker | Sign-in (Better Auth with Google, GitHub and passkeys) |
+| `LICENSES` | KV namespace binding | `apps/site/wrangler.jsonc` | Licence, embed, webhook and rate-limit records |
+| `EVENTS` | Analytics Engine dataset binding | `apps/site/wrangler.jsonc` | Analytics events |
+| `AUTH_DB` | D1 database binding | `apps/site/wrangler.jsonc` (migrations in `apps/site/migrations`) | Sign-in accounts and sessions |
+| `PUBLIC_SITE_URL` | Worker var | `wrangler.jsonc` `vars` | Sign-in and checkout return URLs |
+| `PUBLIC_POLAR_SERVER` | Worker var (`production`/`sandbox`) | `wrangler.jsonc` `vars` | Polar API host for the route handlers |
+| `LICENSE_PUBLIC_KEYS` | code constant in `@awaketab/core` (`Record<ver, JsonWebKey>`) | site + extension | Offline token verification; ships current and previous key |
+| `NEXT_PUBLIC_POLAR_SERVER` | build-time public var | browser bundle | The Polar customer portal link |
+| `NEXT_PUBLIC_ADS_ENABLED` | build-time public var (`'0'`/`'1'`) | browser bundle | Renders the ad slots on content pages (gate G1) |
+| `NEXT_PUBLIC_PRO_ENABLED` | build-time public var | browser bundle | Turns Pro (sync, sign-in, checkout) on |
+| `NEXT_PUBLIC_DEPLOY_ENV` | build-time public var (`play` on preview) | browser bundle and metadata | Keeps the preview out of search |
 
-Rules: secrets never reach the client bundle (only `PUBLIC_*` do; Astro enforces this); the private key exists only in Cloudflare secrets and a password manager; key rotation bumps `LICENSE_SIGNING_VER` (the `ver` claim) and ships both public keys in `LICENSE_PUBLIC_KEYS` for 90 days.
+Every setting is listed with its purpose in `apps/site/.env.example`. Rules: secrets never reach the client bundle (only `NEXT_PUBLIC_*` do; Next.js enforces this); the private key exists only in Cloudflare secrets and a password manager; key rotation bumps `LICENSE_SIGNING_VER` (the `ver` claim) and ships both public keys in `LICENSE_PUBLIC_KEYS` for 90 days.
 
 ---
 
@@ -406,7 +412,7 @@ Other rules: critical CSS inlined (< 20 KB gz; Tailwind v4 emits only used utili
 
 ## 10. Architecture decision records
 
-Format: Context · Decision · Alternatives · Consequences. Status of all twelve: **Accepted, 2026-09-07**.
+Format: Context · Decision · Alternatives · Consequences. Status of ADR-001 to ADR-012: **Accepted, 2026-09-07**; ADR-001, ADR-003, ADR-012, ADR-013 and ADR-014 are superseded by ADR-015.
 
 ### ADR-001 · Astro 5 over Next.js
 
@@ -465,3 +471,9 @@ Format: Context · Decision · Alternatives · Consequences. Status of all twelv
 Status: **Accepted, 2026-09-26** (M6).
 
 **Context.** The spec called for `@vite-pwa/astro` with `injectManifest` (`05-frontend-spec.md` §8.2, E4-T02); until M6 the site shipped a static `public/sw.js`. Since ADR-013 the build has a post-processing step, `scripts/prune-unreferenced.mjs`, that deletes `_astro/*.js` chunks nothing references *after* `astro build`. An Astro/Vite PWA integration computes its precache manifest inside the Vite build, i.e. before the prune — so the manifest would list the deleted ~224 KB React client renderer and installs would 404 on precache (or precache dead bytes). The integration also brings `workbox-build`, about 245 transitive packages, into a repo that audits its dependency tree. **Decision.** Write the worker as `apps/web/src/sw.ts` against the Workbox *runtime* modules only (`workbox-precaching`, `workbox-routing`, `workbox-strategies`, `workbox-expiration`, pinned 7.4.1) and build it with `apps/web/scripts/sw.mjs`, which runs after `prune-unreferenced.mjs` and before `sitemap.mjs`: esbuild bundles `src/sw.ts` (IIFE, minified, ES2020), then the script replaces `self.__WB_MANIFEST` with a manifest it builds from `dist/` — shell pages (`/`, `/pip`, preset routes, locale homes) and static files with an MD5 revision, icons, and every hashed `_astro/*.js|css` with `revision: null` — and writes `dist/sw.js`. The build fails if the marker is missing. `/sw.js` is served `Cache-Control: no-cache` with `Service-Worker-Allowed: /`; `public/sw.js` is deleted. Registration and the prompt-style update flow stay in the island (`pwa.ts`). **Alternatives.** `@vite-pwa/astro` / `vite-plugin-pwa` (the manifest predates the prune; ~245 extra packages); `workbox-build` `injectManifest` called from a post-build script (right ordering, same dependency weight); a hand-written worker without Workbox (smallest, but re-implements precache revisioning, cleanup of outdated caches and expiration). **Consequences.** The manifest matches what ships (58 entries at M6 close) and the worker is ~9.7 KB gz; five dev dependencies (`esbuild` and four Workbox modules) instead of a plugin tree. We own ~80 lines of build script, and `SHELL_PAGES`/`LOCALES`/`PRESET_ROUTES` in `sw.mjs` must be kept in step with routes (`scripts/sw.test.ts` guards it). Offline, an uncached navigation opens a cached shell page chosen by `src/sw-fallback.ts`: the floating timer (`/pip`, `/{lang}/pip`) falls back only to a cached floating timer, in its own language first, and never to a tool page, which inside the small popup would start a second session; every other page falls back to a cached home, which reads its preset or until-time from the URL. Playwright blocks service workers by default because `page.route` cannot see SW-served fetches; the offline journey opts in (`13-testing-strategy.md` §5).
+
+### ADR-015 · Next.js 16 on Cloudflare Workers, replacing the Astro site
+
+Status: **Accepted, 2026-10-30** (owner); the Astro site was removed in November 2026. Supersedes ADR-001, ADR-003, ADR-012, ADR-013 and ADR-014.
+
+**Context.** The Volt redesign handoff specifies Next.js 16 (App Router), Tailwind CSS 4, shadcn/ui, TypeScript, `next-themes` and `lucide-react`, plus sign-in and Pro features that need a server and a database. **Decision.** Build the site in `apps/site` exactly on that stack and run it on Cloudflare Workers through OpenNext, with the API as Next.js route handlers, KV and Analytics Engine as before, and D1 for sign-in (`redesign/DECISIONS.md`, Next.js build). **Consequences.** The zero-hydration contract and the Astro build pipeline retire; the tool renders with React; performance budgets are re-set for the Next app; production and preview are separate Workers with separate bindings (`DEPLOYMENT.md`).

@@ -43,4 +43,4 @@ Before designing or changing any user-facing UI in this repo:
 
 - **Prototype first** on the design canvas (`docs/redesign/CANVASES.md`); the `Main` board on the Tool canvas is the reference logic. Get owner approval before changing production UI.
 - **Changing a contract?** Update the docs in the same change: `docs/00-conventions.md` first for identifiers, `docs/05` for tokens and components.
-- **Before any push:** `pnpm test`, `pnpm test:e2e`, `pnpm build && pnpm test:seo` and the size gate must all be green. `main` auto-deploys.
+- **Before any push:** `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` and the size gate must all be green. `main` auto-deploys.

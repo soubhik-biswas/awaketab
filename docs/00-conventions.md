@@ -1,6 +1,6 @@
 # 00 · Conventions, glossary and canonical facts
 
-> Deployment transition: the active site is now Next.js in `apps/site`, hosted on Cloudflare Workers. [Next.js deployment](DEPLOYMENT.md) supersedes the older Astro/Pages deployment details below. Product identifiers and browser behavior remain governed by this document.
+> Implementation: the site is Next.js 16 in `apps/site`, running on Cloudflare Workers through OpenNext ([Next.js deployment](DEPLOYMENT.md)). The first implementation, an Astro site in `apps/web` on Cloudflare Pages, was removed in November 2026. Entries in §13 that name `.astro` components, `src/tool/` modules, Pages Functions or `apps/web` files record that old implementation; the identifier values they define (routes, keys, events, strings, ids) still hold. Product identifiers and browser behaviour remain governed by this document.
 
 > **This file is the single source of truth for names, identifiers, states, keys, routes, plans and budgets.** Every other document in `docs/` must use these exact identifiers. If a detail here conflicts with another doc, this file wins and the other doc gets fixed. When a decision changes, change it here first.
 
@@ -26,7 +26,7 @@ Status: v1.4 · 26 Sep 2026 · Owner: Soubhik · Derived from `awaketab-blueprin
 | Favicon / icon motif | The ring (progress ring with a glowing dot at 12 o'clock) |
 | Author page | `/about` — real name, testing setup, contact |
 
-Assumptions carried from the blueprint (not yet confirmed by Soubhik): name = AwakeTab; stack = Astro + Cloudflare; engine + library open source (MIT), site content proprietary; launch locales = 8 below; analytics = first-party beacon (no third-party script). Changing any of these means editing this file and grepping the docs.
+Assumptions carried from the blueprint (not yet confirmed by Soubhik): name = AwakeTab; stack = Astro + Cloudflare (since replaced by Next.js on Cloudflare Workers, §3); engine + library open source (MIT), site content proprietary; launch locales = 8 below; analytics = first-party beacon (no third-party script). Changing any of these means editing this file and grepping the docs.
 
 ---
 
@@ -49,7 +49,7 @@ Assumptions carried from the blueprint (not yet confirmed by Soubhik): name = Aw
 | TypeScript type alias | `T` + `PascalCase` | `TLockState`, `TPresetId` |
 | Runtime constant map | `SCREAMING_SNAKE` + `as const` | `PRESET_MS`, `STORAGE_KEYS` |
 
-The `I`/`T` prefixes are enforced by `@typescript-eslint/naming-convention` and apply to every workspace, including the published `@awaketab/wake` and `@awaketab/core` type surfaces. Two exemptions: `Props` in `.astro` files (Astro derives `Astro.props` from that exact name) and `IEnv` in Pages Functions, which already complies. `enum` is banned by `no-restricted-syntax` — closed sets are string-literal unions (`TLockState`, `TEndReason`) or `as const` maps, because `enum` emits runtime JavaScript and the island is budgeted at 15 KB gz critical. Renaming a *type* never renames a *value*: the seven lock-state strings in §5.1, the storage keys in §6 and the preset ids stay byte-identical.
+The `I`/`T` prefixes are enforced by `@typescript-eslint/naming-convention` and apply to every workspace, including the published `@awaketab/wake` and `@awaketab/core` type surfaces. The Worker bindings type `IEnv` (`apps/site/lib/server/env.ts`) already complies. The shadcn/ui files the registry generates (`apps/site/components/ui/**`, `apps/site/hooks/use-mobile.ts`) are exempt so updates apply cleanly. `enum` is banned by `no-restricted-syntax` — closed sets are string-literal unions (`TLockState`, `TEndReason`) or `as const` maps, because `enum` emits runtime JavaScript. Renaming a *type* never renames a *value*: the seven lock-state strings in §5.1, the storage keys in §6 and the preset ids stay byte-identical.
 
 Areas for FR/NFR: `ENGINE`, `TIMER`, `UI`, `AMBIENT`, `STATS`, `PWA`, `PIP`, `I18N`, `SEO`, `CONTENT`, `PRO`, `ADS`, `EXT`, `EMBED`, `LIB`, `API`, `ANALYTICS`, `PERF`, `A11Y`, `SEC`, `PRIVACY`, `COMPAT`.
 
@@ -61,20 +61,20 @@ Priority labels: `P0` (launch blocker), `P1` (launch), `P2` (post-launch, phase 
 
 | Layer | Choice | Notes |
 |---|---|---|
-| Site framework | **Astro 5**, static output, content collections (MDX), built-in i18n routing | One vanilla-TypeScript island for the tool; React is a build-time renderer only (`03-architecture.md` ADR-013), never shipped |
-| Language | TypeScript, `strict: true`, ESM | Node 22 LTS, pnpm 9 workspaces |
-| Styling | Tailwind CSS v4 with design tokens as CSS variables; **shadcn/ui** components rendered at build time (no hydration) | Self-hosted fonts only (D-R26): Geist, Geist Mono, Space Grotesk digits from `/fonts`, metric-matched fallbacks, no third-party font request (`05-frontend-spec.md` §1.2); shadcn's semantic variables alias the `--at-*` tokens (`05-frontend-spec.md` §1.5) |
-| PWA | Workbox runtime modules (`workbox-precaching`, `-routing`, `-strategies`, `-expiration`) bundled by esbuild in a post-build step (`scripts/sw.mjs`) — not `@vite-pwa/astro` (`03-architecture.md` ADR-014) | Precache app shell + tool pages; runtime cache for content pages |
-| Hosting | **Cloudflare Pages** (+ Pages Functions for `/api/*`) | Preview deploy per PR; `_headers` and `_redirects` files |
-| Serverless state | Cloudflare **KV** (licences, embed configs), **Workers Analytics Engine** (events) | No database, no accounts |
+| Site framework | **Next.js 16** (App Router, React 19) in `apps/site`, built for Workers by OpenNext; content collections (`@content-collections`, Markdown in `apps/site/content`); `next-intl` locale routing | The tool is a React component tree (`apps/site/components/tool`). The zero-hydration rule (`03-architecture.md` ADR-013) retired with the Astro site (`redesign/DECISIONS.md`, Next.js build) |
+| Language | TypeScript, `strict: true`, ESM | Node 22 LTS, pnpm 12 workspaces |
+| Styling | Tailwind CSS v4 with design tokens as CSS variables (`apps/site/app/globals.css`); **shadcn/ui** components (`apps/site/components/ui`) | Fonts come from `next/font/google` (`apps/site/app/fonts.ts`), which self-hosts them at build time, so pages make no third-party font request; the extension keeps the `--at-*` tokens (`05-frontend-spec.md` §1.5) |
+| PWA | Serwist service worker `apps/site/worker/sw.ts`, bundled by esbuild (`apps/site/scripts/build-sw.mjs`) to `public/serwist/sw.js` before `next build` | Precaches the offline pages and widget templates; a new revision per build |
+| Hosting | **Cloudflare Workers**: `awaketab-site` (awaketab.com) and `awaketab-site-preview` (play.awaketab.com); `/api/*` are Next.js route handlers | `apps/site/wrangler.jsonc`; `DEPLOYMENT.md` |
+| Serverless state | Cloudflare **KV** `LICENSES` (licences, embed configs), **Workers Analytics Engine** `EVENTS` (events), **D1** `AUTH_DB` (sign-in) | Accounts exist only for sign-in (Better Auth, `apps/site/lib/auth`) |
 | Payments | **Polar.sh** as merchant of record (checkout, licence keys, webhooks) | Alternative: Dodo Payments (UPI) — not in v1 |
 | Ads | Google AdSense → Journey by Mediavine → Raptive/Mediavine (content pages only) | Loader module only in content layout |
 | Analytics | First-party beacon `POST /api/e` → Analytics Engine; Google Search Console; CrUX | No cookies, no third-party analytics script |
 | Extension | **WXT** framework, Manifest V3, Chromium (`chrome.power`) | Firefox has no `power` API → not supported in v1 |
 | Library | `@awaketab/wake` — tsup build (ESM + CJS + d.ts), zero deps | Semantic versioning, changesets |
-| Testing | Vitest (unit), Playwright (e2e: chromium/firefox/webkit), axe-core, Lighthouse CI | See `13-testing-strategy.md` |
-| CI/CD | GitHub Actions → Cloudflare Pages Git integration | See `14-devops.md` |
-| OG images | Generated at build (satori + resvg) per page and locale | |
+| Testing | Vitest (unit, site), Playwright (extension e2e), axe-core, Lighthouse CI | See `13-testing-strategy.md` |
+| CI/CD | GitHub Actions; Workers deploys | See `DEPLOYMENT.md` |
+| OG images | Rendered by the `/og` route (`next/og`) per page template | |
 | Errors | Console + first-party `client_error` event (sampled); no Sentry in v1 | |
 
 ---
@@ -84,26 +84,25 @@ Priority labels: `P0` (launch blocker), `P1` (launch), `P2` (post-launch, phase 
 ```
 awaketab/
 ├─ apps/
-│  ├─ web/                 # Astro site, PWA, tool island, embed iframe app, PiP page, Pages Functions
-│  │  ├─ src/
-│  │  │  ├─ pages/         # routes (see §7)
-│  │  │  ├─ content/       # MDX collections: for/, on/, vs/, guides/, learn/ (per locale)
-│  │  │  ├─ components/    # Astro components (layouts, SEO head, ads slot, sponsor card); ui/ = shadcn/ui primitives, build-time only
-│  │  │  ├─ tool/          # the vanilla-TS island: ui/, ambient/, stats/, store.ts, main.ts, ctx.ts, pip.ts, pip-mirror.ts
-│  │  │  ├─ sw.ts          # service worker source (bundled to dist/sw.js by scripts/sw.mjs)
-│  │  │  ├─ i18n/          # ui strings: en.json, es.json, pt-br.json, de.json, fr.json, ja.json, zh.json, hi.json
-│  │  │  ├─ styles/        # tokens.css, base.css
-│  │  │  └─ lib/           # seo.ts (JSON-LD), og.ts, analytics.ts, ads.ts, license.ts
-│  │  ├─ functions/api/    # Cloudflare Pages Functions: e.ts, license/*.ts, webhooks/polar.ts, embed/config.ts, health.ts
-│  │  ├─ public/           # icons, manifest, robots.txt, ads.txt, fallback video, _headers, _redirects
-│  │  └─ astro.config.mjs
+│  ├─ site/                # Next.js site, tool, embed iframe app, PiP page, API route handlers (Cloudflare Worker)
+│  │  ├─ app/              # routes (see §7): [locale]/ pages, api/ route handlers, og/, robots, sitemap, manifest
+│  │  ├─ content/          # Markdown collections: for/, on/, vs/, guides/, learn/ (per locale)
+│  │  ├─ components/       # tool/, face/, site/ (header, footer, page shell), embed/, pip/, pro/, ui/ = shadcn/ui primitives
+│  │  ├─ lib/              # server/ (API, licences, Polar, rate limit), auth/, embed/, tool/, seo.ts, routes.ts
+│  │  ├─ messages/         # ui strings: en.json, es.json, pt-br.json, de.json, fr.json, ja.json, zh.json, hi.json
+│  │  ├─ i18n/             # next-intl routing, locales, slugs.json
+│  │  ├─ worker/sw.ts      # service worker source (bundled to public/serwist/sw.js by scripts/build-sw.mjs)
+│  │  ├─ migrations/       # D1 migrations for AUTH_DB
+│  │  ├─ public/           # icons, OG backgrounds, widgets, _headers
+│  │  └─ wrangler.jsonc    # Worker bindings: production and env.preview
 │  └─ extension/           # WXT project (popup, options, background service worker)
 ├─ packages/
 │  ├─ wake/                # @awaketab/wake — low-level Screen Wake Lock + fallback + status events
 │  └─ core/                # @awaketab/core — session engine, plans, stats, storage schema, licence token verification (framework-agnostic; shared by web + extension)
+├─ scripts/                # setup, licence keys (keys-dev, keys-prod, check-keys, dev-license-key.json), kv/ backups, lint helpers
 ├─ docs/                   # this documentation set
-├─ .github/workflows/      # ci.yml, lighthouse.yml, release.yml
-├─ pnpm-workspace.yaml · package.json · turbo.json (optional) · CLAUDE.md
+├─ .github/workflows/      # ci.yml, e2e.yml, lighthouse.yml, release.yml, kv-backup.yml, nightly.yml, …
+├─ pnpm-workspace.yaml · package.json · CLAUDE.md
 ```
 
 ---
@@ -195,9 +194,9 @@ sessionStorage also holds `at.v1.signin` (the sign-in button pressed, for the tr
 | `/status` | Service status: "Everything is running", or the maintenance page when the build sets `PUBLIC_MAINTENANCE_UNTIL`. noindex |
 | `/offline` · `/signin/expired` · `/s/removed` · `/500` | System pages (offline, link expired, setup removed, server error), noindex. The service worker caches `/offline` with the English shell and shows it for an uncached page that is not a tool address (`src/sw-fallback.ts`) |
 | `/404` | The not-found system page: the timer button, the help centre and the popular guides (noindex) |
-| `/api/*` | Pages Functions (see §9) |
+| `/api/*` | Next.js route handlers on the Worker (see §9) |
 
-Spelling: page URLs have no trailing slash (`/30m`, `/for/cooking`, `/es/for/cocinar`), except `/` and the locale homes `/{lang}/` (`/es/`). Canonicals, hreflang, sitemaps and links use exactly these spellings. The build writes each page where Cloudflare Pages serves it without a redirect (`x.html`, and `{lang}/index.html` for the homes; `14-devops.md` §2.1).
+Spelling: page URLs have no trailing slash (`/30m`, `/for/cooking`, `/es/for/cocinar`), except `/` and the locale homes `/{lang}/` (`/es/`). Canonicals, hreflang, sitemaps and links use exactly these spellings. (The retired Astro build wrote each page as `x.html`, and `{lang}/index.html` for the homes, so Cloudflare Pages served it without a redirect.)
 
 Query params (all optional): `autostart=1`, `mode=`, `msg=` (≤ 80 chars), `theme=`, `preset=`, `until=HH-MM`, `ref=` (attribution source; never stored beyond the event).
 
@@ -244,7 +243,7 @@ Ad rules (non-negotiable): Google ads never on the awake screen, `/pip`, `/embed
 
 ---
 
-## 9. API surface (Cloudflare Pages Functions under `/api`)
+## 9. API surface (Next.js route handlers under `/api`)
 
 | Method · Path | Purpose | Auth |
 |---|---|---|
@@ -279,7 +278,7 @@ Common fields: `ts`, `path` (no query string), `locale`, `ua` class (browser fam
 | Embed widget JS (gz) | `/embed/cook` iframe app ≤ 25 KB (same full-closure rule); loader `/embed.js` ≤ 3 KB |
 | Tool pages CSS (gz) | ≤ 20 KB, critical inlined |
 | Third-party requests on tool pages | 0 |
-| Hydrated framework islands on any page | 0 (`<astro-island>` in built HTML, or a React runtime chunk in `dist/_astro/`, fails the size gate) |
+| Hydrated framework islands on any page | Retired with the Astro site: the Next site renders the tool with React (`redesign/DECISIONS.md`, Next.js build) |
 | LCP (lab, mobile emulation) | ≤ 1.2 s; field p75 ≤ 2.0 s |
 | INP field p75 | ≤ 100 ms |
 | CLS | 0 (fixed slot sizes everywhere) |
@@ -307,7 +306,7 @@ Common fields: `ts`, `path` (no query string), `locale`, `ua` class (browser fam
 
 ## 13. Accepted proposals (v1.1 — consolidated from docs 02–09, 15)
 
-The identifiers below were proposed while writing the other documents and are now canonical. Docs that still say "PROPOSED" for any of these are to be read as accepted.
+The identifiers below were proposed while writing the other documents and are now canonical. Docs that still say "PROPOSED" for any of these are to be read as accepted. File paths, components and build steps here that belong to the removed Astro site (`apps/web`) are the record of that implementation; its successors live in `apps/site`.
 
 ### 13.1 Engine and session constants
 
@@ -352,9 +351,9 @@ The identifiers below were proposed while writing the other documents and are no
 | API error codes | `invalid_key` · `activation_limit` · `revoked` · `refunded` · `polar_unavailable` · `rate_limited` · `bad_token` · `bad_request` |
 | KV keys | `lic:{keyHash}` · `cus:{customerId}` · `wh:{eventId}` (TTL 30 d) · `ord:{orderId}` · `embed:{domain}` · `rl:{route}:{ipHash}:{bucket}` (TTL 120 s) · `rating:{id}` · D-06: `lk:{polarLicenseKeyId}` · `grant:{benefitGrantId}` · `sub:{subscriptionId}` (§13.15) |
 | Kiosk token expiry | `exp = now + 365 d`, re-validate every 30 d when online |
-| Secrets (Pages Functions) | `POLAR_ACCESS_TOKEN` · `POLAR_WEBHOOK_SECRET` · `POLAR_ORGANIZATION_ID` · `POLAR_BENEFIT_MAP` (JSON benefit-id → plan) · `LICENSE_SIGNING_KEY` (private JWK, ES256) · `LICENSE_SIGNING_VER` (integer `ver` claim) · `LICENSE_KEY_ENC_KEY` (32-byte base64, AES-GCM for raw key at rest) · `RATE_LIMIT_SALT` · `TURNSTILE_SECRET_KEY` (optional) |
+| Secrets (Worker) | `POLAR_ACCESS_TOKEN` · `POLAR_WEBHOOK_SECRET` · `POLAR_ORGANIZATION_ID` · `POLAR_BENEFIT_MAP` (JSON benefit-id → plan) · `LICENSE_SIGNING_KEY` (private JWK, ES256) · `LICENSE_SIGNING_VER` (integer `ver` claim) · `LICENSE_KEY_ENC_KEY` (32-byte base64, AES-GCM for raw key at rest) · `RATE_LIMIT_SALT` · `TURNSTILE_SECRET_KEY` (optional) |
 | Bindings | KV `LICENSES` · Analytics Engine `EVENTS` (dataset `awaketab_events`) |
-| KV ops (F-02, 2026-09-26) | Workflow `.github/workflows/kv-backup.yml` (weekly, artifact `kv-backup-<run id>` with `{namespace}-YYYY-MM-DD.jsonl.enc`, 84 days) · root scripts `pnpm kv:backup` · `pnpm kv:restore <file>` · `pnpm kv:reencrypt` (code in `apps/web/scripts/kv/`) · GitHub Actions secrets `CLOUDFLARE_API_TOKEN` (KV Read) · `CLOUDFLARE_ACCOUNT_ID` · `KV_LICENSES_ID` · `KV_LICENSES_PREVIEW_ID` (optional) · `BACKUP_ENCRYPTION_KEY` (32-byte base64) · operator-only env for rotation `OLD_LICENSE_KEY_ENC_KEY` · `NEW_LICENSE_KEY_ENC_KEY` · backup format `awaketab-kv-backup` v1 (`14-devops.md` §10–§11) |
+| KV ops (F-02, 2026-09-26) | Workflow `.github/workflows/kv-backup.yml` (weekly, artifact `kv-backup-<run id>` with `{namespace}-YYYY-MM-DD.jsonl.enc`, 84 days) · root scripts `pnpm kv:backup` · `pnpm kv:restore <file>` · `pnpm kv:reencrypt` (code in `scripts/kv/`) · GitHub Actions secrets `CLOUDFLARE_API_TOKEN` (KV Read) · `CLOUDFLARE_ACCOUNT_ID` · `KV_LICENSES_ID` · `KV_LICENSES_PREVIEW_ID` (optional) · `BACKUP_ENCRYPTION_KEY` (32-byte base64) · operator-only env for rotation `OLD_LICENSE_KEY_ENC_KEY` · `NEW_LICENSE_KEY_ENC_KEY` · backup format `awaketab-kv-backup` v1 (`14-devops.md` §10–§11) |
 | Public build vars | `PUBLIC_SITE_URL` · `PUBLIC_ADS_ENABLED` (`'0'`/`'1'`) · `PUBLIC_SPONSOR_ENABLED` · `PUBLIC_POLAR_SERVER` (`production`/`sandbox`, default `sandbox`; the Functions read the same variable at run time, §13.14) · `INDEXNOW_KEY` (optional, §13.14) |
 | Code constants | `LICENSE_PUBLIC_KEYS: Record<number, JsonWebKey>` (in `@awaketab/core`; `PRODUCTION_LICENSE_PUBLIC_KEYS` plus the dev key in sandbox builds only, §13.14) · `PLAN_PRICES` · `PLAN_FEATURES` · `CHECKOUT_LINKS` (`src/lib/checkout.ts`, §13.14) · `PRO_LAUNCH_END` · `AD_UNITS` · `AD_CLIENT` |
 | Polar labels | benefits `lk_pro_yearly`, `lk_pro_lifetime`, `lk_embed`, `lk_kiosk_site`, `lk_kiosk_5`; discount `LAUNCH19` ($10 off `pro_lifetime`, 90 days); product `sponsor_month` |
@@ -666,8 +665,8 @@ Accepted on 2026-09-26 (`LAUNCH-AUDIT.md`). Specs: `08-data-storage.md` §7, `09
 | `.github/workflows/indexnow.yml` | Runs on a successful production `deployment_status` reported by Cloudflare Pages, or by hand (`all`). Skipped with a notice when the secret is unset |
 | `PUBLIC_POLAR_SERVER` | The one Polar switch. Build: `polarServer()` in `scripts/polar-server.mjs` (unset → `sandbox`; any value but `sandbox` or `production` fails the build) → `define` of `__AT_POLAR_SERVER__` and `__AT_LICENSE_DEV_KEY__` in `astro.config.mjs`, `scripts/embed-loader.mjs` and `apps/extension/wxt.config.ts`. Run time: `polarServer(env)` / `apiBase(env)` in `functions/_lib/polar.ts` (`POLAR_API_BASES`: `https://sandbox-api.polar.sh`, `https://api.polar.sh`; only `production` reaches production). `POLAR_API_BASE` is removed |
 | `CHECKOUT_LINKS_SANDBOX` · `CHECKOUT_LINKS_PRODUCTION` · `CHECKOUT_PLACEHOLDER` | `src/lib/checkout.ts`; `CHECKOUT_LINKS = checkoutLinks(POLAR_SERVER)`. The production links are owner-data placeholders (`https://buy.polar.sh/PROPOSED-REPLACE-…`, not identifiers) until N-04 |
-| `PRODUCTION_LICENSE_PUBLIC_KEYS` · `DEV_LICENSE_KEY_VER` (1) · `TRUSTS_DEV_LICENSE_KEY` | `@awaketab/core`. `LICENSE_PUBLIC_KEYS` adds the dev key (its private half is in `.dev.vars.example`) only when the bundler defines `__AT_LICENSE_DEV_KEY__` as true: sandbox, dev and test builds. Production bundles contain no trace of it. Production keys start at `ver` 2 |
-| `scripts/check-keys.mts` · `pnpm keys:check` | Only with `PUBLIC_POLAR_SERVER=production`. Source check (first web build step): fails on no production key, the dev key listed, a private or non-P-256 JWK, or a placeholder or sandbox checkout link. `--dist <dir>` (last web build step; `pnpm -F extension zip`): fails on the dev key's `x` or `y` in any output file, or a production key missing from every file. `AT_ALLOW_MISSING_PRODUCTION_KEY=1` waives only "no production key" and "placeholder link" (CI's production-mode bundle check) |
+| `PRODUCTION_LICENSE_PUBLIC_KEYS` · `DEV_LICENSE_KEY_VER` (1) · `TRUSTS_DEV_LICENSE_KEY` | `@awaketab/core`. `LICENSE_PUBLIC_KEYS` adds the dev key (its private half is in `scripts/dev-license-key.json`) only when the bundler defines `__AT_LICENSE_DEV_KEY__` as true: sandbox, dev and test builds. Production bundles contain no trace of it. Production keys start at `ver` 2 |
+| `scripts/check-keys.mts` · `pnpm keys:check` | Only with `PUBLIC_POLAR_SERVER=production` (or `--force`). Source check (first step of `pnpm -F extension zip`): fails on no production key, the dev key listed, or a private or non-P-256 JWK; the dev key is read from `scripts/dev-license-key.json`. `--dist <dir>` (after the extension build): fails on the dev key's `x` or `y` in any output file, or a production key missing from every file. `AT_ALLOW_MISSING_PRODUCTION_KEY=1` waives only "no production key" |
 | `pnpm keys:prod` | `scripts/keys-prod.mts`: prints a fresh ES256 pair (the public JWK line for `PRODUCTION_LICENSE_PUBLIC_KEYS[ver]`, the private JWK for the `LICENSE_SIGNING_KEY` secret, and `LICENSE_SIGNING_VER`). Writes nothing |
 | `pnpm -F extension zip` | Builds with `PUBLIC_POLAR_SERVER=production` and runs `check-keys.mts` before and after the build |
 

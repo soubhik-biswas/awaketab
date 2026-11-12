@@ -1,5 +1,5 @@
 -- KPI queries for dataset awaketab_events (docs/18 §4)
--- Optional live run: CF_AE_TOKEN + CF_ACCOUNT_ID with apps/web/scripts/metrics-week.mjs (posts the first statement).
+-- Run against the Analytics Engine SQL API with CF_AE_TOKEN and CF_ACCOUNT_ID (the old metrics-week script left with the Astro site).
 
 SELECT toStartOfDay(timestamp) AS day,
        countIf(index1 = 'lock_state' AND blob7 = 'held' AND double1 <= 300) / countIf(index1 = 'session_start' AND blob6 = 'autostart') AS autostart_success
