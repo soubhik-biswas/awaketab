@@ -8,7 +8,7 @@
 2. The maintainer triages it. Only `soubhik-biswas` applies the `approved` label; work on an issue starts after that label is there. An approval from any other account does not count.
 3. The maintainer uses `ready`, `in-progress`, `blocked`, `needs-information` or `not-planned` to show where an approved issue stands.
 4. Contributors open focused pull requests against `main` and link the approved issue with `Closes #123` or `Tracks: #123`. A draft means work in progress; a ready pull request means it can be reviewed.
-5. CI must pass. Before merging, the maintainer can deploy the branch to the preview at play.awaketab.com (`pnpm -F site run deploy:preview`) to check it there.
+5. CI must pass. Before merging, the maintainer merges the branch into `play`, which Cloudflare deploys to the internal preview at play.awaketab.com, and tests it there.
 6. A merge into `main` is built and deployed to production by Cloudflare; the **Workers Builds: awaketab-site** check on the merge commit shows the result. See [Deployment](../docs/DEPLOYMENT.md).
 
 ## The board

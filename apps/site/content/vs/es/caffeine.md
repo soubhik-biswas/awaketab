@@ -33,9 +33,9 @@ compare:
     - what: "¿Necesita algo visible?"
       cells: ["Sí, la pestaña tiene que estar a la vista", "No"]
     - what: "Ventana minimizada"
-      cells: ["Se pausa: “En pausa — pestaña oculta”", "Sigue activo"]
+      cells: ["Se pausa: “En pausa”", "Sigue activo"]
     - what: "Estado del bloqueo"
-      cells: ["Indicador que solo dice “Pantalla despierta” si el navegador lo confirma", "Ícono en la barra de menús"]
+      cells: ["Indicador que solo dice “Despierta” si el navegador lo confirma", "Ícono en la barra de menús"]
     - what: "Dónde funciona"
       cells: ["Navegadores en Mac, Windows, Linux, Android, iPhone y iPad", "macOS (la versión que comparamos)"]
     - what: "Tapa cerrada"
@@ -50,7 +50,7 @@ picks:
     - title: "No puedes o no quieres instalar nada"
       text: "En una computadora del trabajo o prestada, basta con abrir la página."
     - title: "Quieres saber si realmente funciona"
-      text: "El indicador tiene siete estados, y solo dos muestran la pantalla como despierta: “Pantalla despierta” y “Despierta con video de respaldo”. Si el navegador rechaza el bloqueo, verás “Bloqueado — aquí está la solución” con el motivo."
+      text: "El indicador tiene siete estados, y solo dos muestran la pantalla como despierta: “Despierta” y “Despierta con video”. Si el navegador rechaza el bloqueo, verás “No despierta” con el motivo."
     - title: "Usas otros dispositivos"
       text: "La misma página sirve en el teléfono para una [receta en la cocina](/es/for/cocinar) o en una PC con Windows."
 faq:
@@ -59,7 +59,7 @@ faq:
   - q: "¿Caffeine o AwakeTab simulan pulsaciones de teclas?"
     a: "Ninguno de los dos. Caffeine para Mac mantiene una aserción de energía de macOS; la pulsación de F15 es de Zhorn Caffeine para Windows, otra app. AwakeTab usa la API estándar Screen Wake Lock del navegador y nunca simula pulsaciones ni movimientos del mouse, por eso no te mantiene en verde en Teams o Slack."
   - q: "¿AwakeTab sigue funcionando si minimizo la ventana, como hace Caffeine?"
-    a: "No. Al minimizar la ventana o cambiar de pestaña, el navegador libera el bloqueo y el indicador muestra “En pausa — pestaña oculta”. Caffeine no tiene esa restricción porque actúa en todo el sistema."
+    a: "No. Al minimizar la ventana o cambiar de pestaña, el navegador libera el bloqueo y el indicador muestra “En pausa”. Caffeine no tiene esa restricción porque actúa en todo el sistema."
   - q: "¿Cuál conviene en una computadora del trabajo donde no puedo instalar apps?"
     a: "AwakeTab, porque es una página web: funciona en Safari 16.4+, Chrome 84+, Edge 84+ o Firefox 126+ sin permisos de administrador. Aun así, una política de bloqueo de la empresa sigue sus propias reglas y un Wake Lock no la cambia."
 honestLimit: "Caffeine para Mac mantiene una aserción de energía en todo el sistema y funciona sin nada visible; AwakeTab necesita una pestaña visible y se pausa cuando la ocultas."

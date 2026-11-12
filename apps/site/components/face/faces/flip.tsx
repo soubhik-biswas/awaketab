@@ -1,69 +1,35 @@
 import type { CSSProperties } from 'react';
-import { BLACK, NAVY, WHITE } from '../art';
 import { EndLine, type IDrawProps, L, mono } from '../kit';
+import { CARD_W, FLIP_CSS, FlipCard } from './flip-cards';
 
-// Porcelain cards by day, graphite cards at night.
-const TOP = { light: '#FFFFFF', night: '#252935' };
-const BOTTOM = { light: '#EEF0F6', night: '#1A1D26' };
-const SHADOW = {
-  light: `0 14px 28px ${NAVY(0.12)}, inset 0 0 0 1px #D6D9E3, inset 0 1px 0 #FFFFFF`,
-  night: `0 14px 28px ${BLACK(0.28)}, inset 0 1px 0 ${WHITE(0.08)}`,
-};
+const GAP = 12;
+const DOT = 10;
 
-const sheen: CSSProperties = {
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: 0,
-  height: 84,
-  background: `linear-gradient(180deg, ${WHITE(0.06)}, transparent)`,
-};
-const hinge = (light: boolean): CSSProperties => ({
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: 87,
-  height: 2,
-  background: light ? NAVY(0.16) : BLACK(0.55),
-  boxShadow: `0 1px 0 ${light ? '#FFFFFF' : WHITE(0.06)}`,
-});
-const dot = (accent: string): CSSProperties => ({
+// A hollow dot is the shape of "not awake", so the colon never says it by colour alone.
+const dot = (accent: string, hollow: boolean): CSSProperties => ({
   display: 'block',
-  width: 10,
-  height: 10,
+  width: DOT,
+  height: DOT,
   borderRadius: '50%',
-  background: accent,
+  background: hollow ? 'transparent' : accent,
+  boxShadow: hollow ? `inset 0 0 0 2px ${accent}` : undefined,
 });
 
-// Split-flap cards with a real hinge gap; the right card's top flap falls each second while awake.
+// The unit sits centred under its card; the left pad cancels the tracking after its last letter.
+const unit: CSSProperties = { width: CARD_W, paddingLeft: '.16em', textAlign: 'center' };
+
+// Split-flap cards with a real hinge gap: when a pair of digits changes, its top flap falls onto the new value.
 export default function Flip({ m }: IDrawProps) {
   const { t, accent } = m;
-  const k = m.night ? 'night' : 'light';
-  const top = TOP[k];
-  const split = hinge(!m.night);
-  const card: CSSProperties = {
-    position: 'relative',
-    width: 136,
-    height: 168,
-    borderRadius: 18,
-    background: `linear-gradient(180deg, ${top} 0 50%, ${BOTTOM[k]} 50% 100%)`,
-    color: t.cardInk,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: 98,
-    fontWeight: 600,
-    letterSpacing: '-0.04em',
-    fontVariantNumeric: 'tabular-nums',
-    boxShadow: SHADOW[k],
-    overflow: 'hidden',
-  };
+  // The dock button is too small to show a falling flap.
+  const flap = !m.still && !m.thumb;
   return (
     <div
       style={{
         position: 'absolute',
         left: 0,
-        top: 34,
+        // Thumbnails drop the labels, so the cards alone sit in the middle.
+        top: m.compact ? 71 : 34,
         width: 360,
         display: 'flex',
         flexDirection: 'column',
@@ -71,56 +37,18 @@ export default function Flip({ m }: IDrawProps) {
         gap: 12,
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={card}>
-          <div style={sheen} />
-          <span style={{ position: 'relative' }}>{m.ga}</span>
-          <div style={split} />
-        </div>
+      <style>{FLIP_CSS}</style>
+      <div style={{ display: 'flex', alignItems: 'center', gap: GAP }}>
+        <FlipCard value={m.ga} flap={flap} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-          <span className="afx-breath" style={dot(accent)} />
-          <span className="afx-breath" style={dot(accent)} />
+          <span className="afx-breath" style={dot(accent, m.hollow)} />
+          <span className="afx-breath" style={dot(accent, m.hollow)} />
         </div>
-        <div style={{ ...card, perspective: 600 }}>
-          <div style={sheen} />
-          <span style={{ position: 'relative' }}>{m.gb}</span>
-          <div style={split} />
-          <div
-            className="afx-flap"
-            style={{
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              width: 140,
-              height: 88,
-              overflow: 'hidden',
-              borderRadius: '16px 16px 0 0',
-              background: top,
-              transformOrigin: '50% 100%',
-              opacity: m.liveOp,
-            }}
-          >
-            <span
-              style={{
-                position: 'absolute',
-                left: 0,
-                width: 140,
-                top: 0,
-                height: 176,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: t.cardInk,
-              }}
-            >
-              {m.gb}
-            </span>
-          </div>
-        </div>
+        <FlipCard value={m.gb} flap={flap} />
       </div>
-      <div className={L} style={{ display: 'flex', gap: 140, ...mono(12, '.16em', t.ink2) }}>
-        <span>{m.h > 0 ? 'HR' : 'MIN'}</span>
-        <span>{m.h > 0 ? 'MIN' : 'SEC'}</span>
+      <div className={L} style={{ display: 'flex', gap: GAP * 2 + DOT, ...mono(12, '.16em', t.ink2) }}>
+        <span style={unit}>{m.h > 0 ? 'HR' : 'MIN'}</span>
+        <span style={unit}>{m.h > 0 ? 'MIN' : 'SEC'}</span>
       </div>
       <EndLine m={m} px={15} />
     </div>

@@ -12,22 +12,22 @@ translationOf: "cooking"
 lastVerified: 2026-09-09
 browsers: []
 os: []
-lead: "Você está no meio da receita, com a mão cheia de massa, e a tela do celular escurece. O AwakeTab resolve isso sem instalar nada: ele pede ao navegador um Wake Lock (o recurso que impede a tela de apagar) e segura a tela acesa enquanto a aba dele fica visível — sozinha, ao lado da receita em tela dividida ou numa janela vizinha. Esta página já abre a ferramenta no modo Cozinha e sem horário de término (“∞”), porque ninguém sabe quanto tempo o feijão vai levar."
+lead: "Você está no meio da receita, com a mão cheia de massa, e a tela do celular escurece. O AwakeTab resolve isso sem instalar nada: ele pede ao navegador um Wake Lock (o recurso que impede a tela de apagar) e segura a tela acesa enquanto a aba dele fica visível — sozinha, ao lado da receita em tela dividida ou numa janela vizinha. O botão desta página inicia uma sessão sem horário de término (“Sem fim”) no mostrador Bold, de números grandes, porque ninguém sabe quanto tempo o feijão vai levar."
 crumb: "Cozinha"
 toc:
   celular-e-tablet-o-que-o-sistema-pode-atrapalhar: "Celular e tablet"
 steps:
   - title: "Deixe o celular ou tablet na tomada, se puder."
     text: "Uma tela acesa por uma hora gasta bateria."
-  - title: "Toque em iniciar e confira o indicador."
-    text: "Só quando ele mostrar “Tela ligada” é que o navegador confirmou o bloqueio."
+  - title: "Toque em “Manter ligada” e confira o indicador."
+    text: "Só quando ele mostrar “Ligada” é que o navegador confirmou o bloqueio."
   - title: "Se a receita estiver em outro site ou app, coloque os dois lado a lado."
     text: "Tela dividida no Android, apps em janelas no iPadOS 26 (Split View no iPadOS 18 ou anterior), uma segunda janela no computador. No iPhone, só um app fica na frente."
 figures:
   - frame: phone
     label: "Captura do celular"
-    alt: "o AwakeTab no modo Cozinha num iPhone"
-    caption: "O modo Cozinha num iPhone."
+    alt: "o AwakeTab com o mostrador Bold num iPhone"
+    caption: "O mostrador Bold num iPhone."
   - frame: desktop
     label: "Captura do computador"
     alt: "a receita e o AwakeTab lado a lado em duas janelas no computador"
@@ -43,16 +43,16 @@ pills:
     text: "Seu navegador não tem Wake Lock nativo e você aceitou o vídeo silencioso, que consome mais bateria."
 checklist:
   - "Não confie num relógio que está escurecendo — confie no indicador."
-  - "Se o indicador diz “Tela ligada”, a receita não vai sumir enquanto a aba ficar na frente."
+  - "Se o indicador diz “Ligada”, a receita não vai sumir enquanto a aba ficar na frente."
   - "Se você sair para responder uma mensagem, o bloqueio cai e volta quando você retornar."
   - "Lembre: o AwakeTab não é temporizador de segurança; não deixe o forno ligado confiando só na tela do celular."
 faq:
   - q: "Se eu abrir o app de receitas ou o WhatsApp, a tela continua ligada?"
-    a: "Não. Quando você troca de app ou a aba fica oculta, o navegador libera o bloqueio e o indicador passa para “Pausado — aba oculta”. Volte para a aba do AwakeTab e espere aparecer “Tela ligada” de novo antes de voltar para a panela."
+    a: "Não. Quando você troca de app ou a aba fica oculta, o navegador libera o bloqueio e o indicador passa para “Pausado”. Volte para a aba do AwakeTab e espere aparecer “Ligada” de novo antes de voltar para a panela."
   - q: "Minha receita está em outro site. Preciso abrir tudo dentro do AwakeTab?"
     a: "Não, mas o AwakeTab precisa continuar visível. No tablet, deixe a receita e o AwakeTab lado a lado (apps em janelas no iPadOS 26, Split View no iPadOS 18 ou anterior, tela dividida no Android). No iPhone só um app fica na frente, então o AwakeTab não mantém acesa uma receita aberta em outro app. No computador, use uma segunda janela."
   - q: "Posso encostar na tela com a mão suja de farinha?"
-    a: "No modo Cozinha, tocar no número grande pausa a contagem, e a tela continua ligada. Se você pausar sem querer, toque de novo para retomar. Com o celular longe do fogão, a tela fica ligada sem você precisar mexer nela."
+    a: "Não precisa tocar em nada: depois que o indicador mostra “Ligada”, a tela continua ligada até você parar. Quando terminar, toque em Parar na barra de baixo com o nó do dedo. Com o celular longe do fogão, a tela fica ligada sem você precisar mexer nela."
   - q: "Quais navegadores funcionam para cozinhar com o celular?"
     a: "Wake Lock nativo no Chrome 84+, Edge 84+, Firefox 126+, Safari 16.4+ e Samsung Internet 14+, conforme a tabela de 9 de setembro de 2026. Firefox mais antigo usa o vídeo alternativo depois de um toque."
 honestLimit: "Funciona enquanto a aba do AwakeTab está na tela. No celular, abrir outro app — inclusive o da própria receita — libera o bloqueio até você voltar para a aba."
@@ -77,7 +77,7 @@ updated: 2026-09-27
 
 ## O que o indicador vai mostrar
 
-No modo Cozinha, você também pode adicionar até três temporizadores de cozinha (5, 10, 15, 30 ou 60 min), cada um toca ao chegar a zero, e tocar no número grande pausa a contagem sem apagar a tela.
+O mostrador Bold ocupa a tela com números grandes, fáceis de ler da bancada. O AwakeTab não cronometra a comida: use o timer do forno para o que está assando.
 
 ::pills
 

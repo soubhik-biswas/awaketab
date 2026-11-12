@@ -1,9 +1,25 @@
 'use client';
 
+import { StateIcon, type TFaceState } from '@/components/face';
 import { cn } from '@/lib/utils';
-import { useGlance, type IGlance } from './context';
+import type { TWakeState } from '@/lib/wake';
+import { useGlance, useTickValue, type IGlance, type ITick } from './context';
 
 const PULSE = new Set(['running', 'starting', 'fallback']);
+
+// How each session state is drawn, on the face and as the pill's glyph. A session that needs a tap borrows the
+// paused drawing (amber, bars) but is never called paused.
+export const FACE_STATE: Record<TWakeState, TFaceState> = {
+  idle: 'idle',
+  starting: 'starting',
+  running: 'running',
+  fallback: 'fallback',
+  paused: 'paused',
+  needsyou: 'paused',
+  ended: 'up',
+  blocked: 'blocked',
+  unsupported: 'unsupported',
+};
 
 const SHORT: Record<IGlance['reason'], string> = {
   battery: 'reason.battery',
@@ -12,10 +28,10 @@ const SHORT: Record<IGlance['reason'], string> = {
   policy: 'reason.policy',
 };
 
-// Words, dot shape and colour together: solid while something is happening, hollow at rest, pulsing while awake.
-function pillText(g: IGlance): string {
+// Words, glyph and colour together, so no state reads by colour alone. Paused is only the person's own Pause.
+export function pillText(g: IGlance, tick: Pick<ITick, 'now' | 'remain' | 'endsAt'>): string {
   const { t, st, indef } = g;
-  const time = g.time(g.endsAt);
+  const time = g.until(tick.endsAt);
   switch (st) {
     case 'idle':
       return t('pill.idle');
@@ -26,7 +42,7 @@ function pillText(g: IGlance): string {
     case 'fallback':
       return indef ? t('pill.fallbackOpen') : t('pill.fallback', { time });
     case 'paused':
-      return t('pill.paused', { dur: g.dur(g.remain) });
+      return indef ? t('pill.pausedOpen') : t('pill.paused', { dur: g.dur(tick.remain) });
     case 'needsyou':
       return t('pill.needsyou');
     case 'blocked':
@@ -34,18 +50,18 @@ function pillText(g: IGlance): string {
     case 'unsupported':
       return t('pill.unsupported');
     case 'ended':
-      return t('pill.ended', { time: g.time(g.snap.endedAt ?? g.now) });
+      return t('pill.ended', { time: g.time(g.endedAt ?? tick.now) });
   }
 }
 
 export function StatusPill({ className }: { className?: string }) {
   const g = useGlance();
+  const text = useTickValue((tick) => pillText(g, tick));
   return (
-    // A focus stop right after the skip link; the announcer in the tool speaks the changes, so the pill stays quiet.
+    // Words to read, not a control: the announcer in the tool speaks the changes, so the pill stays quiet.
     <span
       role="status"
       aria-live="off"
-      tabIndex={0}
       className={cn(
         'tg-glass tg-pill inline-flex min-h-[38px] max-w-full items-center gap-2.5 rounded-full py-1 pr-4 pl-[13px] text-[14px] font-semibold tracking-[-0.005em]',
         className,
@@ -53,9 +69,11 @@ export function StatusPill({ className }: { className?: string }) {
     >
       <span
         aria-hidden="true"
-        className={cn('tg-dot size-[9px] flex-none rounded-full', PULSE.has(g.st) && 'tg-pulse')}
-      />
-      {pillText(g)}
+        className={cn('tg-glyph flex size-4 flex-none rounded-full', PULSE.has(g.st) && 'tg-pulse')}
+      >
+        <StateIcon state={FACE_STATE[g.st]} c="currentColor" />
+      </span>
+      {text}
     </span>
   );
 }

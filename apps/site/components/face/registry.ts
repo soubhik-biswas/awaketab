@@ -92,7 +92,7 @@ export const FACES: readonly IFaceInfo[] = [
     id: 'words',
     num: '10',
     name: 'Words',
-    blurb: 'Time in a sentence, written natively in each of the eight languages.',
+    blurb: 'Time in a plain English sentence, like a note on the desk.',
     kind: 'ambient',
     featured: false,
   },

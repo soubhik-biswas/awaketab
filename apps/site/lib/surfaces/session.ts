@@ -12,6 +12,8 @@ export interface ISurfaceView {
   label: TSurfaceLabel;
   tone: TSurfaceTone;
   solid: boolean;
+  // True when a hidden tab let the lock go: pass it to <Face needs> so the face never says paused.
+  needs?: boolean;
   live: boolean;
   awake: boolean;
   canExtend: boolean;
@@ -40,13 +42,13 @@ const FACE: Record<TWakeState, TFaceState> = {
 
 const TONE: Record<TSurfaceLabel, TSurfaceTone> = {
   awake: 'lamp',
-  fallback: 'lamp',
+  fallback: 'info',
   starting: 'info',
   paused: 'warning',
   hidden: 'warning',
-  needsyou: 'info',
+  needsyou: 'warning',
   blocked: 'destructive',
-  unsupported: 'muted',
+  unsupported: 'info',
   ended: 'ended',
   idle: 'muted',
 };
@@ -66,7 +68,7 @@ function labelOf(s: TSnap, held: boolean): TSurfaceLabel {
     case 'starting':
       return 'starting';
     case 'paused':
-      return s.pauseReason === 'hidden' ? 'hidden' : 'paused';
+      return 'paused';
     case 'needsyou':
       return 'needsyou';
     case 'blocked':
@@ -96,6 +98,7 @@ export function surfaceView(s: TSnap, opts: { held?: boolean; locale?: string; f
     label,
     tone: TONE[label],
     solid: awake,
+    needs: label === 'needsyou',
     live,
     awake: awake || isAwake(s.state),
     canExtend: live && s.endsAt !== null,

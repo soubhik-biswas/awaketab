@@ -4,9 +4,11 @@ import type { TLocale } from '@/i18n/locales';
 import { cn } from '@/lib/utils';
 import { Accent } from '../accent';
 import { BentoCell, BentoGrid } from '../effects/bento-grid';
-import { SAMPLE, SiteFace } from '../site-face';
+import { SiteFace } from '../site-face';
 import { display, story } from '../styles';
+import { SAMPLE } from './sample';
 import { StoryHead } from './story-head';
+import { PRO_ENABLED } from '@/lib/features';
 
 const cell = cn(story.card, 'gap-5 p-[22px] min-[700px]:p-7');
 
@@ -47,13 +49,13 @@ export async function Bento({ locale }: { locale: TLocale }) {
           />
           <CellText h={t('read.h')} d={t('read.d')} />
           <div className="relative flex flex-none justify-center">
-            <SiteFace face="bold" size={440} tabletSize={340} phoneSize={280} bare {...sample} />
+            <SiteFace face="bold" size={440} tabletSize={340} phoneSize={280} bare square {...sample} />
           </div>
         </BentoCell>
         <BentoCell className={cell}>
           <CellText h={t('tap.h')} d={t('tap.d')} />
           <div aria-hidden="true" className="relative flex justify-start">
-            <span className="site-act inline-flex h-14 items-center gap-2.5 rounded-full px-6 text-[17px] font-bold shadow-[0_14px_36px_var(--primary-glow),inset_0_1px_0_rgba(255,255,255,.4)]">
+            <span className="site-act inline-flex h-14 items-center gap-2.5 rounded-full px-6 text-[17px] font-bold shadow-[0_14px_36px_var(--site-tap-glow),inset_0_1px_0_rgba(255,255,255,.4)]">
               <Play className="size-[18px] fill-current" strokeWidth={0} />
               {t('tap.cta')}
             </span>
@@ -67,7 +69,7 @@ export async function Bento({ locale }: { locale: TLocale }) {
               <li
                 key={key}
                 className={cn(
-                  'inline-flex h-9 items-center gap-2.5 rounded-full border bg-[var(--site-s1)] pr-3.5 pl-3 text-[14px] font-semibold',
+                  'inline-flex h-[38px] items-center gap-2.5 rounded-full border bg-[var(--site-s1)] pr-3.5 pl-3 text-[14px] font-semibold',
                   tone,
                 )}
               >
@@ -87,7 +89,7 @@ export async function Bento({ locale }: { locale: TLocale }) {
           </ul>
         </BentoCell>
         <BentoCell className={cell}>
-          <CellText h={t('free.h')} d={t('free.d')} />
+          <CellText h={t('free.h')} d={t(PRO_ENABLED ? 'free.d' : 'free.dFree')} />
           <span className={cn(display, 'text-[96px] leading-[.9] min-[700px]:text-[120px]')}>
             <Accent>{t('free.zero')}</Accent>
           </span>
@@ -95,14 +97,14 @@ export async function Bento({ locale }: { locale: TLocale }) {
         <BentoCell className={cn(cell, 'min-[700px]:max-[1100px]:col-span-2')}>
           <CellText h={t('devices.h')} d={t('devices.d')} />
           <div aria-hidden="true" className="flex items-end gap-3">
-            <span className="flex h-32 w-[70px] items-center justify-center rounded-[18px] border-2 border-border-hi bg-[var(--site-device)]">
-              <SiteFace face="ring" size={54} bare motion="off" {...sample} />
+            <span className="box-content flex h-32 w-[70px] items-center justify-center rounded-[18px] border-2 border-border-hi bg-[var(--site-device)]">
+              <SiteFace face="ring" size={54} bare square motion="off" {...sample} />
             </span>
-            <span className="flex h-[140px] w-[104px] items-center justify-center rounded-[16px] border-2 border-border-hi bg-[var(--site-device)]">
-              <SiteFace face="aurora" size={84} bare motion="off" {...sample} />
+            <span className="box-content flex h-[140px] w-[104px] items-center justify-center rounded-[16px] border-2 border-border-hi bg-[var(--site-device)]">
+              <SiteFace face="aurora" size={84} bare square motion="off" {...sample} />
             </span>
-            <span className="flex h-[104px] w-[156px] items-center justify-center rounded-[12px_12px_4px_4px] border-2 border-b-[10px] border-border-hi bg-[var(--site-device)]">
-              <SiteFace face="neon" size={104} bare motion="off" {...sample} />
+            <span className="box-content flex h-[104px] w-[156px] items-center justify-center rounded-[12px_12px_4px_4px] border-2 border-b-[10px] border-border-hi bg-[var(--site-device)]">
+              <SiteFace face="neon" size={104} bare square motion="off" {...sample} />
             </span>
           </div>
         </BentoCell>

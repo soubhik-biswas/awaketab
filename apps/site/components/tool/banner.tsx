@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'motion/react';
 import { History, Play, Sparkle, TriangleAlert, type LucideIcon } from 'lucide-react';
 import { useGlance, type IGlance, type TBannerKind } from './context';
@@ -10,7 +11,9 @@ interface IBannerDef {
   soft: string;
   icon: LucideIcon;
   action?: (g: IGlance) => void;
-  alert: boolean;
+  // How the banner is spoken. The tool's announcer already speaks a refused or hidden session, so those banners
+  // stay quiet and nothing is said twice.
+  role?: 'alert' | 'status';
 }
 
 const DEFS: Record<TBannerKind, IBannerDef> = {
@@ -19,30 +22,40 @@ const DEFS: Record<TBannerKind, IBannerDef> = {
     soft: '--tg-red-soft',
     icon: TriangleAlert,
     action: (g) => g.a.open('help'),
-    alert: true,
   },
   unsupported: {
     col: '--tg-sky',
     soft: '--tg-sky-soft',
     icon: TriangleAlert,
     action: (g) => g.a.useFallback(),
-    alert: true,
+    role: 'alert',
   },
-  fallback: { col: '--tg-sky', soft: '--tg-sky-soft', icon: Play, alert: false },
+  fallback: { col: '--tg-sky', soft: '--tg-sky-soft', icon: Play, role: 'status' },
   needsyou: {
     col: '--tg-amber',
     soft: '--tg-amber-soft',
     icon: TriangleAlert,
     action: (g) => g.a.resume(),
-    alert: true,
   },
-  conflict: { col: '--tg-amber', soft: '--tg-amber-soft', icon: History, action: (g) => g.a.takeOver(), alert: false },
-  offline: { col: '--tg-t2', soft: '--tg-s2', icon: TriangleAlert, alert: false },
-  update: { col: '--tg-violet', soft: '--tg-violet-soft', icon: Sparkle, action: (g) => g.a.reload(), alert: false },
+  conflict: {
+    col: '--tg-amber',
+    soft: '--tg-amber-soft',
+    icon: History,
+    action: (g) => g.a.takeOver(),
+    role: 'status',
+  },
+  offline: { col: '--tg-t2', soft: '--tg-s2', icon: TriangleAlert, role: 'status' },
+  update: {
+    col: '--tg-violet',
+    soft: '--tg-violet-soft',
+    icon: Sparkle,
+    action: (g) => g.a.reload(),
+    role: 'status',
+  },
 };
 
 // Problems appear only when they are true: under the top bar, in words, with the fix one tap away.
-export function Banner() {
+export const Banner = memo(function Banner() {
   const g = useGlance();
   const kind = g.banner;
   if (!kind || g.panel !== 'none') return null;
@@ -54,7 +67,7 @@ export function Banner() {
   return (
     <motion.div
       key={kind}
-      role={d.alert ? 'alert' : 'status'}
+      role={d.role}
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: g.hidden ? 0 : 1, y: 0 }}
       transition={{ duration: 0.42, ease: EASE }}
@@ -88,4 +101,4 @@ export function Banner() {
       ) : null}
     </motion.div>
   );
-}
+});

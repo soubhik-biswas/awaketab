@@ -5,8 +5,8 @@ import { DialLabel, type IDrawProps, L, MONO, lmin, Svg } from '../kit';
 
 const WELL = { light: '#E9E9F1', dark: '#0A0B10', oled: '#0A0E18' };
 const PILL = { light: 'rgba(255,255,255,.94)', night: 'rgba(10,15,28,.9)' };
-const MINOR = ticks(110, 115, 60, (i) => i % 5 !== 0);
-const MAJOR = ticks(108, 117, 12);
+const MINOR = ticks(109, 114, 60, (i) => i % 5 !== 0);
+const MAJOR = ticks(108, 115, 12);
 
 // A solid disc that shrinks toward 12, in one heat colour: green, then lime, amber and ember.
 export default function Disc({ m }: IDrawProps) {
@@ -15,7 +15,7 @@ export default function Disc({ m }: IDrawProps) {
   const hc = m.heat(m.frac);
   const discFill = `radial-gradient(circle at 50% 30%, ${alpha(hc, 0xf2)}, ${hc} 70%, ${alpha(hc, 0xcc)} 100%)`;
   const mask = `conic-gradient(#000 0deg ${deg.toFixed(2)}deg, transparent ${deg.toFixed(2)}deg 360deg)`;
-  const [ex, ey] = P(105, deg);
+  const [ex, ey] = P(103, deg);
   const edge = deg > 1 && deg < 359 ? 1 : 0;
   const disc: CSSProperties = {
     position: 'absolute',
@@ -34,12 +34,12 @@ export default function Disc({ m }: IDrawProps) {
         <path d={MINOR} strokeWidth="1.2" opacity=".55" style={{ stroke: t.ink2 }} />
         <path d={MAJOR} strokeWidth="2.4" strokeLinecap="round" style={{ stroke: t.ink }} />
       </Svg>
-      {Array.from({ length: 12 }, (_, i) => (
+      {Array.from({ length: m.total > 0 && !m.indef ? 12 : 0 }, (_, i) => (
         <DialLabel
           key={i}
           m={m}
           text={String(Math.round(((m.total / 60) * i) / 12))}
-          rr={128}
+          rr={130}
           deg={i * 30}
           fs={12}
           color={t.ink2}
@@ -63,7 +63,7 @@ export default function Disc({ m }: IDrawProps) {
           x1="180"
           y1="155"
           x2="180"
-          y2="50"
+          y2="52"
           strokeWidth="3"
           strokeLinecap="round"
           opacity={edge}
@@ -101,7 +101,7 @@ export default function Disc({ m }: IDrawProps) {
           {m.digits}
         </span>
         <span className={L} style={{ fontFamily: MONO, fontSize: lmin(12), color: t.ink2 }}>
-          {m.endShort}
+          {m.indef ? 'no end' : m.endShort}
         </span>
       </div>
     </>

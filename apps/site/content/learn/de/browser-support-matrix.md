@@ -32,13 +32,13 @@ notes:
     text: "Energiesparmodi lehnen den Lock nicht ab."
 faq:
   - q: "Gilt die Tabelle auch, wenn der Tab im Hintergrund liegt?"
-    a: "Nein. In jedem aufgeführten Browser gilt der Wake Lock nur für ein sichtbares Dokument. Minimieren Sie das Fenster, wechseln Sie den Tab oder am Handy die App, gibt der Browser den Lock frei, und die Anzeige zeigt „Pausiert — Tab ausgeblendet“."
+    a: "Nein. In jedem aufgeführten Browser gilt der Wake Lock nur für ein sichtbares Dokument. Minimieren Sie das Fenster, wechseln Sie den Tab oder am Handy die App, gibt der Browser den Lock frei, und die Anzeige zeigt „Pausiert“."
   - q: "Warum steht Chrome auf dem iPhone nicht in der Tabelle?"
     a: "Wir führen nur Zeilen, die wir anhand von Browser-Dokumentation und Quellcode geprüft haben. Für iPhone und iPad ist Safari ab 16.4 belegt, für Web-Apps auf dem Home-Bildschirm iOS 18.4. Andere Kombinationen beanspruchen wir nicht."
   - q: "Was bedeutet „Video-Ersatzlösung“ genau?"
-    a: "Unterstützt ein Browser die Screen Wake Lock API nicht, etwa Firefox vor Version 126, kann AwakeTab nach einem Tippen oder Klick ein winziges stummes Video abspielen, das den Bildschirm anlässt. Die Anzeige lautet dann „Bildschirm bleibt per Video an“. Das verbraucht mehr Strom als der native Lock."
+    a: "Unterstützt ein Browser die Screen Wake Lock API nicht, etwa Firefox vor Version 126, kann AwakeTab nach einem Tippen oder Klick ein winziges stummes Video abspielen, das den Bildschirm anlässt. Die Anzeige lautet dann „Wach per Video“. Das verbraucht mehr Strom als der native Lock."
   - q: "Unterstützt ein Browser den Lock, heißt das, er wird immer gewährt?"
-    a: "Nein. Ein Tab, der beim Start nicht sichtbar ist, eine Einbettung ohne Berechtigung für screen-wake-lock, Safari ohne vorheriges Tippen oder Firefox bei 5 % Akku oder weniger ohne Ladekabel führen zu „Blockiert — so beheben Sie es“. Energiesparmodi lehnen nicht ab. Ohne HTTPS fehlt der Lock ganz."
+    a: "Nein. Ein Tab, der beim Start nicht sichtbar ist, eine Einbettung ohne Berechtigung für screen-wake-lock, Safari ohne vorheriges Tippen oder Firefox bei 5 % Akku oder weniger ohne Ladekabel führen zu „Nicht wach“. Energiesparmodi lehnen nicht ab. Ohne HTTPS fehlt der Lock ganz."
 honestLimit: "Die Tabelle gibt den Stand vom 26. September 2026 wieder. Ältere Versionen weichen auf die Video-Ersatzlösung aus, und jede Zeile gilt nur für dieses Prüfdatum."
 related:
   - "/learn/screen-wake-lock-api-guide"
@@ -74,7 +74,7 @@ updated: 2026-09-27
 
 ## Was „nativ“ in der Praxis heißt
 
-AwakeTab ruft `navigator.wakeLock.request('screen')` aus einer sicheren, sichtbaren Seite auf. Die Statusanzeige kennt sieben Zustände, von „Bereit“ über „Wird gestartet…“ bis „Tippen für die Ersatzlösung“. Einen laufenden Timer zeigt sie nur, wenn der Browser den Lock hält („Bildschirm bleibt an“) oder die Ersatzlösung läuft („Bildschirm bleibt per Video an“). Nimmt der Browser den Lock zurück, heißt es „Pausiert — Tab ausgeblendet“; lehnt er ab, „Blockiert — so beheben Sie es“. Ein vorgetäuschtes „gehalten“ gibt es nicht.
+AwakeTab ruft `navigator.wakeLock.request('screen')` aus einer sicheren, sichtbaren Seite auf. Die Statusanzeige kennt sieben Zustände, von „Nicht aktiv“ über „Browser wird gefragt…“ bis „Kein Wake Lock in diesem Browser“. Einen laufenden Timer zeigt sie nur, wenn der Browser den Lock hält („Wach“) oder die Ersatzlösung läuft („Wach per Video“). Nimmt der Browser den Lock zurück, heißt es „Pausiert“; lehnt er ab, „Nicht wach“. Ein vorgetäuschtes „gehalten“ gibt es nicht.
 
 ## Methodik und Datum
 
@@ -92,7 +92,7 @@ Jede Zeile beruht auf Browser-Dokumentation und Quellcode (zuletzt geprüft am 2
 
 ## Selbst ausprobieren
 
-Das eingebettete Tool startet hier mit „15 Min.“. Tippen Sie auf „Bildschirm eingeschaltet lassen“ und prüfen Sie, welche Meldung Ihr Browser liefert. Zeigt die Anzeige „Tippen für die Ersatzlösung“, fehlt Ihrem Browser der native Lock.
+Das eingebettete Tool startet hier mit „15 Min.“. Tippen Sie auf „Bildschirm eingeschaltet lassen“ und prüfen Sie, welche Meldung Ihr Browser liefert. Zeigt die Anzeige „Kein Wake Lock in diesem Browser“, fehlt Ihrem Browser der native Lock.
 
 ## Was die Tabelle nicht aussagt
 

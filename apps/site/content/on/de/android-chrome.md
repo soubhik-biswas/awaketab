@@ -28,10 +28,10 @@ toc:
 steps:
   - title: "Öffnen Sie awaketab.com in Chrome"
     path: "Chrome › awaketab.com"
-    text: "Voreingestellt ist „30 Min.“; wählen Sie bei Bedarf „1 Std.“, „2 Std.“ oder „∞“."
+    text: "Voreingestellt ist „30 Min.“; wählen Sie bei Bedarf „1 Std.“, „2 Std.“ oder „Ohne Ende“."
     shot: "AwakeTab in Chrome unter Android mit gewählter Dauer"
   - title: "Starten Sie mit „Bildschirm eingeschaltet lassen“"
-    text: "Lesen Sie die Anzeige: „Bildschirm bleibt an“ bedeutet, Chrome hält den Lock wirklich. Erst dann legen Sie das Handy ab."
+    text: "Lesen Sie die Anzeige: „Wach“ bedeutet, Chrome hält den Lock wirklich. Erst dann legen Sie das Handy ab."
     shot: "die Statusanzeige von AwakeTab bei laufender Sitzung"
   - title: "Brauchen Sie parallel eine andere App?"
     text: "Nutzen Sie den geteilten Bildschirm oder die Pop-up-Ansicht. AwakeTab muss dabei sichtbar bleiben."
@@ -55,14 +55,14 @@ matrix:
 rows:
   blockers:
     - title: "Energiesparmodus"
-      text: "Den Energiesparmodus prüft Chrome nicht; er lehnt den Lock also nicht ab. Er kann aber die Abschaltzeit verkürzen oder das Display dimmen. Ob er sich über einen gehaltenen Lock hinwegsetzt, haben wir noch nicht auf einem Gerät geprüft. „Blockiert — so beheben Sie es“ erscheint nur, wenn Chrome wirklich ablehnt, und darunter steht die Ursache."
+      text: "Den Energiesparmodus prüft Chrome nicht; er lehnt den Lock also nicht ab. Er kann aber die Abschaltzeit verkürzen oder das Display dimmen. Ob er sich über einen gehaltenen Lock hinwegsetzt, haben wir noch nicht auf einem Gerät geprüft. „Nicht wach“ erscheint nur, wenn Chrome wirklich ablehnt, und darunter steht die Ursache."
     - title: "Hersteller-Listen"
       text: "Heikler sind die eigenen Energiesparlisten mancher Hersteller. Bei Samsung heißen sie zum Beispiel „Apps im Standby“ und „Apps im Tiefschlaf“, bei anderen Marken gibt es ähnliche Menüs. Landet Chrome dort, kann das System den Tab beenden, sobald Sie die App verlassen. Beim Zurückkehren lädt die Seite dann neu, und Sie müssen die Sitzung erneut starten."
 faq:
   - q: "Bleibt das Display an, wenn ich kurz zu Maps oder YouTube springe?"
-    a: "Nein. Verlassen Sie Chrome oder wechseln Sie den Tab, gibt der Browser den Wake Lock frei, und die Anzeige zeigt „Pausiert — Tab ausgeblendet“. Kommen Sie zurück, fordert AwakeTab ihn neu an. Legen Sie das Handy erst weg, wenn wieder „Bildschirm bleibt an“ zu sehen ist."
-  - q: "Warum zeigt AwakeTab „Blockiert — so beheben Sie es“?"
-    a: "Chrome hat den Lock abgelehnt, und die Zeile darunter nennt den Grund. Am Energiesparmodus liegt es nicht, den prüft Chrome gar nicht. Meist war der Tab beim Start nicht sichtbar, oder AwakeTab läuft eingebettet in einer Seite ohne Berechtigung für screen-wake-lock. Öffnen Sie awaketab.com direkt, lassen Sie den Tab vorne und tippen Sie auf „Starten“."
+    a: "Nein. Verlassen Sie Chrome oder wechseln Sie den Tab, gibt der Browser den Wake Lock frei, und die Anzeige zeigt „Pausiert“. Kommen Sie zurück, fordert AwakeTab ihn neu an. Legen Sie das Handy erst weg, wenn wieder „Wach“ zu sehen ist."
+  - q: "Warum zeigt AwakeTab „Nicht wach“?"
+    a: "Chrome hat den Lock abgelehnt, und die Zeile darunter nennt den Grund. Am Energiesparmodus liegt es nicht, den prüft Chrome gar nicht. Meist war der Tab beim Start nicht sichtbar, oder AwakeTab läuft eingebettet in einer Seite ohne Berechtigung für screen-wake-lock. Öffnen Sie awaketab.com direkt, lassen Sie den Tab vorne und tippen Sie auf „Wach halten“."
   - q: "Mein Samsung schließt den Tab, nachdem ich weggewechselt habe. Woran liegt das?"
     a: "Manche Hersteller schicken Apps über eigene Listen schlafen, bei Samsung etwa „Apps im Standby“ oder „Apps im Tiefschlaf“. Steht Chrome dort, kann das System den Tab beenden, sobald Sie die App verlassen. Nehmen Sie Chrome aus diesen Listen heraus, wenn der Tab bei der Rückkehr neu lädt."
   - q: "Geht das auch mit Samsung Internet oder Firefox?"
@@ -103,4 +103,4 @@ Die normale Abschaltzeit finden Sie unter Einstellungen → Display → Bildschi
 
 ## Was Chrome auf Android nicht kann
 
-Einen Chat-Status hält AwakeTab nicht grün, denn Teams, Slack und Zoom werten Eingaben aus, nicht das Display, und AwakeTab simuliert keine Berührungen. Ein Handy, das unbeaufsichtigt als Aufpasser dient, ist keine gute Idee. Und ein leuchtendes Display zieht Akku: Wer länger als eine Stunde braucht, steckt das Ladekabel ein. Auf OLED-Bildschirmen mindert die Pixelverschiebung des Nachtmodus das Einbrennen, verhindert es aber nicht ganz.
+Einen Chat-Status hält AwakeTab nicht grün, denn Teams, Slack und Zoom werten Eingaben aus, nicht das Display, und AwakeTab simuliert keine Berührungen. Ein Handy, das unbeaufsichtigt als Aufpasser dient, ist keine gute Idee. Und ein leuchtendes Display zieht Akku: Wer länger als eine Stunde braucht, steckt das Ladekabel ein. Auf OLED-Bildschirmen mindert die Pixelverschiebung des Wandmodus das Einbrennen, verhindert es aber nicht ganz.

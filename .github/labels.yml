@@ -36,10 +36,10 @@
   description: Security hardening or a disclosed fix. Report vulnerabilities privately, never in an issue.
 - name: dependencies
   color: '0366d6'
-  description: Updates a dependency. Used by Dependabot.
+  description: Updates a dependency.
 - name: github_actions
   color: '000000'
-  description: Updates a GitHub Actions workflow dependency. Used by Dependabot.
+  description: Updates a GitHub Actions workflow dependency.
 - name: good first issue
   color: '7057ff'
   description: A small, well-described task for a first contribution.

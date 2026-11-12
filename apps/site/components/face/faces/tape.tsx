@@ -1,8 +1,14 @@
+'use client';
+
+import { useState } from 'react';
 import { CARD_SHADOW } from '../art';
 import { alpha } from '../geometry';
-import { big, EndLine, type IDrawProps, Kicker, L, lmin, MONO } from '../kit';
+import { big, EndLine, type IDrawProps, Kicker, L, lmin, MONO, PLATE } from '../kit';
 
 const PX = 14;
+const NEEDLE = 160;
+// Minutes drawn either side of the needle: the plate shows about eleven, the rest stays hidden under the edge fade.
+const SPAN = 13;
 const GROUND = {
   light: 'linear-gradient(180deg, #FFFFFF, #EFEFF6)',
   dark: 'linear-gradient(180deg, #14161D, #0A0B10)',
@@ -11,13 +17,35 @@ const GROUND = {
 const SPENT = { light: 'rgba(246,244,239,.62)', night: 'rgba(7,11,22,.62)' };
 const EDGE_MASK = 'linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent)';
 
+const mark = (min: number): string => {
+  if (min < 60) return String(min);
+  const mm = min % 60;
+  return `${Math.floor(min / 60)}h${mm ? String(mm).padStart(2, '0') : ''}`;
+};
+
 // A minute ruler glides under a fixed needle; the heat strip shows the final stretch.
 export default function Tape({ m }: IDrawProps) {
   const { t } = m;
-  const tm = Math.max(5, Math.min(180, Math.ceil(m.total / 60)));
-  const tw = tm * PX;
+  const now = m.shownSec / 60;
+  // The window also covers where the ruler was a second ago, so a jump of many minutes glides past drawn ticks.
+  const [trail, setTrail] = useState({ now, was: now });
+  if (trail.now !== now) setTrail({ now, was: trail.now });
+  const end = m.indef ? Infinity : Math.max(5, Math.ceil(m.total / 60));
+  const lo = Math.max(0, Math.floor(Math.min(now, trail.was)) - SPAN);
+  const hi = Math.min(end, Math.ceil(Math.max(now, trail.was)) + SPAN);
+  const count = Math.max(0, hi - lo + 1);
   const hc = m.heat(m.frac);
-  const heat = `linear-gradient(90deg, ${alpha(hc, 0x55)}, ${hc})`;
+  // A session without an end has no final stretch, so its strip is one even colour.
+  const heat = m.indef
+    ? { backgroundImage: 'none', backgroundColor: alpha(hc, 0x88), backgroundSize: 'auto', backgroundPosition: '0 0' }
+    : {
+        backgroundImage: `linear-gradient(90deg, ${alpha(hc, 0x55)}, ${hc})`,
+        backgroundColor: 'transparent',
+        backgroundSize: `${end * PX}px 100%`,
+        backgroundPosition: `${-lo * PX}px 0`,
+      };
+  // Counting down, the minutes past the needle are spent; counting up, the minutes behind it are.
+  const spent = m.indef ? { left: 0, width: NEEDLE } : { left: NEEDLE, right: 0 };
   return (
     <>
       <div
@@ -37,6 +65,7 @@ export default function Tape({ m }: IDrawProps) {
         <EndLine m={m} px={14} />
       </div>
       <div
+        className={PLATE}
         style={{
           position: 'absolute',
           left: 20,
@@ -47,20 +76,16 @@ export default function Tape({ m }: IDrawProps) {
           background: GROUND[m.theme],
           boxShadow: CARD_SHADOW[m.theme],
           overflow: 'hidden',
+          isolation: 'isolate',
         }}
       >
         <div style={{ position: 'absolute', inset: 0, WebkitMaskImage: EDGE_MASK, maskImage: EDGE_MASK }}>
           <div
             className="af-tr"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: `${(160 - (m.shownSec / 60) * PX).toFixed(1)}px`,
-              width: tw,
-              height: 96,
-            }}
+            style={{ position: 'absolute', top: 0, left: `${(NEEDLE - now * PX).toFixed(1)}px`, width: 0, height: 96 }}
           >
-            {Array.from({ length: tm + 1 }, (_, i) => {
+            {Array.from({ length: count }, (_, j) => {
+              const i = lo + j;
               const major = i % 5 === 0;
               return (
                 <span
@@ -78,43 +103,45 @@ export default function Tape({ m }: IDrawProps) {
                 />
               );
             })}
-            {Array.from({ length: Math.floor(tm / 5) + 1 }, (_, k) => (
-              <span
-                key={k}
-                className={L}
-                style={{
-                  position: 'absolute',
-                  left: k * 5 * PX - 20,
-                  top: 44,
-                  width: 40,
-                  textAlign: 'center',
-                  fontFamily: MONO,
-                  fontSize: lmin(12),
-                  color: t.ink2,
-                }}
-              >
-                {k * 5}
-              </span>
-            ))}
+            {Array.from({ length: count }, (_, j) => lo + j)
+              .filter((i) => i % 5 === 0)
+              .map((i) => (
+                <span
+                  key={`n${i}`}
+                  className={L}
+                  style={{
+                    position: 'absolute',
+                    left: i * PX - 22,
+                    top: 44,
+                    width: 44,
+                    textAlign: 'center',
+                    whiteSpace: 'nowrap',
+                    fontFamily: MONO,
+                    fontSize: lmin(12),
+                    color: t.ink2,
+                  }}
+                >
+                  {mark(i)}
+                </span>
+              ))}
             <div
               style={{
                 position: 'absolute',
-                left: 0,
+                left: lo * PX,
                 top: 72,
-                width: tw,
+                width: (hi - lo) * PX,
                 height: 6,
                 borderRadius: 3,
-                background: heat,
+                ...heat,
               }}
             />
           </div>
           <div
             style={{
               position: 'absolute',
-              left: 160,
               top: 0,
-              right: 0,
               bottom: 0,
+              ...spent,
               background: m.night ? SPENT.night : SPENT.light,
             }}
           />
@@ -122,7 +149,7 @@ export default function Tape({ m }: IDrawProps) {
         <div
           style={{
             position: 'absolute',
-            left: 159,
+            left: NEEDLE - 1,
             top: 0,
             width: 2,
             height: 96,
@@ -131,7 +158,7 @@ export default function Tape({ m }: IDrawProps) {
           }}
         />
         <svg
-          style={{ position: 'absolute', left: 150, top: 0 }}
+          style={{ position: 'absolute', left: NEEDLE - 10, top: 0 }}
           width="20"
           height="12"
           viewBox="0 0 20 12"

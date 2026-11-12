@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import matrix from '../../../../../extension/data/support-matrix.json';
 import { Block, Callout, DataTable, Faq, Prose, Steps, tx } from '@/components/site/blocks';
 import { JsonLd } from '@/components/site/json-ld';
 import { HeroButtons, PageHero } from '@/components/site/page-hero';
@@ -12,6 +13,8 @@ const STORE = {
   edge: 'https://microsoftedge.microsoft.com/addons/search/AwakeTab',
 } as const;
 const LISTED = false as boolean;
+// The one support data file the extension's own manifest reads its minimum version from.
+const MIN_VERSION = matrix.extension.minimumChromeVersion;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.extension' });
@@ -33,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   await englishOnly(params);
   const t = await getTranslations({ locale: 'en', namespace: 'page.extension' });
   const canonical = `${SITE}${ROUTES.extension}`;
-  const note = `${t('cta.note', { browsers: 'Chrome and Edge', version: '116' })}${LISTED ? '' : ` ${t('cta.pending')}`}`;
+  const note = `${t('cta.note', { browsers: 'Chrome and Edge', version: MIN_VERSION })}${LISTED ? '' : ` ${t('cta.pending')}`}`;
   return (
     <>
       <JsonLd
@@ -73,7 +76,17 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       </Block>
       <Block id="ext-features" h={t('features.title')}>
         <Prose
-          items={[{ list: [t('features.levels'), t('features.timers'), t('features.badge'), t('features.pro')] }]}
+          items={[
+            {
+              list: [
+                t('features.lengths'),
+                t('features.badge'),
+                t('features.face'),
+                t('features.options'),
+                t('features.shortcut'),
+              ],
+            },
+          ]}
         />
         <Callout tone="warning" title="What it can’t do">
           {t('limits.running')} {t('limits.lid')} {t('limits.presence')}
@@ -84,7 +97,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
           label={t('permissions.title')}
           cols={['Permission', 'Why']}
           template="0.8fr 2fr"
-          rows={(['power', 'storage', 'alarms', 'notifications', 'sites'] as const).map((key) => {
+          rows={(['power', 'alarms', 'storage', 'offscreen', 'activeTab', 'sites'] as const).map((key) => {
             const [name = '', why = ''] = t(`permissions.${key}`).split(' — ');
             return [tx(name, true), tx(why)];
           })}

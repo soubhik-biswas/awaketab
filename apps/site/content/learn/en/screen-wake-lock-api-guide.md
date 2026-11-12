@@ -45,11 +45,11 @@ rows:
       value: "iOS 18.4 and later"
   errors:
     - title: "The page is hidden or not active"
-      text: "The request is rejected, and a held lock is released. AwakeTab shows \"Paused — tab hidden\" and asks again when you come back."
+      text: "The request is rejected, and a held lock is released. AwakeTab shows \"Paused\" and asks again when you come back."
     - title: "A Permissions-Policy blocks it"
-      text: "Common in an iframe without `allow=\"screen-wake-lock\"`. AwakeTab shows \"Blocked — here's the fix\"."
+      text: "Common in an iframe without `allow=\"screen-wake-lock\"`. AwakeTab shows \"Not awake\"."
     - title: "Safari has not had a tap yet"
-      text: "Safari wants a recent tap on the page. AwakeTab shows \"Blocked — here's the fix\", and tapping Retry is that tap."
+      text: "Safari wants a recent tap on the page. AwakeTab shows \"Not awake\", and tapping Retry is that tap."
     - title: "Firefox is at 5 % battery or less and not charging"
       text: "Firefox refuses new locks and releases held ones. Plug in, then tap Retry."
     - title: "The page is not on HTTPS"
@@ -113,7 +113,7 @@ code:
       stopButton.addEventListener('click', letScreenSleep);
 lifecycle:
   title: "Wake lock lifecycle"
-  desc: "Ready moves to Starting when the page calls request. Starting moves to Screen awake when the browser grants the lock. Screen awake moves to Paused, tab hidden, when the page is hidden. When the page is visible again it requests a new lock and returns to Starting."
+  desc: "Ready moves to Starting when the page calls request. Starting moves to Awake when the browser grants the lock. Awake moves to Paused, tab hidden, when the page is hidden. When the page is visible again it requests a new lock and returns to Starting."
   edges:
     granted: "granted"
     hidden: "tab hidden"
@@ -121,7 +121,7 @@ lifecycle:
     noApi: "no wakeLock in navigator"
     tap: "tap"
   others: "Other ways out"
-  caption: "Labels are the exact pill copy. A timer runs only in \"Screen awake\" and \"Awake via video fallback\"."
+  caption: "Labels are the exact pill copy. A timer runs only in \"Awake\" and \"Awake via video\"."
 faq:
   - q: "Does the Screen Wake Lock API show a permission prompt?"
     a: "Not in Chromium: its screen-wake-lock permission is allowed by default, so a visible, top-level HTTPS page gets the lock without asking. Safari's condition is a recent tap on the page, and Firefox's is a battery above 5 % or a charger."

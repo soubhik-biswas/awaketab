@@ -2,8 +2,8 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
     ".": {
-      "entry": ["scripts/*.mjs", "lighthouserc.cjs"],
-      "project": ["*.{ts,mjs,cjs}", "scripts/**/*.mjs"],
+      "entry": ["scripts/*.{mjs,mts}", "scripts/kv/*.ts", "lighthouserc.cjs"],
+      "project": ["*.{ts,mjs,cjs}", "scripts/**/*.{mjs,mts,ts}"],
       "vitest": {
         "config": ["vitest.config.ts"]
       }
@@ -33,23 +33,11 @@
         "open-next.config.ts",
         "worker/sw.ts",
         "scripts/*.{mjs,mts}",
-        "**/*.test.{ts,tsx}"
+        "**/*.test.{ts,tsx}",
+        "e2e/**/*.spec.ts"
       ],
       "project": ["**/*.{ts,tsx,mjs,mts}"],
-      "ignore": ["components/ui/**", "hooks/use-mobile.ts"],
-      "ignoreDependencies": [
-        "@base-ui/react",
-        "@hookform/resolvers",
-        "@shadcn/react",
-        "date-fns",
-        "embla-carousel-react",
-        "input-otp",
-        "react-day-picker",
-        "react-hook-form",
-        "react-resizable-panels",
-        "tailwindcss",
-        "tw-animate-css"
-      ],
+      "ignoreDependencies": ["tailwindcss", "tw-animate-css"],
       "ignoreIssues": {
         "components/ui/*.tsx": ["exports", "types"]
       }

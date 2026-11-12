@@ -99,7 +99,7 @@ export async function articleMetadata(kind: TContentKind, locale: string, slug: 
   const og = await articleOg(a);
   const indexable = isIndexable(a);
   return pageMetadata({
-    title: titleFor(a.h1, a.crumb),
+    title: titleFor(a.h1, a.crumb, a.title),
     description: a.description,
     path: articlePath(kind, a.enSlug, a.locale),
     locale: a.locale,
@@ -114,28 +114,36 @@ export async function articleMetadata(kind: TContentKind, locale: string, slug: 
 interface IRelated {
   href: string;
   label: string;
+  desc?: string;
   lang?: string;
 }
 
 async function relatedLinks(a: TArticle): Promise<IRelated[]> {
   const tp = await getTranslations({ locale: 'en', namespace: 'page' });
-  const SITE_PAGES: Record<string, string> = {
-    '/embed': tp('embed.h1'),
-    '/extension': tp('extension.h1'),
-    '/kiosk': tp('kiosk.h1'),
-    '/library': tp('library.h1'),
-    '/pro': tp('pro.h1'),
-    '/about': tp('about.h1'),
+  const sitePage = (key: 'embed' | 'extension' | 'kiosk' | 'library' | 'pro' | 'about') => ({
+    label: tp(`${key}.h1`),
+    desc: tp(`${key}.description`),
+  });
+  const SITE_PAGES: Record<string, { label: string; desc: string }> = {
+    '/embed': sitePage('embed'),
+    '/extension': sitePage('extension'),
+    '/kiosk': sitePage('kiosk'),
+    '/library': sitePage('library'),
+    '/pro': sitePage('pro'),
+    '/about': sitePage('about'),
   };
   return a.related.map((href) => {
     const [, kind = '', enSlug = ''] = href.split('/');
     const known = (['for', 'on', 'vs', 'guides', 'learn'] as const).find((k) => k === kind);
     const source = known ? articleIn(known, enSlug, 'en') : undefined;
-    const fallback = SITE_PAGES[href] ?? href.replace(/^\//u, '').replaceAll('/', ' · ').replaceAll('-', ' ');
-    if (a.locale === 'en') return { href, label: source?.h1 ?? fallback };
+    const page = SITE_PAGES[href];
+    const fallback = page?.label ?? href.replace(/^\//u, '').replaceAll('/', ' · ').replaceAll('-', ' ');
+    const desc = source?.description ?? page?.desc;
+    const withDesc = desc ? { desc } : {};
+    if (a.locale === 'en') return { href, label: source?.h1 ?? fallback, ...withDesc };
     const same = known ? articleIn(known, enSlug, a.locale) : undefined;
-    if (same && known) return { href: articlePath(known, enSlug, a.locale), label: same.h1 };
-    return { href, label: `${source?.h1 ?? fallback} (${LOCALE_META.en.label})`, lang: 'en' };
+    if (same && known) return { href: articlePath(known, enSlug, a.locale), label: same.h1, desc: same.description };
+    return { href, label: `${source?.h1 ?? fallback} (${LOCALE_META.en.label})`, lang: 'en', ...withDesc };
   });
 }
 
@@ -184,6 +192,7 @@ export async function ArticlePage({
   const relatedCards: ICard[] = related.map((r) => ({
     href: r.href,
     title: r.label,
+    ...(r.desc ? { desc: r.desc } : {}),
     link: ts('article.read'),
     ...(r.lang ? { lang: r.lang, titleLang: r.lang } : {}),
   }));
@@ -241,6 +250,7 @@ export async function ArticlePage({
           published: a.published,
           image: `${SITE}${ogImageUrl(await articleOg(a), locale)}`,
           ...(a.updated ? { updated: a.updated } : {}),
+          ...(a.faq.length > 0 ? { faq: a.faq } : {}),
           breadcrumbs,
         })}
       />

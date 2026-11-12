@@ -8,13 +8,13 @@ export const TRIAL_DAYS = 14;
 
 export function priceLabel(plan: TProPlan): string {
   const amount = PLAN_PRICES[plan];
-  return amount === null ? '[PRICE]' : `$${String(amount)}`;
+  return amount === null ? '—' : `$${String(amount)}`;
 }
 
-// Whole percent saved by paying yearly instead of twelve months; a placeholder until both prices exist.
+// Whole percent saved by paying yearly instead of twelve months; a dash until both prices exist.
 export function yearlySaving(): string {
   const { yearly, monthly } = PLAN_PRICES;
-  if (yearly === null || monthly === null || monthly <= 0) return '[NUMBER]';
+  if (yearly === null || monthly === null || monthly <= 0) return '—';
   return String(Math.round((1 - yearly / (monthly * 12)) * 100));
 }
 

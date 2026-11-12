@@ -14,7 +14,7 @@ lastVerified: 2026-09-09
 browsers: ["chrome", "safari", "firefox"]
 os: ["macos"]
 crumb: "macOS"
-lead: "Safari 16.4+, Chrome 84+ y Firefox 126+ pueden mantener encendida la pantalla de tu Mac desde una pestaña visible, sin instalar ninguna app. Inicia la sesión de una hora que trae esta página, o cualquier otra duración; estará activa cuando el indicador marque “Pantalla despierta”. Mientras la pantalla siga encendida, la Mac tampoco entra en reposo por inactividad. Ten presentes dos límites: cerrar la tapa la pone en reposo, y minimizar la ventana o cambiar de pestaña libera el bloqueo."
+lead: "Safari 16.4+, Chrome 84+ y Firefox 126+ pueden mantener encendida la pantalla de tu Mac desde una pestaña visible, sin instalar ninguna app. Inicia la sesión de una hora que trae esta página, o cualquier otra duración; estará activa cuando el indicador marque “Despierta”. Mientras la pantalla siga encendida, la Mac tampoco entra en reposo por inactividad. Ten presentes dos límites: cerrar la tapa la pone en reposo, y minimizar la ventana o cambiar de pestaña libera el bloqueo."
 facts:
   - label: "Safari"
     value: "16.4 o posterior"
@@ -29,7 +29,7 @@ steps:
     text: "Conecta la MacBook al cargador si la sesión va a ser larga."
     shot: "AwakeTab en Safari en una Mac con la duración elegida"
   - title: "Revisa el indicador"
-    text: "Debe decir “Pantalla despierta”. Si dice “Bloqueado — aquí está la solución”, el motivo aparece justo debajo."
+    text: "Debe decir “Despierta”. Si dice “No despierta”, el motivo aparece justo debajo."
     shot: "el indicador de AwakeTab con la sesión activa"
   - title: "Deja la ventana a la vista"
     text: "Puede estar en un costado de la pantalla o en un monitor externo, pero no minimizada."
@@ -76,7 +76,7 @@ faq:
   - q: "¿Qué navegador conviene usar en Mac?"
     a: "Cualquiera de estos tiene Wake Lock nativo: Safari 16.4+, Chrome 84+, Firefox 126+, además de Edge 84+ y Opera 70+. Con un Firefox anterior, AwakeTab usa un video de respaldo tras un clic, que gasta más energía."
   - q: "¿Qué pasa si minimizo la ventana o cambio a otra pestaña?"
-    a: "El navegador libera el bloqueo y el indicador muestra “En pausa — pestaña oculta”; la cuenta regresiva se detiene. Vuelve a la pestaña y espera a “Pantalla despierta” antes de alejarte."
+    a: "El navegador libera el bloqueo y el indicador muestra “En pausa”; la cuenta regresiva se detiene. Vuelve a la pestaña y espera a “Despierta” antes de alejarte."
 honestLimit: "La pantalla sigue encendida y, mientras lo está, la Mac no entra en reposo por inactividad; cerrar la tapa sí la pone en reposo (salvo en modo de tapa cerrada con pantalla externa) y ocultar la pestaña libera el bloqueo."
 related:
   - "/vs/caffeine"
@@ -105,11 +105,11 @@ macOS separa dos cosas: el reposo de la pantalla y el reposo del sistema. Un Wak
 
 ## La tapa cerrada
 
-Una MacBook con la tapa cerrada entra en reposo, salvo en modo de tapa cerrada (con corriente y una pantalla externa conectada). No importa si AwakeTab dice “Pantalla despierta” un segundo antes: ni una página web ni una extensión pueden impedirlo. Entre las páginas relacionadas hay una guía dedicada a la Mac con la tapa cerrada.
+Una MacBook con la tapa cerrada entra en reposo, salvo en modo de tapa cerrada (con corriente y una pantalla externa conectada). No importa si AwakeTab dice “Despierta” un segundo antes: ni una página web ni una extensión pueden impedirlo. Entre las páginas relacionadas hay una guía dedicada a la Mac con la tapa cerrada.
 
 ## Si minimizas o cambias de pestaña
 
-El Wake Lock pertenece a la pestaña que ves. Minimizar la ventana o pasar a otra pestaña hace que se libere, y AwakeTab lo muestra con “En pausa — pestaña oculta”. Al volver, pide el bloqueo otra vez y la cuenta regresiva continúa desde donde se quedó, calculada con el reloj del sistema.
+El Wake Lock pertenece a la pestaña que ves. Minimizar la ventana o pasar a otra pestaña hace que se libere, y AwakeTab lo muestra con “En pausa”. Al volver, pide el bloqueo otra vez y la cuenta regresiva continúa desde donde se quedó, calculada con el reloj del sistema.
 
 ## Otros límites en Mac
 

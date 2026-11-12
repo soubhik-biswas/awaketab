@@ -4,16 +4,20 @@ import { Block, Callout, Cards } from '@/components/site/blocks';
 import { HelpSearch } from '@/components/site/help-search';
 import { JsonLd } from '@/components/site/json-ld';
 import { PageHero } from '@/components/site/page-hero';
-import { changelog, HELP_CHIPS, HELP_TOPICS } from '@/lib/content';
+import { changelog, HELP_CHIPS, HELP_TOPICS, helpSearchEntries } from '@/lib/content';
 import { fullDate } from '@/lib/dates';
 import { panelHref, ROUTES, SITE } from '@/lib/routes';
+import { PRO_ENABLED } from '@/lib/features';
 import { articleSchema, englishOnly, pageMetadata, titleFor } from '@/lib/seo';
+
+// Billing help only exists with Pro, so the free build's copy leaves it out.
+const FREE = PRO_ENABLED ? '' : 'Free';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'site.help' });
   return pageMetadata({
     title: titleFor(t('h1')),
-    description: t('description'),
+    description: t(`description${FREE}`),
     path: ROUTES.help,
     og: { template: 'guide', kicker: t('eyebrow'), title: t('h1'), sub: t('ogSub'), scene: 'maintenance' },
   });
@@ -31,7 +35,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         schema={articleSchema({
           canonical: `${SITE}${ROUTES.help}`,
           title: t('h1'),
-          description: t('description'),
+          description: t(`description${FREE}`),
           locale: 'en',
           published: '2026-09-09',
           ...(updated ? { updated } : {}),
@@ -45,12 +49,13 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         crumbs={[{ href: ROUTES.help, label: tc('help') }, { label: t('allTopics') }]}
         eyebrow={t('eyebrow')}
         h1={t('h1')}
+        h1Class="max-[699px]:max-w-[300px]"
         lead={t('lead')}
         scene="maintenance"
       />
       <Block label={t('searchLabel')}>
         <HelpSearch
-          topics={HELP_TOPICS.map(({ title, href, words }) => ({ title, href, words }))}
+          topics={helpSearchEntries()}
           chips={HELP_CHIPS}
           labels={{
             search: t('searchLabel'),
@@ -61,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
               : t('countPlain', { n: HELP_TOPICS.length }),
             one: t('one', { q: '{q}' }),
             many: t('many', { n: '{n}', q: '{q}' }),
-            none: t('none', { q: '{q}' }),
+            none: t(`none${FREE}`, { q: '{q}' }),
           }}
         />
       </Block>

@@ -6,8 +6,10 @@ import { big, EndLine, type IDrawProps } from '../kit';
 export default function Battery({ m }: IDrawProps) {
   const { t } = m;
   const tone = m.heatT(m.frac);
-  const w = Math.max(6, Math.round(232 * m.frac));
+  // The cell's inside is 240 wide (264 less the 4 px wall and 8 px gap each side): 100 % fills it, 0 % is empty.
+  const w = m.frac > 0 ? Math.max(6, Math.round(240 * m.frac)) : 0;
   const inside = m.frac > 0.45;
+  const label = m.indef ? '∞' : m.pctLabel;
   return (
     <div
       style={{
@@ -39,7 +41,7 @@ export default function Battery({ m }: IDrawProps) {
               position: 'relative',
               height: 94,
               width: w,
-              borderRadius: 16,
+              borderRadius: 14,
               background: `linear-gradient(90deg, ${tone}, ${alpha(tone, 0xd9)})`,
               overflow: 'hidden',
               display: 'flex',
@@ -65,7 +67,7 @@ export default function Battery({ m }: IDrawProps) {
               position: 'absolute',
               top: 0,
               bottom: 0,
-              left: inside ? 28 : w + 24,
+              left: inside ? 28 : Math.max(24, w + 24),
               display: 'flex',
               alignItems: 'center',
               fontSize: 38,
@@ -75,7 +77,7 @@ export default function Battery({ m }: IDrawProps) {
               fontVariantNumeric: 'tabular-nums',
             }}
           >
-            {m.pctLabel}
+            {label}
           </span>
         </div>
         <div style={{ width: 12, height: 40, borderRadius: '0 6px 6px 0', background: t.ink }} />

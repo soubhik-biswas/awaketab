@@ -30,7 +30,7 @@ steps:
     text: "Diese Seite startet mit „1 Std.“."
     shot: "AwakeTab in Edge unter Windows 11 mit gewählter Dauer"
   - title: "Klicken Sie auf „Bildschirm eingeschaltet lassen“ oder drücken Sie die Leertaste"
-    text: "Prüfen Sie die Anzeige. „Bildschirm bleibt an“ heißt: Der Lock steht."
+    text: "Prüfen Sie die Anzeige. „Wach“ heißt: Der Lock steht."
     shot: "die Statusanzeige von AwakeTab bei laufender Sitzung"
   - title: "Schieben Sie das Fenster an den Rand oder auf einen zweiten Monitor"
     text: "Es darf klein sein, aber nicht minimiert oder vollständig verdeckt."
@@ -42,11 +42,11 @@ matrix:
     - what: "Chrome ab 84"
       result: works
       label: "Unterstützt"
-      text: "Tab muss sichtbar bleiben; schwebendes Fenster ab 116"
+      text: "Tab muss sichtbar bleiben; Mini-Uhr ab 116"
     - what: "Edge ab 84"
       result: works
       label: "Unterstützt"
-      text: "Tab muss sichtbar bleiben; schwebendes Fenster ab 116"
+      text: "Tab muss sichtbar bleiben; Mini-Uhr ab 116"
     - what: "Firefox ab 126"
       result: works
       label: "Unterstützt"
@@ -58,14 +58,14 @@ matrix:
 rows:
   blockers:
     - title: "Energiesparmodus"
-      text: "Seit Windows 11 24H2 heißt der frühere „Stromsparmodus“ „Energiesparmodus“ (Energy saver). Er kann das Display dimmen oder früher abschalten, lehnt den Lock aus Chrome oder Edge aber nicht ab, denn Chromium prüft ihn gar nicht. „Blockiert — so beheben Sie es“ hat andere Ursachen, etwa eine Einbettung ohne Berechtigung, und die Anzeige nennt sie."
+      text: "Seit Windows 11 24H2 heißt der frühere „Stromsparmodus“ „Energiesparmodus“ (Energy saver). Er kann das Display dimmen oder früher abschalten, lehnt den Lock aus Chrome oder Edge aber nicht ab, denn Chromium prüft ihn gar nicht. „Nicht wach“ hat andere Ursachen, etwa eine Einbettung ohne Berechtigung, und die Anzeige nennt sie."
     - title: "Effizienzmodus in Edge"
       text: "Ob er einen gehaltenen Lock beeinflusst, ist nicht belegt und noch nicht auf einem Gerät geprüft. Hält Edge nicht, sagt Ihnen die Anzeige das sofort."
     - title: "Firmenrichtlinien"
-      text: "Ein per Gruppenrichtlinie erzwungener Sperrbildschirm, eine Smartcard-Sperre oder ein Monitor, der sich von selbst abschaltet, stehen über jedem Browser. Dimmt das Display trotz „Bildschirm bleibt an“, liegt die Ursache dort."
+      text: "Ein per Gruppenrichtlinie erzwungener Sperrbildschirm, eine Smartcard-Sperre oder ein Monitor, der sich von selbst abschaltet, stehen über jedem Browser. Dimmt das Display trotz „Wach“, liegt die Ursache dort."
 faq:
   - q: "Bleibt der Bildschirm an, wenn ich das Browserfenster minimiere?"
-    a: "Nein. Minimieren, ein Tab-Wechsel oder ein Fenster, das AwakeTab komplett verdeckt, lassen den Browser den Wake Lock freigeben. Die Anzeige zeigt dann „Pausiert — Tab ausgeblendet“. Holen Sie das Fenster zurück und warten Sie auf „Bildschirm bleibt an“."
+    a: "Nein. Minimieren, ein Tab-Wechsel oder ein Fenster, das AwakeTab komplett verdeckt, lassen den Browser den Wake Lock freigeben. Die Anzeige zeigt dann „Pausiert“. Holen Sie das Fenster zurück und warten Sie auf „Wach“."
   - q: "Wo stelle ich unter Windows 11 ein, wann der Bildschirm ausgeht?"
     a: "Unter Einstellungen → System → Netzbetrieb und Akku. Dort legen Sie getrennt für Akku- und Netzbetrieb fest, wann das Display abschaltet. Auf Firmen-PCs ist diese Einstellung oft per Richtlinie gesperrt; AwakeTab braucht dagegen keine Installation und keine Administratorrechte."
   - q: "Was hat Modern Standby damit zu tun?"
@@ -88,7 +88,7 @@ updated: 2026-09-27
 
 ::steps
 
-Arbeiten Sie parallel im Vollbild, etwa in einer Präsentation, nutzen Sie in Chrome oder Edge das „Schwebende Fenster“. Die kleine Anzeige bleibt dann über anderen Programmen sichtbar.
+Arbeiten Sie parallel im Vollbild, etwa in einer Präsentation, nutzen Sie in Chrome oder Edge die „Mini-Uhr“. Die kleine Anzeige bleibt dann über anderen Programmen sichtbar.
 
 ::ad
 
@@ -110,4 +110,4 @@ Viele neuere Notebooks nutzen Modern Standby statt des klassischen Ruhezustands.
 
 ## Lange Sitzungen am PC
 
-Ein helles Display kostet Energie, am Laptop gehört für mehrere Stunden das Netzteil dazu. Chromium-Browser können AwakeTab bei einem von Ihnen gewählten Akkustand automatisch stoppen lassen. Laufzeit und Statistik zählen nur, während der Lock tatsächlich gehalten wird. Steht AwakeTab als Dashboard- oder Infobildschirm im Büro, lohnt morgens ein kurzer Blick, ob die Anzeige noch „Bildschirm bleibt an“ meldet.
+Ein helles Display kostet Energie, am Laptop gehört für mehrere Stunden das Netzteil dazu. Die Laufzeit im Verlauf zählt nur, während der Lock tatsächlich gehalten wird. Steht AwakeTab als Dashboard- oder Infobildschirm im Büro, lohnt morgens ein kurzer Blick, ob die Anzeige noch „Wach“ meldet.

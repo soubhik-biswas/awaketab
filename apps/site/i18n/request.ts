@@ -16,7 +16,7 @@ const LOADERS: Record<string, () => Promise<{ default: TTree }>> = {
   hi: () => import('../messages/hi.json'),
 };
 
-// Untranslated keys fall back to English, as the old catalog loader did.
+// Untranslated keys fall back to English, so a missing string never shows as a bare key.
 function merge(base: TTree, over: TTree): TTree {
   const out: TTree = { ...base };
   for (const [key, value] of Object.entries(over)) {

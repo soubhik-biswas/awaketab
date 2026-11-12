@@ -14,7 +14,7 @@ lastVerified: 2026-09-09
 browsers: ["chrome"]
 os: ["android"]
 crumb: "Android no Chrome"
-lead: "O Chrome 84 ou posterior no Android aceita o pedido de Wake Lock de qualquer aba que esteja à vista. Inicie o AwakeTab e espere o “Tela ligada”; daí em diante o celular não escurece enquanto o Chrome mostrar essa aba. Não precisa instalar app nenhum. Duas coisas podem atrapalhar: sair do Chrome libera o bloqueio, e listas de “apps em suspensão” de algumas fabricantes podem encerrar a aba depois que você sai. A Economia de bateria pode escurecer a tela, mas o Chrome não recusa o pedido por causa dela. Esta página sugere 30 minutos."
+lead: "O Chrome 84 ou posterior no Android aceita o pedido de Wake Lock de qualquer aba que esteja à vista. Inicie o AwakeTab e espere o “Ligada”; daí em diante o celular não escurece enquanto o Chrome mostrar essa aba. Não precisa instalar app nenhum. Duas coisas podem atrapalhar: sair do Chrome libera o bloqueio, e listas de “apps em suspensão” de algumas fabricantes podem encerrar a aba depois que você sai. A Economia de bateria pode escurecer a tela, mas o Chrome não recusa o pedido por causa dela. Esta página sugere 30 minutos."
 facts:
   - label: "Chrome"
     value: "84 ou posterior"
@@ -32,7 +32,7 @@ steps:
     text: "Para sessões longas, ligue o celular no carregador."
     shot: "o AwakeTab no Chrome para Android com a duração escolhida"
   - title: "Inicie a sessão"
-    text: "Aguarde “Tela ligada” aparecer no indicador; antes disso ele mostra “Iniciando…”."
+    text: "Aguarde “Ligada” aparecer no indicador; antes disso ele mostra “Perguntando ao navegador…”."
     shot: "o indicador do AwakeTab com a sessão ativa"
   - title: "Precisa ver outra coisa ao mesmo tempo?"
     text: "Use a tela dividida com o AwakeTab numa metade. Assim a aba continua visível."
@@ -64,7 +64,7 @@ matrix:
 rows:
   blockers:
     - title: "Economia de bateria"
-      text: "O Chrome não recusa o Wake Lock por causa dela (segundo o código-fonte do Chromium, conferido em 26 de setembro de 2026), mas ela pode encurtar o tempo limite ou escurecer a tela. Se aparecer “Bloqueado — veja como corrigir”, o AwakeTab mostra a causa real."
+      text: "O Chrome não recusa o Wake Lock por causa dela (segundo o código-fonte do Chromium, conferido em 26 de setembro de 2026), mas ela pode encurtar o tempo limite ou escurecer a tela. Se aparecer “Não está ligada”, o AwakeTab mostra a causa real."
     - title: "Apps em suspensão"
       text: "Samsung, Xiaomi e outras marcas podem colocar o Chrome para dormir depois que você o deixa em segundo plano. Se a sessão sumir sozinha, confira essas listas nas configurações de bateria."
     - title: "Tela dividida"
@@ -73,8 +73,8 @@ rows:
       text: "No Chrome, as Configurações do AwakeTab têm “Parar automaticamente com bateria fraca”, com o limite que você escolher."
 faq:
   - q: "Se eu abrir o YouTube ou outro app, a tela continua ligada?"
-    a: "Não pelo AwakeTab. Quando o Chrome vai para segundo plano, o bloqueio é liberado e o indicador mostra “Pausado — aba oculta”. Volte para a aba e o AwakeTab pede o bloqueio de novo. Com a tela dividida, os dois ficam visíveis ao mesmo tempo."
-  - q: "Aparece “Bloqueado — veja como corrigir”. O que é?"
+    a: "Não pelo AwakeTab. Quando o Chrome vai para segundo plano, o bloqueio é liberado e o indicador mostra “Pausado”. Volte para a aba e o AwakeTab pede o bloqueio de novo. Com a tela dividida, os dois ficam visíveis ao mesmo tempo."
+  - q: "Aparece “Não está ligada”. O que é?"
     a: "Na maioria das vezes a aba não estava visível quando o AwakeTab pediu o bloqueio, ou a página está dentro de um quadro (iframe) sem permissão; o motivo aparece embaixo do indicador. A Economia de bateria não é a causa: o Chrome não recusa o Wake Lock por causa dela."
   - q: "Meu Samsung ou Xiaomi fecha o Chrome depois de um tempo. Por quê?"
     a: "Algumas fabricantes têm listas de apps colocados em suspensão ou otimização agressiva de bateria. Elas podem encerrar a aba depois que você sai do Chrome. Tire o Chrome dessas listas nas configurações de bateria do aparelho."

@@ -1,3 +1,5 @@
+'use client';
+
 import { type ReactNode, useRef } from 'react';
 import { cn } from 'cn';
 import { CASE, plate } from './art';
@@ -43,7 +45,8 @@ const CASELESS: ReadonlySet<TFaceId> = new Set<TFaceId>([
   'constellation',
 ]);
 
-function StateIcon({ state, c }: { state: TFaceState; c: string }) {
+// One glyph per state, so the status reads by shape as well as by colour and words.
+export function StateIcon({ state, c }: { state: TFaceState; c: string }) {
   const body = {
     running: (
       <>
@@ -158,6 +161,7 @@ export function FaceFrame({
         )}
         {PLATED.has(m.face) && (
           <div
+            className="af-plate"
             style={{
               position: 'absolute',
               left: 34,

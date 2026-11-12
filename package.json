@@ -2,7 +2,7 @@
   "name": "awaketab",
   "version": "0.0.0",
   "private": true,
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "type": "module",
   "packageManager": "pnpm@12.17.0",
   "engines": {
@@ -20,7 +20,7 @@
     "lint": "node scripts/comments.mjs && prettier --check . --log-level warn && knip && pnpm -F @awaketab/wake -F @awaketab/core build > /dev/null && eslint . && stylelint \"apps/extension/**/*.css\"",
     "format": "prettier --write . --log-level warn",
     "knip": "knip",
-    "typecheck": "pnpm -F @awaketab/wake -F @awaketab/core build > /dev/null && pnpm -r typecheck",
+    "typecheck": "pnpm -F @awaketab/wake -F @awaketab/core build > /dev/null && pnpm -r typecheck && tsc -p scripts/tsconfig.json",
     "size": "pnpm -r --if-present size",
     "keys:dev": "node scripts/keys-dev.mjs",
     "keys:prod": "tsx scripts/keys-prod.mts",
@@ -28,6 +28,7 @@
     "kv:backup": "tsx scripts/kv/backup.ts",
     "kv:restore": "tsx scripts/kv/restore.ts",
     "kv:reencrypt": "tsx scripts/kv/reencrypt.ts",
+    "metrics": "node scripts/metrics.mjs",
     "lighthouse": "lhci autorun"
   },
   "devDependencies": {

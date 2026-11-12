@@ -17,7 +17,7 @@ export async function localeParam(params: Promise<{ locale: string }>): Promise<
   return locale;
 }
 
-// Pages that exist in English only: the locale prefixes 404, as on the old site.
+// Pages that exist in English only: the locale prefixes 404, so no language serves an untranslated copy.
 export async function englishOnly(params: Promise<{ locale: string }>): Promise<'en'> {
   const locale = await localeParam(params);
   if (locale !== 'en') notFound();
@@ -44,6 +44,18 @@ export interface IOgCard {
 }
 
 const OG_SIZE = { width: 1200, height: 630 } as const;
+
+// Open Graph wants language_TERRITORY; Spanish is the neutral Latin American edition (docs/07 §1).
+const OG_LOCALE: Record<TLocale, string> = {
+  en: 'en_US',
+  es: 'es_LA',
+  'pt-br': 'pt_BR',
+  de: 'de_DE',
+  fr: 'fr_FR',
+  ja: 'ja_JP',
+  zh: 'zh_CN',
+  hi: 'hi_IN',
+};
 
 // The head icons and both theme colours from the marketing board, shared by every locale layout.
 export const SITE_ICONS: NonNullable<Metadata['icons']> = {
@@ -78,15 +90,41 @@ export function ogImageUrl(card: IOgCard, locale: TLocale = 'en'): string {
 }
 
 const SUFFIX = ' · AwakeTab';
+const BRAND = /awaketab/iu;
+const WRITTEN_SUFFIX = / [—·] AwakeTab$/u;
 
-// "{H1} · AwakeTab" under 60 characters (brief §9h). A long H1 drops its clause after a colon or question mark,
-// then falls back to its short crumb, so the suffix always stays.
-export function titleFor(h1: string, short?: string): string {
+const fits = (text: string): boolean => text.length + SUFFIX.length < 60;
+
+// A title that already names AwakeTab stands alone (docs/06 §4); every other one takes the suffix.
+const withBrand = (text: string): string | null => {
+  if (BRAND.test(text)) return text.length < 60 ? text : null;
+  return fits(text) ? text + SUFFIX : null;
+};
+
+// The longest run of whole words that still fits, so a title never stops in the middle of a phrase.
+function wholeWords(text: string): string {
+  const words = text.split(/\s+/u);
+  let out = '';
+  for (const word of words) {
+    const next = out ? `${out} ${word}` : word;
+    if (!fits(next)) break;
+    out = next;
+  }
+  return (out || text.slice(0, 48)).replace(/[\s,;:–—-]+$/u, '');
+}
+
+// "{H1} · AwakeTab" under 60 characters (brief §9h). A long H1 gives way to the page's hand-written title, then to
+// its clause before a colon or question mark, then to its short crumb.
+export function titleFor(h1: string, short?: string, written?: string): string {
   const clean = h1.trim().replace(/[.!]$/u, '');
-  if (clean.length + SUFFIX.length < 60) return clean + SUFFIX;
+  const stem = written?.trim().replace(WRITTEN_SUFFIX, '');
   const clause = clean.split(/[:?]\s/u)[0]?.trim() ?? clean;
-  if (clause !== clean && clause.length + SUFFIX.length < 60) return clause + SUFFIX;
-  return (short ?? clause.slice(0, 48)) + SUFFIX;
+  const candidates = [clean, stem, clause.split(/\s+/u).length > 2 ? clause : undefined, short];
+  for (const candidate of candidates) {
+    const title = candidate ? withBrand(candidate) : null;
+    if (title) return title;
+  }
+  return wholeWords(clean) + SUFFIX;
 }
 
 export interface IPageMeta {
@@ -137,13 +175,11 @@ export function pageMetadata(meta: IPageMeta): Metadata {
     openGraph: {
       type: meta.article ? 'article' : 'website',
       siteName: 'AwakeTab',
-      locale: LOCALE_META[locale].htmlLang.replace('-', '_'),
+      locale: OG_LOCALE[locale],
       ...(noindex
         ? {}
         : {
-            alternateLocale: alternates
-              .filter((a) => a.locale !== locale)
-              .map((a) => LOCALE_META[a.locale].htmlLang.replace('-', '_')),
+            alternateLocale: alternates.filter((a) => a.locale !== locale).map((a) => OG_LOCALE[a.locale]),
           }),
       title: meta.title,
       description: meta.description,
@@ -196,6 +232,7 @@ export function homeSchema(locale: TLocale, ratings: IRatingsSummary): TSchemaNo
         '@type': 'WebSite',
         '@id': `${SITE}/#website`,
         name: 'AwakeTab',
+        alternateName: ['Awake Tab', 'awaketab.com'],
         url: `${SITE}/`,
         publisher: { '@id': `${SITE}/#org` },
         inLanguage: LOCALE_META[locale].hreflang,
@@ -213,8 +250,34 @@ export interface IArticleSchemaInput {
   published: string;
   updated?: string;
   image?: string;
+  faq?: Array<{ q: string; a: string }>;
   breadcrumbs: Array<{ name: string; url: string }>;
 }
+
+// Search engines reject a date without a time zone, so a plain day becomes midnight UTC.
+export function schemaDate(value: string | Date): string {
+  if (value instanceof Date) return value.toISOString();
+  if (/^\d{4}-\d{2}-\d{2}$/u.test(value)) return `${value}T00:00:00+00:00`;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
+}
+
+// Answers are written with inline Markdown; structured data wants the words alone.
+const plainText = (value: string): string =>
+  value
+    .replace(/\[([^\]]+)\]\([^)]+\)/gu, '$1')
+    .replace(/[*_`]/gu, '')
+    .replace(/\s+/gu, ' ')
+    .trim();
+
+const faqPage = (items: Array<{ q: string; a: string }>): TSchemaNode => ({
+  '@type': 'FAQPage',
+  mainEntity: items.map((item) => ({
+    '@type': 'Question',
+    name: plainText(item.q),
+    acceptedAnswer: { '@type': 'Answer', text: plainText(item.a) },
+  })),
+});
 
 const breadcrumbList = (items: Array<{ name: string; url: string }>): TSchemaNode => ({
   '@type': 'BreadcrumbList',
@@ -232,15 +295,17 @@ export function articleSchema(input: IArticleSchemaInput): TSchemaNode {
     headline: input.title,
     description: input.description,
     url: input.canonical,
-    datePublished: input.published,
-    dateModified: input.updated ?? input.published,
+    datePublished: schemaDate(input.published),
+    dateModified: schemaDate(input.updated ?? input.published),
     inLanguage: LOCALE_META[input.locale].hreflang,
     // Google does not resolve an @id on another page, so the article names its author and publisher inline.
     author: { '@type': 'Person', '@id': `${SITE}/about#person`, name: 'Soubhik Biswas', url: `${SITE}/about` },
     publisher: { '@type': 'Organization', '@id': `${SITE}/#org`, name: 'AwakeTab', url: `${SITE}/` },
   };
-  if (input.image) article.image = input.image;
-  return { '@context': 'https://schema.org', '@graph': [article, breadcrumbList(input.breadcrumbs)] };
+  article.image = input.image ?? `${SITE}/og/og-01.png`;
+  const graph = [article, breadcrumbList(input.breadcrumbs)];
+  if (input.faq && input.faq.length > 0) graph.push(faqPage(input.faq));
+  return { '@context': 'https://schema.org', '@graph': graph };
 }
 
 function itemListSchema(name: string, items: Array<{ name: string; url: string }>): TSchemaNode {

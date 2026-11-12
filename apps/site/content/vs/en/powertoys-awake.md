@@ -34,7 +34,7 @@ compare:
     - what: "How it keeps Windows awake"
       cells: ["Screen Wake Lock API; the browser asks Windows to keep the display on", "Power request from a background app"]
     - what: "With the tab hidden or no window open"
-      cells: ["Stops. The pill says \"Paused — tab hidden\" and asks again when you return.", "Keeps holding. It has no tab."]
+      cells: ["Stops. The pill says \"Paused\" and asks again when you return.", "Keeps holding. It has no tab."]
     - what: "Screen"
       cells: ["On while the lock holds", "Off by default, on with \"Keep screen on\""]
     - what: "When it ends"
@@ -44,7 +44,7 @@ compare:
     - what: "Platforms"
       cells: ["Windows, macOS, Linux, ChromeOS, Android, iPhone, iPad", "Windows"]
     - what: "Price"
-      cells: ["Free, with optional Pro", "Free, open source"]
+      cells: ["Free", "Free, open source"]
     - what: "Last release"
       cells: ["Web app, see the [changelog](/changelog)", "PowerToys 0.101, August 2026"]
     - what: "Facts checked"
@@ -62,7 +62,7 @@ picks:
     - title: "You can't install PowerToys"
       text: "On a work laptop with no admin rights, a web page may be the only tool available. It leaves sign-in and lock policies as IT set them."
     - title: "You want to see the state from across the room"
-      text: "Presenting, a wall dashboard or a report you read without touching: the pill says \"Screen awake\" only once the browser grants the lock."
+      text: "Presenting, a wall dashboard or a report you read without touching: the pill says \"Awake\" only once the browser grants the lock."
     - title: "You want a timed session with an end you can see"
       text: "Pick 1 h or an end time such as 5:30 PM. A chime and a \"Time's up\" prompt let you add 15 minutes."
     - title: "You also use a Mac, Chromebook or phone"
@@ -75,7 +75,7 @@ faq:
   - q: "Does PowerToys Awake need admin rights?"
     a: "Installing PowerToys may need admin rights, depending on how your PC is managed, and IT can switch Awake off with a group policy that Microsoft documents. AwakeTab installs nothing, which is why it is often the option left on a locked-down laptop."
   - q: "Does AwakeTab have a screen-off mode like Awake?"
-    a: "The web page always keeps the screen on, and while it does, Windows does not idle-sleep. For the computer awake with the screen free to turn off, AwakeTab for Chrome has a System level that works in Chrome and Edge even when the tab is hidden."
+    a: "The web page always keeps the screen on, and while it does, Windows does not idle-sleep. To keep the display on while you work in other tabs or apps, AwakeTab for Chrome does it from the toolbar in Chrome and Edge. For the computer awake with the screen free to turn off, PowerToys Awake is the right tool."
 honestLimit: "PowerToys Awake holds whatever is in front. AwakeTab holds only while its tab is visible, so for a long job behind other windows, Awake or AwakeTab for Chrome is the better fit."
 related:
   - "/on/windows-11"
@@ -114,4 +114,4 @@ Microsoft says Awake doesn't work while the lock screen is showing, because the 
 
 ## Confirm which one is working
 
-In an administrator terminal, run `powercfg /requests`. With AwakeTab showing "Screen awake" in Chrome or Edge, the browser appears under DISPLAY. The Windows settings behind this are in [Keep the screen on in Windows 11 and 10](/on/windows-11).
+In an administrator terminal, run `powercfg /requests`. With AwakeTab showing "Awake" in Chrome or Edge, the browser appears under DISPLAY. The Windows settings behind this are in [Keep the screen on in Windows 11 and 10](/on/windows-11).

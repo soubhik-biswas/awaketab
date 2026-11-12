@@ -1,6 +1,7 @@
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse, type NextRequest } from 'next/server';
 import { routing } from './i18n/routing';
+import { canonicalUrl } from './lib/canonical-url';
 import { ALIASES } from './lib/routes';
 
 const intl = createMiddleware(routing);
@@ -18,6 +19,12 @@ const MOVED: Record<string, [string, 301 | 302]> = {
 };
 
 export default function proxy(request: NextRequest) {
+  const canonical = canonicalUrl(
+    request.nextUrl,
+    request.headers.get('host') ?? '',
+    request.headers.get('x-forwarded-proto'),
+  );
+  if (canonical) return NextResponse.redirect(canonical, 308);
   const moved = MOVED[request.nextUrl.pathname];
   if (moved) {
     const url = request.nextUrl.clone();

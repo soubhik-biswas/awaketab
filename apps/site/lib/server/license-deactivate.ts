@@ -1,5 +1,5 @@
 import type { IEnv } from './env';
-import { jsonError, jsonOk, rateLimited } from './http';
+import { jsonError, jsonOk, LICENSE_BODY_BYTES, rateLimited, readJsonBody, stringField } from './http';
 import { parseSigningKey, publicJwk, verifyES256 } from './jwt';
 import { decryptUtf8, publicActivations, readLicense, sha256Hex, writeLicense } from './license';
 import { PolarError, createPolar } from './polar';
@@ -7,15 +7,10 @@ import { clientIp, rateLimit } from './ratelimit';
 
 export async function deactivateRoute(request: Request, env: IEnv): Promise<Response> {
   if (!(await rateLimit(env, 'license', clientIp(request), 10))) return rateLimited();
-  let token: string;
-  let deviceId: string;
-  try {
-    const body = (await request.json()) as { token?: string; deviceId?: string };
-    token = body.token ?? '';
-    deviceId = body.deviceId ?? '';
-  } catch {
-    return jsonError('bad_request', 400);
-  }
+  const read = await readJsonBody(request, LICENSE_BODY_BYTES);
+  if (!read.ok) return read.response;
+  const token = stringField(read.value, 'token');
+  const deviceId = stringField(read.value, 'deviceId');
   const kv = env.LICENSES;
   const encKey = env.LICENSE_KEY_ENC_KEY;
   if (!kv || !encKey || !env.LICENSE_SIGNING_KEY) return jsonError('polar_unavailable', 502);

@@ -1,5 +1,5 @@
 import { arc, f1, P } from '../geometry';
-import { big, D, DialLabel, EndLine, type IDrawProps, MONO, Svg } from '../kit';
+import { big, D, DialLabel, EndLine, fit, type IDrawProps, MONO, Svg } from '../kit';
 
 const GX = 180;
 const GY = 175;
@@ -19,10 +19,10 @@ const gTicks = (r1: number, r2: number, n: number, every: number): string => {
   return d;
 };
 const MINOR = gTicks(112, 118, 40, 0);
-const MAJOR = gTicks(104, 118, 40, 10);
+const MAJOR = gTicks(108, 118, 40, 10);
 const span = (f: number): string => arc(GR, gA(0) + 360, gA(f) + 360, GX, GY);
 
-// An instrument needle with a five-minute warning zone.
+// An instrument needle with a five-minute warning zone; the readout sits below the needle's reach at empty and full.
 export default function Gauge({ m }: IDrawProps) {
   const { t, accent } = m;
   const gFr = m.st === 'idle' ? 1 : m.frac;
@@ -42,12 +42,12 @@ export default function Gauge({ m }: IDrawProps) {
         <path className={D} d={MINOR} strokeWidth="1.4" opacity=".55" style={{ stroke: t.ink2 }} />
         <path d={MAJOR} strokeWidth="2.6" style={{ stroke: t.ink }} />
       </Svg>
-      {[0.25, 0.5, 0.75].map((q) => (
+      {(m.total > 0 && !m.indef ? [0.25, 0.5, 0.75] : []).map((q) => (
         <DialLabel
           key={q}
           m={m}
           text={String(Math.round((m.total / 60) * q))}
-          rr={96}
+          rr={90}
           deg={gA(q)}
           fs={13}
           color={t.ink2}
@@ -78,7 +78,7 @@ export default function Gauge({ m }: IDrawProps) {
               left: 177,
               top: 63,
               width: 6,
-              height: 130,
+              height: 124,
               borderRadius: 3,
               background: `linear-gradient(180deg, ${accent}, ${t.ink} 70%)`,
             }}
@@ -102,7 +102,7 @@ export default function Gauge({ m }: IDrawProps) {
         style={{
           position: 'absolute',
           left: 0,
-          top: 206,
+          top: 213,
           width: 360,
           display: 'flex',
           flexDirection: 'column',
@@ -110,7 +110,7 @@ export default function Gauge({ m }: IDrawProps) {
           gap: 4,
         }}
       >
-        <span style={big(46, 400)}>{m.digits}</span>
+        <span style={big(fit(m, m.long ? 38 : 46, 32), 400)}>{m.digits}</span>
         <EndLine m={m} px={14} />
       </div>
     </>

@@ -1,48 +1,63 @@
-import { WEBM_DATA_URL } from './assets/blank.webm.b64.js';
-
 export interface IFallbackHandle {
   el: HTMLVideoElement;
   play(): Promise<void>;
   pause(): void;
   remove(): void;
-  startNudge(ms: number): void;
-  stopNudge(): void;
+  watch(ms: number, onStall: () => void): void;
+  unwatch(): void;
 }
+
+const CHECK_MS = 250;
+const CHECKS = 8;
 
 export function createFallbackVideo(doc: Document, sources: { webm?: string; mp4?: string } = {}): IFallbackHandle {
   const v = doc.createElement('video');
-  v.muted = true;
-  v.loop = true;
   v.playsInline = true;
-  v.autoplay = false;
   v.preload = 'auto';
-  v.setAttribute('muted', '');
   v.setAttribute('playsinline', '');
   v.setAttribute('webkit-playsinline', '');
   v.setAttribute('aria-hidden', 'true');
-  v.setAttribute('hidden', '');
   v.title = 'AwakeTab keeps the screen awake';
   v.disablePictureInPicture = true;
-  v.style.cssText =
-    'position:fixed;inset-inline-start:0;inset-block-end:0;inline-size:1px;block-size:1px;opacity:0.01;pointer-events:none';
-  // The MP4 is opt-in (`@awaketab/wake/video`) so the default build stays inside its size budget.
-  let last: HTMLSourceElement | null = null;
-  for (const [type, src] of [
-    ['video/webm', sources.webm ?? WEBM_DATA_URL],
-    ['video/mp4', sources.mp4],
-  ] as const) {
-    if (!src) continue;
-    last = doc.createElement('source');
-    last.type = type;
-    last.src = src;
-    v.appendChild(last);
-  }
+  // Drawn on the page and never muted: a browser keeps the display on only for a video it renders that has sound.
+  v.style.cssText = 'position:fixed;left:0;bottom:0;width:1px;height:1px;opacity:0.01;pointer-events:none';
   doc.body.appendChild(v);
-  let nudgeTimer: ReturnType<typeof setInterval> | null = null;
 
-  const play = () => {
-    v.muted = true;
-    return new Promise<void>((resolve, reject) => {
+  let last: HTMLSourceElement | null = null;
+  let loading: Promise<void> | null = null;
+  let timer: ReturnType<typeof setInterval> | null = null;
+  let pending: Promise<void> | null = null;
+  let stop: (() => void) | null = null;
+  let on = false;
+
+  const running = (from: number) => !v.paused && v.readyState >= 2 && v.currentTime !== from;
+
+  // WebKit lets the screen sleep when a looping clip wraps, so the clip rewinds before its end instead of using `loop`.
+  v.addEventListener('timeupdate', () => {
+    if (v.currentTime > v.duration * 0.8) v.currentTime = 0;
+  });
+  v.addEventListener('ended', () => {
+    v.currentTime = 0;
+    if (on) void v.play().catch(() => undefined);
+  });
+
+  // The clips live in their own module, fetched on first use, so the core entry stays small.
+  const load = (): Promise<void> =>
+    (sources.webm && sources.mp4 ? Promise.resolve(sources) : import('./video.js')).then((clip) => {
+      for (const [type, src] of [
+        ['video/webm', sources.webm ?? clip.webm],
+        ['video/mp4', sources.mp4 ?? clip.mp4],
+      ] as const) {
+        if (!src) continue;
+        last = doc.createElement('source');
+        last.type = type;
+        last.src = src;
+        v.appendChild(last);
+      }
+    });
+
+  const started = () =>
+    new Promise<void>((resolve, reject) => {
       // play() never settles once every <source> has failed, so the last source's error rejects it instead.
       if (last)
         last.onerror = () => {
@@ -50,35 +65,74 @@ export function createFallbackVideo(doc: Document, sources: { webm?: string; mp4
         };
       v.play().then(resolve, reject);
     });
+
+  // play() resolving is not proof: the clip counts as playing only once its clock has moved.
+  const moving = () =>
+    new Promise<void>((resolve, reject) => {
+      const from = v.currentTime;
+      let n = 0;
+      const id = setInterval(() => {
+        n += 1;
+        const ok = on && running(from);
+        if (!ok && on && n < CHECKS) return;
+        clearInterval(id);
+        if (ok) resolve();
+        else reject(new Error('stalled'));
+      }, CHECK_MS);
+    });
+
+  const play = (): Promise<void> => {
+    on = true;
+    // Called in the tap itself, before the clip has arrived, so the element may play later without another tap.
+    void Promise.resolve(v.play()).catch(() => undefined);
+    pending ??= new Promise<void>((resolve, reject) => {
+      stop = () => {
+        reject(new Error('stopped'));
+      };
+      (loading ??= load()).then(started).then(moving).then(resolve, reject);
+    }).finally(() => {
+      pending = null;
+    });
+    return pending;
+  };
+
+  const halt = () => {
+    on = false;
+    stop?.();
+    v.pause();
+  };
+
+  const unwatch = () => {
+    if (timer) clearInterval(timer);
+    timer = null;
   };
 
   return {
     el: v,
     play,
-    pause() {
-      v.pause();
-    },
-    startNudge(ms: number) {
-      if (nudgeTimer) return;
-      nudgeTimer = setInterval(() => {
-        if (v.paused || v.ended || v.readyState < 2) {
-          v.currentTime = 0;
-          void play().catch(() => undefined);
-        }
+    pause: halt,
+    watch(ms, onStall) {
+      unwatch();
+      let at = v.currentTime;
+      timer = setInterval(() => {
+        const ok = running(at);
+        at = v.currentTime;
+        if (ok) return;
+        // One restart before reporting the loss: a stalled clip often only needs play() again.
+        play().then(
+          () => {
+            at = v.currentTime;
+          },
+          () => {
+            if (on) onStall();
+          },
+        );
       }, ms);
     },
-    stopNudge() {
-      if (nudgeTimer) {
-        clearInterval(nudgeTimer);
-        nudgeTimer = null;
-      }
-    },
+    unwatch,
     remove() {
-      if (nudgeTimer) {
-        clearInterval(nudgeTimer);
-        nudgeTimer = null;
-      }
-      v.pause();
+      unwatch();
+      halt();
       v.remove();
     },
   };

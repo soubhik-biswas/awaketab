@@ -6,7 +6,11 @@ const HEIGHTS = Array.from({ length: NBR }, (_, i) => 40 + Math.round(70 * (0.5 
 // The whole session as bars: spent ones fade, the current one breathes.
 export default function Bars({ m }: IDrawProps) {
   const { t } = m;
-  const nowBar = Math.min(NBR - 1, Math.floor((1 - m.frac) * NBR));
+  const idle = m.st === 'idle';
+  // With no end every bar is awake and the newest, on the right, is now.
+  const nowBar = m.indef ? NBR - 1 : Math.min(NBR - 1, Math.floor((1 - m.frac) * NBR));
+  const from = m.indef && !idle ? m.t12(m.nowSec - m.r) : m.startShort;
+  const to = m.indef ? (idle ? 'no end' : 'now') : m.endShort;
   return (
     <div
       style={{
@@ -23,8 +27,8 @@ export default function Bars({ m }: IDrawProps) {
       <span style={big(58)}>{m.digits}</span>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 110 }}>
         {HEIGHTS.map((hgt, i) => {
-          const spent = m.st !== 'idle' && i < nowBar;
-          const cur = m.st !== 'idle' && m.st !== 'up' && i === nowBar;
+          const spent = !idle && !m.indef && i < nowBar;
+          const cur = !idle && m.st !== 'up' && i === nowBar;
           return (
             <span
               key={i}
@@ -35,7 +39,7 @@ export default function Bars({ m }: IDrawProps) {
                 height: cur ? 110 : hgt,
                 borderRadius: 3,
                 background: m.st === 'up' || spent ? t.track : m.heat(m.frac),
-                opacity: spent || cur ? 1 : 0.45 + (0.55 * (NBR - i)) / Math.max(1, NBR - nowBar),
+                opacity: spent || cur ? 1 : Math.min(1, 0.45 + (0.55 * (NBR - i)) / Math.max(1, NBR - nowBar)),
               }}
             />
           );
@@ -45,8 +49,8 @@ export default function Bars({ m }: IDrawProps) {
         className={L}
         style={{ width: 267, display: 'flex', justifyContent: 'space-between', ...mono(12, '.06em', t.ink2) }}
       >
-        <span>{m.startShort}</span>
-        <span>{m.endShort}</span>
+        <span>{from}</span>
+        <span>{to}</span>
       </div>
     </div>
   );

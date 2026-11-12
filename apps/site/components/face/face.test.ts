@@ -120,7 +120,7 @@ describe('faceModel', () => {
     expect(m.digits).toBe('42:18');
     expect(m.endLine).toBe('until 11:30 AM');
     expect(m.topWord).toBe('left');
-    expect(m.capText).toBe('Screen awake');
+    expect(m.capText).toBe('Awake');
   });
 
   it('shows the full length at rest and nothing left once time is up', () => {
@@ -140,24 +140,47 @@ describe('faceModel', () => {
   });
 
   it('takes localised labels', () => {
-    const m = ring({ lblTop: 'übrig', lblEnd: 'bis 11:30' });
+    const m = ring({ lblTop: 'übrig', lblEnd: 'bis 11:30', lblCap: 'Wach' });
     expect(m.topWord).toBe('übrig');
     expect(m.endLine).toBe('bis 11:30');
+    expect(m.capText).toBe('Wach');
+    expect(m.aria).toBe('Wach, 43 min remaining, bis 11:30');
+  });
+
+  it("captions each state in the status pill's words", () => {
+    expect(ring({ state: 'idle' }).capText).toBe('Not keeping awake');
+    expect(ring({ state: 'starting' }).capText).toBe('Asking the browser…');
+    expect(ring({ state: 'fallback' }).capText).toBe('Awake via video');
+    expect(ring({ state: 'paused' }).capText).toBe('Paused');
+    expect(ring({ state: 'blocked' }).capText).toBe('Not awake');
+    expect(ring({ state: 'unsupported' }).capText).toBe('No wake lock in this browser');
+  });
+
+  it('never calls a session that needs a tap paused', () => {
+    const m = ring({ state: 'paused', needs: true });
+    expect(m.needs).toBe(true);
+    expect(m.topWord).toBe('not awake');
+    expect(m.capText).toBe('Tap to resume');
+    expect(m.aria).not.toMatch(/paused/iu);
+    expect(m.accentValue).toBe(ring({ state: 'paused' }).accentValue);
+    expect(ring({ needs: true }).needs).toBe(false);
   });
 
   it('keeps the aria label to whole minutes, so it changes at most once a minute', () => {
-    expect(ring().aria).toBe('Screen awake, 43 min remaining, until 11:30 AM');
+    expect(ring().aria).toBe('Awake, 43 min remaining, until 11:30 AM');
     expect(ring({ remain: 2521 }).aria).toContain('43 min remaining');
     expect(ring({ remain: 2520 }).aria).toContain('42 min remaining');
     expect(ring({ remain: 3900, total: 7200 }).aria).toContain('1 h 5 min remaining');
     expect(ring({ state: 'up' }).aria).toBe("Time's up, Ended 10:47 AM");
   });
 
-  it('scales labels to 12 px on screen from 240 px, goes compact below 200 px and thumbnail at 64 px', () => {
+  it('scales labels to 12 px on screen from 240 px, 10 px from 200 px, goes compact below 200 px and thumbnail at 64 px', () => {
     expect(ring({ size: 250 }).LMIN).toBeCloseTo(17.28, 2);
     expect(ring({ size: 240 }).LMIN).toBe(18);
     expect(ring({ size: 360 }).LMIN).toBe(0);
-    expect(ring({ size: 200 }).LMIN).toBe(0);
+    expect(ring({ size: 200 }).LMIN).toBe(18);
+    expect(ring({ size: 225 }).LMIN).toBe(16);
+    expect(ring({ size: 199 }).LMIN).toBe(0);
     expect(ring({ size: 199 }).compact).toBe(true);
     expect(ring({ size: 200 }).compact).toBe(false);
     expect(ring({ size: 64 }).thumb).toBe(true);
@@ -267,7 +290,7 @@ describe('<Face>', () => {
   it('is a timer named in whole minutes, with its drawing hidden from assistive tech', () => {
     const out = html();
     expect(out).toContain('role="timer"');
-    expect(out).toContain('aria-label="Screen awake, 43 min remaining, until 11:30 AM"');
+    expect(out).toContain('aria-label="Awake, 43 min remaining, until 11:30 AM"');
     expect(out).toContain('aria-hidden="true"');
     expect(out).toContain('af-live');
   });
@@ -308,13 +331,12 @@ describe('<Face>', () => {
   });
 
   it('shows the status caption unless bare', () => {
-    expect(html()).toContain('Screen awake</span>');
-    expect(html({ bare: true })).not.toContain('Screen awake</span>');
+    expect(html()).toContain('Awake</span>');
+    expect(html({ bare: true })).not.toContain('Awake</span>');
   });
 
   it('gives every face a true light version instead of a dark slab', () => {
     const night: Partial<Record<TFaceId, string>> = {
-      flip: '#252935',
       nixie: '#0A0D12',
       board: '#0B0F18',
       neon: '#0C080E',
@@ -329,6 +351,11 @@ describe('<Face>', () => {
       expect(html({ face, theme: 'dark' }), face).toContain(ground);
       expect(html({ face, theme: 'light' }), face).not.toContain(ground);
     }
+    // Flip ships one card sheet for every theme and the face's own theme class picks the set.
+    const flip = html({ face: 'flip', theme: 'light' });
+    expect(flip).toMatch(/class="af\b[^"]*\blight\b/u);
+    expect(flip).toMatch(/\.af\.light \.af-flip\{[^}]*--fc-top:[^;]*#FFFFFF/u);
+    expect(html({ face: 'flip', theme: 'dark' })).not.toMatch(/class="af\b[^"]*\blight\b/u);
     expect(html({ face: 'eink', theme: 'dark' })).toContain('invert(.93)');
     expect(html({ face: 'eink', theme: 'light' })).not.toContain('invert(');
     // LCD and Diver keep their dark bezel, like the real objects.
@@ -394,7 +421,7 @@ describe('every face at every size', () => {
         }
     }
     expect(bad).toEqual([]);
-  });
+  }, 60_000);
 
   it('keeps the caption inside the square box', () => {
     for (const theme of THEMES) expect(strayText(html({ theme, size: 300 }), ART_W)).toEqual([]);

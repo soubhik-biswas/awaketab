@@ -31,23 +31,33 @@ export const ticks = (
   return d;
 };
 
+// One SVG arc command; a span past half a turn is drawn as two, because a single arc whose ends almost meet is
+// placed by rounding and can jump off its centre.
+const sweepTo = (rr: number, d0: number, e: number, cx: number, cy: number, cw: 0 | 1): string => {
+  const seg = (from: number, to: number): string => {
+    const [x, y] = P(rr, to, cx, cy);
+    return ` A${rr} ${rr} 0 ${Math.abs(to - from) > 180 ? 1 : 0} ${cw} ${f1(x)} ${f1(y)}`;
+  };
+  if (Math.abs(e - d0) <= 180) return seg(d0, e);
+  const mid = (d0 + e) / 2;
+  return seg(d0, mid) + seg(mid, e);
+};
+
+const end = (d0: number, d1: number): number => (d1 - d0 >= 359.9 ? d0 + 359.9 : d1);
+
 export const arc = (rr: number, d0: number, d1: number, cx = CX, cy = CY): string => {
   if (d1 - d0 <= 0.05) return '';
-  const e = d1 - d0 >= 359.9 ? d0 + 359.9 : d1;
+  const e = end(d0, d1);
   const [ax, ay] = P(rr, d0, cx, cy);
-  const [bx, by] = P(rr, e, cx, cy);
-  return `M${f1(ax)} ${f1(ay)} A${rr} ${rr} 0 ${e - d0 > 180 ? 1 : 0} 1 ${f1(bx)} ${f1(by)}`;
+  return `M${f1(ax)} ${f1(ay)}${sweepTo(rr, d0, e, cx, cy, 1)}`;
 };
 
 export const sectorPath = (r1: number, r2: number, d0: number, d1: number): string => {
   if (d1 - d0 <= 0.05) return '';
-  const e = d1 - d0 >= 359.9 ? d0 + 359.9 : d1;
+  const e = end(d0, d1);
   const [ax, ay] = P(r2, d0);
-  const [bx, by] = P(r2, e);
   const [cx, cy] = P(r1, e);
-  const [dx, dy] = P(r1, d0);
-  const lg = e - d0 > 180 ? 1 : 0;
-  return `M${f1(ax)} ${f1(ay)} A${r2} ${r2} 0 ${lg} 1 ${f1(bx)} ${f1(by)} L${f1(cx)} ${f1(cy)} A${r1} ${r1} 0 ${lg} 0 ${f1(dx)} ${f1(dy)} Z`;
+  return `M${f1(ax)} ${f1(ay)}${sweepTo(r2, d0, e, CX, CY, 1)} L${f1(cx)} ${f1(cy)}${sweepTo(r1, e, d0, CX, CY, 0)} Z`;
 };
 
 // A ring's stroke-dasharray showing fraction f of circumference c.

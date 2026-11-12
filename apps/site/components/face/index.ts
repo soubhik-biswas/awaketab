@@ -1,5 +1,6 @@
 export { Face } from './face';
 export { FaceGrid } from './face-grid';
+export { StateIcon } from './frame';
 export {
   FACE_IDS,
   FACE_STATES,

@@ -5,6 +5,11 @@ import { EndLine, type IDrawProps, L, mono } from '../kit';
 // Minutes in huge type, seconds in the lamp colour, a progress hairline.
 export default function Type({ m }: IDrawProps) {
   const { t, accent } = m;
+  const big = m.h > 0 ? `${m.h}:${pad(m.m)}` : String(m.m);
+  // Digits advance about 0.56 em at this tracking and the colon 0.22 em; 226 px leaves room for the seconds column.
+  const em = big.replace(':', '').length * 0.56 + (m.h > 0 ? 0.22 : 0);
+  const fs = Math.min(m.h > 9 ? 92 : m.h > 0 ? 116 : 196, Math.floor(226 / em));
+  const unit = m.indef ? 'AWAKE' : 'LEFT';
   const knob: CSSProperties = {
     position: 'absolute',
     top: -5,
@@ -31,14 +36,14 @@ export default function Type({ m }: IDrawProps) {
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
         <span
           style={{
-            fontSize: m.h > 0 ? 116 : 196,
+            fontSize: fs,
             fontWeight: 700,
             letterSpacing: '-0.07em',
             lineHeight: 0.82,
             fontVariantNumeric: 'tabular-nums',
           }}
         >
-          {m.h > 0 ? `${m.h}:${pad(m.m)}` : String(m.m)}
+          {big}
         </span>
         <span style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingTop: 10 }}>
           <span
@@ -54,7 +59,7 @@ export default function Type({ m }: IDrawProps) {
             {pad(m.s)}
           </span>
           <span className={L} style={mono(12, '.14em', t.ink2)}>
-            {m.h > 0 ? 'H:MIN LEFT' : 'MIN LEFT'}
+            {m.h > 0 ? `H:MIN ${unit}` : `MIN ${unit}`}
           </span>
         </span>
       </div>

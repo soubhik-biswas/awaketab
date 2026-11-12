@@ -112,6 +112,7 @@ export function MiniClock({ view, theme, face = 'ring', onClose, windowed = fals
           face={face}
           theme={theme}
           state={view.face}
+          needs={view.needs}
           size={170}
           remain={view.remain}
           total={view.total || 3600}

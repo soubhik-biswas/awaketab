@@ -14,6 +14,8 @@ export interface IToolSettings {
   totalSec: number;
   label: string;
   h12: boolean;
+  // False until the person picks a dial; until then the clock follows the language.
+  clockSet: boolean;
   secs: boolean;
   chime: TChimeKind;
   dim: boolean;
@@ -21,6 +23,9 @@ export interface IToolSettings {
   vibe: TVibe;
   motion: TVibeMotion;
   ambientOn: boolean;
+  keepControls: boolean;
+  // Open the mini clock when the person leaves the tab during a session, where the browser allows it.
+  autoMini: boolean;
 }
 
 export const SETTINGS_KEY = 'at.v1.settings';
@@ -32,6 +37,7 @@ const TOOL_DEFAULTS: IToolSettings = {
   totalSec: 3600,
   label: '',
   h12: true,
+  clockSet: false,
   secs: true,
   chime: 'two',
   dim: false,
@@ -39,6 +45,8 @@ const TOOL_DEFAULTS: IToolSettings = {
   vibe: 'aurora',
   motion: 'calm',
   ambientOn: false,
+  keepControls: false,
+  autoMini: true,
 };
 
 const PRESET_SEC: Record<Exclude<TPresetId, 'custom' | 'until'>, number> = {
@@ -62,6 +70,8 @@ type TStored = ISettings & {
   vibe?: TVibe;
   vibeMotion?: TVibeMotion;
   ambientOn?: boolean;
+  keepControls?: boolean;
+  autoMini?: boolean;
 };
 
 function fromStored(raw: unknown): { stored: TStored | null; tool: IToolSettings } {
@@ -86,6 +96,7 @@ function fromStored(raw: unknown): { stored: TStored | null; tool: IToolSettings
       totalSec,
       label: typeof s.intention === 'string' ? s.intention.slice(0, 80) : '',
       h12: ambient.clock24h !== true,
+      clockSet: typeof ambient.clock24h === 'boolean',
       secs: ambient.showSeconds !== false,
       chime: sound.id === 'none' ? 'off' : sound.id === 'bell' ? 'bell' : 'two',
       dim: s.dimAtNight === true,
@@ -93,20 +104,29 @@ function fromStored(raw: unknown): { stored: TStored | null; tool: IToolSettings
       vibe: VIBES.find((v) => v === String(loose.vibe)) ?? 'aurora',
       motion: MOTIONS.find((v) => v === String(loose.vibeMotion)) ?? 'calm',
       ambientOn: loose.ambientOn === true,
+      keepControls: loose.keepControls === true,
+      autoMini: loose.autoMini !== false,
     },
   };
 }
 
-// The tool reads and writes the shared at.v1.settings record, so the old site's choices carry over.
-function toStored(tool: IToolSettings): TStored {
-  let base: TStored = { ...DEFAULT_SETTINGS };
+function readRaw(): Record<string, unknown> | null {
   try {
     const raw = JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? 'null') as unknown;
-    if (isRecord(raw)) base = { ...DEFAULT_SETTINGS, ...raw };
+    return isRecord(raw) ? raw : null;
   } catch {
-    // Unreadable settings are replaced by the defaults below.
+    return null;
   }
-  const { faceStyles: _drop, ...rest } = base;
+}
+
+// The tool reads and writes the shared at.v1.settings record, which the analytics card writes too, so fields it does
+// not own are kept as they are. Visits are counted only after a yes, so no answer is ever written for the person.
+function toStored(tool: IToolSettings): Omit<TStored, 'telemetry'> & { telemetry?: boolean } {
+  // Unreadable settings are replaced by the defaults.
+  const raw = readRaw();
+  const base: TStored = raw ? { ...DEFAULT_SETTINGS, ...raw } : { ...DEFAULT_SETTINGS };
+  const asked = raw?.telemetry;
+  const { faceStyles: _drop, telemetry: _unasked, ...rest } = base;
   const preset = presetIdFor(tool.totalSec);
   return {
     ...rest,
@@ -115,7 +135,12 @@ function toStored(tool: IToolSettings): TStored {
     defaultPreset: preset,
     lastCustomMs: preset === 'custom' ? tool.totalSec * 1000 : rest.lastCustomMs,
     intention: tool.label.slice(0, 80),
-    ambient: { ...DEFAULT_SETTINGS.ambient, ...rest.ambient, clock24h: !tool.h12, showSeconds: tool.secs },
+    ambient: {
+      ...DEFAULT_SETTINGS.ambient,
+      ...rest.ambient,
+      clock24h: tool.clockSet ? !tool.h12 : null,
+      showSeconds: tool.secs,
+    },
     sound: {
       ...DEFAULT_SETTINGS.sound,
       ...rest.sound,
@@ -126,6 +151,9 @@ function toStored(tool: IToolSettings): TStored {
     vibe: tool.vibe,
     vibeMotion: tool.motion,
     ambientOn: tool.ambientOn,
+    keepControls: tool.keepControls,
+    autoMini: tool.autoMini,
+    ...(typeof asked === 'boolean' ? { telemetry: asked } : {}),
   };
 }
 
@@ -133,6 +161,29 @@ const settingsStore = createLocalStore<IToolSettings>(SETTINGS_KEY, (raw) => fro
 
 export function updateSettings(patch: Partial<IToolSettings>) {
   settingsStore.set((prev) => ({ ...prev, ...patch }));
+}
+
+const ONBOARDING_KEY = 'at.v1.onboarding';
+const ANALYTICS_TIP = 'analytics';
+
+// "Count my visits" is on only when the person has said yes, in Settings or on the analytics card.
+export function readTelemetry(): boolean {
+  return readRaw()?.telemetry === true;
+}
+
+// The Settings switch gives the same answer as the analytics card, so the card stops asking once it is used.
+export function setTelemetry(on: boolean) {
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...(readRaw() ?? { v: 1 }), telemetry: on }));
+    const raw = JSON.parse(localStorage.getItem(ONBOARDING_KEY) ?? 'null') as unknown;
+    const onboarding = isRecord(raw) ? raw : {};
+    const tips: unknown[] = Array.isArray(onboarding.dismissedTips) ? onboarding.dismissedTips : [];
+    if (!tips.includes(ANALYTICS_TIP)) tips.push(ANALYTICS_TIP);
+    localStorage.setItem(ONBOARDING_KEY, JSON.stringify({ ...onboarding, v: 1, dismissedTips: tips }));
+  } catch {
+    // Blocked storage: the answer lasts for this visit only.
+  }
+  document.documentElement.dataset.consent = '';
 }
 
 export function useToolSettings(): IToolSettings {

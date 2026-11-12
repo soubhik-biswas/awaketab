@@ -26,14 +26,14 @@ steps:
   - title: "Start the agent or build."
     text: "Run Claude Code, Codex or your build as usual, with the laptop plugged in."
   - title: "Open AwakeTab in its own small window."
-    text: "Choose ∞, or \"Until…\" with a time such as 7:00 AM tomorrow. Pick Minimal mode, a dim screen with the elapsed time."
+    text: "Choose No end, so it runs until you stop it. For a long run, pick the OLED theme in Settings and the Calm background from Vibe: a dark, still screen with the time."
   - title: "Place it beside your terminal."
     text: "It can sit unfocused; it only has to stay uncovered."
 figures:
   - frame: phone
     label: "Phone screenshot"
-    alt: "AwakeTab in Minimal mode, a dim screen with the elapsed time"
-    caption: "Minimal mode for a long run."
+    alt: "AwakeTab on the OLED theme with the Calm background, a dark and still screen"
+    caption: "A dark, still screen for a long run."
   - frame: desktop
     label: "Desktop screenshot"
     alt: "a small AwakeTab window beside a terminal running Claude Code on a Mac"
@@ -44,7 +44,7 @@ pills:
   - state: lost
     text: "The window is minimised or covered, so the normal sleep timer runs again. Uncover it and AwakeTab asks again."
   - state: denied
-    text: "The browser said no. Chrome and Edge have no battery check, but Firefox refuses at 5% battery or less while not charging. The card names the fix."
+    text: "The browser said no. Chrome and Edge have no battery check, but Firefox refuses at 5% battery or less while not charging. The banner names the fix."
 checklist:
   - "The laptop is plugged in."
   - "The lid stays open, or the Mac has its charger and an external monitor connected."
@@ -55,8 +55,8 @@ faq:
     a: "Run caffeinate -i claude instead of claude. The Mac will not idle-sleep until you quit Claude Code; the display can still turn off. Use caffeinate -di claude if you also want the screen to stay lit so you can glance at it. The same pattern works for codex or any build command."
   - q: "Does the terminal window have to stay in front?"
     a: "No. caffeinate and PowerToys Awake work whatever window is in front, even with the screen off. With the web page, the AwakeTab window is the one that must stay uncovered; the terminal can sit behind other windows."
-  - q: "Is the extension’s System level better than the web page for an overnight job?"
-    a: "Usually, yes. It keeps the computer awake with the tab hidden or the window minimised, and the popup shows “System awake”. The screen may still dim or lock, which suits a night run. Chrome or Edge must stay open."
+  - q: "Is the extension better than the web page for an overnight job?"
+    a: "Usually, yes. It keeps the display, and so the computer, awake with the tab hidden or the window minimised, and the toolbar badge shows the time left. Chrome or Edge must stay open, and a work policy can still lock the screen."
   - q: "Can AwakeTab stop a browser-based agent from timing out?"
     a: "No. It keeps the display on and nothing else. A site that signs you out when idle, or a browser that slows a hidden agent tab, is outside its reach. Keep the agent’s tab visible, or run the agent from a terminal."
 honestLimit: "The web page keeps the display on, and with it stops idle sleep, only while its tab is visible. Minimise it or close the lid and the computer can sleep mid-run. For unattended jobs, use caffeinate, PowerToys Awake or AwakeTab for Chrome."
@@ -101,7 +101,7 @@ The pill at the top of the tool tells you what the browser is doing:
 | Claude Code, Codex or a build in a Mac terminal | `caffeinate -i` in front of the command | Holds off idle sleep until the command exits, then lets go |
 | The same job on Windows | PowerToys Awake | Keeps the PC awake; the display turns off unless you switch on "Keep screen on" |
 | You want to watch the run | A visible AwakeTab tab | The screen stays lit for a glance at progress |
-| Overnight, tab hidden, Chrome or Edge | AwakeTab for Chrome, System level | Keeps the computer awake with the tab hidden; the screen may dim or lock |
+| Overnight, tab hidden, Chrome or Edge | AwakeTab for Chrome | Keeps the display on from the toolbar with the tab hidden; a work policy can still lock the screen |
 
 On a Mac, that looks like `caffeinate -i codex` or `caffeinate -i npm run build`. Microsoft documents PowerToys Awake on [Microsoft Learn](https://learn.microsoft.com/en-us/windows/powertoys/awake) (checked 26 September 2026); [our PowerToys Awake comparison](/vs/powertoys-awake) sets the two side by side.
 

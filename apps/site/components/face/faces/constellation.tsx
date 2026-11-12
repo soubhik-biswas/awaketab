@@ -1,6 +1,6 @@
 import { fxInk, fxInk2 } from '../art';
 import { f1 } from '../geometry';
-import { card, type IDrawProps, L, lmin } from '../kit';
+import { card, type IDrawProps, L, lmin, PLATE } from '../kit';
 
 // A dawn sky with ink-green stars by day, a night sky with glowing stars at night.
 const ART = {
@@ -25,11 +25,13 @@ export default function Constellation({ m }: IDrawProps) {
   const a = light ? ART.light : ART.night;
   const acc = m.accent;
   const lit = Math.round(m.ringFrac * CS);
+  // A small tile scales the sky down; stars and lines grow so the figure still reads at that size.
+  const k = Math.max(1, 200 / m.size);
   const path = POINTS.slice(0, lit)
     .map(([x, y], i) => `${i ? 'L' : 'M'}${f1(x)} ${f1(y)}`)
     .join(' ');
   return (
-    <div style={card(m, { background: a.sky })}>
+    <div className={PLATE} style={card(m, { background: a.sky })}>
       <svg
         style={{ position: 'absolute', left: 0, top: 0 }}
         width="332"
@@ -37,12 +39,19 @@ export default function Constellation({ m }: IDrawProps) {
         viewBox="0 0 332 282"
         aria-hidden="true"
       >
-        <path d={path} fill="none" strokeWidth="1.2" opacity=".5" style={{ stroke: acc }} />
+        <path
+          d={path}
+          fill="none"
+          strokeWidth={f1(1.3 * k)}
+          strokeLinejoin="round"
+          opacity=".62"
+          style={{ stroke: acc }}
+        />
       </svg>
       {POINTS.map(([x, y], i) => {
         const on = i < lit;
         const bright = i % 6 === 0;
-        const sz = on ? (bright ? 6 : 4) : 2;
+        const sz = (on ? (bright ? 6 : 4) : 2) * k;
         return (
           <span
             key={i}

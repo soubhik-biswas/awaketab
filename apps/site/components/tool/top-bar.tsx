@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'motion/react';
 import { History, LayoutGrid, Search, SlidersVertical, Wand, type LucideIcon } from 'lucide-react';
 import { AppMark } from '@/components/brand/mark';
@@ -8,6 +9,7 @@ import type { TPanel } from '@/lib/tool/ui';
 import { useGlance } from './context';
 import { StatusPill } from './status-pill';
 import { EASE, Kbd } from './kit';
+import { warmPanels } from './panels/lazy';
 
 const PLACES: Array<[TPanel, string, LucideIcon]> = [
   ['vibes', 'top.vibe', Wand],
@@ -20,27 +22,28 @@ const iconBtn =
   'tg-btn relative inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-full border-0 text-[14px] font-semibold tracking-[-0.005em]';
 
 // Logo and the status pill (in the stage on phone and tablet portrait) on the left; the glass capsule on the right is
-// its own element, placed after the stage in the DOM so focus follows the accessibility board: pill, length, Keep
-// awake, then Vibe, Faces, Recents, Settings and Search last.
+// its own element, placed after the stage in the DOM so focus follows the accessibility board: length, Keep awake,
+// then Vibe, Faces, Recents, Settings and Search last. While the controls rest they are inert.
 function useBarMotion() {
   const { hidden } = useGlance();
   return {
     initial: false as const,
     animate: { opacity: hidden ? 0 : 1, y: hidden ? 12 : 0 },
     transition: { duration: 0.45, ease: EASE },
-    'aria-hidden': hidden || undefined,
+    inert: hidden,
+    'data-rests': '',
   };
 }
 
 // Below 360 px (a 320 px phone, or 200% zoom) the wordmark steps aside so the capsule never covers it.
-export function TopBar() {
+export const TopBar = memo(function TopBar() {
   const g = useGlance();
-  const { desk, phone, narrow, hidden } = g;
+  const { desk, phone, narrow } = g;
   return (
     <motion.header
       {...useBarMotion()}
       className="absolute inset-x-0 top-0 z-[5] flex items-center gap-3"
-      style={{ height: g.topH, paddingInline: phone ? 16 : 28, pointerEvents: hidden ? 'none' : undefined }}
+      style={{ height: g.topH, paddingInline: phone ? 16 : 28 }}
     >
       <div className="flex min-w-0 items-center">
         <AppMark size={30} wordSize={phone ? 20 : 22} word={g.W >= 360} label="AwakeTab" />
@@ -52,19 +55,22 @@ export function TopBar() {
       ) : null}
     </motion.header>
   );
-}
+});
 
-export function TopPlaces() {
+// Every button here opens a panel or the command palette, so their code is fetched as the pointer or focus arrives.
+export const TopPlaces = memo(function TopPlaces() {
   const g = useGlance();
-  const { t, desk, phone, panel, hidden } = g;
+  const { t, desk, phone, panel } = g;
   const mac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/u.test(navigator.platform || navigator.userAgent);
   return (
     <motion.div
       {...useBarMotion()}
+      onPointerEnter={warmPanels}
+      onFocus={warmPanels}
       className="absolute top-0 right-0 z-[5] flex items-center"
-      style={{ height: g.topH, paddingRight: phone ? 16 : 28, pointerEvents: hidden ? 'none' : undefined }}
+      style={{ height: g.topH, paddingRight: phone ? 16 : 28 }}
     >
-      <div className="tg-hair flex items-center gap-0.5 rounded-full p-1 shadow-[0_10px_30px_var(--tg-caps-shadow),inset_0_1px_0_var(--tg-inset-hi)]">
+      <div className="tg-hair flex items-center gap-0.5 rounded-full p-1 shadow-[0_10px_30px_var(--tg-caps-shadow),inset_0_1px_0_var(--tg-caps-hi)]">
         {PLACES.map(([key, label, Icon]) => {
           const on = panel === key;
           return (
@@ -116,4 +122,4 @@ export function TopPlaces() {
       </div>
     </motion.div>
   );
-}
+});

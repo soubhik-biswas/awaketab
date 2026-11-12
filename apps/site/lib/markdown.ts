@@ -91,7 +91,7 @@ const plain = (text: string): string =>
     .replace(/\*\*([^*]+)\*\*/gu, '$1')
     .replace(/\[([^\]]+)\]\([^)]+\)/gu, '$1');
 
-// The same ids GitHub and Astro give headings, so existing #anchors and frontmatter `toc` keys keep working.
+// The same ids GitHub gives headings, so existing #anchors and frontmatter `toc` keys keep working.
 function slugify(text: string): string {
   return text
     .toLowerCase()

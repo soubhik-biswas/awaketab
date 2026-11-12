@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Face } from '@/components/face';
 import { SurfacePill, useSurfaceLine } from '@/components/pip/mini-clock';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,8 @@ import { holdTween, usePop } from '@/lib/surfaces/motion';
 import type { ISurfaceView } from '@/lib/surfaces/session';
 
 const RING = 2 * Math.PI * 15;
+// The languages that write the clock on a 24-hour dial whatever the setting says, as the tool does.
+const DIAL_24: readonly string[] = ['de', 'es', 'fr', 'pt-br'];
 
 // The 1440 × 810 wall-mode artboard, scaled to whatever box holds it (the page's preview or the TV itself).
 function FitStage({ children, className }: { children: ReactNode; className?: string }) {
@@ -146,6 +148,7 @@ export interface IKioskScreenProps {
   shift: number;
   asleep?: string | null;
   dim?: number;
+  fmt?: 12 | 24;
   onLeave: () => void;
   fill?: boolean;
   className?: string;
@@ -159,11 +162,14 @@ export function KioskScreen({
   shift,
   asleep,
   dim = 1,
+  fmt = 12,
   onLeave,
   fill = false,
   className,
 }: IKioskScreenProps) {
   const t = useTranslations('surfaces');
+  const tg = useTranslations('tool.glance');
+  const locale = useLocale();
   const line = useSurfaceLine();
   const [locked, setLocked] = useState(true);
   const root = useRef<HTMLDivElement | null>(null);
@@ -187,6 +193,11 @@ export function KioskScreen({
   }, [locked]);
 
   const pill = asleep ?? `${t(`status.${view.label}`)} · ${line(view)}`;
+  // The face's own words are English, so other languages get the tool's words and the reader's clock.
+  const translated = locale !== 'en';
+  const faceTop = translated && view.face === 'idle' ? tg('face.ready') : undefined;
+  const faceLeft = translated && view.awake && view.until ? tg('face.left') : undefined;
+  const faceEnd = translated && view.awake && view.until ? tg('pill.awake', { time: view.until }) : undefined;
   const screen = (
     <FitStage className="size-full">
       <div
@@ -214,12 +225,16 @@ export function KioskScreen({
               face={config.face}
               theme={config.screen}
               state={view.face}
+              needs={view.needs}
               size={KIOSK_STAGE.face}
               remain={view.remain}
               total={view.total || 3600}
               nowSec={view.nowSec}
               indef={view.indef}
               bare
+              fmt={fmt === 24 || DIAL_24.includes(locale) ? 24 : 12}
+              lblTop={faceTop ?? faceLeft}
+              lblEnd={faceEnd}
               motion="auto"
             />
           </div>

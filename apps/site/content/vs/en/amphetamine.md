@@ -30,7 +30,7 @@ compare:
     - what: "What it is"
       cells: ["A web page that asks the browser for a screen wake lock", "A native Mac app"]
     - what: "With the tab hidden or no browser open"
-      cells: ["Stops. The pill says \"Paused — tab hidden\" and asks again when you return.", "Keeps holding, with no window open"]
+      cells: ["Stops. The pill says \"Paused\" and asks again when you return.", "Keeps holding, with no window open"]
     - what: "With the lid closed"
       cells: ["No. A closed lid sleeps the Mac unless it is in clamshell mode with power and an external display.", "Has a closed-display mode option. Its own help lists what it needs on your Mac."]
     - what: "Triggers"
@@ -60,7 +60,7 @@ picks:
     - title: "You want it to end by itself"
       text: "Pick 30 min, 1 h or a clock time such as 11:30 AM. Hidden time doesn't count toward a timed session."
     - title: "You want to see that it's working"
-      text: "The pill turns to \"Screen awake\" once your browser has granted the lock, not when you press the button."
+      text: "The pill turns to \"Awake\" once your browser has granted the lock, not when you press the button."
     - title: "You want a hidden tab to count"
       text: "On desktop Chrome or Edge, [AwakeTab for Chrome](/extension) uses Chrome's own power setting, so it keeps working with the tab hidden. It still stops at a closed lid."
 faq:
@@ -108,4 +108,4 @@ Without a native tool, closing the lid sleeps a MacBook unless it is in clamshel
 
 ## Check what is holding your Mac awake
 
-Run `pmset -g assertions` in Terminal. It lists every process asking macOS not to sleep. With AwakeTab showing "Screen awake" in Chrome, the browser holds a PreventUserIdleDisplaySleep or NoDisplaySleep entry. Hide the tab and that line is gone; anything still listed belongs to another app.
+Run `pmset -g assertions` in Terminal. It lists every process asking macOS not to sleep. With AwakeTab showing "Awake" in Chrome, the browser holds a PreventUserIdleDisplaySleep or NoDisplaySleep entry. Hide the tab and that line is gone; anything still listed belongs to another app.

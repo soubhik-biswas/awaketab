@@ -1,5 +1,5 @@
 import { fxInk, fxInk2 } from '../art';
-import { card, digitSize, type IDrawProps, L, lmin, Stars, type TStar } from '../kit';
+import { card, digitSize, type IDrawProps, L, lmin, Stars, type TStar, PLATE } from '../kit';
 
 // A bright sky, a slate moon and an amber corona by day; a night sky at night.
 const ART = {
@@ -10,6 +10,7 @@ const ART = {
     moon: 'radial-gradient(circle at 40% 35%, #3A4158, #1B2030 70%)',
     bead: '#FFF6E0',
     beadGlow: 'rgba(255,170,60,.85)',
+    sunGlow: '0 0 0 1px rgba(214,150,50,.22), 0 0 40px rgba(255,190,110,.55)',
   },
   night: {
     sky: 'radial-gradient(80% 60% at 50% 40%, #0B0D1C, #010207 70%)',
@@ -18,6 +19,7 @@ const ART = {
     moon: 'radial-gradient(circle at 40% 35%, #10131F, #020309 70%)',
     bead: '#FFFFFF',
     beadGlow: 'rgba(255,250,235,.9)',
+    sunGlow: '0 0 40px rgba(255,220,160,.6)',
   },
 };
 const SUN = 'radial-gradient(circle at 45% 40%, #FFFFFF, #FFF1CF 55%, #FFD999 100%)';
@@ -28,8 +30,8 @@ const STARS: readonly TStar[] = [
   [280, 210],
   [40, 120],
   [310, 130],
-  [150, 230],
-  [240, 250],
+  [300, 176],
+  [292, 248],
   [90, 20],
   [200, 14],
   [16, 250],
@@ -41,15 +43,19 @@ export default function Eclipse({ m }: IDrawProps) {
   const light = !m.night;
   const a = light ? ART.light : ART.night;
   const covered = m.st === 'idle' ? 0 : 1 - m.frac;
+  // Paused, blocked and unsupported name their state, since the sky alone would look awake.
+  const halted = m.st === 'paused' || m.st === 'blocked' || m.st === 'unsupported';
+  const word = m.topWord.charAt(0).toUpperCase() + m.topWord.slice(1);
+  const pct = m.total > 0 && !m.indef && m.st !== 'idle' ? ` · ${Math.round(covered * 100)}% covered` : '';
   return (
-    <div style={card(m, { background: a.sky })}>
+    <div className={PLATE} style={card(m, { background: a.sky })}>
       {m.night && <Stars pts={STARS} colors={['#FFFFFF']} step={0.4} />}
       <div
         className="afx-breath"
         style={{
           position: 'absolute',
           left: 36,
-          top: -24,
+          top: -32,
           width: 260,
           height: 260,
           borderRadius: '50%',
@@ -61,20 +67,21 @@ export default function Eclipse({ m }: IDrawProps) {
         style={{
           position: 'absolute',
           left: 96,
-          top: 34,
+          top: 28,
           width: 140,
           height: 140,
           borderRadius: '50%',
           background: SUN,
-          boxShadow: '0 0 40px rgba(255,220,160,.6)',
+          boxShadow: a.sunGlow,
         }}
       />
       <div
         className="af-tr"
         style={{
           position: 'absolute',
-          left: Math.round(93 - 220 * (1 - covered)),
-          top: 31,
+          // From first contact with the sun's edge (-50) to totality (93), so the overlap matches the percentage.
+          left: Math.round(-50 + 143 * covered),
+          top: 25,
           width: 146,
           height: 146,
           borderRadius: '50%',
@@ -85,8 +92,8 @@ export default function Eclipse({ m }: IDrawProps) {
       <span
         style={{
           position: 'absolute',
-          left: 170,
-          top: 35,
+          left: 186,
+          top: 24,
           width: 10,
           height: 10,
           borderRadius: '50%',
@@ -99,12 +106,12 @@ export default function Eclipse({ m }: IDrawProps) {
         style={{
           position: 'absolute',
           left: 0,
-          top: 196,
+          top: 182,
           width: 332,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: 2,
+          gap: 4,
           color: fxInk(light),
         }}
       >
@@ -119,8 +126,14 @@ export default function Eclipse({ m }: IDrawProps) {
         >
           {m.digits}
         </span>
-        <span className={L} style={{ fontSize: lmin(13), color: fxInk2(light) }}>
-          {m.endLine} · {Math.round(covered * 100)}% covered
+        <span className={L} style={{ fontSize: lmin(13), color: fxInk2(light), whiteSpace: 'nowrap' }}>
+          {halted ? (
+            <>
+              <span style={{ color: m.accent, fontWeight: 600 }}>{word}</span> · {m.endLine}
+            </>
+          ) : (
+            `${m.endLine}${pct}`
+          )}
         </span>
       </div>
     </div>

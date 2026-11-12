@@ -7,8 +7,9 @@ import { createRequire } from 'node:module';
 const ts = createRequire(import.meta.url)('typescript');
 
 const FIX = process.argv.includes('--fix');
-const EXT = /\.(?:ts|tsx|mts|cts|js|mjs|cjs|css)$/u;
-const SKIP = /\/(?:dist|\.wxt|\.output)\//u;
+const EXT = /\.(?:ts|tsx|mts|cts|js|mjs|cjs|css|html)$/u;
+// The HTML prototypes under docs/ are kept as they were handed over.
+const SKIP = /\/(?:dist|\.wxt|\.output)\/|^docs\/.*\.html$/u;
 const DIRECTIVE =
   /^\/\*[*!]?\s*(?:eslint|stylelint|global\s|globals\s|istanbul|c8\s|v8\signore|@ts-|@vitest-environment|prettier-ignore|@vite-ignore|[#@]__PURE__|@license|@preserve)/u;
 const CONFIG_TYPE = /^\/\*\*\s*@type\s*\{[^\n]*\}\s*\*\/$/u;
@@ -34,6 +35,7 @@ function firstLine(comment) {
 }
 
 function keep(comment, file) {
+  if (file.endsWith('.html')) return false;
   if (DIRECTIVE.test(`/* ${firstLine(comment)}`) || comment.includes('@vite-ignore') || comment.includes('__PURE__'))
     return true;
   if (/\.config\.[cm]?js$/u.test(file) && CONFIG_TYPE.test(comment)) return true;
@@ -77,6 +79,10 @@ function cssComments(text) {
     }
   }
   return out;
+}
+
+function htmlComments(text) {
+  return [...text.matchAll(/<!--[\s\S]*?-->/gu)].map((m) => [m.index, m.index + m[0].length]);
 }
 
 // A comment that is the only content of a block keeps its meaning as one `//` line.
@@ -132,19 +138,23 @@ let total = 0;
 const report = [];
 for (const file of files) {
   const text = readFileSync(file, 'utf8');
-  const all = file.endsWith('.css') ? cssComments(text) : scriptComments(text, scriptKind(file));
+  const all = file.endsWith('.css')
+    ? cssComments(text)
+    : file.endsWith('.html')
+      ? htmlComments(text)
+      : scriptComments(text, scriptKind(file));
   const ranges = all.filter(([a, b]) => !keep(text.slice(a, b), file));
   if (ranges.length === 0) continue;
   total += ranges.length;
   report.push(`${file}: ${String(ranges.length)}`);
-  if (FIX) writeFileSync(file, strip(text, ranges, !file.endsWith('.css')));
+  if (FIX) writeFileSync(file, strip(text, ranges, !/\.(?:css|html)$/u.test(file)));
 }
 
 if (FIX) {
   console.log(`comments: removed ${String(total)} from ${String(report.length)} files`);
 } else if (total > 0) {
   console.error(
-    `comments: ${String(total)} block or JSDoc comments; only // comments are allowed (run node scripts/comments.mjs --fix)`,
+    `comments: ${String(total)} block, JSDoc or HTML comments; only // comments are allowed (run node scripts/comments.mjs --fix)`,
   );
   console.error(report.join('\n'));
   process.exit(1);

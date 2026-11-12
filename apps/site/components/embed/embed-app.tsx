@@ -1,10 +1,15 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { createWakeLock } from '@awaketab/wake';
-import { mp4 } from '@awaketab/wake/video';
-import { EmbedWidget, KitchenTimers, type TEmbedAction, type TEmbedNotice } from '@/components/embed/embed-widget';
+import {
+  EmbedWidget,
+  KitchenTimers,
+  type TEmbedAction,
+  type TEmbedNotice,
+  type TEmbedReason,
+} from '@/components/embed/embed-widget';
 import { formatFullDate, formatTime } from '@/lib/format';
 import { createBridge, type IBridge } from '@/lib/embed/bridge';
 import { formatClock } from '@/lib/embed/clock';
@@ -21,6 +26,10 @@ import {
 import { addTimer, readTimers, safeStorage, settleTimers, writeTimers, type ICookTimer } from '@/lib/embed/timers';
 import { useWindowNow } from '@/lib/surfaces/hooks';
 import { playChime } from '@/lib/tool/sound';
+
+// What a compact frame spends beside the pill's words: its padding and border, the Start button with its gap, and
+// the pill's own dot and padding.
+const COMPACT_CHROME = 184;
 
 function useScheme(): 'light' | 'dark' {
   return useSyncExternalStore(
@@ -48,7 +57,7 @@ export function EmbedApp() {
   const [timers, setTimers] = useState<ICookTimer[]>([]);
   const [long, setLong] = useState(false);
   const [said, setSaid] = useState('');
-  const engine = useMemo(() => new EmbedEngine(() => createWakeLock({ videoSources: { mp4 } })), []);
+  const engine = useMemo(() => new EmbedEngine(() => createWakeLock()), []);
   const snap = useSyncExternalStore(engine.subscribe, engine.getSnapshot, engine.getSnapshot);
   const scheme = useScheme();
   const now = useWindowNow(null);
@@ -92,13 +101,28 @@ export function EmbedApp() {
     });
   }, [snap.lock, snap.session, params]);
 
+  // The pill takes its own row in a compact frame that is narrow, or whose words do not fit beside the button.
+  const fitPill = useCallback(() => {
+    const el = root.current;
+    if (!el || !params) return;
+    const w = el.clientWidth;
+    const words = el.querySelector<HTMLElement>('[data-pill-words]');
+    const tight = w < EMBED_NARROW.compact[0] || (words !== null && words.scrollWidth > w - COMPACT_CHROME);
+    setLong(params.size === 'compact' && w > 0 && tight);
+  }, [params]);
+
+  const endsAt = snap.session?.endsAt ?? null;
+  useEffect(() => {
+    fitPill();
+    void document.fonts.ready.then(fitPill);
+  }, [fitPill, snap.lock, endsAt, locale]);
+
   useEffect(() => {
     const el = root.current;
     if (!el || typeof ResizeObserver === 'undefined' || !params) return;
     let last = 0;
     const ro = new ResizeObserver(() => {
-      const w = el.clientWidth;
-      setLong(params.size === 'compact' && w > 0 && w < EMBED_NARROW.compact[0]);
+      fitPill();
       const h = Math.ceil(el.getBoundingClientRect().height);
       if (h > 0 && h !== last) {
         last = h;
@@ -107,7 +131,7 @@ export function EmbedApp() {
     });
     ro.observe(el);
     return () => ro.disconnect();
-  }, [params]);
+  }, [params, fitPill]);
 
   useEffect(() => {
     const { list, done } = settleTimers(timers, now);
@@ -154,6 +178,9 @@ export function EmbedApp() {
         fix: advice === 'iframe_no_allow',
       }
     : null;
+  let reason: TEmbedReason = 'unknown';
+  if (advice === 'iframe_no_allow' || advice === 'permissions_policy') reason = 'policy';
+  else if (advice === 'insecure_context') reason = 'insecure';
   const cook = params.mode === 'cook';
   const hint =
     snap.lock === 'requesting'
@@ -237,6 +264,8 @@ export function EmbedApp() {
         note={note}
         notice={notice}
         paused={paused}
+        until={s?.endsAt ? formatTime(s.endsAt, locale) : null}
+        reason={reason}
         long={long}
         accent={cfg?.accent ? { bg: cfg.accent, fg: onAccent(cfg.accent) } : null}
         timers={timerBlock}

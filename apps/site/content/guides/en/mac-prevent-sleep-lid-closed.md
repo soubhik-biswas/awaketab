@@ -36,7 +36,7 @@ steps:
     path: "Terminal › pmset -g log"
     text: "`pmset -g log` records each sleep and wake with a reason. If it shows a sleep when you closed the lid, check the first two steps and Apple's guide for your model."
 stepsDone: "All four done. If the Mac still sleeps when you close it, read the next section."
-toolNote: "With the lid open, a tab is enough. The AwakeTab timer runs until you stop it. Kept in view in Chrome or Edge, it holds the display on, and the Mac skips idle sleep for as long as that lasts. The pill says \"Screen awake\" once the browser grants it, and \"Paused — tab hidden\" if you switch to another tab."
+toolNote: "With the lid open, a tab is enough. The AwakeTab timer runs until you stop it. Kept in view in Chrome or Edge, it holds the display on, and the Mac skips idle sleep for as long as that lasts. The pill says \"Awake\" once the browser grants it, and \"Paused\" if you switch to another tab."
 faq:
   - q: "Does caffeinate keep a MacBook awake with the lid closed?"
     a: "Not with its usual options. `caffeinate -i` or `caffeinate -di` stops idle sleep while the lid is open. Closing the lid is not idle time, so the Mac sleeps anyway unless it is in clamshell mode with power and an external display."
@@ -101,4 +101,4 @@ A closed Mac that stays awake still makes heat. Inside a bag or sleeve it has no
 - `pmset -g assertions` lists every process asking macOS not to sleep. A browser keeping the screen on shows a PreventUserIdleDisplaySleep or NoDisplaySleep entry. `caffeinate -i` shows PreventUserIdleSystemSleep.
 - `pmset -g` prints your current settings. After using the pmset switch, check it is off again.
 
-If the job runs out of sight, [AwakeTab for Chrome](/extension) at its System level keeps the Mac awake with the tab hidden while Chrome runs. For long builds and agents, [keeping your computer awake for an AI agent](/for/ai-agents) compares the options. The full Mac setup is on [the macOS page](/on/macos).
+If the job runs out of sight, [AwakeTab for Chrome](/extension) keeps the display, and so the Mac, awake with the tab hidden while Chrome runs. For long builds and agents, [keeping your computer awake for an AI agent](/for/ai-agents) compares the options. The full Mac setup is on [the macOS page](/on/macos).

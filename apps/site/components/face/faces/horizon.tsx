@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { CARD_SHADOW } from '../art';
 import { alpha } from '../geometry';
-import { big, EndLine, type IDrawProps, Stars, type TStar } from '../kit';
+import { big, EndLine, type IDrawProps, Stars, type TStar, PLATE } from '../kit';
 
 const STARS: readonly TStar[] = [
   [30, 30, 3],
@@ -32,6 +32,8 @@ const shimmer = (left: number, top: number, width: number, accent: string): CSSP
 // A lamp-sun sets toward the horizon as the session runs down.
 export default function Horizon({ m }: IDrawProps) {
   const { accent, theme } = m;
+  // The sun's centre runs from 122 px above the horizon at the start down onto it at the end.
+  const sunTop = Math.round(184 - 32 - 122 * m.frac);
   const sky =
     theme === 'light'
       ? `linear-gradient(180deg, #F9EEDF 0%, #F6E1C8 70%, ${alpha(accent, 0x55)} 100%)`
@@ -40,6 +42,7 @@ export default function Horizon({ m }: IDrawProps) {
         : `linear-gradient(180deg, #0A1226 0%, #16213D 65%, ${alpha(accent, 0x44)} 100%)`;
   return (
     <div
+      className={PLATE}
       style={{
         position: 'absolute',
         left: 20,
@@ -48,6 +51,7 @@ export default function Horizon({ m }: IDrawProps) {
         height: 300,
         overflow: 'hidden',
         borderRadius: 28,
+        isolation: 'isolate',
         background: SEA[theme],
         boxShadow: CARD_SHADOW[theme],
       }}
@@ -60,13 +64,25 @@ export default function Horizon({ m }: IDrawProps) {
           className="af-tr"
           style={{
             position: 'absolute',
+            left: 146,
+            top: sunTop - 68,
+            width: 200,
+            height: 200,
+            borderRadius: '50%',
+            background: `radial-gradient(closest-side, ${alpha(accent, 0x73)}, ${alpha(accent, 0x2e)} 45%, transparent)`,
+          }}
+        />
+        <div
+          className="af-tr"
+          style={{
+            position: 'absolute',
             left: 214,
-            top: Math.round(184 - 32 - 122 * m.frac),
+            top: sunTop,
             width: 64,
             height: 64,
             borderRadius: '50%',
             background: `radial-gradient(circle at 40% 35%, ${m.night ? SUN_HIGHLIGHT.night : SUN_HIGHLIGHT.light}, ${accent} 70%)`,
-            boxShadow: `0 0 0 10px ${alpha(accent, 0x26)}, 0 0 60px ${alpha(accent, 0x99)}`,
+            boxShadow: `0 0 0 10px ${alpha(accent, 0x26)}`,
           }}
         />
       </div>

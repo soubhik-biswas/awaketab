@@ -5,13 +5,13 @@ import { inline, splitArticle, tokenize, type ISection } from '@/lib/markdown';
 import { cn } from '@/lib/utils';
 import { StatusPill, type TStatusState } from '@/components/product/status-pill';
 import { Block, Callout, DataTable, html, Steps, status, tx, type TCell } from '../blocks';
+import { lockPillLabel, type TLock } from '../pill-copy';
 import * as s from '../styles';
 import { Checklist } from './checklist';
 import { CodeBlock } from './code-block';
 import { TrackedSteps } from './tracked-steps';
 
 type TT = (key: string, values?: Record<string, string | number>) => string;
-type TLock = 'idle' | 'requesting' | 'held' | 'lost' | 'denied' | 'unsupported' | 'fallback';
 
 const LOCK_PILL: Record<TLock, TStatusState> = {
   idle: 'idle',
@@ -98,7 +98,7 @@ function PillStates({ pills, t }: { pills: NonNullable<TArticle['pills']>; t: TT
           className="flex flex-col gap-2 border-t border-border px-5 py-4 first:border-t-0 min-[700px]:flex-row min-[700px]:items-center min-[700px]:gap-5"
         >
           <dt className="min-[700px]:w-[260px] min-[700px]:flex-none">
-            <StatusPill state={LOCK_PILL[row.state]} label={pillLabel(t, row.state)} />
+            <StatusPill state={LOCK_PILL[row.state]} label={lockPillLabel(t, row.state)} />
           </dt>
           <dd className={cn(s.body, 'site-prose m-0')} dangerouslySetInnerHTML={{ __html: inline(row.text) }} />
         </div>
@@ -107,10 +107,8 @@ function PillStates({ pills, t }: { pills: NonNullable<TArticle['pills']>; t: TT
   );
 }
 
-const pillLabel = (t: TT, state: TLock): string => (state === 'idle' ? t('pill.idle._') : t(`pill.${state}`));
-
 function Lifecycle({ data, t }: { data: NonNullable<TArticle['lifecycle']>; t: TT }) {
-  const pill = (state: TLock) => <StatusPill state={LOCK_PILL[state]} label={pillLabel(t, state)} />;
+  const pill = (state: TLock) => <StatusPill state={LOCK_PILL[state]} label={lockPillLabel(t, state)} />;
   const edge = (text: string, mono = false) => (
     <span className="inline-flex items-center gap-1.5 text-[14px] text-muted-foreground-strong">
       <ArrowRight className="hidden size-4 min-[700px]:inline" aria-hidden="true" />
@@ -335,7 +333,7 @@ function SectionBody({ section, a, t, tp }: { section: ISection; a: TArticle; t:
         part.kind === 'html' ? (
           <div
             key={i}
-            className="site-prose flex max-w-[760px] flex-col gap-4 text-[17px] leading-[1.7] min-[700px]:text-[18px]"
+            className="site-prose flex max-w-[760px] flex-col gap-4 text-[17px] leading-[1.7] min-[700px]:text-[18px] [&_ol]:leading-[1.65] [&_ul]:leading-[1.65]"
             dangerouslySetInnerHTML={{ __html: part.html }}
           />
         ) : (
@@ -346,19 +344,20 @@ function SectionBody({ section, a, t, tp }: { section: ISection; a: TArticle; t:
   );
 }
 
-// The Markdown body as board blocks: one section per h2, prose and the placed `::blocks` in page order.
+// The Markdown body as one run of prose: a section per h2, its text and the placed `::blocks` in page order.
 export function ArticleBody({ a, t, tp }: { a: TArticle; t: TT; tp: TT }) {
   return (
-    <>
+    <div className="flex flex-col gap-[26px]">
       {splitArticle(a.html).map((section, i) => (
         <Block
           key={section.id ?? i}
+          article
           {...(section.id ? { id: section.id } : {})}
           {...(section.title ? { h: section.title } : { label: a.h1 })}
         >
           <SectionBody section={section} a={a} t={t} tp={tp} />
         </Block>
       ))}
-    </>
+    </div>
   );
 }

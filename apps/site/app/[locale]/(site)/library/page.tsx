@@ -4,6 +4,7 @@ import wakePkg from '../../../../../../packages/wake/package.json';
 import { CodeBlock } from '@/components/site/article/code-block';
 import { Block, DataTable, html, tx } from '@/components/site/blocks';
 import { JsonLd } from '@/components/site/json-ld';
+import { lockPillLabel } from '@/components/site/pill-copy';
 import { HeroButtons, PageHero } from '@/components/site/page-hero';
 import { inline, tokenize } from '@/lib/markdown';
 import { ROUTES, SITE } from '@/lib/routes';
@@ -24,7 +25,7 @@ const CMP: ReadonlyArray<readonly [string, string, string]> = [
   ['Native Wake Lock', 'Yes, first', 'Yes (when present)'],
   ['State reporting', 'Seven states + change events with reason and advice', '`isEnabled` boolean'],
   ['Denial diagnosis', '`classifyDenial()` advice codes', 'None'],
-  ['Fallback', 'Inlined 1-frame video, gesture-aware, pauses when hidden', 'Looping video, always on'],
+  ['Fallback', 'Inlined two-frame WebM (MP4 opt-in), gesture-aware, pauses when hidden', 'Looping video, always on'],
   ['Size (gzip)', '≤ 3.4 KB, fallback included', '≈ 3.2 KB'],
   ['TypeScript · SSR', 'Native · inert on the server', 'Community typings · no'],
   ['Adapters', 'React, Preact, Vue (< 400 B each)', 'No'],
@@ -46,7 +47,6 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const tt = await getTranslations({ locale: 'en', namespace: 'tool' });
   const tc = await getTranslations({ locale: 'en', namespace: 'content' });
   const canonical = `${SITE}${ROUTES.library}`;
-  const pill = (s: (typeof STATES)[number]) => (s === 'idle' ? tt('pill.idle._') : tt(`pill.${s}`));
   const lines = (code: string, lang: string) => code.split('\n').map((l) => tokenize(l, lang));
   return (
     <>
@@ -93,12 +93,16 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
           scrollLabel={tc('codeScroll', { file: 'main.js' })}
         />
       </Block>
-      <Block id="lib-states" h="Seven honest states" sub="The same states and pill copy as the AwakeTab tool.">
+      <Block
+        id="lib-states"
+        h="Seven honest states"
+        sub="The seven lock states, in the words AwakeTab’s own pill uses."
+      >
         <DataTable
           label="Lock states"
-          cols={['State', 'What the pill says']}
+          cols={['State', 'What AwakeTab’s pill says']}
           template="1fr 1.6fr"
-          rows={STATES.map((s) => [tx(s, true), tx(pill(s))])}
+          rows={STATES.map((s) => [tx(s, true), tx(lockPillLabel(tt, s))])}
         />
       </Block>
       <Block id="lib-compare" h="@awaketab/wake vs NoSleep.js">

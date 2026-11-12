@@ -341,16 +341,9 @@ export function createController(opts: IControllerOptions): IController {
     } else {
       const stored = storage.session();
       if (stored?.status !== 'paused') return;
-      // Fold the pause into the end time so the engine's resume check sees the time that is really left.
-      const at = now();
-      const paused = stored.pausedAt ?? at;
-      const folded =
-        stored.plan.type === 'duration' && stored.endsAt !== null
-          ? { ...stored, endsAt: stored.endsAt + (at - paused) + stored.pausedMs, pausedMs: 0, pausedAt: at }
-          : stored;
-      storage.writeSession(folded);
+      // The engine moves the end time forward by the pause, so the time that was left is the time that runs.
       if (engine.getResumable()) await engine.resumeSession();
-      else finalizeExpired(folded);
+      else finalizeExpired(stored);
     }
     if (isLive(engine.session)) engine.updateSession({ modeState: { hidden: false } });
     await ensureSessionAlarms();

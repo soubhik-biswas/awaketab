@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { alpha, f1, P, sectorPath, ticks } from '../geometry';
+import { alpha, CX, CY, f1, P, ticks } from '../geometry';
 import { D, hand, type IDrawProps, Svg } from '../kit';
 import type { TFaceModel } from '../model';
 
@@ -13,8 +13,21 @@ const MAJOR = ticks(108, 130, 12);
 const LUXE_MINOR = ticks(126, 130, 60, (i) => i % 5 !== 0);
 const LUXE_MAJOR = ticks(114, 130, 12, (i) => i % 3 !== 0);
 
-// The minutes left as degrees on the minute track (one minute = 6°), capped just under a full turn.
-export const minutesSpan = (m: TFaceModel): number => Math.min(359.9, (m.st === 'idle' ? m.total : m.r) / 10);
+// The minutes left as degrees (one minute = 6°), at most a full turn; a session with no end has none.
+export const minutesSpan = (m: TFaceModel): number =>
+  m.indef ? 0 : Math.min(360, (m.st === 'idle' ? m.total : m.r) / 10);
+
+const pt = (rr: number, deg: number): string => P(rr, deg).map(f1).join(' ');
+// A ring sector drawn as two half arcs (a whole ring when it is a full turn), so a sector of nearly a full turn
+// cannot lose its centre to rounding as a single arc between two almost equal points does.
+export const band = (r1: number, r2: number, d0: number, span: number): string => {
+  if (span <= 0.05) return '';
+  if (span >= 359.9)
+    return `M${CX - r2} ${CY}A${r2} ${r2} 0 1 1 ${CX + r2} ${CY}A${r2} ${r2} 0 1 1 ${CX - r2} ${CY}ZM${CX - r1} ${CY}A${r1} ${r1} 0 1 0 ${CX + r1} ${CY}A${r1} ${r1} 0 1 0 ${CX - r1} ${CY}Z`;
+  const d1 = d0 + span;
+  const mid = d0 + span / 2;
+  return `M${pt(r2, d0)}A${r2} ${r2} 0 0 1 ${pt(r2, mid)}A${r2} ${r2} 0 0 1 ${pt(r2, d1)}L${pt(r1, d1)}A${r1} ${r1} 0 0 0 ${pt(r1, mid)}A${r1} ${r1} 0 0 0 ${pt(r1, d0)}Z`;
+};
 
 // Analog and Analog luxe: real time on the hands, the lamp sector running from now to the end time.
 export function AnalogDial({ m, luxe, children }: IDrawProps & { luxe: boolean; children?: ReactNode }) {
@@ -39,7 +52,7 @@ export function AnalogDial({ m, luxe, children }: IDrawProps & { luxe: boolean; 
         />
       )}
       <Svg>
-        <path d={sectorPath(luxe ? 62 : 96, 134, m.minDeg, m.minDeg + spanN)} style={{ fill: sectorC }} />
+        <path d={band(luxe ? 62 : 96, 134, m.minDeg, spanN)} style={{ fill: sectorC }} />
         {luxe && (
           <>
             <circle cx="180" cy="155" r="130" fill="none" strokeWidth="1" style={{ stroke: t.line }} />
@@ -60,8 +73,12 @@ export function AnalogDial({ m, luxe, children }: IDrawProps & { luxe: boolean; 
           strokeLinecap="round"
           style={{ stroke: t.ink }}
         />
-        <circle cx={f1(ex)} cy={f1(ey)} r="6" style={{ fill: accent }} />
-        <circle className="afx-pulse" cx={f1(ex)} cy={f1(ey)} r="6" opacity={m.haloOp} style={{ fill: accent }} />
+        {spanN > 0 && (
+          <>
+            <circle cx={f1(ex)} cy={f1(ey)} r="6" style={{ fill: accent }} />
+            <circle className="afx-pulse" cx={f1(ex)} cy={f1(ey)} r="6" opacity={m.haloOp} style={{ fill: accent }} />
+          </>
+        )}
       </Svg>
       {children}
       <div

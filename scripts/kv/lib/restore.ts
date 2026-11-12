@@ -1,14 +1,8 @@
-// Restore planning: compare a backup with the target namespace, then (only with --apply) write.
-//
-// A restore never deletes. Keys missing from the target are created; keys whose current value equals the
-// backup are left alone; keys whose value differs are conflicts and are only overwritten with --overwrite,
-// because the live value is usually newer (a licence activated after the backup was taken). Records whose
-// `expiration` has passed, or is less than the 60 s KV minimum away, are skipped: KV would reject them, and
-// the data had expired anyway.
+// Plans a restore against the target namespace and writes only with --apply; a restore never deletes.
 import type { IKvRecord } from './format.ts';
 import { isExpiredForWrite, type IKvStore } from './store.ts';
 
-export interface IRestorePlan {
+interface IRestorePlan {
   create: IKvRecord[];
   conflict: IKvRecord[];
   same: IKvRecord[];
@@ -16,7 +10,7 @@ export interface IRestorePlan {
   filtered: number;
 }
 
-export interface IRestoreOptions {
+interface IRestoreOptions {
   nowMs?: number;
   prefixes?: readonly string[];
 }
@@ -56,7 +50,7 @@ export async function applyRestore(plan: IRestorePlan, target: IKvStore, overwri
   return writes.length;
 }
 
-export interface IRestoreSummary {
+interface IRestoreSummary {
   create: number;
   conflict: number;
   same: number;

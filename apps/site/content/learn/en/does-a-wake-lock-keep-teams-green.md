@@ -122,7 +122,7 @@ Tell people where you are instead of making the computer look busy. Each of thes
 
 ## Why won't AwakeTab fake input?
 
-The loudest request in this category is "keep me green". Faking it would mean moving the pointer or sending key presses, which makes your status say something that isn't true, to people who rely on it. AwakeTab keeps the screen on so you can read, watch or present, and it says plainly when it can't. If the browser takes the lock back because you switched tabs, the pill reads "Paused — tab hidden" rather than pretending.
+The loudest request in this category is "keep me green". Faking it would mean moving the pointer or sending key presses, which makes your status say something that isn't true, to people who rely on it. AwakeTab keeps the screen on so you can read, watch or present, and it says plainly when it can't. If the browser takes the lock back because you switched tabs, the pill reads "Paused" rather than pretending.
 
 ## Are mouse jigglers a policy risk?
 

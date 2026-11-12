@@ -111,9 +111,13 @@ describe('backup format', () => {
     expect(() => parseBackup('{"format":"other"}')).toThrow(/Not an/u);
   });
 
-  it('backs up the D-06 Polar id indexes with the licences', () => {
+  it('backs up the Polar id indexes with the licences', () => {
     expect(BACKUP_PREFIXES).toEqual(expect.arrayContaining(['lic:', 'cus:', 'ord:', 'lk:', 'grant:', 'sub:']));
     expect(BACKUP_PREFIXES).not.toContain('wh:');
+  });
+
+  it('backs up what visitors wrote: ratings and feedback', () => {
+    expect(BACKUP_PREFIXES).toEqual(expect.arrayContaining(['rating:', 'feedback:']));
   });
 
   it('names files per namespace and UTC day, and counts per key family', () => {
@@ -235,6 +239,27 @@ describe('restore', () => {
     expect(target.json('lic:bbb')).toEqual({ changed: true });
     expect(target.rows.has('lic:zzz')).toBe(true);
     expect(target.rows.has('rating:old')).toBe(false);
+  });
+
+  it('carries feedback and ratings through a backup and a restore, with their expiry', async () => {
+    const note = { rating: 'good', topics: ['faces'], text: 'More faces please', device: 'phone', at: NOW };
+    const source = new MemoryKvStore('LICENSES', 1000, () => NOW)
+      .seed('feedback:f1', note, { expiration: FUTURE })
+      .seed('feedback:f2', { rating: 'love', topics: [], device: 'desktop', at: NOW }, { expiration: FUTURE })
+      .seed('rating:r1', { stars: 4, locale: 'de', ver: 'x', at: NOW }, { expiration: FUTURE })
+      .seed('wh:evt_1', { at: NOW }, { expiration: FUTURE });
+    const backup = await backupOf(source);
+    expect(backup.header.prefixes).toEqual(expect.arrayContaining(['feedback:', 'rating:']));
+    expect(backup.records.map((row) => row.key)).toEqual(['feedback:f1', 'feedback:f2', 'rating:r1']);
+    expect(countByPrefix(backup.records)).toEqual({ 'feedback:': 2, 'rating:': 1 });
+
+    const target = new MemoryKvStore('LICENSES_PREVIEW', 1000, () => NOW);
+    const plan = await planRestore(backup.records, target, { nowMs: NOW, prefixes: ['feedback:'] });
+    expect(plan.filtered).toBe(1);
+    expect(await applyRestore(plan, target, false)).toBe(2);
+    expect(target.record('feedback:f1')).toEqual(source.record('feedback:f1'));
+    expect(target.json('feedback:f1')).toEqual(note);
+    expect(target.rows.has('rating:r1')).toBe(false);
   });
 
   it('overwrites conflicts only with overwrite, and filters by prefix', async () => {

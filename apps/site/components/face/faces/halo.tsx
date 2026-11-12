@@ -9,7 +9,7 @@ const GLOW_MASK = 'radial-gradient(circle, transparent 0 96px, #000 104px 132px,
 const disc: CSSProperties = { position: 'absolute', left: 50, top: 20, width: 260, height: 260, borderRadius: '50%' };
 const masked = (mask: string): CSSProperties => ({ ...disc, WebkitMaskImage: mask, maskImage: mask });
 
-// A glowing gradient ring that closes toward 12.
+// A glowing gradient ring that closes toward 12; a round cap closes its flat start at 12.
 export default function Halo({ m }: IDrawProps) {
   const deg = 360 * m.ringFrac;
   const d = deg.toFixed(1);
@@ -27,6 +27,19 @@ export default function Halo({ m }: IDrawProps) {
         style={{ ...masked(GLOW_MASK), background: grad, filter: 'blur(16px)', opacity: m.multi ? 0.75 : 0.35 }}
       />
       <div className="af-tr" style={{ ...masked(RING_MASK), background: grad }} />
+      {deg > 0 && (
+        <span
+          style={{
+            position: 'absolute',
+            left: 169.25,
+            top: 21.85,
+            width: 21.5,
+            height: 21.5,
+            borderRadius: '50%',
+            background: m.multi ? m.lamp : m.accent,
+          }}
+        />
+      )}
       <span
         style={{
           position: 'absolute',

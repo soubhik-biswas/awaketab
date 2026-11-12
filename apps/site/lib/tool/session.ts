@@ -108,6 +108,8 @@ function fresh(s: ISession, now: number, sec: number): ISession {
 
 // The session machine: idle → starting → running ⇄ paused, running → ended, a refused or released lock → blocked or
 // needs you, and a fix or the video fallback back to running. Side effects (asking for the lock) live in lib/wake.ts.
+// Paused is only ever the person's own Pause: it freezes the clock. A hidden tab that lost the lock needs you
+// instead, and its clock keeps running to the same end time.
 export function reduce(s: ISession, e: TSessionEvent): ISession {
   switch (e.type) {
     case 'start': {
@@ -132,7 +134,7 @@ export function reduce(s: ISession, e: TSessionEvent): ISession {
       };
     }
     case 'hidden':
-      return isAwake(s.state) ? { ...s, state: 'paused', pauseReason: 'hidden' } : s;
+      return isAwake(s.state) ? { ...s, state: 'needsyou', pauseReason: 'hidden' } : s;
     case 'refused': {
       // A refusal never wins while a lock is actually held: no battery-saver warning over a working session.
       if (e.held || !isLive(s.state) || s.pausedAt !== null) return s;

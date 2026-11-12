@@ -1,28 +1,76 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, Trash2, TriangleAlert } from 'lucide-react';
+import { Check, CircleCheck, Trash2, TriangleAlert } from 'lucide-react';
 import { RadioGroup } from 'radix-ui';
 import { Face } from '@/components/face';
+import { cn } from '@/lib/utils';
 import { clockTime } from '@/lib/tool/clock';
-import { faceLabel } from '@/lib/tool/collections';
 import { clearHistory } from '@/lib/tool/history';
 import { shareLink } from '@/lib/tool/share';
 import type { TToolLang } from '@/lib/tool/strings';
-import { useGlance } from '../context';
-import { Group, Note, RowText, SecLabel, StepNo, SwitchRow } from '../kit';
+import { useGlance, useTickValue } from '../context';
+import { CARD, Group, Note, RowText, SecLabel, StepNo, SwitchRow } from '../kit';
 import { showNote } from '../overlays';
 import { LANG_NAMES } from './settings';
 import { PanelBody, PanelFoot } from './shell';
 
 const HELP_STEPS: Record<string, number> = { battery: 3, unknown: 3, insecure: 2, policy: 2 };
 
-// The real reason, the time it was checked and numbered steps; the video fallback is the pinned way out.
+// The real reason, the time it was checked and numbered steps; the video fallback is the pinned way out. A warning
+// shows only while the browser is really refusing the lock: with the lock held, or nothing asked yet, the panel says
+// so instead, and a hidden tab or a browser without wake locks gets its own plain line and one button.
 export function HelpPanel() {
   const g = useGlance();
-  const { t, reason } = g;
-  const checked = g.snap.checkedAt ?? g.now;
+  const { t, reason, st } = g;
+  const minute = useTickValue((tick) => Math.floor(tick.now / 60_000));
+  const checked = g.checkedAt ?? minute * 60_000;
   const steps = HELP_STEPS[reason] ?? 3;
+  if (st !== 'blocked') {
+    const awake = st === 'running' || st === 'fallback';
+    const calm = st !== 'needsyou' && st !== 'unsupported';
+    const Icon = calm ? CircleCheck : TriangleAlert;
+    const title = calm ? t('help.ok.h') : t(`banner.${st}.t`);
+    const desc = !calm
+      ? t(`banner.${st}.d`)
+      : st === 'fallback'
+        ? `${t('banner.fallback.t')} ${t('banner.fallback.d')}`
+        : awake
+          ? t('help.ok.awake')
+          : t('help.ok.rest');
+    return (
+      <>
+        <PanelBody>
+          <div className={cn(CARD, 'flex gap-3.5 p-4')}>
+            <span
+              className={cn(
+                'flex size-11 flex-none items-center justify-center rounded-[14px]',
+                awake ? 'bg-(--tg-volt-soft) text-(--tg-volt)' : 'bg-(--tg-s2) text-(--tg-text)',
+              )}
+            >
+              <Icon className="size-6" strokeWidth={2} aria-hidden="true" />
+            </span>
+            <span className="flex flex-col gap-1">
+              <strong className="font-display text-[20px] font-bold tracking-[-0.02em]">{title}</strong>
+              <span className="text-[13px] leading-[1.45] text-(--tg-t2)">{desc}</span>
+            </span>
+          </div>
+        </PanelBody>
+        {st === 'needsyou' ? (
+          <PanelFoot
+            primary={{
+              label: t('dock.resume'),
+              go: () => {
+                g.a.resume();
+                g.a.close();
+              },
+            }}
+          />
+        ) : null}
+        {st === 'unsupported' ? <PanelFoot primary={{ label: t('help.video'), go: () => g.a.useFallback() }} /> : null}
+      </>
+    );
+  }
   return (
     <>
       <PanelBody>
@@ -111,19 +159,20 @@ const LANG_ROWS: readonly TToolLang[] = ['en', 'de', 'ja', 'zh', 'hi', 'es'];
 export function LanguagePanel() {
   const g = useGlance();
   const { t } = g;
+  const now = useTickValue((tick) => Math.floor(tick.now / 60_000)) * 60_000;
   return (
     <PanelBody>
       <RadioGroup.Root value={g.lang} onValueChange={(v) => g.a.setLang(v)} aria-label={t('panel.language.t')}>
         <Group>
           {(LANG_ROWS.includes(g.lang) ? LANG_ROWS : [...LANG_ROWS, g.lang]).map((k) => {
             const on = k === g.lang;
-            const time = clockTime(g.now, k, 12);
+            const time = clockTime(now, k, 12);
             return (
               <RadioGroup.Item
                 key={k}
                 value={k}
                 lang={k}
-                className="tg-btn flex min-h-[60px] w-full items-center gap-3.5 border-0 bg-transparent px-4 py-2.5 text-(--tg-text) [&+&]:border-t [&+&]:border-(--tg-border)"
+                className="tg-btn tg-row flex min-h-[60px] w-full items-center gap-3.5 border-0 bg-transparent px-4 py-2.5 text-(--tg-text) [&+&]:border-t [&+&]:border-(--tg-border)"
               >
                 <RowText title={LANG_NAMES[k]} desc={`${t(`lang.${k}`)} · ${time}`} />
                 {on ? (
@@ -188,7 +237,7 @@ export function SharePanel() {
               motion="off"
             />
           </span>
-          <RowText title={`${len} · ${faceLabel(g.face)} · ${t(`vibe.${settings.vibe}.n`)}`} desc={t('share.card')} />
+          <RowText title={`${len} · ${g.faceName(g.face)} · ${t(`vibe.${settings.vibe}.n`)}`} desc={t('share.card')} />
         </div>
         <SecLabel>{t('share.link')}</SecLabel>
         <div className="flex h-[52px] items-center gap-2.5 rounded-[16px] border border-(--tg-border-hi) bg-(--tg-field) pr-1.5 pl-4">

@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toFaceId } from '@/components/face';
-import { useFaceTheme, useWindowNow } from '@/lib/surfaces/hooks';
+import { useWakeStill } from '@/components/tool/hooks';
+import { clockDial } from '@/lib/clock-format';
+import { useFaceTheme } from '@/lib/surfaces/hooks';
 import { EXTEND_SEC, shortDuration, surfaceView } from '@/lib/surfaces/session';
 import {
   postWidgetData,
@@ -33,15 +35,45 @@ function runWidgetAction(a: TWidgetAction): void {
   }
 }
 
-// Keeps the installed app's widgets in step with this tab and carries out their taps (through the service worker).
-export function WidgetSync() {
+const watchWorker = (cb: () => void) => {
+  const sw = typeof navigator === 'undefined' ? undefined : navigator.serviceWorker;
+  sw?.addEventListener('controllerchange', cb);
+  return () => sw?.removeEventListener('controllerchange', cb);
+};
+
+// Widgets are fed through the service worker, so a page no worker controls has nobody to tell.
+function useWidgetHost(): boolean {
+  return useSyncExternalStore(
+    watchWorker,
+    () => 'serviceWorker' in navigator && navigator.serviceWorker.controller !== null,
+    () => false,
+  );
+}
+
+// The widgets read to the minute, so the clock here turns once a minute, on the minute.
+function useMinute(): number {
+  const [minute, setMinute] = useState(() => Math.floor(Date.now() / 60_000));
+  useEffect(() => {
+    let id = 0;
+    const tick = () => {
+      setMinute(Math.floor(Date.now() / 60_000));
+      id = window.setTimeout(tick, 60_000 - (Date.now() % 60_000) + 5);
+    };
+    id = window.setTimeout(tick, 60_000 - (Date.now() % 60_000) + 5);
+    return () => window.clearTimeout(id);
+  }, []);
+  return minute;
+}
+
+function WidgetFeed() {
   const t = useTranslations('surfaces');
   const locale = useLocale();
-  const { h12, label } = useToolSettings();
-  const snap = useWake();
+  const { h12, clockSet, label } = useToolSettings();
+  const snap = useWakeStill();
   const line = useSurfaceLine();
-  const minute = Math.floor(useWindowNow(null) / 60_000);
-  const view = surfaceView({ ...snap, now: minute * 60_000 || snap.now }, { locale, fmt: h12 ? 12 : 24 });
+  const minute = useMinute();
+  const fmt = clockDial(locale, clockSet ? !h12 : null);
+  const view = surfaceView({ ...snap, now: minute * 60_000 }, { locale, fmt });
   const json = JSON.stringify(
     widgetData(view, {
       status: t(`status.${view.label}`),
@@ -64,6 +96,14 @@ export function WidgetSync() {
     postWidgetData(JSON.parse(json) as IWidgetData);
   }, [json]);
 
+  return null;
+}
+
+// Keeps the installed app's widgets in step with this tab and carries out their taps (through the service worker).
+// The feed and its clock run only while a service worker is there to pass the data on.
+export function WidgetSync() {
+  const hosted = useWidgetHost();
+
   useEffect(() => {
     const sw = typeof navigator === 'undefined' ? undefined : navigator.serviceWorker;
     if (!sw) return;
@@ -75,7 +115,7 @@ export function WidgetSync() {
     return () => sw.removeEventListener('message', onMessage);
   }, []);
 
-  return null;
+  return hosted ? <WidgetFeed /> : null;
 }
 
 // The three widgets on their home-screen frame, live from the engine, for previews and the dev board.

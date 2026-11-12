@@ -34,11 +34,11 @@ steps:
     shot: "the About screen with the iOS Version row"
   - title: "Open AwakeTab in Safari and tap Keep awake"
     path: "Safari › awaketab.com"
-    text: "Safari will not grant a wake lock until you touch the page, so the session always starts from your tap. Then watch the pill. It says \"Screen awake\" only once Safari has agreed."
-    shot: "AwakeTab in Safari with the pill reading Screen awake"
+    text: "Safari will not grant a wake lock until you touch the page, so the session always starts from your tap. Then watch the pill. It says \"Awake\" only once Safari has agreed."
+    shot: "AwakeTab in Safari with the pill reading Awake"
   - title: "Keep the tab in front"
     path: "No app switching while it runs"
-    text: "Going to the Home Screen, opening another app or pressing the side button hides the page. The pill changes to \"Paused — tab hidden\". Come back and AwakeTab asks Safari again by itself."
+    text: "Going to the Home Screen, opening another app or pressing the side button hides the page. The pill changes to \"Paused\". Come back and AwakeTab asks Safari again by itself."
     shot: "the pill after switching away and back"
   - title: "Optional: add it to your Home Screen"
     path: "Share › Add to Home Screen"
@@ -55,7 +55,7 @@ matrix:
     - what: "Session started without a tap, for example after a reload"
       result: blocked
       label: "Blocked"
-      text: "The pill says \"Blocked — here's the fix\". Tap Retry."
+      text: "The pill says \"Not awake\". Tap Retry."
     - what: "Another app, another tab or the lock screen"
       result: pauses
       label: "Pauses"

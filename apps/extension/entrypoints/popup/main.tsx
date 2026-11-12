@@ -8,6 +8,7 @@ import { browser } from 'wxt/browser';
 import { Face } from '../../../site/components/face/face';
 import { toFaceId, type TFaceState } from '../../../site/components/face/model';
 import type { IExtApi, IStorageChange } from '../../src/api';
+import { clockTime, dialOf } from '../../src/i18n';
 import type { IExtState, ITabRef, TExtRequest } from '../../src/messages';
 import { loadPage, send, watchTheme, type IPageContext, type TPageTheme } from '../../src/page';
 import { EXT_PRESETS, isExtPreset, presetOf, type TExtPreset } from '../../src/settings';
@@ -112,6 +113,22 @@ function Popup({ ctx, first }: { ctx: IPageContext; first: IExtState | null }) {
   const remain = live ? (indef ? elapsedSec(live, now) : Math.ceil((left ?? 0) / 1000)) : PRESET_SEC[chosen];
   const total = live ? Math.round((totalMs(live) ?? 3_600_000) / 1000) : PRESET_SEC[chosen] || 3600;
   const pill = pillCopy(view, state?.lock ?? 'idle', live, now);
+  const clock24h = ctx.settings.ambient.clock24h;
+  const endTime = clockTime(now + remain * 1000, ctx.locale, clock24h);
+  // The face's own words are English; the popup hands it the reader's language and clock.
+  const faceTop =
+    view === 'ready'
+      ? t('ext.face.ready')
+      : view === 'paused'
+        ? t('ext.face.paused')
+        : view === 'blocked'
+          ? t('ext.face.blocked')
+          : indef
+            ? t('ext.face.awakeFor')
+            : t('ext.face.left');
+  let faceEnd = t('ext.face.until', { time: endTime });
+  if (indef) faceEnd = t('ext.face.open');
+  else if (view === 'ready') faceEnd = t('ext.face.ends', { minutes: Math.round(total / 60), time: endTime });
 
   const pick = (value: string) => {
     if (!isExtPreset(value)) return;
@@ -143,6 +160,9 @@ function Popup({ ctx, first }: { ctx: IPageContext; first: IExtState | null }) {
           nowSec={secondsSinceMidnight(now)}
           size={220}
           bare
+          fmt={dialOf(ctx.locale, clock24h)}
+          lblTop={faceTop}
+          lblEnd={faceEnd}
           motion="auto"
         />
 

@@ -118,7 +118,7 @@
   --primary-foreground: #0b0718;
   --primary-soft: #241a4d;
   --secondary: #15171e;
-  --secondary-foreground: #eef2fa;
+  --secondary-foreground: #f2f4fa;
   --muted: #15171e;
   --muted-foreground: #99a1b5;
   --muted-foreground-strong: #a6afc2;
@@ -138,7 +138,7 @@
   --info: #7cbbff;
   --info-soft: #0f2645;
   --ended: #99a1b5;
-  --ended-soft: #1d273f;
+  --ended-soft: #1c1f29;
 
   --field: #05060a;
   --pop: #0e1016;
@@ -147,9 +147,9 @@
   --halo: rgba(61, 245, 142, 0.28);
   --primary-glow: rgba(159, 123, 255, 0.38);
   --scrim: rgba(0, 0, 0, 0.6);
-  --shadow-e1: 0 0 0 1px #26314a;
-  --shadow-e2: 0 0 0 1px #26314a, 0 10px 30px rgba(0, 0, 0, 0.45);
-  --shadow-e3: 0 0 0 1px #4a587a, 0 30px 70px rgba(0, 0, 0, 0.6);
+  --shadow-e1: 0 0 0 1px rgba(255, 255, 255, 0.09);
+  --shadow-e2: 0 0 0 1px rgba(255, 255, 255, 0.09), 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-e3: 0 0 0 1px rgba(255, 255, 255, 0.18), 0 30px 70px rgba(0, 0, 0, 0.6);
   --face-sky: #7cbbff;
   --face-violet: #c1b1fe;
   --face-lime: #b8f25a;
@@ -169,12 +169,12 @@
   --destructive-press: #f44a65;
   --ring-soft: rgba(124, 187, 255, 0.28);
   --destructive-ring: rgba(255, 107, 129, 0.22);
-  --tip: #eef2fa;
+  --tip: #f2f4fa;
   --tip-foreground: #0b1020;
   --tip-kbd: #878aa0;
   --raised: var(--surface-3);
   --highlight: var(--surface-3);
-  --face-plate: #070b16;
+  --face-plate: #0e1016;
   --border-hi: rgba(255, 255, 255, 0.18);
   --panel: rgba(13, 16, 30, 0.86);
   --glass: rgba(255, 255, 255, 0.04);
@@ -184,6 +184,7 @@
 }
 
 .oled {
+  color-scheme: dark;
   --background: #000000;
   --card: #05060a;
   --popover: #05060a;
@@ -198,6 +199,7 @@
   --glass: rgba(255, 255, 255, 0.035);
   --grid: rgba(255, 255, 255, 0.03);
   --vibe-opacity: 0.3;
+  --face-plate: #000000;
 }
 :root,
 .scene-light {
@@ -227,13 +229,13 @@
 .scene-dark {
   --scene-ink: #04060c;
   --scene-shadow: #000000;
-  --scene-blob: #151d31;
+  --scene-blob: #15171e;
   --scene-blob-2: #241a4d;
   --scene-spark: #ffc53d;
   --scene-w: #e7eaf0;
   --scene-w2: #c9d4ec;
   --scene-p: #b0bcd3;
-  --scene-m: #151d31;
+  --scene-m: #15171e;
   --scene-s: #7cbbff;
   --scene-v: #c1b1fe;
   --scene-k: #0b0f1a;
@@ -353,7 +355,7 @@
   --duration-fast: 120ms;
   --duration-base: 180ms;
   --duration-panel: 240ms;
-  --duration-arrive: 520ms;
+  --duration-arrive: 420ms;
   --duration-ambient: 4s;
   --ease-panel: cubic-bezier(0.2, 0.9, 0.25, 1.15);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -371,7 +373,7 @@
   --animate-shimmer: at-shimmer 1.6s ease-in-out infinite;
   --animate-breath: at-breath 2.4s ease-in-out infinite;
   --animate-float: at-float 5s ease-in-out infinite;
-  --animate-rise: at-rise 240ms cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+  --animate-rise: at-rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-fade: at-fade 180ms ease-out both;
   --animate-caret: at-caret 1s steps(1) infinite;
 
@@ -409,7 +411,7 @@
   @keyframes at-rise {
     from {
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateY(14px);
     }
     to {
       opacity: 1;
@@ -457,7 +459,6 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
   }
 
   :focus-visible {
@@ -466,11 +467,14 @@
   }
 
   :lang(ja) {
-    --font-script: var(--font-noto-jp, "Noto Sans JP");
+    --font-script:
+      "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", "Meiryo", "Noto Sans JP",
+      "Noto Sans CJK JP";
   }
 
   :lang(zh) {
-    --font-script: var(--font-noto-sc, "Noto Sans SC");
+    --font-script:
+      "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC";
   }
 
   :lang(hi) {

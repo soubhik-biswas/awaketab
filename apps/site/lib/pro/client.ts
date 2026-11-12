@@ -3,6 +3,7 @@
 import { DEFAULT_SETTINGS } from '@awaketab/core';
 import { identityFor } from '@/components/product/device-presence';
 import { authClient, signOutEverywhere } from '@/lib/auth/client';
+import { PRO_ENABLED } from '@/lib/features';
 import { SETTINGS_KEY } from '@/lib/tool/settings';
 import { isRecord } from '@/lib/tool/store';
 import {
@@ -74,7 +75,10 @@ function writeMix(mix: TSoundMix): void {
   const raw = readJson(SETTINGS_KEY);
   const base = isRecord(raw) ? raw : { ...DEFAULT_SETTINGS };
   const fs = isRecord(base.focusSound) ? base.focusSound : DEFAULT_SETTINGS.focusSound;
-  const m: Record<string, number> = {};
+  // Layers this store does not know (the newer sounds) are kept as they are.
+  const known = new Set<string>(MIX_KEYS);
+  const kept = isRecord(fs.mix) ? Object.entries(fs.mix).filter(([k]) => !known.has(k)) : [];
+  const m: Record<string, unknown> = Object.fromEntries(kept);
   for (const k of MIX_KEYS) if (mix[k] > 0) m[k] = mix[k] / 100;
   writeJson(SETTINGS_KEY, { ...DEFAULT_SETTINGS, ...base, focusSound: { ...fs, mix: m } });
 }
@@ -167,8 +171,10 @@ export function createProSource(): IProSource {
         window.addEventListener('storage', onStorage);
         window.addEventListener('at:license', onLicense);
         window.addEventListener('at:account', onAccount);
-        refreshDevices();
-        void refreshSession();
+        if (PRO_ENABLED) {
+          refreshDevices();
+          void refreshSession();
+        }
       }
       return () => {
         subs.delete(cb);

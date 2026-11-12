@@ -15,7 +15,7 @@ browsers: []
 os: []
 faq:
   - q: "Posso minimizar o navegador e deixar o download correndo?"
-    a: "Pode, mas o AwakeTab para de segurar a tela. Minimizar ou esconder a aba libera o bloqueio, e o indicador muda para “Pausado — aba oculta”. Deixe a aba do AwakeTab visível, mesmo que pequena, numa janela ao lado do gerenciador de downloads."
+    a: "Pode, mas o AwakeTab para de segurar a tela. Minimizar ou esconder a aba libera o bloqueio, e o indicador muda para “Pausado”. Deixe a aba do AwakeTab visível, mesmo que pequena, numa janela ao lado do gerenciador de downloads."
   - q: "No Windows, o computador também deixa de entrar em suspensão?"
     a: "Sim, enquanto a tela estiver ligada: Chrome e Edge pedem ao Windows para manter a tela acesa, e com isso ele não suspende por inatividade, segundo a documentação da Microsoft. O mesmo vale para o macOS, segundo a Apple. Para manter o computador acordado com a tela apagada, use uma ferramenta nativa ou o nível Sistema da extensão."
   - q: "Se eu fechar a tampa do notebook, o download continua?"
@@ -36,13 +36,13 @@ updated: 2026-09-27
 
 ## O que dá e o que não dá para garantir
 
-Uma cópia grande trava quando o notebook dorme no meio do caminho. O AwakeTab mantém a **tela** ligada enquanto a aba dele estiver visível. Enquanto a tela fica ligada, nem o Windows nem o macOS entram em suspensão por inatividade, segundo a documentação da Microsoft e da Apple (conferida em 26 de setembro de 2026). A ferramenta já abre em “∞”, sem prazo para acabar: download grande não avisa quando termina.
+Uma cópia grande trava quando o notebook dorme no meio do caminho. O AwakeTab mantém a **tela** ligada enquanto a aba dele estiver visível. Enquanto a tela fica ligada, nem o Windows nem o macOS entram em suspensão por inatividade, segundo a documentação da Microsoft e da Apple (conferida em 26 de setembro de 2026). A ferramenta já abre em “Sem fim”, sem prazo para acabar: download grande não avisa quando termina.
 
 ## Como deixar o download seguro
 
 1. Ligue o notebook na tomada se o download for longo. A economia de energia do Windows (“Energy saver”, antes Economia de bateria) não recusa o bloqueio, mas pode escurecer a tela.
 2. Abra o AwakeTab numa janela própria e deixe-a visível num canto da tela, ao lado do cliente de download, da loja de jogos ou do gerenciador de arquivos.
-3. Toque em iniciar e espere o indicador dizer “Tela ligada”. A partir daí, o navegador confirmou o bloqueio.
+3. Toque em “Manter ligada” e espere o indicador dizer “Ligada”. A partir daí, o navegador confirmou o bloqueio.
 4. Não minimize a janela do AwakeTab. Se ela ficar oculta, o bloqueio é liberado e só volta quando você trouxer a aba para frente.
 
 ## Tela ligada não é o mesmo que computador acordado
@@ -57,7 +57,7 @@ Detalhes por sistema:
 
 ## O que conferir antes de sair de perto
 
-Confirme que a página abriu em HTTPS, que a janela do AwakeTab está na frente e que o indicador diz “Tela ligada”. Não confie no ícone do seu chat nem num relógio de tela escurecendo. Se o navegador recusar, leia o motivo mostrado e corrija a causa em vez de apertar iniciar de novo: repetir sem mudar nada gera a mesma recusa.
+Confirme que a página abriu em HTTPS, que a janela do AwakeTab está na frente e que o indicador diz “Ligada”. Não confie no ícone do seu chat nem num relógio de tela escurecendo. Se o navegador recusar, leia o motivo mostrado e corrija a causa em vez de apertar iniciar de novo: repetir sem mudar nada gera a mesma recusa.
 
 ## Downloads que atravessam a madrugada
 

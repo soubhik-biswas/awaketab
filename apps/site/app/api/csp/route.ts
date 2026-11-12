@@ -1,7 +1,7 @@
 import { api } from '@/lib/server/api';
 import { MAX_BODY_BYTES } from '@/lib/server/env';
 import { mapEvent, readCappedText, writePoints, type IIncomingEvent } from '@/lib/server/events';
-import { jsonError, jsonOk, rateLimited } from '@/lib/server/http';
+import { isJsonRequest, jsonError, jsonOk, rateLimited } from '@/lib/server/http';
 import { clientIp, rateLimit } from '@/lib/server/ratelimit';
 
 interface ICspReport {
@@ -25,9 +25,13 @@ function reportPath(parsed: unknown): string {
 
 export const dynamic = 'force-dynamic';
 
+// The Reporting API posts application/reports+json; the older report-uri posts application/csp-report.
+const LEGACY_REPORT_TYPE = ['application/csp-report'];
+
 export const POST = api(async (request, { env }) => {
   const ip = clientIp(request);
   if (!(await rateLimit(env, 'csp', ip))) return rateLimited();
+  if (!isJsonRequest(request, LEGACY_REPORT_TYPE)) return jsonError('unsupported_media_type', 415);
   const raw = await readCappedText(request, MAX_BODY_BYTES);
   if (raw === null) return jsonError('too_large', 413);
   let path: string;

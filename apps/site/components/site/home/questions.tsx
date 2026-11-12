@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import type { TLocale } from '@/i18n/locales';
+import { PRO_ENABLED } from '@/lib/features';
 import { panelHref } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { Faq } from '../blocks';
@@ -28,7 +29,10 @@ export async function Questions({ locale }: { locale: TLocale }) {
           {t('after')}
         </p>
       </div>
-      <Faq variant="home" items={QUESTIONS.map((n) => ({ q: t(`${n}.q`), a: t(`${n}.a`) }))} />
+      <Faq
+        variant="home"
+        items={QUESTIONS.map((n) => ({ q: t(`${n}.q`), a: t(n === '4' && !PRO_ENABLED ? '4.aFree' : `${n}.a`) }))}
+      />
     </section>
   );
 }

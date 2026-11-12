@@ -1,6 +1,6 @@
 # Store listing — AwakeTab — Keep your screen awake
 
-Copy for the Chrome Web Store and Edge Add-ons, word for word from `docs/plan/glance/LISTING_COPY.md` (the marketing board). Use with [the release guide](PUBLISHING.md), [reviewer instructions](reviewer-instructions.md) and [privacy disclosures](privacy-disclosures.md). Store form fields use plain text; keep the paragraph spacing and drop the Markdown when pasting. Placeholders stay in [BRACKETS]. There is no email address anywhere: support and feedback are in the app (Settings → Send feedback) and on the help centre.
+Copy for the Chrome Web Store and Edge Add-ons, from `docs/plan/glance/LISTING_COPY.md` (the marketing board), changed only where the first release differs from it: the popup's four lengths, the eight languages the package ships, the real help and privacy addresses, and no Pro paragraph, because Pro is switched off at launch. Use with [the release guide](PUBLISHING.md), [reviewer instructions](reviewer-instructions.md) and [privacy disclosures](privacy-disclosures.md). Store form fields use plain text; keep the paragraph spacing and drop the Markdown when pasting. There is no email address anywhere: support and feedback are in the app (Settings → Send feedback) and on the help centre.
 
 ## Identity
 
@@ -9,11 +9,11 @@ Copy for the Chrome Web Store and Edge Add-ons, word for word from `docs/plan/gl
 | Name (33 / 75) | AwakeTab — Keep your screen awake |
 | Summary (115 / 132) | Keep your screen on with one click. A calm clock shows the time left. 46 faces, all free — no account, no tracking. |
 | Category | Productivity → Tools |
-| Language | English (also German, Japanese, Chinese, Hindi) |
+| Language | English, Spanish, Portuguese (Brazil), German, French, Japanese, Chinese (Simplified) and Hindi: the eight languages in the package |
 | Homepage | https://awaketab.com/extension |
 | Support | https://awaketab.com/help, and Settings → Send feedback inside AwakeTab |
-| Privacy policy URL | [PRIVACY POLICY URL] |
-| Price | Free. AwakeTab Pro is optional: [PRICE] / year, 14 days free. |
+| Privacy policy URL | https://awaketab.com/privacy#extension |
+| Price | Free |
 
 ## Description
 
@@ -23,12 +23,12 @@ Keep your screen awake — only for as long as you need.
 AwakeTab stops your display from dimming or going to sleep while you read a recipe, present slides, watch a dashboard or wait for a long download. Pick a length, click once, and a big, calm clock shows exactly how much time is left. When the time is up, your computer goes back to its normal sleep settings.
 
 WHAT YOU GET — ALL FREE
-• One click from the toolbar: 15 min, 30 min, 1 hour, 2 hours or no end
+• One click from the toolbar: 15 min, 30 min, 1 hour or no end
 • Time left on the icon badge, so you never need to open anything
 • Works in any tab, and while you use other apps
 • 46 clock faces — analog, digital and ambient — and six living backgrounds
 • Presets for the things you do every day (Kitchen, Slides, Night desk…)
-• Light, dark and OLED themes, 12- or 24-hour time, five languages
+• Light, dark and OLED themes, 12- or 24-hour time, eight languages
 • Keyboard shortcuts and full screen-reader support
 
 HONEST BY DESIGN
@@ -39,10 +39,7 @@ PRIVATE BY DEFAULT
 • No account. No ads. No tracking.
 • Settings, presets and history stay on this device.
 
-OPTIONAL PRO
-Everything above is free, for good. AwakeTab Pro ([PRICE] / year, 14 days free) syncs one setup to up to five screens and lets you start or stop any of them from one.
-
-Help: [HELP CENTRE URL]
+Help: https://awaketab.com/help
 Feedback: open AwakeTab → Settings → Send feedback.
 ```
 
@@ -65,11 +62,11 @@ Keeps the computer's display awake for a length of time the user chooses, and sh
 
 ## Privacy practices (data usage form)
 
-- **Data collected:** None by default. Only when the user chooses to send feedback: the message, plus browser and device type. With Pro only: an account identifier from Google, GitHub or a passkey, used only for sync.
+- **Data collected:** None by default. Only when the user chooses to send feedback: the message, plus browser and device type.
 - **Sold or transferred to third parties:** No.
 - **Used for anything unrelated to the single purpose:** No.
 - **Used to decide creditworthiness or for lending:** No.
-- **Privacy policy URL:** [PRIVACY POLICY URL]
+- **Privacy policy URL:** https://awaketab.com/privacy#extension
 
 > Have legal review the privacy answers and the policy before submitting. The answers must match what the build actually sends.
 

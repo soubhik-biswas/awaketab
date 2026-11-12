@@ -1,6 +1,6 @@
 import { fxInk } from '../art';
 import { alpha, sectorPath } from '../geometry';
-import { card, DISPLAY, type IDrawProps, L, lmin, MONO } from '../kit';
+import { card, DISPLAY, fit, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 // A pale dash with light-grey off segments by day, a dark dash at night.
 const ART = {
@@ -55,8 +55,9 @@ export default function Hud({ m }: IDrawProps) {
   const a = m.night ? ART.night : ART.light;
   const acc = m.accent;
   const lit = Math.round(m.ringFrac * HS);
+  const label = m.indef && m.awake ? m.topWord : m.st === 'up' ? "time's up" : 'time left';
   return (
-    <div style={card(m, { background: a.glass })}>
+    <div className={PLATE} style={card(m, { background: a.glass })}>
       <svg
         style={{ position: 'absolute', left: -14, top: -14 }}
         width="360"
@@ -80,14 +81,26 @@ export default function Hud({ m }: IDrawProps) {
           color: fxInk(!m.night),
         }}
       >
-        <span className={L} style={{ fontFamily: MONO, fontSize: lmin(12), letterSpacing: '.24em', color: a.lab }}>
-          TIME LEFT
+        <span
+          className={L}
+          style={{
+            fontFamily: MONO,
+            fontSize: lmin(12),
+            letterSpacing: '.24em',
+            textTransform: 'uppercase',
+            whiteSpace: 'nowrap',
+            color: a.lab,
+          }}
+        >
+          {label}
         </span>
         <span
           style={{
             fontFamily: DISPLAY,
             fontStretch: '112%',
-            fontSize: m.long ? 56 : 76,
+            // Sized to clear the arc's inner edge (232 wide at the readout) with the slant included.
+            fontSize: fit(m, m.long ? 54 : 68, 48),
+            whiteSpace: 'nowrap',
             fontWeight: 600,
             letterSpacing: '-0.03em',
             lineHeight: 1,
@@ -98,8 +111,8 @@ export default function Hud({ m }: IDrawProps) {
         >
           {m.digits}
         </span>
-        <span className={L} style={{ fontFamily: MONO, fontSize: lmin(13), color: acc }}>
-          END {m.endShort}
+        <span className={L} style={{ fontFamily: MONO, fontSize: lmin(13), whiteSpace: 'nowrap', color: acc }}>
+          {m.indef ? 'NO END' : `END ${m.endShort}`}
         </span>
       </div>
       <div

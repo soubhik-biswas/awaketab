@@ -1,20 +1,18 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { classifyDenial, createWakeLock } from '../src/index.js';
-import { createFakeApi, FakeSentinel, setVisibility } from './fake.js';
+import { createFakeApi, fakeMedia, FakeSentinel, setVisibility } from './fake.js';
 import { mp4 as MP4_DATA_URL, webm as WEBM_DATA_URL } from '../src/video.js';
 
 function doc() {
   return document;
 }
 
-function mockPlaying() {
-  return vi.spyOn(HTMLVideoElement.prototype, 'play').mockImplementation(async function (this: HTMLVideoElement) {
-    Object.defineProperty(this, 'paused', { configurable: true, get: () => false });
-  });
-}
-
 describe('@awaketab/wake', () => {
+  let media: ReturnType<typeof fakeMedia> | null = null;
+
   afterEach(() => {
+    media?.restore();
+    media = null;
     vi.useRealTimers();
     document.body.replaceChildren();
     Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' });
@@ -110,39 +108,38 @@ describe('@awaketab/wake', () => {
   });
 
   it('T07 missing API is unsupported and request uses fallback', async () => {
-    const play = mockPlaying();
+    media = fakeMedia();
     const lock = createWakeLock({ wakeLock: null, documentLike: doc(), fallback: 'video' });
     expect(lock.state).toBe('unsupported');
     expect(lock.supported).toBe(false);
     const state = await lock.request();
     expect(state).toBe('fallback');
-    play.mockRestore();
     lock.destroy();
   });
 
-  it('T08 fallback play resolves, element attached, nudge armed', async () => {
-    vi.useFakeTimers();
-    const play = mockPlaying();
+  it('T08 fallback play resolves, element attached, watchdog armed', async () => {
+    media = fakeMedia();
     const lock = createWakeLock({
       wakeLock: null,
       documentLike: doc(),
       fallback: 'video',
       nudgeIntervalMs: 20_000,
     });
-    await lock.request();
-    expect(lock.state).toBe('fallback');
+    vi.useFakeTimers();
+    void lock.request();
+    await vi.waitFor(() => expect(lock.state).toBe('fallback'));
     expect(lock.usingFallback).toBe(true);
     expect(document.querySelector('video')).toBeTruthy();
-    play.mockClear();
-    await vi.advanceTimersByTimeAsync(20_000);
-    play.mockRestore();
+    const plays = media.plays;
+    await vi.advanceTimersByTimeAsync(60_000);
+    expect(lock.state).toBe('fallback');
+    expect(media.plays).toBe(plays);
     lock.destroy();
   });
 
   it('T09 fallback play reject stays unsupported and detaches video', async () => {
-    const play = vi
-      .spyOn(HTMLVideoElement.prototype, 'play')
-      .mockRejectedValue(new DOMException('autoplay', 'NotAllowedError'));
+    media = fakeMedia();
+    media.reject = new DOMException('autoplay', 'NotAllowedError');
     const errors: unknown[] = [];
     const lock = createWakeLock({ wakeLock: null, documentLike: doc(), fallback: 'video' });
     lock.on('error', (e) => errors.push(e.error));
@@ -150,59 +147,57 @@ describe('@awaketab/wake', () => {
     expect(lock.state).toBe('unsupported');
     expect(errors.length).toBeGreaterThan(0);
     expect(document.querySelector('video')).toBeNull();
-    play.mockRestore();
     lock.destroy();
   });
 
   it('T09b a play() that never settles fails over when the last source errors', async () => {
-    const play = vi
-      .spyOn(HTMLVideoElement.prototype, 'play')
-      .mockImplementation(() => new Promise<void>(() => undefined));
+    media = fakeMedia();
+    media.hang = true;
     const lock = createWakeLock({ wakeLock: null, documentLike: doc(), fallback: 'video' });
     const pending = lock.request();
-    await Promise.resolve();
+    await vi.waitFor(() => expect(document.querySelectorAll('video source').length).toBe(2));
     const sources = [...document.querySelectorAll('video source')];
     sources.at(-1)?.dispatchEvent(new Event('error'));
     expect(await pending).toBe('unsupported');
     expect(lock.advice).toBe('unsupported_browser');
     expect(document.querySelector('video')).toBeNull();
-    play.mockRestore();
     lock.destroy();
   });
 
-  it('T09c the built-in source is WebM; an MP4 is added only when passed', async () => {
-    const play = mockPlaying();
+  it('T09c both built-in clips are offered, WebM first; a passed source replaces its own', async () => {
+    media = fakeMedia();
+    const types = () => [...document.querySelectorAll('video source')].map((s) => s.getAttribute('type'));
+    const srcs = () => [...document.querySelectorAll('video source')].map((s) => s.getAttribute('src'));
     const plain = createWakeLock({ wakeLock: null, documentLike: doc(), fallback: 'video' });
     await plain.request();
-    expect([...document.querySelectorAll('video source')].map((s) => s.getAttribute('type'))).toEqual(['video/webm']);
+    expect(types()).toEqual(['video/webm', 'video/mp4']);
+    expect(srcs()).toEqual([WEBM_DATA_URL, MP4_DATA_URL]);
     plain.destroy();
-    const withMp4 = createWakeLock({
+    const own = createWakeLock({
       wakeLock: null,
       documentLike: doc(),
       fallback: 'video',
-      videoSources: { mp4: MP4_DATA_URL },
+      videoSources: { mp4: 'https://example.test/clip.mp4' },
     });
-    await withMp4.request();
-    expect([...document.querySelectorAll('video source')].map((s) => s.getAttribute('type'))).toEqual([
-      'video/webm',
-      'video/mp4',
-    ]);
-    play.mockRestore();
-    withMp4.destroy();
+    await own.request();
+    expect(srcs()).toEqual([WEBM_DATA_URL, 'https://example.test/clip.mp4']);
+    own.destroy();
   });
 
-  it('T09d the fallback clips are real two-frame videos', () => {
+  it('T09d the fallback clips are real ten-second videos with a video and an audio track', () => {
     const bytes = (url: string) => Buffer.from(url.slice(url.indexOf(',') + 1), 'base64');
     const webm = bytes(WEBM_DATA_URL);
     expect(webm.subarray(0, 4).toString('hex')).toBe('1a45dfa3');
-    expect(webm.includes('webm')).toBe(true);
-    expect(webm.includes('V_VP8')).toBe(true);
-    // Two SimpleBlocks (0xA3), each a VP8 keyframe with its start code.
-    expect(webm.toString('hex').split('9d012a').length - 1).toBe(2);
+    for (const mark of ['webm', 'V_VP8', 'A_OPUS', 'OpusHead']) expect(webm.includes(mark), mark).toBe(true);
     const mp4 = bytes(MP4_DATA_URL);
-    for (const box of ['ftyp', 'moov', 'mvhd', 'trak', 'stsd', 'avc1', 'avcC', 'stts', 'stsz', 'stco', 'mdat'])
+    for (const box of ['ftyp', 'moov', 'mvhd', 'trak', 'stsd', 'avc1', 'avcC', 'mp4a', 'esds', 'stts', 'stco', 'mdat'])
       expect(mp4.includes(box), box).toBe(true);
-    expect(mp4.readUInt32BE(mp4.indexOf('stsz') + 12)).toBe(2);
+    const mvhd = mp4.indexOf('mvhd');
+    const timescale = mp4.readUInt32BE(mvhd + 16);
+    const duration = mp4.readUInt32BE(mvhd + 20);
+    expect(duration / timescale).toBeCloseTo(10, 1);
+    expect(mp4.length).toBeLessThan(4_000);
+    expect(webm.length).toBeLessThan(4_000);
   });
 
   it('T10 release from held and fallback returns idle with user_release', async () => {
@@ -216,13 +211,12 @@ describe('@awaketab/wake', () => {
     expect(reasons).toContain('user_release');
     expect(fake.sentinels[0]?.released).toBe(true);
 
-    const play = mockPlaying();
+    media = fakeMedia();
     const videoLock = createWakeLock({ wakeLock: null, documentLike: doc(), fallback: 'video' });
-    await videoLock.request();
+    expect(await videoLock.request()).toBe('fallback');
     await videoLock.release();
     expect(videoLock.state).toBe('idle');
     expect(document.querySelector('video')).toBeNull();
-    play.mockRestore();
     lock.destroy();
     videoLock.destroy();
   });
@@ -237,7 +231,7 @@ describe('@awaketab/wake', () => {
     expect(lock.state).toBe('idle');
   });
 
-  it('T12 fullscreenchange while held re-requests once', async () => {
+  it('T12 fullscreenchange while held asks for nothing', async () => {
     const fake = createFakeApi();
     const lock = createWakeLock({ wakeLock: fake.api, documentLike: doc(), fallback: 'none' });
     await lock.request();
@@ -246,7 +240,20 @@ describe('@awaketab/wake', () => {
     document.dispatchEvent(new Event('fullscreenchange'));
     await Promise.resolve();
     await Promise.resolve();
-    expect(req).toHaveBeenCalledTimes(1);
+    expect(req).not.toHaveBeenCalled();
+    expect(lock.state).toBe('held');
+    lock.destroy();
+  });
+
+  it('T12b fullscreenchange while denied asks once more', async () => {
+    const fake = createFakeApi();
+    fake.rejectNextWith(new DOMException('denied', 'NotAllowedError'));
+    const lock = createWakeLock({ wakeLock: fake.api, documentLike: doc(), fallback: 'none', retry: false });
+    await lock.request();
+    expect(lock.state).toBe('denied');
+    document.dispatchEvent(new Event('fullscreenchange'));
+    await vi.waitFor(() => expect(lock.state).toBe('held'));
+    expect(fake.sentinels.filter((s) => !s.released)).toHaveLength(1);
     lock.destroy();
   });
 

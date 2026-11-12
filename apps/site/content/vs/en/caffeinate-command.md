@@ -30,13 +30,13 @@ compare:
     - what: "How it keeps the Mac awake"
       cells: ["Screen Wake Lock API; Chrome holds a \"no display sleep\" power assertion", "A power assertion from Terminal: `-i` stops idle sleep, `-di` also keeps the display on"]
     - what: "With the tab hidden or the window covered"
-      cells: ["Stops. The pill says \"Paused — tab hidden\" and asks again when you return.", "Keeps holding, whatever window is in front"]
+      cells: ["Stops. The pill says \"Paused\" and asks again when you return.", "Keeps holding, whatever window is in front"]
     - what: "Screen off, Mac awake"
       cells: ["No, it keeps the display on", "Yes, with `caffeinate -i`"]
     - what: "When it ends"
       cells: ["At the time you pick, or when you stop it", "When you press Control-C, or when the command it runs exits"]
     - what: "What you see"
-      cells: ["A pill that says \"Screen awake\" only once the browser grants the lock", "The Terminal window running it"]
+      cells: ["A pill that says \"Awake\" only once the browser grants the lock", "The Terminal window running it"]
     - what: "With the lid closed"
       cells: ["Sleeps, unless in clamshell mode", "Sleeps, unless in clamshell mode"]
       same: true
@@ -57,11 +57,11 @@ picks:
       text: "caffeinate works whatever window is in front. A browser tab loses its lock the moment you switch away."
   us:
     - title: "You'd rather press a button"
-      text: "No Terminal and no flags. Open the page, pick a length and press Start."
+      text: "No Terminal and no flags. Open the page, pick a length and press Keep awake."
     - title: "You want it to end at a time"
       text: "Pick 30 min, 1 h or a clock time such as 11:30 AM. Hidden time doesn't count toward a timed session."
     - title: "You want to see that it's working"
-      text: "The pill turns to \"Screen awake\" once your browser has granted the lock, not when you press the button."
+      text: "The pill turns to \"Awake\" once your browser has granted the lock, not when you press the button."
     - title: "You are not on a Mac"
       text: "AwakeTab works in Chrome and Edge on Windows, in Chrome on Android, and in Safari 16.4 or later on iPhone and iPad."
     - title: "You want a hidden tab to count"
@@ -111,4 +111,4 @@ Closing the lid is a direct request to sleep, not idle time, so caffeinate with 
 
 ## Check which one is holding your Mac awake
 
-Run `pmset -g assertions` in Terminal. It lists every process asking macOS not to sleep. `caffeinate -i` shows up as PreventUserIdleSystemSleep. With AwakeTab showing "Screen awake" in Chrome, the browser holds a PreventUserIdleDisplaySleep or NoDisplaySleep entry. Hide the tab, run it again, and the browser's line is gone.
+Run `pmset -g assertions` in Terminal. It lists every process asking macOS not to sleep. `caffeinate -i` shows up as PreventUserIdleSystemSleep. With AwakeTab showing "Awake" in Chrome, the browser holds a PreventUserIdleDisplaySleep or NoDisplaySleep entry. Hide the tab, run it again, and the browser's line is gone.

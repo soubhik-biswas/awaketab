@@ -1,14 +1,16 @@
 import type { Metadata } from 'next';
+import type { TLocale } from '@/i18n/locales';
 import type { TSceneKey } from '@/lib/content';
 import { pageMetadata, titleFor } from '@/lib/seo';
 import { HeroButtons, PageHero, type IHeroAction } from './page-hero';
 
 // System pages stay out of search and share the default image; the title is their H1.
-export function systemMetadata(h1: string, description: string, path: string): Metadata {
+export function systemMetadata(h1: string, description: string, path: string, locale: TLocale = 'en'): Metadata {
   return pageMetadata({
     title: titleFor(h1),
     description,
     path,
+    locale,
     noindex: true,
     og: { image: 'og-01', alt: 'AwakeTab clock showing 38:12 left' },
   });

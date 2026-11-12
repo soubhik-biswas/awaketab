@@ -88,7 +88,6 @@ export function securityHeaders(): IHeaderRule[] {
     });
   }
   rules.push({ source: '/api/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex' }] });
-  rules.push({ source: '/auth/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex' }] });
   if (process.env.NEXT_PUBLIC_DEPLOY_ENV === 'play')
     rules.push({ source: '/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] });
   return rules;

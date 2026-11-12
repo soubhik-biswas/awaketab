@@ -29,7 +29,7 @@ export async function FinalCta({ locale }: { locale: TLocale }) {
           <p className={cn(story.lead, 'relative')}>{t('lead')}</p>
           <a
             href={startHref('p60', 'standard', locale)}
-            className="site-act relative mt-2 inline-flex h-16 items-center gap-3 rounded-full px-8 text-[18px] font-bold no-underline shadow-[0_18px_50px_var(--primary-glow),inset_0_1px_0_rgba(255,255,255,.4)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring"
+            className="site-act relative mt-2 inline-flex h-16 items-center gap-3 rounded-full px-8 text-[18px] font-bold no-underline shadow-[0_18px_50px_var(--site-cta-glow),inset_0_1px_0_rgba(255,255,255,.4)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring"
           >
             <Play className="size-5 fill-current" strokeWidth={0} aria-hidden="true" />
             {t('button')}

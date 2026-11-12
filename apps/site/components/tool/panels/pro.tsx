@@ -9,7 +9,7 @@ import { portalUrl, priceLabel, yearlySaving } from '@/lib/pro/plans';
 import { isLatin } from '@/lib/tool/strings';
 import { pro, type IProDevice } from '@/lib/tool/pro';
 import { isAwake } from '@/lib/wake';
-import { useGlance } from '../context';
+import { useGlance, useTickValue } from '../context';
 import { Group, Note, RowText, SecLabel, StepNo, Tag } from '../kit';
 import { PanelBody, PanelFoot } from './shell';
 
@@ -187,7 +187,7 @@ export function PlanPanel() {
   const { t } = g;
   const acct = g.pro.account;
   const via = t(`settings.via.${acct?.method ?? 'google'}`);
-  const date = g.pro.account?.renewsOn || '[DATE]';
+  const date = g.pro.account?.renewsOn || '—';
   const plan = acct?.plan ?? 'yearly';
   const price = plan === 'monthly' ? priceLabel('monthly') : priceLabel('yearly');
   const portal = () => window.location.assign(pro.billingUrl());
@@ -227,8 +227,8 @@ export function PlanPanel() {
         <SecLabel>{t('plan.receipts')}</SecLabel>
         {g.ui.qa.samples ? (
           <Group>
-            <PlanRow title="[DATE]" desc={t('plan.r1')} value={t('plan.download')} onClick={portal} />
-            <PlanRow title="[DATE]" desc={t('plan.r2')} value={t('plan.download')} onClick={portal} />
+            <PlanRow title={date} desc={t('plan.r1')} value={t('plan.download')} onClick={portal} />
+            <PlanRow title={date} desc={t('plan.r2')} value={t('plan.download')} onClick={portal} />
           </Group>
         ) : (
           // Receipts live with the payment provider, so the list is its portal rather than a copy kept here.
@@ -278,12 +278,13 @@ export function DevicesPanel() {
   const g = useGlance();
   const { t } = g;
   const here = isAwake(g.st);
+  const until = useTickValue((tick) => g.time(tick.endsAt));
   const rows: IScreenRow[] = g.ui.qa.samples
     ? SAMPLE
     : g.pro.devices.map((d) => ({
         name: d.name,
         icon: KIND_ICON[d.kind],
-        status: d.current ? (here ? t('pill.awake', { time: g.time(g.endsAt) }) : t('devices.asleep')) : d.detail,
+        status: d.current ? (here ? t('pill.awake', { time: until }) : t('devices.asleep')) : d.detail,
         awake: d.current && here,
         btn: d.current ? (here ? 'stop' : 'start') : null,
       }));

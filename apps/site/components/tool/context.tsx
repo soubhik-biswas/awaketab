@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo, useSyncExternalStore } from 'react';
 import type { useTranslations } from 'next-intl';
 import type { TFaceTheme } from '@/components/face';
 import type { TGlanceFace } from '@/lib/tool/collections';
@@ -12,7 +12,8 @@ import type { IProSnapshot } from '@/lib/tool/pro';
 import type { IToolSettings, TThemeChoice, TVibe, TVibeMotion } from '@/lib/tool/settings';
 import type { TToolLang } from '@/lib/tool/strings';
 import type { IToolUi, TBlockReason, TDevice, TPanel, TRating } from '@/lib/tool/ui';
-import type { IWakeSnapshot, TWakeState } from '@/lib/wake';
+import { secondsOfDay } from '@/lib/tool/clock';
+import { elapsedSec, isLive, remainSec, useWake, wake, type IWakeSnapshot, type TWakeState } from '@/lib/wake';
 
 export type TT = ReturnType<typeof useTranslations>;
 export type TBannerKind = 'blocked' | 'unsupported' | 'fallback' | 'needsyou' | 'conflict' | 'offline' | 'update';
@@ -63,7 +64,6 @@ export interface IGlance {
   night: boolean;
   faceTheme: TFaceTheme;
   themeChoice: TThemeChoice;
-  snap: IWakeSnapshot;
   settings: IToolSettings;
   ui: IToolUi;
   presets: IPreset[];
@@ -74,14 +74,16 @@ export interface IGlance {
   isSet: boolean;
   hidden: boolean;
   still: boolean;
+  dim: boolean;
   fullscreen: boolean;
+  canFullscreen: boolean;
   panel: TPanel;
   total: number;
-  remain: number;
   indef: boolean;
-  now: number;
-  nowSec: number;
-  endsAt: number;
+  offset: number;
+  startedAt: number | null;
+  endedAt: number | null;
+  checkedAt: number | null;
   face: TGlanceFace;
   reason: TBlockReason;
   banner: TBannerKind | null;
@@ -89,8 +91,22 @@ export interface IGlance {
   dockH: number;
   root: HTMLDivElement | null;
   time: (ms: number) => string;
+  until: (ms: number) => string;
   dur: (sec: number) => string;
+  durLong: (sec: number) => string;
+  faceName: (face: unknown) => string;
+  tf: TT;
   a: IToolActions;
+}
+
+// The part of the tool that moves with the clock. Everything in IGlance holds still between real changes, so only
+// what reads the clock is drawn again each second.
+export interface ITick {
+  snap: IWakeSnapshot;
+  now: number;
+  nowSec: number;
+  remain: number;
+  endsAt: number;
 }
 
 export const ToolContext = createContext<IGlance | null>(null);
@@ -99,4 +115,35 @@ export function useGlance(): IGlance {
   const ctx = useContext(ToolContext);
   if (!ctx) throw new Error('useGlance needs the tool');
   return ctx;
+}
+
+// idleSec is the length chosen in Set mode; offset moves the clock for the dev boards.
+function tickOf(snap: IWakeSnapshot, idleSec: number, offset: number): ITick {
+  const now = (snap.now || Date.now()) + offset;
+  const st = snap.state;
+  const live = isLive(st);
+  const indef = live ? snap.endsAt === null : idleSec === 0;
+  const total = live || st === 'ended' ? snap.totalSec : idleSec;
+  const remain = live ? (indef ? elapsedSec(snap) : remainSec(snap)) : st === 'ended' ? 0 : total;
+  return { snap, now, nowSec: secondsOfDay(now), remain, endsAt: now + (indef ? 0 : remain) * 1000 };
+}
+
+// The clock, every second: for the face and whatever else counts with it.
+export function useTick(): ITick {
+  const g = useGlance();
+  const snap = useWake();
+  const idleSec = g.settings.totalSec;
+  return useMemo(() => tickOf(snap, idleSec, g.offset), [snap, idleSec, g.offset]);
+}
+
+// One value read from the clock (a formatted time, a flag): the caller is drawn again only when that value changes.
+// The value must be a string, number or boolean.
+export function useTickValue<T extends string | number | boolean>(select: (tick: ITick) => T): T {
+  const g = useGlance();
+  const read = (snap: IWakeSnapshot) => select(tickOf(snap, g.settings.totalSec, g.offset));
+  return useSyncExternalStore(
+    wake.subscribe,
+    () => read(wake.getSnapshot()),
+    () => read(wake.getServerSnapshot()),
+  );
 }

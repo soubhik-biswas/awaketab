@@ -57,90 +57,6 @@
     "library": {
       "h1": "@awaketab/wake:正直なウェイクロックライブラリ"
     },
-    "extension": {
-      "h1": "AwakeTab for Chrome",
-      "lead": "Web アプリがウェイクロックを保持できるのは、そのタブが表示されているあいだだけです。拡張機能は Chrome 自体に画面（またはコンピューターだけ）のスリープ防止を頼むので、タブが非表示でもウィンドウが最小化されていても動き続けます。",
-      "cta": {
-        "chrome": "Chrome に追加",
-        "edge": "Edge 版を入手",
-        "note": "無料。{browsers} で動作します（バージョン {version} 以降）。",
-        "chromeSearch": "Chrome ウェブストアで検索",
-        "edgeSearch": "Edge アドオンで検索",
-        "pending": "ストアの審査待ちのため、現在これらのボタンはストア内の検索を開きます。"
-      },
-      "firefox": {
-        "title": "Firefox や Safari をお使いですか？",
-        "body": "Firefox と Safari は拡張機能に電源 API を提供していないため、AwakeTab の拡張機能はありません。Web アプリならタブが表示されているあいだ画面をオンに保てます。",
-        "link": "Firefox で AwakeTab を使う"
-      },
-      "features": {
-        "title": "できること",
-        "levels": "画面 または システム: 画面をオンのままにするか、コンピューターだけを起こしておいて画面は暗くなるに任せるかを選べます。",
-        "timers": "Web アプリと同じプリセット: 15 分から 4 時間、指定した時刻まで、または止めるまで。",
-        "badge": "ツールバーのバッジに ON、SYS、または残り時間（分）が表示され、Alt+Shift+A でどのタブからでも切り替えられます。",
-        "pro": "Pro なら: 毎週のスケジュールと、Chrome の起動時や選んだサイトを開いたときの自動開始。"
-      },
-      "limits": {
-        "running": "Chrome が起動しているあいだだけ動作します。",
-        "lid": "ノートパソコンのふたを閉じたときのスリープは防げません。",
-        "presence": "Teams や Slack で「連絡可能」のままにはなりません。在席状態はキーボードとマウスの操作で決まり、AwakeTab が入力を偽装することはありません。"
-      },
-      "permissions": {
-        "title": "権限とその理由",
-        "power": "power — 画面またはシステムのスリープを防ぐため。",
-        "storage": "storage — 設定と現在のセッションを保存するため。",
-        "alarms": "alarms — バックグラウンド処理が休止中でもタイマーとスケジュールを動かすため。",
-        "notifications": "notifications（任意）— タイマーの終了を知らせるため。",
-        "sites": "サイトへのアクセス（任意・1 サイトずつ）— 選んだサイトで自動的に開始するため。デフォルトではどのサイトにもアクセスしません。",
-        "lead": "Three it needs to work, two you can turn on. It gets no site access unless you pick a site."
-      },
-      "privacy": "匿名の利用統計はデフォルトでオフです。拡張機能が URL・タブのタイトル・サイト名を送ることはなく、広告も表示しません。",
-      "web": "何もインストールしたくない場合は、Web アプリでタブが表示されているあいだ画面をオンに保てます。",
-      "value": "Keeps your screen awake from the toolbar, even when the tab is hidden or the window is minimised.",
-      "fact": {
-        "hidden": "Keeps going with the tab hidden",
-        "level": "Screen, or only the computer",
-        "private": "No ads, no site access by default"
-      },
-      "alt": {
-        "why": "Why there is no extension for this browser"
-      },
-      "compare": {
-        "title": "Tab or extension",
-        "hidden": "With the tab hidden"
-      },
-      "steps": {
-        "title": "Ready in three steps",
-        "install": {
-          "title": "Install",
-          "body": "Add it from the Chrome Web Store, or from Edge Add-ons in Edge."
-        },
-        "pin": {
-          "title": "Pin it",
-          "body": "Open the Extensions menu (the puzzle piece) and pin AwakeTab, so its badge stays in view."
-        },
-        "press": {
-          "title": "Press the shortcut",
-          "body": "From any tab, it starts your usual length. Press it again to stop. On a Mac, Alt is the Option key."
-        }
-      },
-      "faq": {
-        "title": "Questions",
-        "q1": "Is it free?",
-        "a1": "Yes. Timers, Screen or System, the toolbar badge and the shortcut are free. Pro adds weekly schedules and auto-start.",
-        "q2": "Can it see the sites I visit?",
-        "a2": "No. It has no site access by default and never sends URLs, tab titles or site names. Auto-start on a site, a Pro feature, asks for access to that one site.",
-        "q3": "Why not just use the web app?",
-        "a3": "The web app keeps the screen awake only while its tab is visible. The extension keeps going while you work in other tabs or with the window minimised, as long as Chrome is running.",
-        "q4": "Can I change the shortcut?",
-        "a4": "Yes. Open chrome://extensions/shortcuts in Chrome, or edge://extensions/shortcuts in Edge, and set your own. Do that too if another extension already uses Alt+Shift+A.",
-        "q5": "Does the extension have the clock faces, sounds and notes?",
-        "a5": "No, those live in the web app. The extension keeps the screen, or only the computer, awake from the toolbar. Open AwakeTab from its pop-up for the twelve clock faces, colour themes, focus sounds, the notepad and the focus tools."
-      },
-      "band": {
-        "title": "Keep the screen on while you work in other tabs"
-      }
-    },
     "home": {
       "title": "AwakeTab — この画面をつけたまま",
       "description": "ワンクリックで画面をつけたままに。落ち着いた時計が残り時間を表示します。46の文字盤と6つの動く背景、すべて無料。インストールも登録も不要です。",
@@ -743,72 +659,16 @@
       "tomorrow": "{time} tomorrow",
       "yesterday": "{time} yesterday"
     },
-    "volt": {
-      "soundNav": "サウンド",
-      "studio": "文字盤スタジオ",
-      "keep": "画面をつけたままにする",
-      "pause": "一時停止",
-      "resume": "再開",
-      "stop": "停止",
-      "ext15": "+15分",
-      "again": "もう一度",
-      "starting": "開始中…",
-      "fix": "解決方法を見る",
-      "fallback": "動画で代替する",
-      "timer": "タイマー",
-      "faces": "文字盤",
-      "presets": "プリセット",
-      "history": "履歴",
-      "devices": "デバイス",
-      "settings": "設定",
-      "help": "ヘルプ",
-      "more": "その他",
-      "search": "検索またはジャンプ…",
-      "session": "セッション",
-      "length": "時間",
-      "label": "ラベル",
-      "face": "文字盤",
-      "allFaces": "49種類すべて",
-      "options": "オプション",
-      "level": "スリープ防止の範囲",
-      "screen": "画面",
-      "system": "システム · アプリ",
-      "sound": "終了時にチャイム",
-      "soundD": "やさしい2音のチャイム",
-      "dim": "夜は時計を暗く",
-      "dimD": "午後10:00以降",
-      "secs": "秒を表示",
-      "secsD": "文字盤とタブのタイトル",
-      "idle": "停止中",
-      "awakeUntil": "点灯中 · ",
-      "awakeFor": "点灯中 · 終了なし",
-      "fb": "点灯中 · 動画で代替",
-      "paused": "一時停止中",
-      "needs": "タップして再開",
-      "blocked": "ブロック · 省電力",
-      "ended": "終了 ",
-      "unsup": "このブラウザは非対応",
-      "left": "残り",
-      "until": "まで ",
-      "endsAt": "終了 ",
-      "wouldEnd": "終了予定 ",
-      "min": "分",
-      "hour": "1時間",
-      "hours2": "2時間",
-      "untilT": "時刻まで…",
-      "label0": "役員会でのプレゼン",
-      "forLen": " · 終了 ",
-      "extend": "延長",
-      "hero": "画面をつけたままに。",
-      "heroSub": "ワンタップ。時間が来たら元どおりスリープ。インストールも登録も不要。",
-      "heroSubPhone": "ワンタップ。時間が来たらスリープ。"
-    },
     "glance": {
       "free": "無料",
       "unit": {
         "h": "時間",
         "min": "分",
         "hour": "時間"
+      },
+      "long": {
+        "min": "{n}分",
+        "hour": "{n}時間"
       },
       "len": {
         "0": "15分",
@@ -833,6 +693,7 @@
         "fallback": "動画で点灯中 · {time}まで",
         "fallbackOpen": "動画で点灯中 · 停止するまで",
         "paused": "一時停止 · 残り{dur}",
+        "pausedOpen": "一時停止 · 無制限",
         "needsyou": "タップで再開 · タブが隠れました",
         "blocked": "点灯していません · {reason}",
         "unsupported": "このブラウザはウェイクロック非対応",
@@ -857,6 +718,11 @@
       },
       "stage": {
         "label": "タイマー"
+      },
+      "crash": {
+        "h": "タイマーで問題が発生しました。",
+        "d": "画面のスリープ防止は止まっています。ページを再読み込みして、もう一度始めてください。",
+        "btn": "再読み込み"
       },
       "face": {
         "aria": "文字盤：{face}",
@@ -967,6 +833,7 @@
         "hidden": "タブが隠れたため、ブラウザが解除しました。",
         "refused": "点灯していません — {reason}。解決方法をご覧ください。",
         "paused": "一時停止しました。残り{dur}。",
+        "pausedOpen": "一時停止しました。",
         "ended": "時間です。画面はスリープできます。",
         "face": "文字盤：{face}。"
       },
@@ -1016,7 +883,7 @@
         },
         "sound": {
           "t": "環境音",
-          "d": "無料 · 自分だけの背景音を作る"
+          "d": "無料 · シーン、自然、ライブ音楽"
         },
         "clear": {
           "t": "履歴を消去",
@@ -1091,9 +958,11 @@
         "h12": "12時間表示",
         "h12D": "11:42ではなく午前11:42と表示します",
         "secs": "秒を表示",
-        "secsD": "文字盤とタブのタイトルに表示します",
+        "secsD": "タブのタイトルに表示します",
         "dim": "夜は暗めに",
         "dimD": "午後10:00以降は光を抑えます",
+        "keep": "操作を常に表示",
+        "keepD": "起動中も上部バーとドックを隠しません",
         "sound": "サウンド",
         "chime": "終了時のチャイム",
         "chimeD": "時間になったら一度だけ鳴ります",
@@ -1103,18 +972,21 @@
           "off": "オフ"
         },
         "mixer": "環境音ミキサー",
-        "mixerD": "雨、カフェ、暖炉、ブラウンノイズ",
+        "mixerD": "自然、場所、ノイズ、ライブ音楽",
         "studio": "文字盤スタジオ",
         "studioD": "アクセントカラーと光を自分好みに",
         "more": "その他",
         "ambient": "環境音",
-        "ambientD": "雨、カフェ、暖炉、ブラウンノイズ",
+        "ambientD": "自然、場所、ノイズ、ライブ音楽",
         "language": "言語",
         "languageD": "表示言語と時刻の形式を変更します",
         "share": "この設定を共有",
         "shareD": "開くとすぐ始められるリンク",
         "clear": "履歴を消去",
         "clearD": "プリセットと設定は残ります",
+        "privacy": "プライバシー",
+        "count": "訪問をカウントする",
+        "countD": "Cookie を使わず、匿名です。どちらを選んでも AwakeTab は同じように動きます。",
         "account": "アカウント",
         "signedOut": "サインインしていません",
         "signedOutD": "アカウントなしですべて使えます。サインインはProの同期にだけ必要です。",
@@ -1175,6 +1047,11 @@
           "s1d": "awaketab.comなら同じように使え、ウェイクロックも許可されます。",
           "s2": "または動画で代用する",
           "s2d": "無音の見えない動画で、ほとんどの画面をつけておけます。"
+        },
+        "ok": {
+          "h": "問題はありません",
+          "awake": "ブラウザがウェイクロックを保持しているので、この画面は点灯したままです。",
+          "rest": "実行中のセッションはありません。ブラウザがウェイクロックを拒否したときは、理由と対処法がここに表示されます。"
         }
       },
       "studio": {
@@ -1230,22 +1107,50 @@
         "ready": "準備完了：{name}",
         "off": "オフ · {name}",
         "silent": "すべてのレイヤーがオフです",
-        "fades": "セッションが終わるとフェードアウトします",
+        "silentHint": "シーンを選ぶか、レイヤーをオンにしてください",
+        "fades": "セッション開始でフェードインし、一時停止や終了でフェードアウトします",
         "waits": "画面がついている間に再生します",
         "preview": "5秒間の試聴でした。画面がついている間に再生します",
         "turnOn": "点灯中に環境音を流す",
         "turnOff": "環境音をオフにする",
+        "volume": "音量",
+        "shuffle": "シャッフル",
+        "mixes": "シーン",
+        "count": "{n} オン",
+        "group": {
+          "nature": "自然",
+          "places": "場所",
+          "noise": "ノイズ",
+          "music": "音楽"
+        },
         "rain": "雨",
+        "ocean": "波の音",
+        "stream": "小川",
+        "wind": "風",
+        "crickets": "夜の虫の声",
+        "thunder": "遠雷",
         "cafe": "カフェ",
         "fire": "暖炉",
+        "train": "列車",
+        "fan": "扇風機",
         "brown": "ブラウンノイズ",
-        "mixes": "ミックス",
+        "pink": "ピンクノイズ",
+        "white": "ホワイトノイズ",
+        "pad": "温かいパッド",
+        "keys": "やさしい鍵盤",
+        "drone": "低いドローン",
+        "bells": "ガラスの鈴",
         "mix": {
           "rainy": "雨のカフェ",
           "focus": "深い集中",
           "fire": "暖炉のそば",
           "off": "オフ",
-          "custom": "あなたのミックス"
+          "custom": "あなたのミックス",
+          "train": "夜行列車",
+          "ocean": "海の風",
+          "keys": "静かな鍵盤",
+          "storm": "夏の嵐",
+          "night": "夏の夜"
         }
       },
       "feedback": {
@@ -1322,7 +1227,7 @@
         "f3": "デバイスをまたいだ履歴とエクスポート",
         "f4": "担当者による優先サポート",
         "f5": "新しい文字盤と雰囲気をいち早く",
-        "note": "14日間無料、その後は年額{price}。設定 → プランを管理からいつでも解約できます。決済は[PAYMENT PROVIDER]で安全に行われます。",
+        "note": "14日間無料、その後は年額{price}。設定 → プランを管理からいつでも解約できます。決済はPolarで安全に行われます。",
         "trial": "14日間の無料体験を始める",
         "later": "あとで"
       },
@@ -1351,7 +1256,7 @@
         "yearlyD": "{price} / 年 · 次回のお支払いは{date}",
         "change": "変更",
         "payment": "お支払い方法",
-        "paymentD": "[PAYMENT PROVIDER]が管理します",
+        "paymentD": "Polarが管理します",
         "update": "更新",
         "screens": "画面",
         "screensD": "{max}台中{n}台を使用中",
@@ -1360,8 +1265,8 @@
         "cancelD": "{date}まで有効です",
         "cancelBtn": "解約",
         "receipts": "領収書",
-        "r1": "Pro · 年額 · [PRICE]",
-        "r2": "無料体験開始 · [PRICE] 0",
+        "r1": "Pro · 年額 · $12",
+        "r2": "無料体験開始 · $0",
         "download": "ダウンロード",
         "note": "いつでも解約できます。Proはお支払い済みの期間の終わりまで有効です。無料の機能はすべての画面でそのまま使えます。",
         "done": "完了",
@@ -1371,7 +1276,7 @@
         "lifetime": "Pro · 買い切り",
         "lifetimeD": "更新はありません",
         "allReceipts": "すべての領収書",
-        "allReceiptsD": "すべてのお支払い分を[PAYMENT PROVIDER]が保管しています",
+        "allReceiptsD": "すべてのお支払い分をPolarが保管しています",
         "open": "開く"
       },
       "devices": {
@@ -1895,7 +1800,7 @@
     },
     "promise": "Keeps your screen awake and tells you honestly whether it is working.",
     "version": "Version {version}",
-    "copyright": "© {year} AwakeTab · MIT",
+    "copyright": "© {year} AwakeTab",
     "made": "Made with care",
     "source": "Open source on GitHub",
     "top": "Back to top",
@@ -2169,25 +2074,6 @@
       "clock": "現在時刻 {time}"
     }
   },
-  "builder": {
-    "mode": "モード",
-    "size": {
-      "_": "サイズ",
-      "compact": "コンパクト(320 × 96)",
-      "full": "全幅(高さ 240 px)"
-    },
-    "lang": {
-      "_": "言語",
-      "page": "ページに合わせる"
-    },
-    "snippet": "スニペット",
-    "copied": "コピーしました",
-    "url": "キオスク URL",
-    "msg": "メッセージ(80文字まで)",
-    "logo": "ロゴの URL(https、Kiosk ライセンスが必要)",
-    "token": "ライセンストークン(Kiosk ライセンスが必要)",
-    "autostart": "自動的に開始"
-  },
   "library": {
     "demo": {
       "title": "ライブ状態遷移",
@@ -2229,127 +2115,6 @@
   "kiosk": {
     "license": {
       "invalid": "このキオスクライセンスのリンクを確認できませんでした。キオスク URL ビルダーから URL を開き直してください。"
-    }
-  },
-  "ext": {
-    "name": "AwakeTab: Keep Screen Awake",
-    "description": "ワンクリックで画面（またはコンピューター全体）をスリープさせません。信頼できる正直なステータス表示付き。",
-    "command": {
-      "toggle": "スリープ防止のオン/オフ"
-    },
-    "level": {
-      "label": "スリープを防ぐ対象",
-      "display": {
-        "_": "画面",
-        "help": "画面をつけたまま、スリープも防ぎます。"
-      },
-      "system": {
-        "_": "システム",
-        "help": "スリープは防ぎますが、画面は暗くなったり消えたりすることがあります。"
-      }
-    },
-    "pill": {
-      "system": "画面が暗くなったりロックされたりすることがあります",
-      "systemHeld": "システム起動中"
-    },
-    "popup": {
-      "start": "開始",
-      "open": "AwakeTab を開く",
-      "limits": "Chrome の起動中は、タブを隠してもウィンドウを最小化しても動作します。ふたを閉じるとスリープは防げません。"
-    },
-    "origin": {
-      "schedule": "スケジュールで開始しました",
-      "autostart": "自動開始サイトで開始しました",
-      "startup": "Chrome の起動時に開始しました"
-    },
-    "advice": {
-      "unsupported": "このブラウザは拡張機能に電源 API を提供していません。代わりにタブで AwakeTab を開いてください。",
-      "denied": "ブラウザまたは組織のポリシーにより、このデバイスのスリープ防止がブロックされています。"
-    },
-    "options": {
-      "title": "AwakeTab の設定",
-      "saved": "保存しました",
-      "defaults": "デフォルト",
-      "sound": {
-        "help": "システムの通知音を使うため、通知をオンにする必要があります。"
-      },
-      "notifications": {
-        "allow": "通知を許可",
-        "help": "初回は Chrome が許可を求めます。ここでいつでもオフに戻せます。"
-      },
-      "battery": {
-        "_": "バッテリー",
-        "unavailable": "拡張機能ではまだ使えません。Chrome が拡張機能のバックグラウンド処理にバッテリー残量を渡さないためです。Web アプリではバッテリー低下時に停止できます。"
-      },
-      "appearance": "表示と言語",
-      "keyboard": "キーボード",
-      "shortcut": {
-        "current": "どのタブからでも切り替え: {shortcut}",
-        "none": "どのタブからでも切り替えるショートカットは未設定です。",
-        "change": "ショートカットを変更"
-      },
-      "locale": {
-        "auto": "ブラウザの言語"
-      }
-    },
-    "schedules": {
-      "title": "スケジュール",
-      "days": "曜日",
-      "from": "開始",
-      "to": "終了",
-      "add": "スケジュールを追加",
-      "empty": "スケジュールはまだありません。",
-      "error": {
-        "days": "曜日を 1 つ以上選んでください。",
-        "same": "開始と終了には別の時刻を指定してください。"
-      }
-    },
-    "autostart": {
-      "title": "自動開始",
-      "browser": "Chrome の起動時に常にスリープを防ぐ",
-      "sites": {
-        "_": "サイト",
-        "help": "そのサイトのタブが読み込まれると開始し、最後のタブを閉じると停止します。Chrome はそのサイトへのアクセスだけを求めます。追加したサイトを AwakeTab が送信することはありません。"
-      },
-      "site": "サイト（例: docs.example.com）",
-      "duration": {
-        "open": "タブが開いているあいだ"
-      },
-      "add": "サイトを追加",
-      "empty": "サイトはまだありません。",
-      "error": {
-        "host": "docs.example.com のようなサイト名を入力してください。",
-        "denied": "Chrome はこのサイトへのアクセスを許可しませんでした。"
-      }
-    },
-    "remove": {
-      "_": "削除",
-      "label": "{item} を削除"
-    },
-    "pro": {
-      "locked": "スケジュールと自動開始は AwakeTab Pro の機能です。"
-    },
-    "license": {
-      "title": "Pro ライセンス",
-      "activate": "有効化",
-      "devices": "ここで有効化すると 5 台のうち 1 台として数えられます。キーはこのブラウザのプロファイルにだけ保存され、同期されません。",
-      "remove": "このブラウザから削除",
-      "removeFailed": "ここからは削除しましたが、awaketab.com に接続できませんでした。「デバイスを管理」でこのデバイスを削除してください。",
-      "get": "キーは awaketab.com で確認できます",
-      "working": "キーを確認しています…"
-    },
-    "privacy": {
-      "title": "プライバシー",
-      "telemetry": {
-        "help": "オンにしない限りオフです。awaketab.com に送るのはセッションの開始と終了、Pro の有効化、エラー件数だけです。URL・タブのタイトル・サイト名は決して送りません。"
-      },
-      "stored": "このブラウザに保存されるもの: 設定、現在のセッション、Pro ライセンス。設定はここに保存され、Chrome アカウントで同期されます。ライセンスは同期されません。",
-      "policy": "プライバシーポリシー"
-    },
-    "about": {
-      "title": "このアプリについて",
-      "version": "バージョン {version}",
-      "changelog": "新機能"
     }
   },
   "notes": {
@@ -2481,7 +2246,7 @@
       "analog": "針は実際の時刻、ベゼルのランプの弧は終了時刻まで続きます。",
       "luxe": "セリフ体の数字、分目盛り、ランプのセクターを備えた深みのある文字盤。",
       "rings": "セッション、分、秒を3つの同心円で。",
-      "words": "時間を文章で。8つの言語それぞれで自然に表します。",
+      "words": "時間をシンプルな英語の一文で。机に置いたメモのように。",
       "nixie": "メッシュとうっすら見える8の字のガラス管。光はランプの色になります。",
       "lcd": "うっすらとした 88:88 の上に斜めのセグメント。枕元の時計のように。",
       "dive": "ダイバーズウォッチのベゼル。緑の弧が残りの分、針は実際の時刻を指します。",
@@ -2532,14 +2297,14 @@
         "awakeFor": "点灯して"
       },
       "cap": {
-        "idle": "準備完了",
-        "starting": "開始中…",
-        "running": "画面点灯中",
-        "fallback": "動画で代替して点灯中",
-        "paused": "一時停止中 — タブが非表示",
-        "blocked": "ブロック — 解決方法はこちら",
-        "unsupported": "タップして代替手段を使う",
-        "up": "時間になりました"
+        "idle": "スリープ許可中",
+        "starting": "ブラウザに確認中…",
+        "running": "点灯中",
+        "fallback": "動画で点灯中",
+        "paused": "一時停止",
+        "blocked": "点灯していません",
+        "unsupported": "このブラウザはウェイクロック非対応",
+        "up": "時間です"
       },
       "end": {
         "until": "{time}まで",
@@ -2677,13 +2442,17 @@
         "lead": "リンクが古いか、入力に誤りがあるかもしれません。タイマーはここにあります。",
         "guides": "人気のガイド",
         "eyebrow": "404",
-        "description": "このAwakeTabのページはスリープしてしまいました。リンクが古いか、入力に誤りがあるようです。タイマーはここですぐ使え、ヘルプとガイドもワンタップで開けます。"
+        "description": "このAwakeTabのページはスリープしてしまいました。リンクが古いか、入力に誤りがあるようです。タイマーはここですぐ使え、ヘルプとガイドもワンタップで開けます。",
+        "help": "ヘルプのトピックを検索するか、何が起きたかをお知らせください。"
       },
       "offline": {
         "eyebrow": "オフライン",
         "h1": "オフラインです。でもタイマーは動きます。",
         "lead": "画面をつけたままにするのにインターネットは不要です。同期と共有リンクは再接続まで待機します。",
-        "timer": "タイマーを使い続ける"
+        "timer": "タイマーを使い続ける",
+        "leadFree": "画面をつけたままにするのにインターネットは必要ありません。まだ開いていないページは、再接続するまでお待ちください。",
+        "description": "オフラインですが、画面をつけたままにするのにインターネットは必要ありません。タイマーは動き続け、同期と共有リンクは再接続までお待ちください。",
+        "descriptionFree": "オフラインですが、画面をつけたままにするのにインターネットは必要ありません。タイマーは動き続け、ほかのページは再接続すると読み込めます。"
       },
       "status": {
         "eyebrow": "メンテナンス",
@@ -2691,8 +2460,7 @@
         "lead": "ログインと同期は{time}ごろまで停止します。タイマーはすべてのデバイスで通常どおり動きます。",
         "okEyebrow": "状態",
         "okH1": "すべて正常に動いています。",
-        "okLead": "タイマー、ログイン、同期は動作しています。メンテナンスの予定は、まずここでお知らせします。",
-        "see": "状態を見る"
+        "okLead": "タイマー、ログイン、同期は動作しています。メンテナンスの予定は、まずここでお知らせします。"
       },
       "removed": {
         "eyebrow": "設定が削除されました",
@@ -2744,7 +2512,6 @@
     "help": {
       "eyebrow": "ヘルプセンター",
       "h1": "どのようなことでお困りですか？",
-      "lead": "ほとんどの問題は、省電力モード、非表示のタブ、古いブラウザーが原因です。検索するか、下のトピックから始めてください。",
       "searchLabel": "ヘルプを検索",
       "placeholder": "ヘルプを検索 —「バッテリー」や「iPad」など",
       "chips": "よくある質問",
@@ -2760,8 +2527,7 @@
     "changelog": {
       "crumb": "更新履歴",
       "eyebrow": "更新履歴",
-      "h1": "新着情報",
-      "lead": "すべてのリリースを新しい順に。バージョン番号と日付はリリースまでのプレースホルダーです。"
+      "h1": "新着情報"
     },
     "pro": {
       "h1": "スリープ防止はずっと無料です。"
@@ -2774,46 +2540,67 @@
       "allow": "許可する"
     },
     "foot": {
-      "kicker": "人がつくり、人が読む",
-      "ctaH": "あなたらしくするために",
-      "ctaAccent": "必要なものを教えてください。",
+      "kicker": "無料 · アカウント不要 · オープンソース",
+      "headline": "どうすれば<accent>あなたらしく</accent>なるか、教えてください。",
       "ctaLine": "ツール内で2タップ：設定 → フィードバックを送る。すべてのメッセージを読んでいます。",
-      "timer": "タイマーを開く",
       "feedback": "フィードバックを送る",
+      "help": "ヘルプセンター",
       "tagline": "ブラウザから画面をつけたままにして、終わったらまたスリープさせます。ずっと無料です。",
-      "status": "すべて正常 · ウェイクロックAPIは良好",
-      "statusDown": "メンテナンス予定 · タイマーはそのまま使えます",
+      "status": {
+        "native": "このブラウザは画面をつけたままにできます",
+        "fallback": "ウェイクロックが使えないため、AwakeTabは動画を使います"
+      },
       "social": {
         "github": "GitHubのAwakeTab",
-        "x": "XでAwakeTabを共有",
         "rss": "更新履歴のフィード（RSS）"
       },
-      "product": "製品",
-      "uses": "使い方",
-      "learn": "学ぶ",
-      "company": "運営",
-      "faces": "文字盤",
-      "vibes": "雰囲気",
-      "pro": "Pro",
+      "groups": {
+        "product": "製品",
+        "uses": "使い方",
+        "devices": "デバイス",
+        "learn": "学ぶ",
+        "company": "運営"
+      },
+      "links": {
+        "timer": "タイマーを開く",
+        "faces": "文字盤",
+        "vibes": "雰囲気",
+        "extension": "拡張機能",
+        "embed": "サイト用ウィジェット",
+        "kiosk": "壁掛けモード",
+        "library": "Wakeライブラリ",
+        "cooking": "料理",
+        "presenting": "プレゼン",
+        "dashboards": "ダッシュボード",
+        "nightdesk": "夜のデスク",
+        "allUses": "すべての使い方",
+        "support": "対応ブラウザ",
+        "deviceGuides": "デバイス別ガイド",
+        "compare": "ツールを比較",
+        "help": "ヘルプセンター",
+        "guides": "ガイド",
+        "how": "仕組み",
+        "faq": "よくある質問",
+        "changelog": "更新履歴",
+        "about": "AwakeTabについて",
+        "github": "GitHub",
+        "roadmap": "ロードマップ",
+        "privacy": "プライバシー",
+        "terms": "利用規約"
+      },
       "new": "NEW",
-      "cooking": "料理",
-      "presenting": "プレゼン",
-      "dashboards": "ダッシュボード",
-      "nightdesk": "夜のデスク",
-      "help": "ヘルプセンター",
-      "support": "対応ブラウザ",
-      "guides": "ガイド",
-      "changelog": "更新履歴",
-      "about": "AwakeTabについて",
-      "statusLink": "稼働状況",
-      "copyright": "© [YEAR] [COMPANY NAME]",
+      "newTab": "新しいタブで開きます",
+      "copyright": "© {year} AwakeTab",
+      "made": "<name></name> が<heart>愛</heart>を込めて制作",
+      "makerLink": "LinkedInの{name}",
       "cookies": "トラッキングCookieなし",
       "theme": {
         "label": "テーマ",
         "system": "システム",
         "light": "ライト",
         "dark": "ダーク"
-      }
+      },
+      "language": "言語"
     },
     "story": {
       "cue": "スクロール：ほかとの違い",
@@ -2878,7 +2665,8 @@
         "free": {
           "h": "無料。すべて。",
           "d": "文字盤、テーマ、プリセット、サウンドのすべて。Proは複数画面の同期だけです。",
-          "zero": "$0"
+          "zero": "$0",
+          "dFree": "文字盤、テーマ、プリセット、サウンドのすべて。購入するものはありません。"
         },
         "devices": {
           "h": "スマホ、タブレット、ノートPC、壁",
@@ -2949,7 +2737,8 @@
         },
         "4": {
           "q": "本当に無料ですか？",
-          "a": "はい。文字盤、テーマ、プリセット、サウンドのすべてが無料です。Proは任意で、複数の画面を同期するだけです。"
+          "a": "はい。文字盤、テーマ、プリセット、サウンドのすべてが無料です。Proは任意で、複数の画面を同期するだけです。",
+          "aFree": "はい。文字盤、テーマ、プリセット、サウンドのすべてが無料で、登録も購入も不要です。"
         },
         "5": {
           "q": "時間になるとどうなりますか？",
@@ -2967,6 +2756,187 @@
         "lead": "Chrome、Edge、Firefox、Safariで使えます。インストールは不要です。",
         "button": "この画面をつけておく"
       }
+    }
+  },
+  "surfaces": {
+    "status": {
+      "awake": "点灯中",
+      "fallback": "動画で代替",
+      "starting": "開始中…",
+      "paused": "一時停止",
+      "hidden": "一時停止",
+      "needsyou": "操作が必要",
+      "blocked": "ブロック",
+      "unsupported": "非対応",
+      "ended": "時間です",
+      "idle": "点灯していません"
+    },
+    "line": {
+      "until": "{time}まで",
+      "noEnd": "無制限",
+      "hidden": "タブが非表示",
+      "left": "残り{time}",
+      "needsyou": "AwakeTabをタップして再開",
+      "blocked": "AwakeTabを開いて解決",
+      "ended": "{time}に終了",
+      "idle": "AwakeTabで開始",
+      "starting": "ブラウザに確認中",
+      "unsupported": "AwakeTabを開く"
+    },
+    "pip": {
+      "region": "ミニ時計",
+      "title": "AwakeTab ミニ時計",
+      "open": "ミニ時計を開く",
+      "close": "ミニ時計を閉じる",
+      "popupBlocked": "ブラウザがミニ時計のウィンドウをブロックしました。AwakeTabのポップアップを許可して、もう一度お試しください。",
+      "controls": "ミニ時計の操作",
+      "bigger": "文字盤と操作を表示",
+      "smaller": "ミニ時計を小さくする",
+      "pause": "一時停止",
+      "resume": "再開",
+      "again": "もう一度",
+      "retry": "再試行",
+      "back": "タブに戻る",
+      "paused": "画面が消えることがあります",
+      "needs": "画面が消えることがあります · 再試行をタップ",
+      "stopAsk": "画面の点灯をやめますか？",
+      "stopYes": "停止",
+      "stopNo": "続ける",
+      "soundName": "集中サウンド",
+      "soundLabel": "集中サウンド：{name}",
+      "isOpen": "ミニ時計を表示中",
+      "closeShort": "閉じる",
+      "offer": "ミニ時計を最前面に表示",
+      "offerD": "ほかのウィンドウの上に浮かぶので、作業しながら残り時間を確認できます。",
+      "missedD": "タブを離れたとき、ブラウザが自動で開きませんでした。タップすると開き、閉じるまで最前面に表示されます。",
+      "notNow": "今はしない",
+      "auto": "タブを離れたらミニ時計",
+      "autoD": "セッション中にタブを切り替えると、小さな時計が最前面に浮かびます。自動で開けるかどうかはブラウザが決め、一度だけ確認されることがあります。",
+      "tapD": "このブラウザは自動で開けないため、セッション開始時に AwakeTab がワンタップで開けるようご案内します。",
+      "noneD": "このブラウザでは使えません。パソコンの Chrome と Edge なら小さな時計を最前面に表示できます。"
+    },
+    "widgets": {
+      "small": "点灯中 · {time}",
+      "smallNoEnd": "点灯中 · 無制限",
+      "presets": "プリセット",
+      "presetsLabel": "プリセットを開始",
+      "presenting": "プレゼン",
+      "cooking": "料理",
+      "reading": "読書",
+      "hour": "1時間",
+      "min45": "45分",
+      "min30": "30分",
+      "session": "画面をつけたままにしています",
+      "awakeUntil": "{time}まで点灯",
+      "awakeNoEnd": "点灯中 · 無制限",
+      "extend": "+15分",
+      "extendLabel": "15分追加",
+      "stop": "停止",
+      "start": "開始",
+      "left": "残り{dur}",
+      "ends": "{time}に終了 · タップで延長",
+      "quick": "画面をつけておく · 1時間",
+      "quickLabel": "この画面を1時間つけておく",
+      "name": "この画面"
+    },
+    "kiosk": {
+      "section": "共有画面でのキオスクモード",
+      "region": "キオスク画面",
+      "kicker": "受付",
+      "headline": "おかけになってお待ちください。",
+      "line": "お名前をお呼びします。",
+      "hold": "3秒長押しで終了",
+      "holding": "そのまま押し続けて…",
+      "holdLabel": "3秒長押しでキオスクモードを終了",
+      "unlocked": "キオスクのロックを解除しました",
+      "unlockedBody": "文字盤、スケジュール、メッセージを変更するか、キオスクモードを終了します。30秒間操作がないと再びロックされます。",
+      "back": "キオスクに戻る",
+      "leave": "キオスクモードを終了",
+      "face": "文字盤",
+      "screen": "画面",
+      "midnight": "ミッドナイト",
+      "oled": "OLEDブラック",
+      "schedule": "スケジュール",
+      "scheduleBody": "{days} {from} – {to}。この時間帯以外は画面がスリープできます。",
+      "weekdays": "平日",
+      "everyday": "毎日",
+      "alwaysBody": "毎日、終日。キオスクモードを終了するまで画面はつけたままです。",
+      "burn": "焼き付き対策",
+      "burnBody": "レイアウト全体が3分ごとに数ピクセルずれ、OLEDは完全な黒を使い、午後10時以降は画面が40%に暗くなります。「今すぐずらす」をお試しください。",
+      "shift": "今すぐずらす",
+      "start": "キオスクモードを開始",
+      "asleep": "スケジュール外：{time}まで画面がスリープできます。",
+      "licensed": "キオスクライセンス有効",
+      "invalid": "このキオスクリンクを確認できませんでした。受け取ったリンクをもう一度開いてください。"
+    },
+    "embedPage": {
+      "eyebrow": "ウェブサイト用ウィジェット",
+      "h1": "読者の画面をつけたままに",
+      "lead": "読者の画面をつけたままにする「クックモード」ボタンを追加できます。scriptタグ1つ、正直な状態表示、第三者へのリクエストなし。クレジットリンク付きで無料です。",
+      "builder": "ウィジェットを作る",
+      "builderSub": "見た目を選んでください。デモとコードがその場で変わります。",
+      "demo": "ライブデモ",
+      "demoNote": "これが実際のウィジェットです。下のクレジット行はローダーが追加します。",
+      "snippet": "設置：1行",
+      "snippetNote": "ウィジェットを表示したい場所に貼り付けてください。クレジットリンクはローダーが追加します。",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "mode": {
+        "_": "モード",
+        "cook": "クック",
+        "standard": "スタンダード",
+        "clock": "時計",
+        "minimal": "ミニマル"
+      },
+      "theme": {
+        "_": "テーマ",
+        "auto": "自動",
+        "light": "ライト",
+        "dark": "ダーク",
+        "oled": "OLED"
+      },
+      "size": {
+        "_": "サイズ",
+        "compact": "コンパクト",
+        "full": "全幅"
+      },
+      "length": {
+        "_": "開始時の長さ",
+        "pinf": "停止するまで",
+        "p15": "15分",
+        "p30": "30分",
+        "p45": "45分",
+        "p60": "1時間",
+        "p120": "2時間",
+        "p240": "4時間"
+      },
+      "lang": {
+        "_": "言語",
+        "page": "ページに合わせる"
+      },
+      "allow": "allow属性が重要な理由",
+      "allowBody": "埋め込みページが画面をつけたままにできるのは、サイトがallow=\"screen-wake-lock\"で許可した場合だけです。ローダーは必ずこれを追加します。scriptタグが削除されるプラットフォームでは、代わりにこのiframeを貼り付け、allow属性を残してください。",
+      "api": "JavaScript API",
+      "apiBody": "ローダーはwindow.AwakeTabEmbedを公開し、on(\"state\", callback)、start('{ preset, ms, until }')、stop()、setTheme(theme)が使えます。start()はクリックから呼び出してください。動画の代替方式にはタップが必要です。",
+      "licence": "クレジット行",
+      "licenceBody": "ウィジェットは無料です。ローダーが下に小さなクレジットリンクを追加します。画面をつけたままにする動作はどのサイトでも同じです。"
+    },
+    "embed": {
+      "stop": "停止",
+      "retry": "再試行",
+      "fixLabel": "解決方法（AwakeTabを開きます）",
+      "timers": {
+        "remove": "{name}を削除",
+        "done": "{name}が終了しました",
+        "default": "{minutes}分タイマー",
+        "quick": "{minutes}分",
+        "left": "残り{time}",
+        "finished": "完了"
+      }
+    },
+    "unit": {
+      "min": "分",
+      "h": "時間"
     }
   }
 }

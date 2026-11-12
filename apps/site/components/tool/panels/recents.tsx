@@ -1,17 +1,15 @@
 'use client';
 
 import { Plus } from 'lucide-react';
-import { Bar, BarChart, Cell, XAxis } from 'recharts';
 import { Face } from '@/components/face';
 import { Scene } from '@/components/scene/scene';
-import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
 import { cn } from '@/lib/utils';
-import { dayDate, dayDiff, dayStart, weekLetters, weekStart } from '@/lib/tool/clock';
-import { faceLabel, glanceFace } from '@/lib/tool/collections';
+import { dayDate, dayDiff, dayStart, weekDays, weekLetters, weekStart } from '@/lib/tool/clock';
+import { glanceFace } from '@/lib/tool/collections';
 import { groupByDay, sampleHistory, type IHistoryItem } from '@/lib/tool/history';
 import { SAMPLE_PRESETS } from '@/lib/tool/presets';
-import { isLive } from '@/lib/wake';
-import { useGlance, type IGlance } from '../context';
+import { elapsedSec, isLive } from '@/lib/wake';
+import { useGlance, useTickValue, type IGlance } from '../context';
 import { GHOST_BTN, Note, SecLabel } from '../kit';
 import { PanelBody } from './shell';
 
@@ -59,11 +57,76 @@ function week(items: IHistoryItem[], now: number): IWeek {
   };
 }
 
-function WeekCard({ g, items }: { g: IGlance; items: IHistoryItem[] }) {
-  const w = week(items, g.now);
-  const letters = weekLetters(g.lang);
-  const data = w.hours.map((h, i) => ({ day: letters[i], h: Math.round(h * 100) / 100, i }));
-  const config: ChartConfig = { h: { label: g.t('recents.hours'), color: 'var(--tg-bar)' } };
+const PLOT_H = 68;
+const CHART_H = 86;
+const BAR_W = 26;
+const BARS = [0, 1, 2, 3, 4, 5, 6] as const;
+
+// The top of the scale: four even steps that clear the tallest day, so a full bar stops just short of the top.
+function scaleTop(max: number): number {
+  if (max <= 0) return 4;
+  const rough = max / 4;
+  const digits = Math.floor(Math.log10(rough)) + 1;
+  const unit = 10 ** (digits - 1);
+  const grain = digits === 1 ? 0.1 : 0.05;
+  return Math.ceil(rough / unit / grain - 1e-9) * grain * unit * 4;
+}
+
+// Seven bars, Monday first: an empty day keeps a 4 px stub, today is volt and glows.
+function WeekChart({
+  hours,
+  today,
+  letters,
+  label,
+}: {
+  hours: number[];
+  today: number;
+  letters: string[];
+  label: string;
+}) {
+  const top = scaleTop(Math.max(...hours));
+  return (
+    <svg role="img" aria-label={label} width="100%" height={CHART_H} className="block flex-none">
+      {BARS.map((i) => {
+        const h = hours[i] ?? 0;
+        const tall = Math.max(4, (h / top) * PLOT_H);
+        const lit = i === today && h > 0;
+        return (
+          <svg key={i} x={`${(i * 100) / 7}%`} width={`${100 / 7}%`} height={CHART_H} overflow="visible">
+            <rect
+              x="50%"
+              y={PLOT_H - tall}
+              width={BAR_W}
+              height={tall}
+              rx={Math.min(8, tall / 2)}
+              style={{
+                transform: `translateX(${-BAR_W / 2}px)`,
+                fill: h === 0 ? 'var(--tg-s2)' : i === today ? 'var(--tg-volt)' : 'var(--tg-bar)',
+                filter: lit ? 'drop-shadow(0 0 8px color-mix(in srgb, var(--tg-volt) 33%, transparent))' : undefined,
+              }}
+            />
+            <text
+              x="50%"
+              y={CHART_H}
+              textAnchor="middle"
+              className="font-mono text-[12px]"
+              style={{ fill: i === today ? 'var(--tg-text)' : 'var(--tg-t2)' }}
+            >
+              {letters[i]}
+            </text>
+          </svg>
+        );
+      })}
+    </svg>
+  );
+}
+
+function WeekCard({ g, now, items }: { g: IGlance; now: number; items: IHistoryItem[] }) {
+  const w = week(items, now);
+  const hours = w.hours.map((h) => Math.round(h * 100) / 100);
+  const days = weekDays(g.lang);
+  // Read out in full: "Hours awake each day this week: Monday 1 hour 20 minutes, …".
+  const summary = `${g.t('recents.chart')}: ${hours.map((h, i) => `${days[i]} ${g.durLong(Math.round(h * 3600))}`).join(', ')}`;
   const line =
     w.streak > 0
       ? `${g.t('recents.streak', { n: w.streak })}${w.longest ? ` · ${g.t('recents.longest')}` : ''}`
@@ -91,42 +154,7 @@ function WeekCard({ g, items }: { g: IGlance; items: IHistoryItem[] }) {
           </span>
         ) : null}
       </div>
-      <ChartContainer config={config} className="aspect-auto h-[86px] w-full" aria-label={g.t('recents.chart')}>
-        <BarChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }} barCategoryGap={8}>
-          <XAxis
-            dataKey="day"
-            tickLine={false}
-            axisLine={false}
-            height={18}
-            interval={0}
-            tick={(p: { x?: number | string; y?: number | string; payload?: { value?: string }; index?: number }) => (
-              <text
-                x={Number(p.x)}
-                y={Number(p.y) + 10}
-                textAnchor="middle"
-                className="font-mono text-[12px]"
-                style={{ fill: p.index === w.today ? 'var(--tg-text)' : 'var(--tg-t2)' }}
-              >
-                {p.payload?.value}
-              </text>
-            )}
-          />
-          <Bar dataKey="h" radius={8} maxBarSize={26} minPointSize={4} isAnimationActive={false}>
-            {data.map((d) => (
-              <Cell
-                key={d.i}
-                style={{
-                  fill: d.h === 0 ? 'var(--tg-s2)' : d.i === w.today ? 'var(--tg-volt)' : 'var(--tg-bar)',
-                  filter:
-                    d.i === w.today && d.h > 0
-                      ? 'drop-shadow(0 0 8px color-mix(in srgb, var(--tg-volt) 33%, transparent))'
-                      : undefined,
-                }}
-              />
-            ))}
-          </Bar>
-        </BarChart>
-      </ChartContainer>
+      <WeekChart hours={hours} today={w.today} letters={weekLetters(g.lang)} label={summary} />
     </div>
   );
 }
@@ -135,12 +163,15 @@ export function RecentsPanel() {
   const g = useGlance();
   const { t, ui, phone } = g;
   const presets = ui.qa.empty ? [] : ui.qa.samples && g.presets.length === 0 ? SAMPLE_PRESETS : g.presets;
-  const items = ui.qa.samples && g.history.length === 0 ? sampleHistory(g.now) : g.history;
+  // The panel follows the clock by the minute, which is as fine as anything in it reads.
+  const now = useTickValue((tick) => Math.floor(tick.now / 60_000)) * 60_000;
+  const ran = useTickValue((tick) => g.dur(Math.max(60, elapsedSec(tick.snap))));
+  const items = ui.qa.samples && g.history.length === 0 ? sampleHistory(now) : g.history;
   const live = isLive(g.st);
   const days = groupByDay(items);
   return (
     <PanelBody>
-      <WeekCard g={g} items={items} />
+      <WeekCard g={g} now={now} items={items} />
       <SecLabel>{t('recents.presets')}</SecLabel>
       {presets.length === 0 ? (
         <div className="flex flex-col items-center gap-2 rounded-[20px] border-[1.5px] border-dashed border-(--tg-border-hi) bg-(--tg-s1) p-[18px] text-center">
@@ -178,7 +209,7 @@ export function RecentsPanel() {
                   {p.label}
                 </strong>
                 <span className="overflow-hidden text-[13px] text-ellipsis whitespace-nowrap text-(--tg-t2)">
-                  {p.totalSec ? g.dur(p.totalSec) : t('set.noEndCap')} · {faceLabel(p.face)}
+                  {p.totalSec ? g.dur(p.totalSec) : t('set.noEndCap')} · {g.faceName(p.face)}
                 </span>
               </span>
             </button>
@@ -199,28 +230,24 @@ export function RecentsPanel() {
       <SecLabel>{t('recents.history')}</SecLabel>
       {live || days.length ? (
         <>
-          {live && g.snap.startedAt !== null ? (
-            <HistoryDay g={g} at={g.now}>
+          {live && g.startedAt !== null ? (
+            <HistoryDay g={g} now={now} at={now}>
               <HistoryRow
                 g={g}
                 name={t('recents.this')}
-                when={t('recents.sinceNow', { time: g.time(g.snap.startedAt) })}
-                badge={
-                  g.st === 'running' || g.st === 'fallback'
-                    ? t('recents.awakeBadge')
-                    : g.dur(Math.max(60, g.total - g.remain))
-                }
+                when={t('recents.sinceNow', { time: g.time(g.startedAt) })}
+                badge={g.st === 'running' || g.st === 'fallback' ? t('recents.awakeBadge') : ran}
                 current
               />
             </HistoryDay>
           ) : null}
           {days.map((d) => (
-            <HistoryDay key={d.key} g={g} at={d.at}>
+            <HistoryDay key={d.key} g={g} now={now} at={d.at}>
               {d.items.map((it) => (
                 <HistoryRow
                   key={it.id}
                   g={g}
-                  name={it.label || t('recents.untitled', { face: faceLabel(it.face) })}
+                  name={it.label || t('recents.untitled', { face: g.faceName(it.face) })}
                   when={`${g.time(it.startedAt)} – ${g.time(it.endedAt)}`}
                   badge={g.dur(Math.max(60, it.awakeSec))}
                 />
@@ -234,9 +261,9 @@ export function RecentsPanel() {
   );
 }
 
-function HistoryDay({ g, at, children }: { g: IGlance; at: number; children: React.ReactNode }) {
-  const diff = dayDiff(at, g.now);
-  const date = dayDate(at, g.lang);
+function HistoryDay({ g, now, at, children }: { g: IGlance; now: number; at: number; children: React.ReactNode }) {
+  const diff = dayDiff(at, now);
+  const date = dayDate(at, g.lang, new Date(at).getFullYear() !== new Date(now).getFullYear());
   const head = diff === 0 ? g.t('recents.today', { date }) : diff === 1 ? g.t('recents.yesterday', { date }) : date;
   return (
     <div className="flex flex-col gap-0.5">
@@ -260,7 +287,7 @@ function HistoryRow({
   current?: boolean;
 }) {
   return (
-    <div className="flex min-h-[77px] items-center gap-3.5 border-b border-(--tg-border) px-1 py-2">
+    <div className="flex min-h-[60px] items-center gap-3.5 border-b border-(--tg-border) px-1 py-2">
       <span
         aria-hidden="true"
         className={cn(

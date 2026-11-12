@@ -14,7 +14,7 @@ lastVerified: 2026-09-09
 browsers: ["chrome"]
 os: ["android"]
 crumb: "Android en Chrome"
-lead: "Desde Chrome 84, Android permite que una pestaña visible pida un Wake Lock nativo y evite que la pantalla se apague. Esta página viene con una sesión de 30 minutos: tócala y fíjate que aparezca “Pantalla despierta”. Hay dos cosas que pueden arruinarlo: salir de Chrome libera el bloqueo, y las listas de “apps en suspensión” de algunos fabricantes pueden cerrar la pestaña cuando te vas. El Ahorro de batería puede atenuar la pantalla, pero Chrome no rechaza el bloqueo por él."
+lead: "Desde Chrome 84, Android permite que una pestaña visible pida un Wake Lock nativo y evite que la pantalla se apague. Esta página viene con una sesión de 30 minutos: tócala y fíjate que aparezca “Despierta”. Hay dos cosas que pueden arruinarlo: salir de Chrome libera el bloqueo, y las listas de “apps en suspensión” de algunos fabricantes pueden cerrar la pestaña cuando te vas. El Ahorro de batería puede atenuar la pantalla, pero Chrome no rechaza el bloqueo por él."
 facts:
   - label: "Chrome"
     value: "84 o posterior"
@@ -29,7 +29,7 @@ steps:
     text: "Si la sesión va a ser larga, conecta el cargador."
     shot: "AwakeTab en Chrome para Android con la duración elegida"
   - title: "Mira el indicador"
-    text: "Debe decir “Pantalla despierta”."
+    text: "Debe decir “Despierta”."
     shot: "el indicador de AwakeTab con la sesión activa"
   - title: "Si quieres usar otra app al mismo tiempo"
     text: "Activa la pantalla dividida y deja AwakeTab en una de las mitades."
@@ -57,18 +57,18 @@ matrix:
     - what: "Video de respaldo"
       result: fallback
       label: "Respaldo"
-      text: "Con un Firefox más antiguo verás “Toca para usar el respaldo”: es un video mudo que consume más batería."
+      text: "Con un Firefox más antiguo verás “Este navegador no tiene wake lock”: es un video mudo que consume más batería."
 rows:
   blockers:
     - title: "El Ahorro de batería"
-      text: "Chrome no revisa el Ahorro de batería al pedir el Wake Lock: según su código fuente (revisado el 26 de septiembre de 2026), solo lo rechaza si la pestaña no está visible o si una política del sitio lo bloquea. Lo que sí puede hacer el Ahorro de batería es acortar el tiempo de espera o atenuar la pantalla. Si alguna vez ves “Bloqueado — aquí está la solución”, AwakeTab muestra la causa real debajo."
+      text: "Chrome no revisa el Ahorro de batería al pedir el Wake Lock: según su código fuente (revisado el 26 de septiembre de 2026), solo lo rechaza si la pestaña no está visible o si una política del sitio lo bloquea. Lo que sí puede hacer el Ahorro de batería es acortar el tiempo de espera o atenuar la pantalla. Si alguna vez ves “No despierta”, AwakeTab muestra la causa real debajo."
     - title: "Las “apps en suspensión”"
       text: "Samsung y otros fabricantes agregan sus propias listas para poner en suspensión las apps que no usas. Si Chrome está en esa lista, el sistema puede cerrar la pestaña mientras estás en otra app, y al volver AwakeTab tendrá que empezar de nuevo. Si te pasa seguido, saca Chrome de esa lista en los ajustes de batería de tu equipo."
 faq:
-  - q: "¿Por qué AwakeTab dice “Bloqueado — aquí está la solución” en mi celular?"
+  - q: "¿Por qué AwakeTab dice “No despierta” en mi celular?"
     a: "Casi siempre la pestaña no estaba a la vista cuando AwakeTab pidió el bloqueo, o la página está dentro de un marco (iframe) que no lo permite; el motivo aparece debajo del indicador. El Ahorro de batería no es la causa: Chrome no rechaza el Wake Lock por él. Repetir el intento sin cambiar esa condición da el mismo rechazo."
   - q: "¿Sigue encendida la pantalla si abro YouTube o WhatsApp?"
-    a: "No. Al salir de Chrome o cambiar de pestaña, el navegador libera el bloqueo y el indicador muestra “En pausa — pestaña oculta”. Además, algunos fabricantes ponen en suspensión las apps que no usas y pueden cerrar la pestaña mientras estás fuera."
+    a: "No. Al salir de Chrome o cambiar de pestaña, el navegador libera el bloqueo y el indicador muestra “En pausa”. Además, algunos fabricantes ponen en suspensión las apps que no usas y pueden cerrar la pestaña mientras estás fuera."
   - q: "¿Funciona en Samsung Internet o Firefox para Android?"
     a: "Sí. Samsung Internet 14+ y Firefox 126+ tienen Wake Lock nativo en Android, igual que Opera 70+. En Samsung, las “apps en suspensión” pueden cerrar el navegador cuando lo dejas en segundo plano, pero no afectan una pestaña visible."
   - q: "¿Puedo tener AwakeTab y otra app a la vez?"
@@ -105,10 +105,10 @@ Según nuestra [matriz de compatibilidad](/es/learn/matriz-compatibilidad-navega
 
 ## Qué pasa cuando sales de Chrome
 
-Android solo deja mantener la pantalla encendida a la pestaña que está enfrente. Al abrir otra app, ir al inicio o cambiar de pestaña, Chrome suelta el bloqueo de inmediato. AwakeTab lo refleja al instante: “En pausa — pestaña oculta”. Mientras tanto, el tiempo de la sesión no avanza. Al regresar, AwakeTab lo vuelve a pedir; espera a ver “Pantalla despierta” antes de dejar el celular.
+Android solo deja mantener la pantalla encendida a la pestaña que está enfrente. Al abrir otra app, ir al inicio o cambiar de pestaña, Chrome suelta el bloqueo de inmediato. AwakeTab lo refleja al instante: “En pausa”. Mientras tanto, el tiempo de la sesión no avanza. Al regresar, AwakeTab lo vuelve a pedir; espera a ver “Despierta” antes de dejar el celular.
 
 ## Límites en Android
 
 - No te mantiene “disponible” en Teams, Slack o Zoom; eso depende de la actividad del teclado y el mouse, y AwakeTab nunca simula toques.
 - Con la pantalla encendida mucho tiempo, el celular se calienta y gasta batería. Para sesiones largas, conéctalo.
-- En pantallas OLED, dejar la misma imagen horas y horas tiene riesgo de marcas; el modo Noche mueve los píxeles para reducirlo, pero no lo elimina.
+- En pantallas OLED, dejar la misma imagen horas y horas tiene riesgo de marcas; el modo pared de AwakeTab desplaza la imagen unos píxeles para reducirlo, pero no lo elimina.

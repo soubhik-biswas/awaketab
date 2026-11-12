@@ -40,10 +40,10 @@ const widget = (tag: string, name: string, description: string): TWidget => ({
 export default function manifest(): MetadataRoute.Manifest & { widgets: TWidget[] } {
   return {
     id: '/',
-    name: 'AwakeTab — keep your screen awake',
+    name: 'AwakeTab — Keep your screen awake',
     short_name: 'AwakeTab',
     description:
-      'Keep your screen on with one click. A calm clock shows the time left. 46 faces, all free — no account, no tracking.',
+      'Keep your screen on with one click. A calm clock shows the time left. 46 faces, six living backgrounds, free — no install, no account.',
     start_url: '/?source=pwa',
     scope: '/',
     display: 'standalone',

@@ -29,14 +29,14 @@ steps:
     path: "Einstellungen › Anzeige & Helligkeit › Automatische Sperre"
     text: "Öffnen Sie dazu **Einstellungen → Anzeige & Helligkeit → Automatische Sperre**."
 stepsDone: "Erledigt. Ist „Nie“ noch grau, lesen Sie den nächsten Abschnitt."
-toolNote: "Oft wollen Sie gar nicht, dass das iPhone dauerhaft nie sperrt, sondern nur jetzt, für ein Rezept, eine Anleitung oder einen Download. Ein Tipp auf „Bildschirm eingeschaltet lassen“ startet die Sitzung. Sobald die Anzeige „Bildschirm bleibt an“ meldet, bleibt das Display an, bis die Zeit abläuft oder Sie den Tab verlassen. Die Einstellung „Automatische Sperre“ bleibt dabei unverändert."
+toolNote: "Oft wollen Sie gar nicht, dass das iPhone dauerhaft nie sperrt, sondern nur jetzt, für ein Rezept, eine Anleitung oder einen Download. Ein Tipp auf „Bildschirm eingeschaltet lassen“ startet die Sitzung. Sobald die Anzeige „Wach“ meldet, bleibt das Display an, bis die Zeit abläuft oder Sie den Tab verlassen. Die Einstellung „Automatische Sperre“ bleibt dabei unverändert."
 faq:
   - q: "Warum kann ich bei der automatischen Sperre nur „30 Sekunden“ auswählen?"
     a: "Weil der Stromsparmodus eingeschaltet ist. Er graut alle anderen Optionen einschließlich „Nie“ aus und legt die Sperre auf 30 Sekunden fest. Deaktivieren Sie den Modus unter Einstellungen → Batterie, dann sind die Optionen wieder wählbar. Bleiben sie grau, begrenzt meist ein Arbeits- oder Schulprofil die Sperre."
   - q: "Brauche ich „Nie“ überhaupt, wenn ich AwakeTab nutze?"
     a: "Nein. In Safari ab 16.4 hält AwakeTab den Bildschirm an, solange der Tab vorne ist, egal welche Sperrzeit eingestellt ist. Ob der Lock auch bei aktivem Stromsparmodus hält, haben wir noch nicht auf einem Gerät geprüft; das Ergebnis erscheint auf unserer Testseite."
   - q: "Bleibt der Bildschirm an, wenn ich Safari verlasse?"
-    a: "Nein. Wechseln Sie die App oder den Tab, gibt Safari den Wake Lock frei, und die Anzeige zeigt „Pausiert — Tab ausgeblendet“. Ab dann gilt wieder die automatische Sperre aus den Einstellungen."
+    a: "Nein. Wechseln Sie die App oder den Tab, gibt Safari den Wake Lock frei, und die Anzeige zeigt „Pausiert“. Ab dann gilt wieder die automatische Sperre aus den Einstellungen."
   - q: "Ist „Nie“ auf Dauer eine gute Idee?"
     a: "Für einzelne Aufgaben ist eine zeitlich begrenzte Sitzung meist besser. Ein ständig leuchtendes Display kostet Akku, und auf OLED-Displays droht Einbrennen. AwakeTab endet nach der gewählten Dauer von selbst und fragt, ob Sie verlängern möchten."
 honestLimit: "Der Stromsparmodus graut „Nie“ aus und stellt die Sperre auf 30 Sekunden. Ob ein Wake Lock aus Safari dann noch hält, haben wir noch nicht auf einem Gerät geprüft. Ein Firmenprofil kann die Sperre ebenfalls begrenzen."
@@ -59,7 +59,7 @@ Ist der Akku fast leer, hilft das Ladekabel, bevor Sie den Stromsparmodus abscha
 
 ## Wenn „Nie“ weiterhin grau bleibt
 
-Prüfen Sie, ob das Batteriesymbol oben rechts noch gelb ist. Gelb bedeutet: Der Stromsparmodus läuft noch, und die automatische Sperre steht auf 30 Sekunden. Safari prüft ihn nicht und lehnt den Lock deshalb auch nicht mit „Blockiert — so beheben Sie es“ ab; ob das iPhone mit gehaltenem Lock trotzdem sperrt, ist noch nicht auf einem Gerät geprüft. Ist das Symbol nicht gelb, sehen Sie unter Einstellungen → Allgemein → VPN und Geräteverwaltung nach: Ein Arbeits- oder Schulprofil kann die Sperre begrenzen, und nur dessen Verwaltung kann das ändern.
+Prüfen Sie, ob das Batteriesymbol oben rechts noch gelb ist. Gelb bedeutet: Der Stromsparmodus läuft noch, und die automatische Sperre steht auf 30 Sekunden. Safari prüft ihn nicht und lehnt den Lock deshalb auch nicht mit „Nicht wach“ ab; ob das iPhone mit gehaltenem Lock trotzdem sperrt, ist noch nicht auf einem Gerät geprüft. Ist das Symbol nicht gelb, sehen Sie unter Einstellungen → Allgemein → VPN und Geräteverwaltung nach: Ein Arbeits- oder Schulprofil kann die Sperre begrenzen, und nur dessen Verwaltung kann das ändern.
 
 Warum koppelt Apple beides? Im Stromsparmodus soll das iPhone so wenig Energie wie möglich verbrauchen, und ein früh abgeschaltetes Display spart davon am meisten. Deshalb lässt iOS die Sperrzeit in diesem Zustand nicht frei wählen.
 
@@ -69,4 +69,4 @@ Warum koppelt Apple beides? Im Stromsparmodus soll das iPhone so wenig Energie w
 
 Nach einer AwakeTab-Sitzung sperrt das iPhone wie gewohnt. Einen nativen Lock gibt es ab Safari 16.4; als Web-App auf dem Home-Bildschirm ab iOS 18.4, so steht es in unserer Support-Matrix vom 9. September 2026. Ältere Versionen können nach einem Tippen eine Video-Ersatzlösung nutzen, die mehr Akku braucht. Alles Weitere zu Safari auf dem iPhone steht auf der Seite [iPhone-Bildschirm in Safari anlassen](/de/on/iphone-safari).
 
-Verlassen Sie Safari, wird der Lock sofort freigegeben; die Anzeige wechselt zu „Pausiert — Tab ausgeblendet“ und der Timer hält an. AwakeTab hält Sie außerdem nicht in Teams oder Slack auf „verfügbar“, denn deren Status hängt an Ihren Eingaben, nicht am Display. Und ein iPhone, das unbeaufsichtigt als Babyfon oder Sicherheitsmonitor dient, sollten Sie nicht allein auf einen Wake Lock stützen.
+Verlassen Sie Safari, wird der Lock sofort freigegeben; die Anzeige wechselt zu „Pausiert“ und der Timer hält an. AwakeTab hält Sie außerdem nicht in Teams oder Slack auf „verfügbar“, denn deren Status hängt an Ihren Eingaben, nicht am Display. Und ein iPhone, das unbeaufsichtigt als Babyfon oder Sicherheitsmonitor dient, sollten Sie nicht allein auf einen Wake Lock stützen.

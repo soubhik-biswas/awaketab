@@ -162,6 +162,21 @@ test('options: three switches that save and sync, and an honest note when no sit
   );
 });
 
+test('options: the end chime is off until one is chosen, and the tab is named in words', async ({
+  context,
+  extensionId,
+}) => {
+  const page = await openOptions(context, extensionId);
+  await expect(page).toHaveTitle('AwakeTab extension · Options');
+  const chimes = page.locator('[data-chime]');
+  await expect(chimes.getByRole('radio', { name: 'None' })).toHaveAttribute('aria-checked', 'true');
+  await chimes.getByRole('radio', { name: 'Bell' }).click();
+  await expect(chimes.getByRole('radio', { name: 'Bell' })).toHaveAttribute('aria-checked', 'true');
+  await expect
+    .poll(async () => (await localStore(page))['at.v1.settings'])
+    .toMatchObject({ sound: { id: 'bell' }, defaultPreset: 'p60' });
+});
+
 test('options skip entry motion when reduced motion is requested', async ({ context, extensionId }) => {
   const page = await context.newPage();
   await page.emulateMedia({ reducedMotion: 'reduce' });

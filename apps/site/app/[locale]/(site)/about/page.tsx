@@ -3,11 +3,13 @@ import { getTranslations } from 'next-intl/server';
 import { Block, DataTable, Prose, Steps, tx, yes } from '@/components/site/blocks';
 import { JsonLd } from '@/components/site/json-ld';
 import { PageHero } from '@/components/site/page-hero';
+import { lockPillLabel, type TLock } from '@/components/site/pill-copy';
+import { PRO_ENABLED } from '@/lib/features';
 import { panelHref, ROUTES } from '@/lib/routes';
 import { englishOnly, pageMetadata, personSchema, titleFor } from '@/lib/seo';
 
 const COFFEE = 'https://buymeacoffee.com/awaketab';
-const LOCK_STATES = ['idle', 'requesting', 'held', 'lost', 'denied', 'unsupported', 'fallback'] as const;
+const LOCK_STATES: readonly TLock[] = ['idle', 'requesting', 'held', 'lost', 'denied', 'unsupported', 'fallback'];
 const JOURNEYS = [
   'Acquisition',
   'Denial',
@@ -17,30 +19,39 @@ const JOURNEYS = [
   'Multi-tab warnings',
 ];
 const CREDITS = [
-  ['Tone.js', 'https://tonejs.github.io/', 'Focus sounds and end sounds, made live in your browser', 'MIT'],
-  ['howler.js', 'https://howlerjs.com/', 'Plays recorded tracks in the lo-fi library', 'MIT'],
-  ['Embla Carousel', 'https://www.embla-carousel.com/', 'Swiping between clock faces', 'MIT'],
-  ['Tiptap and ProseMirror', 'https://tiptap.dev/', 'The notepad editor', 'MIT'],
-  ['idb-keyval', 'https://github.com/jakearchibald/idb-keyval', 'Keeps notes in this browser', 'Apache 2.0'],
-  ['annyang', 'https://github.com/TalAter/annyang', 'Voice commands while you dictate a note', 'MIT'],
-  ['vanilla-colorful', 'https://github.com/web-padawan/vanilla-colorful', 'The custom lamp colour picker', 'MIT'],
-  ['Hero Patterns', 'https://heropatterns.com/', 'The Dots, Grid and Waves backgrounds, by Steve Schoger', 'CC BY 4.0'],
-  ['IBM Plex Serif', 'https://github.com/IBM/plex', 'The Analog luxe and Words faces, by IBM', 'SIL OFL 1.1'],
-  ['DotGothic16', 'https://github.com/fontworks-fonts/DotGothic16', 'The LED face, by Fontworks', 'SIL OFL 1.1'],
-  ['Geist and Geist Mono', 'https://vercel.com/font', 'The interface type, by Vercel', 'SIL OFL 1.1'],
+  ['Next.js and React', 'https://nextjs.org/', 'The website and the timer', 'MIT'],
+  ['Radix UI and shadcn/ui', 'https://ui.shadcn.com/', 'Accessible panels, menus, switches and tooltips', 'MIT'],
+  ['cmdk', 'https://cmdk.paco.me/', 'The command palette', 'MIT'],
+  ['Vaul', 'https://vaul.emilkowal.ski/', 'Bottom sheets on phones and tablets', 'MIT'],
+  ['Sonner', 'https://sonner.emilkowal.ski/', 'Toasts, such as the one after you add time', 'MIT'],
+  ['GSAP', 'https://gsap.com/', 'The moving parts of the clock faces', 'GSAP standard licence'],
+  ['Motion', 'https://motion.dev/', 'Interface transitions', 'MIT'],
+  ['Magic UI', 'https://magicui.design/', 'The border beam, meteors and grid pattern', 'MIT'],
+  ['Lucide', 'https://lucide.dev/', 'The interface icons, by the Lucide contributors', 'ISC'],
+  ['next-intl', 'https://next-intl.dev/', 'The eight languages', 'MIT'],
+  ['Serwist', 'https://github.com/serwist/serwist', 'The offline page and widgets', 'MIT'],
   [
-    'Space Grotesk',
-    'https://github.com/floriankarsten/space-grotesk',
-    'The numerals of the Bold face, by Florian Karsten',
+    'Bricolage Grotesque',
+    'https://github.com/ateliertriay/bricolage',
+    'Headings and the wordmark, by Mathieu Triay',
     'SIL OFL 1.1',
   ],
-  ['Lucide', 'https://lucide.dev/', 'The interface icons, by the Lucide contributors', 'ISC'],
+  ['Inter', 'https://rsms.me/inter/', 'Interface text and the clock digits, by Rasmus Andersson', 'SIL OFL 1.1'],
   [
-    'SVG Logos',
-    'https://svglogos.dev/',
-    'The browser and platform logos, by Gil Barbara; logos are trademarks of their owners',
-    'CC0 1.0',
+    'Instrument Serif',
+    'https://github.com/Instrument/instrument-serif',
+    'The accent word in headlines, by Instrument',
+    'SIL OFL 1.1',
   ],
+  ['Geist Mono', 'https://vercel.com/font', 'Labels and keyboard keys, by Vercel', 'SIL OFL 1.1'],
+  [
+    'Archivo',
+    'https://github.com/Omnibus-Type/Archivo',
+    'The Neon, Bauhaus, Poster and HUD faces, by Omnibus-Type',
+    'SIL OFL 1.1',
+  ],
+  ['IBM Plex Serif', 'https://github.com/IBM/plex', 'The Luxe, Words and E-ink faces, by IBM', 'SIL OFL 1.1'],
+  ['Noto Sans', 'https://fonts.google.com/noto', 'Japanese, Chinese and Hindi text, by Google', 'SIL OFL 1.1'],
 ] as const;
 const PRINCIPLES = [
   [
@@ -58,18 +69,21 @@ const PRINCIPLES = [
   ],
 ] as const;
 
-// The keyboard map from the accessibility board, in its order and words.
+// The keys the tool listens for (components/tool/keys.ts), in the order a session uses them.
 const KEYS = [
   ['Space', 'Keep awake · pause · resume'],
-  ['+', 'Extend 15 minutes'],
-  ['⇧ +', 'Extend 1 hour'],
-  ['U', 'Keep awake until…'],
-  ['F', 'Fullscreen'],
-  ['⇧ D', 'Toggle theme'],
-  ['?', 'Help & fixes'],
-  ['1 … 9', 'Start a saved preset'],
-  ['⌘ K', 'Command palette'],
-  ['Esc', 'Close sheet, dialog or palette'],
+  ['Enter', 'Start the session, before one is running'],
+  ['← →', 'Pick a shorter or longer length, before one is running'],
+  ['+', 'Add 5 minutes'],
+  ['−', 'Take 5 minutes off'],
+  ['F', 'Open Faces'],
+  ['V', 'Open Vibes'],
+  ['R', 'Open Recents'],
+  [',', 'Open Settings'],
+  ['⇧ F', 'Fullscreen'],
+  ['?', 'Command palette, which lists every command'],
+  ['⌘ K · Ctrl K', 'Command palette, from anywhere on the page'],
+  ['Esc', 'Close a panel or the palette'],
 ] as const;
 
 const link = 'text-link underline underline-offset-2';
@@ -88,7 +102,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   await englishOnly(params);
   const tt = await getTranslations({ locale: 'en', namespace: 'tool' });
-  const pill = (id: (typeof LOCK_STATES)[number]) => (id === 'idle' ? tt('pill.idle._') : tt(`pill.${id}`));
   return (
     <>
       <JsonLd schema={personSchema()} />
@@ -109,11 +122,17 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
             },
             {
               h: 'How we make money',
-              list: [
-                'Pro, for people who sync devices or want the extras. Keeping awake stays free.',
-                'One clearly labelled ad slot on content pages — never on the timer, never animated.',
-                'No selling of data. There is very little data to sell, and we keep it that way.',
-              ],
+              list: PRO_ENABLED
+                ? [
+                    'Pro, for people who sync devices. Keeping awake stays free.',
+                    'One clearly labelled ad slot on content pages — never on the timer, never animated.',
+                    'No selling of data. There is very little data to sell, and we keep it that way.',
+                  ]
+                : [
+                    'Today, we don’t: every feature is free and there is nothing to buy.',
+                    'No ads on the timer, ever. No page shows an ad today; if guides carry one later, it will be a single, clearly labelled slot that never animates.',
+                    'No selling of data. There is very little data to sell, and we keep it that way.',
+                  ],
             },
             {
               h: 'Who we are',
@@ -160,7 +179,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
           label="The seven lock states"
           cols={['Lock state', 'What the pill says']}
           template="1fr 1.6fr"
-          rows={LOCK_STATES.map((id) => [tx(id, true), tx(pill(id))])}
+          rows={LOCK_STATES.map((id) => [tx(id, true), tx(lockPillLabel(tt, id))])}
         />
         <DataTable
           label="What the browser journeys verify"
@@ -180,7 +199,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         <Prose
           items={[
             {
-              p: 'Everything works by keyboard, by touch and with a screen reader. Single-key shortcuts only fire while the timer has focus — never while you type in a field or the palette — and the palette shows each one next to its command.',
+              p: 'Everything works by keyboard, by touch and with a screen reader. Single-key shortcuts only fire while the timer has focus and no panel is open — never while you type in a field or the palette — and the palette shows each one next to its command.',
             },
           ]}
         />
@@ -246,8 +265,8 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
                   <a href={panelHref('feedback')} className={link}>
                     Settings → Send feedback
                   </a>{' '}
-                  for help, bug reports or device results that differ from the support matrix. Plans, receipts, refunds
-                  and deleting your Pro data live in Settings → Account.
+                  for help, bug reports or device results that differ from the support matrix.
+                  {PRO_ENABLED && ' Plans, receipts, refunds and deleting your Pro data live in Settings → Account.'}
                 </>
               ),
             },

@@ -55,7 +55,7 @@ A saver mode works one level below the browser, on the operating system's own se
 - **Android Battery Saver** may shorten the screen timeout or dim the display, depending on the phone.
 - **Windows Energy saver** (called Battery saver before Windows 11 24H2) may dim the screen or shorten timeouts to save power.
 
-None of these is a refused request, so AwakeTab's pill would not show "Blocked — here's the fix" for them. If a saver overrides the screen timeout while the browser still holds the lock, the pill can say "Screen awake" while the screen dims. That is the case we most want to measure.
+None of these is a refused request, so AwakeTab's pill would not show "Not awake" for them. If a saver overrides the screen timeout while the browser still holds the lock, the pill can say "Awake" while the screen dims. That is the case we most want to measure.
 
 ## What we have not tested yet
 
@@ -68,4 +68,4 @@ We have not yet recorded a device test for any of these; the results will appear
 
 ## What to do today
 
-On iPhone, turn Low Power Mode off when the screen must stay on, then open AwakeTab in Safari and tap Start. On Android and Windows, keep the tab visible and watch the screen for the first few minutes; if it dims while the pill says "Screen awake", turn the saver off for that session. In Firefox, plug in before the battery reaches 5 %. [Keep your iPhone screen on in Safari](/on/iphone-safari) has the full iPhone steps.
+On iPhone, turn Low Power Mode off when the screen must stay on, then open AwakeTab in Safari and tap Keep awake. On Android and Windows, keep the tab visible and watch the screen for the first few minutes; if it dims while the pill says "Awake", turn the saver off for that session. In Firefox, plug in before the battery reaches 5 %. [Keep your iPhone screen on in Safari](/on/iphone-safari) has the full iPhone steps.

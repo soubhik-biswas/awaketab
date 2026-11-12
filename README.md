@@ -1,106 +1,93 @@
 <p align="center">
   <a href="https://awaketab.com/">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset=".github/readme/hero-dark.svg">
-      <img src=".github/readme/hero-light.svg" width="640" alt="AwakeTab ring logo and wordmark. Keeps your screen awake, honestly.">
-    </picture>
+    <img src="docs/launch/product-hunt/thumbnail-240.png" width="96" height="96" alt="AwakeTab logo: a ring with a green dot">
   </a>
 </p>
 
-<h1 align="center">Keep the screen on. Know when it is.</h1>
+<h1 align="center">AwakeTab</h1>
 
 <p align="center">
-  A free browser tool for recipes, reading, presentations and focused work.<br>
-  Pick a duration, start a session, and look for <b>Screen awake</b>.<br>
-  No account needed. No ads on the awake screen.
+  <b>Keep this screen awake.</b><br>
+  One click, a big calm clock with the time left, and an honest status if your device says no.<br>
+  Free. No install. No account.
 </p>
 
 <p align="center">
-  <a href="https://awaketab.com/"><b>Try AwakeTab</b></a> ·
-  <a href="https://play.awaketab.com/">Testing environment</a> ·
+  <a href="https://awaketab.com/"><b>Open AwakeTab</b></a> ·
   <a href="#documentation">Documentation</a> ·
+  <a href="https://github.com/soubhik-biswas/awaketab/discussions">Ask a question</a> ·
   <a href="https://github.com/soubhik-biswas/awaketab/issues/new/choose">Report an issue</a>
 </p>
 
 <p align="center">
   <a href="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml"><img src="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml/badge.svg?branch=main" alt="Main branch CI status"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-087B87" alt="MIT licence"></a>
-  <a href=".nvmrc"><img src="https://img.shields.io/badge/Node.js-22-087B87" alt="Development requires Node.js 22"></a>
+  <a href="https://scorecard.dev/viewer/?uri=github.com/soubhik-biswas/awaketab"><img src="https://api.scorecard.dev/projects/github.com/soubhik-biswas/awaketab/badge" alt="OpenSSF Scorecard"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-0B7A3B" alt="GNU AGPL 3.0 licence"></a>
+  <a href=".nvmrc"><img src="https://img.shields.io/badge/Node.js-22-0B7A3B" alt="Development requires Node.js 22"></a>
 </p>
 
-[![AwakeTab running a thirty-minute session: the ring timer, confirmed Screen awake status and Stop button](.github/readme/screens/tool-running.jpg)](https://awaketab.com/)
+[![AwakeTab before a session: the headline Keep this screen awake, a clock face set to one hour, five lengths and the Keep awake button](docs/launch/product-hunt/ph-01.png)](https://awaketab.com/)
 
-*The real web tool on production. Its status follows the browser's confirmed wake lock.*
+**Explore:** [How it works](#how-it-works) · [What you get](#what-you-get) · [Ways to use it](#ways-to-use-it) · [Quick start](#quick-start) · [Development](#development-commands) · [Deployment](#environments-and-deployment) · [Codebase](#architecture-and-repository-map) · [Help](#troubleshooting)
 
-**Explore:** [Demo](#see-it-in-action) · [Features](#features) · [Ways to use it](#choose-how-to-use-it) · [Quick start](#quick-start) · [Development](#development-commands) · [Deployment](#environments-and-deployment) · [Codebase](#architecture-and-repository-map) · [Help](#troubleshooting)
+## How it works
 
-The Next.js website lives in `apps/site`. See [Next.js deployment](docs/DEPLOYMENT.md) for the production and preview Worker pipelines.
+A recipe should stay visible while your hands are busy. A slide timer or a wall dashboard should not need a tap every few minutes. AwakeTab asks the browser for a **screen wake lock**, the permission to keep a display on, and then tells you the truth about the answer.
 
-## See it in action
+1. **Pick a length:** 15 min, 30 min, 1 hour, 2 hours or No end.
+2. **Press Keep awake.** The clock counts down and shows the time the session ends.
+3. **Glance at it from across the room.** The controls step back and the clock stays readable.
 
-[![Animated walkthrough of AwakeTab: choosing a duration, confirming Screen awake, and stopping the session](.github/readme/session-demo.gif)](.github/readme/awaketab-product-demo.mp4)
+[![AwakeTab during a session: the status reads Awake until 12:01 PM, the clock shows 38:12 left, and the dock offers add time, Pause and Stop](docs/launch/product-hunt/ph-02.png)](https://awaketab.com/)
 
-**Choose 30 min → Keep awake → confirm Screen awake → Stop.** The animation uses real browser captures, with shortened pauses between steps. [Watch the narrated 18-second product demo](.github/readme/awaketab-product-demo.mp4) with on-screen captions, or read the [WebVTT transcript](.github/readme/awaketab-product-demo.en.vtt). Open the [full-size animation](.github/readme/session-demo.gif) for a closer look.
+The status pill only ever reports what the browser confirmed. A running countdown alone is not proof that a lock was granted.
 
-The tool may request a session as soon as it opens. If it is already running, press **Stop** before choosing another duration. A browser that requires a tap will ask for one.
-
-<details>
-<summary><b>Make the clock yours</b></summary>
-
-Open **Customize → Face**, use the arrows below the clock, or press **C**. All twelve clock faces are free. Look and Sound live in the same drawer.
-
-<p align="center">
-  <img src=".github/readme/screens/clock-faces.jpg" width="464" alt="The real Customize drawer with Ring, Bold, Horizon and Tide clock faces; Ring is selected">
-</p>
-
-The capture shows part of the face gallery. Try the other faces and focus tools in [the product](https://awaketab.com/).
-
-</details>
-
-## Why AwakeTab
-
-A recipe should stay visible while your hands are busy. A reading session should not need a tap every minute. A presentation clock or wall dashboard should show clearly whether the screen is still being kept awake.
-
-AwakeTab asks for a **screen wake lock**, the browser's permission to keep a display on. The status reports the result, including when the browser releases or refuses it. A running countdown alone is not proof that a lock was granted.
-
-| Status | Meaning |
+| The pill says | What it means |
 | --- | --- |
-| **Ready** | No lock is held. |
-| **Starting…** | Waiting for the browser's answer. |
-| **Screen awake** | The browser confirmed a native lock. |
-| **Paused — tab hidden** | The lock was released; the tool asks again when the tab becomes visible. |
-| **Blocked — here's the fix** | The browser refused. Open the explanation beside the status. |
-| **Tap to use the fallback** | Native wake lock is unavailable; a tap can try the video fallback. |
-| **Awake via video fallback** | The fallback video is playing. |
+| **Not keeping awake** | No session is running. |
+| **Asking the browser…** | Waiting for the browser's answer. |
+| **Awake · until 12:26 PM** | The browser confirmed the lock. With No end it reads "until you stop". |
+| **Paused · 57 min left** | You paused the session; the screen may sleep. |
+| **Tap to resume · tab was hidden** | The browser released the lock while the tab was hidden. One tap takes it back. |
+| **Not awake · battery saver** | The browser refused. The reason and the fix are one tap away. |
+| **No wake lock in this browser** | This browser has no wake lock. A video fallback is offered instead. |
+| **Awake via video · until 12:26 PM** | The fallback video is keeping the screen on. |
 
-**Keep the web tab visible.** Switching tabs, minimising the window or locking the device can end the lock. AwakeTab cannot override a deliberate device lock, a closed laptop lid or every operating-system power restriction. It does not simulate mouse activity or change your availability in chat apps. See the [browser support matrix](https://awaketab.com/support-matrix) and [device guides](https://awaketab.com/on).
+**Keep the tab visible.** Switching tabs, minimising the window or locking the device ends a wake lock; that is how browsers work. AwakeTab cannot override a deliberate device lock, a closed laptop lid or every power policy. It never fakes mouse movement and never changes your status in chat apps. See the [browser support matrix](https://awaketab.com/learn/browser-support-matrix) and the [device guides](https://awaketab.com/on).
 
-## Features
+## What you get
 
-**The free tool is live. Production purchases are disabled.** Pro and business extras exist in the code, but are not currently available to buy. Testing checkout uses a sandbox and does not make a production purchase.
+Everything is free, with no account, no ads on the awake screen and no tracking.
 
-| Area | Available free | Licence-based extras implemented in the code |
-| --- | --- | --- |
-| Sessions | Presets from 15 min to 4 h, until a time, custom length up to 7 days, or until you stop; extend a session | Keeping the screen awake stays free. |
-| Clock and appearance | All twelve clock faces; light, dark and OLED modes; Clear Night, Paper and Nord; free lamps and backgrounds | More palettes, lamps, backgrounds and presets; custom lamp colour |
-| Focus and sound | Focus sounds, end sounds, Pomodoro timer, intention, breathing guide and second time zone | Sound mixer and repeating Pomodoro |
-| Notes and history | One local note with formatting and export; Today and This week statistics | Multiple notes, longer history and statistics CSV export |
-| Ambient display | Clock, Cook, Focus, Night and Minimal views | Personal message and business kiosk branding |
-| Browser integration | Shortcuts, installable web app, cached offline tool, Picture-in-Picture where supported | Extension schedules and auto-start |
+[![Twelve of the forty-six clock faces, from analog rings to flip digits and a moon phase](docs/launch/product-hunt/ph-03.png)](https://awaketab.com/)
 
-Some extras offer a five-minute preview; a preview does not create a licence. Preferences and notes stay in this browser, with no account-based sync. Export notes before clearing site data. Voice typing, where supported, uses the browser's speech service and may send audio to that service.
+| Area | Included |
+| --- | --- |
+| Sessions | Five lengths from 15 minutes to No end; add 5 minutes, 15 minutes or 1 hour while running; Pause, Stop and Start again; sessions survive a reload |
+| Clock faces | 46 faces: analog, digital and ambient. Press **F** to browse them |
+| Backgrounds | Six living backgrounds: Aurora, Night sky, Rain on glass, Sunset, Lava lamp and Calm. Motion can be set to still |
+| Look | Light, dark and OLED themes that follow the system setting; 12- or 24-hour time |
+| Your setups | Presets for the things you do every day, recent sessions and history, kept on this device |
+| Sound | An optional end-of-session chime |
+| Keyboard | **Space** start or pause · **Enter** start · **←** **→** length · **+** **−** five minutes · **F** faces · **⇧F** fullscreen · **V** backgrounds · **R** recents · **,** settings · **⌘K** search and commands |
+| Access | Screen-reader labels throughout, visible focus, 44 px targets, reduced-motion support |
+| Languages | English, Spanish, Portuguese (Brazil), German, French, Japanese, Chinese and Hindi |
+| Offline | Installs as an app and keeps working without a connection |
 
-See [Free and Pro](https://awaketab.com/pro) for the current comparison, [requirements](docs/02-prd.md) for the wider specification, and [data storage](docs/08-data-storage.md) for persistence details.
+[![The six living backgrounds: Aurora, Night sky, Rain on glass, Sunset, Lava lamp and Calm](docs/launch/product-hunt/ph-04.png)](https://awaketab.com/)
 
-## Choose how to use it
+Settings, presets and history stay in your browser; there is no sync at launch. A paid plan for syncing one setup across several screens is built but switched off, and keeping a screen awake stays free. See [requirements](docs/02-prd.md) for the wider specification and [data storage](docs/08-data-storage.md) for what is saved where.
+
+## Ways to use it
 
 | Option | Best for | Availability and limits |
 | --- | --- | --- |
-| **[Web tool](https://awaketab.com/)** | A recipe, reading session or second screen | Live and free. Keep the tab visible. A supporting browser can install it for a standalone window and cached offline use. |
-| **[Chrome / Edge extension](https://awaketab.com/extension)** | Working in another tab or window | Buildable here; store listing is not yet enabled. Uses the browser power API with Screen and System levels. A closed lid still sleeps. |
-| **[Website widget](https://awaketab.com/embed)** | Keep-awake controls inside another website | Script loader and Cook widget implemented. Free widget includes attribution; licensed branding exists, with purchases closed. |
-| **[Kiosk URL builder](https://awaketab.com/kiosk)** | Wall clocks and shared displays | Free parameters configure a display link. Persistent messages and custom logos need the relevant licence. Normal browser and OS limits apply. |
-| **[`@awaketab/wake`](packages/wake/README.md)** | Adding wake lock to your application | Workspace source and builds available; not currently published to npm. Includes React, Preact and Vue adapters. |
+| **[Web tool](https://awaketab.com/)** | A recipe, a reading session or a second screen | Live and free. Keep the tab visible. A supporting browser can install it as an app. |
+| **[Chrome and Edge extension](https://awaketab.com/extension)** | Keeping the screen on while you work in other tabs and apps | Buildable from this repository; the store listing is not published yet. One click from the toolbar: 15 min, 30 min, 1 hour or no end, with the time left on the icon. A closed lid still sleeps. |
+| **Mini clock** | Seeing the time left while another window is in front | A small always-on-top clock, in browsers that support Picture-in-Picture windows. |
+| **[Website widget](https://awaketab.com/embed)** | Keep-awake controls inside your own page, such as a recipe | A script tag adds the widget. The free widget shows a small credit. |
+| **[Wall mode](https://awaketab.com/kiosk)** | Wall clocks and shared displays nobody touches | A link builder for a full-screen clock. Normal browser and operating-system limits apply. |
+| **[`@awaketab/wake`](packages/wake/README.md)** | Adding a wake lock to your own app | The library source and builds are here, with React, Preact and Vue adapters. It is not on npm yet. |
 
 <details>
 <summary><b>Build and load the extension</b></summary>
@@ -111,9 +98,9 @@ Complete [Quick start](#quick-start), then run from the repository root:
 pnpm -F extension build
 ```
 
-Open `chrome://extensions` or `edge://extensions`, enable **Developer mode**, choose **Load unpacked**, and select `apps/extension/.output/chrome-mv3`. See [the extension specification](docs/10-extension-spec.md) for behaviour and permissions. There is no Firefox or Safari power-API extension here.
+Open `chrome://extensions` or `edge://extensions`, enable **Developer mode**, choose **Load unpacked**, and select `apps/extension/.output/chrome-mv3`. See [the extension specification](docs/10-extension-spec.md) for behaviour and permissions. Firefox and Safari have no power API for extensions.
 
-For a validated release ZIP, run `pnpm -F extension publish:package` to choose a version bump. The first unpublished version can use `pnpm -F extension publish:package --current`. The command runs checks and writes a versioned ZIP to your Desktop; purchases stay disabled and store submission is separate. See the [extension release guide](apps/extension/store/PUBLISHING.md).
+For a validated release ZIP, see the [extension release guide](apps/extension/store/PUBLISHING.md).
 
 </details>
 
@@ -126,7 +113,7 @@ The [widget builder](https://awaketab.com/embed) produces a tag such as:
 <script async src="https://awaketab.com/embed.js" data-mode="cook" data-theme="auto" data-size="compact"></script>
 ```
 
-Serve the host page over HTTPS. The loader creates an iframe with `allow="screen-wake-lock"`; a restrictive host Permissions Policy can still block it. See [the embed reference](docs/11-embed-spec.md).
+Serve the host page over HTTPS. The loader creates an iframe with `allow="screen-wake-lock"`; a restrictive Permissions Policy on the host page can still block it. See [the embed reference](docs/11-embed-spec.md).
 
 To create a library archive, start at the root after setup:
 
@@ -136,7 +123,7 @@ cd packages/wake
 pnpm pack
 ```
 
-Install the resulting `.tgz` in your project. Inside this monorepo use `"@awaketab/wake": "workspace:*"` instead. The [library README](packages/wake/README.md) explains its API, adapters and cleanup lifecycle.
+Install the resulting `.tgz` in your project. Inside this monorepo use `"@awaketab/wake": "workspace:*"` instead. The [library README](packages/wake/README.md) explains its API, adapters and cleanup.
 
 </details>
 
@@ -151,11 +138,11 @@ node scripts/setup.mjs
 pnpm dev
 ```
 
-Open **[http://localhost:3000](http://localhost:3000)**. Choose a duration and start. Keep the terminal open while developing; **Ctrl+C** stops the server.
+Open **[http://localhost:3000](http://localhost:3000)**. Choose a length and press **Keep awake**. Keep the terminal open while developing; **Ctrl+C** stops the server.
 
 **The local timer needs no account, payment credentials or Cloudflare login.** `pnpm dev` serves the Next.js website and its route handlers. Licence activation, checkout and other server integrations need their own service setup or test harness; see [`apps/site/.env.example`](apps/site/.env.example).
 
-With nvm, run `nvm install` and `nvm use` in the repository to select [`.nvmrc`](.nvmrc). See [Contributing](CONTRIBUTING.md#set-up) for setup options and platform guidance.
+With a Node version manager, `fnm use` or `nvm use` in the repository selects the version in [`.nvmrc`](.nvmrc). See [Contributing](CONTRIBUTING.md#set-up) for setup options and platform guidance.
 
 ## Development commands
 
@@ -173,36 +160,31 @@ Run these from the **repository root**, unless a command changes directory. A wo
 | `pnpm typecheck` | Check TypeScript in every workspace. |
 | `pnpm test` | Run shared-package, extension and Next.js site tests. |
 | `pnpm test:e2e:ext` | Run extension browser journeys. |
-| `pnpm size` | Check package and website bundle budgets after building. |
+| `pnpm size` | Check the size budgets of the shared packages after building. |
 | `pnpm lighthouse` | Run configured Lighthouse audits. |
 
 Use **`pnpm run setup`**, not `pnpm setup`: the latter is pnpm's own command. [`package.json`](package.json) and [`apps/site/package.json`](apps/site/package.json) are the script reference.
 
 ## Environments and deployment
 
-Cloudflare Workers runs the Next.js site; Cloudflare manages DNS. `main` deploys to `awaketab-site`, and the owner can deploy any branch to the separate `awaketab-site-preview` Worker with a manually run workflow. See [Next.js deployment](docs/DEPLOYMENT.md) for the exact build commands and rollout checks.
+Cloudflare Workers runs the Next.js site; Cloudflare manages DNS. Cloudflare's own GitHub connection builds and deploys both branches, so no deploy token is stored in GitHub. See [Deployment](docs/DEPLOYMENT.md) for the exact settings, commands and rollback steps.
 
 | Environment | URL / source | Payments and service data |
 | --- | --- | --- |
-| Local | `http://localhost:3000`, working tree | Sandbox defaults; no live credentials needed for the timer |
-| **Testing** | **[play.awaketab.com](https://play.awaketab.com/)**, any branch the owner deploys | Polar sandbox; Preview licence storage and event dataset; ads off |
-| **Production** | **[awaketab.com](https://awaketab.com/)**, `main` | Free tool live; purchases disabled; separate production storage and credentials |
+| Local | `http://localhost:3000`, working tree | Sandbox defaults; no credentials needed for the timer |
+| **Preview** | **[play.awaketab.com](https://play.awaketab.com/)**, every push to `play` (internal testing) | Sandbox payments; separate database, storage and event dataset; kept out of search |
+| **Production** | **[awaketab.com](https://awaketab.com/)**, every push to `main` | The free tool; purchases switched off; its own database, storage and credentials |
 
-Testing sends **`X-Robots-Tag: noindex`**. This asks search engines not to index it; it does **not** restrict access. Canonical URLs intentionally remain on `awaketab.com`.
+1. Cut a feature branch from the latest `main` and open a pull request into `main`; CI runs the checks on it.
+2. The maintainer merges the branch into `play`. Cloudflare deploys it to the preview, where it is tested.
+3. When it passes, the same branch is merged into `main`. `play` is never merged into `main`.
+4. On each of those deploys Cloudflare runs the same checks again and applies database migrations. A failing check stops the deploy.
 
-1. Send a focused pull request into `main`; CI runs the checks on it.
-2. When a change needs a live check, the owner deploys its branch to `play.awaketab.com`.
-3. Test affected flows there using sandbox payments and Preview bindings.
-4. Merge into `main` after review and passing checks; `main` deploys to production.
-5. Verify production.
-
-The Workers build root is `/apps/site`, using Node.js 22 and OpenNext. There is no root `deploy` script. Production and preview have separate D1 databases, secrets and bindings. Preview maps `LICENSES` to `LICENSES_PREVIEW` and `EVENTS` to `awaketab_events_preview`; production has its own resources.
-
-Keep production purchases disabled until real checkout links, signing keys and payment services are ready.
+The preview sends `X-Robots-Tag: noindex`, which keeps it out of search engines but does not restrict access.
 
 ## Architecture and repository map
 
-AwakeTab is a **monorepo**: applications and shared packages developed together. The Next.js application lives in `apps/site`. Clock faces, sounds, notes and other feature packs load when used.
+AwakeTab is a **monorepo**: applications and shared packages developed together. The Next.js application lives in `apps/site`. Clock faces load when they are first used.
 
 - **`@awaketab/wake`** requests a lock, handles release events and exposes seven lock states.
 - **`@awaketab/core`** manages sessions, durations, local storage, statistics, capabilities and licence verification.
@@ -225,7 +207,7 @@ awaketab/
 │   └── core/               Sessions, storage and shared logic
 ├── docs/                   Product and engineering references
 ├── scripts/                Setup, licence keys, KV backups and lint helpers
-└── .github/                Workflows, issue forms and README media
+└── .github/                Workflows, issue forms and labels
 ```
 
 The stack centres on Next.js, TypeScript, Tailwind CSS, Cloudflare Workers and WXT. [Architecture](docs/03-architecture.md) describes the design; [Next.js deployment](docs/DEPLOYMENT.md) covers hosting, and [the engine specification](docs/04-engine-spec.md) describes state transitions.
@@ -239,7 +221,7 @@ The stack centres on Next.js, TypeScript, Tailwind CSS, Cloudflare Workers and W
 | `PUBLIC_SITE_URL=https://awaketab.com` | Sign-in and checkout return links |
 | `PUBLIC_POLAR_SERVER=sandbox` | Sandbox checkout and development-key trust; production uses `production` |
 | `NEXT_PUBLIC_DEPLOY_ENV=play` | Marks the preview build: robots.txt, page metadata and a header keep it out of search |
-| `NEXT_PUBLIC_PRO_ENABLED=0` | Keeps Pro (sync, sign-in, checkout) switched off |
+| `NEXT_PUBLIC_PRO_ENABLED=0` | Keeps the paid plan (sync, sign-in, checkout) switched off |
 | `NEXT_PUBLIC_ADS_ENABLED=0` | Disables the content-page ad slots |
 
 `NEXT_PUBLIC_*` switches are read when the site is built, so set them in the build environment. Server settings and secrets reach the Worker at runtime; locally they come from `apps/site/.dev.vars`.
@@ -290,14 +272,14 @@ CI checks `main` and pull requests. Extension Chromium journeys run on pull requ
 | Setup reports the wrong Node version | Select Node.js 22, then rerun setup. Other major versions are outside the declared range. |
 | `pnpm setup` does something unexpected | Run `pnpm run setup` for the project's script. |
 | Corepack is missing or cannot prepare pnpm | Follow setup's error message. Installing `pnpm@12.17.0` globally is an alternative. |
-| The status changes when I switch tabs | This is the web lock lifecycle. Return to the visible tab; use the unpacked extension for background operation. |
-| Ready, blocked or fallback appears | Tap the main control and open **How do we know?** Check browser support, site settings and iframe permission. Use HTTPS or localhost. |
+| The status changes when I switch tabs | Browsers release a wake lock when the tab is hidden. Return to the tab and tap once; use the extension to keep the screen on while you work elsewhere. |
+| The pill says Not awake or No wake lock | Open **See the fix** beside the status. Check browser support, site settings and iframe permission. Use HTTPS or localhost. |
 | The device still sleeps or locks | Check device settings and the status explanation. Wake lock cannot override a deliberate lock, lid closure or every power policy. |
 | The local timer works but `/api/*` does not | The route handlers need their secrets in `apps/site/.dev.vars` and the local bindings from `apps/site/wrangler.jsonc`. Fill in the values for the service you are testing, or use the route-handler tests. |
 | Extension tests cannot find Chromium | Run `node scripts/setup.mjs --with-browsers`, build, then retry. |
-| A production build fails a key or checkout check | Check production settings and the payment flag. Keep dummy keys out and purchases closed until checkout is configured. |
+| A production build fails the key check | A production build must not trust the public development key. Check `PUBLIC_POLAR_SERVER` and the keys in `packages/core/src/license.ts`. |
 
-More help: [browser support](https://awaketab.com/support-matrix), [device guides](https://awaketab.com/on), [existing issues](https://github.com/soubhik-biswas/awaketab/issues).
+More help: [help centre](https://awaketab.com/help), [browser support](https://awaketab.com/learn/browser-support-matrix), [device guides](https://awaketab.com/on), [existing issues](https://github.com/soubhik-biswas/awaketab/issues).
 
 ## Contributing
 
@@ -310,11 +292,6 @@ A small documentation correction, accessibility improvement or reproducible bug 
 The contribution guide covers branches, formatting and review rules.
 
 ## Community
-
-<p>
-  <a href="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml"><img src="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml/badge.svg?branch=main" alt="Main branch CI status"></a>
-  <a href="https://scorecard.dev/viewer/?uri=github.com/soubhik-biswas/awaketab"><img src="https://api.scorecard.dev/projects/github.com/soubhik-biswas/awaketab/badge" alt="OpenSSF Scorecard"></a>
-</p>
 
 AwakeTab is maintained by one person, a few hours a week. Everyone is welcome to ask, report and contribute.
 
@@ -329,28 +306,38 @@ AwakeTab is maintained by one person, a few hours a week. Everyone is welcome to
 
 | Status | Scope |
 | --- | --- |
-| **Shipped** | Free web tool, persistent testing domain, clock faces and focus tools, widget loader, kiosk URL builder and shared library source |
-| **Implemented, limited distribution** | Unpacked extension, workspace library builds, licence-based extras and sandbox checkout |
-| **Pending release work** | Approved store listings, npm publication and production payment launch |
+| **Live** | The free web tool with 46 faces and six backgrounds, the content site in eight languages, the website widget, wall mode and the preview environment |
+| **Built, not yet published** | The Chrome and Edge extension (store listing pending) and the `@awaketab/wake` library (npm release pending) |
+| **Built, switched off** | The paid plan for syncing several screens, with sign-in and checkout |
 
-This is a snapshot, not a delivery promise. Follow [open issues](https://github.com/soubhik-biswas/awaketab/issues) and the [product changelog](https://awaketab.com/changelog). Specifications may include future or historical work; they are not release announcements.
+This is a snapshot, not a delivery promise. The [roadmap](ROADMAP.md) says what comes next, and the [product changelog](https://awaketab.com/changelog) records what shipped.
 
 ## Documentation
 
 | Start here | What you will find |
 | --- | --- |
-| [User guides](https://awaketab.com/learn) | Usage, browser limits and wake-lock behaviour |
+| [User guides](https://awaketab.com/learn) · [Help centre](https://awaketab.com/help) | Usage, browser limits and wake-lock behaviour |
 | [Contributing](CONTRIBUTING.md) | Setup, house rules, tests and pull requests |
 | [Conventions](docs/00-conventions.md) | Canonical names, routes, storage keys and budgets |
 | [Architecture](docs/03-architecture.md) · [Engine](docs/04-engine-spec.md) | Components, data flow and state transitions |
 | [Frontend](docs/05-frontend-spec.md) · [Design](DESIGN.md) | UI contracts, accessibility and design system |
 | [Data and storage](docs/08-data-storage.md) | Local and server persistence |
 | [Extension](docs/10-extension-spec.md) · [Embed](docs/11-embed-spec.md) · [Library](packages/wake/README.md) | Integration references |
-| [Next.js deployment](docs/DEPLOYMENT.md) | Worker environments, domains, commands and preview isolation |
+| [Deployment](docs/DEPLOYMENT.md) | Worker environments, domains, commands, rollback and preview isolation |
 | [Testing](docs/13-testing-strategy.md) · [DevOps](docs/14-devops.md) | Test strategy, operations, backups and recovery |
 
-## Support, security and licence
+## Support and security
 
 Ask questions in [Discussions](https://github.com/soubhik-biswas/awaketab/discussions) and report bugs with the [issue forms](https://github.com/soubhik-biswas/awaketab/issues/new/choose); [SUPPORT.md](SUPPORT.md) says what goes where. Report vulnerabilities through GitHub's [private vulnerability reporting](https://github.com/soubhik-biswas/awaketab/security/advisories/new), as described in [SECURITY.md](SECURITY.md). Do not post security reports in public issues.
 
-Released under the **[MIT License](LICENSE)**. © 2026 Soubhik Biswas. The hosted product has its own [privacy information](https://awaketab.com/privacy) and [terms](https://awaketab.com/terms).
+## Licence
+
+Copyright © 2026 Soubhik Biswas.
+
+- **The website, the extension and the session engine** (`apps/site`, `apps/extension`, `packages/core`) are licensed under the **[GNU Affero General Public License v3.0](LICENSE)**. You may use, study, change and share them. If you distribute a modified version, or run one as a service for other people, you must make your source available under the same licence.
+- **The `@awaketab/wake` library** (`packages/wake`) is licensed under the **[MIT License](packages/wake/LICENSE)**, so you can use it in any project.
+- **The AwakeTab name and logo** are not covered by either licence. See [TRADEMARKS.md](TRADEMARKS.md).
+
+Releases published before 13 November 2026 were under the MIT License, and stay under it.
+
+The hosted product has its own [privacy information](https://awaketab.com/privacy) and [terms](https://awaketab.com/terms).

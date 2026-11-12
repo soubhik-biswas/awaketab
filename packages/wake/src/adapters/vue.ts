@@ -1,29 +1,29 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { createWakeLock } from '../index.js';
-import type { IWakeLockOptions } from '../types.js';
+import type { IWakeLockHandle, IWakeLockOptions, TLockState } from '../types.js';
 
 export function useWakeLock(options?: IWakeLockOptions) {
-  const lock = createWakeLock(options);
-  const state = ref(lock.state);
-  const supported = ref(lock.supported);
-  let off: () => void = () => {
-    return;
-  };
+  const state = ref<TLockState>('idle');
+  const supported = ref(false);
+  let lock: IWakeLockHandle | null = null;
 
   onMounted(() => {
-    off = lock.on('change', (e) => {
+    lock = createWakeLock(options);
+    state.value = lock.state;
+    supported.value = lock.supported;
+    lock.on('change', (e) => {
       state.value = e.to;
     });
   });
   onUnmounted(() => {
-    off();
-    lock.destroy();
+    lock?.destroy();
+    lock = null;
   });
 
   return {
     state,
     supported,
-    request: () => lock.request(),
-    release: () => lock.release(),
+    request: (): Promise<TLockState> => lock?.request() ?? Promise.resolve('idle'),
+    release: (): Promise<void> => lock?.release() ?? Promise.resolve(),
   };
 }

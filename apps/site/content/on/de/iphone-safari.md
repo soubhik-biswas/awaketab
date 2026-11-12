@@ -28,8 +28,8 @@ steps:
     text: "Diese Seite startet mit „30 Min.“; tippen Sie auf eine andere Dauer, wenn Sie länger brauchen."
     shot: "AwakeTab in Safari mit der Dauer „30 Min.“"
   - title: "Tippen Sie auf „Bildschirm eingeschaltet lassen“"
-    text: "Warten Sie, bis die Anzeige „Bildschirm bleibt an“ meldet. Erst dann hält Safari den Lock wirklich."
-    shot: "die Anzeige mit „Bildschirm bleibt an“"
+    text: "Warten Sie, bis die Anzeige „Wach“ meldet. Erst dann hält Safari den Lock wirklich."
+    shot: "die Anzeige mit „Wach“"
   - title: "Legen Sie das iPhone hin, ohne die App zu wechseln"
     text: "Sobald Sie eine andere App öffnen, ist der Lock weg."
     shot: "das iPhone mit Safari im Vordergrund"
@@ -52,14 +52,14 @@ matrix:
     - what: "Safari vor iOS 16.4"
       result: fallback
       label: "Video-Ersatzlösung"
-      text: "Tippen Sie auf „Starten“, um die Video-Ersatzlösung zu verwenden."
+      text: "Tippen Sie auf „Wach halten“, um die Video-Ersatzlösung zu verwenden."
 faq:
   - q: "Was passiert, wenn ich kurz zu Nachrichten oder zur Kamera wechsle?"
-    a: "Dann gibt Safari den Wake Lock frei, und die Anzeige zeigt „Pausiert — Tab ausgeblendet“. Der Timer bleibt stehen. Öffnen Sie Safari wieder mit dem AwakeTab-Tab im Vordergrund und warten Sie, bis „Bildschirm bleibt an“ erscheint, bevor Sie das iPhone hinlegen."
+    a: "Dann gibt Safari den Wake Lock frei, und die Anzeige zeigt „Pausiert“. Der Timer bleibt stehen. Öffnen Sie Safari wieder mit dem AwakeTab-Tab im Vordergrund und warten Sie, bis „Wach“ erscheint, bevor Sie das iPhone hinlegen."
   - q: "Funktioniert AwakeTab auch als App auf dem Home-Bildschirm?"
     a: "Ja, ab iOS 18.4 erhalten Web-Apps auf dem Home-Bildschirm einen nativen Wake Lock. Auf älteren iOS-Versionen nutzen Sie AwakeTab besser direkt in Safari."
   - q: "Mein iPhone läuft noch mit einer Version vor iOS 16.4. Geht es trotzdem?"
-    a: "Einen nativen Lock gibt es dort nicht. Aktualisieren Sie iOS oder tippen Sie auf „Starten“, um die Video-Ersatzlösung zu verwenden. Ein winziges stummes Video hält dann den Bildschirm an; das verbraucht mehr Akku als der native Weg."
+    a: "Einen nativen Lock gibt es dort nicht. Aktualisieren Sie iOS oder tippen Sie auf „Wach halten“, um die Video-Ersatzlösung zu verwenden. Ein winziges stummes Video hält dann den Bildschirm an; das verbraucht mehr Akku als der native Weg."
   - q: "Hält AwakeTab mein iPhone in Teams oder Slack auf „verfügbar“?"
     a: "Nein. Die mobilen Apps von Teams und Slack werten Ihre Aktivität aus, nicht, ob in Safari ein Bildschirm an bleibt. AwakeTab tippt oder wischt niemals für Sie."
 honestLimit: "Nur ab Safari 16.4. Der Stromsparmodus stellt die automatische Sperre auf 30 Sekunden; ob der Lock dann hält, ist noch nicht auf einem Gerät geprüft. Wer die App wechselt, beendet den Wake Lock."
@@ -92,10 +92,10 @@ Ist der Stromsparmodus aktiv, stellt iOS die automatische Sperre auf 30 Sekunden
 
 | Anzeige | Bedeutung |
 |---|---|
-| Bildschirm bleibt an | Safari hält den nativen Lock, der Timer läuft. |
-| Pausiert — Tab ausgeblendet | Sie haben die App oder den Tab gewechselt; der Lock ist freigegeben. |
-| Blockiert — so beheben Sie es | Safari hat abgelehnt, meist weil vorher kein Tippen kam. |
-| Tippen für die Ersatzlösung | Kein nativer Lock verfügbar, etwa vor iOS 16.4. |
+| Wach | Safari hält den nativen Lock, der Timer läuft. |
+| Pausiert | Sie haben die App oder den Tab gewechselt; der Lock ist freigegeben. |
+| Nicht wach | Safari hat abgelehnt, meist weil vorher kein Tippen kam. |
+| Kein Wake Lock in diesem Browser | Kein nativer Lock verfügbar, etwa vor iOS 16.4. |
 
 Lesen Sie bei „Blockiert“ den Hinweis darunter. Fehlte nur das Tippen, genügt ein Tipp auf Starten; bei anderen Ursachen, etwa einer Einbettung ohne Berechtigung, lehnt Safari jedes Mal wieder ab.
 
@@ -105,4 +105,4 @@ Nur Safari 16.4 und neuer bekommt den nativen Lock; unsere Angaben stammen aus d
 
 ::matrix
 
-Ein iPhone ist kein Babyfon und kein Sicherheitsmonitor, lassen Sie es also nicht unbeaufsichtigt als Wächter liegen. Ein hell leuchtendes Display kostet Akku; für lange Sitzungen gehört das iPhone ans Ladekabel. Auf OLED-Modellen reduziert die Pixelverschiebung im Nachtmodus das Einbrennen, beseitigt es aber nicht vollständig. Wenn Sie beim Kochen das Rezept im Blick behalten wollen, hilft die Seite [Bildschirm beim Kochen anlassen](/de/for/kochen).
+Ein iPhone ist kein Babyfon und kein Sicherheitsmonitor, lassen Sie es also nicht unbeaufsichtigt als Wächter liegen. Ein hell leuchtendes Display kostet Akku; für lange Sitzungen gehört das iPhone ans Ladekabel. Auf OLED-Modellen reduziert die Pixelverschiebung im Wandmodus das Einbrennen, beseitigt es aber nicht vollständig. Wenn Sie beim Kochen das Rezept im Blick behalten wollen, hilft die Seite [Bildschirm beim Kochen anlassen](/de/for/kochen).

@@ -38,6 +38,7 @@ const BEAD: Record<TLockState, TMarkLamp> = {
 };
 
 export type TEmbedAction = 'start' | 'stop' | 'retry';
+export type TEmbedReason = 'unknown' | 'insecure' | 'policy';
 export type TEmbedNotice = { tone: 'bad' | 'lamp'; text: string; fix: boolean } | null;
 
 export interface IEmbedWidgetProps {
@@ -54,6 +55,8 @@ export interface IEmbedWidgetProps {
   note: string | null;
   notice: TEmbedNotice;
   paused: boolean;
+  until?: string | null;
+  reason?: TEmbedReason;
   accent?: { bg: string; fg: string } | null;
   timers?: ReactNode;
   long?: boolean;
@@ -67,10 +70,20 @@ export interface IEmbedWidgetProps {
 export function EmbedWidget(p: IEmbedWidgetProps) {
   const t = useTranslations('embed');
   const ts = useTranslations('surfaces.embed');
-  const tp = useTranslations('tool.pill');
+  const tg = useTranslations('tool.glance');
   const full = p.size === 'full';
   const live = p.lock === 'held' || p.lock === 'requesting' || p.lock === 'fallback';
-  const pillLabel = p.lock === 'idle' ? tp('idle._') : tp(p.lock);
+  // The tool's own pill words, so one state reads the same in the widget and on awaketab.com.
+  const pillWords: Record<TLockState, string> = {
+    idle: tg('pill.idle'),
+    requesting: tg('pill.starting'),
+    held: p.until ? tg('pill.awake', { time: p.until }) : tg('pill.awakeOpen'),
+    lost: tg('pill.needsyou'),
+    denied: tg('pill.blocked', { reason: tg(`reason.${p.reason ?? 'unknown'}`) }),
+    unsupported: tg('pill.unsupported'),
+    fallback: p.until ? tg('pill.fallback', { time: p.until }) : tg('pill.fallbackOpen'),
+  };
+  const pillLabel = pillWords[p.lock];
   const accent: CSSProperties | undefined =
     p.accent && p.action === 'start'
       ? { background: p.accent.bg, borderColor: p.accent.bg, color: p.accent.fg }
@@ -96,7 +109,9 @@ export function EmbedWidget(p: IEmbedWidgetProps) {
           p.lock === 'held' && 'motion-safe:animate-pulse',
         )}
       />
-      <span className="truncate">{pillLabel}</span>
+      <span data-pill-words className="truncate">
+        {pillLabel}
+      </span>
     </span>
   );
   const button = (

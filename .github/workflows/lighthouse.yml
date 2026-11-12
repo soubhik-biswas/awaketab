@@ -1,8 +1,7 @@
 name: Lighthouse
 
-# One config (lighthouserc.cjs) for both modes:
-# - a manual run with a base URL (e.g. https://play.awaketab.com) audits that origin and builds nothing;
-# - a pull request builds the site here and LHCI starts the Next server on localhost:4173.
+# Audits the site with lighthouserc.cjs. A pull request builds it here and audits localhost:4173;
+# a manual run with a base URL (e.g. https://play.awaketab.com) audits that origin and builds nothing.
 
 on:
   pull_request:

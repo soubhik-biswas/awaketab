@@ -15,7 +15,7 @@ browsers: []
 os: []
 faq:
   - q: "Si je réduis la fenêtre du navigateur, le PC reste-t-il éveillé ?"
-    a: "Pas grâce à AwakeTab. Réduire la fenêtre ou changer d’onglet masque la page, et le navigateur libère aussitôt le verrou : la pastille passe à « En pause — onglet masqué ». À partir de là, ce sont vos réglages d’alimentation qui décident si l’ordinateur s’endort."
+    a: "Pas grâce à AwakeTab. Réduire la fenêtre ou changer d’onglet masque la page, et le navigateur libère aussitôt le verrou : la pastille passe à « En pause ». À partir de là, ce sont vos réglages d’alimentation qui décident si l’ordinateur s’endort."
   - q: "Mon Mac s’est endormi pendant la nuit alors qu’AwakeTab tournait. C’est normal ?"
     a: "Pas si l’onglet est resté visible et le capot ouvert : tant que l’écran reste allumé, le Mac ne se met pas en veille pour inactivité (documentation IOKit d’Apple). Le plus souvent, la fenêtre a été réduite ou masquée. Pour un téléchargement de nuit écran éteint, utilisez un outil natif comme la commande caffeinate -i."
   - q: "Et sous Windows avec Chrome ou Edge ?"
@@ -49,8 +49,8 @@ Ces informations viennent de la documentation des navigateurs et d’Apple et du
 
 ## Préparer un long téléchargement en quatre gestes
 
-1. Lancez le téléchargement, puis ouvrez AwakeTab dans une fenêtre séparée que vous laissez visible ; un coin de l’écran suffit. La durée « ∞ » est déjà choisie.
-2. Touchez Démarrer et vérifiez que la pastille affiche « Écran allumé ».
+1. Lancez le téléchargement, puis ouvrez AwakeTab dans une fenêtre séparée que vous laissez visible ; un coin de l’écran suffit. La durée « Sans fin » est déjà choisie.
+2. Touchez « Garder allumé » et vérifiez que la pastille affiche « Allumé ».
 3. Branchez le portable sur secteur : un écran allumé des heures consomme, et l’« Économiseur d’énergie » de Windows peut baisser la luminosité.
 4. Ne réduisez pas la fenêtre et ne rabattez pas l’écran : dans les deux cas, le verrou tombe.
 
@@ -66,4 +66,4 @@ Un écran allumé toute la nuit consomme. Sous Chromium, AwakeTab peut s’arrê
 
 ## Ce que la pastille ne vous dira jamais
 
-AwakeTab n’affiche « Écran allumé » que si le navigateur détient réellement le verrou. Si la fenêtre a été masquée, vous verrez « En pause — onglet masqué » à votre retour, et le compteur se sera arrêté pendant l’absence. Une pastille fidèle vaut mieux qu’un téléchargement que vous croyez protégé alors qu’il ne l’est plus. Pour tout ce qui relève du système, comme le capot fermé, un ordinateur éveillé écran éteint ou les stratégies d’entreprise, un outil natif ou un réglage reste le bon choix.
+AwakeTab n’affiche « Allumé » que si le navigateur détient réellement le verrou. Si la fenêtre a été masquée, vous verrez « En pause » à votre retour, et le compteur se sera arrêté pendant l’absence. Une pastille fidèle vaut mieux qu’un téléchargement que vous croyez protégé alors qu’il ne l’est plus. Pour tout ce qui relève du système, comme le capot fermé, un ordinateur éveillé écran éteint ou les stratégies d’entreprise, un outil natif ou un réglage reste le bon choix.

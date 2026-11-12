@@ -31,13 +31,13 @@ toc:
   which-linux-setups-keep-the-screen-on: "Which setups work"
   what-turns-the-screen-off-anyway: "What turns it off"
 steps:
-  - title: "Open AwakeTab in Chrome, Edge or Firefox and press Start"
+  - title: "Open AwakeTab in Chrome, Edge or Firefox and press Keep awake"
     path: "Browser › awaketab.com"
-    text: "Pick a length, or leave it running until you stop it, then press Start. The pill says \"Screen awake\" once the browser has granted the lock."
-    shot: "AwakeTab in Chrome on a Linux desktop with the pill reading Screen awake"
+    text: "Pick a length, or leave it running until you stop it, then press Keep awake. The pill says \"Awake\" once the browser has granted the lock."
+    shot: "AwakeTab in Chrome on a Linux desktop with the pill reading Awake"
   - title: "Keep the window visible"
     path: "No minimising while it runs"
-    text: "Minimise the window or switch tabs and the browser releases the lock. The pill changes to \"Paused — tab hidden\", and AwakeTab asks again when you come back."
+    text: "Minimise the window or switch tabs and the browser releases the lock. The pill changes to \"Paused\", and AwakeTab asks again when you come back."
     shot: "the pill after minimising and restoring the window"
   - title: "Wait past your blank time once"
     path: "Leave the machine alone for longer than the blank delay"
@@ -74,7 +74,7 @@ matrix:
 rows:
   blockers:
     - title: "A desktop that ignores the request"
-      text: "The pill can say \"Screen awake\" while the desktop blanks anyway, because the browser cannot make it listen."
+      text: "The pill can say \"Awake\" while the desktop blanks anyway, because the browser cannot make it listen."
     - title: "A hidden tab"
       text: "A minimised window or another tab in front lets the display go. Bring it back and AwakeTab asks again."
     - title: "A low battery in Firefox"
@@ -90,7 +90,7 @@ rows:
 faq:
   - q: "Does it work on Wayland and X11?"
     a: "Those are display protocols, not desktops, so they are not what decides it. What matters is whether your desktop implements GNOME SessionManager or freedesktop ScreenSaver inhibit, because that is what the browser asks."
-  - q: "The pill says Screen awake, but the screen still blanked. Why?"
+  - q: "The pill says Awake, but the screen still blanked. Why?"
     a: "The pill shows the browser's answer. The browser granted the lock, but your desktop did not keep the screen on. Try the other engine, or change your desktop's own blank delay for this session."
   - q: "Can AwakeTab stop by itself on low battery on a Linux laptop?"
     a: "In Chrome and Edge, yes: they share the battery level with pages, so you can pick a level in AwakeTab's settings. Firefox removed that API in version 52, so there it cannot."

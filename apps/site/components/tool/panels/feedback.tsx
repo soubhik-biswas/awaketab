@@ -16,7 +16,7 @@ export function FeedbackPanel() {
   const g = useGlance();
   const { t } = g;
   const [rating, setRating] = useState<TRating>(g.ui.rating ?? 'good');
-  const [topics, setTopics] = useState<TTopic[]>(['faces']);
+  const [topics, setTopics] = useState<TTopic[]>([]);
   const [text, setText] = useState('');
   const [state, setState] = useState<'ready' | 'sending' | 'failed'>('ready');
   const send = async () => {

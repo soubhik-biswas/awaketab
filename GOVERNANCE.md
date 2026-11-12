@@ -29,9 +29,20 @@ Most decisions happen in the open, on the issue or pull request where they come 
 1. **Proposal.** Someone opens an issue (bug, feature or documentation form) or a discussion. Larger ideas start as an issue before any code is written.
 2. **Discussion.** Anyone can comment. The maintainer asks questions, may label the issue `needs-information`, and tries to explain the trade-offs.
 3. **Decision.** The maintainer decides. Accepted work gets the `approved` label; work that does not fit gets `not-planned` with a short reason. Only the lead maintainer applies `approved`.
-4. **Record.** The reasoning stays on the issue or pull request. Product and design decisions that later work depends on are also written down in the repository's decision logs (for example [docs/redesign/DECISIONS.md](docs/redesign/DECISIONS.md)) and the specifications under [docs/](docs/). User-visible changes get a [changelog](https://awaketab.com/changelog) entry.
+4. **Record.** The reasoning stays on the issue or pull request. Product and design decisions that later work depends on are also written down in the design decisions record ([docs/redesign/DECISIONS.md](docs/redesign/DECISIONS.md)) and the specifications under [docs/](docs/). User-visible changes get a [changelog](https://awaketab.com/changelog) entry.
 
 Decisions can be revisited. If new information turns up, open an issue that links the earlier decision and explains what changed.
+
+### From a branch to the live site
+
+The repository has two long-lived branches, and only the lead maintainer merges into them.
+
+1. A feature branch is cut from `main`.
+2. The maintainer merges it into `play`. Cloudflare deploys `play` to play.awaketab.com, a site for internal testing only that is kept out of search.
+3. The change is tested there.
+4. The same feature branch is merged into `main`, and Cloudflare deploys awaketab.com.
+
+`play` is never merged into `main`, so an unfinished change cannot ride along with a finished one. The automated checks run on every pull request and on every push to `main` and `play`.
 
 ### How input is weighed
 
@@ -61,7 +72,7 @@ New maintainers are added to the table above in a pull request. A maintainer can
 - **Write** or **Triage** access is given only to people who need it for the work they are doing, and removed when they no longer do.
 - Everyone with write access or higher must use **multi-factor authentication** on their GitHub account (and on npm, if they can publish).
 - Access is **reviewed every six months**, and after anyone leaves. Accounts with no activity for six months lose elevated access; it can be given back on request.
-- Deployment and service credentials live only in GitHub Actions secrets or the hosting provider's secret store, never in the repository. They are scoped to what each job needs and rotated when someone with access leaves or a leak is suspected.
+- No deploy credential is stored in GitHub: Cloudflare builds and deploys both sites from its own connection to the repository. The site's runtime secrets live only in the hosting provider's secret store, and the few GitHub Actions secrets (the read-only token for the weekly backup, the token for publishing the library) are scoped to what each job needs. None is ever in the repository, and all are rotated when someone with access leaves or a leak is suspected.
 - Workflows run with read-only tokens by default and ask for extra permissions per job.
 
 ## If the maintainer steps away
@@ -73,7 +84,7 @@ People should not be left guessing if AwakeTab stops being maintained.
 - **Unplanned absence:** if there has been no maintainer activity for six months and no notice, contributors may assume the project is unmaintained and open an issue asking for a handover. The maintainer keeps the account recovery details and a short handover note (accounts, domains, secrets to rotate) somewhere a trusted person can reach.
 - **Hosted product:** if the hosted site is going to close, the maintainer gives at least 30 days' notice on the site and in the repository. The free tool stores everything in the visitor's own browser, so nobody loses an account.
 
-AwakeTab is released under the [MIT License](LICENSE). Whatever happens, anyone may fork it and carry it on.
+AwakeTab is open source: the website (`apps/site`), the extension (`apps/extension`) and the session engine (`packages/core`) under the [GNU AGPL 3.0 only](LICENSE) (`AGPL-3.0-only`), and the `@awaketab/wake` library (`packages/wake`) under the [MIT License](packages/wake/LICENSE). Whatever happens, anyone may fork it and carry it on under those terms. The AwakeTab name and logo are not part of either licence; [TRADEMARKS.md](TRADEMARKS.md) says what a fork may and may not do with them.
 
 ## Changing this document
 

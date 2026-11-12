@@ -1,4 +1,4 @@
-// pnpm kv:backup — see lib/cli.ts for usage and docs/14-devops.md §11 for the runbook.
+// pnpm kv:backup: the runbook is in docs/14-devops.md §7.
 import { runBackup } from './lib/cli.ts';
 import { nodeDeps } from './lib/node-deps.ts';
 

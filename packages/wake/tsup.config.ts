@@ -10,6 +10,17 @@ const externalCore: NonNullable<Options['esbuildPlugins']>[number] = {
   },
 };
 
+// The core fetches the fallback clips with `import('./video.js')` on first use. In the ESM and CJS builds that import
+// stays a real one, pointing at the `video` entry built beside it, so the clips never count against the core's size.
+// The IIFE has no second file to fetch, so it carries the clips itself.
+const lazyClips: NonNullable<Options['esbuildPlugins']>[number] = {
+  name: 'lazy-clips',
+  setup(build) {
+    const file = build.initialOptions.format === 'cjs' ? './video.cjs' : './video.js';
+    build.onResolve({ filter: /^\.\/video\.js$/ }, () => ({ path: file, external: true }));
+  },
+};
+
 export default defineConfig([
   {
     entry: { index: 'src/index.ts', video: 'src/video.ts' },
@@ -19,6 +30,7 @@ export default defineConfig([
     clean: true,
     splitting: false,
     target: 'es2020',
+    esbuildPlugins: [lazyClips],
   },
   {
     entry: {

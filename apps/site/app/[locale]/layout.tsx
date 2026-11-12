@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from 'next';
-import { Noto_Sans_Devanagari, Noto_Sans_JP, Noto_Sans_SC } from 'next/font/google';
+import { Noto_Sans_Devanagari } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { AxeCheck } from '@/components/dev/axe-check';
+import { Telemetry } from '@/components/telemetry';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -19,18 +20,14 @@ import { FONT_VARIABLES } from '../fonts';
 import '../globals.css';
 import '@/components/site/site.css';
 
-const notoJp = Noto_Sans_JP({ variable: '--font-noto-jp', weight: ['400', '700'], preload: false });
-const notoSc = Noto_Sans_SC({ variable: '--font-noto-sc', weight: ['400', '700'], preload: false });
+// Japanese and Chinese use the device's own fonts (globals.css); only Hindi keeps a web font, and its files load
+// only where Devanagari is drawn.
 const notoDeva = Noto_Sans_Devanagari({ variable: '--font-noto-deva', weight: ['400', '700'], preload: false });
 
-const SCRIPT_FONT: Partial<Record<TLocale, string>> = {
-  ja: notoJp.variable,
-  zh: notoSc.variable,
-  hi: notoDeva.variable,
-};
+const SCRIPT_FONT: Partial<Record<TLocale, string>> = { hi: notoDeva.variable };
 
 // The client gets only what client components read; the tool adds its own namespaces here.
-const CLIENT_NAMESPACES = ['site', 'content', 'account', 'tool', 'proflow', 'surfaces', 'embed'] as const;
+const CLIENT_NAMESPACES = ['site', 'content', 'account', 'tool', 'face', 'proflow', 'surfaces', 'embed'] as const;
 
 // A returning visitor who already answered the analytics question never sees the box, not even for a frame.
 const CONSENT_BOOT = `try{var o=JSON.parse(localStorage.getItem('at.v1.onboarding')||'null'),s=JSON.parse(localStorage.getItem('at.v1.settings')||'null');if((o&&Array.isArray(o.dismissedTips)&&o.dismissedTips.indexOf('analytics')>=0)||(s&&s.telemetry===false))document.documentElement.dataset.consent=''}catch(e){}`;
@@ -76,6 +73,7 @@ export default async function LocaleLayout({
           </ThemeProvider>
         </NextIntlClientProvider>
         <ServiceWorker />
+        <Telemetry />
       </body>
     </html>
   );

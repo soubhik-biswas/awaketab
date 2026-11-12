@@ -18,16 +18,16 @@ toc:
   wenn-der-bildschirm-trotzdem-dunkel-wird: "Wenn es trotzdem dunkel wird"
 steps:
   - title: "Öffnen Sie diese Seite und lassen Sie das eingebettete Tool sichtbar."
-    text: "Voreingestellt sind der Kochmodus und die Dauer „∞“, der Bildschirm bleibt also an, bis Sie selbst beenden."
+    text: "Voreingestellt sind die Dauer „Ohne Ende“ und das Zifferblatt Bold mit großen Ziffern, der Bildschirm bleibt also an, bis Sie selbst beenden."
   - title: "Tippen Sie auf „Bildschirm eingeschaltet lassen“ und schauen Sie auf die Statusanzeige."
-    text: "Erst wenn dort „Bildschirm bleibt an“ steht, hält der Browser den Lock wirklich."
+    text: "Erst wenn dort „Wach“ steht, hält der Browser den Lock wirklich."
   - title: "Liegt das Rezept in einer anderen App, legen Sie beide Fenster nebeneinander."
     text: "Auf Tablet oder Laptop bleibt AwakeTab so im Blick. Auf dem iPhone geht das nicht, dort ist nur eine App vorne."
 figures:
   - frame: phone
     label: "Handy-Screenshot"
-    alt: "AwakeTab im Kochmodus auf einem iPhone"
-    caption: "Der Kochmodus auf einem iPhone."
+    alt: "AwakeTab mit dem Zifferblatt Bold auf einem iPhone"
+    caption: "Das Zifferblatt Bold auf einem iPhone."
   - frame: desktop
     label: "Laptop-Screenshot"
     alt: "Rezept und AwakeTab in zwei Fenstern nebeneinander auf einem Laptop"
@@ -41,15 +41,15 @@ pills:
     text: "Ohne HTTPS gibt es gar keinen Lock."
 checklist:
   - "Beim stundenlangen Schmoren lohnt sich das Ladekabel."
-  - "Tippen Sie auf „Bildschirm eingeschaltet lassen“ und schauen Sie auf die Statusanzeige. Erst wenn dort „Bildschirm bleibt an“ steht, hält der Browser den Lock wirklich."
+  - "Tippen Sie auf „Bildschirm eingeschaltet lassen“ und schauen Sie auf die Statusanzeige. Erst wenn dort „Wach“ steht, hält der Browser den Lock wirklich."
   - "Verlassen Sie sich nie darauf, dass ein unbeaufsichtigtes Gerät irgendetwas überwacht."
 faq:
   - q: "Bleibt der Bildschirm an, wenn ich zwischendurch zu WhatsApp oder in die Rezept-App wechsle?"
-    a: "Nein. Sobald AwakeTab nicht mehr zu sehen ist, gibt der Browser den Wake Lock frei, und die Anzeige wechselt zu „Pausiert — Tab ausgeblendet“. Kehren Sie zum Tab zurück und warten Sie, bis wieder „Bildschirm bleibt an“ oder „Bildschirm bleibt per Video an“ erscheint."
+    a: "Nein. Sobald AwakeTab nicht mehr zu sehen ist, gibt der Browser den Wake Lock frei, und die Anzeige wechselt zu „Pausiert“. Kehren Sie zum Tab zurück und warten Sie, bis wieder „Wach“ oder „Wach per Video“ erscheint."
   - q: "Wie habe ich Rezept und AwakeTab gleichzeitig im Blick?"
     a: "Auf dem iPad mit zwei Fenstern nebeneinander (unter iPadOS 26 als Fenster, bis iPadOS 18 per Split View) oder am Laptop mit zwei Fenstern. Entscheidend ist, dass der AwakeTab-Tab sichtbar bleibt. Auf dem iPhone ist immer nur eine App vorne: Ein Rezept in einer anderen App kann AwakeTab dort nicht wach halten."
   - q: "Warum wird mein iPhone trotzdem nach 30 Sekunden dunkel?"
-    a: "Wahrscheinlich ist der Stromsparmodus aktiv. Er stellt die automatische Sperre auf 30 Sekunden. Ob ein Wake Lock aus Safari das iPhone dann trotzdem anlässt, haben wir noch nicht auf einem Gerät geprüft. Unter Android kann der Energiesparmodus die Abschaltzeit verkürzen oder das Display dimmen. „Blockiert — so beheben Sie es“ erscheint nur, wenn der Browser wirklich ablehnt, etwa weil Safari erst ein Tippen braucht."
+    a: "Wahrscheinlich ist der Stromsparmodus aktiv. Er stellt die automatische Sperre auf 30 Sekunden. Ob ein Wake Lock aus Safari das iPhone dann trotzdem anlässt, haben wir noch nicht auf einem Gerät geprüft. Unter Android kann der Energiesparmodus die Abschaltzeit verkürzen oder das Display dimmen. „Nicht wach“ erscheint nur, wenn der Browser wirklich ablehnt, etwa weil Safari erst ein Tippen braucht."
   - q: "Bleibe ich in Teams oder Slack „verfügbar“, während das Tablet in der Küche läuft?"
     a: "Nein. Der Anwesenheitsstatus von Teams, Slack und Zoom richtet sich nach Tastatur- und Mauseingaben, nicht nach dem Bildschirm. AwakeTab bewegt niemals die Maus und drückt keine Tasten."
 honestLimit: "Funktioniert, solange der AwakeTab-Tab auf dem Bildschirm zu sehen ist. Öffnen Sie auf dem Handy eine andere App, gibt der Browser den Wake Lock frei, bis Sie zurückkehren."
@@ -70,7 +70,7 @@ updated: 2026-09-27
 
 ::figures
 
-Haben Sie statt „∞“ eine feste Dauer angetippt, fragt AwakeTab am Ende, ob Sie verlängern möchten. Rechnen Sie in diesem Fall nicht mit einem unbegrenzten Lock, sondern mit genau der gewählten Zeit.
+Haben Sie statt „Ohne Ende“ eine feste Dauer angetippt, endet die Sitzung von selbst; im Dock können Sie dann +15 Min., +30 Min. oder +1 Std. anhängen. Rechnen Sie in diesem Fall nicht mit einem unbegrenzten Lock, sondern mit genau der gewählten Zeit.
 
 ::ad
 
@@ -90,6 +90,6 @@ Unter Android legen Sie die normale Abschaltzeit unter Einstellungen → Display
 
 ## Akku und Sicherheit am Herd
 
-Ein leuchtendes Display verbraucht Strom. In Chromium-Browsern kann AwakeTab bei einem von Ihnen festgelegten Akkustand selbst stoppen; andere Browser bieten das womöglich nicht. Ein Handy ersetzt keinen Blick in den Topf. Weitere Szenarien mit Rezeptbuch oder Noten finden Sie beim [Lesen am Bildschirm](/for/reading).
+Ein leuchtendes Display verbraucht Strom. Ein Handy ersetzt keinen Blick in den Topf. Weitere Szenarien mit Rezeptbuch oder Noten finden Sie beim [Lesen am Bildschirm](/for/reading).
 
 ::checklist

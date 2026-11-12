@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { MousePointer2, Sparkle } from 'lucide-react';
 import { toast } from 'sonner';
@@ -10,7 +11,7 @@ import { EASE } from './kit';
 const TOASTER = 'tool';
 
 // While the controls rest, a small pill says how to bring them back; a full-size catcher takes the tap.
-export function ControlsHint() {
+export const ControlsHint = memo(function ControlsHint() {
   const g = useGlance();
   return (
     <AnimatePresence>
@@ -38,7 +39,7 @@ export function ControlsHint() {
       ) : null}
     </AnimatePresence>
   );
-}
+});
 
 // One gentle nudge after real use: top right under the top bar on wide screens, above the dock on phone.
 export function Nudge({ sessions, presets }: { sessions: number; presets: number }) {
@@ -134,7 +135,7 @@ export function showNote(text: string) {
 }
 
 // Toasts sit centred just above the dock on every device.
-export function ToolToaster({ bottom }: { bottom: number }) {
+export const ToolToaster = memo(function ToolToaster({ bottom }: { bottom: number }) {
   return (
     <Toaster
       id={TOASTER}
@@ -145,4 +146,4 @@ export function ToolToaster({ bottom }: { bottom: number }) {
       style={{ '--width': 'min(640px, calc(100vw - 24px))' } as React.CSSProperties}
     />
   );
-}
+});

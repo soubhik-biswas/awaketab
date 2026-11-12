@@ -46,14 +46,14 @@ picks:
     - title: "Sie dürfen nichts installieren"
       text: "Etwa auf einem verwalteten Firmen-Mac. AwakeTab ist nur eine Seite und braucht weder Konto noch Download."
     - title: "Sie wollen Gewissheit statt Hoffnung"
-      text: "Die Anzeige wechselt zwischen „Bildschirm bleibt an“, „Pausiert — Tab ausgeblendet“ und „Blockiert — so beheben Sie es“, je nachdem, was der Browser tatsächlich tut."
+      text: "Die Anzeige wechselt zwischen „Wach“, „Pausiert“ und „Nicht wach“, je nachdem, was der Browser tatsächlich tut."
     - title: "Sie sind nicht am Mac"
       text: "Auf iPhone, Android-Handy oder Windows-PC hilft Caffeine nicht. Wie es auf dem Mac selbst mit dem Browser aussieht, erklärt [unsere Mac-Seite](/de/on/macos)."
     - title: "Sie wollen sofort loslegen"
       text: "Seite öffnen, Dauer wählen, starten: Es gibt nichts herunterzuladen, zu entpacken oder in den Programme-Ordner zu ziehen."
 faq:
   - q: "Kann AwakeTab wie Caffeine im Hintergrund weiterlaufen?"
-    a: "Nein. Sobald der Tab ausgeblendet ist, weil Sie minimieren, den Tab wechseln oder am Handy die App verlassen, gibt der Browser den Wake Lock frei. Die Anzeige zeigt „Pausiert — Tab ausgeblendet“, bis Sie zurückkehren. Wer ohne sichtbares Fenster auskommen muss, ist mit Caffeine besser bedient."
+    a: "Nein. Sobald der Tab ausgeblendet ist, weil Sie minimieren, den Tab wechseln oder am Handy die App verlassen, gibt der Browser den Wake Lock frei. Die Anzeige zeigt „Pausiert“, bis Sie zurückkehren. Wer ohne sichtbares Fenster auskommen muss, ist mit Caffeine besser bedient."
   - q: "Warum braucht AwakeTab einen sichtbaren Tab, Caffeine aber nicht?"
     a: "Caffeine ist eine Mac-App und hält eine Energiezusicherung von macOS, ganz ohne Tastendrücke. Eine Webseite darf das nicht: Sie kann nur über die Screen Wake Lock API den Browser bitten, und der gewährt den Lock nur einem sichtbaren Tab. Dafür sagt die Statusanzeige genau, ob der Lock gerade besteht."
   - q: "Funktioniert AwakeTab auch dort, wo Caffeine nicht läuft?"
@@ -92,8 +92,8 @@ Der zugeklappte Deckel ist kein Kriterium für die Wahl: Das entscheidet macOS, 
 
 ## Was AwakeTab auf dem Mac leistet und was nicht
 
-Safari 16.4+, Chrome 84+ und Firefox 126+ halten auf dem Mac nativ das Display an. Solange das Display an bleibt, schläft der Mac laut Apples Dokumentation auch nicht bei Inaktivität ein. Der Kernunterschied zu Caffeine: AwakeTab wirkt nur, solange der Tab sichtbar ist, Caffeine auch dann, wenn nichts zu sehen ist. Für Firefox vor Version 126 bleibt nur die Video-Ersatzlösung, die per Klick startet und mehr Energie verbraucht. Lehnt der Browser ab, etwa weil Safari erst einen Klick braucht, meldet AwakeTab „Blockiert — so beheben Sie es“, statt einfach nochmals anzufragen.
+Safari 16.4+, Chrome 84+ und Firefox 126+ halten auf dem Mac nativ das Display an. Solange das Display an bleibt, schläft der Mac laut Apples Dokumentation auch nicht bei Inaktivität ein. Der Kernunterschied zu Caffeine: AwakeTab wirkt nur, solange der Tab sichtbar ist, Caffeine auch dann, wenn nichts zu sehen ist. Für Firefox vor Version 126 bleibt nur die Video-Ersatzlösung, die per Klick startet und mehr Energie verbraucht. Lehnt der Browser ab, etwa weil Safari erst einen Klick braucht, meldet AwakeTab „Nicht wach“, statt einfach nochmals anzufragen.
 
 ## Dauer und Timer in AwakeTab
 
-AwakeTab startet hier mit „∞“, bietet aber auch feste Dauern von „15 Min.“ bis „4 Std.“ oder eine Uhrzeit. Gezählt wird nur die Zeit, in der der Lock tatsächlich besteht, und nach Ablauf fragt AwakeTab, ob Sie verlängern möchten. Wer beim Kochen nur eine Stunde braucht, findet passende Tipps unter [Bildschirm beim Kochen anlassen](/de/for/kochen).
+AwakeTab startet hier mit „Ohne Ende“, bietet aber auch feste Dauern von „15 Min.“ bis „2 Std.“. Die Anzeige nennt die Endzeit, und nach Ablauf können Sie im Dock verlängern. Wer beim Kochen nur eine Stunde braucht, findet passende Tipps unter [Bildschirm beim Kochen anlassen](/de/for/kochen).

@@ -1,10 +1,10 @@
 # Roadmap
 
-This is a short, honest picture of where AwakeTab is going. It is a plan, not a promise of dates. The maintainer works on AwakeTab a few hours a week (see [GOVERNANCE.md](GOVERNANCE.md)), so items move when they are ready.
+This is a short, honest picture of where AwakeTab is going. It is a plan, not a promise of dates. The maintainer works on AwakeTab a few hours a week (see [GOVERNANCE.md](GOVERNANCE.md)), so items move when they are ready. Every change is tried on an internal test site before it reaches awaketab.com (see [From a branch to the live site](GOVERNANCE.md#from-a-branch-to-the-live-site)).
 
 ## Vision
 
-AwakeTab is the browser tab that keeps your screen awake and tells you, honestly, whether it is working. Open the page, and the screen stays on; the status pill says "Screen awake" only while the browser has actually confirmed it. It should be calm, readable from across the room, and done in one tap.
+AwakeTab is the browser tab that keeps your screen awake and tells you, honestly, whether it is working. Open the page, and the screen stays on; the status pill says "Awake" only while the browser has actually confirmed it. It should be calm, readable from across the room, and done in one tap.
 
 ## Scope
 
@@ -12,16 +12,17 @@ AwakeTab is the browser tab that keeps your screen awake and tells you, honestly
 
 - a free web tool that asks the browser for a screen wake lock, with a video fallback where the browser has none;
 - sessions that end after a duration or at a clock time, survive a reload, and tell you when time is up;
-- clock faces, ambient views and focus tools that make a screen that stays on pleasant to look at;
+- clock faces, living backgrounds and ambient sound that make a screen that stays on pleasant to look at;
 - an installable, offline-capable web app in eight languages, accessible to WCAG 2.2 AA;
 - a Chrome and Edge extension for keeping the screen awake while you work in another tab;
-- an embeddable widget for other websites, and an open-source library, `@awaketab/wake`, for developers.
+- an embeddable widget for other websites, and an open-source library, `@awaketab/wake`, for developers;
+- open source: the website, the extension and the session engine under the GNU AGPL 3.0, the `@awaketab/wake` library under MIT (the name and logo are covered by [TRADEMARKS.md](TRADEMARKS.md)).
 
 **AwakeTab deliberately is not:**
 
 - a mouse jiggler or anything that fakes input, and it does not keep Teams, Slack or other apps showing you as "available";
 - a way to stop sleep when a laptop lid is closed, or to override a device's or employer's power and lock policy;
-- a service that stores your data: the free tool needs no account, and settings, notes and history stay in your browser;
+- a service that stores your data: the free tool needs no account, settings, presets and history stay in your browser, and visits are counted only if you allow it;
 - a place for ads on the awake screen, the floating pill, the widget or the extension;
 - a native app, or (for now) a Firefox or Safari extension.
 
@@ -39,7 +40,7 @@ Work in progress or next in line:
 Built in the repository, waiting on release work:
 
 - **Publish the extension** to the Chrome Web Store and Edge Add-ons. Today it can be built and loaded unpacked.
-- **Publish `@awaketab/wake` and `@awaketab/core` to npm.** Today they can be built from source.
+- **Publish `@awaketab/wake` to npm.** Today it can be built from source. `@awaketab/core`, the session engine, stays inside the repository.
 - **Record real-device results** for the device test matrix, so support claims are backed by checks on physical phones, tablets and computers.
 
 ## Later

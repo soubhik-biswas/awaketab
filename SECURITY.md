@@ -32,7 +32,7 @@ There is no paid bug bounty.
 
 | Area | Where it lives |
 | --- | --- |
-| The website and the tool at awaketab.com (and the preview at play.awaketab.com) | `apps/site` |
+| The website and the tool at awaketab.com (and the internal test site at play.awaketab.com) | `apps/site` |
 | The site's API routes: sign-in, the licence API (`/api/license/activate`, `/validate`, `/deactivate`), checkout and its webhook, embed configuration (`/api/embed/config`), and the event, rating, feedback and CSP report endpoints | `apps/site/app/api`, `apps/site/lib/server` |
 | The AwakeTab for Chrome extension | `apps/extension` |
 | The `@awaketab/wake` library and the `@awaketab/core` session engine, including licence token verification | `packages/wake`, `packages/core` |
@@ -54,7 +54,7 @@ Examples of what matters most: a way to unlock Pro features without a valid lice
 
 1. **Contain:** turn off the affected feature or endpoint, or roll back the deployment.
 2. **Rotate:** replace any exposed secret or signing key, and revoke tokens that may be affected.
-3. **Fix:** ship and verify a fix on `main`, with a test that would have caught it.
+3. **Fix:** try the fix on the internal test site (the `play` branch), then merge the same branch into `main` and verify it on the live site, with a test that would have caught it.
 4. **Tell people:** publish an advisory and a changelog entry saying what happened, who was affected and what to do.
 5. **Learn:** write down the cause and what changes to stop it happening again.
 

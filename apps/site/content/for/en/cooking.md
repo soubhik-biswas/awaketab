@@ -1,6 +1,6 @@
 ---
-title: "Cook mode: keep your screen on while cooking — AwakeTab"
-description: "Keep the screen on with floury hands: kitchen timers, a one-tap pause, no install. It works while its tab is visible; on a phone, that is the catch."
+title: "Keep your screen on while you cook — AwakeTab"
+description: "Keep the screen on with floury hands: one tap, a big clock, no install. It works while its tab is visible; on a phone, that is the one catch."
 h1: "Keep your screen on while cooking"
 crumb: "Cooking"
 intent: "keep screen on while cooking"
@@ -22,15 +22,15 @@ toc:
 steps:
   - title: "Open this page on the kitchen device."
     text: "Prop the phone, tablet or laptop where you can read it from the counter. Plug it in if the cook will run long."
-  - title: "Tap \"Keep awake · ∞\"."
-    text: "The tool is already in cook mode with no end time. In Safari, this tap is also the one the browser needs before it grants the lock. Wait for the pill to read \"Screen awake\"."
+  - title: "Tap \"Keep awake · no end\"."
+    text: "The button on this page starts a session with no end time, on the Bold face with its large digits. In Safari, this tap is also the one the browser needs before it grants the lock. Wait for the pill to read \"Awake · until you stop\"."
   - title: "Put the recipe beside it."
-    text: "On an iPad, a laptop or an Android phone in split screen, open the recipe in a window next to AwakeTab. On an iPhone only one app is on screen, so keep this tab in front and use the kitchen timers here."
+    text: "On an iPad, a laptop or an Android phone in split screen, open the recipe in a window next to AwakeTab. On an iPhone only one app is on screen, so keep this tab in front and switch to the recipe only when you need the next step."
 figures:
   - frame: phone
     label: "Phone screenshot"
-    alt: "AwakeTab in cook mode on iPhone Safari"
-    caption: "Cook mode on iPhone Safari."
+    alt: "AwakeTab on the Bold face on iPhone Safari"
+    caption: "The Bold face on iPhone Safari."
   - frame: desktop
     label: "Desktop screenshot"
     alt: "a recipe and AwakeTab side by side in Chrome on a laptop"
@@ -43,19 +43,19 @@ pills:
   - state: lost
     text: "You switched apps, changed tabs or the phone locked. Come back to this tab and AwakeTab asks again."
   - state: denied
-    text: "The browser said no. The card names the cause, such as Safari wanting one more tap, or Firefox at 5% battery or less while not charging."
+    text: "The browser said no. The banner names the cause, such as Safari wanting one more tap, or Firefox at 5% battery or less while not charging."
 checklist:
   - "The phone or tablet is plugged in for a braise or a slow bake."
   - "Low Power Mode is off on iPhone, so Auto-Lock is not forced to 30 seconds."
-  - "A kitchen timer is set for anything in the oven."
-  - "The pill reads \"Screen awake\" before your hands get messy."
+  - "The oven has its own timer set: AwakeTab keeps the screen on, it does not time the roast."
+  - "The pill reads \"Awake · until you stop\" before your hands get messy."
 faq:
-  - q: "My hands are covered in flour. How do I pause without a mess?"
-    a: "Tap the big number with a knuckle or the back of a finger. In cook mode the whole elapsed timer is one large target, so you do not need to hit a small button. The screen stays on while the count is paused, and your kitchen timers keep counting down."
+  - q: "My hands are covered in flour. Do I have to touch the screen again?"
+    a: "No. Once the pill reads Awake, the screen stays on without another touch until you stop it. When dinner is ready, tap Stop in the dock at the bottom with a knuckle or the back of a finger; every button there is at least 44 pixels wide."
   - q: "The recipe is in another app. Can I still use AwakeTab?"
     a: "Yes, if both stay on screen. Put the recipe app and your browser in side by side windows on an iPad, or use split screen on Android. On an iPhone only one app shows at a time, so use the recipe site's own cook mode, or a longer Auto-Lock in Settings > Display & Brightness until you finish."
   - q: "Will a long braise drain my battery?"
-    a: "The wake lock costs almost nothing; the lit screen is what uses power. For a cook that runs for hours, plug the phone in and turn the brightness down. In Chrome and Edge, AwakeTab can also stop by itself at a battery level you pick in Settings."
+    a: "The wake lock costs almost nothing; the lit screen is what uses power. For a cook that runs for hours, plug the phone in and turn the brightness down."
   - q: "Does it keep working if the phone locks?"
     a: "No. Pressing the side button or letting the phone lock hides the page, and the browser takes the lock back. Unlock it and return to this tab, and AwakeTab asks the browser again."
 honestLimit: "Works while the AwakeTab tab is on screen. On a phone the recipe and AwakeTab cannot both be in front, so opening another app releases the lock until you return, and so does locking the phone."
@@ -80,7 +80,7 @@ updated: 2026-09-27
 
 ## What to expect while you cook
 
-Cook mode counts up from the moment the screen is held, so you can see how long the onions have had. Tap the big number to pause the count; the screen stays on while it is paused. Add up to three kitchen timers with the 5, 10, 15, 30 and 60 min buttons. Each one counts down on its own, chimes and flashes at zero, and keeps running while the count is paused. Cook mode has no end time, so no end-of-session prompt interrupts a recipe.
+The session on this page has no end time, so nothing interrupts a recipe: the screen stays on until you tap Stop. The Bold face fills the screen with large digits you can read from the counter, and Faces has 45 more if you prefer an analog dial. If you would rather it ended by itself, pick 30 min, 1 hour or 2 hours before you start; a soft chime marks the end and the screen sleeps normally again. AwakeTab does not time the food, so set the oven timer as usual.
 
 The pill at the top of the tool tells you what the browser is doing:
 

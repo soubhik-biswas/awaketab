@@ -1,11 +1,16 @@
 import { SUB_DIAL } from '../art';
-import { arc, f1, P, ticks } from '../geometry';
-import { D, DialLabel, type IDrawProps, L, lmin, MONO, Svg, sweep } from '../kit';
+import { f1, P, ticks } from '../geometry';
+import { D, DialLabel, fit, type IDrawProps, L, lmin, MONO, Svg, sweep, windowAt } from '../kit';
 
 const MINOR = ticks(128, 134, 60, (i) => i % 5 !== 0);
 const MAJOR = ticks(124, 134, 60, (i) => i % 5 === 0);
 const SUB_L = ticks(32, 36, 12, undefined, 124, 160);
 const SUB_R = ticks(32, 36, 12, undefined, 236, 160);
+
+const pt = (deg: number): string => P(26, deg, 124, 160).map(f1).join(' ');
+// The minutes track in two half arcs, so a long one keeps its centre.
+const track = (deg: number): string =>
+  deg <= 0.05 ? '' : `M${pt(0)}A26 26 0 0 1 ${pt(deg / 2)}A26 26 0 0 1 ${pt(deg)}`;
 
 // Minute and second sub-dials with a sweeping chrono hand.
 export default function Chrono({ m }: IDrawProps) {
@@ -22,13 +27,7 @@ export default function Chrono({ m }: IDrawProps) {
         <circle cx="236" cy="160" r="38" strokeWidth="1" style={{ fill: sub, stroke: t.line }} />
         <path d={SUB_L} strokeWidth="1.4" opacity=".7" style={{ stroke: t.ink2 }} />
         <path d={SUB_R} strokeWidth="1.4" opacity=".7" style={{ stroke: t.ink2 }} />
-        <path
-          d={arc(26, 0, minDeg, 124, 160)}
-          fill="none"
-          strokeWidth="3"
-          strokeLinecap="round"
-          style={{ stroke: accent }}
-        />
+        <path d={track(minDeg)} fill="none" strokeWidth="3" strokeLinecap="round" style={{ stroke: accent }} />
         <line
           x1="124"
           y1="160"
@@ -45,7 +44,7 @@ export default function Chrono({ m }: IDrawProps) {
           key={k}
           m={m}
           text={String((k + 1) * 5)}
-          rr={116}
+          rr={110}
           deg={(k + 1) * 30}
           fs={12}
           color={t.ink2}
@@ -79,18 +78,12 @@ export default function Chrono({ m }: IDrawProps) {
       />
       <div
         style={{
-          position: 'absolute',
-          left: 130,
-          top: 82,
-          width: 100,
-          height: 36,
+          ...windowAt(180, 82, 100, 36),
+          padding: '0 8px',
           borderRadius: 8,
           background: sub,
           border: `1px solid ${t.line}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 22,
+          fontSize: fit(m, 22, 20),
           fontWeight: 500,
           letterSpacing: '-0.02em',
           fontVariantNumeric: 'tabular-nums',
@@ -102,10 +95,12 @@ export default function Chrono({ m }: IDrawProps) {
         className={L}
         style={{
           position: 'absolute',
-          left: 110,
-          width: 140,
-          top: 212,
+          left: 100,
+          width: 160,
+          top: 208,
           textAlign: 'center',
+          textWrap: 'balance',
+          lineHeight: 1.15,
           fontSize: lmin(13),
           color: t.ink2,
         }}

@@ -16,7 +16,7 @@ reviewed: true
 lastVerified: 2026-09-26
 browsers: ["chrome"]
 os: ["chromeos"]
-lead: "Chrome on a Chromebook keeps the screen on from a visible AwakeTab tab. Tap Start and the display stays lit while the tab is showing, then the Chromebook goes back to its own setting when you stop. School and work Chromebooks follow their administrator's power rules, and closing the lid sleeps unless \"Sleep when cover is closed\" is off."
+lead: "Chrome on a Chromebook keeps the screen on from a visible AwakeTab tab. Tap Keep awake and the display stays lit while the tab is showing, then the Chromebook goes back to its own setting when you stop. School and work Chromebooks follow their administrator's power rules, and closing the lid sleeps unless \"Sleep when cover is closed\" is off."
 facts:
   - label: "Chrome"
     value: "84 or later"
@@ -29,13 +29,13 @@ toc:
   which-chromebook-setups-keep-the-screen-on: "Which setups work"
   what-turns-the-screen-off-anyway: "What turns it off"
 steps:
-  - title: "Open AwakeTab in Chrome and tap Start"
+  - title: "Open AwakeTab in Chrome and tap Keep awake"
     path: "Chrome › awaketab.com"
-    text: "Pick a length, an \"Until…\" time or ∞, then tap Start. Wait for the pill to say \"Screen awake\"."
-    shot: "AwakeTab in Chrome on a Chromebook with the pill reading Screen awake"
+    text: "Pick a length or No end, then tap Keep awake. Wait for the pill to say \"Awake\"."
+    shot: "AwakeTab in Chrome on a Chromebook with the pill reading Awake"
   - title: "Keep the tab showing"
     path: "No minimising while it runs"
-    text: "To work at the same time, drag another window to the edge of the display to snap the two side by side. Switch tabs or minimise, and the pill changes to \"Paused — tab hidden\"."
+    text: "To work at the same time, drag another window to the edge of the display to snap the two side by side. Switch tabs or minimise, and the pill changes to \"Paused\"."
     shot: "two snapped windows with AwakeTab on one side"
   - title: "Optional: change the ChromeOS setting"
     path: "Clock › Settings › System preferences › Power"
@@ -56,7 +56,7 @@ matrix:
     - what: "A plain http page"
       result: fallback
       label: "Video fallback"
-      text: "There is no wake lock there, so AwakeTab suggests \"Tap to use the fallback\"."
+      text: "There is no wake lock there, so AwakeTab suggests \"No wake lock in this browser\"."
     - what: "Managed school or work Chromebook"
       result: untested
       label: "Not yet tested"
@@ -74,7 +74,7 @@ rows:
     - title: "Closing the lid"
       text: "The Chromebook sleeps unless \"Sleep when cover is closed\" is off in the Power settings. The tab and the extension cannot stop lid sleep."
     - title: "An administrator's policy"
-      text: "If the pill never reaches \"Screen awake\", or the screen still sleeps, the school or work policy is in charge. Only the administrator can change it."
+      text: "If the pill never reaches \"Awake\", or the screen still sleeps, the school or work policy is in charge. Only the administrator can change it."
       link:
         label: "Keep the classroom screen on"
         href: "/for/classroom"

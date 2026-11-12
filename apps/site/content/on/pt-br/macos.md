@@ -14,7 +14,7 @@ lastVerified: 2026-09-09
 browsers: ["chrome", "safari", "firefox"]
 os: ["macos"]
 crumb: "macOS"
-lead: "No Mac, o Safari 16.4+, o Chrome 84+ e o Firefox 126+ conseguem impedir que a tela desligue enquanto a aba do AwakeTab estiver visível. Clique em iniciar: com “Tela ligada” no indicador, o monitor para de escurecer e não vai para a tela bloqueada por inatividade. Enquanto a tela fica acesa, o Mac também não entra em repouso por inatividade, segundo a documentação da Apple (conferida em 26 de setembro de 2026); dá para conferir com `pmset -g assertions` no Terminal. Mas fechar a tampa ainda coloca o Mac em repouso. Esta página sugere 1 hora."
+lead: "No Mac, o Safari 16.4+, o Chrome 84+ e o Firefox 126+ conseguem impedir que a tela desligue enquanto a aba do AwakeTab estiver visível. Clique em iniciar: com “Ligada” no indicador, o monitor para de escurecer e não vai para a tela bloqueada por inatividade. Enquanto a tela fica acesa, o Mac também não entra em repouso por inatividade, segundo a documentação da Apple (conferida em 26 de setembro de 2026); dá para conferir com `pmset -g assertions` no Terminal. Mas fechar a tampa ainda coloca o Mac em repouso. Esta página sugere 1 hora."
 facts:
   - label: "Safari"
     value: "16.4 ou posterior"
@@ -29,14 +29,14 @@ steps:
     text: "Deixe-a fora da tela cheia de outros apps."
     shot: "o AwakeTab numa janela própria"
   - title: "Clique em iniciar ou aperte Espaço"
-    text: "Confira se o indicador chegou a “Tela ligada”."
+    text: "Confira se o indicador chegou a “Ligada”."
     shot: "o indicador com a sessão ativa"
   - title: "Trabalhe em outros apps com a janela do AwakeTab aparecendo num canto"
     text: "Minimizada no Dock, ela deixa de contar como visível."
     shot: "a janela do AwakeTab num canto"
-  - title: "A “Janela flutuante” fica por cima de tudo"
+  - title: "O minirrelógio fica por cima de tudo"
     text: "No Chrome, no Edge ou no Firefox 151+, é o jeito mais prático de manter o AwakeTab à vista enquanto você usa outro app em tela cheia."
-    shot: "a Janela flutuante sobre outro app"
+    shot: "o minirrelógio sobre outro app"
 matrix:
   label: "Navegadores no macOS, conferido em 26 de setembro de 2026"
   cols: ["Navegador", "Resultado", "Observação"]
@@ -67,7 +67,7 @@ rows:
       text: "O AwakeTab não é a resposta, porque nunca simula entrada."
 faq:
   - q: "Se eu usar o Mission Control ou mudar de Mesa, a tela continua ligada?"
-    a: "Só enquanto a janela do AwakeTab estiver à vista. Minimizada no Dock, esquecida em outra Mesa ou coberta por outras janelas, ela pode ser tratada como oculta; aí o bloqueio é liberado e o indicador mostra “Pausado — aba oculta” até você voltar."
+    a: "Só enquanto a janela do AwakeTab estiver à vista. Minimizada no Dock, esquecida em outra Mesa ou coberta por outras janelas, ela pode ser tratada como oculta; aí o bloqueio é liberado e o indicador mostra “Pausado” até você voltar."
   - q: "O Mac também deixa de entrar em repouso?"
     a: "Sim, no caso do repouso por inatividade, enquanto a tela estiver ligada: o Chrome segura uma asserção que impede o repouso da tela e, segundo a documentação da Apple, o Mac também não entra em repouso por inatividade enquanto ela vale. Para manter o Mac acordado com a tela apagada, use o comando caffeinate ou um app nativo."
   - q: "Dá para usar o MacBook com a tampa fechada e o AwakeTab aberto?"
@@ -110,4 +110,4 @@ O tempo para a tela desligar fica em Ajustes do Sistema → Tela Bloqueada, e as
 
 ## Modo de Pouca Energia no MacBook
 
-Com o Modo de Pouca Energia ativo, o macOS pode reduzir o brilho, mas o navegador não recusa o Wake Lock por causa dele. Se o indicador mostrar “Bloqueado — veja como corrigir”, leia a causa: no Safari, quase sempre falta um clique na página; no Firefox, a bateria pode estar em 5 % ou menos sem carregar. Em Chrome e Edge, há ainda a opção de parar automaticamente quando a bateria cair abaixo do limite que você definir.
+Com o Modo de Pouca Energia ativo, o macOS pode reduzir o brilho, mas o navegador não recusa o Wake Lock por causa dele. Se o indicador mostrar “Não está ligada”, leia a causa: no Safari, quase sempre falta um clique na página; no Firefox, a bateria pode estar em 5 % ou menos sem carregar. Em Chrome e Edge, há ainda a opção de parar automaticamente quando a bateria cair abaixo do limite que você definir.

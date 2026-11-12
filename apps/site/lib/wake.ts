@@ -57,6 +57,9 @@ type TListener<K extends keyof TEvents> = (ev: TEvents[K]) => void;
 const LOW_TIME_SEC = 300;
 const RESUME_NO_END_MS = 12 * 3_600_000;
 const CHANNEL = 'awaketab';
+// A tab that holds the lock says so every few seconds; one that has been silent this long is taken for closed.
+const HEARTBEAT_MS = 3_000;
+const PEER_TIMEOUT_MS = 10_000;
 
 const INITIAL: IWakeSnapshot = { ...IDLE_SESSION, peerHolds: false, announce: null };
 
@@ -74,13 +77,17 @@ class WakeController {
   private video: IWakeLockHandle | null = null;
   private timer: ReturnType<typeof setTimeout> | null = null;
   private channel: BroadcastChannel | null = null;
-  private readonly peers = new Set<string>();
+  private readonly peers = new Map<string, number>();
   private readonly tabId =
     typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : String(Math.random());
   private sessionId = '';
   private awakeSec = 0;
   private announceId = 0;
   private started = false;
+  private finishing = false;
+  private untapped = false;
+  private failed = false;
+  private beatAt = 0;
   private readonly store = typeof window === 'undefined' ? null : createStorage();
 
   subscribe = (cb: () => void): (() => void) => {
@@ -103,7 +110,23 @@ class WakeController {
   }
 
   private emit<K extends keyof TEvents>(type: K, ev: TEvents[K]) {
-    for (const cb of this.events[type]) cb(ev);
+    for (const cb of this.events[type]) this.safely(() => cb(ev));
+  }
+
+  // Bookkeeping around the session (stats, storage, listeners) must never stop the clock or keep the lock held, so
+  // its failures are logged once and left behind.
+  private safely(fn: () => void) {
+    try {
+      fn();
+    } catch (error) {
+      this.report(error);
+    }
+  }
+
+  private report(error: unknown) {
+    if (this.failed) return;
+    this.failed = true;
+    console.error(error);
   }
 
   private notify() {
@@ -145,6 +168,11 @@ class WakeController {
     this.snap = { ...this.snap, now: Date.now(), supported: this.native.supported };
     this.restore();
     this.schedule();
+    // A session that survived a reload asks for its lock again by itself: a visible page needs no tap for it in
+    // Chromium and Firefox. Where the browser does want one, the session waits as "Needs you".
+    if (this.snap.state === 'needsyou' && this.native.supported && document.visibilityState === 'visible') {
+      void this.acquire('native', true);
+    }
   }
 
   private schedule() {
@@ -152,17 +180,27 @@ class WakeController {
     this.timer = setTimeout(this.tick, 1000 - (Date.now() % 1000) + 5);
   }
 
+  // Whatever goes wrong inside a tick, the next one is still scheduled: a session must always reach its end.
   private tick = () => {
-    const now = Date.now();
+    try {
+      this.step(Date.now());
+    } catch (error) {
+      this.report(error);
+    } finally {
+      this.schedule();
+    }
+  };
+
+  private step(now: number) {
     const s = this.snap;
+    this.beat(now);
     if (isAwake(s.state)) {
       this.awakeSec += 1;
-      if (this.awakeSec % 60 === 0) this.creditMinute(now);
+      if (this.awakeSec % 60 === 0) this.safely(() => this.creditMinute(now));
     }
     if (isDue(s, now)) {
       this.send({ type: 'tick', now });
       void this.finish('completed');
-      this.schedule();
       return;
     }
     let extra: Partial<IWakeSnapshot> = {};
@@ -175,9 +213,30 @@ class WakeController {
       }
     }
     this.send({ type: 'tick', now }, extra);
-    if (isLive(this.snap.state) && now % 15_000 < 1000) this.persist();
-    this.schedule();
-  };
+    if (isLive(this.snap.state) && now % 15_000 < 1000) this.safely(() => this.persist());
+  }
+
+  // While this tab keeps the screen awake it repeats its lock state, and peers that have gone quiet are dropped.
+  private beat(now: number) {
+    if (isAwake(this.snap.state) && now - this.beatAt >= HEARTBEAT_MS) {
+      this.beatAt = now;
+      this.post({ type: 'lock', tabId: this.tabId, ts: now, state: this.lockNow() });
+    }
+    for (const [id, seen] of this.peers) {
+      if (now - seen > PEER_TIMEOUT_MS) this.peers.delete(id);
+    }
+    this.syncPeers();
+  }
+
+  private lockNow(): TLockState {
+    if (!isAwake(this.snap.state)) return 'idle';
+    return (this.snap.mode === 'video' ? this.video?.state : this.native?.state) ?? 'idle';
+  }
+
+  private syncPeers() {
+    const holds = this.peers.size > 0 && !isAwake(this.snap.state);
+    if (holds !== this.snap.peerHolds) this.patch({ peerHolds: holds });
+  }
 
   // The lock is asked for again whenever the tab comes back into view.
   private onVisibility = () => {
@@ -187,9 +246,13 @@ class WakeController {
       return;
     }
     this.send({ type: 'tick', now });
+    this.beat(now);
     const s = this.snap;
-    const wasHidden = s.state === 'paused' && s.pauseReason === 'hidden';
-    if (wasHidden || (s.state === 'needsyou' && s.pausedAt === null)) {
+    if (isDue(s, now)) {
+      void this.finish('completed');
+      return;
+    }
+    if (s.state === 'needsyou' && s.pausedAt === null) {
       void this.acquire(s.mode === 'video' ? 'video' : 'native', true);
     }
   };
@@ -207,6 +270,7 @@ class WakeController {
     if (s.pausedAt !== null) return;
     const now = Date.now();
     if (e.to === 'held' || e.to === 'fallback') {
+      this.untapped = false;
       const wasStarting = s.state === 'starting';
       this.send({ type: 'held', mode: which, now }, wasStarting ? this.say('start') : {});
       this.persist();
@@ -216,10 +280,17 @@ class WakeController {
       if (isAwake(s.state)) this.send({ type: 'hidden', now }, this.say('hidden'));
       return;
     }
+    // A fallback clip that stopped playing keeps nothing awake: the session waits for a tap, which can restart it.
+    if (e.to === 'lost' && which === 'video') {
+      if (isAwake(s.state)) this.send({ type: 'hidden', now }, { advice: e.advice ?? null, checkedAt: now });
+      return;
+    }
     if (e.to === 'denied' || e.to === 'unsupported') this.refused(which, e.to, e.advice ?? null);
   }
 
   private refused(which: TLockMode, to: 'denied' | 'unsupported', advice: IWakeSnapshot['advice']) {
+    // Asked without a tap: a refusal that names no cause means the browser wants one, which acquire() settles.
+    if (this.untapped && noCause(advice)) return;
     const before = this.snap.state;
     this.send({ type: 'refused', mode: which, to, advice, held: this.holding(), now: Date.now() });
     const after = this.snap.state;
@@ -231,9 +302,10 @@ class WakeController {
     this.persist();
   }
 
-  private async acquire(which: TLockMode, fromHidden = false) {
+  private async acquire(which: TLockMode, untapped = false) {
     const handle = which === 'native' ? this.native : this.video;
     if (!handle) return;
+    this.untapped = untapped;
     if (which === 'video') void this.native?.release();
     else void this.video?.release();
     const result = await handle.request();
@@ -246,13 +318,14 @@ class WakeController {
       return;
     }
     if (result === 'denied' || result === 'unsupported') {
-      if (fromHidden && !this.holding()) {
-        this.patch({ state: 'needsyou', advice: handle.advice, checkedAt: Date.now() });
+      const advice = handle.advice;
+      if (untapped && !this.holding() && (s.pauseReason === 'hidden' || noCause(advice))) {
+        this.patch({ state: 'needsyou', advice, checkedAt: Date.now() });
         this.persist();
         return;
       }
       if (s.state !== 'blocked' && s.state !== 'unsupported' && s.state !== 'needsyou') {
-        this.refused(which, result, handle.advice);
+        this.refused(which, result, advice);
       }
     }
   }
@@ -319,7 +392,7 @@ class WakeController {
 
   stop() {
     const s = this.snap;
-    if (isLive(s.state)) this.record('user', Date.now());
+    if (isLive(s.state)) this.safely(() => this.record('user', Date.now()));
     void this.releaseAll();
     this.send({ type: 'stop', now: Date.now() });
     this.clearSession();
@@ -373,7 +446,7 @@ class WakeController {
   }
 
   takeOver() {
-    for (const target of this.peers) {
+    for (const target of this.peers.keys()) {
       this.post({ type: 'intent', tabId: this.tabId, ts: Date.now(), target, action: 'stop' });
     }
     this.peers.clear();
@@ -386,13 +459,20 @@ class WakeController {
   }
 
   private async finish(reason: TFinishReason) {
+    // A tick and a return to the tab can both find the session due; it is recorded once.
+    if (this.finishing) return;
+    this.finishing = true;
     const s = this.snap;
     const endedAt = s.endsAt ?? Date.now();
-    this.record(reason, endedAt);
-    await this.releaseAll();
-    this.send({ type: 'end', now: Date.now() }, this.say('ended'));
-    this.emit('ended', { endedAt });
-    this.clearSession();
+    try {
+      this.safely(() => this.record(reason, endedAt));
+      await this.releaseAll();
+      this.send({ type: 'end', now: Date.now() }, this.say('ended'));
+      this.emit('ended', { endedAt });
+      this.safely(() => this.clearSession());
+    } finally {
+      this.finishing = false;
+    }
   }
 
   private record(reason: TFinishReason, endedAt: number) {
@@ -426,11 +506,12 @@ class WakeController {
     const session: IStoredSession = {
       v: 1,
       id: this.sessionId || String(s.startedAt),
+      // The stored end is the real one; the plan's span leaves the paused time out.
       plan: s.endsAt === null ? { type: 'indefinite' } : { type: 'duration', ms: s.endsAt - s.pausedMs - s.startedAt },
       presetId: presetIdOf(s.totalSec),
       mode: 'standard',
       startedAt: s.startedAt,
-      endsAt: s.endsAt === null ? null : s.endsAt - s.pausedMs,
+      endsAt: s.endsAt,
       status,
       pausedAt: s.pausedAt,
       pausedMs: s.pausedMs,
@@ -455,12 +536,12 @@ class WakeController {
     });
   }
 
-  // A session that was live when the tab closed comes back as "Needs you": the lock needs asking again.
+  // A session that was live when the tab closed comes back as "Needs you" until its lock has been asked for again.
   private restore() {
     const saved = this.store?.session();
     if (!saved || (saved.status !== 'active' && saved.status !== 'paused') || saved.source !== 'web') return;
     const now = Date.now();
-    const endsAt = saved.endsAt === null ? null : saved.endsAt + saved.pausedMs;
+    const endsAt = saved.endsAt;
     const paused = saved.status === 'paused' && saved.pausedAt !== null;
     const left = endsAt === null ? null : endsAt - (paused && saved.pausedAt !== null ? saved.pausedAt : now);
     if (left !== null && left <= 0) return;
@@ -491,19 +572,15 @@ class WakeController {
     this.channel.addEventListener('message', (ev: MessageEvent<TTabMessage | null>) => {
       const msg = ev.data;
       if (!msg || msg.tabId === this.tabId) return;
-      if (msg.type === 'hello') {
-        const st = this.native?.state ?? 'idle';
-        const ours = this.snap.mode === 'video' ? (this.video?.state ?? 'idle') : st;
-        this.post({ type: 'lock', tabId: this.tabId, ts: Date.now(), state: isAwake(this.snap.state) ? ours : 'idle' });
-      }
+      const now = Date.now();
+      if (msg.type === 'hello') this.post({ type: 'lock', tabId: this.tabId, ts: now, state: this.lockNow() });
       if (msg.type === 'lock') {
-        if (msg.state === 'held' || msg.state === 'fallback') this.peers.add(msg.tabId);
+        if (msg.state === 'held' || msg.state === 'fallback') this.peers.set(msg.tabId, now);
         else this.peers.delete(msg.tabId);
       }
       if (msg.type === 'bye') this.peers.delete(msg.tabId);
       if (msg.type === 'intent' && msg.target === this.tabId && msg.action === 'stop') this.stop();
-      const holds = this.peers.size > 0 && !isAwake(this.snap.state);
-      if (holds !== this.snap.peerHolds) this.patch({ peerHolds: holds });
+      this.syncPeers();
     });
     this.post({ type: 'hello', tabId: this.tabId, ts: Date.now() });
   }
@@ -534,6 +611,8 @@ type TTabMessage =
   | { type: 'lock'; tabId: string; ts: number; state: TLockState }
   | { type: 'intent'; tabId: string; ts: number; target: string; action: 'stop' | 'add'; ms?: number }
   | { type: 'bye'; tabId: string; ts: number };
+
+const noCause = (advice: IWakeSnapshot['advice']): boolean => advice === null || advice === 'hidden_document';
 
 function presetIdOf(sec: number): IStoredSession['presetId'] {
   const map: Record<number, IStoredSession['presetId']> = {

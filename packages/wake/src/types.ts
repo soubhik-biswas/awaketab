@@ -47,8 +47,6 @@ export interface IWakeLockOptions {
   documentLike?: Document;
   wakeLock?: IWakeLockLike | null;
   document?: Document;
-  isIOS?: boolean;
-  debug?: boolean | ((msg: string, data?: unknown) => void);
 }
 
 export interface IChangeEvent {

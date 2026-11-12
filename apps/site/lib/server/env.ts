@@ -26,7 +26,6 @@ export interface IEnv {
   LICENSES?: IKv;
   EVENTS?: IAnalytics;
   AUTH_DB?: D1Database;
-  CF_PAGES_COMMIT_SHA?: string;
   COMMIT_SHA?: string;
   RATE_LIMIT_SALT?: string;
   LICENSE_SIGNING_KEY?: string;
@@ -55,7 +54,6 @@ export interface IServerContext {
 }
 
 const ENV_KEYS = [
-  'CF_PAGES_COMMIT_SHA',
   'COMMIT_SHA',
   'RATE_LIMIT_SALT',
   'LICENSE_SIGNING_KEY',
@@ -141,5 +139,5 @@ export const EVENT_NAME_SET = new Set<string>(EVENT_NAMES);
 
 export const MAX_BATCH = 20;
 export const MAX_BODY_BYTES = 8 * 1024;
-export const RATE_WINDOW_S = 120;
+export const RATE_WINDOW_S = 60;
 export const RATE_MAX = 30;

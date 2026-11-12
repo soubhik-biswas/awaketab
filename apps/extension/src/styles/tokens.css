@@ -2,13 +2,11 @@
 [data-theme="dark"] {
   color-scheme: dark;
   --at-page: #05060a;
-  --at-surface: #0e1018;
+  --at-surface: #0e1016;
   --at-panel: rgb(16 18 26 / 86%);
   --at-text: #f2f4fa;
   --at-text-2: #a6afc2;
-  --at-text-3: #99a1b5;
   --at-volt: #3df58e;
-  --at-on-volt: #04140a;
   --at-violet-top: #b39bff;
   --at-violet: #9f7bff;
   --at-violet-2: #7c5cff;
@@ -49,7 +47,6 @@
   --at-type-meta: 400 13px var(--at-font-sans);
   --at-type-meta-strong: 600 13px var(--at-font-sans);
   --at-type-row: 700 15px var(--at-font-sans);
-  --at-r-8: 8px;
   --at-r-12: 12px;
   --at-r-14: 14px;
   --at-r-22: 22px;
@@ -59,7 +56,6 @@
   --at-border-dot: 2px;
   --at-ring: 2px;
   --at-s-2: 2px;
-  --at-s-3: 3px;
   --at-s-4: 4px;
   --at-s-8: 8px;
   --at-s-10: 10px;
@@ -80,9 +76,7 @@
   --at-panel: rgb(255 255 255 / 90%);
   --at-text: #0b1020;
   --at-text-2: #4b5165;
-  --at-text-3: #5c6275;
   --at-volt: #117a3b;
-  --at-on-volt: #fff;
   --at-violet-top: #7a4dff;
   --at-violet: #6633f5;
   --at-violet-2: #5124e0;
@@ -116,7 +110,7 @@
 
 [data-theme="oled"] {
   --at-page: #000;
-  --at-surface: #06070c;
+  --at-surface: #05060a;
   --at-panel: rgb(6 7 12 / 94%);
   --at-fill: rgb(255 255 255 / 3.5%);
 }

@@ -61,3 +61,7 @@ export const ROUTES = {
 } as const;
 
 export const SOURCE_URL = 'https://github.com/soubhik-biswas/awaketab';
+export const ROADMAP_URL = `${SOURCE_URL}/blob/main/ROADMAP.md`;
+
+// The maker's public profile. If it is ever emptied the footer shows the name without a link.
+export const MAKER_URL: string = 'https://www.linkedin.com/in/biswas-soubhik/';

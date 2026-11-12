@@ -9,7 +9,7 @@ describe('face id migration', () => {
     for (const id of FACE_IDS) expect(migrateFace(id)).toBe(id);
   });
 
-  it('maps renamed Clear Night faces to their Glance face', () => {
+  it('maps renamed faces to their Glance face', () => {
     expect(migrateFace('word')).toBe('words');
     expect(migrateFace('matrix')).toBe('lcd');
     expect(migrateFace('analog', { analog: 'luxe' })).toBe('luxe');

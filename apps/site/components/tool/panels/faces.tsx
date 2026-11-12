@@ -7,7 +7,7 @@ import { Dialog, RadioGroup, Tabs } from 'radix-ui';
 import { Drawer as Vaul } from 'vaul';
 import { Face } from '@/components/face';
 import { cn } from '@/lib/utils';
-import { COLLECTIONS, FILTERS, faceLabel, tagOf, type TFilter, type TGlanceFace } from '@/lib/tool/collections';
+import { COLLECTIONS, FILTERS, tagOf, type TFilter, type TGlanceFace } from '@/lib/tool/collections';
 import { toolUi } from '@/lib/tool/ui';
 import { useGlance } from '../context';
 import { EASE, Tag } from '../kit';
@@ -32,7 +32,7 @@ function Gallery({ title: Title, desc: Desc }: { title: TText; desc: TText }) {
   const tileH = Math.round(14 + tilePx * 0.875 + 10 + 44);
   const needle = q.trim().toLowerCase();
   let keys: TGlanceFace[] = [...COLLECTIONS[filter]];
-  if (needle) keys = COLLECTIONS.all.filter((k) => faceLabel(k).toLowerCase().includes(needle) || k.includes(needle));
+  if (needle) keys = COLLECTIONS.all.filter((k) => g.faceName(k).toLowerCase().includes(needle) || k.includes(needle));
   else if (filter === 'featured') keys = [g.face, ...keys.filter((k) => k !== g.face)];
   return (
     <>
@@ -51,7 +51,7 @@ function Gallery({ title: Title, desc: Desc }: { title: TText; desc: TText }) {
         </div>
         {!phone ? (
           <label
-            className="ml-auto flex h-12 items-center gap-2.5 rounded-[16px] border border-(--tg-border) bg-(--tg-s1) px-4 text-[15px] text-(--tg-t2)"
+            className="tg-field ml-auto flex h-12 items-center gap-2.5 rounded-[16px] border border-(--tg-border) bg-(--tg-s1) px-4 text-[15px] text-(--tg-t2)"
             style={{ width: tabP ? 220 : 320 }}
           >
             <Search className="size-[18px] flex-none" strokeWidth={2} aria-hidden="true" />
@@ -77,7 +77,7 @@ function Gallery({ title: Title, desc: Desc }: { title: TText; desc: TText }) {
       >
         <Tabs.List
           aria-label={t('faces.collections')}
-          className="tg-noscroll flex flex-none gap-2 overflow-x-auto pt-1 pb-4"
+          className="tg-noscroll -mt-0.5 flex flex-none gap-2 overflow-x-auto pt-1.5 pb-4"
           style={{
             paddingInline: padX,
             maskImage: phone ? 'linear-gradient(90deg, #000 82%, transparent)' : undefined,
@@ -127,11 +127,19 @@ function Gallery({ title: Title, desc: Desc }: { title: TText; desc: TText }) {
               const w = big ? colW * 2 + gap : colW;
               const hgt = big ? tileH * 2 + gap : tileH;
               const px = big ? Math.min(w - 40, Math.round((hgt - 80) / 0.875)) : tilePx;
+              const tag = faceTag(k);
+              // The tag sits in the caption, never on the drawing: beside the name on the wide first tile, in the
+              // collection's place on the others. Its negative margin keeps the caption the height of its text.
+              const pill = tag ? (
+                <span className="-my-1 flex flex-none">
+                  <Tag kind={tag}>{t(TAG_LABEL_KEY[tag])}</Tag>
+                </span>
+              ) : null;
               return (
                 <RadioGroup.Item
                   key={k}
                   value={k}
-                  aria-label={faceLabel(k)}
+                  aria-label={g.faceName(k)}
                   className={cn(
                     'tg-btn tg-tile relative flex flex-col items-stretch gap-2.5 overflow-hidden px-3.5 pt-3.5 pb-3 text-left text-(--tg-text)',
                     big ? 'col-span-2 row-span-2 rounded-[32px]' : 'rounded-[24px]',
@@ -164,26 +172,33 @@ function Gallery({ title: Title, desc: Desc }: { title: TText; desc: TText }) {
                       motion={big ? 'auto' : 'off'}
                     />
                   </span>
-                  <span className="relative flex min-w-0 items-baseline justify-between gap-2">
-                    <span
-                      className={cn(
-                        'overflow-hidden text-ellipsis whitespace-nowrap',
-                        big ? 'font-display text-[22px] font-bold tracking-[-0.02em]' : 'text-[15px] font-bold',
-                      )}
-                    >
-                      {faceLabel(k)}
+                  <span
+                    className={cn(
+                      'relative flex min-w-0 justify-between gap-2',
+                      pill ? 'items-center' : 'items-baseline',
+                    )}
+                  >
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span
+                        className={cn(
+                          'overflow-hidden text-ellipsis whitespace-nowrap',
+                          big ? 'font-display text-[22px] font-bold tracking-[-0.02em]' : 'text-[15px] font-bold',
+                        )}
+                      >
+                        {g.faceName(k)}
+                      </span>
+                      {big ? pill : null}
                     </span>
-                    <span className="font-mono text-[12px] whitespace-nowrap text-(--tg-t2)">
-                      {big
-                        ? t('faces.featuredTag', { tag: t(`faces.filter.${tagOf(k)}`) })
-                        : t(`faces.filter.${tagOf(k)}`)}
-                    </span>
+                    {pill && !big ? (
+                      pill
+                    ) : (
+                      <span className="font-mono text-[12px] whitespace-nowrap text-(--tg-t2)">
+                        {big
+                          ? t('faces.featuredTag', { tag: t(`faces.filter.${tagOf(k)}`) })
+                          : t(`faces.filter.${tagOf(k)}`)}
+                      </span>
+                    )}
                   </span>
-                  {faceTag(k) ? (
-                    <span className="absolute top-3 left-3">
-                      <Tag kind={faceTag(k) ?? 'new'}>{t(TAG_LABEL_KEY[faceTag(k) ?? 'new'])}</Tag>
-                    </span>
-                  ) : null}
                   {on ? (
                     <span className="absolute top-3 right-3 flex size-[26px] items-center justify-center rounded-full bg-(--tg-volt) text-(--tg-on-volt)">
                       <Check className="size-3.5" strokeWidth={3} aria-hidden="true" />

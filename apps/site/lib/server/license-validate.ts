@@ -1,5 +1,5 @@
 import type { IEnv } from './env';
-import { jsonError, jsonOk, rateLimited } from './http';
+import { jsonError, jsonOk, LICENSE_BODY_BYTES, rateLimited, readJsonBody, stringField } from './http';
 import { parseSigningKey, publicJwk, verifyES256 } from './jwt';
 import { PLAN_FEATURES, publicActivations, readLicense, writeLicense } from './license';
 import { clientIp, rateLimit } from './ratelimit';
@@ -7,13 +7,9 @@ import { mintToken } from './token';
 
 export async function validateRoute(request: Request, env: IEnv): Promise<Response> {
   if (!(await rateLimit(env, 'license', clientIp(request), 10))) return rateLimited();
-  let token: string;
-  try {
-    const body = (await request.json()) as { token?: string };
-    token = body.token ?? '';
-  } catch {
-    return jsonError('bad_request', 400);
-  }
+  const read = await readJsonBody(request, LICENSE_BODY_BYTES);
+  if (!read.ok) return read.response;
+  const token = stringField(read.value, 'token');
   const kv = env.LICENSES;
   if (!kv || !env.LICENSE_SIGNING_KEY) return jsonError('polar_unavailable', 502);
   const pub = publicJwk(parseSigningKey(env.LICENSE_SIGNING_KEY));

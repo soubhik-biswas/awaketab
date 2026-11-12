@@ -1,5 +1,5 @@
 import { f1, pad } from '../geometry';
-import { card, DISPLAY, type IDrawProps, L, lmin, MONO } from '../kit';
+import { card, DISPLAY, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 const ART = {
   light: { ground: '#F3EEE3', disc: '#1A1C24', square: '#6633F5', semi: '#E8B931', ink: '#1A1C24' },
@@ -19,8 +19,11 @@ export default function Bauhaus({ m }: IDrawProps) {
   const a = m.night ? ART.night : ART.light;
   const unitA = m.h > 0 ? 'HR' : 'MIN';
   const unitB = m.h > 0 ? 'MIN' : 'SEC';
+  // The readout has 100 px between x 216 and the card's edge; a digit advances about 0.62 em, the h about 0.6 em.
+  const em = m.h > 0 ? String(m.h).length * 0.62 + 0.6 : 1.24;
+  const fs = Math.min(m.h > 9 ? 48 : m.h > 0 ? 60 : 76, Math.floor(100 / em));
   return (
-    <div style={card(m, { background: a.ground })}>
+    <div className={PLATE} style={card(m, { background: a.ground })}>
       <svg
         style={{ position: 'absolute', left: 0, top: 0 }}
         width="332"
@@ -33,7 +36,6 @@ export default function Bauhaus({ m }: IDrawProps) {
         <circle cx="112" cy="132" r="10" fill={a.ground} />
         <rect x="248" y="22" width="56" height="56" fill={a.square} />
         <path d="M262 282 A44 44 0 0 1 350 282 Z" fill={a.semi} />
-        <rect x="24" y="242" width="150" height="10" fill={a.ink} />
       </svg>
       <div
         style={{ position: 'absolute', left: 216, top: 100, display: 'flex', flexDirection: 'column', color: a.ink }}
@@ -42,7 +44,7 @@ export default function Bauhaus({ m }: IDrawProps) {
           style={{
             fontFamily: DISPLAY,
             fontStretch: '112%',
-            fontSize: m.h > 0 ? 60 : 76,
+            fontSize: fs,
             fontWeight: 800,
             letterSpacing: '-0.04em',
             lineHeight: 0.86,
@@ -69,12 +71,23 @@ export default function Bauhaus({ m }: IDrawProps) {
           {unitA} · {unitB}
         </span>
       </div>
-      <span
-        className={L}
-        style={{ position: 'absolute', left: 24, top: 258, fontFamily: MONO, fontSize: lmin(12), color: a.ink }}
+      <div
+        style={{
+          position: 'absolute',
+          left: 24,
+          bottom: 9,
+          width: 228,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 6,
+          color: a.ink,
+        }}
       >
-        {m.endLine}
-      </span>
+        <span style={{ display: 'block', width: 150, height: 10, background: a.ink }} />
+        <span className={L} style={{ fontFamily: MONO, fontSize: lmin(12), lineHeight: 1.2 }}>
+          {m.endLine}
+        </span>
+      </div>
     </div>
   );
 }

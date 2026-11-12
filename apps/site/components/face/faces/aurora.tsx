@@ -1,17 +1,20 @@
 import type { CSSProperties } from 'react';
 import { BLACK, WHITE } from '../art';
 import { alpha } from '../geometry';
-import { card, cardColumn, digitSize, type IDrawProps, L, lmin, MONO } from '../kit';
+import { card, cardColumn, digitSize, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 // A pastel mesh with dark ink by day, so the digits keep their contrast; a deep mesh at night.
 const ART = {
   light: { base: '#EEF0F8', ink: '#0B1020', shade: WHITE(0.45), track: 'rgba(11,16,32,.16)', mint: '#6FDDA0' },
   night: { base: '#05060F', ink: '#FFFFFF', shade: BLACK(0.35), track: WHITE(0.22), mint: '' },
 };
+const OLED_BASE = '#000000';
 const VIOLET = { light: '#B29CFF', night: '#7B5CFF' };
 const CYAN = { light: '#8FD3FF', night: '#3FB8FF' };
 const veil = (shade: string): string =>
   `radial-gradient(120% 80% at 50% 0%, ${WHITE(0.1)}, transparent 50%), radial-gradient(90% 70% at 50% 100%, ${shade}, transparent 60%)`;
+// A soft pool of night behind the time, so white digits keep their contrast over the brightest light.
+const POOL = 'radial-gradient(70% 50% at 50% 50%, rgba(5,6,15,.6), rgba(5,6,15,.45) 50%, rgba(5,6,15,0) 100%)';
 
 const light = (
   left: number,
@@ -37,15 +40,18 @@ const light = (
 export default function Aurora({ m }: IDrawProps) {
   const k = m.night ? 'night' : 'light';
   const a = ART[k];
-  const a1 = m.multi ? a.mint || m.lamp : m.accent;
-  const a2 = m.multi ? VIOLET[k] : alpha(m.accent, 0x99);
+  // By day a resting state is a pale tint of its colour, so the dark ink stays readable and the card stays light.
+  const a1 = m.multi ? a.mint || m.lamp : m.night ? m.accent : alpha(m.accent, 0x66);
+  const a2 = m.multi ? VIOLET[k] : alpha(m.accent, m.night ? 0x99 : 0x3d);
   const a3 = m.multi ? CYAN[k] : m.t.track;
   return (
-    <div style={card(m, { background: a.base })}>
+    <div className={PLATE} style={card(m, { background: m.theme === 'oled' ? OLED_BASE : a.base })}>
       <div className="afx-drift" style={light(-50, -70, 270, 270, a1, 42, 0.9)} />
       <div className="afx-drift2" style={light(130, 50, 270, 250, a2, 48, 0.85)} />
       <div className="afx-drift" data-delay="-6" style={light(30, 170, 230, 190, a3, 44, 0.7)} />
-      <div style={{ position: 'absolute', inset: 0, background: veil(a.shade) }} />
+      <div
+        style={{ position: 'absolute', inset: 0, background: m.night ? `${POOL}, ${veil(a.shade)}` : veil(a.shade) }}
+      />
       <div style={cardColumn(4, { color: a.ink })}>
         <span
           className={L}
@@ -66,7 +72,7 @@ export default function Aurora({ m }: IDrawProps) {
             letterSpacing: '-0.05em',
             lineHeight: 1,
             fontVariantNumeric: 'tabular-nums',
-            textShadow: `0 2px 30px ${BLACK(0.25)}`,
+            textShadow: m.night ? `0 2px 30px ${BLACK(0.25)}` : 'none',
           }}
         >
           {m.digits}

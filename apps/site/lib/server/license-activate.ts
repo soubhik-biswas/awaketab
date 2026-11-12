@@ -1,6 +1,16 @@
 import { resolveCheckoutKey } from './checkout-key';
 import type { IEnv, IKv } from './env';
-import { isLookupBody, jsonError, jsonOk, parseActivateBody, parseLookupBody, rateLimited, syncing } from './http';
+import {
+  isLookupBody,
+  jsonError,
+  jsonOk,
+  LICENSE_BODY_BYTES,
+  parseActivateBody,
+  parseLookupBody,
+  rateLimited,
+  readJsonBody,
+  syncing,
+} from './http';
 import {
   encryptUtf8,
   PLAN_FEATURES,
@@ -20,12 +30,9 @@ const STALE_MS = 90 * 86_400_000;
 export async function activateRoute(request: Request, env: IEnv): Promise<Response> {
   const ip = clientIp(request);
   if (!(await rateLimit(env, 'license', ip, 10))) return rateLimited();
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return jsonError('bad_request', 400);
-  }
+  const read = await readJsonBody(request, LICENSE_BODY_BYTES);
+  if (!read.ok) return read.response;
+  const body = read.value;
   if (isLookupBody(body)) {
     const lookup = parseLookupBody(body);
     return lookup ? lookupCheckout(env, lookup.checkoutId) : jsonError('bad_request', 400);

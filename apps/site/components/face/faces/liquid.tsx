@@ -1,6 +1,6 @@
 import { BLACK, NAVY, WHITE } from '../art';
 import { alpha } from '../geometry';
-import { digitSize, type IDrawProps, L, lmin, MONO } from '../kit';
+import { digitSize, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 // A clear glass sphere with a pastel fill and ink digits by day; a dark sphere of light at night.
 const ART = {
@@ -21,24 +21,30 @@ const ART = {
 };
 const CRESTS = Array.from({ length: 17 }, (_, k) => ` Q${k * 32 + 16} ${k % 2 ? 14 : 2} ${k * 32 + 32} 8`).join('');
 const WAVE = `M0 8${CRESTS} L520 16 L0 16 Z`;
+// Each bubble starts at least its 150 px rise below the surface, so it fades out before it reaches the air.
 const BUBBLES = [
-  { left: 70, top: 120, d: 8, delay: 0 },
-  { left: 160, top: 150, d: 6, delay: -2 },
-  { left: 120, top: 170, d: 10, delay: -3.4 },
+  { left: 70, top: 154, d: 8, delay: 0 },
+  { left: 160, top: 176, d: 6, delay: -2 },
+  { left: 120, top: 198, d: 10, delay: -3.4 },
 ] as const;
+const NIGHT_GLASS = '#070B18';
+const deep = (c: string, pct: number): string => `color-mix(in srgb, ${c} ${pct}%, ${NIGHT_GLASS})`;
 
 // A glass sphere of light that drains as the session runs, with waves and bubbles.
 export default function Liquid({ m }: IDrawProps) {
   const light = !m.night;
   const a = light ? ART.light : ART.night;
   const hc = m.heat(m.frac);
-  const crest = light ? alpha(hc, 0x8c) : hc;
+  // At night the liquid is a deep glow of its colour, so the white digits keep their contrast where they cross it.
+  const crest = light ? alpha(hc, 0x8c) : deep(hc, 48);
   const fill = light
     ? `linear-gradient(180deg, ${alpha(hc, 0x73)}, ${alpha(hc, 0x4d)} 60%, ${alpha(hc, 0x40)})`
-    : `linear-gradient(180deg, ${hc}, ${alpha(hc, 0xb3)} 60%, ${alpha(hc, 0x80)})`;
-  const level = Math.round(260 * (1 - m.ringFrac));
+    : `linear-gradient(180deg, ${deep(hc, 48)}, ${deep(hc, 40)} 60%, ${deep(hc, 32)})`;
+  // Empty drops the surface below the glass too, so no wave is left showing at the bottom.
+  const level = m.ringFrac <= 0 ? 280 : Math.round(260 * (1 - m.ringFrac));
   return (
     <div
+      className={PLATE}
       style={{
         position: 'absolute',
         left: 50,
@@ -47,6 +53,7 @@ export default function Liquid({ m }: IDrawProps) {
         height: 260,
         borderRadius: '50%',
         overflow: 'hidden',
+        isolation: 'isolate',
         background: a.glass,
         boxShadow: `${a.shadow}, 0 0 0 1px ${m.t.line}`,
       }}

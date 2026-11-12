@@ -57,90 +57,6 @@
     "library": {
       "h1": "@awaketab/wake : la bibliothèque wake lock honnête"
     },
-    "extension": {
-      "h1": "AwakeTab for Chrome",
-      "lead": "L’application web ne peut garder le verrou d’écran que tant que son onglet est visible. L’extension demande à Chrome lui-même de garder l’écran — ou seulement l’ordinateur — éveillé, et continue donc de fonctionner onglet masqué ou fenêtre réduite.",
-      "cta": {
-        "chrome": "Ajouter à Chrome",
-        "edge": "Obtenir pour Edge",
-        "note": "Gratuit. Fonctionne dans {browsers} (version {version} ou ultérieure).",
-        "chromeSearch": "Rechercher sur le Chrome Web Store",
-        "edgeSearch": "Rechercher dans les modules Edge",
-        "pending": "La fiche attend la validation de la boutique : pour l’instant, ces boutons ouvrent une recherche dans la boutique."
-      },
-      "firefox": {
-        "title": "Vous utilisez Firefox ou Safari ?",
-        "body": "Firefox et Safari ne fournissent pas d’API d’alimentation aux extensions : il n’existe donc pas d’extension AwakeTab pour eux. L’application web garde l’écran allumé tant que son onglet est visible.",
-        "link": "AwakeTab sur Firefox"
-      },
-      "features": {
-        "title": "Ce qu’elle fait",
-        "levels": "Écran ou Système : gardez l’écran allumé, ou seulement l’ordinateur éveillé en laissant l’écran s’assombrir.",
-        "timers": "Les mêmes préréglages que l’application web : de 15 minutes à 4 heures, jusqu’à une heure donnée ou jusqu’à ce que vous arrêtiez.",
-        "badge": "Le badge de la barre affiche ON, SYS ou les minutes restantes, et Alt+Shift+A active ou désactive depuis n’importe quel onglet.",
-        "pro": "Avec Pro : plannings hebdomadaires et démarrage auto à l’ouverture de Chrome ou sur un site de votre choix."
-      },
-      "limits": {
-        "running": "Elle ne fonctionne que lorsque Chrome est ouvert.",
-        "lid": "Elle ne peut pas empêcher la veille quand vous fermez le capot d’un portable.",
-        "presence": "Elle ne vous fait pas apparaître disponible dans Teams ou Slack : la présence suit votre clavier et votre souris, et AwakeTab ne simule jamais d’activité."
-      },
-      "permissions": {
-        "title": "Autorisations, et pourquoi",
-        "power": "power — garder l’écran ou le système éveillé.",
-        "storage": "storage — enregistrer vos réglages et la session en cours.",
-        "alarms": "alarms — faire tourner minuteurs et plannings pendant que le processus d’arrière-plan dort.",
-        "notifications": "notifications (facultatif) — vous prévenir à la fin d’un minuteur.",
-        "sites": "Accès aux sites (facultatif, un site à la fois) — démarrer automatiquement sur les sites choisis. Aucun accès par défaut.",
-        "lead": "Three it needs to work, two you can turn on. It gets no site access unless you pick a site."
-      },
-      "privacy": "Les statistiques d’utilisation anonymes sont désactivées par défaut. L’extension n’envoie jamais d’URL, de titres d’onglets ni de noms de sites, et n’affiche aucune publicité.",
-      "web": "Vous préférez ne rien installer ? L’application web garde l’écran allumé tant que son onglet est visible.",
-      "value": "Keeps your screen awake from the toolbar, even when the tab is hidden or the window is minimised.",
-      "fact": {
-        "hidden": "Keeps going with the tab hidden",
-        "level": "Screen, or only the computer",
-        "private": "No ads, no site access by default"
-      },
-      "alt": {
-        "why": "Why there is no extension for this browser"
-      },
-      "compare": {
-        "title": "Tab or extension",
-        "hidden": "With the tab hidden"
-      },
-      "steps": {
-        "title": "Ready in three steps",
-        "install": {
-          "title": "Install",
-          "body": "Add it from the Chrome Web Store, or from Edge Add-ons in Edge."
-        },
-        "pin": {
-          "title": "Pin it",
-          "body": "Open the Extensions menu (the puzzle piece) and pin AwakeTab, so its badge stays in view."
-        },
-        "press": {
-          "title": "Press the shortcut",
-          "body": "From any tab, it starts your usual length. Press it again to stop. On a Mac, Alt is the Option key."
-        }
-      },
-      "faq": {
-        "title": "Questions",
-        "q1": "Is it free?",
-        "a1": "Yes. Timers, Screen or System, the toolbar badge and the shortcut are free. Pro adds weekly schedules and auto-start.",
-        "q2": "Can it see the sites I visit?",
-        "a2": "No. It has no site access by default and never sends URLs, tab titles or site names. Auto-start on a site, a Pro feature, asks for access to that one site.",
-        "q3": "Why not just use the web app?",
-        "a3": "The web app keeps the screen awake only while its tab is visible. The extension keeps going while you work in other tabs or with the window minimised, as long as Chrome is running.",
-        "q4": "Can I change the shortcut?",
-        "a4": "Yes. Open chrome://extensions/shortcuts in Chrome, or edge://extensions/shortcuts in Edge, and set your own. Do that too if another extension already uses Alt+Shift+A.",
-        "q5": "Does the extension have the clock faces, sounds and notes?",
-        "a5": "No, those live in the web app. The extension keeps the screen, or only the computer, awake from the toolbar. Open AwakeTab from its pop-up for the twelve clock faces, colour themes, focus sounds, the notepad and the focus tools."
-      },
-      "band": {
-        "title": "Keep the screen on while you work in other tabs"
-      }
-    },
     "home": {
       "title": "AwakeTab — Gardez cet écran allumé",
       "description": "Gardez l’écran allumé en un clic. Une horloge calme affiche le temps restant. 46 cadrans, six fonds animés, gratuit : rien à installer, aucun compte.",
@@ -743,66 +659,6 @@
       "tomorrow": "{time} tomorrow",
       "yesterday": "{time} yesterday"
     },
-    "volt": {
-      "soundNav": "Son",
-      "studio": "Studio de cadrans",
-      "keep": "Garder allumé",
-      "pause": "Pause",
-      "resume": "Reprendre",
-      "stop": "Arrêter",
-      "ext15": "+15 min",
-      "again": "Recommencer",
-      "starting": "Démarrage…",
-      "fix": "Voir la solution",
-      "fallback": "Utiliser la vidéo de secours",
-      "timer": "Minuteur",
-      "faces": "Cadrans",
-      "presets": "Préréglages",
-      "history": "Historique",
-      "devices": "Appareils",
-      "settings": "Réglages",
-      "help": "Aide et solutions",
-      "more": "Plus",
-      "search": "Rechercher ou aller à…",
-      "session": "Session",
-      "length": "Durée",
-      "label": "Libellé",
-      "face": "Cadran",
-      "allFaces": "Les 49 cadrans",
-      "options": "Options",
-      "level": "Niveau de maintien",
-      "screen": "Écran",
-      "system": "Système · app",
-      "sound": "Carillon à la fin",
-      "soundD": "Un doux carillon à deux notes",
-      "dim": "Atténuer l’horloge la nuit",
-      "dimD": "Après 22 h",
-      "secs": "Afficher les secondes",
-      "secsD": "Sur le cadran et dans le titre de l’onglet",
-      "idle": "Écran non maintenu",
-      "awakeUntil": "Allumé · jusqu’à ",
-      "awakeFor": "Allumé · sans fin",
-      "fb": "Allumé · vidéo de secours",
-      "paused": "En pause",
-      "needs": "Action requise · touchez pour reprendre",
-      "blocked": "Bloqué · économiseur de batterie",
-      "ended": "Terminé à ",
-      "unsup": "Non pris en charge ici",
-      "left": "restantes",
-      "until": "jusqu’à ",
-      "endsAt": "Se termine à ",
-      "wouldEnd": "Se terminerait à ",
-      "min": " min",
-      "hour": "1 heure",
-      "hours2": "2 heures",
-      "untilT": "Jusqu’à…",
-      "label0": "Présentation au conseil",
-      "forLen": " · fin ",
-      "extend": "Prolonger",
-      "hero": "Gardez cet écran allumé.",
-      "heroSub": "Un geste. Il se remet en veille quand le temps est écoulé, sans installation ni compte.",
-      "heroSubPhone": "Un geste. Il se remet en veille à la fin."
-    },
     "glance": {
       "tagNew": "Nouveau",
       "tagHot": "Populaire",
@@ -813,6 +669,10 @@
         "h": "h",
         "min": "min",
         "hour": "heure"
+      },
+      "long": {
+        "min": "{n, plural, one {# minute} other {# minutes}}",
+        "hour": "{n, plural, one {# heure} other {# heures}}"
       },
       "len": {
         "0": "15 min",
@@ -837,6 +697,7 @@
         "fallback": "Allumé par vidéo · jusqu’à {time}",
         "fallbackOpen": "Allumé par vidéo · jusqu’à l’arrêt",
         "paused": "En pause · encore {dur}",
+        "pausedOpen": "En pause · sans fin",
         "needsyou": "Touchez pour reprendre · l’onglet était masqué",
         "blocked": "Pas allumé · {reason}",
         "unsupported": "Pas de wake lock dans ce navigateur",
@@ -861,6 +722,11 @@
       },
       "stage": {
         "label": "Minuteur"
+      },
+      "crash": {
+        "h": "Le minuteur a rencontré un problème.",
+        "d": "L’écran n’est plus maintenu éveillé. Rechargez la page pour recommencer.",
+        "btn": "Recharger"
       },
       "face": {
         "aria": "Cadran : {face}",
@@ -953,7 +819,7 @@
         }
       },
       "toast": {
-        "extended": "{dur} ajoutées · désormais jusqu’à {time}",
+        "extended": "Temps ajouté : {dur} · désormais jusqu’à {time}",
         "undo": "Annuler"
       },
       "nudge": {
@@ -972,11 +838,12 @@
       "an": {
         "start": "Écran allumé jusqu’à {time}.",
         "startOpen": "Écran allumé jusqu’à ce que vous l’arrêtiez.",
-        "extend": "{dur} ajoutées. Désormais jusqu’à {time}.",
+        "extend": "Temps ajouté : {dur}. Désormais jusqu’à {time}.",
         "low": "Encore 5 minutes. Ajouter 15 minutes ?",
         "hidden": "L’onglet était masqué, le navigateur a lâché prise.",
         "refused": "Pas allumé — {reason}. Voir la solution.",
         "paused": "En pause. {dur} conservées.",
+        "pausedOpen": "En pause.",
         "ended": "C’est l’heure. L’écran peut se mettre en veille.",
         "face": "Cadran : {face}."
       },
@@ -1016,7 +883,7 @@
         },
         "sound": {
           "t": "Son d’ambiance",
-          "d": "Gratuit · composez votre propre fond sonore"
+          "d": "Gratuit · scènes, nature et musique en direct"
         },
         "clear": {
           "t": "Effacer l’historique",
@@ -1091,9 +958,11 @@
         "h12": "Horloge sur 12 heures",
         "h12D": "Affiche 11:42 AM au lieu de 11:42",
         "secs": "Afficher les secondes",
-        "secsD": "Sur le cadran et dans le titre de l’onglet",
+        "secsD": "Dans le titre de l’onglet",
         "dim": "Atténuer la nuit",
         "dimD": "Lueur plus douce après 22:00",
+        "keep": "Garder les commandes visibles",
+        "keepD": "La barre du haut et le dock restent affichés tant que l’écran reste éveillé",
         "sound": "Son",
         "chime": "Carillon à la fin",
         "chimeD": "Sonne une fois quand le temps est écoulé",
@@ -1103,18 +972,21 @@
           "off": "Désactivé"
         },
         "mixer": "Mixeur d’ambiance",
-        "mixerD": "Pluie, café, feu et bruit brun",
+        "mixerD": "Nature, lieux, bruit et musique en direct",
         "studio": "Atelier de cadrans",
         "studioD": "Votre propre couleur d’accent et votre lueur",
         "more": "Plus",
         "ambient": "Son d’ambiance",
-        "ambientD": "Pluie, café, feu, bruit brun",
+        "ambientD": "Nature, lieux, bruit et musique en direct",
         "language": "Langue",
         "languageD": "Change le texte et le format de l’heure",
         "share": "Partager cette configuration",
         "shareD": "Un lien qui s’ouvre prêt à démarrer",
         "clear": "Effacer l’historique",
         "clearD": "Les préréglages et les paramètres restent",
+        "privacy": "Confidentialité",
+        "count": "Compter mes visites",
+        "countD": "Sans cookies et anonyme. AwakeTab fonctionne de la même façon dans les deux cas.",
         "account": "Compte",
         "signedOut": "Non connecté",
         "signedOutD": "Tout fonctionne sans compte. Connectez-vous uniquement pour synchroniser Pro.",
@@ -1175,6 +1047,11 @@
           "s1d": "awaketab.com fonctionne de la même façon, avec le wake lock autorisé.",
           "s2": "Ou utilisez la vidéo de secours",
           "s2d": "Une vidéo silencieuse et invisible garde la plupart des écrans allumés."
+        },
+        "ok": {
+          "h": "Tout va bien",
+          "awake": "Le navigateur maintient le wake lock : cet écran reste allumé.",
+          "rest": "Aucune session en cours. Si le navigateur refuse le wake lock, la raison et la solution s’affichent ici."
         }
       },
       "studio": {
@@ -1230,22 +1107,50 @@
         "ready": "Prêt : {name}",
         "off": "Désactivé · {name}",
         "silent": "Toutes les couches sont coupées",
-        "fades": "S’estompe à la fin de la session",
+        "silentHint": "Choisissez une ambiance ou activez une couche",
+        "fades": "Monte au début de la session et s’estompe à la pause ou à la fin",
         "waits": "Joue tant que l’écran est allumé",
         "preview": "C’était un aperçu de cinq secondes ; le son joue tant que l’écran est allumé",
         "turnOn": "Jouer le son d’ambiance quand l’écran est allumé",
         "turnOff": "Couper le son d’ambiance",
+        "volume": "Volume",
+        "shuffle": "Au hasard",
+        "mixes": "Ambiances",
+        "count": "{n} actives",
+        "group": {
+          "nature": "Nature",
+          "places": "Lieux",
+          "noise": "Bruit",
+          "music": "Musique"
+        },
         "rain": "Pluie",
+        "ocean": "Vagues",
+        "stream": "Ruisseau",
+        "wind": "Vent",
+        "crickets": "Grillons la nuit",
+        "thunder": "Tonnerre lointain",
         "cafe": "Café",
         "fire": "Cheminée",
+        "train": "Train",
+        "fan": "Ventilateur",
         "brown": "Bruit brun",
-        "mixes": "Mélanges",
+        "pink": "Bruit rose",
+        "white": "Bruit blanc",
+        "pad": "Nappe chaude",
+        "keys": "Touches douces",
+        "drone": "Bourdon grave",
+        "bells": "Cloches de verre",
         "mix": {
           "rainy": "Café pluvieux",
           "focus": "Concentration",
           "fire": "Coin du feu",
           "off": "Désactivé",
-          "custom": "Votre mélange"
+          "custom": "Votre mélange",
+          "train": "Train de nuit",
+          "ocean": "Air marin",
+          "keys": "Touches calmes",
+          "storm": "Orage d’été",
+          "night": "Nuit d’été"
         }
       },
       "feedback": {
@@ -1322,7 +1227,7 @@
         "f3": "Historique sur tous les appareils, avec export",
         "f4": "Aide prioritaire par une vraie personne",
         "f5": "Accès anticipé aux nouveaux cadrans et ambiances",
-        "note": "14 jours gratuits, puis {price} par an. Résiliable à tout moment dans Paramètres → Gérer l’abonnement. Paiement sécurisé par [PAYMENT PROVIDER].",
+        "note": "14 jours gratuits, puis {price} par an. Résiliable à tout moment dans Paramètres → Gérer l’abonnement. Paiement sécurisé par Polar.",
         "trial": "Commencer l’essai gratuit de 14 jours",
         "later": "Plus tard"
       },
@@ -1351,7 +1256,7 @@
         "yearlyD": "{price} / an · prochain paiement le {date}",
         "change": "Changer",
         "payment": "Moyen de paiement",
-        "paymentD": "Géré par [PAYMENT PROVIDER]",
+        "paymentD": "Géré par Polar",
         "update": "Mettre à jour",
         "screens": "Écrans",
         "screensD": "{n} sur {max} utilisés",
@@ -1360,8 +1265,8 @@
         "cancelD": "Reste actif jusqu’au {date}",
         "cancelBtn": "Résilier",
         "receipts": "Reçus",
-        "r1": "Pro · annuel · [PRICE]",
-        "r2": "Essai commencé · [PRICE] 0",
+        "r1": "Pro · annuel · $12",
+        "r2": "Essai commencé · $0",
         "download": "Télécharger",
         "note": "Résiliable à tout moment : Pro reste actif jusqu’à la fin de la période payée. Vos écrans gardent toutes les fonctions gratuites.",
         "done": "Terminé",
@@ -1371,7 +1276,7 @@
         "lifetime": "Pro · payé une fois",
         "lifetimeD": "Aucun renouvellement",
         "allReceipts": "Tous les reçus",
-        "allReceiptsD": "Conservés par [PAYMENT PROVIDER] pour chaque paiement",
+        "allReceiptsD": "Conservés par Polar pour chaque paiement",
         "open": "Ouvrir"
       },
       "devices": {
@@ -1895,7 +1800,7 @@
     },
     "promise": "Keeps your screen awake and tells you honestly whether it is working.",
     "version": "Version {version}",
-    "copyright": "© {year} AwakeTab · MIT",
+    "copyright": "© {year} AwakeTab",
     "made": "Made with care",
     "source": "Open source on GitHub",
     "top": "Back to top",
@@ -2169,25 +2074,6 @@
       "clock": "Heure actuelle {time}"
     }
   },
-  "builder": {
-    "mode": "Mode",
-    "size": {
-      "_": "Taille",
-      "compact": "Compact (320 × 96)",
-      "full": "Pleine largeur (240 px de haut)"
-    },
-    "lang": {
-      "_": "Langue",
-      "page": "Comme la page"
-    },
-    "snippet": "Votre extrait",
-    "copied": "Copié",
-    "url": "URL du kiosque",
-    "msg": "Message (jusqu'à 80 caractères)",
-    "logo": "URL du logo (https, licence Kiosk requise)",
-    "token": "Jeton de licence (licence Kiosk requise)",
-    "autostart": "Démarrer automatiquement"
-  },
   "library": {
     "demo": {
       "title": "Machine à états en direct",
@@ -2229,127 +2115,6 @@
   "kiosk": {
     "license": {
       "invalid": "Ce lien de licence kiosque n'a pas pu être vérifié. Rouvrez l'URL depuis le générateur d'URL de kiosque."
-    }
-  },
-  "ext": {
-    "name": "AwakeTab: Keep Screen Awake",
-    "description": "Gardez l’écran (ou tout l’ordinateur) éveillé en un clic, avec un statut honnête sur lequel compter.",
-    "command": {
-      "toggle": "Activer ou désactiver"
-    },
-    "level": {
-      "label": "Garder éveillé",
-      "display": {
-        "_": "Écran",
-        "help": "Garde l’écran allumé et l’ordinateur actif."
-      },
-      "system": {
-        "_": "Système",
-        "help": "Garde l’ordinateur actif, mais l’écran peut s’assombrir ou s’éteindre."
-      }
-    },
-    "pill": {
-      "system": "L’écran peut s’assombrir ou se verrouiller",
-      "systemHeld": "Système éveillé"
-    },
-    "popup": {
-      "start": "Démarrer",
-      "open": "Ouvrir AwakeTab",
-      "limits": "Actif tant que Chrome est ouvert, même onglet masqué ou fenêtre réduite. N’empêche pas la veille quand vous fermez le capot."
-    },
-    "origin": {
-      "schedule": "Lancé par votre planning",
-      "autostart": "Lancé par un site en démarrage auto",
-      "startup": "Lancé à l’ouverture de Chrome"
-    },
-    "advice": {
-      "unsupported": "Ce navigateur ne fournit pas l’API d’alimentation aux extensions. Ouvrez plutôt AwakeTab dans un onglet.",
-      "denied": "Votre navigateur ou votre organisation empêche de garder cet appareil éveillé."
-    },
-    "options": {
-      "title": "Réglages d’AwakeTab",
-      "saved": "Enregistré",
-      "defaults": "Valeurs par défaut",
-      "sound": {
-        "help": "Utilise le son de notification du système : les notifications doivent être activées."
-      },
-      "notifications": {
-        "allow": "Autoriser les notifications",
-        "help": "Chrome demande l’autorisation la première fois. Vous pouvez les désactiver ici."
-      },
-      "battery": {
-        "_": "Batterie",
-        "unavailable": "Pas encore disponible dans l’extension : Chrome ne communique pas le niveau de batterie aux processus d’arrière-plan des extensions. L’application web peut s’arrêter en cas de batterie faible."
-      },
-      "appearance": "Apparence et langue",
-      "keyboard": "Clavier",
-      "shortcut": {
-        "current": "Activer ou désactiver depuis n’importe quel onglet : {shortcut}",
-        "none": "Aucun raccourci n’est défini pour activer ou désactiver depuis n’importe quel onglet.",
-        "change": "Modifier le raccourci"
-      },
-      "locale": {
-        "auto": "Langue du navigateur"
-      }
-    },
-    "schedules": {
-      "title": "Plannings",
-      "days": "Jours",
-      "from": "De",
-      "to": "À",
-      "add": "Ajouter un planning",
-      "empty": "Aucun planning pour l’instant.",
-      "error": {
-        "days": "Choisissez au moins un jour.",
-        "same": "Le début et la fin doivent être différents."
-      }
-    },
-    "autostart": {
-      "title": "Démarrage auto",
-      "browser": "Garder éveillé à chaque démarrage de Chrome",
-      "sites": {
-        "_": "Sites",
-        "help": "Démarre quand un onglet du site se charge et s’arrête à la fermeture du dernier. Chrome demande l’accès à ce seul site ; AwakeTab ne transmet jamais la liste de vos sites."
-      },
-      "site": "Site, par ex. docs.example.com",
-      "duration": {
-        "open": "Tant que l’onglet est ouvert"
-      },
-      "add": "Ajouter un site",
-      "empty": "Aucun site pour l’instant.",
-      "error": {
-        "host": "Saisissez un nom de site comme docs.example.com.",
-        "denied": "Chrome n’a pas accordé l’accès à ce site."
-      }
-    },
-    "remove": {
-      "_": "Supprimer",
-      "label": "Supprimer {item}"
-    },
-    "pro": {
-      "locked": "Plannings et démarrage auto font partie d’AwakeTab Pro."
-    },
-    "license": {
-      "title": "Licence Pro",
-      "activate": "Activer",
-      "devices": "L’activer ici utilise l’un de vos cinq appareils. La clé reste dans ce profil du navigateur et n’est jamais synchronisée.",
-      "remove": "Retirer de ce navigateur",
-      "removeFailed": "Retirée ici, mais awaketab.com est injoignable. Retirez cet appareil dans Gérer les appareils.",
-      "get": "Retrouvez votre clé sur awaketab.com",
-      "working": "Vérification de votre clé…"
-    },
-    "privacy": {
-      "title": "Confidentialité",
-      "telemetry": {
-        "help": "Désactivé tant que vous ne l’activez pas. N’envoie à awaketab.com que le début et la fin des sessions, l’activation Pro et des nombres d’erreurs. Jamais d’URL, de titres d’onglets ni de noms de sites."
-      },
-      "stored": "Enregistré dans ce navigateur : vos réglages, la session en cours et votre licence Pro. Les réglages sont enregistrés ici et synchronisés avec votre compte Chrome ; votre licence n’est jamais synchronisée.",
-      "policy": "Politique de confidentialité"
-    },
-    "about": {
-      "title": "À propos",
-      "version": "Version {version}",
-      "changelog": "Nouveautés"
     }
   },
   "notes": {
@@ -2481,7 +2246,7 @@
       "analog": "Les aiguilles donnent l’heure réelle ; l’arc lumineux de la lunette court jusqu’à l’heure de fin.",
       "luxe": "Un cadran plus profond avec chiffres à empattements, minuterie et secteur lumineux.",
       "rings": "La session, les minutes et les secondes en trois anneaux concentriques.",
-      "words": "L’heure en une phrase, écrite naturellement dans chacune des huit langues.",
+      "words": "L’heure en une simple phrase en anglais, comme un mot posé sur le bureau.",
       "nixie": "Des tubes de verre avec grille et 8 fantômes ; la lueur prend la couleur de la lampe.",
       "lcd": "Des segments inclinés sur un léger 88:88 fantôme, comme un réveil de chevet.",
       "dive": "Une lunette de montre de plongée : l’arc vert indique les minutes restantes, les aiguilles l’heure réelle.",
@@ -2532,14 +2297,14 @@
         "awakeFor": "allumé depuis"
       },
       "cap": {
-        "idle": "Prêt",
-        "starting": "Démarrage…",
-        "running": "Écran allumé",
-        "fallback": "Allumé grâce à la vidéo de secours",
-        "paused": "En pause — onglet masqué",
-        "blocked": "Bloqué — voici la solution",
-        "unsupported": "Touchez pour utiliser la solution de secours",
-        "up": "Temps écoulé"
+        "idle": "Écran non maintenu",
+        "starting": "Demande au navigateur…",
+        "running": "Allumé",
+        "fallback": "Allumé par vidéo",
+        "paused": "En pause",
+        "blocked": "Pas allumé",
+        "unsupported": "Pas de wake lock dans ce navigateur",
+        "up": "C’est l’heure"
       },
       "end": {
         "until": "jusqu’à {time}",
@@ -2677,13 +2442,17 @@
         "lead": "Le lien est peut-être ancien ou mal saisi. Le minuteur est juste ici.",
         "guides": "Guides populaires",
         "eyebrow": "404",
-        "description": "Cette page AwakeTab s’est endormie : le lien est peut-être ancien ou mal saisi. Le minuteur fonctionne juste ici, et l’aide comme les guides sont à un toucher."
+        "description": "Cette page AwakeTab s’est endormie : le lien est peut-être ancien ou mal saisi. Le minuteur fonctionne juste ici, et l’aide comme les guides sont à un toucher.",
+        "help": "Parcourez les sujets d’aide ou dites-nous ce qui n’a pas marché."
       },
       "offline": {
         "eyebrow": "Hors ligne",
         "h1": "Vous êtes hors ligne. Le minuteur, non.",
         "lead": "Garder l’écran allumé ne demande pas Internet. La synchronisation et les liens partagés attendent votre reconnexion.",
-        "timer": "Continuer avec le minuteur"
+        "timer": "Continuer avec le minuteur",
+        "leadFree": "Garder l’écran allumé ne demande pas internet. Les pages que vous n’avez pas encore ouvertes attendent votre reconnexion.",
+        "description": "Vous êtes hors ligne, mais garder l’écran allumé ne demande pas internet. Le minuteur continue ; la synchronisation et les liens partagés attendent votre reconnexion.",
+        "descriptionFree": "Vous êtes hors ligne, mais garder l’écran allumé ne demande pas internet. Le minuteur continue, et les autres pages se rechargent dès votre reconnexion."
       },
       "status": {
         "eyebrow": "Maintenance",
@@ -2691,8 +2460,7 @@
         "lead": "La connexion et la synchronisation sont suspendues jusqu’à environ {time}. Le minuteur fonctionne normalement sur tous les appareils.",
         "okEyebrow": "État",
         "okH1": "Tout fonctionne.",
-        "okLead": "Le minuteur, la connexion et la synchronisation fonctionnent. Toute maintenance prévue est d’abord annoncée ici.",
-        "see": "Voir l’état"
+        "okLead": "Le minuteur, la connexion et la synchronisation fonctionnent. Toute maintenance prévue est d’abord annoncée ici."
       },
       "removed": {
         "eyebrow": "Configuration retirée",
@@ -2744,7 +2512,6 @@
     "help": {
       "eyebrow": "Centre d’aide",
       "h1": "Comment pouvons-nous vous aider ?",
-      "lead": "La plupart des problèmes viennent de l’économiseur de batterie, d’un onglet masqué ou d’un ancien navigateur. Cherchez, ou commencez par un sujet ci-dessous.",
       "searchLabel": "Rechercher dans l’aide",
       "placeholder": "Rechercher dans l’aide : essayez « batterie » ou « iPad »",
       "chips": "Questions fréquentes",
@@ -2760,8 +2527,7 @@
     "changelog": {
       "crumb": "Nouveautés",
       "eyebrow": "NOUVEAUTÉS",
-      "h1": "Quoi de neuf",
-      "lead": "Chaque version, la plus récente d’abord. Les numéros de version et les dates sont provisoires jusqu’à la sortie."
+      "h1": "Quoi de neuf"
     },
     "pro": {
       "h1": "Garder l’écran allumé reste gratuit."
@@ -2774,46 +2540,67 @@
       "allow": "Autoriser"
     },
     "foot": {
-      "kicker": "FAIT PAR DES HUMAINS · LU PAR DES HUMAINS",
-      "ctaH": "Dites-nous ce qui le rendrait",
-      "ctaAccent": "vôtre.",
+      "kicker": "GRATUIT · SANS COMPTE · OPEN SOURCE",
+      "headline": "Dites-nous ce qui le rendrait <accent>vôtre.</accent>",
       "ctaLine": "Deux touchers dans l’outil : Paramètres → Envoyer un avis. Nous lisons chaque message.",
-      "timer": "Ouvrir le minuteur",
       "feedback": "Envoyer un avis",
+      "help": "Centre d’aide",
       "tagline": "Garde un écran allumé depuis le navigateur, puis le laisse se mettre en veille. Gratuit, pour toujours.",
-      "status": "Tout fonctionne · API wake lock en bonne santé",
-      "statusDown": "Maintenance prévue · le minuteur fonctionne toujours",
+      "status": {
+        "native": "Ce navigateur peut garder votre écran allumé",
+        "fallback": "Pas de wake lock ici, AwakeTab utilise donc une vidéo"
+      },
       "social": {
         "github": "AwakeTab sur GitHub",
-        "x": "Partager AwakeTab sur X",
         "rss": "Flux des nouveautés (RSS)"
       },
-      "product": "Produit",
-      "uses": "Usages",
-      "learn": "Apprendre",
-      "company": "À propos",
-      "faces": "Cadrans",
-      "vibes": "Ambiances",
-      "pro": "Pro",
+      "groups": {
+        "product": "Produit",
+        "uses": "Usages",
+        "devices": "Appareils",
+        "learn": "Apprendre",
+        "company": "À propos"
+      },
+      "links": {
+        "timer": "Ouvrir le minuteur",
+        "faces": "Cadrans",
+        "vibes": "Ambiances",
+        "extension": "Extension",
+        "embed": "Widget pour sites web",
+        "kiosk": "Mode mural",
+        "library": "Bibliothèque Wake",
+        "cooking": "Cuisine",
+        "presenting": "Présentations",
+        "dashboards": "Tableaux de bord",
+        "nightdesk": "Bureau de nuit",
+        "allUses": "Tous les usages",
+        "support": "Compatibilité",
+        "deviceGuides": "Guides par appareil",
+        "compare": "Comparer les outils",
+        "help": "Centre d’aide",
+        "guides": "Guides",
+        "how": "Comment ça marche",
+        "faq": "FAQ",
+        "changelog": "Nouveautés",
+        "about": "À propos d’AwakeTab",
+        "github": "GitHub",
+        "roadmap": "Feuille de route",
+        "privacy": "Confidentialité",
+        "terms": "Conditions d’utilisation"
+      },
       "new": "NOUVEAU",
-      "cooking": "Cuisine",
-      "presenting": "Présentations",
-      "dashboards": "Tableaux de bord",
-      "nightdesk": "Bureau de nuit",
-      "help": "Centre d’aide",
-      "support": "Compatibilité des navigateurs",
-      "guides": "Guides",
-      "changelog": "Nouveautés",
-      "about": "À propos d’AwakeTab",
-      "statusLink": "État",
-      "copyright": "© [YEAR] [COMPANY NAME]",
+      "newTab": "s’ouvre dans un nouvel onglet",
+      "copyright": "© {year} AwakeTab",
+      "made": "Fait avec <heart>amour</heart> par <name></name>",
+      "makerLink": "{name} sur LinkedIn",
       "cookies": "Aucun cookie de suivi",
       "theme": {
         "label": "Thème",
         "system": "Système",
         "light": "Clair",
         "dark": "Sombre"
-      }
+      },
+      "language": "Langue"
     },
     "story": {
       "cue": "Faites défiler : ce qui le rend différent",
@@ -2878,7 +2665,8 @@
         "free": {
           "h": "Gratuit. Tout.",
           "d": "Chaque cadran, thème, préréglage et son. Pro synchronise seulement plusieurs écrans.",
-          "zero": "$0"
+          "zero": "$0",
+          "dFree": "Chaque cadran, thème, préréglage et son. Rien à acheter."
         },
         "devices": {
           "h": "Téléphone, tablette, ordinateur, mur",
@@ -2949,7 +2737,8 @@
         },
         "4": {
           "q": "C’est vraiment gratuit ?",
-          "a": "Oui. Chaque cadran, thème, préréglage et son. Pro est facultatif et synchronise seulement plusieurs écrans."
+          "a": "Oui. Chaque cadran, thème, préréglage et son. Pro est facultatif et synchronise seulement plusieurs écrans.",
+          "aFree": "Oui. Chaque cadran, thème, préréglage et son, sans compte et sans rien à acheter."
         },
         "5": {
           "q": "Que se passe-t-il quand le temps est écoulé ?",
@@ -2967,6 +2756,187 @@
         "lead": "Fonctionne dans Chrome, Edge, Firefox et Safari. Rien à installer.",
         "button": "Garder cet écran allumé"
       }
+    }
+  },
+  "surfaces": {
+    "status": {
+      "awake": "Allumé",
+      "fallback": "Vidéo de secours",
+      "starting": "Démarrage…",
+      "paused": "En pause",
+      "hidden": "En pause",
+      "needsyou": "Action requise",
+      "blocked": "Bloqué",
+      "unsupported": "Non pris en charge",
+      "ended": "C’est l’heure",
+      "idle": "Pas allumé"
+    },
+    "line": {
+      "until": "jusqu’à {time}",
+      "noEnd": "sans fin",
+      "hidden": "onglet masqué",
+      "left": "encore {time}",
+      "needsyou": "touchez AwakeTab pour reprendre",
+      "blocked": "ouvrez AwakeTab pour corriger",
+      "ended": "terminé à {time}",
+      "idle": "démarrez dans AwakeTab",
+      "starting": "demande au navigateur",
+      "unsupported": "ouvrez AwakeTab"
+    },
+    "pip": {
+      "region": "Mini-horloge",
+      "title": "Mini-horloge AwakeTab",
+      "open": "Ouvrir la mini-horloge",
+      "close": "Fermer la mini-horloge",
+      "popupBlocked": "Le navigateur a bloqué la fenêtre de la mini-horloge. Autorisez les pop-ups pour AwakeTab, puis réessayez.",
+      "controls": "Commandes de la mini-horloge",
+      "bigger": "Afficher le cadran et les commandes",
+      "smaller": "Réduire la mini-horloge",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "again": "Recommencer",
+      "retry": "Réessayer",
+      "back": "Retour à l’onglet",
+      "paused": "l’écran peut s’éteindre",
+      "needs": "l’écran peut s’éteindre · touchez Réessayer",
+      "stopAsk": "Ne plus garder l’écran allumé ?",
+      "stopYes": "Arrêter",
+      "stopNo": "Continuer",
+      "soundName": "Son de concentration",
+      "soundLabel": "Son de concentration : {name}",
+      "isOpen": "La mini-horloge est ouverte",
+      "closeShort": "Fermer",
+      "offer": "Garder une mini-horloge au premier plan",
+      "offerD": "Elle flotte au-dessus de vos autres fenêtres : vous voyez le temps restant pendant que vous travaillez.",
+      "missedD": "Votre navigateur ne l’a pas ouverte tout seul quand vous avez changé d’onglet. Un geste suffit, et elle reste au premier plan jusqu’à ce que vous la fermiez.",
+      "notNow": "Pas maintenant",
+      "auto": "Mini-horloge en quittant l’onglet",
+      "autoD": "Pendant une session, une petite horloge reste au premier plan quand vous changez d’onglet. Votre navigateur décide quand elle peut s’ouvrir seule et peut vous le demander une fois.",
+      "tapD": "Ce navigateur ne peut pas l’ouvrir tout seul : AwakeTab vous la propose en un geste au début d’une session.",
+      "noneD": "Non disponible dans ce navigateur. Chrome et Edge sur ordinateur peuvent garder une petite horloge au premier plan."
+    },
+    "widgets": {
+      "small": "Allumé · {time}",
+      "smallNoEnd": "Allumé · sans fin",
+      "presets": "Préréglages",
+      "presetsLabel": "Lancer un préréglage",
+      "presenting": "Présentation",
+      "cooking": "Cuisine",
+      "reading": "Lecture",
+      "hour": "1 h",
+      "min45": "45 min",
+      "min30": "30 min",
+      "session": "Écran maintenu allumé",
+      "awakeUntil": "Allumé jusqu’à {time}",
+      "awakeNoEnd": "Allumé · sans fin",
+      "extend": "+15 min",
+      "extendLabel": "Ajouter 15 minutes",
+      "stop": "Arrêter",
+      "start": "Démarrer",
+      "left": "encore {dur}",
+      "ends": "Se termine à {time} · touchez pour prolonger",
+      "quick": "Garder allumé · 1 h",
+      "quickLabel": "Garder cet écran allumé pendant 1 heure",
+      "name": "Cet écran"
+    },
+    "kiosk": {
+      "section": "Mode kiosque sur un écran partagé",
+      "region": "Écran kiosque",
+      "kicker": "ACCUEIL",
+      "headline": "Veuillez vous asseoir.",
+      "line": "Nous vous appellerons.",
+      "hold": "Maintenez 3 s pour quitter",
+      "holding": "Maintenez encore…",
+      "holdLabel": "Maintenez 3 secondes pour quitter le mode kiosque",
+      "unlocked": "Kiosque déverrouillé",
+      "unlockedBody": "Changez le cadran, l’horaire ou le message, ou quittez le mode kiosque. Il se verrouille de nouveau après 30 secondes sans toucher.",
+      "back": "Retour au kiosque",
+      "leave": "Quitter le mode kiosque",
+      "face": "CADRAN",
+      "screen": "ÉCRAN",
+      "midnight": "Minuit",
+      "oled": "Noir OLED",
+      "schedule": "Horaire",
+      "scheduleBody": "{days} {from} – {to}. En dehors de ces heures, l’écran peut se mettre en veille.",
+      "weekdays": "En semaine",
+      "everyday": "Tous les jours",
+      "alwaysBody": "Tous les jours, toute la journée. L’écran reste allumé jusqu’à ce que vous quittiez le mode kiosque.",
+      "burn": "Protection contre le marquage",
+      "burnBody": "Toute la mise en page se décale de quelques pixels toutes les 3 minutes, l’OLED utilise un noir pur et l’écran s’atténue à 40 % après 22 h. Essayez « Décaler maintenant ».",
+      "shift": "Décaler maintenant",
+      "start": "Démarrer le mode kiosque",
+      "asleep": "Hors horaire : l’écran peut se mettre en veille jusqu’à {time}.",
+      "licensed": "Licence kiosque active",
+      "invalid": "Ce lien kiosque n’a pas pu être vérifié. Rouvrez le lien que vous avez reçu."
+    },
+    "embedPage": {
+      "eyebrow": "Widget pour sites web",
+      "h1": "Gardez allumés les écrans de vos lecteurs",
+      "lead": "Ajoutez un bouton Mode cuisine qui garde allumés les écrans de vos lecteurs : une balise script, un état honnête et aucune requête tierce. Gratuit, avec un lien de crédit.",
+      "builder": "Créez votre widget",
+      "builderSub": "Choisissez son apparence. La démo et le code changent au fur et à mesure.",
+      "demo": "Démo en direct",
+      "demoNote": "Voici le vrai widget, avec la ligne de crédit que le chargeur ajoute dessous.",
+      "snippet": "Installation : une ligne",
+      "snippetNote": "Collez-la là où le widget doit apparaître. Le chargeur ajoute lui-même le lien de crédit.",
+      "copy": "Copier",
+      "copied": "Copié",
+      "mode": {
+        "_": "Mode",
+        "cook": "Cuisine",
+        "standard": "Standard",
+        "clock": "Horloge",
+        "minimal": "Minimal"
+      },
+      "theme": {
+        "_": "Thème",
+        "auto": "Auto",
+        "light": "Clair",
+        "dark": "Sombre",
+        "oled": "OLED"
+      },
+      "size": {
+        "_": "Taille",
+        "compact": "Compact",
+        "full": "Pleine largeur"
+      },
+      "length": {
+        "_": "Durée de départ",
+        "pinf": "Jusqu’à l’arrêt",
+        "p15": "15 minutes",
+        "p30": "30 minutes",
+        "p45": "45 minutes",
+        "p60": "1 heure",
+        "p120": "2 heures",
+        "p240": "4 heures"
+      },
+      "lang": {
+        "_": "Langue",
+        "page": "Comme la page"
+      },
+      "allow": "Pourquoi l’attribut allow compte",
+      "allowBody": "Les navigateurs ne laissent une page intégrée garder l’écran allumé que si le site l’autorise avec allow=\"screen-wake-lock\". Le chargeur l’ajoute toujours. Si votre plateforme supprime les balises script, collez cet iframe et gardez l’attribut allow.",
+      "api": "API JavaScript",
+      "apiBody": "Le chargeur expose window.AwakeTabEmbed avec on(\"state\", callback), start('{ preset, ms, until }'), stop() et setTheme(theme). Appelez start() depuis un clic : la vidéo de secours a besoin d’un toucher.",
+      "licence": "La ligne de crédit",
+      "licenceBody": "Le widget est gratuit. Le chargeur ajoute dessous un petit lien de crédit, et garder l’écran allumé fonctionne de la même façon sur tous les sites."
+    },
+    "embed": {
+      "stop": "Arrêter",
+      "retry": "Réessayer",
+      "fixLabel": "Comment corriger (ouvre AwakeTab)",
+      "timers": {
+        "remove": "Supprimer {name}",
+        "done": "{name} est terminé",
+        "default": "Minuteur de {minutes} minutes",
+        "quick": "{minutes} min",
+        "left": "encore {time}",
+        "finished": "Terminé"
+      }
+    },
+    "unit": {
+      "min": "min",
+      "h": "h"
     }
   }
 }

@@ -6,6 +6,8 @@ import { gsap } from 'gsap';
 import { CustomEase } from 'gsap/CustomEase';
 
 gsap.registerPlugin(useGSAP, CustomEase);
+// Loops follow the wall clock, so after a stall or a hidden tab they jump to the right time instead of slowing down.
+gsap.ticker.lagSmoothing(0);
 
 type TValue = number | string;
 type TTrack = readonly (readonly [number, TValue])[];
@@ -23,7 +25,6 @@ const BEZIER = {
   in: '0.42,0 1,1',
   out: '0,0 0.58,1',
   inOut: '0.42,0 0.58,1',
-  roll: '0.2,0.8 0.2,1',
   step: '',
 } as const;
 type TEase = keyof typeof BEZIER;
@@ -67,11 +68,15 @@ const sweep =
     return { d, props: { rotation: line(a, a + 360) } };
   };
 const spin = (d: number): IFx => ({ d, props: { rotation: line(0, 360) }, origin: '50% 50%' });
-const pulse: IFx = {
-  d: 2.4,
-  props: { scale: line(0.7, 1.9), opacity: line(0.55, 0) },
-  ease: 'out',
-  origin: '50% 50%',
+const radius = new WeakMap<Element, number>();
+// A dot on a dial moves every second, and a scale keeps the origin it had when the loop was built, so the halo of
+// an SVG dot grows by its radius instead and stays on the dot.
+const pulse = (el: Element): IFx => {
+  if (!(el instanceof SVGCircleElement))
+    return { d: 2.4, props: { scale: line(0.7, 1.6), opacity: line(0.55, 0) }, ease: 'out', origin: '50% 50%' };
+  const r = radius.get(el) ?? el.r.baseVal.value;
+  radius.set(el, r);
+  return { d: 2.4, props: { 'attr:r': line(r * 0.7, r * 1.6), opacity: line(0.55, 0) }, ease: 'out' };
 };
 const drift: IFx = {
   d: 14,
@@ -154,17 +159,6 @@ const FX: Readonly<Record<string, IFx | ((el: Element) => IFx)>> = {
     },
     ease: 'in',
   },
-  roll: {
-    d: 1,
-    props: {
-      y: [
-        [0, -100],
-        [0.32, 0],
-        [1, 0],
-      ],
-    },
-    ease: 'roll',
-  },
   flick: {
     d: 5,
     props: {
@@ -236,16 +230,18 @@ function loop(el: Element, fx: IFx, elapsed: number): void {
   const svgOrigin = el.getAttribute('data-svg-origin');
   const start: gsap.TweenVars = svgOrigin ? { svgOrigin } : fx.origin ? { transformOrigin: fx.origin } : {};
   for (const [prop, track] of Object.entries(fx.props)) {
+    const vars = (v: TValue): gsap.TweenVars =>
+      prop.startsWith('attr:') ? { attr: { [prop.slice(5)]: v } } : { [prop]: v };
     const first = track[0];
-    if (first) start[prop] = first[1];
+    if (first) Object.assign(start, vars(first[1]));
     for (let i = 1; i < track.length; i++) {
       const a = track[i - 1];
       const b = track[i];
       if (!a || !b || b[0] <= a[0]) continue;
       tl.fromTo(
         el,
-        { [prop]: a[1] },
-        { [prop]: b[1], duration: (b[0] - a[0]) * fx.d, ease, immediateRender: false },
+        vars(a[1]),
+        { ...vars(b[1]), duration: (b[0] - a[0]) * fx.d, ease, immediateRender: false },
         a[0] * fx.d,
       );
     }

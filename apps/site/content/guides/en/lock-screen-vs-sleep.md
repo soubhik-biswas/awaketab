@@ -55,7 +55,7 @@ faq:
     a: "It can, and the cause is usually a driver or an app waking the PC. Run powercfg /sleepstudy in an administrator terminal: the report shows each standby session and what used power during it. A wake lock plays no part once the lid is shut."
   - q: "Is the Mac's password delay the same as its display timeout?"
     a: "No. The timeout decides when the screen turns off; the password delay decides how long after that you can wake the Mac without typing your password. Each can be set without the other."
-honestLimit: "A wake lock stops the display sleeping. It does not change when Windows or macOS asks for your password, and a work policy that locks after inactivity can still lock the screen while the pill says \"Screen awake\"."
+honestLimit: "A wake lock stops the display sleeping. It does not change when Windows or macOS asks for your password, and a work policy that locks after inactivity can still lock the screen while the pill says \"Awake\"."
 related:
   - "/guides/windows-11-screen-turns-off-after-1-minute"
   - "/on/windows-11"
@@ -74,7 +74,7 @@ These paths are for Windows 11. On older Windows 11 builds the timeouts section 
 
 ## If the setting is greyed out
 
-If choices are greyed out and Settings notes that your organisation manages them, IT has set them. One common source is the "Interactive logon: Machine inactivity limit" policy, which can lock the screen while the pill says "Screen awake". Ask IT. Managed machines get their own page: [keeping a work laptop display awake](/for/work-laptop).
+If choices are greyed out and Settings notes that your organisation manages them, IT has set them. One common source is the "Interactive logon: Machine inactivity limit" policy, which can lock the screen while the pill says "Awake". Ask IT. Managed machines get their own page: [keeping a work laptop display awake](/for/work-laptop).
 
 ::ad
 

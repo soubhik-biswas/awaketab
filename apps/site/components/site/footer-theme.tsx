@@ -1,10 +1,9 @@
 'use client';
 
 import { Monitor, Moon, Sun, type LucideIcon } from 'lucide-react';
-import { motion, useReducedMotion } from 'motion/react';
 import { useTheme } from 'next-themes';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useIsClient } from 'usehooks-ts';
-import { cn } from '@/lib/utils';
 
 type TChoice = 'system' | 'light' | 'dark';
 
@@ -19,7 +18,9 @@ const CHOICES: ReadonlyArray<readonly [TChoice, LucideIcon]> = [
 export function FooterTheme({ label, names }: { label: string; names: Record<TChoice, string> }) {
   const { theme, setTheme } = useTheme();
   const mounted = useIsClient();
-  const reduced = useReducedMotion();
+  const group = useRef<HTMLSpanElement>(null);
+  const [thumb, setThumb] = useState<{ x: number; width: number } | null>(null);
+  const [ready, setReady] = useState(false);
   const current: TChoice | null = !mounted
     ? null
     : theme === 'light'
@@ -27,13 +28,71 @@ export function FooterTheme({ label, names }: { label: string; names: Record<TCh
       : theme === 'system'
         ? 'system'
         : 'dark';
+
+  // The marked segment carries its name, so its width changes with the choice and when the web font arrives.
+  useEffect(() => {
+    const el = group.current;
+    if (!el || !current) return;
+    const place = () => {
+      const on = el.querySelector<HTMLElement>('[aria-checked="true"]');
+      if (on) setThumb({ x: on.offsetLeft, width: on.offsetWidth });
+    };
+    place();
+    const watch = new ResizeObserver(place);
+    watch.observe(el);
+    return () => watch.disconnect();
+  }, [current]);
+
+  // The thumb slides only after it has been put in place once.
+  const placed = thumb !== null;
+  useEffect(() => {
+    if (!placed) return;
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => setReady(true));
+    });
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [placed]);
+
+  const onKeyDown = (event: KeyboardEvent<HTMLSpanElement>) => {
+    const radios = [...event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="radio"]')];
+    const last = radios.length - 1;
+    const at = radios.findIndex((radio) => radio === document.activeElement);
+    const steps: Record<string, number> = {
+      ArrowRight: at < last ? at + 1 : 0,
+      ArrowDown: at < last ? at + 1 : 0,
+      ArrowLeft: at > 0 ? at - 1 : last,
+      ArrowUp: at > 0 ? at - 1 : last,
+      Home: 0,
+      End: last,
+    };
+    const next = radios[steps[event.key] ?? -1];
+    if (!next) return;
+    event.preventDefault();
+    next.focus();
+    next.click();
+  };
+
   return (
     <span
+      ref={group}
       role="radiogroup"
       aria-label={label}
-      className="inline-flex gap-0.5 rounded-full border border-white/[.09] bg-white/5 p-[3px]"
+      className="site-foot-seg"
+      data-ready={ready ? '' : undefined}
+      onKeyDown={onKeyDown}
     >
-      {CHOICES.map(([value, Icon]) => {
+      {thumb && (
+        <span
+          aria-hidden="true"
+          className="site-foot-seg-thumb"
+          style={{ width: thumb.width, transform: `translateX(${thumb.x}px)` }}
+        />
+      )}
+      {CHOICES.map(([value, Icon], index) => {
         const on = current === value;
         return (
           <button
@@ -42,21 +101,15 @@ export function FooterTheme({ label, names }: { label: string; names: Record<TCh
             role="radio"
             aria-checked={on}
             aria-label={names[value]}
+            tabIndex={on || (current === null && index === 0) ? 0 : -1}
             onClick={() => setTheme(value)}
-            className={cn(
-              'relative inline-flex h-7 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent outline-none after:absolute after:-inset-x-1.5 after:-inset-y-2 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#7CBBFF]',
-              on ? 'text-[#05060A]' : 'text-[#A6AFC2] hover:text-[#F2F4FA]',
-            )}
           >
+            <Icon className="site-foot-i" aria-hidden="true" />
             {on && (
-              <motion.span
-                layoutId="site-foot-theme"
-                aria-hidden="true"
-                className="absolute inset-0 rounded-full bg-[#F2F4FA]"
-                transition={reduced ? { duration: 0 } : { duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              />
+              <span className="site-foot-seg-label" aria-hidden="true">
+                {names[value]}
+              </span>
             )}
-            <Icon className="relative size-3.5" strokeWidth={2} aria-hidden="true" />
           </button>
         );
       })}
