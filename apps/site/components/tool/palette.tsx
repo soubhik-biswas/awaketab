@@ -51,7 +51,8 @@ function commands(g: IGlance): Array<{ h: string; items: ICmd[] }> {
     session.push({ id: 'resume', label: t('dock.resume'), icon: Play, keys: 'Space', run: a.resume });
   else session.push({ id: 'start', label: t('pal.start'), icon: Play, keys: '↵', run: a.start });
   if (live) session.push({ id: 'stop', label: t('dock.stop'), icon: X, run: a.stop });
-  session.push({ id: 'full', label: t('dock.full'), icon: Maximize, keys: '⇧F', run: a.fullscreen });
+  if (g.canFullscreen)
+    session.push({ id: 'full', label: t('dock.full'), icon: Maximize, keys: '⇧F', run: a.fullscreen });
   const go: ICmd[] = [
     {
       id: 'faces',
@@ -146,6 +147,7 @@ export function Palette() {
   const [q, setQ] = useState('');
   const groups = commands(g);
   const count = groups.reduce((n, gr) => n + gr.items.length, 0);
+  // The panel is 640 px inside its 1 px line, as the board draws it.
   const w = Math.min(g.W - 24, 640);
   const run = (c: ICmd) => {
     g.a.close();
@@ -175,8 +177,8 @@ export function Palette() {
             </Dialog.Overlay>
             <Dialog.Content asChild forceMount aria-describedby={undefined}>
               <motion.div
-                className="tg-glass absolute z-[8] overflow-hidden rounded-[24px] bg-(--tg-panel)! shadow-(--tg-shadow) outline-none"
-                style={{ left: Math.round((g.W - w) / 2), top: g.phone ? 72 : 120, width: w }}
+                className="tg-glass tg-field absolute z-[8] overflow-hidden rounded-[24px] bg-(--tg-panel)! shadow-(--tg-shadow) outline-none"
+                style={{ left: Math.round((g.W - w) / 2), top: g.phone ? 72 : 120, width: w + 2 }}
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 14 }}
@@ -184,7 +186,7 @@ export function Palette() {
               >
                 <Dialog.Title className="sr-only">{t('top.searchLabel')}</Dialog.Title>
                 <Command label={t('top.searchLabel')} loop className="flex flex-col">
-                  <div className="flex h-16 items-center gap-3 border-b border-(--tg-border) pr-4 pl-5 text-(--tg-t2)">
+                  <div className="flex h-[65px] items-center gap-3 border-b border-(--tg-border) pr-4 pl-5 text-(--tg-t2)">
                     <Search className="size-5 flex-none" strokeWidth={2} aria-hidden="true" />
                     <Command.Input
                       value={q}
@@ -194,7 +196,7 @@ export function Palette() {
                     />
                     <Kbd>esc</Kbd>
                   </div>
-                  <Command.List className="tg-scroll max-h-[min(60vh,520px)] overflow-y-auto p-2 [&_[cmdk-list-sizer]]:flex [&_[cmdk-list-sizer]]:flex-col [&_[cmdk-list-sizer]]:gap-0.5">
+                  <Command.List className="tg-scroll max-h-[min(60svh,520px)] overflow-y-auto p-2 [&_[cmdk-list-sizer]]:flex [&_[cmdk-list-sizer]]:flex-col [&_[cmdk-list-sizer]]:gap-0.5">
                     <Command.Empty className="px-3 py-6 text-center text-[15px] text-(--tg-t2)">
                       {t('pal.none', { q })}
                     </Command.Empty>
@@ -202,7 +204,7 @@ export function Palette() {
                       <Command.Group
                         key={gr.h}
                         heading={gr.h}
-                        className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pt-2.5 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[12px] [&_[cmdk-group-heading]]:tracking-[.12em] [&_[cmdk-group-heading]]:text-(--tg-t2) [&_[cmdk-group-heading]]:uppercase"
+                        className="flex flex-col gap-0.5 [&_[cmdk-group-items]]:flex [&_[cmdk-group-items]]:flex-col [&_[cmdk-group-items]]:gap-0.5 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pt-2.5 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[12px] [&_[cmdk-group-heading]]:tracking-[.12em] [&_[cmdk-group-heading]]:text-(--tg-t2) [&_[cmdk-group-heading]]:uppercase"
                       >
                         {gr.items.map((c) => {
                           const Icon = c.icon;
@@ -225,7 +227,7 @@ export function Palette() {
                       </Command.Group>
                     ))}
                   </Command.List>
-                  <div className="flex h-12 items-center gap-4 border-t border-(--tg-border) px-4 text-[13px] text-(--tg-t2)">
+                  <div className="flex h-[49px] items-center gap-4 border-t border-(--tg-border) px-4 text-[13px] text-(--tg-t2)">
                     <span>
                       <Kbd>↑</Kbd> <Kbd>↓</Kbd> {t('pal.move')}
                     </span>

@@ -23,20 +23,20 @@ facts:
     value: "14 or later"
   - label: "Screen timeout"
     value: "one setting for every app"
-  - label: "Floating window"
+  - label: "Mini clock"
     value: "not on Android"
 toc:
   set-it-up-on-your-android-phone: "Set it up"
   which-android-setups-keep-the-screen-on: "Which setups work"
   what-turns-the-screen-off-anyway: "What turns it off"
 steps:
-  - title: "Open AwakeTab in Chrome and tap Start"
+  - title: "Open AwakeTab in Chrome and tap Keep awake"
     path: "Chrome › awaketab.com"
-    text: "Pick a length or an \"Until…\" time, then tap Start. Wait for the pill to say \"Screen awake\"."
-    shot: "AwakeTab in Chrome on Android with the pill reading Screen awake"
+    text: "Pick a length, then tap Keep awake. Wait for the pill to say \"Awake\"."
+    shot: "AwakeTab in Chrome on Android with the pill reading Awake"
   - title: "Keep the tab on screen"
     path: "No Home, Recents or other apps"
-    text: "Leaving Chrome or the tab ends the lock straight away, and the pill changes to \"Paused — tab hidden\". Come back and AwakeTab asks again."
+    text: "Leaving Chrome or the tab ends the lock straight away, and the pill changes to \"Paused\". Come back and AwakeTab asks again."
     shot: "the pill after leaving Chrome and coming back"
   - title: "Optional: use split screen"
     path: "Recents › app icon › Split screen"
@@ -69,7 +69,7 @@ matrix:
     - what: "Older browser, or a plain http page"
       result: fallback
       label: "Video fallback"
-      text: "No Screen Wake Lock API there. You can choose \"Tap to use the fallback\"."
+      text: "No Screen Wake Lock API there. You can choose \"No wake lock in this browser\"."
 rows:
   blockers:
     - title: "Sleeping-apps lists"
@@ -90,8 +90,8 @@ faq:
     a: "No. Chrome has no Battery Saver check on the wake lock, so it is not refused. Battery Saver may still shorten your timeout or dim the display, which changes what happens after the session ends or once you leave the tab."
   - q: "Why was my session gone when I came back to Chrome?"
     a: "Some phones close apps they think you have stopped using, and Chrome can be one of them once it is in the background. AwakeTab restores a session after the page reloads, so check the pill. If it keeps happening, look for your phone maker's list of apps that should never sleep and add Chrome."
-  - q: "Can I use AwakeTab's floating window on Android?"
-    a: "No. The floating window needs a desktop browser feature that Chrome for Android lacks. Split screen is the nearest option, since it keeps the tab on screen beside another app."
+  - q: "Can I use AwakeTab's mini clock on Android?"
+    a: "No. The mini clock needs a desktop browser feature that Chrome for Android lacks. Split screen is the nearest option, since it keeps the tab on screen beside another app."
 honestLimit: "The screen stays on only while Chrome, with the AwakeTab tab showing, is on screen. Press Home or open another app and your phone goes back to its normal screen timeout."
 related:
   - "/for/cooking"

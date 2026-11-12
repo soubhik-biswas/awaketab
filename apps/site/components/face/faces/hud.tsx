@@ -1,6 +1,6 @@
 import { fxInk } from '../art';
 import { alpha, sectorPath } from '../geometry';
-import { card, DISPLAY, type IDrawProps, L, lmin, MONO } from '../kit';
+import { card, DISPLAY, fit, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 // A pale dash with light-grey off segments by day, a dark dash at night.
 const ART = {
@@ -56,7 +56,7 @@ export default function Hud({ m }: IDrawProps) {
   const acc = m.accent;
   const lit = Math.round(m.ringFrac * HS);
   return (
-    <div style={card(m, { background: a.glass })}>
+    <div className={PLATE} style={card(m, { background: a.glass })}>
       <svg
         style={{ position: 'absolute', left: -14, top: -14 }}
         width="360"
@@ -87,7 +87,7 @@ export default function Hud({ m }: IDrawProps) {
           style={{
             fontFamily: DISPLAY,
             fontStretch: '112%',
-            fontSize: m.long ? 56 : 76,
+            fontSize: fit(m, m.long ? 56 : 76, 48),
             fontWeight: 600,
             letterSpacing: '-0.03em',
             lineHeight: 1,

@@ -19,9 +19,7 @@ const UNKNOWN: IAuthStatus = { ready: true, google: true, github: true, passkey:
 const FEATURES = ['f1', 'f2', 'f3', 'f4', 'f5'] as const;
 const PLANS: readonly TProPlan[] = ['yearly', 'monthly'];
 
-// /pro/checkout: plan → account → pay, then the payment provider returns to /pro/activate. The plan step is the Pro
-// offer panel; the account step is the three sign-in buttons, skipped when already signed in or when sign-in is
-// not set up on this site.
+// /pro/checkout: plan, account, pay. The account step is skipped when signed in or when sign-in is not set up.
 export function CheckoutFlow({ backHref }: { backHref: string }) {
   const t = useTranslations('proflow.checkout');
   const [step, setStep] = useState<TCheckoutStep>('plans');

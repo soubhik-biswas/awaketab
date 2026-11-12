@@ -19,7 +19,7 @@ faq:
   - q: "¿AwakeTab evita que Windows se suspenda o solo mantiene la pantalla?"
     a: "Lo que pide es la pantalla, y eso alcanza: en Chrome y Edge, mientras la pantalla sigue encendida, ni Windows ni macOS entran en suspensión por inactividad, según la documentación de Microsoft y Apple. Para una copia larga con la pantalla apagada, usa una utilidad nativa o el nivel Sistema de la extensión."
   - q: "¿Puedo minimizar el navegador mientras se descarga el archivo?"
-    a: "No. Una ventana minimizada o una pestaña en segundo plano pierden el bloqueo, y el indicador muestra “En pausa — pestaña oculta” hasta que vuelves. Deja AwakeTab en una ventana a la vista, aunque sea pequeña."
+    a: "No. Una ventana minimizada o una pestaña en segundo plano pierden el bloqueo, y el indicador muestra “En pausa” hasta que vuelves. Deja AwakeTab en una ventana a la vista, aunque sea pequeña."
   - q: "Si la laptop se suspendió de todos modos, ¿el temporizador miente?"
     a: "No. Cada cálculo usa la hora del sistema y las estadísticas solo suman mientras el bloqueo está activo, así que al despertar verás un número honesto en lugar de horas que no ocurrieron."
 honestLimit: "Mantiene la pantalla encendida y, en Chrome y Edge sobre Windows o macOS, eso también evita la suspensión por inactividad mientras la pestaña está a la vista. Cerrar la tapa sí suspende el equipo."
@@ -48,12 +48,12 @@ En Linux, Chrome y Firefox le piden al escritorio que no se suspenda; que lo res
 
 1. Conecta la laptop a la corriente si la descarga es larga. El ahorro de energía de Windows (“Energy saver”, antes Ahorro de batería) no rechaza el bloqueo, pero puede atenuar la pantalla.
 2. Abre AwakeTab en una ventana propia y déjala a la vista, al lado del gestor de descargas o en un segundo monitor. Puede ser pequeña, pero no minimizada.
-3. Elige “∞” para que no se detenga sola; cuando el indicador muestre “Pantalla despierta”, ya puedes dejarla.
+3. Elige “Sin fin” para que no se detenga sola; cuando el indicador muestre “Despierta”, ya puedes dejarla.
 4. No cierres la tapa. Si necesitas la laptop cerrada, configura el sistema o usa una herramienta nativa.
 
 ## Por qué el indicador importa más que el reloj
 
-Muchas páginas reproducen un video en bucle y esperan que la pantalla no se apague. AwakeTab solo arranca el temporizador cuando el navegador confirma el bloqueo. Si la pestaña se oculta, verás “En pausa — pestaña oculta” en lugar de una cuenta regresiva que sigue avanzando sin respaldo. Si el equipo llegó a suspenderse, el tiempo se recalcula con el reloj del sistema, así que no te va a mostrar horas falsas.
+Muchas páginas reproducen un video en bucle y esperan que la pantalla no se apague. AwakeTab solo arranca el temporizador cuando el navegador confirma el bloqueo. Si la pestaña se oculta, verás “En pausa” en lugar de una cuenta regresiva que sigue avanzando sin respaldo. Si el equipo llegó a suspenderse, el tiempo se recalcula con el reloj del sistema, así que no te va a mostrar horas falsas.
 
 ## Navegadores con bloqueo nativo en escritorio
 

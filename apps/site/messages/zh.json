@@ -57,93 +57,9 @@
     "library": {
       "h1": "@awaketab/wake:诚实的唤醒锁库"
     },
-    "extension": {
-      "h1": "AwakeTab for Chrome",
-      "lead": "网页版只有在标签页可见时才能保持唤醒锁。扩展会直接请求 Chrome 让屏幕（或仅让电脑）保持唤醒，因此即使标签页被隐藏或窗口已最小化也能继续工作。",
-      "cta": {
-        "chrome": "添加到 Chrome",
-        "edge": "获取 Edge 版",
-        "note": "免费。适用于 {browsers}（版本 {version} 或更高）。",
-        "chromeSearch": "在 Chrome 应用商店中搜索",
-        "edgeSearch": "在 Edge 加载项中搜索",
-        "pending": "商店页面正在等待审核，因此这些按钮目前会打开商店搜索。"
-      },
-      "firefox": {
-        "title": "在用 Firefox 或 Safari？",
-        "body": "Firefox 和 Safari 没有为扩展提供电源 API，因此没有适用于它们的 AwakeTab 扩展。网页版会在标签页可见时让屏幕保持常亮。",
-        "link": "在 Firefox 上使用 AwakeTab"
-      },
-      "features": {
-        "title": "功能",
-        "levels": "屏幕或系统：让屏幕保持常亮，或者只让电脑保持唤醒、屏幕可以变暗。",
-        "timers": "与网页版相同的预设：15 分钟到 4 小时、到指定时间，或直到你停止。",
-        "badge": "工具栏徽标会显示 ON、SYS 或剩余分钟数，在任意标签页按 Alt+Shift+A 即可开关。",
-        "pro": "Pro 版：每周计划，以及在 Chrome 启动或访问你选定的网站时自动启动。"
-      },
-      "limits": {
-        "running": "只在 Chrome 运行时有效。",
-        "lid": "合上笔记本盖子时无法阻止睡眠。",
-        "presence": "它不会让 Teams 或 Slack 一直显示你“在线”：在线状态取决于你的键盘和鼠标操作，而 AwakeTab 从不模拟输入。"
-      },
-      "permissions": {
-        "title": "权限及用途",
-        "power": "power — 让屏幕或系统保持唤醒。",
-        "storage": "storage — 保存你的设置和当前会话。",
-        "alarms": "alarms — 在后台进程休眠时运行计时器和计划。",
-        "notifications": "notifications（可选）— 在计时结束时通知你。",
-        "sites": "网站访问权限（可选，每次一个网站）— 在你选定的网站上自动启动。默认不访问任何网站。",
-        "lead": "Three it needs to work, two you can turn on. It gets no site access unless you pick a site."
-      },
-      "privacy": "匿名使用统计默认关闭。扩展从不发送网址、标签页标题或网站名称，也不显示广告。",
-      "web": "不想安装任何东西？网页版会在标签页可见时让屏幕保持常亮。",
-      "value": "Keeps your screen awake from the toolbar, even when the tab is hidden or the window is minimised.",
-      "fact": {
-        "hidden": "Keeps going with the tab hidden",
-        "level": "Screen, or only the computer",
-        "private": "No ads, no site access by default"
-      },
-      "alt": {
-        "why": "Why there is no extension for this browser"
-      },
-      "compare": {
-        "title": "Tab or extension",
-        "hidden": "With the tab hidden"
-      },
-      "steps": {
-        "title": "Ready in three steps",
-        "install": {
-          "title": "Install",
-          "body": "Add it from the Chrome Web Store, or from Edge Add-ons in Edge."
-        },
-        "pin": {
-          "title": "Pin it",
-          "body": "Open the Extensions menu (the puzzle piece) and pin AwakeTab, so its badge stays in view."
-        },
-        "press": {
-          "title": "Press the shortcut",
-          "body": "From any tab, it starts your usual length. Press it again to stop. On a Mac, Alt is the Option key."
-        }
-      },
-      "faq": {
-        "title": "Questions",
-        "q1": "Is it free?",
-        "a1": "Yes. Timers, Screen or System, the toolbar badge and the shortcut are free. Pro adds weekly schedules and auto-start.",
-        "q2": "Can it see the sites I visit?",
-        "a2": "No. It has no site access by default and never sends URLs, tab titles or site names. Auto-start on a site, a Pro feature, asks for access to that one site.",
-        "q3": "Why not just use the web app?",
-        "a3": "The web app keeps the screen awake only while its tab is visible. The extension keeps going while you work in other tabs or with the window minimised, as long as Chrome is running.",
-        "q4": "Can I change the shortcut?",
-        "a4": "Yes. Open chrome://extensions/shortcuts in Chrome, or edge://extensions/shortcuts in Edge, and set your own. Do that too if another extension already uses Alt+Shift+A.",
-        "q5": "Does the extension have the clock faces, sounds and notes?",
-        "a5": "No, those live in the web app. The extension keeps the screen, or only the computer, awake from the toolbar. Open AwakeTab from its pop-up for the twelve clock faces, colour themes, focus sounds, the notepad and the focus tools."
-      },
-      "band": {
-        "title": "Keep the screen on while you work in other tabs"
-      }
-    },
     "home": {
       "title": "AwakeTab — 让这块屏幕保持常亮",
-      "description": "一键让屏幕保持常亮。一只安静的时钟显示剩余时间。46 款表盘、6 种动态背景，全部免费，无需安装，无需账户。",
+      "description": "一键让屏幕保持常亮，安静的时钟显示剩余时间。46 款表盘、6 种动态背景，全部免费；无需安装，也无需注册账户，时间一到，屏幕便会恢复正常休眠。",
       "ogAlt": "显示剩余 38:12 的 AwakeTab 时钟"
     }
   },
@@ -743,72 +659,16 @@
       "tomorrow": "{time} tomorrow",
       "yesterday": "{time} yesterday"
     },
-    "volt": {
-      "soundNav": "声音",
-      "studio": "表盘工作室",
-      "keep": "保持屏幕常亮",
-      "pause": "暂停",
-      "resume": "继续",
-      "stop": "停止",
-      "ext15": "+15 分钟",
-      "again": "重新开始",
-      "starting": "正在启动…",
-      "fix": "查看解决办法",
-      "fallback": "使用视频备用方案",
-      "timer": "计时",
-      "faces": "表盘",
-      "presets": "预设",
-      "history": "历史记录",
-      "devices": "设备",
-      "settings": "设置",
-      "help": "帮助",
-      "more": "更多",
-      "search": "搜索或跳转…",
-      "session": "会话",
-      "length": "时长",
-      "label": "标签",
-      "face": "表盘",
-      "allFaces": "全部 49 款",
-      "options": "选项",
-      "level": "防休眠范围",
-      "screen": "屏幕",
-      "system": "系统 · 应用",
-      "sound": "结束时提示音",
-      "soundD": "柔和的双音提示",
-      "dim": "夜间调暗时钟",
-      "dimD": "晚上 10:00 之后",
-      "secs": "显示秒",
-      "secsD": "表盘和标签页标题",
-      "idle": "未启用",
-      "awakeUntil": "常亮中 · 至",
-      "awakeFor": "常亮中 · 不限时",
-      "fb": "常亮中 · 视频备用",
-      "paused": "已暂停",
-      "needs": "轻触以继续",
-      "blocked": "已被阻止 · 省电模式",
-      "ended": "已结束于 ",
-      "unsup": "此浏览器不支持",
-      "left": "剩余",
-      "until": "至 ",
-      "endsAt": "结束于 ",
-      "wouldEnd": "将结束于 ",
-      "min": " 分钟",
-      "hour": "1 小时",
-      "hours2": "2 小时",
-      "untilT": "直到…",
-      "label0": "向董事会演示",
-      "forLen": " · 结束于 ",
-      "extend": "延长",
-      "hero": "让屏幕保持常亮。",
-      "heroSub": "一键开启。时间到后自动恢复休眠，无需安装或账号。",
-      "heroSubPhone": "一键开启，到点自动休眠。"
-    },
     "glance": {
       "free": "免费",
       "unit": {
         "h": "小时",
         "min": "分钟",
         "hour": "小时"
+      },
+      "long": {
+        "min": "{n} 分钟",
+        "hour": "{n} 小时"
       },
       "len": {
         "0": "15 分钟",
@@ -833,6 +693,7 @@
         "fallback": "视频常亮中 · 至 {time}",
         "fallbackOpen": "视频常亮中 · 直到你停止",
         "paused": "已暂停 · 剩余 {dur}",
+        "pausedOpen": "已暂停 · 不限时",
         "needsyou": "轻触继续 · 标签页曾被隐藏",
         "blocked": "未常亮 · {reason}",
         "unsupported": "此浏览器不支持唤醒锁",
@@ -857,6 +718,11 @@
       },
       "stage": {
         "label": "计时"
+      },
+      "crash": {
+        "h": "计时器出了点问题。",
+        "d": "屏幕不再保持唤醒。请重新加载页面后再开始。",
+        "btn": "重新加载"
       },
       "face": {
         "aria": "表盘：{face}",
@@ -967,6 +833,7 @@
         "hidden": "标签页曾被隐藏，浏览器已释放。",
         "refused": "未常亮 — {reason}。请查看解决办法。",
         "paused": "已暂停。保留 {dur}。",
+        "pausedOpen": "已暂停。",
         "ended": "时间到。屏幕现在可以休眠。",
         "face": "表盘：{face}。"
       },
@@ -1091,9 +958,11 @@
         "h12": "12 小时制",
         "h12D": "显示上午11:42，而不是 11:42",
         "secs": "显示秒",
-        "secsD": "在表盘和标签页标题中显示",
+        "secsD": "在标签页标题中显示",
         "dim": "夜间调暗",
         "dimD": "晚上 10:00 后光线更柔和",
+        "keep": "始终显示控件",
+        "keepD": "保持唤醒时不隐藏顶部栏和控制栏",
         "sound": "声音",
         "chime": "结束提示音",
         "chimeD": "时间到时响一次",
@@ -1115,6 +984,9 @@
         "shareD": "打开即可开始的链接",
         "clear": "清除记录",
         "clearD": "预设和设置会保留",
+        "privacy": "隐私",
+        "count": "统计我的访问",
+        "countD": "不使用 Cookie，完全匿名。无论开或关，AwakeTab 的功能都一样。",
         "account": "账户",
         "signedOut": "未登录",
         "signedOutD": "不登录也能使用全部功能。只有同步 Pro 时才需要登录。",
@@ -1175,6 +1047,11 @@
           "s1d": "awaketab.com 的用法完全相同，并允许唤醒锁。",
           "s2": "或者使用视频备用方案",
           "s2d": "一段无声、不可见的视频能让大多数屏幕保持常亮。"
+        },
+        "ok": {
+          "h": "一切正常",
+          "awake": "浏览器正在保持唤醒锁，所以屏幕会一直亮着。",
+          "rest": "当前没有正在进行的会话。如果浏览器拒绝唤醒锁，原因和解决办法会显示在这里。"
         }
       },
       "studio": {
@@ -1322,7 +1199,7 @@
         "f3": "跨设备历史，可导出",
         "f4": "真人优先帮助",
         "f5": "抢先体验新表盘和氛围",
-        "note": "14 天免费，之后每年 {price}。随时可在 设置 → 管理订阅 中取消。由 [PAYMENT PROVIDER] 提供安全结账。",
+        "note": "14 天免费，之后每年 {price}。随时可在 设置 → 管理订阅 中取消。由 Polar 提供安全结账。",
         "trial": "开始 14 天免费试用",
         "later": "以后再说"
       },
@@ -1351,7 +1228,7 @@
         "yearlyD": "{price} / 年 · 下次付款 {date}",
         "change": "更改",
         "payment": "付款方式",
-        "paymentD": "由 [PAYMENT PROVIDER] 处理",
+        "paymentD": "由 Polar 处理",
         "update": "更新",
         "screens": "屏幕",
         "screensD": "已用 {n} / {max}",
@@ -1360,8 +1237,8 @@
         "cancelD": "有效期至 {date}",
         "cancelBtn": "取消",
         "receipts": "收据",
-        "r1": "Pro · 按年 · [PRICE]",
-        "r2": "试用开始 · [PRICE] 0",
+        "r1": "Pro · 按年 · $12",
+        "r2": "试用开始 · $0",
         "download": "下载",
         "note": "随时取消：Pro 会保持到你已付费周期结束。你的屏幕保留所有免费功能。",
         "done": "完成",
@@ -1371,7 +1248,7 @@
         "lifetime": "Pro · 一次性付费",
         "lifetimeD": "不会续订",
         "allReceipts": "全部收据",
-        "allReceiptsD": "每笔付款都由 [PAYMENT PROVIDER] 保存",
+        "allReceiptsD": "每笔付款都由 Polar 保存",
         "open": "打开"
       },
       "devices": {
@@ -1895,7 +1772,7 @@
     },
     "promise": "Keeps your screen awake and tells you honestly whether it is working.",
     "version": "Version {version}",
-    "copyright": "© {year} AwakeTab · MIT",
+    "copyright": "© {year} AwakeTab",
     "made": "Made with care",
     "source": "Open source on GitHub",
     "top": "Back to top",
@@ -2169,25 +2046,6 @@
       "clock": "当前时间 {time}"
     }
   },
-  "builder": {
-    "mode": "模式",
-    "size": {
-      "_": "尺寸",
-      "compact": "紧凑(320 × 96)",
-      "full": "全宽(高 240 像素)"
-    },
-    "lang": {
-      "_": "语言",
-      "page": "与页面一致"
-    },
-    "snippet": "你的代码片段",
-    "copied": "已复制",
-    "url": "终端网址",
-    "msg": "消息(最多 80 个字符)",
-    "logo": "徽标网址(https,需要 Kiosk 许可证)",
-    "token": "许可证令牌(需要 Kiosk 许可证)",
-    "autostart": "自动开始"
-  },
   "library": {
     "demo": {
       "title": "实时状态机",
@@ -2229,127 +2087,6 @@
   "kiosk": {
     "license": {
       "invalid": "无法验证此终端许可证链接。请从终端网址生成器重新打开该网址。"
-    }
-  },
-  "ext": {
-    "name": "AwakeTab: Keep Screen Awake",
-    "description": "一键让屏幕（或整台电脑）保持唤醒，状态显示诚实可信。",
-    "command": {
-      "toggle": "开关保持唤醒"
-    },
-    "level": {
-      "label": "保持唤醒",
-      "display": {
-        "_": "屏幕",
-        "help": "保持屏幕常亮，电脑也不会休眠。"
-      },
-      "system": {
-        "_": "系统",
-        "help": "电脑保持唤醒，但屏幕仍可能变暗或关闭。"
-      }
-    },
-    "pill": {
-      "system": "屏幕可能变暗或锁定",
-      "systemHeld": "系统保持唤醒"
-    },
-    "popup": {
-      "start": "开始",
-      "open": "打开 AwakeTab",
-      "limits": "只要 Chrome 在运行就有效，即使标签页被隐藏或窗口已最小化。合上笔记本盖子时无法阻止睡眠。"
-    },
-    "origin": {
-      "schedule": "由你的计划启动",
-      "autostart": "由自动启动网站启动",
-      "startup": "在 Chrome 启动时开始"
-    },
-    "advice": {
-      "unsupported": "此浏览器没有为扩展提供电源 API。请改为在标签页中打开 AwakeTab。",
-      "denied": "你的浏览器或所在组织阻止了让此设备保持唤醒。"
-    },
-    "options": {
-      "title": "AwakeTab 设置",
-      "saved": "已保存",
-      "defaults": "默认设置",
-      "sound": {
-        "help": "使用系统通知提示音，因此需要开启通知。"
-      },
-      "notifications": {
-        "allow": "允许通知",
-        "help": "Chrome 会在第一次时请求权限。你可以随时在这里关闭。"
-      },
-      "battery": {
-        "_": "电池",
-        "unavailable": "扩展暂不支持：Chrome 不会把电池电量告诉扩展的后台进程。网页版可以在电量低时停止。"
-      },
-      "appearance": "外观与语言",
-      "keyboard": "键盘",
-      "shortcut": {
-        "current": "在任意标签页中开关：{shortcut}",
-        "none": "尚未设置在任意标签页中开关的快捷键。",
-        "change": "更改快捷键"
-      },
-      "locale": {
-        "auto": "浏览器语言"
-      }
-    },
-    "schedules": {
-      "title": "计划",
-      "days": "星期",
-      "from": "开始",
-      "to": "结束",
-      "add": "添加计划",
-      "empty": "还没有计划。",
-      "error": {
-        "days": "请至少选择一天。",
-        "same": "开始和结束时间必须不同。"
-      }
-    },
-    "autostart": {
-      "title": "自动启动",
-      "browser": "每次 Chrome 启动时保持唤醒",
-      "sites": {
-        "_": "网站",
-        "help": "当该网站的标签页加载时开始，关闭最后一个时停止。Chrome 只会请求访问该网站；AwakeTab 从不上报你添加了哪些网站。"
-      },
-      "site": "网站，例如 docs.example.com",
-      "duration": {
-        "open": "在标签页打开期间"
-      },
-      "add": "添加网站",
-      "empty": "还没有网站。",
-      "error": {
-        "host": "请输入网站名称，例如 docs.example.com。",
-        "denied": "Chrome 未授予访问该网站的权限。"
-      }
-    },
-    "remove": {
-      "_": "移除",
-      "label": "移除 {item}"
-    },
-    "pro": {
-      "locked": "计划和自动启动属于 AwakeTab Pro 功能。"
-    },
-    "license": {
-      "title": "Pro 许可证",
-      "activate": "激活",
-      "devices": "在这里激活会占用你五台设备中的一台。密钥只保存在此浏览器配置文件中，永不同步。",
-      "remove": "从此浏览器移除",
-      "removeFailed": "已在此处移除，但无法连接 awaketab.com。请在“管理设备”中移除此设备。",
-      "get": "在 awaketab.com 查找你的密钥",
-      "working": "正在验证你的密钥…"
-    },
-    "privacy": {
-      "title": "隐私",
-      "telemetry": {
-        "help": "除非你开启，否则保持关闭。只向 awaketab.com 发送会话开始和结束、Pro 激活及错误计数。从不发送网址、标签页标题或网站名称。"
-      },
-      "stored": "保存在此浏览器中：你的设置、当前会话和 Pro 许可证。设置保存在这里，并通过你的 Chrome 帐号同步；许可证从不同步。",
-      "policy": "隐私政策"
-    },
-    "about": {
-      "title": "关于",
-      "version": "版本 {version}",
-      "changelog": "更新内容"
     }
   },
   "notes": {
@@ -2532,13 +2269,13 @@
         "awakeFor": "已常亮"
       },
       "cap": {
-        "idle": "就绪",
-        "starting": "正在启动…",
-        "running": "屏幕常亮中",
-        "fallback": "通过视频备用方案常亮",
-        "paused": "已暂停 — 标签页已隐藏",
-        "blocked": "已被阻止 — 查看解决办法",
-        "unsupported": "轻触以使用备用方案",
+        "idle": "未保持常亮",
+        "starting": "正在询问浏览器…",
+        "running": "常亮中",
+        "fallback": "视频常亮中",
+        "paused": "已暂停",
+        "blocked": "未常亮",
+        "unsupported": "此浏览器不支持唤醒锁",
         "up": "时间到"
       },
       "end": {
@@ -2677,13 +2414,17 @@
         "lead": "链接可能过时或输错了。计时器就在这里。",
         "guides": "热门指南",
         "eyebrow": "404",
-        "description": "这个 AwakeTab 页面睡着了：链接可能已过期或输错了。计时器就在这里照常可用，帮助中心和指南一点就到。"
+        "description": "这个 AwakeTab 页面睡着了：链接可能已过期或输错了。计时器就在这里照常可用，帮助中心和指南一点就到。",
+        "help": "搜索帮助主题，或告诉我们哪里出了问题。"
       },
       "offline": {
         "eyebrow": "离线",
         "h1": "你离线了，计时器没有。",
         "lead": "保持屏幕常亮不需要联网。同步和共享链接会等到你重新联网。",
-        "timer": "继续使用计时器"
+        "timer": "继续使用计时器",
+        "leadFree": "保持屏幕常亮不需要联网。尚未打开过的页面要等你重新联网后才能加载。",
+        "description": "你已离线，但保持屏幕常亮不需要联网。计时器照常工作；同步和分享链接要等你重新联网。",
+        "descriptionFree": "你已离线，但保持屏幕常亮不需要联网。计时器照常工作，其他页面在你重新联网后即可加载。"
       },
       "status": {
         "eyebrow": "维护",
@@ -2691,8 +2432,7 @@
         "lead": "登录和同步将暂停到大约{time}。计时器在每台设备上照常工作。",
         "okEyebrow": "状态",
         "okH1": "一切运行正常。",
-        "okLead": "计时器、登录和同步都在正常工作。计划维护会先在这里公布。",
-        "see": "查看状态"
+        "okLead": "计时器、登录和同步都在正常工作。计划维护会先在这里公布。"
       },
       "removed": {
         "eyebrow": "设置已移除",
@@ -2744,7 +2484,6 @@
     "help": {
       "eyebrow": "帮助中心",
       "h1": "需要什么帮助？",
-      "lead": "大多数问题来自省电模式、隐藏的标签页或旧版浏览器。搜索一下，或从下面的主题开始。",
       "searchLabel": "搜索帮助",
       "placeholder": "搜索帮助 — 试试“电池”或“iPad”",
       "chips": "常见问题",
@@ -2760,8 +2499,7 @@
     "changelog": {
       "crumb": "更新日志",
       "eyebrow": "更新日志",
-      "h1": "新功能",
-      "lead": "每次发布，最新的在前。版本号和日期在发布前均为占位内容。"
+      "h1": "新功能"
     },
     "pro": {
       "h1": "保持常亮一直免费。"
@@ -2774,46 +2512,67 @@
       "allow": "允许"
     },
     "foot": {
-      "kicker": "由人制作 · 由人阅读",
-      "ctaH": "告诉我们，怎样让它",
-      "ctaAccent": "更像你的。",
+      "kicker": "免费 · 无需账号 · 开源",
+      "headline": "告诉我们，怎样让它<accent>更像你的。</accent>",
       "ctaLine": "在工具里点两下：设置 → 发送反馈。每条消息我们都会读。",
-      "timer": "打开计时器",
       "feedback": "发送反馈",
+      "help": "帮助中心",
       "tagline": "在浏览器里让屏幕保持常亮，结束后再让它正常休眠。永久免费。",
-      "status": "所有系统正常 · 唤醒锁 API 运行良好",
-      "statusDown": "已计划维护 · 计时器照常可用",
+      "status": {
+        "native": "此浏览器可以让屏幕保持常亮",
+        "fallback": "这里没有唤醒锁，所以 AwakeTab 改用视频"
+      },
       "social": {
         "github": "GitHub 上的 AwakeTab",
-        "x": "在 X 上分享 AwakeTab",
         "rss": "更新日志订阅（RSS）"
       },
-      "product": "产品",
-      "uses": "使用场景",
-      "learn": "学习",
-      "company": "关于",
-      "faces": "表盘",
-      "vibes": "氛围",
-      "pro": "Pro",
+      "groups": {
+        "product": "产品",
+        "uses": "使用场景",
+        "devices": "设备",
+        "learn": "学习",
+        "company": "关于"
+      },
+      "links": {
+        "timer": "打开计时器",
+        "faces": "表盘",
+        "vibes": "氛围",
+        "extension": "扩展",
+        "embed": "网站小组件",
+        "kiosk": "墙面模式",
+        "library": "Wake 代码库",
+        "cooking": "做饭",
+        "presenting": "演示",
+        "dashboards": "仪表盘",
+        "nightdesk": "夜间书桌",
+        "allUses": "全部使用场景",
+        "support": "浏览器支持",
+        "deviceGuides": "设备指南",
+        "compare": "工具对比",
+        "help": "帮助中心",
+        "guides": "指南",
+        "how": "工作原理",
+        "faq": "常见问题",
+        "changelog": "更新日志",
+        "about": "关于 AwakeTab",
+        "github": "GitHub",
+        "roadmap": "路线图",
+        "privacy": "隐私",
+        "terms": "条款"
+      },
       "new": "新",
-      "cooking": "做饭",
-      "presenting": "演示",
-      "dashboards": "仪表盘",
-      "nightdesk": "夜间书桌",
-      "help": "帮助中心",
-      "support": "浏览器支持",
-      "guides": "指南",
-      "changelog": "更新日志",
-      "about": "关于 AwakeTab",
-      "statusLink": "运行状态",
-      "copyright": "© [YEAR] [COMPANY NAME]",
+      "newTab": "在新标签页中打开",
+      "copyright": "© {year} AwakeTab",
+      "made": "由 <name></name> 用<heart>爱</heart>打造",
+      "makerLink": "{name} 的 LinkedIn 主页",
       "cookies": "无追踪 Cookie",
       "theme": {
         "label": "主题",
         "system": "跟随系统",
         "light": "浅色",
         "dark": "深色"
-      }
+      },
+      "language": "语言"
     },
     "story": {
       "cue": "向下滚动：它有什么不同",
@@ -2878,7 +2637,8 @@
         "free": {
           "h": "免费。全部。",
           "d": "每一款表盘、主题、预设和声音。Pro 只负责同步多块屏幕。",
-          "zero": "$0"
+          "zero": "$0",
+          "dFree": "每一款表盘、主题、预设和声音。没有任何付费项目。"
         },
         "devices": {
           "h": "手机、平板、笔记本、墙面",
@@ -2949,7 +2709,8 @@
         },
         "4": {
           "q": "真的免费吗？",
-          "a": "是的。每一款表盘、主题、预设和声音都免费。Pro 是可选的，只用来同步多块屏幕。"
+          "a": "是的。每一款表盘、主题、预设和声音都免费。Pro 是可选的，只用来同步多块屏幕。",
+          "aFree": "是的。每一款表盘、主题、预设和声音都免费，无需账户，也没有任何付费项目。"
         },
         "5": {
           "q": "时间到了会怎样？",
@@ -2967,6 +2728,162 @@
         "lead": "支持 Chrome、Edge、Firefox 和 Safari。无需安装。",
         "button": "让这块屏幕保持常亮"
       }
+    }
+  },
+  "surfaces": {
+    "status": {
+      "awake": "常亮中",
+      "fallback": "视频备用方案",
+      "starting": "正在启动…",
+      "paused": "已暂停",
+      "hidden": "已暂停",
+      "needsyou": "需要你操作",
+      "blocked": "已被阻止",
+      "unsupported": "不支持",
+      "ended": "时间到",
+      "idle": "未常亮"
+    },
+    "line": {
+      "until": "至 {time}",
+      "noEnd": "不限时",
+      "hidden": "标签页已隐藏",
+      "left": "剩余 {time}",
+      "needsyou": "轻触 AwakeTab 继续",
+      "blocked": "打开 AwakeTab 解决",
+      "ended": "已于 {time} 结束",
+      "idle": "在 AwakeTab 中开始",
+      "starting": "正在询问浏览器",
+      "unsupported": "打开 AwakeTab"
+    },
+    "pip": {
+      "region": "迷你时钟",
+      "title": "AwakeTab 迷你时钟",
+      "open": "打开迷你时钟",
+      "close": "关闭迷你时钟",
+      "popupBlocked": "浏览器拦截了迷你时钟窗口。请允许 AwakeTab 弹出窗口后重试。"
+    },
+    "widgets": {
+      "small": "常亮中 · {time}",
+      "smallNoEnd": "常亮中 · 不限时",
+      "presets": "预设",
+      "presetsLabel": "启动预设",
+      "presenting": "演示",
+      "cooking": "做饭",
+      "reading": "阅读",
+      "hour": "1 小时",
+      "min45": "45 分钟",
+      "min30": "30 分钟",
+      "session": "正在保持屏幕常亮",
+      "awakeUntil": "常亮至 {time}",
+      "awakeNoEnd": "常亮中 · 不限时",
+      "extend": "+15 分钟",
+      "extendLabel": "增加 15 分钟",
+      "stop": "停止",
+      "start": "开始",
+      "left": "剩余 {dur}",
+      "ends": "{time} 结束 · 轻触延长",
+      "quick": "保持常亮 · 1 小时",
+      "quickLabel": "让这块屏幕保持常亮 1 小时",
+      "name": "这块屏幕"
+    },
+    "kiosk": {
+      "section": "共享屏幕上的自助终端模式",
+      "region": "自助终端屏幕",
+      "kicker": "前台",
+      "headline": "请就座稍候。",
+      "line": "我们会叫您的名字。",
+      "hold": "长按 3 秒退出",
+      "holding": "继续按住…",
+      "holdLabel": "长按 3 秒退出自助终端模式",
+      "unlocked": "自助终端已解锁",
+      "unlockedBody": "可更改表盘、时间表或消息，或退出自助终端模式。30 秒无操作后会再次锁定。",
+      "back": "返回自助终端",
+      "leave": "退出自助终端模式",
+      "face": "表盘",
+      "screen": "屏幕",
+      "midnight": "午夜",
+      "oled": "OLED 纯黑",
+      "schedule": "时间表",
+      "scheduleBody": "{days} {from} – {to}。其余时间屏幕可以休眠。",
+      "weekdays": "工作日",
+      "everyday": "每天",
+      "alwaysBody": "每天全天。屏幕保持常亮，直到你退出自助终端模式。",
+      "burn": "防烧屏",
+      "burnBody": "整个布局每 3 分钟移动几个像素，OLED 使用纯黑，晚上 10 点后屏幕调暗至 40%。试试“立即偏移”。",
+      "shift": "立即偏移",
+      "start": "启动自助终端模式",
+      "asleep": "不在时间表内：屏幕可休眠至 {time}。",
+      "licensed": "自助终端许可已激活",
+      "invalid": "无法验证此自助终端链接。请重新打开你收到的链接。"
+    },
+    "embedPage": {
+      "eyebrow": "网站小组件",
+      "h1": "让读者的屏幕保持常亮",
+      "lead": "添加一个“烹饪模式”按钮，让读者的屏幕保持常亮：一个 script 标签、如实的状态显示、没有第三方请求。免费，附一条署名链接。",
+      "builder": "生成你的小组件",
+      "builderSub": "选择外观，演示和代码会随之更新。",
+      "demo": "实时演示",
+      "demoNote": "这是真实的小组件，下方的署名行由加载器添加。",
+      "snippet": "安装：一行代码",
+      "snippetNote": "粘贴到小组件要出现的位置。署名链接由加载器自动添加。",
+      "copy": "复制",
+      "copied": "已复制",
+      "mode": {
+        "_": "模式",
+        "cook": "烹饪",
+        "standard": "标准",
+        "clock": "时钟",
+        "minimal": "极简"
+      },
+      "theme": {
+        "_": "主题",
+        "auto": "自动",
+        "light": "浅色",
+        "dark": "深色",
+        "oled": "OLED"
+      },
+      "size": {
+        "_": "尺寸",
+        "compact": "紧凑",
+        "full": "全宽"
+      },
+      "length": {
+        "_": "初始时长",
+        "pinf": "直到我停止",
+        "p15": "15 分钟",
+        "p30": "30 分钟",
+        "p45": "45 分钟",
+        "p60": "1 小时",
+        "p120": "2 小时",
+        "p240": "4 小时"
+      },
+      "lang": {
+        "_": "语言",
+        "page": "跟随页面"
+      },
+      "allow": "为什么 allow 属性很重要",
+      "allowBody": "只有网站用 allow=\"screen-wake-lock\" 允许时，浏览器才让嵌入页面保持屏幕常亮。加载器总会加上它。如果你的平台会移除 script 标签，请改为粘贴这个 iframe，并保留 allow 属性。",
+      "api": "JavaScript API",
+      "apiBody": "加载器提供 window.AwakeTabEmbed，包含 on(\"state\", callback)、start('{ preset, ms, until }')、stop() 和 setTheme(theme)。请在点击事件中调用 start()：视频备用方案需要一次点按。",
+      "licence": "署名行",
+      "licenceBody": "小组件免费。加载器会在下方加一条小小的署名链接，保持屏幕常亮的效果在任何网站都一样。"
+    },
+    "embed": {
+      "stop": "停止",
+      "retry": "重试",
+      "fixLabel": "如何解决（打开 AwakeTab）",
+      "timers": {
+        "remove": "移除{name}",
+        "done": "{name}已完成",
+        "default": "{minutes} 分钟计时器",
+        "quick": "{minutes} 分钟",
+        "left": "剩余 {time}",
+        "finished": "完成"
+      }
+    },
+    "unit": {
+      "min": "分钟",
+      "h": "小时"
     }
   }
 }

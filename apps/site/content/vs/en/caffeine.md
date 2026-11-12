@@ -35,7 +35,7 @@ compare:
     - what: "How it keeps the screen on"
       cells: ["Screen Wake Lock API in the browser", "macOS power assertion", "Simulated F15 key press every 59 seconds, or `-stes` mode"]
     - what: "With the tab hidden or no window open"
-      cells: ["Stops. The pill says \"Paused — tab hidden\" and asks again when you return.", "Keeps holding", "Keeps holding"]
+      cells: ["Stops. The pill says \"Paused\" and asks again when you return.", "Keeps holding", "Keeps holding"]
     - what: "Sends keys or moves the pointer"
       cells: ["No", "No", "Yes, by default"]
     - what: "Install"
@@ -43,7 +43,7 @@ compare:
     - what: "Platforms"
       cells: ["Chrome and Edge 84+, Firefox 126+, Safari 16.4+", "macOS", "Windows"]
     - what: "Price"
-      cells: ["Free, with optional Pro", "Free", "Free"]
+      cells: ["Free", "Free", "Free"]
     - what: "Last release"
       cells: ["Web app, see the [changelog](/changelog)", "Its page lists no version or date", "v1.98, November 2024"]
     - what: "Facts checked"
@@ -52,7 +52,7 @@ compare:
 picks:
   them:
     - title: "You work full screen in other apps all day"
-      text: "A menu-bar cup holds whatever is in front. A browser tab loses its lock the moment you switch away, and the pill changes to \"Paused — tab hidden\"."
+      text: "A menu-bar cup holds whatever is in front. A browser tab loses its lock the moment you switch away, and the pill changes to \"Paused\"."
     - title: "The browser won't be open"
       text: "A render or a large copy can run with every browser window closed; a web page can't."
     - title: "You want a Windows tray tool"
@@ -63,7 +63,7 @@ picks:
     - title: "You want it to end by itself"
       text: "Pick 30 min, 1 h or a clock time such as 11:30 AM. Hidden time doesn't count toward a timed session."
     - title: "You want to see that it's working"
-      text: "The pill turns to \"Screen awake\" once your browser has granted the lock, not when you press the button."
+      text: "The pill turns to \"Awake\" once your browser has granted the lock, not when you press the button."
     - title: "You're on a phone or tablet"
       text: "AwakeTab works in Safari 16.4 or later (after one tap) and in Chrome on Android."
     - title: "You want a hidden tab to count"
@@ -115,4 +115,4 @@ Closing the lid puts a MacBook to sleep whatever a menu-bar app or a tab asks, u
 
 ## Check which one is holding your Mac awake
 
-Run `pmset -g assertions` in Terminal. With Caffeine on, you should see an assertion owned by Caffeine. With AwakeTab showing "Screen awake" in Chrome, the browser holds a PreventUserIdleDisplaySleep or NoDisplaySleep assertion, and macOS does not idle-sleep meanwhile.
+Run `pmset -g assertions` in Terminal. With Caffeine on, you should see an assertion owned by Caffeine. With AwakeTab showing "Awake" in Chrome, the browser holds a PreventUserIdleDisplaySleep or NoDisplaySleep assertion, and macOS does not idle-sleep meanwhile.

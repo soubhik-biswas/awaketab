@@ -72,7 +72,7 @@ If the menu will not open or ignores changes, some monitors have a menu lock; th
 
 ## If the screen still goes dark
 
-1. Start AwakeTab and wait for "Screen awake".
+1. Start AwakeTab and wait for "Awake".
 2. On Windows, run `powercfg /requests` in an administrator terminal and look for the browser under DISPLAY. On a Mac, run `pmset -g assertions` and look for a NoDisplaySleep entry.
 3. If the request is there and the second screen still goes dark, the timeout is not the cause. Go back to the cable and monitor steps.
 
@@ -98,6 +98,6 @@ On a work computer these may be greyed out because IT sets them. In that case, l
 
 ## Where to put the AwakeTab tab
 
-Put it where nothing covers it. A tab in a minimised window counts as hidden, and one fully covered by another window can too; the pill then shows "Paused — tab hidden". A window that is visible but not focused is fine.
+Put it where nothing covers it. A tab in a minimised window counts as hidden, and one fully covered by another window can too; the pill then shows "Paused". A window that is visible but not focused is fine.
 
 For a wall screen running all day, see [keeping a dashboard screen on](/for/dashboards). If you present from a laptop onto the second screen, see [presenting with AwakeTab](/for/presentations). Browser setup for each system is on [the Windows 11 page](/on/windows-11) and [the Mac page](/on/macos).

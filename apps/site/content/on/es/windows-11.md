@@ -14,7 +14,7 @@ lastVerified: 2026-09-09
 browsers: ["chrome", "edge"]
 os: ["windows"]
 crumb: "Windows 11"
-lead: "En Windows 11, Chrome 84+ y Edge 84+ conceden un Wake Lock nativo a cualquier pestaña visible. Abre AwakeTab, deja la sesión de 1 hora que trae esta página o elige otra duración, y espera a que el indicador diga “Pantalla despierta”. Desde ese momento, Windows no atenúa ni apaga la pantalla mientras la pestaña siga a la vista, y tampoco entra en suspensión por inactividad. Los mismos pasos sirven en Windows 10. Tres cosas quedan fuera de su alcance: minimizar la ventana u ocultar la pestaña libera el bloqueo, cerrar la tapa suspende el equipo y Modern Standby es un tema aparte que depende del firmware."
+lead: "En Windows 11, Chrome 84+ y Edge 84+ conceden un Wake Lock nativo a cualquier pestaña visible. Abre AwakeTab, deja la sesión de 1 hora que trae esta página o elige otra duración, y espera a que el indicador diga “Despierta”. Desde ese momento, Windows no atenúa ni apaga la pantalla mientras la pestaña siga a la vista, y tampoco entra en suspensión por inactividad. Los mismos pasos sirven en Windows 10. Tres cosas quedan fuera de su alcance: minimizar la ventana u ocultar la pestaña libera el bloqueo, cerrar la tapa suspende el equipo y Modern Standby es un tema aparte que depende del firmware."
 facts:
   - label: "Chrome y Edge"
     value: "84 o posterior"
@@ -46,11 +46,11 @@ rows:
       text: "Al cerrarla, el equipo hace lo que indique la acción de la tapa en Windows (normalmente, suspenderse), sin importar lo que diga cualquier página web o extensión."
 faq:
   - q: "¿Funciona igual en Edge que en Chrome?"
-    a: "Sí. Los dos tienen Wake Lock nativo desde la versión 84 en Windows. El modo de eficiencia de Edge no rechaza el bloqueo, porque Edge usa el mismo código de Chromium; si el indicador no llega a “Pantalla despierta”, el motivo aparece debajo."
+    a: "Sí. Los dos tienen Wake Lock nativo desde la versión 84 en Windows. El modo de eficiencia de Edge no rechaza el bloqueo, porque Edge usa el mismo código de Chromium; si el indicador no llega a “Despierta”, el motivo aparece debajo."
   - q: "¿Por qué la pantalla se apaga cuando la laptop está con batería?"
-    a: "El ahorro de energía de Windows (“Energy saver”, antes Ahorro de batería) no rechaza el bloqueo, pero puede atenuar la pantalla o acortar los tiempos. Si la pantalla se apaga con el indicador en “Pantalla despierta”, revisa si la pestaña quedó oculta o si una política de la empresa bloquea la sesión."
+    a: "El ahorro de energía de Windows (“Energy saver”, antes Ahorro de batería) no rechaza el bloqueo, pero puede atenuar la pantalla o acortar los tiempos. Si la pantalla se apaga con el indicador en “Despierta”, revisa si la pestaña quedó oculta o si una política de la empresa bloquea la sesión."
   - q: "¿Sigue funcionando si minimizo el navegador o pongo otra ventana encima?"
-    a: "Si minimizas la ventana o cambias de pestaña, el navegador libera el bloqueo y verás “En pausa — pestaña oculta”. Deja AwakeTab en una ventana a la vista, aunque sea pequeña o en un segundo monitor."
+    a: "Si minimizas la ventana o cambias de pestaña, el navegador libera el bloqueo y verás “En pausa”. Deja AwakeTab en una ventana a la vista, aunque sea pequeña o en un segundo monitor."
   - q: "¿AwakeTab puede evitar que Windows se suspenda al cerrar la tapa?"
     a: "No. Al cerrar la tapa, Windows hace lo que indique su acción de la tapa (normalmente, suspender), y Modern Standby tiene su propio comportamiento a nivel de firmware. Eso se configura en Windows, no desde una pestaña del navegador."
 honestLimit: "Una pestaña oculta o una ventana minimizada liberan el bloqueo; Modern Standby tiene sus propias peculiaridades; cerrar la tapa suspende el equipo salvo que cambies esa acción en Windows."
@@ -69,9 +69,9 @@ updated: 2026-09-27
 
 - **Al lado de tu trabajo.** Con Win + las flechas puedes dejar AwakeTab en una esquina mientras usas otra app.
 - **En un segundo monitor.** El bloqueo cubre el tiempo de apagado de pantalla del sistema; lo importante es que la pestaña siga visible.
-- **Ventana flotante.** En Chrome, Edge y Firefox 151+, el botón “Ventana flotante” deja un temporizador pequeño por encima de todo.
+- **Minirreloj.** En Chrome, Edge y Firefox 151+, la paleta (Ctrl K) con “Abrir el minirreloj” deja un temporizador pequeño por encima de todo.
 
-Si minimizas el navegador o cambias de pestaña, el indicador pasa a “En pausa — pestaña oculta” y la cuenta regresiva se detiene hasta que vuelves.
+Si minimizas el navegador o cambias de pestaña, el indicador pasa a “En pausa” y la cuenta regresiva se detiene hasta que vuelves.
 
 ::ad
 
@@ -89,7 +89,7 @@ Si tu pantalla se apaga al minuto aunque ya cambiaste ese valor, la guía sobre 
 
 ## Ahorro de energía y modo de eficiencia
 
-En Windows 11 24H2, el ahorro de batería pasó a llamarse ahorro de energía (“Energy saver”). Ni ese modo ni el modo de eficiencia de Edge hacen que el navegador rechace el Wake Lock: según el código fuente de Chromium (revisado el 26 de septiembre de 2026), Chrome y Edge no los revisan. Lo que sí puede hacer el ahorro de energía es atenuar la pantalla o acortar los tiempos. Si ves “Bloqueado — aquí está la solución”, la causa real aparece debajo, por ejemplo una pestaña oculta o una página dentro de un marco sin permiso. Intentarlo otra vez sin cambiar nada repite el mismo rechazo.
+En Windows 11 24H2, el ahorro de batería pasó a llamarse ahorro de energía (“Energy saver”). Ni ese modo ni el modo de eficiencia de Edge hacen que el navegador rechace el Wake Lock: según el código fuente de Chromium (revisado el 26 de septiembre de 2026), Chrome y Edge no los revisan. Lo que sí puede hacer el ahorro de energía es atenuar la pantalla o acortar los tiempos. Si ves “No despierta”, la causa real aparece debajo, por ejemplo una pestaña oculta o una página dentro de un marco sin permiso. Intentarlo otra vez sin cambiar nada repite el mismo rechazo.
 
 ## Modern Standby y la tapa cerrada
 

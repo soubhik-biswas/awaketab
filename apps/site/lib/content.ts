@@ -74,8 +74,20 @@ export function staticArticleParams(kind: TContentKind): Array<{ locale: TLocale
   return BY_KIND[kind].map((a) => ({ locale: a.locale, slug: publicSlug(kind, a.enSlug, a.locale) }));
 }
 
+// Words that only make sense once Pro is on sale. While it is off, release notes about it stay out of the page and
+// the feed: a note loses those lines, and a note with nothing else to say is left out.
+const PRO_WORDS = /\bPro\b|licen[cs]e|checkout|Polar|refund|billing|sign[- ]in|purchase|paid plan/iu;
+
+function withoutPro(entry: TChangelogEntry): TChangelogEntry | null {
+  if (PRO_WORDS.test(entry.title)) return null;
+  const items = entry.items.filter((item) => !PRO_WORDS.test(item));
+  return items.length > 0 ? { ...entry, items } : null;
+}
+
 export function changelog(): TChangelogEntry[] {
-  return [...allChangelogs].sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
+  const all = [...allChangelogs].sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
+  if (PRO_ENABLED) return all;
+  return all.map(withoutPro).filter((entry): entry is TChangelogEntry => entry !== null);
 }
 
 export interface IHubItem {
@@ -141,11 +153,11 @@ export const HUBS: Record<TContentKind, IHub> = {
           },
           {
             slug: 'presentations',
-            line: 'Full-screen slides hide the tab. Use the floating window in desktop Chrome, Edge or Firefox 151+, or mind the OS display timeout.',
+            line: 'Full-screen slides hide the tab. Use the mini clock in desktop Chrome, Edge or Firefox 151+, or mind the OS display timeout.',
           },
           {
             slug: 'teleprompter',
-            line: 'Not a scrolling prompter. Keep your script visible beside it, side by side or with the floating window.',
+            line: 'Not a scrolling prompter. Keep your script visible beside it, side by side or with the mini clock.',
           },
           {
             slug: 'classroom',
@@ -477,7 +489,7 @@ const ALL_HELP_TOPICS: readonly IHelpTopic[] = [
     title: 'My screen still goes dark',
     line: 'The three causes, and one fix for each.',
     href: '/learn/honest-limits',
-    words: 'sleep sleeps dim dims off black battery saver hidden tab blocked fix',
+    words: 'sleep sleeps dim dims off black hidden tab closed lid blocked fix',
     scene: 'error',
     link: 'Fix it',
   },
@@ -522,10 +534,10 @@ const ALL_HELP_TOPICS: readonly IHelpTopic[] = [
     link: 'See the changelog',
   },
   {
-    title: 'Battery saver blocks the wake lock',
-    line: 'Low Power Mode, Energy Saver and battery saver can still dim the screen.',
+    title: 'Do battery savers block a wake lock?',
+    line: 'Mostly no. Firefox stops at 5 % battery, and iPhone Low Power Mode caps Auto-Lock at 30 seconds.',
     href: '/learn/low-power-mode-and-wake-locks',
-    words: 'battery saver low power mode energy saver dark dim blocked android',
+    words: 'battery saver low power mode energy saver dark dim blocked android firefox',
   },
   {
     title: 'The extension shows a red badge',
@@ -546,3 +558,25 @@ const ALL_HELP_CHIPS: ReadonlyArray<readonly [string, string]> = [
 // Billing help exists only while Pro is on.
 export const HELP_TOPICS = ALL_HELP_TOPICS.filter((x) => PRO_ENABLED || x.href !== '/pro');
 export const HELP_CHIPS = ALL_HELP_CHIPS.filter(([, href]) => PRO_ENABLED || href !== '/pro');
+
+interface IHelpSearchEntry {
+  title: string;
+  href: string;
+  words: string;
+}
+
+// What the help centre searches: its own topics first, then every English article (docs/00 §7).
+export function helpSearchEntries(): IHelpSearchEntry[] {
+  const topics = HELP_TOPICS.map(({ title, href, words }) => ({ title, href, words }));
+  const seen = new Set(topics.map((x) => x.href));
+  const pages = (Object.keys(BY_KIND) as TContentKind[]).flatMap((kind) =>
+    BY_KIND[kind]
+      .filter((a) => a.locale === 'en')
+      .map((a) => ({
+        title: a.h1,
+        href: articlePath(kind, a.enSlug, 'en'),
+        words: [a.crumb ?? '', a.intent, ...a.secondaryQueries].join(' '),
+      })),
+  );
+  return [...topics, ...pages.filter((x) => !seen.has(x.href))];
+}

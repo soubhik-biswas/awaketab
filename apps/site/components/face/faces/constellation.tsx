@@ -1,6 +1,6 @@
 import { fxInk, fxInk2 } from '../art';
 import { f1 } from '../geometry';
-import { card, type IDrawProps, L, lmin } from '../kit';
+import { card, type IDrawProps, L, lmin, PLATE } from '../kit';
 
 // A dawn sky with ink-green stars by day, a night sky with glowing stars at night.
 const ART = {
@@ -29,7 +29,7 @@ export default function Constellation({ m }: IDrawProps) {
     .map(([x, y], i) => `${i ? 'L' : 'M'}${f1(x)} ${f1(y)}`)
     .join(' ');
   return (
-    <div style={card(m, { background: a.sky })}>
+    <div className={PLATE} style={card(m, { background: a.sky })}>
       <svg
         style={{ position: 'absolute', left: 0, top: 0 }}
         width="332"

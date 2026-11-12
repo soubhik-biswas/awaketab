@@ -31,6 +31,7 @@
   --tg-hair-a: rgba(11, 16, 32, 0.14);
   --tg-hair-b: rgba(11, 16, 32, 0.05);
   --tg-inset-hi: rgba(255, 255, 255, 0.9);
+  --tg-caps-hi: rgba(255, 255, 255, 0.9);
   --tg-caps-shadow: rgba(0, 0, 0, 0.08);
   --tg-icon: #2a3042;
   --tg-on-volt: #ffffff;
@@ -103,6 +104,7 @@
   --tg-hair-a: rgba(255, 255, 255, 0.2);
   --tg-hair-b: rgba(255, 255, 255, 0.04);
   --tg-inset-hi: rgba(255, 255, 255, 0.08);
+  --tg-caps-hi: rgba(255, 255, 255, 0.07);
   --tg-caps-shadow: rgba(0, 0, 0, 0.35);
   --tg-icon: #d5dae6;
   --tg-on-volt: #04140a;
@@ -195,13 +197,9 @@
   box-shadow: none;
 }
 
-.tg-dot {
+.tg-glyph {
   --pulse: color-mix(in srgb, var(--tg-state) 40%, transparent);
-  background: var(--tg-state);
-}
-:is([data-state="idle"], [data-state="ended"]) .tg-dot {
-  background: transparent;
-  border: 2px solid var(--tg-state);
+  color: var(--tg-state);
 }
 
 .tg-btn {
@@ -219,6 +217,17 @@
 [data-slot="tool"] :focus-visible {
   outline: 2px solid var(--tg-ring);
   outline-offset: 3px;
+}
+[data-slot="tool"] .tg-field:has(:focus-visible) {
+  outline: 2px solid var(--tg-ring);
+  outline-offset: 3px;
+}
+[data-slot="tool"] .tg-field :is(input, textarea, button):focus-visible {
+  outline: none;
+}
+[data-slot="tool"] .tg-row.tg-row:focus-visible {
+  outline-offset: -3px;
+  border-radius: 15px;
 }
 
 .tg-tile {
@@ -290,10 +299,10 @@
 }
 @keyframes tg-rain {
   from {
-    background-position: 0 0;
+    transform: translate3d(0, 0, 0);
   }
   to {
-    background-position: -120px 900px;
+    transform: translate3d(-120px, 900px, 0);
   }
 }
 @keyframes tg-lava {
@@ -367,6 +376,13 @@
 .tg-tw {
   animation: tg-tw 3.2s ease-in-out infinite;
 }
+.tg-rain,
+.tg-rain2 {
+  position: absolute;
+  inset: -900px -120px 0 0;
+  background-size: 120px 900px;
+  will-change: transform;
+}
 .tg-rain {
   animation: tg-rain 1.1s linear infinite;
 }
@@ -439,6 +455,248 @@
   opacity: 0;
 }
 
+[data-slot="tool"][data-away] *,
+[data-slot="tool"][data-away] *::before,
+[data-slot="tool"][data-away] *::after {
+  animation-play-state: paused;
+}
+
+.tg-shell {
+  position: absolute;
+  inset: 0;
+  container: tg-frame / size;
+}
+.tg-shell-face {
+  flex: 0 1 auto;
+  min-height: 0;
+  width: clamp(96px, calc((100cqh - var(--tg-set-fixed)) / 0.875), min(var(--tg-set-want), 100cqw - 32px));
+  aspect-ratio: 360 / 315;
+}
+@container tg-frame (width < 700px) {
+  .tg-shell-stage {
+    --tg-set-want: 296px;
+    --tg-set-fixed: 428px;
+  }
+}
+@container tg-frame (width < 700px) and (height < 512px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 404px;
+  }
+  .tg-shell-eyebrow {
+    display: none;
+  }
+}
+@container tg-frame (width < 700px) and (height < 488px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 319px;
+  }
+  .tg-shell-hero {
+    display: contents;
+  }
+  .tg-shell-headline {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@container tg-frame (width < 700px) and (height < 403px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 267px;
+  }
+  .tg-shell-pill {
+    display: none;
+  }
+}
+@container tg-frame (width < 700px) and (height < 351px) {
+  .tg-shell-face {
+    display: none;
+  }
+}
+@container tg-frame (width < 700px) and (height < 253px) {
+  .tg-shell-note {
+    display: none;
+  }
+}
+@container tg-frame (width < 700px) and (height < 219px) {
+  .tg-shell-stage {
+    overflow-y: auto;
+  }
+}
+@container tg-frame (width >= 700px) and (width < 1100px) {
+  .tg-shell-stage {
+    --tg-set-want: 480px;
+    --tg-set-fixed: 465px;
+  }
+}
+@container tg-frame (width >= 700px) and (width < 1100px) and (height < 549px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 436px;
+  }
+  .tg-shell-eyebrow {
+    display: none;
+  }
+}
+@container tg-frame (width >= 700px) and (width < 1100px) and (height < 520px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 357px;
+  }
+  .tg-shell-hero {
+    display: contents;
+  }
+  .tg-shell-headline {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@container tg-frame (width >= 700px) and (width < 1100px) and (height < 441px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 299px;
+  }
+  .tg-shell-pill {
+    display: none;
+  }
+}
+@container tg-frame (width >= 700px) and (width < 1100px) and (height < 383px) {
+  .tg-shell-face {
+    display: none;
+  }
+}
+@container tg-frame (width >= 700px) and (width < 1100px) and (height < 279px) {
+  .tg-shell-note {
+    display: none;
+  }
+}
+@container tg-frame (width >= 700px) and (width < 1100px) and (height < 241px) {
+  .tg-shell-stage {
+    overflow-y: auto;
+  }
+}
+@container tg-frame (width >= 1100px) and (width < 1300px) {
+  .tg-shell-stage {
+    --tg-set-want: 340px;
+    --tg-set-fixed: 399px;
+  }
+}
+@container tg-frame (width >= 1100px) and (width < 1300px) and (height < 483px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 370px;
+  }
+  .tg-shell-eyebrow {
+    display: none;
+  }
+}
+@container tg-frame (width >= 1100px) and (width < 1300px) and (height < 454px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 299px;
+  }
+  .tg-shell-hero {
+    display: contents;
+  }
+  .tg-shell-headline {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@container tg-frame (width >= 1100px) and (width < 1300px) and (height < 383px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 299px;
+  }
+  .tg-shell-pill {
+    display: none;
+  }
+}
+@container tg-frame (width >= 1100px) and (width < 1300px) and (height < 383px) {
+  .tg-shell-face {
+    display: none;
+  }
+}
+@container tg-frame (width >= 1100px) and (width < 1300px) and (height < 279px) {
+  .tg-shell-note {
+    display: none;
+  }
+}
+@container tg-frame (width >= 1100px) and (width < 1300px) and (height < 241px) {
+  .tg-shell-stage {
+    overflow-y: auto;
+  }
+}
+@container tg-frame (width >= 1300px) {
+  .tg-shell-stage {
+    --tg-set-want: 380px;
+    --tg-set-fixed: 411px;
+  }
+}
+@container tg-frame (width >= 1300px) and (height < 495px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 382px;
+  }
+  .tg-shell-eyebrow {
+    display: none;
+  }
+}
+@container tg-frame (width >= 1300px) and (height < 466px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 299px;
+  }
+  .tg-shell-hero {
+    display: contents;
+  }
+  .tg-shell-headline {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@container tg-frame (width >= 1300px) and (height < 383px) {
+  .tg-shell-stage {
+    --tg-set-fixed: 299px;
+  }
+  .tg-shell-pill {
+    display: none;
+  }
+}
+@container tg-frame (width >= 1300px) and (height < 383px) {
+  .tg-shell-face {
+    display: none;
+  }
+}
+@container tg-frame (width >= 1300px) and (height < 279px) {
+  .tg-shell-note {
+    display: none;
+  }
+}
+@container tg-frame (width >= 1300px) and (height < 241px) {
+  .tg-shell-stage {
+    overflow-y: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-slot="tool"]
     :is(
@@ -464,5 +722,37 @@
   }
   .tg-tile:hover {
     transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  [data-slot="tool"] .tg-btn {
+    outline: 1px solid ButtonBorder;
+    outline-offset: -1px;
+  }
+  [data-slot="tool"] :is([role="radio"][aria-checked="true"], [role="tab"][aria-selected="true"], [data-state="on"]) {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  [data-slot="tool"] .tg-track {
+    forced-color-adjust: none;
+    background: ButtonFace;
+    box-shadow: inset 0 0 0 1px ButtonText;
+  }
+  [data-slot="tool"] .tg-track[data-on] {
+    background: Highlight;
+  }
+  [data-slot="tool"] .tg-track > * {
+    background: ButtonText;
+  }
+  [data-slot="tool"] .tg-track[data-on] > * {
+    background: HighlightText;
+  }
+  [data-slot="tool"] :is([role="radio"], *):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 3px;
+  }
+  [data-slot="tool"] .tg-field:has(:focus-visible) {
+    outline-color: Highlight;
   }
 }

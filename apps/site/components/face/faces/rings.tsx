@@ -1,5 +1,5 @@
 import { alpha, dash } from '../geometry';
-import { big, column, type IDrawProps, L, mono, Svg, sweep } from '../kit';
+import { big, column, fit, type IDrawProps, L, mono, Svg, sweep } from '../kit';
 
 const C1 = 2 * Math.PI * 128;
 const C2 = 2 * Math.PI * 104;
@@ -53,7 +53,7 @@ export default function Rings({ m }: IDrawProps) {
         />
       </div>
       <div style={column(4)}>
-        <span style={big(m.long ? 34 : 46, 400, '-0.03em')}>{m.digits}</span>
+        <span style={big(fit(m, m.long ? 34 : 46, 30), 400, '-0.03em')}>{m.digits}</span>
         <span className={L} style={mono(12, '.1em', m.t.ink2)}>
           {m.endShort}
         </span>

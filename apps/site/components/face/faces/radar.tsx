@@ -1,6 +1,6 @@
 import { CARD_SHADOW } from '../art';
 import { alpha, f1, P, ticks } from '../geometry';
-import { type IDrawProps, L, mono, Svg } from '../kit';
+import { type IDrawProps, L, mono, Svg, PLATE } from '../kit';
 
 const SCOPE = {
   light: 'radial-gradient(circle, #F2FBF5, #E2F2E8)',
@@ -20,6 +20,7 @@ export default function Radar({ m }: IDrawProps) {
   return (
     <>
       <div
+        className={PLATE}
         style={{
           position: 'absolute',
           left: 44,
@@ -28,6 +29,7 @@ export default function Radar({ m }: IDrawProps) {
           height: 272,
           borderRadius: '50%',
           overflow: 'hidden',
+          isolation: 'isolate',
           background: SCOPE[m.theme],
           boxShadow: CARD_SHADOW[m.theme],
         }}

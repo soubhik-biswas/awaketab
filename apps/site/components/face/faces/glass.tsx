@@ -1,9 +1,11 @@
 import { BLACK, WHITE } from '../art';
 import { alpha } from '../geometry';
-import { card, digitSize, type IDrawProps, L, lmin, MONO } from '../kit';
+import { card, digitSize, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
-const VIOLET = '#7B5CFF';
-const CYAN = '#3FB8FF';
+// Pastel orbs by day, deep ones at night.
+const MINT = '#6FDDA0';
+const VIOLET = { light: '#B29CFF', night: '#7B5CFF' };
+const CYAN = { light: '#8FD3FF', night: '#3FB8FF' };
 const GROUND = { light: 'linear-gradient(160deg, #F4F5FB, #E7E9F4)', night: '#070A16' };
 const PANE = { light: WHITE(0.42), night: WHITE(0.09) };
 const PANE_LINE = { light: WHITE(0.8), night: WHITE(0.2) };
@@ -15,11 +17,12 @@ const orb = (left: number, top: number, d: number, background: string) =>
 // A frosted pane floats over soft colour orbs; the time sits on the glass.
 export default function Glass({ m }: IDrawProps) {
   const k = m.night ? 'night' : 'light';
-  const a2 = m.multi ? VIOLET : alpha(m.accent, 0x99);
-  const a3 = m.multi ? CYAN : m.t.track;
+  const a1 = m.multi ? (m.night ? m.lamp : MINT) : m.accent;
+  const a2 = m.multi ? VIOLET[k] : alpha(m.accent, 0x99);
+  const a3 = m.multi ? CYAN[k] : m.t.track;
   return (
-    <div style={card(m, { background: GROUND[k] })}>
-      <div className="afx-float" style={orb(-10, -20, 190, m.mc1)} />
+    <div className={PLATE} style={card(m, { background: GROUND[k] })}>
+      <div className="afx-float" style={orb(-10, -20, 190, a1)} />
       <div className="afx-float" data-delay="-3" style={orb(180, 120, 200, a2)} />
       <div style={orb(210, 18, 70, a3)} />
       <div

@@ -21,16 +21,16 @@ toc:
   ce-quawaketab-ne-fait-pas-en-cuisine: "Ce qu’AwakeTab ne fait pas"
 steps:
   - title: "Ouvrez cette page sur le téléphone ou la tablette posé sur le plan de travail."
-    text: "Le mode cuisine et la durée « ∞ » (« Jusqu’à ce que j’arrête ») sont déjà sélectionnés. Pour un plat qui mijote longtemps, branchez l’appareil."
-  - title: "Touchez Démarrer."
-    text: "Attendez que la pastille affiche « Écran allumé »."
+    text: "La durée « Sans fin » est déjà sélectionnée, avec le cadran Bold et ses grands chiffres. Pour un plat qui mijote longtemps, branchez l’appareil."
+  - title: "Touchez « Garder allumé »."
+    text: "Attendez que la pastille affiche « Allumé »."
   - title: "Si la recette vit dans une autre appli ou un autre site, mettez les deux côte à côte."
     text: "Fenêtres sur iPad, écran partagé sur Android : AwakeTab reste ainsi à l’écran. Sur iPhone, c’est impossible : une seule appli est au premier plan."
 figures:
   - frame: phone
     label: "Capture du téléphone"
-    alt: "AwakeTab en mode cuisine sur un iPhone"
-    caption: "Le mode cuisine sur un iPhone."
+    alt: "AwakeTab avec le cadran Bold sur un iPhone"
+    caption: "Le cadran Bold sur un iPhone."
   - frame: desktop
     label: "Capture de la tablette"
     alt: "la recette et AwakeTab côte à côte sur un iPad"
@@ -41,16 +41,16 @@ pills:
   - state: lost
     text: "Vous êtes allé vérifier un message. Vous verrez cet état en revenant, le temps que le verrou soit redemandé."
   - state: denied
-    text: "Le navigateur refuse la demande, par exemple parce que Safari attend un toucher ou que Firefox est à 5 % de batterie ou moins, et la pastille indique la cause. L’économiseur de batterie ne provoque pas ce refus. Hors toucher manquant, toucher Démarrer en boucle ne change rien."
+    text: "Le navigateur refuse la demande, par exemple parce que Safari attend un toucher ou que Firefox est à 5 % de batterie ou moins, et la pastille indique la cause. L’économiseur de batterie ne provoque pas ce refus. Hors toucher manquant, toucher « Garder allumé » en boucle ne change rien."
   - state: fallback
     text: "Sur un navigateur sans prise en charge native, comme un ancien Firefox, un toucher lance la vidéo de secours. Cette méthode consomme davantage de batterie."
 checklist:
   - "Pour un plat qui mijote longtemps, branchez l’appareil."
-  - "Attendez que la pastille affiche « Écran allumé »."
+  - "Attendez que la pastille affiche « Allumé »."
   - "Ne laissez pas un téléphone sans surveillance en guise d’alarme près des plaques."
 faq:
   - q: "Je passe sur l’appli minuteur et l’écran s’éteint quand même. Pourquoi ?"
-    a: "Dès que vous quittez l’onglet AwakeTab pour une autre application, le navigateur retire le verrou : un onglet masqué ne peut pas le conserver. Revenez sur la page, attendez que la pastille repasse à « Écran allumé », ou placez les deux applis côte à côte en écran partagé."
+    a: "Dès que vous quittez l’onglet AwakeTab pour une autre application, le navigateur retire le verrou : un onglet masqué ne peut pas le conserver. Revenez sur la page, attendez que la pastille repasse à « Allumé », ou placez les deux applis côte à côte en écran partagé."
   - q: "Ma recette est dans une autre appli. Comment garder les deux à l’écran ?"
     a: "Sur iPad, placez les deux fenêtres côte à côte (Split View sur iPadOS 18 et versions antérieures) ; sur Android, utilisez l’écran partagé. Tant que l’onglet AwakeTab reste affiché, l’écran ne s’éteint pas. Sur iPhone, une seule appli est au premier plan : AwakeTab ne peut pas garder allumée une recette ouverte ailleurs."
   - q: "Faut-il brancher le téléphone pour une longue cuisson ?"
@@ -78,7 +78,7 @@ updated: 2026-09-27
 
 ## Ce que la pastille vous dit pendant la recette
 
-La pastille est le cœur de l’outil : elle n’annonce « Écran allumé » que lorsque le navigateur a réellement accordé le verrou.
+La pastille est le cœur de l’outil : elle n’annonce « Allumé » que lorsque le navigateur a réellement accordé le verrou.
 
 ::pills
 

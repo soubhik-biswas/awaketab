@@ -34,7 +34,7 @@ compare:
     - what: "How it keeps the screen on"
       cells: ["Screen Wake Lock API, no input", "A device the computer treats as a mouse", "An app that moves the pointer or sends keys"]
     - what: "With the tab hidden or no window open"
-      cells: ["Stops. The pill says \"Paused — tab hidden\" and asks again when you return.", "Keeps working, no tab involved", "Keeps working"]
+      cells: ["Stops. The pill says \"Paused\" and asks again when you return.", "Keeps working, no tab involved", "Keeps working"]
     - what: "Changes chat status"
       cells: ["No", "Yes, it looks like activity", "Usually"]
     - what: "Install"
@@ -42,7 +42,7 @@ compare:
     - what: "Platforms"
       cells: ["Current Chrome, Edge, Firefox and Safari", "Any computer with USB", "Depends on the app"]
     - what: "Price"
-      cells: ["Free, with optional Pro", "About $4 to $40 (Banking Dive, June 2024)", "Often free"]
+      cells: ["Free", "About $4 to $40 (Banking Dive, June 2024)", "Often free"]
 picks:
   them:
     - title: "Your own machine has no usable browser"
@@ -55,7 +55,7 @@ picks:
     - title: "You'd rather not have to explain it"
       text: "AwakeTab doesn't fake activity, doesn't change your status and leaves sign-in and lock policies alone. If your employer has rules about screen locking, follow them."
     - title: "You want to know it's working"
-      text: "Read the state at a glance: \"Screen awake\" while the lock holds, \"Paused — tab hidden\" after you switch away."
+      text: "Read the state at a glance: \"Awake\" while the lock holds, \"Paused\" after you switch away."
 faq:
   - q: "Is AwakeTab a mouse jiggler?"
     a: "No. It never moves the pointer or presses a key. It asks your browser to keep the display on, the same request a video player makes during playback, and it shows you whether the browser said yes."

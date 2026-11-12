@@ -1,6 +1,7 @@
 import { BLACK, CARD_SHADOW } from '../art';
 import { alpha } from '../geometry';
-import { type IDrawProps, L, MONO, mono } from '../kit';
+import { type IDrawProps, L, MONO, mono, PLATE } from '../kit';
+import type { TFaceModel } from '../model';
 
 // The bezel stays dark in every theme, like the real object.
 const BEZEL = {
@@ -9,14 +10,25 @@ const BEZEL = {
 };
 const NB = 20;
 
+// The corner tag says AWAKE only while the screen is held and PAUSE only when the person paused; every other state
+// reads in the face's own top word (not awake, starting).
+const tagWord = (m: TFaceModel): string => {
+  if (m.awake) return 'AWAKE';
+  if (m.st === 'idle') return 'READY';
+  if (m.st === 'up') return 'END';
+  if (m.st === 'paused' && !m.needs) return 'PAUSE';
+  return m.topWord;
+};
+
 // Slanted segments over a faint 88:88 ghost, like a bedside clock.
 export default function Lcd({ m }: IDrawProps) {
   const { accent } = m;
   const onB = Math.round(m.frac * NB);
-  const tag = m.st === 'paused' ? 'PAUSE' : m.st === 'up' ? 'END' : m.st === 'idle' ? 'READY' : 'AWAKE';
   const glow = `0 0 10px ${alpha(accent, 0x40)}`;
+  const ghost = m.digits.length > 7 ? '88:88:88' : m.long ? '8:88:88' : '88:88';
   return (
     <div
+      className={PLATE}
       style={{
         position: 'absolute',
         left: 18,
@@ -53,9 +65,11 @@ export default function Lcd({ m }: IDrawProps) {
             border: `1px solid ${accent}`,
             borderRadius: 4,
             ...mono(12, '.14em', accent),
+            textTransform: 'uppercase',
+            whiteSpace: 'nowrap',
           }}
         >
-          {tag}
+          {tagWord(m)}
         </span>
         <div
           style={{
@@ -74,7 +88,7 @@ export default function Lcd({ m }: IDrawProps) {
             fontVariantNumeric: 'tabular-nums',
           }}
         >
-          <span style={{ position: 'absolute', color: alpha(accent, 0x26) }}>{m.long ? '8:88:88' : '88:88'}</span>
+          <span style={{ position: 'absolute', color: alpha(accent, 0x26) }}>{ghost}</span>
           <span style={{ position: 'relative', color: accent, textShadow: glow }}>{m.dL}</span>
           {m.dR && (
             <>

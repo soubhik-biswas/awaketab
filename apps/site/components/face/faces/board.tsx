@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { BLACK, CARD_SHADOW, SNOW } from '../art';
-import { type IDrawProps, L, lmin, MONO } from '../kit';
+import { type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 import type { TFaceState } from '../model';
 
 // A white board with pale tiles by day, a station board at night.
@@ -17,6 +17,7 @@ const ART = {
 };
 type TArt = (typeof ART)['light'];
 
+// The STATE row: AWAKE only while the screen is held, PAUSED only when the person paused.
 const WORD: Readonly<Record<TFaceState, string>> = {
   idle: 'READY',
   starting: 'START',
@@ -27,6 +28,8 @@ const WORD: Readonly<Record<TFaceState, string>> = {
   unsupported: 'NOLOCK',
   up: 'ENDED',
 };
+// A hidden tab let the lock go: not awake until a tap, with the clock still counting.
+const NEEDS_WORD = 'NOTAWAKE';
 
 const keyStyle = (a: TArt): CSSProperties => ({
   flex: 'none',
@@ -108,6 +111,7 @@ export default function Board({ m }: IDrawProps) {
   const done = `${Math.round(100 * (1 - m.frac))}%`;
   return (
     <div
+      className={PLATE}
       style={{
         position: 'absolute',
         left: 14,
@@ -139,7 +143,14 @@ export default function Board({ m }: IDrawProps) {
       </div>
       <Row a={a} k="LEFT" text={left} color={ink} flap live={m.live} />
       <Row a={a} k="ENDS" text={ends} color={ink} flap={false} live={m.live} />
-      <Row a={a} k="STATE" text={WORD[m.st].padEnd(8, ' ').slice(0, 8)} color={acc} flap={false} live={m.live} />
+      <Row
+        a={a}
+        k="STATE"
+        text={(m.needs ? NEEDS_WORD : WORD[m.st]).padEnd(8, ' ').slice(0, 8)}
+        color={acc}
+        flap={false}
+        live={m.live}
+      />
       <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
         <span className={L} style={keyStyle(a)}>
           DONE

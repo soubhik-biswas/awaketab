@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { Globe, Headphones, MessageCircle, Share, Sparkle, Trash2, User, type LucideIcon } from 'lucide-react';
 import { RadioGroup, ToggleGroup } from 'radix-ui';
@@ -7,7 +8,7 @@ import { BorderBeam } from '@/components/ui-effects/border-beam';
 import { cn } from '@/lib/utils';
 import { priceLabel } from '@/lib/pro/plans';
 import { ROUTES } from '@/lib/routes';
-import type { TChimeKind, TThemeChoice } from '@/lib/tool/settings';
+import { readTelemetry, setTelemetry, type TChimeKind, type TThemeChoice } from '@/lib/tool/settings';
 import type { TPanel } from '@/lib/tool/ui';
 import { useGlance } from '../context';
 import { AVATAR, CARD, Chevron, GHOST_BTN, Group, ROW, RowText, SecLabel, SwitchRow, Tag } from '../kit';
@@ -107,6 +108,8 @@ export function SettingsPanel() {
   const g = useGlance();
   const { t, settings } = g;
   const go = (p: TPanel) => () => g.a.open(p);
+  // Read when the panel opens, so an answer just given on the analytics card shows here too.
+  const [counted, setCounted] = useState(readTelemetry);
   return (
     <PanelBody>
       <SecLabel>{t('settings.appearance')}</SecLabel>
@@ -138,13 +141,21 @@ export function SettingsPanel() {
           );
         })}
       </RadioGroup.Root>
+      <Group>
+        <SwitchRow
+          title={t('settings.keep')}
+          desc={t('settings.keepD')}
+          checked={settings.keepControls}
+          onChange={(keepControls) => g.a.update({ keepControls })}
+        />
+      </Group>
       <SecLabel>{t('settings.clock')}</SecLabel>
       <Group>
         <SwitchRow
           title={t('settings.h12')}
           desc={t('settings.h12D')}
-          checked={settings.h12}
-          onChange={(h12) => g.a.update({ h12 })}
+          checked={g.fmt === 12}
+          onChange={(h12) => g.a.update({ h12, clockSet: true })}
         />
         <SwitchRow
           title={t('settings.secs')}
@@ -207,6 +218,18 @@ export function SettingsPanel() {
         />
         <MoreRow icon={Share} title={t('settings.share')} desc={t('settings.shareD')} go={go('share')} />
         <MoreRow icon={Trash2} title={t('settings.clear')} desc={t('settings.clearD')} danger go={go('clear')} />
+      </Group>
+      <SecLabel>{t('settings.privacy')}</SecLabel>
+      <Group>
+        <SwitchRow
+          title={t('settings.count')}
+          desc={t('settings.countD')}
+          checked={counted}
+          onChange={(on) => {
+            setTelemetry(on);
+            setCounted(on);
+          }}
+        />
       </Group>
       {PRO_ENABLED ? (
         <>

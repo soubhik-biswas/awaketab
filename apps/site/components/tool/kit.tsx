@@ -36,8 +36,9 @@ export function Group({ children, className, ...props }: ComponentProps<'div'>) 
   );
 }
 
+// tg-row keeps the focus ring inside the row, where the group's rounded, clipped edge cannot cut it off.
 export const ROW =
-  'flex w-full min-h-16 items-center gap-3.5 border-0 bg-transparent px-4 py-3 text-(--tg-text) [&+&]:border-t [&+&]:border-(--tg-border)';
+  'tg-row flex w-full min-h-16 items-center gap-3.5 border-0 bg-transparent px-4 py-3 text-(--tg-text) [&+&]:border-t [&+&]:border-(--tg-border)';
 
 export function RowText({ title, desc, className }: { title: ReactNode; desc?: ReactNode; className?: string }) {
   return (
@@ -107,8 +108,9 @@ export function SwitchRow({
     <SwitchPrimitive.Root checked={checked} onCheckedChange={onChange} className={cn('tg-btn', ROW)}>
       <RowText title={title} desc={desc} />
       <span
+        data-on={checked || undefined}
         className={cn(
-          'relative h-7 w-12 flex-none rounded-full',
+          'tg-track relative h-7 w-12 flex-none rounded-full',
           checked ? 'bg-(--tg-volt)' : 'bg-(--tg-s3) shadow-[inset_0_0_0_1px_var(--tg-border-hi)]',
         )}
       >

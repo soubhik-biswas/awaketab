@@ -1,6 +1,6 @@
 import { plate } from '../art';
 import { f1, P, ticks } from '../geometry';
-import { big, type IDrawProps, Kicker, L, lmin, mono, Svg } from '../kit';
+import { big, type IDrawProps, Kicker, L, lmin, mono, Svg, PLATE } from '../kit';
 import type { TFaceModel } from '../model';
 
 function Dial({
@@ -25,6 +25,7 @@ function Dial({
   return (
     <>
       <div
+        className={PLATE}
         style={{
           position: 'absolute',
           left: cx - 74,

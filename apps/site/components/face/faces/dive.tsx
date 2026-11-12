@@ -1,6 +1,6 @@
 import { BLACK, SNOW } from '../art';
 import { alpha, arc, ticks } from '../geometry';
-import { D, DialLabel, hand, type IDrawProps, L, mono, MONO, Svg } from '../kit';
+import { D, DialLabel, hand, type IDrawProps, L, mono, MONO, Svg, windowAt } from '../kit';
 
 // The bezel stays dark in every theme, like the real object.
 const BEZEL = {
@@ -91,14 +91,7 @@ export default function Dive({ m }: IDrawProps) {
       <span
         className={L}
         style={{
-          position: 'absolute',
-          left: 120,
-          width: 120,
-          top: 206,
-          height: 30,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          ...windowAt(180, 206, 120, 30),
           borderRadius: 10,
           background: t.panel,
           boxShadow: `0 0 0 1px ${alpha(accent, 0x40)}, 0 6px 16px ${BLACK(0.35)}`,

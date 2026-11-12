@@ -13,6 +13,8 @@ export interface IDrawProps {
 export const L = 'af-l';
 // Detail (minor ticks, dial numerals, stars) that a thumbnail drops, keeping only the main shape and digits.
 export const D = 'af-d';
+// The face's own ground (dial, card, glass), outlined when the system forces its colours.
+export const PLATE = 'af-plate';
 export const lmin = (px: number): string => `max(${px}px, var(--lmin))`;
 export const MONO = 'var(--font-geist-mono), ui-monospace, monospace';
 // Archivo, the display face; pair it with fontStretch 112 % (or 125 % for the widest cuts).
@@ -169,6 +171,24 @@ export function Stars({
 export const digitSize = (m: TFaceModel, size: 'big' | 'mid' | 'sm'): number =>
   ({ big: m.long ? 64 : 92, mid: m.long ? 52 : 72, sm: m.long ? 46 : 62 })[size];
 
+// Ten hours or more is eight characters: such a reading takes the tighter size so it stays inside its dial or card.
+export const fit = (m: TFaceModel, size: number, tight: number): number => (m.digits.length > 7 ? tight : size);
+
+// A readout window centred on x that grows with its text instead of letting the text spill out.
+export const windowAt = (x: number, top: number, minWidth: number, height: number): CSSProperties => ({
+  position: 'absolute',
+  left: x,
+  top,
+  minWidth,
+  height,
+  padding: '0 4px',
+  transform: 'translateX(-50%)',
+  whiteSpace: 'nowrap',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
 // The rounded card the scene faces draw on: 332 × 282 at 14, 14.
 export const card = (m: TFaceModel, extra?: CSSProperties): CSSProperties => ({
   position: 'absolute',
@@ -178,6 +198,8 @@ export const card = (m: TFaceModel, extra?: CSSProperties): CSSProperties => ({
   height: 282,
   borderRadius: 44,
   overflow: 'hidden',
+  // Its own stacking context, so moving and blurred layers stay clipped to the rounded corners in every browser.
+  isolation: 'isolate',
   boxShadow: CARD_SHADOW[m.theme],
   ...extra,
 });

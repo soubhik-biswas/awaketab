@@ -83,7 +83,7 @@ function expectHead(path: string, m: Metadata) {
     expect(title).toBe(HOME_TITLE);
     expect(description).toBe(HOME_DESCRIPTION);
   } else {
-    expect(title, path).toMatch(/ · AwakeTab$/u);
+    expect(title.match(/awaketab/giu)?.length, `${path} title "${title}"`).toBe(1);
     expect(description.length, `${path} description "${description}"`).toBeGreaterThanOrEqual(140);
     expect(description.length, `${path} description "${description}"`).toBeLessThanOrEqual(155);
   }

@@ -25,6 +25,7 @@ export function Block({
   label,
   children,
   className,
+  article = false,
 }: {
   id?: string;
   h?: string;
@@ -32,6 +33,7 @@ export function Block({
   label?: string;
   children: ReactNode;
   className?: string;
+  article?: boolean;
 }) {
   const headId = id && h ? `${id}-h` : undefined;
   return (
@@ -42,7 +44,7 @@ export function Block({
       className={cn('flex scroll-mt-6 flex-col gap-[14px] min-[700px]:gap-5', s.pad, className)}
     >
       {h && (
-        <h2 id={headId} className={s.h2}>
+        <h2 id={headId} className={article ? cn(s.h3Prose, '-mb-1.5 min-[700px]:-mb-3') : s.h2}>
           {h}
         </h2>
       )}
@@ -100,7 +102,11 @@ export function Cards({ items, cols }: { items: readonly ICard[]; cols: 1 | 2 | 
               <strong className={s.h3} lang={card.titleLang}>
                 {card.title}
               </strong>
-              {card.desc && <span className={s.body}>{card.desc}</span>}
+              {card.desc && (
+                <span className={s.body} lang={card.titleLang}>
+                  {card.desc}
+                </span>
+              )}
               <span className="mt-auto inline-flex min-h-8 items-center gap-1.5 text-[15px] font-semibold text-lamp">
                 {card.link}
                 <ArrowRight

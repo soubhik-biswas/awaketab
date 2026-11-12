@@ -22,14 +22,14 @@ steps:
     short: "Set the phone's timeout"
     path: "Settings › Display › Screen timeout"
     text: "On a Pixel with Android 16, the path is Settings › Display & touch › Screen timeout. Pick the length you want for every other app. The longest choice depends on your phone."
-  - title: "Open AwakeTab in Chrome and press Start"
+  - title: "Open AwakeTab in Chrome and press Keep awake"
     short: "Start in Chrome"
     path: "Chrome › awaketab.com"
-    text: "Pick a length or an \"Until…\" time, then press Start. Chrome 84 or later and Samsung Internet 14 or later support it. Wait for the pill to say \"Screen awake\"."
+    text: "Pick a length, then press Keep awake. Chrome 84 or later and Samsung Internet 14 or later support it. Wait for the pill to say \"Awake\"."
   - title: "Keep the tab on screen"
     short: "Keep the tab on screen"
     path: "No Home, Recents or other apps"
-    text: "Leaving Chrome or the tab ends the lock straight away, and the pill changes to \"Paused — tab hidden\". Your normal timeout applies again until you come back, and AwakeTab asks again when you do."
+    text: "Leaving Chrome or the tab ends the lock straight away, and the pill changes to \"Paused\". Your normal timeout applies again until you come back, and AwakeTab asks again when you do."
   - title: "Optional: put AwakeTab beside another app"
     short: "Optional: split screen"
     path: "Recents › app icon › Split screen"
@@ -44,12 +44,12 @@ rows:
     - title: "The power button"
       text: "Pressing it turns the screen off, whatever the tab asked for."
     - title: "Leaving the tab"
-      text: "Home, Recents, another app or another tab end the lock at once. The pill shows \"Paused — tab hidden\" until you return."
+      text: "Home, Recents, another app or another tab end the lock at once. The pill shows \"Paused\" until you return."
     - title: "Battery Saver"
       text: "Chrome does not refuse the wake lock because of it. It may shorten your timeout or dim the screen once you leave the tab."
     - title: "An older browser or a plain http page"
-      text: "There is no Screen Wake Lock API there. AwakeTab offers \"Tap to use the fallback\", which uses more power."
-toolNote: "Open AwakeTab in Chrome on the phone and press Start. The screen stays on only while this tab is on screen, and the pill says \"Screen awake\" once Chrome grants the lock. Leave the tab and your phone's own timeout takes over again, with nothing to undo."
+      text: "There is no Screen Wake Lock API there. AwakeTab offers \"No wake lock in this browser\", which uses more power."
+toolNote: "Open AwakeTab in Chrome on the phone and press Keep awake. The screen stays on only while this tab is on screen, and the pill says \"Awake\" once Chrome grants the lock. Leave the tab and your phone's own timeout takes over again, with nothing to undo."
 faq:
   - q: "Can I set a longer screen timeout for Chrome only?"
     a: "Not on stock Android: Screen timeout is one setting for the whole phone. AwakeTab gets close for the browser, because the screen stays on only while its Chrome tab is on screen and your normal timeout returns when you leave."
@@ -57,8 +57,8 @@ faq:
     a: "No. A wake lock covers the page that asked for it. Another app keeps the phone's timeout, unless AwakeTab is on screen beside it in split screen, which we have not yet recorded on a device."
   - q: "Does Battery Saver stop Chrome keeping the screen on?"
     a: "No. Chrome has no Battery Saver check on the wake lock, so it is not refused. Battery Saver may still shorten your timeout or dim the display, which changes what happens after the session ends or once you leave the tab."
-  - q: "Can I use AwakeTab's floating window on Android?"
-    a: "No. The floating window needs a desktop browser feature that Chrome for Android lacks. Split screen is the nearest option, since it keeps the tab on screen beside another app."
+  - q: "Can I use AwakeTab's mini clock on Android?"
+    a: "No. The mini clock needs a desktop browser feature that Chrome for Android lacks. Split screen is the nearest option, since it keeps the tab on screen beside another app."
 honestLimit: "Stock Android has no per-app timeout, and AwakeTab covers its own browser tab only. Press Home or open another app and the phone goes back to its normal screen timeout."
 related:
   - "/on/android-chrome"
@@ -81,7 +81,7 @@ The paths are for stock Android and Pixel phones. Other makers can name these sc
 
 A wake lock covers the page that asked for it, not the phone. A recipe app or a PDF reader follows the phone's timeout, unless it keeps the screen on by itself, even with AwakeTab running in Chrome behind it.
 
-That leaves two honest options. Put AwakeTab in one half of split screen beside the other app, so the tab stays on screen; we have not yet recorded a device result for that, so check the pill. Or raise the phone's own timeout for as long as you need it, and lower it again afterwards, because a long timeout also drains the battery in your pocket. For a kitchen, the [cook mode page](/for/cooking) explains what works on a phone and what does not.
+That leaves two honest options. Put AwakeTab in one half of split screen beside the other app, so the tab stays on screen; we have not yet recorded a device result for that, so check the pill. Or raise the phone's own timeout for as long as you need it, and lower it again afterwards, because a long timeout also drains the battery in your pocket. For a kitchen, the [cooking page](/for/cooking) explains what works on a phone and what does not.
 
 ::ad
 

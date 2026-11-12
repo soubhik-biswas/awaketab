@@ -1,5 +1,5 @@
 import { f1, pad } from '../geometry';
-import { card, DISPLAY, type IDrawProps, L, lmin, MONO } from '../kit';
+import { card, DISPLAY, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 const ART = {
   light: { ground: '#F3EEE3', disc: '#1A1C24', square: '#6633F5', semi: '#E8B931', ink: '#1A1C24' },
@@ -20,7 +20,7 @@ export default function Bauhaus({ m }: IDrawProps) {
   const unitA = m.h > 0 ? 'HR' : 'MIN';
   const unitB = m.h > 0 ? 'MIN' : 'SEC';
   return (
-    <div style={card(m, { background: a.ground })}>
+    <div className={PLATE} style={card(m, { background: a.ground })}>
       <svg
         style={{ position: 'absolute', left: 0, top: 0 }}
         width="332"
@@ -42,7 +42,7 @@ export default function Bauhaus({ m }: IDrawProps) {
           style={{
             fontFamily: DISPLAY,
             fontStretch: '112%',
-            fontSize: m.h > 0 ? 60 : 76,
+            fontSize: m.h > 9 ? 48 : m.h > 0 ? 60 : 76,
             fontWeight: 800,
             letterSpacing: '-0.04em',
             lineHeight: 0.86,

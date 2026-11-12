@@ -120,7 +120,7 @@ describe('faceModel', () => {
     expect(m.digits).toBe('42:18');
     expect(m.endLine).toBe('until 11:30 AM');
     expect(m.topWord).toBe('left');
-    expect(m.capText).toBe('Screen awake');
+    expect(m.capText).toBe('Awake');
   });
 
   it('shows the full length at rest and nothing left once time is up', () => {
@@ -140,13 +140,34 @@ describe('faceModel', () => {
   });
 
   it('takes localised labels', () => {
-    const m = ring({ lblTop: 'übrig', lblEnd: 'bis 11:30' });
+    const m = ring({ lblTop: 'übrig', lblEnd: 'bis 11:30', lblCap: 'Wach' });
     expect(m.topWord).toBe('übrig');
     expect(m.endLine).toBe('bis 11:30');
+    expect(m.capText).toBe('Wach');
+    expect(m.aria).toBe('Wach, 43 min remaining, bis 11:30');
+  });
+
+  it("captions each state in the status pill's words", () => {
+    expect(ring({ state: 'idle' }).capText).toBe('Not keeping awake');
+    expect(ring({ state: 'starting' }).capText).toBe('Asking the browser…');
+    expect(ring({ state: 'fallback' }).capText).toBe('Awake via video');
+    expect(ring({ state: 'paused' }).capText).toBe('Paused');
+    expect(ring({ state: 'blocked' }).capText).toBe('Not awake');
+    expect(ring({ state: 'unsupported' }).capText).toBe('No wake lock in this browser');
+  });
+
+  it('never calls a session that needs a tap paused', () => {
+    const m = ring({ state: 'paused', needs: true });
+    expect(m.needs).toBe(true);
+    expect(m.topWord).toBe('not awake');
+    expect(m.capText).toBe('Tap to resume');
+    expect(m.aria).not.toMatch(/paused/iu);
+    expect(m.accentValue).toBe(ring({ state: 'paused' }).accentValue);
+    expect(ring({ needs: true }).needs).toBe(false);
   });
 
   it('keeps the aria label to whole minutes, so it changes at most once a minute', () => {
-    expect(ring().aria).toBe('Screen awake, 43 min remaining, until 11:30 AM');
+    expect(ring().aria).toBe('Awake, 43 min remaining, until 11:30 AM');
     expect(ring({ remain: 2521 }).aria).toContain('43 min remaining');
     expect(ring({ remain: 2520 }).aria).toContain('42 min remaining');
     expect(ring({ remain: 3900, total: 7200 }).aria).toContain('1 h 5 min remaining');
@@ -267,7 +288,7 @@ describe('<Face>', () => {
   it('is a timer named in whole minutes, with its drawing hidden from assistive tech', () => {
     const out = html();
     expect(out).toContain('role="timer"');
-    expect(out).toContain('aria-label="Screen awake, 43 min remaining, until 11:30 AM"');
+    expect(out).toContain('aria-label="Awake, 43 min remaining, until 11:30 AM"');
     expect(out).toContain('aria-hidden="true"');
     expect(out).toContain('af-live');
   });
@@ -308,8 +329,8 @@ describe('<Face>', () => {
   });
 
   it('shows the status caption unless bare', () => {
-    expect(html()).toContain('Screen awake</span>');
-    expect(html({ bare: true })).not.toContain('Screen awake</span>');
+    expect(html()).toContain('Awake</span>');
+    expect(html({ bare: true })).not.toContain('Awake</span>');
   });
 
   it('gives every face a true light version instead of a dark slab', () => {

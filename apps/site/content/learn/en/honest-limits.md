@@ -75,7 +75,7 @@ A wake lock is a request from a web page to keep the display on. The browser gra
 
 ::rows limits
 
-The rest of this page takes each limit in turn. When one of them stops a session, the pill says so instead of pretending: you see "Paused — tab hidden" or "Blocked — here's the fix", never a false "Screen awake".
+The rest of this page takes each limit in turn. When one of them stops a session, the pill says so instead of pretending: you see "Paused" or "Not awake", never a false "Awake".
 
 ## Why does a hidden tab lose the lock?
 
@@ -83,7 +83,7 @@ Browsers release a wake lock as soon as its page is hidden, so a background tab 
 
 AwakeTab pauses when that happens and asks again when the tab is visible. A window that is on screen but not focused keeps its lock, so you can put AwakeTab beside the document you are reading.
 
-Full-screen slides are the case that catches people out: the presentation covers the tab, so the tab counts as hidden. In desktop Chrome and Edge 116 and later, and desktop Firefox 151 and later, the floating window keeps AwakeTab visible on top of the slides. The extension, a second window or a longer display timeout for the talk also work. [Keep the screen on while presenting](/for/presentations) covers each option.
+Full-screen slides are the case that catches people out: the presentation covers the tab, so the tab counts as hidden. In desktop Chrome and Edge 116 and later, and desktop Firefox 151 and later, the mini clock keeps AwakeTab visible on top of the slides. The extension, a second window or a longer display timeout for the talk also work. [Keep the screen on while presenting](/for/presentations) covers each option.
 
 For a display that must stay awake behind other windows, use the [AwakeTab extension for Chrome and Edge](/extension). It uses Chrome's own power API, which does not depend on a visible tab.
 
@@ -95,7 +95,7 @@ Closing the lid is an operating-system decision, and no web page or extension ca
 
 iPhone Low Power Mode forces a 30-second Auto-Lock, and it applies whatever a web page asks for. Turn it off in Settings, then Battery, and the normal Auto-Lock comes back. [Do battery savers block a wake lock? Mostly, no](/learn/low-power-mode-and-wake-locks) explains what each phone and browser does.
 
-Firefox has one battery rule of its own. At 5 % battery or less, while not charging, it turns down new wake locks and releases a held one. The pill then reads "Blocked — here's the fix" and names the cause. Plug in and start again.
+Firefox has one battery rule of its own. At 5 % battery or less, while not charging, it turns down new wake locks and releases a held one. The pill then reads "Not awake" and names the cause. Plug in and start again.
 
 ## Does AwakeTab change my chat status?
 

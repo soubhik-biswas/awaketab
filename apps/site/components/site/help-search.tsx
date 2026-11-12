@@ -43,7 +43,7 @@ export function HelpSearch({
           onChange={(e) => setQ(e.target.value)}
           placeholder={labels.placeholder}
           aria-describedby={`${id}-count`}
-          className="h-14 min-w-0 flex-1 border-0 bg-transparent text-[18px] text-foreground outline-none placeholder:text-muted-foreground"
+          className="h-[58px] min-w-0 flex-1 border-0 bg-transparent px-0.5 text-[18px] text-foreground outline-none placeholder:text-muted-foreground"
         />
       </label>
       <nav aria-label={labels.chips} className="flex flex-wrap gap-2">

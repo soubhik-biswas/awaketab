@@ -1,7 +1,6 @@
 import {
   FACE_COLLECTIONS,
   faceKind,
-  faceName,
   toFaceId,
   type TFaceCollection,
   type TFaceId,
@@ -19,5 +18,3 @@ export const tagOf = (k: TFaceId): TFaceKind => faceKind(k);
 
 // Any stored id comes back as a face that exists: the retired LED, Pulse and Terminal move to their closest face.
 export const glanceFace = (v: unknown): TFaceId => toFaceId(v);
-
-export const faceLabel = (k: unknown): string => faceName(toFaceId(k));

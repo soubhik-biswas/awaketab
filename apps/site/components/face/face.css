@@ -1,12 +1,24 @@
 .af {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  contain: layout;
   direction: ltr;
   font-family: var(--font-inter), var(--font-script, system-ui), system-ui, sans-serif;
   font-feature-settings:
     "tnum" 1,
     "cv11" 1;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-variant-numeric: normal;
   line-height: normal;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0;
+  text-shadow: none;
+  white-space: normal;
   color: var(--foreground);
   text-align: start;
 }
@@ -20,8 +32,12 @@
   left: 0;
   top: 0;
   width: 360px;
-  height: 360px;
+  height: 310px;
   transform-origin: 0 0;
+}
+
+.af svg {
+  overflow: visible;
 }
 
 .af-tr {
@@ -50,5 +66,30 @@
   .af *::before,
   .af *::after {
     transition: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .af {
+    forced-color-adjust: none;
+    border-radius: 8%;
+    outline: 2px solid CanvasText;
+  }
+
+  .af.light {
+    background-color: #f5f5fa;
+  }
+
+  .af.dark {
+    background-color: #07080c;
+  }
+
+  .af.oled {
+    background-color: #000;
+  }
+
+  .af .af-plate {
+    outline: 2px solid currentcolor;
+    outline-offset: -2px;
   }
 }

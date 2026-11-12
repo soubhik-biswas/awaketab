@@ -53,9 +53,7 @@ async function whileSyncing<T extends { ok: boolean; error?: string }>(attempt: 
   return result;
 }
 
-// /pro/activate: where the payment provider returns after paying (processing, Pro is on, declined, still syncing,
-// closed), and where a licence key from the receipt turns Pro on by hand. `?ext=1` only shows the key for the
-// extension.
+// /pro/activate: where the payment provider returns, and where a licence key from the receipt turns Pro on by hand.
 export function ActivateFlow({
   timerHref,
   manageHref,

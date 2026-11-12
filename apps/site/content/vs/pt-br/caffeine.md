@@ -39,7 +39,7 @@ compare:
     - what: "Plataformas"
       cells: ["Qualquer sistema com um navegador compatível (Chrome, Edge, Firefox, Safari, Samsung Internet, Opera)", "macOS"]
     - what: "Status mostrado"
-      cells: ["“Tela ligada” só quando o navegador confirma", "Ícone na barra de menus"]
+      cells: ["“Ligada” só quando o navegador confirma", "Ícone na barra de menus"]
 picks:
   them:
     - title: "Você não quer nenhuma janela à vista"
@@ -50,14 +50,14 @@ picks:
     - title: "Você não pode ou não quer instalar apps"
       text: "Por exemplo, num computador emprestado ou gerenciado."
     - title: "Você quer saber a verdade"
-      text: "O indicador só diz “Tela ligada” quando o navegador confirma o bloqueio. Se o navegador recusar, aparece “Bloqueado — veja como corrigir”, com a causa."
+      text: "O indicador só diz “Ligada” quando o navegador confirma o bloqueio. Se o navegador recusar, aparece “Não está ligada”, com a causa."
     - title: "Você não está no Mac"
       text: "O mesmo endereço funciona no Windows, no Android, no iPhone e no Linux."
     - title: "Você prefere uma API padrão do navegador"
       text: "O AwakeTab nunca aperta teclas nem mexe o mouse, o que importa se a política de TI da sua empresa proíbe simuladores de entrada."
 faq:
   - q: "O AwakeTab funciona com a aba escondida, como o Caffeine funciona sem janela?"
-    a: "Não. É a maior diferença entre os dois. Quando a aba do AwakeTab fica oculta ou o navegador é minimizado, o bloqueio é liberado e o indicador mostra “Pausado — aba oculta”. O Caffeine atua no sistema inteiro sem nada visível."
+    a: "Não. É a maior diferença entre os dois. Quando a aba do AwakeTab fica oculta ou o navegador é minimizado, o bloqueio é liberado e o indicador mostra “Pausado”. O Caffeine atua no sistema inteiro sem nada visível."
   - q: "O Caffeine ou o AwakeTab me deixam verde no Teams?"
     a: "O AwakeTab, não: ele nunca simula teclas nem mouse, e a presença no Teams e no Slack segue a entrada do teclado e do mouse. O Caffeine para Mac não simula teclas (usa uma asserção de energia do macOS), e não prometemos nada sobre o efeito dele em apps de chat."
   - q: "Preciso de permissão de administrador para usar o AwakeTab no Mac do trabalho?"
@@ -96,7 +96,7 @@ Tampa fechada não é motivo para escolher nenhum dos dois: com a tampa fechada,
 
 ## Como testar o AwakeTab no lugar do Caffeine
 
-Abra o AwakeTab no Safari, no Chrome ou no Firefox do Mac e deixe a sessão em “∞” (até você parar), que já vem sugerida aqui. Toque em iniciar e deixe a janela à vista num canto. Se você minimizar a janela ou escondê-la atrás de um app em tela cheia, o indicador muda para “Pausado — aba oculta” — o comportamento esperado de uma aba. Para detalhes do sistema, veja [impedir que a tela do Mac desligue](/pt-br/on/macos).
+Abra o AwakeTab no Safari, no Chrome ou no Firefox do Mac e deixe a sessão em “Sem fim” (até você parar), que já vem sugerida aqui. Toque em “Manter ligada” e deixe a janela à vista num canto. Se você minimizar a janela ou escondê-la atrás de um app em tela cheia, o indicador muda para “Pausado” — o comportamento esperado de uma aba. Para detalhes do sistema, veja [impedir que a tela do Mac desligue](/pt-br/on/macos).
 
 ## Resumo honesto
 

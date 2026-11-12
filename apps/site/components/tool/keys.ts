@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { LENGTHS } from './set-controls';
 import type { IGlance } from './context';
 
-// Space and Enter belong to a focused control; on the stage or the status pill they drive the session.
+// Space and Enter belong to a focused control; on the stage they drive the session.
 const CONTROLS = 'button, a[href], [role="radio"], [role="tab"], [role="switch"], [role="slider"], [role="checkbox"]';
 
 function typing(el: Element | null): boolean {

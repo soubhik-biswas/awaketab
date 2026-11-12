@@ -5,9 +5,6 @@ import { useIsClient, useMediaQuery } from 'usehooks-ts';
 import { cn } from '@/lib/utils';
 import { Face, isFaceId, type TFaceMotion, type TFaceState, type TFaceTheme } from '@/components/face';
 
-// The boards' sample moment: 38:12 left of an hour at 11:03:48 AM.
-export const SAMPLE = { remain: 2292, total: 3600, nowSec: 39_828 } as const;
-
 // A face in the page's own theme. The server and the first paint keep a box of the face's size, so nothing shifts
 // when the drawing arrives; the phone size is picked after mount, never from window during render.
 export function SiteFace({
@@ -18,6 +15,7 @@ export function SiteFace({
   nowSec,
   state = 'idle',
   bare = false,
+  square = false,
   framed = false,
   indef = false,
   motion,
@@ -32,6 +30,7 @@ export function SiteFace({
   nowSec?: number;
   state?: TFaceState;
   bare?: boolean;
+  square?: boolean;
   framed?: boolean;
   indef?: boolean;
   motion?: TFaceMotion;
@@ -45,8 +44,9 @@ export function SiteFace({
   const large = useMediaQuery('(min-width: 1100px)', { defaultValue: true, initializeWithValue: false });
   const px = !wide && phoneSize ? phoneSize : !large && tabletSize ? tabletSize : size;
   const theme: TFaceTheme = resolvedTheme === 'dark' || resolvedTheme === 'oled' ? resolvedTheme : 'light';
-  // A bare face is its 360 × 315 artboard; with the caption or the case it stays square.
-  const tall = (n: number) => (bare && !framed ? Math.round(n * 0.875) : n);
+  // A bare face is its 360 × 315 artboard; with the caption or the case it stays square. A square slot keeps the
+  // full box for a bare face too, with the drawing at its top.
+  const tall = (n: number) => (bare && !framed && !square ? Math.round(n * 0.875) : n);
   if (!mounted)
     return (
       <span
@@ -65,7 +65,7 @@ export function SiteFace({
         }}
       />
     );
-  return (
+  const drawing = (
     <Face
       face={isFaceId(face) ? face : 'ring'}
       theme={theme}
@@ -81,4 +81,5 @@ export function SiteFace({
       {...(className ? { className } : {})}
     />
   );
+  return square ? <div style={{ width: px, height: px }}>{drawing}</div> : drawing;
 }

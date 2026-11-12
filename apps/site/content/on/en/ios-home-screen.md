@@ -16,7 +16,7 @@ noindex: true
 lastVerified: 2026-09-26
 browsers: ["safari"]
 os: ["ios", "ipados"]
-lead: "From iOS 18.4, AwakeTab added to your Home Screen can keep the iPhone screen on while the app is open in front. Tap Start once, because iOS only grants a wake lock after a tap. On iOS 26, sites you add to the Home Screen open as web apps by default. Before iOS 18.4, web apps cannot hold the lock, so use AwakeTab in Safari instead."
+lead: "From iOS 18.4, AwakeTab added to your Home Screen can keep the iPhone screen on while the app is open in front. Tap Keep awake once, because iOS only grants a wake lock after a tap. On iOS 26, sites you add to the Home Screen open as web apps by default. Before iOS 18.4, web apps cannot hold the lock, so use AwakeTab in Safari instead."
 facts:
   - label: "Home Screen web app"
     value: "iOS 18.4 or later"
@@ -39,13 +39,13 @@ steps:
     path: "Safari › Share › Add to Home Screen"
     text: "Open awaketab.com in Safari first. The icon opens AwakeTab without the Safari toolbar, and on iOS 26 it opens as a web app by default."
     shot: "the Share sheet with Add to Home Screen"
-  - title: "Open the app and tap Start"
+  - title: "Open the app and tap Keep awake"
     path: "Home Screen › AwakeTab"
-    text: "iOS will not grant a wake lock until you touch the page, so the session always starts from your tap. The pill says \"Screen awake\" only once iOS has agreed."
-    shot: "the AwakeTab web app with the pill reading Screen awake"
+    text: "iOS will not grant a wake lock until you touch the page, so the session always starts from your tap. The pill says \"Awake\" only once iOS has agreed."
+    shot: "the AwakeTab web app with the pill reading Awake"
   - title: "Keep the app in front"
     path: "No app switching while it runs"
-    text: "Going Home, opening another app or pressing the side button releases the lock, and the pill changes to \"Paused — tab hidden\". Open the app again and AwakeTab asks again by itself."
+    text: "Going Home, opening another app or pressing the side button releases the lock, and the pill changes to \"Paused\". Open the app again and AwakeTab asks again by itself."
     shot: "the pill after switching away and back"
 matrix:
   label: "Home Screen web app support, sources checked 26 September 2026"
@@ -54,7 +54,7 @@ matrix:
     - what: "Home Screen web app, iOS 18.4 or later, app in front"
       result: works
       label: "Supported"
-      text: "Tap Start once. The same rules as Safari apply."
+      text: "Tap Keep awake once. The same rules as Safari apply."
     - what: "Site added to the Home Screen on iOS 26"
       result: works
       label: "Supported"
@@ -66,7 +66,7 @@ matrix:
     - what: "Session started without a tap, for example after a reload"
       result: blocked
       label: "Blocked"
-      text: "The pill says \"Blocked — here's the fix\". Tap Retry."
+      text: "The pill says \"Not awake\". Tap Retry."
     - what: "Home Screen, another app or the lock screen"
       result: pauses
       label: "Pauses"

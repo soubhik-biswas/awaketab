@@ -39,7 +39,7 @@ steps:
     path: "Leave the phone untouched for a while"
     text: "Set Auto-Lock to 1 minute and time it without touching the phone. If it locks on time, the setting works. If it goes back to 30 seconds, Low Power Mode has come back on."
 stepsDone: "All four done. If Never is still grey, read the next section."
-toolNote: "If you only need the screen on for one task, you can leave Auto-Lock alone. AwakeTab keeps the screen on while its Safari tab is in front, in Safari 16.4 or later. Tap Keep awake once, because Safari needs that tap. The pill says \"Screen awake\" only once Safari confirms the lock. When you leave the tab, your normal Auto-Lock takes over again."
+toolNote: "If you only need the screen on for one task, you can leave Auto-Lock alone. AwakeTab keeps the screen on while its Safari tab is in front, in Safari 16.4 or later. Tap Keep awake once, because Safari needs that tap. The pill says \"Awake\" only once Safari confirms the lock. When you leave the tab, your normal Auto-Lock takes over again."
 faq:
   - q: "Why does Auto-Lock go back to 30 seconds every evening?"
     a: "Something switches Low Power Mode on again, and that resets Auto-Lock to 30 seconds. A battery-level automation in Shortcuts is the usual reason, especially one someone else set up on a shared or family phone."
@@ -84,4 +84,4 @@ Open the **Shortcuts** app and tap **Automation**. Look for an automation that r
 
 ## When the screen you need is another app
 
-A wake lock in a tab covers that tab only. On an iPhone only one app can be in front, so AwakeTab cannot keep a recipe app or a PDF reader on. For a kitchen, the [cook mode page](/for/cooking) explains what works on a phone and what does not. An iPad can show AwakeTab next to the app you are using; see [keeping an iPad display awake](/on/ipad). The full Safari walk-through is on [keep your iPhone screen on in Safari](/on/iphone-safari).
+A wake lock in a tab covers that tab only. On an iPhone only one app can be in front, so AwakeTab cannot keep a recipe app or a PDF reader on. For a kitchen, the [cooking page](/for/cooking) explains what works on a phone and what does not. An iPad can show AwakeTab next to the app you are using; see [keeping an iPad display awake](/on/ipad). The full Safari walk-through is on [keep your iPhone screen on in Safari](/on/iphone-safari).

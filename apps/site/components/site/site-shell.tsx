@@ -7,16 +7,14 @@ import { Consent } from './consent';
 import { SiteFooter } from './site-footer';
 import { SiteHeader } from './site-header';
 
-// Every website page: the floating glass nav, the page, the graphite footer, and the analytics question floating
-// over it all. The home page passes the tool as `top`, which takes the nav's place, and its story keeps the home
-// board's wider rhythm.
+// Every website page: the nav, the page and the footer. The home page passes the tool as `top` in the nav's place.
 export async function SiteShell({ locale, top, children }: { locale: TLocale; top?: ReactNode; children: ReactNode }) {
   const t = await getTranslations({ locale, namespace: 'site' });
   const tt = await getTranslations({ locale, namespace: 'tool' });
   // The tool's stage is the home page's main landmark, so the story below it is a plain region.
   const Body = top ? 'div' : 'main';
   return (
-    <div className="relative overflow-x-clip bg-background text-foreground">
+    <div className={cn('relative overflow-x-clip bg-background text-foreground', !top && 'site-page')}>
       {!top && <div className="site-glow" aria-hidden="true" />}
       <a
         href={top ? `#${STAGE_ID}` : '#content'}

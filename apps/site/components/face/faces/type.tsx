@@ -31,7 +31,7 @@ export default function Type({ m }: IDrawProps) {
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
         <span
           style={{
-            fontSize: m.h > 0 ? 116 : 196,
+            fontSize: m.h > 9 ? 92 : m.h > 0 ? 116 : 196,
             fontWeight: 700,
             letterSpacing: '-0.07em',
             lineHeight: 0.82,

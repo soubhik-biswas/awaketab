@@ -24,15 +24,15 @@ toc:
   before-you-rely-on-it-at-work: "Before you rely on it"
 steps:
   - title: "Open AwakeTab in Edge or Chrome."
-    text: "Edge comes with Windows. Pick 30 min, or tap \"Until…\" and choose when your day ends, such as 5:30 PM."
-  - title: "Tap Start."
-    text: "You'll see \"Starting…\" briefly, then \"Screen awake\" once Edge or Chrome agrees."
+    text: "Edge comes with Windows. Pick 30 min for one task, or 2 hours for a longer stretch; the line under the button shows when it will end."
+  - title: "Tap Keep awake."
+    text: "You'll see \"Asking the browser…\" briefly, then \"Awake\" once Edge or Chrome agrees."
   - title: "Snap it beside your work."
     text: "Press Windows key + Left arrow, or drag the window to your second monitor."
 figures:
   - frame: phone
     label: "Phone screenshot"
-    alt: "the AwakeTab pill reading Screen awake in Edge"
+    alt: "the AwakeTab pill reading Awake in Edge"
     caption: "The pill in Edge."
   - frame: desktop
     label: "Desktop screenshot"
@@ -48,7 +48,7 @@ pills:
 checklist:
   - "You know whether your laptop has a lock policy as well as a display timeout."
   - "Nothing covers AwakeTab: it is snapped to one side or on a second monitor."
-  - "The session ends when your day does, such as \"Until…\" 5:30 PM."
+  - "The session has an end: the pill names it, such as \"Awake · until 5:30 PM\"."
   - "Your employer's rules on screen locking allow it."
 faq:
   - q: "Do I need admin rights or an install?"
@@ -57,7 +57,7 @@ faq:
     a: "Your organisation probably sets a lock after a period of inactivity, separate from the display timeout. AwakeTab keeps the display on but leaves that lock alone, so it still happens on schedule. If the time is too short for your work, ask IT whether it can change."
   - q: "What happens when I close the lid to walk to a meeting?"
     a: "The laptop sleeps as usual. When you open it and sign in, AwakeTab asks for the wake lock again as long as its tab is visible."
-  - q: "The pill says “Blocked — here's the fix”. What now?"
+  - q: "The pill says “Not awake”. What now?"
     a: "The browser refused. On a managed laptop that often means an administrator has switched wake locks off for the browser. The pill explains the cause it can see. Nothing on the page can or should change an administrator’s choice; ask IT if you need the screen on longer."
 honestLimit: "AwakeTab holds off only the display timeout, and only while its tab is visible. A separate lock policy, removing a smart card or closing the lid still locks or sleeps the laptop, and Teams still shows Away."
 related:

@@ -52,7 +52,7 @@ rows:
       text: "How their own power features treat a visible tab."
     - title: "The video fallback on current iOS"
       text: "It has not been re-checked."
-    - title: "The floating window with its tab hidden"
+    - title: "The mini clock with its tab hidden"
       text: "Whether it keeps the screen on while its tab is hidden."
     - title: "Mac clamshell mode"
       text: "What each MacBook needs to stay awake with the lid closed."
@@ -66,7 +66,7 @@ faq:
   - q: "Why is there no device result yet?"
     a: "The manual device run has not been recorded. Each row in the matrix is a planned case, and its outcome, date and evidence appear there once it has been run."
   - q: "How can I check a claim on my own device?"
-    a: "Open AwakeTab, press Start and read the pill. \"Screen awake\" appears only once your browser grants the lock, so the pill is the check."
+    a: "Open AwakeTab, press Keep awake and read the pill. \"Awake\" appears only once your browser grants the lock, so the pill is the check."
 honestLimit: "Device results are pending: every row in the matrix is planned, not done. Until a row is recorded, claims rest on documentation, engine source and automated tests."
 related:
   - "/learn/browser-support-matrix"

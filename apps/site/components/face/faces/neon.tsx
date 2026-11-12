@@ -1,6 +1,6 @@
 import { WHITE } from '../art';
 import { alpha } from '../geometry';
-import { card, cardColumn, digitSize, DISPLAY, type IDrawProps, L, lmin } from '../kit';
+import { card, cardColumn, digitSize, DISPLAY, type IDrawProps, L, lmin, PLATE } from '../kit';
 import type { TFaceState } from '../model';
 
 // A white-washed brick wall by day, with the tube glow in the deep accent; a dark wall at night.
@@ -11,6 +11,7 @@ const WALL = {
 const VIOLET = { light: '#6633F5', night: '#9F7BFF' };
 const SIGN_INK = '#F1E8FF';
 const INK = { live: '#F4FFF8', still: '#E9ECF2' };
+// The sign: AWAKE only while the screen is held, PAUSED only when the person paused.
 const WORD: Readonly<Record<TFaceState, string>> = {
   idle: 'READY',
   starting: 'WAKING',
@@ -36,6 +37,7 @@ export default function Neon({ m }: IDrawProps) {
     : `0 0 4px #FFFFFF, 0 0 10px ${acc}, 0 0 22px ${acc}, 0 0 46px ${acc}, 0 0 80px ${alpha(acc, 0x99)}`;
   return (
     <div
+      className={PLATE}
       style={card(m, {
         backgroundColor: wall.bg,
         backgroundImage: `repeating-linear-gradient(0deg, ${wall.brick} 0 1px, transparent 1px 30px), repeating-linear-gradient(90deg, ${wall.brick2} 0 1px, transparent 1px 60px), radial-gradient(70% 60% at 50% 45%, ${alpha(acc, 0x33)}, transparent 70%)`,
@@ -50,11 +52,13 @@ export default function Neon({ m }: IDrawProps) {
             fontSize: lmin(15),
             fontWeight: 700,
             letterSpacing: '.3em',
+            textTransform: 'uppercase',
+            whiteSpace: 'nowrap',
             color: signInk,
             textShadow: signGlow,
           }}
         >
-          {WORD[m.st]}
+          {m.needs ? m.topWord : WORD[m.st]}
         </span>
         <span
           style={{

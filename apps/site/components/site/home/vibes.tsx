@@ -2,8 +2,9 @@ import { getTranslations } from 'next-intl/server';
 import type { TFaceId } from '@/components/face';
 import type { TLocale } from '@/i18n/locales';
 import { cn } from '@/lib/utils';
-import { SAMPLE, SiteFace } from '../site-face';
+import { SiteFace } from '../site-face';
 import { story } from '../styles';
+import { SAMPLE } from './sample';
 import { StoryHead } from './story-head';
 
 // Each vibe with the face its preview card shows; the backgrounds (dark and light pastel) live in site.css.
@@ -26,7 +27,7 @@ export async function Vibes({ locale }: { locale: TLocale }) {
         {VIBES.map(([key, face]) => (
           <li
             key={key}
-            className="relative h-[260px] overflow-hidden rounded-[28px] border border-[rgba(11,16,32,.08)] shadow-[0_24px_50px_rgba(11,16,32,.10)] min-[700px]:h-[300px] dark:border-white/10 dark:shadow-[0_24px_50px_rgba(0,0,0,.45)]"
+            className="relative h-[262px] overflow-hidden rounded-[28px] border border-[rgba(11,16,32,.08)] shadow-[0_24px_50px_rgba(11,16,32,.10)] min-[700px]:h-[302px] dark:border-white/10 dark:shadow-[0_24px_50px_rgba(0,0,0,.45)]"
           >
             <div aria-hidden="true" className={cn('site-vibe absolute inset-0', `site-vibe-${key}`)} />
             <div className="absolute inset-x-0 top-[34px] flex justify-center">

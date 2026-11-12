@@ -13,7 +13,7 @@ translationOf: "cooking"
 lastVerified: 2026-09-09
 browsers: []
 os: []
-lead: "Con las manos llenas de masa no vas a tocar el teléfono cada medio minuto. Abre AwakeTab en el navegador, deja la pestaña a la vista y la pantalla no se apagará mientras sigues la receta. La herramienta de esta página ya viene en modo Cocina y con la duración “∞”, así que se mantiene hasta que tú la detengas. El indicador solo muestra “Pantalla despierta” cuando el navegador confirma el Wake Lock (el permiso que impide que la pantalla se atenúe y se bloquee). Si abres otra app en el teléfono, el bloqueo se libera hasta que regreses."
+lead: "Con las manos llenas de masa no vas a tocar el teléfono cada medio minuto. Abre AwakeTab en el navegador, deja la pestaña a la vista y la pantalla no se apagará mientras sigues la receta. La herramienta de esta página ya viene con la esfera Bold, de números grandes, y la duración “Sin fin”, así que se mantiene hasta que tú la detengas. El indicador solo muestra “Despierta” cuando el navegador confirma el Wake Lock (el permiso que impide que la pantalla se atenúe y se bloquee). Si abres otra app en el teléfono, el bloqueo se libera hasta que regreses."
 crumb: "Cocina"
 toc:
   prepara-el-teléfono-o-la-tablet-antes-de-empezar: "Prepáralo"
@@ -23,20 +23,20 @@ steps:
     text: "Si la receta es larga, conéctalo al cargador."
   - title: "Deja AwakeTab visible."
     text: "En una tablet puede ir junto a la receta: con apps en ventanas en iPadOS 26, en Split View en iPadOS 18 o anterior, o en pantalla dividida en Android. En un iPhone solo se ve una app a la vez: úsalo como única pestaña, por ejemplo con un recetario de papel."
-  - title: "Toca para empezar y confirma que el indicador cambió a “Pantalla despierta”."
-    text: "Si en cambio ves “Despierta con video de respaldo”, tu navegador no tiene Wake Lock nativo y AwakeTab usa un video silencioso, que gasta más batería."
+  - title: "Toca para empezar y confirma que el indicador cambió a “Despierta”."
+    text: "Si en cambio ves “Despierta con video”, tu navegador no tiene Wake Lock nativo y AwakeTab usa un video silencioso, que gasta más batería."
 figures:
   - frame: phone
     label: "Captura del teléfono"
-    alt: "AwakeTab en modo Cocina en un iPhone"
-    caption: "El modo Cocina en un iPhone."
+    alt: "AwakeTab con la esfera Bold en un iPhone"
+    caption: "La esfera Bold en un iPhone."
   - frame: desktop
     label: "Captura de la tablet"
     alt: "la receta y AwakeTab lado a lado en una tablet"
     caption: "La receta y AwakeTab lado a lado en una tablet."
 pills:
   - state: lost
-    text: "El temporizador se detiene. Cuando regresas, espera a que vuelva a decir “Pantalla despierta” antes de dejar el teléfono en la barra."
+    text: "El temporizador se detiene. Cuando regresas, espera a que vuelva a decir “Despierta” antes de dejar el teléfono en la barra."
   - state: denied
     text: "El motivo aparece al lado: casi siempre la pestaña no estaba a la vista o Safari necesita que toques la pantalla primero (en Firefox, también la batería al 5 % o menos sin cargar)."
 checklist:
@@ -48,7 +48,7 @@ checklist:
   - "Algunos fabricantes de Android además tienen listas de “apps en suspensión” que pueden cerrar el navegador cuando lo dejas en segundo plano."
 faq:
   - q: "¿La pantalla sigue encendida si contesto un WhatsApp en medio de la receta?"
-    a: "No. Al cambiar de app o de pestaña, el navegador libera el bloqueo y el indicador pasa a “En pausa — pestaña oculta”. Vuelve a AwakeTab y espera a que diga “Pantalla despierta” o “Despierta con video de respaldo” antes de seguir cocinando."
+    a: "No. Al cambiar de app o de pestaña, el navegador libera el bloqueo y el indicador pasa a “En pausa”. Vuelve a AwakeTab y espera a que diga “Despierta” o “Despierta con video” antes de seguir cocinando."
   - q: "¿Puedo ver la receta en otra app al mismo tiempo?"
     a: "En una tablet, sí: pon la receta y AwakeTab lado a lado (apps en ventanas en iPadOS 26, Split View en iPadOS 18 o anterior, pantalla dividida en Android). En un iPhone solo hay una app al frente, así que AwakeTab no puede mantener despierta una receta abierta en otra app. Si la receta tapa por completo la pestaña, el bloqueo se libera."
   - q: "¿Por qué el iPhone se bloquea a los 30 segundos aunque inicié AwakeTab?"

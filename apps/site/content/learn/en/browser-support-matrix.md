@@ -55,7 +55,7 @@ faq:
   - q: "Why does a browser on the list still let my screen turn off?"
     a: "Usually because the tab was hidden: the browser releases the lock when you switch tabs or apps. Other causes are a shorter operating system limit, such as iPhone Low Power Mode's 30-second Auto-Lock, or Safari waiting for a first tap."
   - q: "Does Brave support the Screen Wake Lock API?"
-    a: "Brave is built on Chromium, so it follows Chrome's implementation, but we have not checked its version history separately. Open AwakeTab in it and read the pill: “Screen awake” means the browser confirmed the lock."
+    a: "Brave is built on Chromium, so it follows Chrome's implementation, but we have not checked its version history separately. Open AwakeTab in it and read the pill: “Awake” means the browser confirmed the lock."
   - q: "What does “device results are pending” mean?"
     a: "Every row here comes from browser documentation and engine source code. We have not yet recorded our own run of each browser on a real device. Those results will be added, with dates, as they are recorded, and no row claims a device test before then."
   - q: "Is the video fallback listed as supported everywhere?"
@@ -88,7 +88,7 @@ updated: 2026-09-27
 
 Other Chromium browsers, such as Brave, share Chrome's code, but their version floors are not listed here because we haven't checked them separately.
 
-Native support means the browser implements the Screen Wake Lock API. Below these versions, AwakeTab shows "Tap to use the fallback" and offers a silent one-frame video loop after one tap. While it runs, the pill reads "Awake via video fallback".
+Native support means the browser implements the Screen Wake Lock API. Below these versions, AwakeTab shows "No wake lock in this browser" and offers a silent one-frame video loop after one tap. While it runs, the pill reads "Awake via video".
 
 ## What works beyond a single tab?
 
@@ -96,7 +96,7 @@ Two AwakeTab features depend on browser support of their own.
 
 | Feature | Where it works | Notes |
 |---|---|---|
-| Floating window (Document Picture-in-Picture) | Desktop Chrome and Edge 116+, desktop Firefox 151+ (May 2026) | Not in Safari, not on Android. Whether it keeps the screen on while the opener tab is hidden has not been device-tested yet. |
+| Mini clock (Document Picture-in-Picture) | Desktop Chrome and Edge 116+, desktop Firefox 151+ (May 2026) | Not in Safari, not on Android. Whether it keeps the screen on while the opener tab is hidden has not been device-tested yet. |
 | AwakeTab for Chrome (extension) | Chrome and Edge on desktop | Uses Chrome's power API, so it keeps working with the tab hidden or the window minimised. It can't stop sleep when a lid closes. Firefox and Safari give extensions no power API, so there is no version for them. |
 
 If your job needs a hidden tab to keep the screen on, [AwakeTab for Chrome](/extension) is the row that matters.
@@ -149,7 +149,7 @@ All checked 26 September 2026.
 - [Chromium wake_lock.cc](https://chromium.googlesource.com/chromium/src/+/main/third_party/blink/renderer/modules/wake_lock/wake_lock.cc): the only refusal checks in Chrome, Edge, Opera and Samsung Internet.
 - [WebKit WakeLock.cpp](https://github.com/WebKit/WebKit/blob/main/Source/WebCore/Modules/screen-wake-lock/WakeLock.cpp): Safari's user-gesture rule.
 - [Firefox WakeLockJS.cpp](https://github.com/mozilla-firefox/firefox/blob/main/dom/power/WakeLockJS.cpp): the 5 % battery rule.
-- MDN browser-compat-data for Document Picture-in-Picture, and the Firefox 151 release notes: floating window support.
+- MDN browser-compat-data for Document Picture-in-Picture, and the Firefox 151 release notes: mini clock support.
 
 ## What does this table not tell you?
 

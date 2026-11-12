@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { CARD_SHADOW } from '../art';
 import { alpha } from '../geometry';
-import { big, EndLine, type IDrawProps, Stars, type TStar } from '../kit';
+import { big, EndLine, type IDrawProps, Stars, type TStar, PLATE } from '../kit';
 
 const STARS: readonly TStar[] = [
   [30, 30, 3],
@@ -40,6 +40,7 @@ export default function Horizon({ m }: IDrawProps) {
         : `linear-gradient(180deg, #0A1226 0%, #16213D 65%, ${alpha(accent, 0x44)} 100%)`;
   return (
     <div
+      className={PLATE}
       style={{
         position: 'absolute',
         left: 20,
@@ -48,6 +49,7 @@ export default function Horizon({ m }: IDrawProps) {
         height: 300,
         overflow: 'hidden',
         borderRadius: 28,
+        isolation: 'isolate',
         background: SEA[theme],
         boxShadow: CARD_SHADOW[theme],
       }}

@@ -30,14 +30,14 @@ steps:
     short: "Touchez Jamais"
     text: "Ou une durée plus longue que 30 secondes."
 stepsDone: "C’est fait. Si Jamais reste grisé, lisez la section suivante."
-toolNote: "Vous ne voulez pas toucher au Verrouillage automatique pour une seule recette ou un seul tutoriel ? AwakeTab garde l’écran allumé depuis Safari, sans modifier vos réglages. La durée proposée ici est de « 30 min » ; touchez Démarrer et attendez que la pastille indique « Écran allumé »."
+toolNote: "Vous ne voulez pas toucher au Verrouillage automatique pour une seule recette ou un seul tutoriel ? AwakeTab garde l’écran allumé depuis Safari, sans modifier vos réglages. La durée proposée ici est de « 30 min » ; touchez « Garder allumé » et attendez que la pastille indique « Allumé »."
 faq:
   - q: "Pourquoi « Jamais » est-il grisé alors que ma batterie est chargée ?"
     a: "Parce que le mode Économie d’énergie peut rester actif alors que la batterie est remontée. Vérifiez Réglages → Batterie ou l’icône de batterie : si elle est jaune, le mode est encore activé. Sinon, un profil professionnel ou scolaire (MDM) limite peut-être le délai : voyez Réglages → Général → VPN et gestion de l’appareil."
   - q: "AwakeTab fonctionne-t-il quand le mode Économie d’énergie est activé ?"
     a: "Safari ne vérifie pas ce mode et ne refuse donc pas le verrou pour cette raison. Mais le mode règle le Verrouillage automatique sur 30 secondes, et nous n’avons pas encore vérifié sur un appareil si l’écran reste allumé malgré tout. Le résultat figurera sur notre page consacrée aux tests."
   - q: "Si je quitte Safari pour une autre appli, l’écran reste-t-il allumé ?"
-    a: "Non. Dès que l’onglet AwakeTab n’est plus visible, iOS retire le verrou et la pastille passe à « En pause — onglet masqué ». C’est alors le Verrouillage automatique qui reprend la main."
+    a: "Non. Dès que l’onglet AwakeTab n’est plus visible, iOS retire le verrou et la pastille passe à « En pause ». C’est alors le Verrouillage automatique qui reprend la main."
   - q: "Faut-il laisser le Verrouillage automatique sur Jamais en permanence ?"
     a: "Ce n’est pas nécessaire. Vous pouvez garder un délai court au quotidien et ouvrir AwakeTab dans Safari seulement quand un écran doit rester allumé ; la session s’arrête à la fin de la durée choisie."
 honestLimit: "Le mode Économie d’énergie grise l’option Jamais et règle le verrouillage sur 30 s ; nous n’avons pas encore vérifié sur un appareil si le verrou de Safari tient malgré tout. Un profil professionnel peut aussi limiter ce délai."
@@ -65,7 +65,7 @@ Revérifiez l’icône de batterie en haut de l’écran : jaune, elle signale q
 
 Le Verrouillage automatique sur Jamais s’applique partout, à toutes les applications, jusqu’à ce que vous le changiez. C’est pratique sur un iPhone fixé au mur ou branché en permanence, beaucoup moins dans une poche. AwakeTab ne vaut que pour l’onglet visible et s’arrête à la fin de la durée choisie, ce qui évite d’oublier un écran allumé. Dans les deux cas, pensez à la batterie : un écran qui ne s’éteint jamais la vide vite.
 
-Si vous choisissez l’onglet, deux conditions à respecter. D’abord, touchez Démarrer vous-même : Safari n’accorde le verrou qu’après un toucher. Ensuite, Safari doit rester au premier plan : changer d’application libère le verrou jusqu’à votre retour. Avec le mode Économie d’énergie actif, Safari ne refuse pas le verrou, mais son effet sur l’écran n’a pas encore été vérifié sur un appareil.
+Si vous choisissez l’onglet, deux conditions à respecter. D’abord, touchez « Garder allumé » vous-même : Safari n’accorde le verrou qu’après un toucher. Ensuite, Safari doit rester au premier plan : changer d’application libère le verrou jusqu’à votre retour. Avec le mode Économie d’énergie actif, Safari ne refuse pas le verrou, mais son effet sur l’écran n’a pas encore été vérifié sur un appareil.
 
 Les versions requises : Safari 16.4 ou ultérieur dans le navigateur, et iOS 18.4 si vous avez ajouté AwakeTab à l’écran d’accueil. Sur un iOS plus ancien, un toucher lance une vidéo de secours, plus gourmande en batterie. Tous les détails pour Safari sont sur notre page [iPhone et Safari](/fr/on/iphone-safari).
 

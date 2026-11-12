@@ -32,7 +32,7 @@ notes:
     text: "L’économiseur de batterie et le mode Économie d’énergie ne refusent pas la demande."
 faq:
   - q: "Mon navigateur n’est pas dans le tableau. AwakeTab fonctionnera-t-il ?"
-    a: "Nous ne revendiquons que les lignes vérifiées. Ouvrez AwakeTab : si le Wake Lock natif est absent, la pastille affiche « Touchez pour utiliser la solution de secours ». La vidéo de secours démarre après ce toucher et consomme davantage d’énergie."
+    a: "Nous ne revendiquons que les lignes vérifiées. Ouvrez AwakeTab : si le Wake Lock natif est absent, la pastille affiche « Pas de wake lock dans ce navigateur ». La vidéo de secours démarre après ce toucher et consomme davantage d’énergie."
   - q: "Chrome sur iPhone figure-t-il dans la matrice ?"
     a: "Il n’a pas de ligne dédiée, donc nous n’affirmons rien à son sujet. Sur iPhone, les lignes vérifiées sont Safari 16.4+ et les applications web de l’écran d’accueil à partir d’iOS 18.4."
   - q: "Pourquoi le verrou s’arrête quand je change d’onglet, même dans un navigateur compatible ?"
@@ -77,11 +77,11 @@ Une version minimale indique à partir de quand le navigateur expose l’API. El
 
 ::rows refusals
 
-Sans HTTPS, l’API est absente : la pastille propose alors « Touchez pour utiliser la solution de secours ».
+Sans HTTPS, l’API est absente : la pastille propose alors « Pas de wake lock dans ce navigateur ».
 
 ::note savers
 
-AwakeTab traduit chacun de ces cas en un état visible. La pastille affiche « Écran allumé » ou « Écran allumé grâce à la vidéo de secours » uniquement quand un verrou est réellement actif ; sinon, elle indique « En pause — onglet masqué » ou « Bloqué — voici la solution », avec la cause. Pour Safari sur iPhone, voyez aussi [notre page dédiée](/fr/on/iphone-safari).
+AwakeTab traduit chacun de ces cas en un état visible. La pastille affiche « Allumé » ou « Allumé par vidéo » uniquement quand un verrou est réellement actif ; sinon, elle indique « En pause » ou « Pas allumé », avec la cause. Pour Safari sur iPhone, voyez aussi [notre page dédiée](/fr/on/iphone-safari).
 
 ## Méthode et date
 

@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { NAVY, WHITE } from '../art';
 import { alpha, f1 } from '../geometry';
-import { big, EndLine, type IDrawProps, Kicker, L, lmin, MONO, Svg } from '../kit';
+import { big, EndLine, fit, type IDrawProps, Kicker, L, lmin, MONO, Svg } from '../kit';
 
 const BULB =
   'M66 42 H154 C154 98 117 126 114 155 C117 184 154 212 154 268 H66 C66 212 103 184 106 155 C103 126 66 98 66 42 Z';
@@ -128,7 +128,7 @@ export default function Hourglass({ m }: IDrawProps) {
         }}
       >
         <Kicker m={m} />
-        <span style={big(m.long ? 40 : 52)}>{m.digits}</span>
+        <span style={big(fit(m, m.long ? 40 : 52, 34))}>{m.digits}</span>
         <EndLine m={m} px={14} />
         <span className={L} style={{ marginTop: 8, fontFamily: MONO, fontSize: lmin(12), color: accent }}>
           {m.pctLabel} sand left

@@ -28,7 +28,7 @@ const TONES: Record<Exclude<TChimeKind, 'off'>, Array<[number, number, number]>>
   ],
 };
 
-// Synthesised, so there is no audio file to load (the old tool's chime, docs/04 §10).
+// Synthesised, so there is no audio file to load (docs/04 §10).
 export function playChime(kind: TChimeKind, volume = 0.6) {
   if (kind === 'off') return;
   const ac = audio();

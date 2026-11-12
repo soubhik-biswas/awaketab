@@ -1,6 +1,6 @@
 ---
 title: "Keep the screen on while presenting — AwakeTab"
-description: "Full-screen slides hide the AwakeTab tab, so the browser stops keeping the screen on. Use the floating window, AwakeTab for Chrome or a longer timeout."
+description: "Full-screen slides hide the AwakeTab tab, so the browser stops keeping the screen on. Use the mini clock, AwakeTab for Chrome or a longer timeout."
 h1: "Keep the screen on while presenting"
 intent: "keep screen on during presentation"
 secondaryQueries:
@@ -15,7 +15,7 @@ reviewed: true
 lastVerified: 2026-09-26
 browsers: ["chrome", "edge", "firefox"]
 os: ["windows", "macos", "chromeos", "linux"]
-lead: "Yes, AwakeTab can keep the screen on while you present, with one catch. When your slides go full screen, they hide the AwakeTab tab, and the browser stops keeping the screen on. So keep AwakeTab visible another way: the floating window in desktop Chrome, Edge or Firefox; AwakeTab for Chrome, which works with the tab hidden; a second window on your own screen; or a longer display timeout for the talk."
+lead: "Yes, AwakeTab can keep the screen on while you present, with one catch. When your slides go full screen, they hide the AwakeTab tab, and the browser stops keeping the screen on. So keep AwakeTab visible another way: the mini clock in desktop Chrome, Edge or Firefox; AwakeTab for Chrome, which works with the tab hidden; a second window on your own screen; or a longer display timeout for the talk."
 crumb: "Presentations"
 toc:
   set-it-up-before-youre-introduced: "Set it up"
@@ -24,42 +24,42 @@ toc:
   the-projector-and-second-displays: "Projectors and second displays"
 steps:
   - title: "Start a session that ends with your slot."
-    text: "Pick 2 h, or tap \"Until…\" and choose the end of your slot, such as 11:30 AM. Tap Start and wait for \"Screen awake\"."
-  - title: "Open the floating window, or turn on the extension."
-    text: "Start the slideshow. The floating window should still say \"Screen awake\"."
+    text: "Pick 2 hours, the longest timed length, or No end for a longer slot. Tap Keep awake and wait for the pill to read \"Awake\"."
+  - title: "Open the mini clock, or turn on the extension."
+    text: "Start the slideshow. The mini clock should still say \"Awake\"."
   - title: "Rehearse once."
     text: "Leave the slideshow running, untouched, for longer than your display timeout. If the screen stays on, you're set."
 figures:
   - frame: phone
     label: "Phone screenshot"
-    alt: "the AwakeTab floating window reading Screen awake"
-    caption: "The floating window."
+    alt: "the AwakeTab mini clock reading Awake"
+    caption: "The mini clock."
   - frame: desktop
     label: "Desktop screenshot"
-    alt: "full-screen slides in Chrome with the AwakeTab floating window in a corner"
-    caption: "Full-screen slides with the floating window in a corner."
+    alt: "full-screen slides in Chrome with the AwakeTab mini clock in a corner"
+    caption: "Full-screen slides with the mini clock in a corner."
 pills:
   - state: held
     text: "With a running time, the display, and the projector with it, is being kept on."
   - state: lost
     text: "Full-screen slides cover AwakeTab, and the normal display timeout is back in charge."
   - state: denied
-    text: "The browser refused the lock. Check the card before you go on stage: it names the cause and the fix, such as Safari wanting one more tap."
+    text: "The browser refused the lock. A red banner under the top bar names the cause; tap See the fix before you go on stage."
 checklist:
-  - "The session covers your slot: 2 h, or \"Until…\" set to its end."
-  - "In Settings, \"When time is up\" is \"Just stop\" and the end sound is None."
+  - "The session covers your slot: 2 hours, or No end."
+  - "In Settings, \"Chime at the end\" is Off, so no sound lands in the Q&A."
   - "On an extended display, AwakeTab is on your laptop and the slides on the projector."
   - "A rehearsal past your display timeout kept the screen on."
 faq:
   - q: "My slides app is in full screen. Why did the pill change?"
-    a: "Full screen covers the AwakeTab tab, and browsers only keep the screen on for a page you can see. The pill reads “Paused — tab hidden” until the tab is visible again."
+    a: "Full screen covers the AwakeTab tab, and browsers only keep the screen on for a page you can see. The pill reads “Paused” until the tab is visible again."
   - q: "Will the audience see AwakeTab on the projector?"
-    a: "Only if you put it there. With an extended display, keep the floating window or the AwakeTab window on your laptop screen and the slides on the projector. When you mirror the display, the floating window shows on both, so drag it into a corner or rely on AwakeTab for Chrome instead."
+    a: "Only if you put it there. With an extended display, keep the mini clock or the AwakeTab window on your laptop screen and the slides on the projector. When you mirror the display, the mini clock shows on both, so drag it into a corner or rely on AwakeTab for Chrome instead."
   - q: "Can I stop it at the end of the talk without touching the laptop?"
-    a: "Yes. Tap “Until…” before you start and pick the end of your slot, such as 11:30 AM. In Settings, set “When time is up” to “Just stop” and the end sound to None, so no prompt or chime lands in the Q&A."
+    a: "Yes. Pick a timed length such as 2 hours before you start: the session ends by itself and the screen sleeps normally again. In Settings, set “Chime at the end” to Off so no sound lands in the Q&A."
   - q: "Does a longer display timeout on a shared lectern PC cause problems?"
     a: "It can, because the next person inherits it. If you change the timeout for your talk, put it back afterwards. A tab or the extension leaves the settings alone and stops when you tell it to."
-honestLimit: "Full-screen slides hide the AwakeTab tab, and then the screen follows its normal timeout. The projector follows that same timeout. Keep AwakeTab visible in a floating window or second window, or use AwakeTab for Chrome."
+honestLimit: "Full-screen slides hide the AwakeTab tab, and then the screen follows its normal timeout. The projector follows that same timeout. Keep AwakeTab visible in a mini clock or second window, or use AwakeTab for Chrome."
 related:
   - "/on/windows-11"
   - "/on/macos"
@@ -92,14 +92,14 @@ The pill at the top of the tool tells you what the browser is doing:
 
 | Option | Where it works | What to know |
 |---|---|---|
-| Floating window | Desktop Chrome and Edge 116 or later, Firefox 151 or later | Stays on top of other windows. Not in Safari or on Android |
+| Mini clock | Desktop Chrome and Edge 116 or later, Firefox 151 or later | Stays on top of other windows. Not in Safari or on Android |
 | AwakeTab for Chrome | Chrome and Edge on a computer | Uses Chrome's power setting, so the tab can be hidden or minimised |
 | A second window on your screen | Any browser, with an extended display | Slides full screen on the projector, AwakeTab visible on the laptop |
 | A longer display timeout | Any computer where you can change settings | Free and certain, but remember to set it back |
 
-**The floating window** is the quickest. Open it with the "Floating window" button in the AwakeTab header; the browser may ask you to allow pop-ups for awaketab.com. Whether it keeps the screen on while full-screen slides cover the main tab is not yet device-tested; the result will go on our how-we-tested page. Until then, rehearse.
+**The mini clock** is the quickest. While a session runs, press ⌘K (Ctrl K on Windows), type "mini" and choose **Open the mini clock**; the browser may ask you to allow pop-ups for awaketab.com. Whether it keeps the screen on while full-screen slides cover the main tab is not yet device-tested; the result will go on our how-we-tested page. Until then, rehearse.
 
-**[AwakeTab for Chrome](/extension)** is the most dependable choice for full-screen slides. Its Screen level keeps the display on while Chrome runs, whatever window is in front.
+**[AwakeTab for Chrome](/extension)** is the most dependable choice for full-screen slides. It asks the browser itself to keep the display on while the browser runs, whatever window is in front.
 
 **A longer timeout** is the right answer on your own laptop if you present often. The steps are in [Keep the screen on in Windows 11](/on/windows-11) and on [the Mac page](/on/macos).
 

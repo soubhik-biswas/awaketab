@@ -1,8 +1,8 @@
 import { isFaceId, RETIRED_FACES, toFaceId, type TFaceId } from '@/components/face';
 
-// A shared setup link carries the length, the face and the chime only (handoff §11): /s/<face>-<minutes>-<chime|quiet>,
-// for any of the 46 faces.
-// Lengths a link may carry, each with the tool's preset id (docs/00 §7 `preset=`); 0 means "until I stop".
+// A shared setup link carries the length, the face and the chime only: /s/<face>-<minutes>-<chime|quiet>.
+
+// Lengths a link may carry, each with the tool's preset id; 0 means "until I stop".
 const SETUP_LENGTHS: Record<number, string> = {
   15: 'p15',
   30: 'p30',
@@ -29,13 +29,13 @@ export function parseSetup(code: string): ISetup | null {
   return { face: toFaceId(id), minutes, chime: m[3] === 'chime' };
 }
 
-// The tool URL a setup opens: the home starts on its own, `autostart=0` lets the visitor change it first.
+// The tool URL a setup opens: `autostart=1` starts it straight away, `autostart=0` lets the visitor change it first.
 export function setupToolHref(setup: ISetup, start: boolean): string {
   const q = new URLSearchParams({
     preset: SETUP_LENGTHS[setup.minutes] ?? 'p30',
     face: setup.face,
     chime: setup.chime ? 'on' : 'off',
+    autostart: start ? '1' : '0',
   });
-  if (!start) q.set('autostart', '0');
   return `/?${q.toString()}`;
 }

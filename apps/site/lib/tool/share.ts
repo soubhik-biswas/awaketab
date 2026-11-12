@@ -28,12 +28,21 @@ const PRESET_SEC: Record<string, number> = {
 
 const presetFor = (sec: number): string | null => Object.entries(PRESET_SEC).find(([, v]) => v === sec)?.[0] ?? null;
 
-// The tool's address options: ?preset=p45&face=flip&vibe=night&chime=on&autostart=1&until=HH-MM.
+const MAX_MINUTES = 7 * 24 * 60;
+
+// Every option the tool reads from the address; they are taken off it once read.
+const TOOL_PARAMS = ['preset', 'minutes', 'face', 'vibe', 'chime', 'autostart', 'until', 'open'] as const;
+
+// The tool's address options: ?preset=p45&face=flip&vibe=night&chime=on&autostart=1&until=HH-MM, or
+// ?preset=custom&minutes=480 for a length with no preset of its own.
 export function readToolQuery(search: string, now = Date.now()): IToolQuery {
   const q = new URLSearchParams(search);
   const out: IToolQuery = {};
   const preset = q.get('preset');
   if (preset && preset in PRESET_SEC) out.totalSec = PRESET_SEC[preset];
+  const minutes = Number(q.get('minutes'));
+  if (preset === 'custom' && Number.isInteger(minutes) && minutes >= 1 && minutes <= MAX_MINUTES)
+    out.totalSec = minutes * 60;
   const face = q.get('face');
   if (face && (FACE_IDS as readonly string[]).includes(face)) out.face = face as TFace;
   const vibe = VIBES.find((v) => v === q.get('vibe'));
@@ -52,6 +61,13 @@ export function readToolQuery(search: string, now = Date.now()): IToolQuery {
   const open = OPEN_PANELS.find((x) => x === q.get('open'));
   if (open && (open !== 'pro' || PRO_ENABLED)) out.open = open;
   return out;
+}
+
+// The address without the tool's own options, so a reload or a copied link never repeats them.
+export function stripToolQuery(href: string): string {
+  const url = new URL(href);
+  for (const key of TOOL_PARAMS) url.searchParams.delete(key);
+  return `${url.pathname}${url.search}${url.hash}`;
 }
 
 interface IShareSetup {

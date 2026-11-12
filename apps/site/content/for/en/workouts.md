@@ -13,7 +13,7 @@ browsers: []
 os: []
 faq:
   - q: "Does this work if the tab is hidden?"
-    a: "No. The browser releases the lock when you switch tabs or apps. Come back and the pill returns to “Screen awake”. On desktop Chrome or Edge, AwakeTab for Chrome keeps the screen on with the tab hidden."
+    a: "No. The browser releases the lock when you switch tabs or apps. Come back and the pill returns to “Awake”. On desktop Chrome or Edge, AwakeTab for Chrome keeps the screen on with the tab hidden."
   - q: "Will this keep Teams or Slack Available?"
     a: "No. Teams and Slack set you to Away from keyboard and mouse inactivity, not from a lit screen. AwakeTab never moves the mouse or presses keys."
   - q: "What browsers are in scope?"
@@ -34,7 +34,7 @@ A floor timer that dims mid-set is useless. Use clock mode, lock orientation, an
 
 ## How the lock works on this page
 
-AwakeTab asks the browser for a screen wake lock from a secure page that is on screen. The pill at the top of the tool says what the browser answered: "Starting…" while it asks, "Screen awake" once the browser has confirmed the lock, "Paused — tab hidden" when the tab is out of sight, and "Blocked — here's the fix" when the browser refuses, with the cause. Only "Screen awake" and "Awake via video fallback" come with a running timer.
+AwakeTab asks the browser for a screen wake lock from a secure page that is on screen. The pill at the top of the tool says what the browser answered: "Asking the browser…" while it asks, "Awake" once the browser has confirmed the lock, "Paused" when the tab is out of sight, and "Not awake" when the browser refuses, with the cause. Only "Awake" and "Awake via video" mean the screen is being held.
 
 Chrome and Edge 84, Firefox 126, Safari 16.4, Samsung Internet 14 and Opera 70 are the first versions with the Screen Wake Lock API; iPhone and iPad Home Screen apps need iOS 18.4. Older Firefox can use the video fallback after a tap. A browser refuses or takes back the lock when the tab is hidden, when a Permissions-Policy blocks it, when Safari has not had a tap yet, or when Firefox is at 5 % battery or less and not charging. A page without HTTPS has no wake lock at all. Battery savers are not a refusal cause in Chrome or Safari.
 
@@ -48,17 +48,17 @@ Windows: Settings > System > Power & battery sets the screen timeout. Energy sav
 
 ## What success looks like
 
-Success is a pill that matches the browser. If the OS still dims, you are looking at a different policy (lock screen, smart card, monitor auto-off) or a hidden tab. Tapping Start again without changing what caused a refusal gets the same answer. Stats count only the time the screen was actually kept awake.
+Success is a pill that matches the browser. If the OS still dims, you are looking at a different policy (lock screen, smart card, monitor auto-off) or a hidden tab. Tapping Keep awake again without changing what caused a refusal gets the same answer. Recents counts only the time the screen was actually kept awake.
 
 
 ## A short checklist before you walk away
 
-Before you walk away, check that the page uses HTTPS, that this tab is in front, and that the pill says "Screen awake". A dimming clock or a chat avatar tells you nothing about the lock; the pill does. If the pill says "Blocked — here's the fix", follow the line under it instead of tapping Start again. A timed session ends when its time is up, so pick ∞ if you want it to run until you stop it.
+Before you walk away, check that the page uses HTTPS, that this tab is in front, and that the pill says "Awake". A dimming clock or a chat avatar tells you nothing about the lock; the pill does. If the pill says "Not awake", follow the line under it instead of tapping Start again. A timed session ends when its time is up, so pick No end if you want it to run until you stop it.
 
 ## When the pill changes
 
-When you hide the tab, the pill changes to "Paused — tab hidden". That is the page telling the truth, not a bug: the browser has taken the lock back, and AwakeTab asks again as soon as you return. Paused time does not count toward a timed session. If the screen must stay on while the tab is hidden, AwakeTab for Chrome uses Chrome's own power setting instead and keeps working with the tab hidden on desktop Chrome and Edge. Firefox and Safari give extensions no power setting, so there the tab has to stay in view.
+When you hide the tab, the pill changes to "Paused". That is the page telling the truth, not a bug: the browser has taken the lock back, and AwakeTab asks again as soon as you return. Paused time does not count toward a timed session. If the screen must stay on while the tab is hidden, AwakeTab for Chrome uses Chrome's own power setting instead and keeps working with the tab hidden on desktop Chrome and Edge. Firefox and Safari give extensions no power setting, so there the tab has to stay in view.
 
 ## Battery, heat and overnight use
 
-A lit panel costs energy. Plug in for night-clock, dashboard and kiosk sessions. In Chrome and Edge, AwakeTab can stop by itself at a battery level you pick; Firefox and Safari do not tell pages the battery level. OLED burn-in is reduced by night mode pixel shift and is not eliminated. Firmware and OS power rules still win. If you need those jobs, use a native utility and keep this tab for a screen you can see.
+A lit panel costs energy. Plug in for night-clock, dashboard and kiosk sessions. OLED burn-in is reduced by wall mode's pixel shift and is not eliminated. Firmware and OS power rules still win. If you need those jobs, use a native utility and keep this tab for a screen you can see.

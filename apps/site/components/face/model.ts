@@ -18,6 +18,9 @@ export interface IFaceProps {
   motion?: TFaceMotion;
   lblTop?: string;
   lblEnd?: string;
+  lblCap?: string;
+  // The lock needs a tap after a hidden tab let it go: drawn like paused, in amber, but never called paused.
+  needs?: boolean;
   fmt?: 12 | 24;
   // Draws the watch-glass case behind the face (faces with their own card keep it); the box stays square.
   framed?: boolean;
@@ -119,16 +122,18 @@ const TOP: Readonly<Record<TFaceState, string>> = {
   up: "time's up",
 };
 
+// The status pill's words, without the time the end line already carries.
 const CAPTION: Readonly<Record<TFaceState, string>> = {
-  idle: 'Ready',
-  starting: 'Starting…',
-  running: 'Screen awake',
-  fallback: 'Awake via video fallback',
-  paused: 'Paused — tab hidden',
-  blocked: "Blocked — here's the fix",
-  unsupported: 'Tap to use the fallback',
+  idle: 'Not keeping awake',
+  starting: 'Asking the browser…',
+  running: 'Awake',
+  fallback: 'Awake via video',
+  paused: 'Paused',
+  blocked: 'Not awake',
+  unsupported: 'No wake lock in this browser',
   up: "Time's up",
 };
+const NEEDS_CAPTION = 'Tap to resume';
 
 // The face palette of Face.dc.html (graphite v2 at night), per theme.
 export interface IFacePalette {
@@ -298,14 +303,15 @@ export function faceModel(p: IFaceProps, opts: IFaceOptions = {}) {
       : st === 'idle'
         ? `${Math.round(total / 60)} min · ends ${endShort}`
         : `until ${endShort}`;
-  let topWord = TOP[st];
+  const needs = p.needs === true && st === 'paused';
+  let topWord = needs ? TOP.blocked : TOP[st];
   if (indef) {
     endLine = st === 'idle' ? 'until you stop it' : 'no end · until you stop';
     if (awake) topWord = 'awake for';
   }
   if (p.lblTop) topWord = p.lblTop;
   if (p.lblEnd) endLine = p.lblEnd;
-  const capText = CAPTION[st];
+  const capText = p.lblCap || (needs ? NEEDS_CAPTION : CAPTION[st]);
   // Whole minutes, rounded up, so the label changes at most once a minute.
   const mins = Math.ceil(r / 60);
   const left =
@@ -367,6 +373,7 @@ export function faceModel(p: IFaceProps, opts: IFaceOptions = {}) {
     endLine,
     topWord,
     capText,
+    needs,
     aria,
     ringFrac: st === 'idle' ? 1 : frac,
     shownSec: st === 'idle' ? total : r,

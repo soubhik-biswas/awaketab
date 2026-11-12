@@ -23,8 +23,8 @@ toc:
   put-awaketab-where-the-browser-can-see-it: "Where to put AwakeTab"
   before-you-leave-it-on-the-wall: "Before you leave it"
 steps:
-  - title: "Choose ∞ and a quiet face."
-    text: "Pick Minimal or Clock mode (below). To let the screen sleep out of hours, use \"Until…\" with a time such as 6:00 PM instead."
+  - title: "Choose No end and a quiet face."
+    text: "Pick a quiet face and background (below). To let the screen sleep out of hours, pick 2 hours instead of No end and start it again when you need it."
   - title: "Copy a link that starts itself."
     text: "Open Share, turn on \"Start automatically\" and copy the link. It ends in `?autostart=1` and carries the length you chose."
   - title: "Open that link when the wall computer starts."
@@ -32,7 +32,7 @@ steps:
 figures:
   - frame: phone
     label: "Phone screenshot"
-    alt: "AwakeTab resized to a narrow strip in Minimal mode"
+    alt: "AwakeTab resized to a narrow strip on a quiet face"
     caption: "AwakeTab as a narrow strip at the edge of the screen."
   - frame: desktop
     label: "Desktop screenshot"
@@ -99,17 +99,17 @@ On a Chromebook driving a wall screen, closing the lid sleeps it unless "Sleep w
 
 ## Choose a quiet face
 
-**Minimal** is a dim screen with a small elapsed time, so AwakeTab doesn't compete with your charts. **Clock** shows the time in large numerals, handy where people also glance for the time.
+The **Calm** background (from Vibe) has no motion, and the **OLED** theme keeps the page black, so AwakeTab doesn't compete with your charts. The **Bold** face shows the time left in large digits, handy where people glance at it from across the room.
 
 ## Power and the panel
 
-A screen lit all day needs mains power. In Chrome and Edge, AwakeTab can stop itself at a battery level you pick, which protects a laptop someone unplugged.
+A screen lit all day needs mains power.
 
 OLED and some LCD panels can keep a faint image of anything that sits still for weeks. AwakeTab shifts its own face by a couple of pixels every minute, but it can't move your dashboard, so use the panel's screen-care settings or rotate between views.
 
 ## Many screens, or a lobby
 
-For a reception screen, a shop or a row of wall displays, the [Kiosk licence](/kiosk) adds your logo. It costs $19 once for one site or $49 for five, where a site is one location with any number of screens. AwakeTab is not a kiosk browser: it doesn't lock the device down or launch itself, so pair it with your operating system's kiosk mode.
+For a reception screen, a shop or a row of wall displays, [wall mode](/kiosk) fills the screen with one clock face, shifts it a few pixels every 3 minutes and dims it at night. AwakeTab is not a kiosk browser: it doesn't lock the device down or launch itself, so pair it with your operating system's kiosk mode.
 
 ## Before you leave it on the wall
 

@@ -1,6 +1,6 @@
 import { CARD_SHADOW } from '../art';
 import { alpha } from '../geometry';
-import { type IDrawProps, L, lmin, MONO } from '../kit';
+import { type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 import type { TFaceModel } from '../model';
 
 const GRID = [
@@ -99,6 +99,7 @@ export default function WordGrid({ m }: IDrawProps) {
   return (
     <>
       <div
+        className={PLATE}
         style={{
           position: 'absolute',
           left: 16,

@@ -185,7 +185,7 @@ export function driftAt(step: number): readonly [number, number] {
 
 export type TKioskLicence = 'none' | 'stored' | 'invalid';
 
-// A #lic= token from the licence email: verified on the device, kept as the licence record, then removed from the
+// A #lic= token in the kiosk link: verified on the device, kept as the licence record, then removed from the
 // address bar so it never lingers in history or a screenshot.
 export async function applyKioskHash(
   hash: string,

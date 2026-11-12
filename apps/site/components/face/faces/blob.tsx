@@ -1,6 +1,6 @@
 import { BLACK, WHITE } from '../art';
 import { alpha } from '../geometry';
-import { card, type IDrawProps, L, lmin, MONO } from '../kit';
+import { card, fit, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 const GROUND = { light: '#F1F2F9', night: '#05060E' };
 const HUES = ['#3FB8FF', '#7B5CFF', '#FF7DD8'] as const;
@@ -12,7 +12,7 @@ export default function Blob({ m }: IDrawProps) {
     ? `conic-gradient(from 200deg, ${m.lamp}, ${HUES.join(', ')}, ${m.lamp})`
     : `conic-gradient(from 200deg, ${m.accent}, ${alpha(m.accent, 0x88)}, ${m.accent})`;
   return (
-    <div style={card(m, { background: m.night ? GROUND.night : GROUND.light })}>
+    <div className={PLATE} style={card(m, { background: m.night ? GROUND.night : GROUND.light })}>
       <div
         style={{
           position: 'absolute',
@@ -63,7 +63,7 @@ export default function Blob({ m }: IDrawProps) {
         </span>
         <span
           style={{
-            fontSize: 58,
+            fontSize: fit(m, 58, 48),
             fontWeight: 300,
             letterSpacing: '-0.045em',
             lineHeight: 1,

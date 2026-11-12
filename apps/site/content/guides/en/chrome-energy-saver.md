@@ -25,7 +25,7 @@ steps:
   - title: "Start a session and read the pill"
     short: "Read the pill"
     path: "AwakeTab › Start"
-    text: "Wait for \"Screen awake\", which shows only once Chrome has granted the lock. If it says \"Blocked — here's the fix\", follow the line under it."
+    text: "Wait for \"Awake\", which shows only once Chrome has granted the lock. If it says \"Not awake\", follow the line under it."
   - title: "Check the Windows screen timeout and Energy saver"
     short: "Check Windows settings"
     path: "Settings › System › Power & battery"
@@ -49,7 +49,7 @@ rows:
         label: "Lock screen versus sleep"
         href: "/guides/lock-screen-vs-sleep"
     - title: "The session ended"
-      text: "A timed session stops at the time you picked, and your normal timeout takes over. Pick ∞ to run until you stop it."
+      text: "A timed session stops at the time you picked, and your normal timeout takes over. Pick No end to run until you stop it."
   savers:
     - title: "Chrome's Energy Saver"
       text: "Slows tabs in the background. It does not touch the wake lock of the tab you are looking at."
@@ -62,13 +62,13 @@ rows:
       link:
         label: "iPhone Auto-Lock greyed out"
         href: "/guides/iphone-auto-lock-never-greyed-out"
-toolNote: "You don't need to turn Energy Saver off first. Keep this tab in front and press Start: the pill says \"Screen awake\" once Chrome grants the lock, and it changes to \"Paused — tab hidden\" the moment the tab is out of sight."
+toolNote: "You don't need to turn Energy Saver off first. Keep this tab in front and press Keep awake: the pill says \"Awake\" once Chrome grants the lock, and it changes to \"Paused\" the moment the tab is out of sight."
 faq:
   - q: "Should I turn off Energy Saver to keep the screen on?"
     a: "No. Chromium's wake lock code has no check for Energy Saver, and the lock permission is allowed by default. Turning it off changes how background tabs behave, not whether the visible tab can keep the screen on."
   - q: "Does Energy Saver affect AwakeTab for Chrome?"
     a: "AwakeTab for Chrome uses Chrome's own power setting instead of a page's wake lock, so it keeps working with the tab hidden or the window minimised. It still cannot stop sleep when a laptop lid closes."
-  - q: "Why did the pill change to \"Paused — tab hidden\"?"
+  - q: "Why did the pill change to \"Paused\"?"
     a: "The browser took the lock back because the tab was hidden: another tab in front, the window minimised, or a full-screen app on top. AwakeTab asks again as soon as you return, and paused time does not count toward a timed session."
 honestLimit: "Energy Saver throttles background tabs. It does not block a visible tab's wake lock, and neither do Windows Energy saver or Android Battery Saver, which may still dim the screen. A hidden tab has no lock at all."
 related:
@@ -90,7 +90,7 @@ These work in Chrome and Edge on any system. Sources checked 26 September 2026: 
 
 ## If the screen still goes dark
 
-With the tab in front and the pill saying "Screen awake", the cause is outside the browser. These are the usual ones.
+With the tab in front and the pill saying "Awake", the cause is outside the browser. These are the usual ones.
 
 ::rows still
 

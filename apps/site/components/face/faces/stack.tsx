@@ -5,19 +5,19 @@ import { type IDrawProps, L, lmin, MONO } from '../kit';
 export default function Stack({ m }: IDrawProps) {
   const { t, accent } = m;
   const line = (weight: number, color?: string) => ({
-    fontSize: 150,
+    fontSize: m.h > 9 ? 116 : 150,
     fontWeight: weight,
     letterSpacing: '-0.08em',
     lineHeight: 0.8,
     color,
     fontVariantNumeric: 'tabular-nums' as const,
   });
-  const unit = (left: number, top: number, width: number) => ({
+  const unit = (top: number) => ({
     position: 'absolute' as const,
-    left,
+    left: 299,
     top,
-    width,
-    textAlign: 'center' as const,
+    transform: 'translateX(-50%)',
+    whiteSpace: 'nowrap' as const,
     fontFamily: MONO,
     fontSize: lmin(12),
     color: t.ink2,
@@ -67,10 +67,10 @@ export default function Stack({ m }: IDrawProps) {
           }}
         />
       </div>
-      <span className={L} style={unit(286, 18, 26)}>
+      <span className={L} style={unit(18)}>
         {m.h > 0 ? 'HR' : 'MIN'}
       </span>
-      <span className={L} style={unit(280, 276, 38)}>
+      <span className={L} style={unit(276)}>
         {m.h > 0 ? 'MIN' : 'SEC'}
       </span>
     </>

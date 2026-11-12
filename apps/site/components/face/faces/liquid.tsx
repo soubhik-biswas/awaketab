@@ -1,6 +1,6 @@
 import { BLACK, NAVY, WHITE } from '../art';
 import { alpha } from '../geometry';
-import { digitSize, type IDrawProps, L, lmin, MONO } from '../kit';
+import { digitSize, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 // A clear glass sphere with a pastel fill and ink digits by day; a dark sphere of light at night.
 const ART = {
@@ -39,6 +39,7 @@ export default function Liquid({ m }: IDrawProps) {
   const level = Math.round(260 * (1 - m.ringFrac));
   return (
     <div
+      className={PLATE}
       style={{
         position: 'absolute',
         left: 50,
@@ -47,6 +48,7 @@ export default function Liquid({ m }: IDrawProps) {
         height: 260,
         borderRadius: '50%',
         overflow: 'hidden',
+        isolation: 'isolate',
         background: a.glass,
         boxShadow: `${a.shadow}, 0 0 0 1px ${m.t.line}`,
       }}

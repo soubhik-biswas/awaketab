@@ -1,6 +1,6 @@
 import { CARD_SHADOW } from '../art';
 import { alpha } from '../geometry';
-import { big, EndLine, type IDrawProps, Kicker, L, lmin, MONO } from '../kit';
+import { big, EndLine, type IDrawProps, Kicker, L, lmin, MONO, PLATE } from '../kit';
 
 const PX = 14;
 const GROUND = {
@@ -37,6 +37,7 @@ export default function Tape({ m }: IDrawProps) {
         <EndLine m={m} px={14} />
       </div>
       <div
+        className={PLATE}
         style={{
           position: 'absolute',
           left: 20,

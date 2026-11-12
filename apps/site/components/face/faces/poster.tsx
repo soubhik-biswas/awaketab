@@ -1,5 +1,5 @@
 import { pad } from '../geometry';
-import { card, DISPLAY, type IDrawProps, L, lmin, MONO } from '../kit';
+import { card, DISPLAY, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 const ART = {
   light: { ground: '#F2EFE8', ink: '#0B1020', onAccent: '#FFFFFF', track: 'rgba(11,16,32,.15)' },
@@ -11,7 +11,7 @@ export default function Poster({ m }: IDrawProps) {
   const a = m.night ? ART.night : ART.light;
   const big = m.h > 0 ? `${m.h}:${pad(m.m)}` : String(m.m);
   return (
-    <div style={card(m, { background: a.ground, color: a.ink })}>
+    <div className={PLATE} style={card(m, { background: a.ground, color: a.ink })}>
       <span
         style={{
           position: 'absolute',
@@ -19,7 +19,7 @@ export default function Poster({ m }: IDrawProps) {
           top: 4,
           fontFamily: DISPLAY,
           fontStretch: '112%',
-          fontSize: big.length > 3 ? 120 : 196,
+          fontSize: big.length > 4 ? 98 : big.length > 3 ? 120 : 196,
           fontWeight: 900,
           letterSpacing: '-0.06em',
           lineHeight: 1,

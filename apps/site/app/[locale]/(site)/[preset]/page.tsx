@@ -136,8 +136,12 @@ export default async function Page({ params }: { params: TParams }) {
           minutes={r.minutes}
           eyebrow={ts('tool.eyebrow')}
           title={`A ${r.job} session`}
-          desc={`Trust the pill, not the button. It reads “${tt('pill.held')}” only after the browser confirms the wake lock, and it changes to “${tt('pill.lost')}” the moment you switch away.`}
-          href={startHref(r.preset, 'standard')}
+          desc={`Trust the pill, not the button. It starts with “${tt('glance.tab.awake')}” and names the end time only after the browser confirms the wake lock, and it turns to “${tt('glance.tab.paused')}” the moment you switch away.`}
+          href={
+            r.preset === 'custom'
+              ? `${startHref(r.preset, 'standard')}&minutes=${String(r.minutes)}`
+              : startHref(r.preset, 'standard')
+          }
           label={`Keep awake · ${r.cta}`}
         />
       </Block>
@@ -145,7 +149,7 @@ export default async function Page({ params }: { params: TParams }) {
         <Prose
           items={[
             {
-              p: `When ${r.words === '1 hour' ? 'the hour is' : `the ${r.words} are`} up, AwakeTab asks “Time's up. Keep going?” with +15 min, +30 min, +1 h and Stop. If you do nothing, it stops on its own and your usual screen timeout takes over. To change the length, pick another preset in the tool or one of the lengths below; a change during a session applies straight away.`,
+              p: `When ${r.words === '1 hour' ? 'the hour is' : `the ${r.words} are`} up, the pill reads “${tt('glance.tab.up')}”, a soft chime plays and your usual screen timeout takes over. To carry on, tap +15 min, +30 min or +1 hour, or ${tt('glance.dock.again')}. To change the length before you start, pick another length in the tool or one of the pages below.`,
             },
           ]}
         />
@@ -158,15 +162,12 @@ export default async function Page({ params }: { params: TParams }) {
       <Block id="lengths" h="Other lengths">
         <Chips
           label="Other lengths"
-          items={[
-            ...PRESET_ROUTES.map((s) => ({
-              href: `/${s}`,
-              label: ROUTES[s].short,
-              current: s === slug,
-              aria: `Keep awake for ${ROUTES[s].short}`,
-            })),
-            { href: '/', label: 'Until a time…', aria: 'Pick an end time in the tool' },
-          ]}
+          items={PRESET_ROUTES.map((s) => ({
+            href: `/${s}`,
+            label: ROUTES[s].short,
+            current: s === slug,
+            aria: `Keep awake for ${ROUTES[s].short}`,
+          }))}
         />
       </Block>
       <Block id="guides" h={`Guides for a ${r.job} job`}>

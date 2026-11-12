@@ -31,11 +31,11 @@ steps:
   - title: "Ouvrez awaketab.com dans votre navigateur"
     text: "La durée « 1 h » est présélectionnée ici. Sur un MacBook, restez branché pour les longues sessions."
     shot: "AwakeTab dans Safari sur un Mac"
-  - title: "Appuyez sur Espace ou cliquez sur Démarrer"
-    text: "Attendez « Écran allumé » dans la pastille."
+  - title: "Appuyez sur Espace ou cliquez sur « Garder allumé »"
+    text: "Attendez « Allumé » dans la pastille."
     shot: "la pastille d’AwakeTab pendant une session"
   - title: "Laissez la fenêtre visible"
-    text: "Si vous travaillez dans d’autres apps, redimensionnez-la en petite fenêtre dans un coin au lieu de l’envoyer dans le Dock ; sous Chrome, Edge ou Firefox 151+, la « Fenêtre flottante » de l’en-tête fait le même travail."
+    text: "Si vous travaillez dans d’autres apps, redimensionnez-la en petite fenêtre dans un coin au lieu de l’envoyer dans le Dock ; sous Chrome, Edge ou Firefox 151+, la mini-horloge (Ctrl K, puis « Ouvrir la mini-horloge ») fait le même travail."
     shot: "une petite fenêtre AwakeTab dans un coin"
 matrix:
   label: "Navigateurs pris en charge sur macOS, matrice vérifiée le 26 septembre 2026"
@@ -64,9 +64,9 @@ matrix:
 rows:
   blockers:
     - title: "Onglet masqué"
-      text: "La pastille passe à « En pause — onglet masqué » et le minuteur s’arrête jusqu’à ce que vous reveniez sur la page."
+      text: "La pastille passe à « En pause » et le minuteur s’arrête jusqu’à ce que vous reveniez sur la page."
     - title: "Refus du navigateur"
-      text: "Si la pastille affiche « Bloqué — voici la solution », la cause (par exemple un clic manquant dans Safari) est indiquée juste en dessous."
+      text: "Si la pastille affiche « Pas allumé », la cause (par exemple un clic manquant dans Safari) est indiquée juste en dessous."
     - title: "Capot fermé"
       text: "Fermer le capot met le Mac en veille, sauf en mode clamshell (secteur et écran externe), et aucune page web ni extension ne peut l’en empêcher."
 faq:
@@ -75,7 +75,7 @@ faq:
   - q: "Puis-je rabattre l’écran de mon MacBook pendant qu’AwakeTab tourne ?"
     a: "Non. Fermer le capot met le Mac en veille, sauf en mode clamshell (secteur et écran externe), et aucune page web ni extension ne peut l’en empêcher. Il faut un réglage du système ou un utilitaire natif."
   - q: "Que se passe-t-il si je masque Safari avec ⌘H ou réduis la fenêtre ?"
-    a: "L’onglet devient invisible et le navigateur libère le verrou. La pastille passe à « En pause — onglet masqué » et le minuteur s’arrête jusqu’à ce que vous reveniez sur la page."
+    a: "L’onglet devient invisible et le navigateur libère le verrou. La pastille passe à « En pause » et le minuteur s’arrête jusqu’à ce que vous reveniez sur la page."
   - q: "Mon statut Slack ou Teams restera-t-il actif ?"
     a: "Non. Ces applications suivent l’activité du clavier et du trackpad, pas l’état de l’écran. AwakeTab ne simule aucune saisie, donc votre statut évolue comme d’habitude."
 honestLimit: "L’écran reste allumé tant que l’onglet est visible, et le Mac ne se met alors pas en veille pour inactivité ; fermer le capot le met quand même en veille, sauf en mode clamshell avec secteur et écran externe."
@@ -115,7 +115,7 @@ C’est la question qui revient le plus souvent. Un MacBook dont on rabat l’é
 
 ## Pourquoi faire confiance à la pastille
 
-AwakeTab considère le navigateur comme seule source de vérité. Tant que Safari, Chrome ou Firefox n’a pas confirmé le verrou, la pastille n’affiche pas « Écran allumé » et le minuteur ne tourne pas. Si l’écran s’éteint quand même, vous saurez pourquoi : onglet masqué, refus du navigateur, ou règle de verrouillage d’une autre nature.
+AwakeTab considère le navigateur comme seule source de vérité. Tant que Safari, Chrome ou Firefox n’a pas confirmé le verrou, la pastille n’affiche pas « Allumé » et le minuteur ne tourne pas. Si l’écran s’éteint quand même, vous saurez pourquoi : onglet masqué, refus du navigateur, ou règle de verrouillage d’une autre nature.
 
 ::rows blockers
 

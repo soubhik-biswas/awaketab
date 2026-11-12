@@ -53,11 +53,17 @@ export function sentence(m: TFaceModel): readonly [string, string, string] {
         ? `${num(m.m)} minute${m.m > 1 ? 's' : ''}`
         : 'less than a minute';
   const tm = Math.round(m.total / 60);
+  // A tab that came back without its lock is not awake and waits for a tap; only the person's own pause says paused.
+  const needs = [
+    'Not awake,',
+    `with ${remW} left.`,
+    'The lock let go while this tab was hidden. Tap to resume.',
+  ] as const;
   const W: Record<TFaceState, readonly [string, string, string]> = {
     running: [cap(remW), 'left,', `until ${endW}.`],
     fallback: [cap(remW), 'left,', `until ${endW} — via the video fallback.`],
     starting: ['Asking', 'the browser to keep the screen on…', ''],
-    paused: ['Paused', `with ${remW} left.`, 'Come back to this tab to continue.'],
+    paused: ['Paused', `with ${remW} left.`, 'Resume when you are ready.'],
     blocked: ['Not awake.', 'The browser refused the lock.', 'The fix is one tap away.'],
     unsupported: ['Not awake yet.', 'This browser has no wake lock.', 'Tap to use the video fallback.'],
     up: ["Time's up.", '', `Ended at ${endW}.`],
@@ -67,7 +73,7 @@ export function sentence(m: TFaceModel): readonly [string, string, string] {
       `It would end at ${endW}.`,
     ],
   };
-  return W[m.st];
+  return m.needs ? needs : W[m.st];
 }
 
 // Time in a sentence, with a blinking cursor and a hairline of time left.

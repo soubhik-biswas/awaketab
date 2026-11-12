@@ -1,10 +1,12 @@
 import { getTranslations } from 'next-intl/server';
-import { faceName, type TFaceId } from '@/components/face';
+import { faceName } from '@/components/face/registry';
+import type { TFaceId } from '@/components/face/model';
 import type { TLocale } from '@/i18n/locales';
 import { cn } from '@/lib/utils';
 import { Marquee } from '../effects/marquee';
-import { SAMPLE, SiteFace } from '../site-face';
+import { SiteFace } from '../site-face';
 import { story } from '../styles';
+import { SAMPLE } from './sample';
 import { StoryHead } from './story-head';
 
 // The home board's 22 faces, split into two rows that drift in opposite directions.
@@ -60,6 +62,7 @@ function Row({ faces, reverse, seconds }: { faces: readonly TFaceId[]; reverse?:
             remain={SAMPLE.remain}
             nowSec={SAMPLE.nowSec}
             bare
+            square
             motion="off"
           />
           <span className="text-[14px] font-semibold text-muted-foreground-strong">{faceName(id)}</span>

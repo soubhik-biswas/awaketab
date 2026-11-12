@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { BLACK, fxInk, fxInk2, NAVY, WHITE } from '../art';
 import { dash } from '../geometry';
-import { type IDrawProps, L, lmin, MONO, Stars, type TStar, Svg } from '../kit';
+import { type IDrawProps, L, lmin, MONO, Stars, type TStar, Svg, PLATE } from '../kit';
 import { FACE_PALETTE, stateColour, type TFaceModel } from '../model';
 
 // A pale daytime sky by day, a night sky at night.
@@ -76,6 +76,7 @@ export default function Moon({ m }: IDrawProps) {
   return (
     <>
       <div
+        className={PLATE}
         style={{
           position: 'absolute',
           left: 34,

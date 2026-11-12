@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { BLACK, WHITE } from '../art';
 import { alpha } from '../geometry';
-import { card, cardColumn, digitSize, type IDrawProps, L, lmin, MONO } from '../kit';
+import { card, cardColumn, digitSize, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 // A pastel mesh with dark ink by day, so the digits keep their contrast; a deep mesh at night.
 const ART = {
@@ -41,7 +41,7 @@ export default function Aurora({ m }: IDrawProps) {
   const a2 = m.multi ? VIOLET[k] : alpha(m.accent, 0x99);
   const a3 = m.multi ? CYAN[k] : m.t.track;
   return (
-    <div style={card(m, { background: a.base })}>
+    <div className={PLATE} style={card(m, { background: a.base })}>
       <div className="afx-drift" style={light(-50, -70, 270, 270, a1, 42, 0.9)} />
       <div className="afx-drift2" style={light(130, 50, 270, 250, a2, 48, 0.85)} />
       <div className="afx-drift" data-delay="-6" style={light(30, 170, 230, 190, a3, 44, 0.7)} />

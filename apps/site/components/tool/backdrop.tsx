@@ -63,12 +63,23 @@ function scatter(W: number, H: number, night: boolean) {
   return { stars, bokeh, dust };
 }
 
-const rain = (w: number, a: number, op: number): CSSProperties => ({
-  backgroundImage: `repeating-linear-gradient(102deg, transparent 0 ${w}px, rgba(190,210,255,${a}) ${w}px ${w + 1}px, transparent ${w + 1}px ${w * 2}px)`,
-  backgroundSize: '120px 900px',
-  opacity: op,
-  maskImage: 'linear-gradient(180deg, transparent, #000 20%, #000 80%, transparent)',
-});
+// One sheet of rain. The streaks are drawn once on a layer one tile larger than its window and that layer slides,
+// so falling rain costs no repaint; the fade at top and bottom stays on the window, which does not move.
+function Rain({ w, a, op, className }: { w: number; a: number; op: number; className: string }) {
+  return (
+    <div
+      className="absolute -inset-10 overflow-hidden"
+      style={{ opacity: op, maskImage: 'linear-gradient(180deg, transparent, #000 20%, #000 80%, transparent)' }}
+    >
+      <div
+        className={className}
+        style={{
+          backgroundImage: `repeating-linear-gradient(102deg, transparent 0 ${w}px, rgba(190,210,255,${a}) ${w}px ${w + 1}px, transparent ${w + 1}px ${w * 2}px)`,
+        }}
+      />
+    </div>
+  );
+}
 
 const TINT: Partial<Record<TWakeState, [string, string]>> = {
   running: ['rgba(61,245,142,.07)', 'rgba(17,122,59,.05)'],
@@ -86,11 +97,13 @@ interface IBackdropProps {
   vibe: TVibe;
   motion: TVibeMotion;
   still: boolean;
+  dim: boolean;
   state: TWakeState;
 }
 
 // Every vibe sits under the same state tint, grid, spotlight, vignette and grain; the whole layer dims to
-// --vibe-opacity on OLED and every animation stops on Still, battery saver and reduced motion.
+// --vibe-opacity on OLED, softens again when Dim at night is on after 10 PM, and every animation stops on Still,
+// battery saver and reduced motion.
 export const Backdrop = memo(function Backdrop({
   W,
   H,
@@ -100,6 +113,7 @@ export const Backdrop = memo(function Backdrop({
   vibe,
   motion,
   still,
+  dim,
   state,
 }: IBackdropProps) {
   const dots = useMemo(() => scatter(W, H, night), [W, H, night]);
@@ -119,10 +133,11 @@ export const Backdrop = memo(function Backdrop({
     <div
       aria-hidden="true"
       className={cn(
-        'pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-(--vibe-opacity)',
+        'pointer-events-none absolute inset-0 z-0 overflow-hidden transition-opacity duration-600',
         (still || motion === 'still') && 'tg-still',
         motion === 'lively' && !still && 'tg-lively',
       )}
+      style={{ opacity: dim ? 'calc(var(--vibe-opacity) * 0.4)' : 'var(--vibe-opacity)' }}
     >
       {vibe === 'aurora' ? (
         <>
@@ -258,8 +273,8 @@ export const Backdrop = memo(function Backdrop({
           {dots.bokeh.map((s, i) => (
             <span key={i} className="absolute rounded-full blur-[6px]" style={s} />
           ))}
-          <div className="tg-rain2 absolute -inset-10" style={rain(14, night ? 0.18 : 0.25, 0.7)} />
-          <div className="tg-rain absolute -inset-10" style={rain(9, night ? 0.32 : 0.4, 0.9)} />
+          <Rain className="tg-rain2" w={14} a={night ? 0.18 : 0.25} op={0.7} />
+          <Rain className="tg-rain" w={9} a={night ? 0.32 : 0.4} op={0.9} />
         </>
       ) : null}
       {vibe === 'sunset' ? (

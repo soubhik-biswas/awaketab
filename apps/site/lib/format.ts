@@ -1,3 +1,5 @@
+import { clockText } from '@/lib/clock-format';
+
 export type TClockFormat = 12 | 24;
 
 export interface IEndsLineOptions {
@@ -25,6 +27,11 @@ function pad(value: number): string {
 
 export function formatTime(value: Date | number, locale = 'en', fmt?: TClockFormat): string {
   const english = isEnglish(locale);
+  // Hindi names the part of the day (सुबह, दोपहर, शाम, रात), which the browser's own format leaves as am and pm.
+  if (fmt !== 24 && locale.toLowerCase().split('-')[0] === 'hi') {
+    const d = toDate(value);
+    return clockText(d.getHours(), d.getMinutes(), 'hi', 12);
+  }
   const cycle = fmt ?? (english ? 12 : undefined);
   const options: Intl.DateTimeFormatOptions = { timeStyle: 'short' };
   if (cycle) options.hourCycle = cycle === 12 ? 'h12' : 'h23';

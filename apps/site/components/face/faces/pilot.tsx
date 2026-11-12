@@ -1,6 +1,6 @@
 import { SUB_DIAL } from '../art';
 import { alpha, sectorPath, ticks } from '../geometry';
-import { D, DialLabel, hand, type IDrawProps, L, lmin, MONO, Svg } from '../kit';
+import { D, DialLabel, hand, type IDrawProps, L, lmin, MONO, Svg, windowAt } from '../kit';
 import { minutesSpan } from './analog-dial';
 
 const MINOR = ticks(126, 132, 60, (i) => i % 5 !== 0);
@@ -37,17 +37,10 @@ export default function Pilot({ m }: IDrawProps) {
       <div
         className={L}
         style={{
-          position: 'absolute',
-          left: 146,
-          top: 196,
-          width: 68,
-          height: 26,
+          ...windowAt(180, 196, 68, 26),
           borderRadius: 6,
           background: SUB_DIAL[m.theme],
           border: `1px solid ${t.line}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           fontFamily: MONO,
           fontSize: lmin(13),
           color: accent,

@@ -1,5 +1,5 @@
 import { fxInk, fxInk2 } from '../art';
-import { card, digitSize, type IDrawProps, L, lmin, Stars, type TStar } from '../kit';
+import { card, digitSize, type IDrawProps, L, lmin, Stars, type TStar, PLATE } from '../kit';
 
 // A bright sky, a slate moon and an amber corona by day; a night sky at night.
 const ART = {
@@ -42,7 +42,7 @@ export default function Eclipse({ m }: IDrawProps) {
   const a = light ? ART.light : ART.night;
   const covered = m.st === 'idle' ? 0 : 1 - m.frac;
   return (
-    <div style={card(m, { background: a.sky })}>
+    <div className={PLATE} style={card(m, { background: a.sky })}>
       {m.night && <Stars pts={STARS} colors={['#FFFFFF']} step={0.4} />}
       <div
         className="afx-breath"

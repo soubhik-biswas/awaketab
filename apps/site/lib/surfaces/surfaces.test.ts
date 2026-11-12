@@ -46,9 +46,10 @@ describe('surface view', () => {
     expect(v.remain).toBe(39 * 60);
   });
 
-  it('says paused when the tab is hidden, unless the floating window holds its own lock', () => {
-    const hidden = snap({ state: 'paused', pauseReason: 'hidden' });
-    expect(surfaceView(hidden).label).toBe('hidden');
+  it('needs you, never paused, when the tab is hidden, unless the floating window holds its own lock', () => {
+    const hidden = snap({ state: 'needsyou', pauseReason: 'hidden' });
+    expect(surfaceView(hidden).label).toBe('needsyou');
+    expect(surfaceView(hidden).remain).toBe(39 * 60);
     expect(surfaceView(hidden, { held: true }).label).toBe('awake');
     expect(surfaceView(snap({ state: 'paused', pauseReason: 'user', pausedAt: at(11, 3) }), { held: true }).label).toBe(
       'paused',
@@ -64,6 +65,14 @@ describe('surface view', () => {
 
   it('says tomorrow past midnight', () => {
     expect(surfaceView(snap({ now: at(23, 30), endsAt: at(0, 30, 3) })).until).toBe('12:30 AM tomorrow');
+  });
+
+  it('colours each state as the tool does: sky for video and no wake lock, amber when it needs a tap', () => {
+    expect(surfaceView(snap({ state: 'fallback', mode: 'video' })).tone).toBe('info');
+    expect(surfaceView(snap({ state: 'needsyou' })).tone).toBe('warning');
+    expect(surfaceView(snap({ state: 'unsupported' })).tone).toBe('info');
+    expect(surfaceView(snap({ state: 'blocked' })).tone).toBe('destructive');
+    expect(surfaceView(snap()).tone).toBe('lamp');
   });
 
   it('formats digits like the board', () => {

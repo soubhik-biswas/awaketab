@@ -44,7 +44,7 @@ faq:
   - q: "¿AwakeTab funciona con el Modo de bajo consumo activado?"
     a: "Todavía no lo sabemos con certeza. Safari no tiene ninguna regla que rechace el Wake Lock por ese modo, pero aún no registramos una prueba en un dispositivo que confirme si la pantalla sigue encendida más allá de los 30 segundos. Si el iPhone se bloquea igual, apaga el modo y vuelve a iniciar la sesión."
   - q: "Ya apagué el Modo de bajo consumo, ¿la pantalla sigue encendida si cambio de app?"
-    a: "No. Safari solo mantiene el Wake Lock mientras la pestaña está al frente. Si abres otra app o bajas al inicio, el bloqueo se libera y el indicador muestra “En pausa — pestaña oculta” hasta que regreses."
+    a: "No. Safari solo mantiene el Wake Lock mientras la pestaña está al frente. Si abres otra app o bajas al inicio, el bloqueo se libera y el indicador muestra “En pausa” hasta que regreses."
   - q: "¿Qué versión necesito para usar AwakeTab en lugar de cambiar el ajuste?"
     a: "Safari 16.4 o posterior. Si agregaste AwakeTab a la pantalla de inicio, esa app necesita iOS 18.4 o posterior; con versiones anteriores, úsalo en Safari."
 honestLimit: "El Modo de bajo consumo pone Nunca en gris y fija 30 segundos; aún no registramos una prueba que confirme si el Wake Lock de Safari mantiene la pantalla encendida con ese modo activo."
@@ -69,11 +69,11 @@ Si el Modo de bajo consumo se vuelve a encender solo, conecta el iPhone al carga
 
 ## Por qué una pestaña es mejor que dejarlo en Nunca
 
-Poner Bloqueo automático en Nunca sirve, pero es fácil olvidarlo y encontrar el iPhone con la pantalla encendida y sin batería horas después. Con AwakeTab el cambio es temporal: eliges 30 minutos (la opción que trae esta página), 1 hora o “∞”, y cuando termina o cierras la pestaña, tu ajuste de siempre vuelve a mandar. El indicador te muestra “Pantalla despierta” solo cuando Safari realmente concedió el bloqueo.
+Poner Bloqueo automático en Nunca sirve, pero es fácil olvidarlo y encontrar el iPhone con la pantalla encendida y sin batería horas después. Con AwakeTab el cambio es temporal: eliges 30 minutos (la opción que trae esta página), 1 hora o “Sin fin”, y cuando termina o cierras la pestaña, tu ajuste de siempre vuelve a mandar. El indicador te muestra “Despierta” solo cuando Safari realmente concedió el bloqueo.
 
 ## Lo que el Modo de bajo consumo le hace a AwakeTab
 
-Con el modo encendido, iOS fija el Bloqueo automático en 30 segundos. Safari no rechaza el Wake Lock por ese modo, así que el indicador no mostrará “Bloqueado — aquí está la solución” por su culpa. Lo que aún no sabemos, porque todavía no registramos una prueba en un dispositivo, es si la pantalla aguanta más de esos 30 segundos. Si el iPhone se bloquea igual, apaga el modo en Ajustes → Batería. Lo explicamos con más detalle, junto con los otros límites en Safari, en la guía de [iPhone con Safari](/es/on/iphone-safari).
+Con el modo encendido, iOS fija el Bloqueo automático en 30 segundos. Safari no rechaza el Wake Lock por ese modo, así que el indicador no mostrará “No despierta” por su culpa. Lo que aún no sabemos, porque todavía no registramos una prueba en un dispositivo, es si la pantalla aguanta más de esos 30 segundos. Si el iPhone se bloquea igual, apaga el modo en Ajustes → Batería. Lo explicamos con más detalle, junto con los otros límites en Safari, en la guía de [iPhone con Safari](/es/on/iphone-safari).
 
 ## Otros casos que conviene conocer
 

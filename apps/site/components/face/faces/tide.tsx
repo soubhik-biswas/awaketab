@@ -1,6 +1,6 @@
 import { BLACK, NAVY, WHITE } from '../art';
 import { alpha } from '../geometry';
-import { big, EndLine, type IDrawProps, L, lmin, MONO } from '../kit';
+import { big, EndLine, fit, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 
 const GLASS = {
   light: 'linear-gradient(90deg, #FFFFFF, #EFEFF6)',
@@ -26,6 +26,7 @@ export default function Tide({ m }: IDrawProps) {
   return (
     <>
       <div
+        className={PLATE}
         style={{
           position: 'absolute',
           left: 60,
@@ -34,6 +35,7 @@ export default function Tide({ m }: IDrawProps) {
           height: 290,
           borderRadius: 52,
           overflow: 'hidden',
+          isolation: 'isolate',
           background: GLASS[theme],
           boxShadow: shadow,
         }}
@@ -112,7 +114,7 @@ export default function Tide({ m }: IDrawProps) {
             gap: 6,
           }}
         >
-          <span style={big(m.long ? 40 : 54)}>{m.digits}</span>
+          <span style={big(fit(m, m.long ? 40 : 54, 36))}>{m.digits}</span>
           <EndLine m={m} px={14} />
         </div>
       </div>

@@ -14,7 +14,7 @@ lastVerified: 2026-09-09
 browsers: ["chrome", "edge"]
 os: ["windows"]
 crumb: "Windows 11"
-lead: "No Windows 11, o Chrome 84+ e o Edge 84+ aceitam o Wake Lock nativo enquanto a aba aparece na tela. Clique em iniciar; assim que surgir “Tela ligada”, o monitor deixa de apagar e de bloquear por inatividade enquanto a janela estiver à vista. Enquanto isso, o Windows também não entra em suspensão por inatividade. Sem instalar programa e sem mexer nas configurações de energia; os mesmos passos valem para o Windows 10. Limites: minimizar o navegador libera o bloqueio, fechar a tampa suspende o notebook, e o Modern Standby é uma história à parte, decidida por firmware. Esta página sugere uma sessão de 1 hora."
+lead: "No Windows 11, o Chrome 84+ e o Edge 84+ aceitam o Wake Lock nativo enquanto a aba aparece na tela. Clique em iniciar; assim que surgir “Ligada”, o monitor deixa de apagar e de bloquear por inatividade enquanto a janela estiver à vista. Enquanto isso, o Windows também não entra em suspensão por inatividade. Sem instalar programa e sem mexer nas configurações de energia; os mesmos passos valem para o Windows 10. Limites: minimizar o navegador libera o bloqueio, fechar a tampa suspende o notebook, e o Modern Standby é uma história à parte, decidida por firmware. Esta página sugere uma sessão de 1 hora."
 facts:
   - label: "Chrome e Edge"
     value: "84 ou posterior"
@@ -29,10 +29,10 @@ steps:
     text: "1 h já vem sugerida. Em sessões longas, ligue o notebook na tomada."
     shot: "o AwakeTab no Edge no Windows 11 com a duração escolhida"
   - title: "Clique em iniciar ou aperte Espaço"
-    text: "Espere o indicador chegar a “Tela ligada”."
+    text: "Espere o indicador chegar a “Ligada”."
     shot: "o indicador do AwakeTab com a sessão ativa"
   - title: "Vai usar outros programas?"
-    text: "Encaixe a janela do AwakeTab num canto da tela, ou abra a “Janela flutuante”, que fica por cima das outras."
+    text: "Encaixe a janela do AwakeTab num canto da tela, ou abra o minirrelógio (Ctrl K, depois “Abrir o minirrelógio”), que fica por cima das outras."
     shot: "a janela do AwakeTab num canto da tela"
 matrix:
   label: "Navegadores no Windows 11 e 10, conferido em 26 de setembro de 2026"
@@ -64,7 +64,7 @@ rows:
       text: "O Wake Lock mexe na tela, não nos estados de baixo consumo que o firmware decide."
 faq:
   - q: "Posso minimizar o Chrome e continuar trabalhando no Excel?"
-    a: "Minimizado, não. Uma aba minimizada ou coberta por completo fica oculta, e o Windows recebe de volta o controle da tela; o indicador mostra “Pausado — aba oculta”. Deixe a janela do AwakeTab visível num canto ou use a janela flutuante do Chrome, do Edge ou do Firefox 151+."
+    a: "Minimizado, não. Uma aba minimizada ou coberta por completo fica oculta, e o Windows recebe de volta o controle da tela; o indicador mostra “Pausado”. Deixe a janela do AwakeTab visível num canto ou use o minirrelógio do Chrome, do Edge ou do Firefox 151+."
   - q: "Meu notebook corporativo apaga a tela mesmo com o AwakeTab. Por quê?"
     a: "Em PCs gerenciados, uma política da empresa pode bloquear a tela ou exigir login depois de alguns minutos. Isso é diferente do tempo limite de tela, e um Wake Lock não passa por cima de política corporativa nem de remoção do cartão inteligente."
   - q: "O AwakeTab me mantém disponível no Teams?"

@@ -14,7 +14,7 @@ const twelve = (h: number, m: number) => `${String(h % 12 || 12)}:${pad(m)} ${h 
 
 export const dynamicParams = false;
 
-// Every /until/HH-MM exists in 5-minute steps, as on the old site.
+// Every /until/HH-MM exists in 5-minute steps, which keeps the set of pages small enough to build ahead.
 export function generateStaticParams() {
   const out: Array<{ locale: string; time: string }> = [];
   for (let h = 0; h < 24; h += 1)
@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: TParams }) {
       <PageHero
         eyebrow="Keep awake until"
         h1={`Keep your screen awake until ${here}`}
-        lead={`AwakeTab works out the length from your device clock, then counts down to ${here}. If ${here} has already passed today, the session ends at ${here} tomorrow, and the tool says so above the countdown.`}
+        lead={`AwakeTab works out the length from your device clock, then counts down to ${here}. If ${here} has already passed today, the session ends at ${here} tomorrow, and the pill says “tomorrow”.`}
       />
       <Block id="s-tool" label={`Until ${here}`}>
         <ToolSlot
@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: TParams }) {
           minutes={null}
           eyebrow={ts('tool.eyebrow')}
           title={`Until ${here}`}
-          desc={`The end time stays fixed while the session runs. +15 min moves it 15 minutes later, and Stop ends it now. The pill reads “${tt('pill.held')}” only while the browser holds the wake lock.`}
+          desc={`The end time stays fixed while the session runs. +15 min moves it 15 minutes later, and Stop ends it now. The pill reads “${tt('glance.pill.awake', { time: here })}” only while the browser holds the wake lock.`}
           href={`/?until=${time}`}
           label={`Keep awake until ${here}`}
         />
@@ -86,9 +86,10 @@ export default async function Page({ params }: { params: TParams }) {
       </Block>
       <Block id="times" h="Nearby times">
         <Chips label="Nearby times" items={near} />
-        <a href="/" className="text-[15px] font-semibold text-lamp underline underline-offset-[3px]">
-          Any other time: open the tool and pick Until a time…
-        </a>
+        <p className="m-0 text-[15px] text-muted-foreground-strong">
+          Any other time: change the end of this page&apos;s address to the hour and minute you want, in 24-hour time
+          and five-minute steps. /until/17-45 ends at 5:45 PM.
+        </p>
       </Block>
     </>
   );

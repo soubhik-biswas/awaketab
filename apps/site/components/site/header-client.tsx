@@ -23,7 +23,11 @@ export interface INavLink {
 }
 
 const navItem =
-  'inline-flex h-11 items-center rounded-[10px] px-3 text-[15px] font-medium text-foreground no-underline hover:bg-secondary aria-[current=page]:bg-secondary aria-[current=page]:font-bold';
+  'inline-flex h-11 items-center rounded-[10px] px-3 text-[15px] font-medium text-foreground no-underline hover:bg-secondary aria-[current=page]:bg-secondary aria-[current=page]:font-bold aria-[current=true]:bg-secondary aria-[current=true]:font-bold';
+
+// A link is the current page on its own address and the current section on every page below it.
+const currentFor = (pathname: string, href: string): 'page' | 'true' | undefined =>
+  pathname === href ? 'page' : pathname.startsWith(`${href}/`) ? 'true' : undefined;
 
 export function NavLinks({ links, label, hrefLang }: { links: readonly INavLink[]; label: string; hrefLang?: string }) {
   const pathname = usePathname();
@@ -35,7 +39,7 @@ export function NavLinks({ links, label, hrefLang }: { links: readonly INavLink[
           href={l.href}
           hrefLang={hrefLang}
           className={navItem}
-          aria-current={pathname === l.href ? 'page' : undefined}
+          aria-current={currentFor(pathname, l.href)}
         >
           {l.label}
         </a>
@@ -131,7 +135,7 @@ export function MobileMenu({
               href={l.href}
               hrefLang={locale === 'en' ? undefined : 'en'}
               onClick={() => setOpen(false)}
-              aria-current={pathname === l.href ? 'page' : undefined}
+              aria-current={currentFor(pathname, l.href)}
               className={cn(navItem, 'h-12 text-[17px]')}
             >
               {l.label}
@@ -149,7 +153,7 @@ export function MobileMenu({
               lang={LOCALE_META[t.locale].htmlLang}
               hrefLang={LOCALE_META[t.locale].hreflang}
               aria-current={t.locale === locale ? 'true' : undefined}
-              className={cn(navItem, 'aria-[current=true]:bg-secondary aria-[current=true]:font-bold')}
+              className={navItem}
             >
               <Globe className="mr-2 size-4" aria-hidden="true" />
               {t.label}

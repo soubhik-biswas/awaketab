@@ -170,7 +170,7 @@ export function KioskPage() {
         {t('section')}
       </h1>
       <div className="grid items-start gap-8 xl:grid-cols-[minmax(0,960px)_1fr]">
-        <KioskScreen config={shown} view={view} shift={shift} dim={nightDim(now)} onLeave={() => undefined} />
+        <KioskScreen config={shown} view={view} shift={shift} dim={nightDim(now)} fmt={fmt} onLeave={() => undefined} />
         <div className="flex flex-col gap-[14px]">
           <div className="flex flex-col gap-2">
             <span className={LABEL} id="kiosk-face">
@@ -238,6 +238,7 @@ export function KioskPage() {
                 shift={shift}
                 asleep={asleep}
                 dim={nightDim(now)}
+                fmt={fmt}
                 onLeave={leave}
                 fill
               />

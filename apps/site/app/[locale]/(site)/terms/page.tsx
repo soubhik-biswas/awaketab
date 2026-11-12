@@ -1,14 +1,18 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { LegalPage, legalLink } from '@/components/site/legal-page';
+import { PRO_ENABLED } from '@/lib/features';
 import { panelHref, ROUTES } from '@/lib/routes';
 import { englishOnly, pageMetadata, titleFor } from '@/lib/seo';
+
+// Paid plans only exist with Pro, so the free build's terms leave them out.
+const FREE = PRO_ENABLED ? '' : 'Free';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale: 'en', namespace: 'page.terms' });
   return pageMetadata({
     title: titleFor('Terms of use'),
-    description: t('description'),
+    description: t(`description${FREE}`),
     path: ROUTES.terms,
     og: { image: 'og-02', alt: 'AwakeTab: keep this screen awake' },
   });
@@ -22,10 +26,10 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       crumb={t('h1')}
       h1="Terms of use"
       lead="You may use AwakeTab to request that a supported browser keep a display awake while the relevant page remains eligible. Browser, operating-system and device power policy always remain in control."
-      description={t('description')}
+      description={t(`description${FREE}`)}
       path={ROUTES.terms}
-      updated="2026-09-09"
-      effective="2026-09-09"
+      updated="2026-11-13"
+      effective="2026-11-13"
       other={['Privacy', ROUTES.privacy]}
       sections={[
         {
@@ -55,24 +59,32 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         {
           id: 'licences',
           title: 'Software and licences',
-          summary:
-            'the website is provided as-is, open-source packages keep their own licence, and paid licences have a 14-day refund.',
+          summary: PRO_ENABLED
+            ? 'the website is provided as-is, open-source packages keep their own licence, and paid plans have a 14-day refund.'
+            : 'the website is provided as-is and free to use, and open-source packages keep their own licence.',
           body: (
             <>
               <p className="m-0">
-                The public website is provided as-is. Open-source packages are governed by the licence included with
-                their source. Paid product terms, activation limits and refund information shown at checkout apply in
-                addition to these terms. Features and browser support may change as platforms change.
+                The public website is provided as-is. You may use the free tool for personal and commercial purposes.
+                Open-source packages are governed by the licence included with their source. Features and browser
+                support may change as platforms change.
+                {PRO_ENABLED &&
+                  ' Paid product terms, activation limits and refund information shown at checkout apply in addition to these terms.'}
               </p>
-              <p className="m-0">
-                Paid licences include a 14-day refund, no questions asked. Ask from Settings → Account → Manage plan, or
-                send a note from{' '}
-                <a href={panelHref('feedback')} className={legalLink}>
-                  Settings → Send feedback
-                </a>{' '}
-                with your receipt; the payment provider&apos;s customer portal works too. Refunds deactivate the licence
-                key.
-              </p>
+              {PRO_ENABLED ? (
+                <p className="m-0">
+                  Paid plans include a 14-day refund, no questions asked. Ask from Settings → Account → Manage plan; the
+                  payment provider&apos;s customer portal works too. Refunds end Pro on every device.
+                </p>
+              ) : (
+                <p className="m-0">
+                  Questions about these terms go through{' '}
+                  <a href={panelHref('feedback')} className={legalLink}>
+                    Settings → Send feedback
+                  </a>{' '}
+                  inside the tool.
+                </p>
+              )}
             </>
           ),
         },

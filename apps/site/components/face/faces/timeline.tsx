@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { CARD_SHADOW } from '../art';
 import { alpha } from '../geometry';
-import { big, type IDrawProps, Kicker, L, mono } from '../kit';
+import { big, type IDrawProps, Kicker, L, mono, PLATE } from '../kit';
 
 // Now → Ends, like a boarding pass. The most literal way to read time left.
 export default function Timeline({ m }: IDrawProps) {
@@ -30,6 +30,7 @@ export default function Timeline({ m }: IDrawProps) {
   const time: CSSProperties = { fontSize: 24, fontWeight: 500, letterSpacing: '-0.02em' };
   return (
     <div
+      className={PLATE}
       style={{
         position: 'absolute',
         left: 18,

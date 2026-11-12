@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { CARD_SHADOW, WHITE } from '../art';
-import { EndLine, type IDrawProps, Kicker } from '../kit';
+import { EndLine, type IDrawProps, Kicker, PLATE } from '../kit';
 
 // Each digit is six small clocks (two columns, three rows) whose hands trace its seven segments; 225° on every hand leaves a clock blank.
 const SEG7 = ['abcdef', 'bc', 'abged', 'abgcd', 'fgbc', 'afgcd', 'afgedc', 'abc', 'abcdefg', 'abcdfg'] as const;
@@ -89,6 +89,7 @@ export default function Clocks({ m }: IDrawProps) {
   return (
     <>
       <div
+        className={PLATE}
         style={{
           position: 'absolute',
           left: 0,

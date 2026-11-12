@@ -15,7 +15,7 @@ reviewed: true
 lastVerified: 2026-09-26
 browsers: ["safari"]
 os: ["ipados"]
-lead: "Safari on iPadOS 16.4 or later can keep your iPad display on while the AwakeTab tab is visible. Tap Start once, because Safari only grants a wake lock after a tap. When you stop, switch tabs or leave Safari, the iPad goes back to its Auto-Lock time."
+lead: "Safari on iPadOS 16.4 or later can keep your iPad display on while the AwakeTab tab is visible. Tap Keep awake once, because Safari only grants a wake lock after a tap. When you stop, switch tabs or leave Safari, the iPad goes back to its Auto-Lock time."
 facts:
   - label: "Safari"
     value: "iPadOS 16.4 or later"
@@ -30,10 +30,10 @@ toc:
   which-ipad-setups-keep-the-screen-on: "Which setups work"
   what-turns-the-screen-off-anyway: "What turns it off"
 steps:
-  - title: "Open AwakeTab in Safari and tap Start"
+  - title: "Open AwakeTab in Safari and tap Keep awake"
     path: "Safari › awaketab.com"
-    text: "Safari will not grant a wake lock until you tap, even from a shared /1h link. Wait for the pill to say \"Screen awake\"."
-    shot: "AwakeTab in Safari on iPad with the pill reading Screen awake"
+    text: "Safari will not grant a wake lock until you tap, even from a shared /1h link. Wait for the pill to say \"Awake\"."
+    shot: "AwakeTab in Safari on iPad with the pill reading Awake"
   - title: "Keep AwakeTab beside your score or recipe"
     path: "Windowed apps › tile Safari beside the other app"
     text: "On iPadOS 26, tile Safari next to the other app, or use Slide Over, back in iPadOS 26.1. On iPadOS 18 and earlier, use Split View. The AwakeTab window can be small; it only needs to be on screen."
@@ -53,7 +53,7 @@ matrix:
     - what: "Safari on iPadOS 16.4 or later, tab visible"
       result: works
       label: "Supported"
-      text: "Tap Start once. Safari needs that tap before it grants the lock."
+      text: "Tap Keep awake once. Safari needs that tap before it grants the lock."
     - what: "Safari tiled beside another app, or in Slide Over"
       result: untested
       label: "Not yet tested"
@@ -73,7 +73,7 @@ matrix:
     - what: "Safari before iPadOS 16.4"
       result: fallback
       label: "Video fallback"
-      text: "No Screen Wake Lock API. You will see \"Tap to use the fallback\"."
+      text: "No Screen Wake Lock API. You will see \"No wake lock in this browser\"."
 rows:
   blockers:
     - title: "Low Power Mode"

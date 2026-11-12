@@ -30,11 +30,11 @@ faq:
   - q: "¿Qué navegadores mantienen la pantalla encendida sin usar el respaldo?"
     a: "Los que tienen Wake Lock nativo: Chrome 84+, Edge 84+, Firefox 126+, Safari 16.4+, Samsung Internet 14+ y Opera 70+. En todos, la pestaña tiene que estar visible para que el bloqueo se mantenga."
   - q: "¿Qué pasa si uso un Firefox anterior a la versión 126?"
-    a: "AwakeTab ofrece el video de respaldo: un video silencioso diminuto que mantiene la pantalla encendida. Necesita que toques o hagas clic para arrancar y consume más energía. El indicador lo muestra como “Despierta con video de respaldo”."
+    a: "AwakeTab ofrece el video de respaldo: un video silencioso diminuto que mantiene la pantalla encendida. Necesita que toques o hagas clic para arrancar y consume más energía. El indicador lo muestra como “Despierta con video”."
   - q: "¿Funciona como app instalada en la pantalla de inicio del iPhone?"
     a: "Sí, desde iOS 18.4. Con versiones anteriores, el Wake Lock no está disponible en las apps de la pantalla de inicio, así que conviene usar AwakeTab directamente en Safari 16.4 o posterior."
   - q: "¿El bloqueo sigue activo en una pestaña en segundo plano?"
-    a: "No, en ningún navegador de la tabla. Al ocultar la pestaña, minimizar la ventana o cambiar de app, el navegador libera el bloqueo y el indicador muestra “En pausa — pestaña oculta” hasta que vuelves."
+    a: "No, en ningún navegador de la tabla. Al ocultar la pestaña, minimizar la ventana o cambiar de app, el navegador libera el bloqueo y el indicador muestra “En pausa” hasta que vuelves."
 honestLimit: "La tabla se basa en la documentación y el código fuente de los navegadores, revisados el 26 de septiembre de 2026; aún no registramos pruebas en dispositivos, y las versiones anteriores usan el video de respaldo."
 related:
   - "/on/iphone-safari"
@@ -62,7 +62,7 @@ updated: 2026-09-27
 
 ## Cómo leer la tabla
 
-**Versión mínima** es la primera versión en la que el navegador concede un Screen Wake Lock a una pestaña visible y segura (HTTPS). No es una promesa sobre tu equipo en particular: una pestaña oculta, una política del sitio (por ejemplo, un marco sin permiso), Safari sin un toque previo o Firefox con la batería al 5 % o menos pueden rechazar la solicitud aunque tu navegador esté al día. Cuando eso ocurre, el indicador cambia a “Bloqueado — aquí está la solución” y explica el motivo; jamás finge un “Pantalla despierta”. Una página sin HTTPS no tiene Wake Lock.
+**Versión mínima** es la primera versión en la que el navegador concede un Screen Wake Lock a una pestaña visible y segura (HTTPS). No es una promesa sobre tu equipo en particular: una pestaña oculta, una política del sitio (por ejemplo, un marco sin permiso), Safari sin un toque previo o Firefox con la batería al 5 % o menos pueden rechazar la solicitud aunque tu navegador esté al día. Cuando eso ocurre, el indicador cambia a “No despierta” y explica el motivo; jamás finge un “Despierta”. Una página sin HTTPS no tiene Wake Lock.
 
 **Nativo** significa que AwakeTab usa la API del navegador directamente. **Respaldo** significa que reproduce un video silencioso de un cuadro para mantener la pantalla encendida; solo arranca después de que tocas la pantalla y gasta más batería.
 
@@ -80,7 +80,7 @@ Cada fila se revisó con la documentación y el código fuente de los navegadore
 - [WebKit WakeLock.cpp](https://github.com/WebKit/WebKit/blob/main/Source/WebCore/Modules/screen-wake-lock/WakeLock.cpp)
 - [Firefox WakeLockJS.cpp](https://github.com/mozilla-firefox/firefox/blob/main/dom/power/WakeLockJS.cpp)
 
-Si tu versión es anterior a la mínima, actualiza el navegador o usa el video de respaldo; AwakeTab te lo propone con “Toca para usar el respaldo”.
+Si tu versión es anterior a la mínima, actualiza el navegador o usa el video de respaldo; AwakeTab te lo propone con “Este navegador no tiene wake lock”.
 
 ::note pending
 

@@ -34,9 +34,9 @@ notes:
     text: "Uma página sem HTTPS nem tem Wake Lock: o AwakeTab oferece a alternativa."
 faq:
   - q: "Suporte ao Wake Lock significa que a tela fica ligada com a aba em segundo plano?"
-    a: "Não. Em todos os navegadores da tabela, o bloqueio só vale enquanto a aba está visível. Minimizar, trocar de aba ou de app libera o bloqueio, e o AwakeTab mostra “Pausado — aba oculta” até você voltar."
+    a: "Não. Em todos os navegadores da tabela, o bloqueio só vale enquanto a aba está visível. Minimizar, trocar de aba ou de app libera o bloqueio, e o AwakeTab mostra “Pausado” até você voltar."
   - q: "Meu navegador está abaixo da versão mínima. O que acontece?"
-    a: "O AwakeTab mostra “Toque para usar a alternativa”. Com o seu toque, um pequeno vídeo silencioso mantém a tela ligada. Funciona, mas consome mais bateria do que o Wake Lock nativo, e o indicador passa a dizer “Tela ligada por vídeo alternativo”."
+    a: "O AwakeTab mostra “Este navegador não tem wake lock”. Com o seu toque, um pequeno vídeo silencioso mantém a tela ligada. Funciona, mas consome mais bateria do que o Wake Lock nativo, e o indicador passa a dizer “Ligada por vídeo”."
   - q: "Por que o Safari aparece com 16.4 e o app da Tela de Início com 18.4?"
     a: "São contextos diferentes no iPhone. No Safari, o Wake Lock chegou no iOS 16.4. Em apps web adicionados à Tela de Início, ele só funciona a partir do iOS 18.4; em versões anteriores, use o AwakeTab direto no Safari."
   - q: "A tabela vale para sempre?"
@@ -69,9 +69,9 @@ updated: 2026-09-27
 
 ## Como ler esta tabela
 
-**Versão mínima** é a primeira versão em que o navegador concede o Wake Lock sem truques. Abaixo dela, o AwakeTab não finge: o indicador mostra “Toque para usar a alternativa”, e só depois do seu toque o vídeo silencioso começa.
+**Versão mínima** é a primeira versão em que o navegador concede o Wake Lock sem truques. Abaixo dela, o AwakeTab não finge: o indicador mostra “Este navegador não tem wake lock”, e só depois do seu toque o vídeo silencioso começa.
 
-**Nativo** quer dizer que o AwakeTab chama `navigator.wakeLock.request('screen')` e o navegador confirma. Só então o indicador diz “Tela ligada”. Se o navegador recusar, aparece “Bloqueado — veja como corrigir”, nunca um falso “ligado”.
+**Nativo** quer dizer que o AwakeTab chama `navigator.wakeLock.request('screen')` e o navegador confirma. Só então o indicador diz “Ligada”. Se o navegador recusar, aparece “Não está ligada”, nunca um falso “ligado”.
 
 **Observação** lista o que costuma derrubar o bloqueio mesmo numa versão compatível:
 

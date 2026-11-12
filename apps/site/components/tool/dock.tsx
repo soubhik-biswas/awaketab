@@ -1,13 +1,14 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'motion/react';
 import { Maximize, Minimize, Pause, Play, RotateCcw, Square, TriangleAlert, type LucideIcon } from 'lucide-react';
 import { Face } from '@/components/face';
 import { cn } from '@/lib/utils';
-import { faceLabel } from '@/lib/tool/collections';
 import type { TWakeState } from '@/lib/wake';
 import { useGlance, type IGlance } from './context';
 import { EASE } from './kit';
+import { warmPanels } from './panels/lazy';
 
 interface IPrimary {
   label: string;
@@ -32,33 +33,34 @@ const KEY =
   'tg-btn inline-flex flex-none items-center justify-center border border-(--tg-border) bg-(--tg-s1) text-(--tg-text)';
 
 // The dock keeps the same slots in every state: add time · primary · stop · face · fullscreen. Only Stop leaves,
-// when the session has already ended. On phone it folds into two rows.
-export function Dock() {
+// when the session has already ended, and Fullscreen where the browser has none. On phone it folds into two rows.
+export const Dock = memo(function Dock() {
   const g = useGlance();
   const { t, phone, desk, st, hidden } = g;
   if (g.isSet || g.panel === 'faces') return null;
   const ended = st === 'ended';
   const chips: Array<[number, string, string]> = ended
     ? [
-        [900, t('dock.add', { n: 15, unit: t('unit.min') }), t('dock.addAria', { dur: g.dur(900) })],
-        [1800, t('dock.add', { n: 30, unit: t('unit.min') }), t('dock.addAria', { dur: g.dur(1800) })],
-        [3600, t('dock.add', { n: 1, unit: t('unit.hour') }), t('dock.addAria', { dur: g.dur(3600) })],
+        [900, t('dock.add', { n: 15, unit: t('unit.min') }), t('dock.addAria', { dur: g.durLong(900) })],
+        [1800, t('dock.add', { n: 30, unit: t('unit.min') }), t('dock.addAria', { dur: g.durLong(1800) })],
+        [3600, t('dock.add', { n: 1, unit: t('unit.hour') }), t('dock.addAria', { dur: g.durLong(3600) })],
       ]
     : [
-        [300, t('dock.add', { n: 5, unit: t('unit.min') }), t('dock.addAria', { dur: g.dur(300) })],
-        [900, t('dock.add', { n: 15, unit: t('unit.min') }), t('dock.addAria', { dur: g.dur(900) })],
-        [3600, t('dock.add', { n: 1, unit: t('unit.hour') }), t('dock.addAria', { dur: g.dur(3600) })],
+        [300, t('dock.add', { n: 5, unit: t('unit.min') }), t('dock.addAria', { dur: g.durLong(300) })],
+        [900, t('dock.add', { n: 15, unit: t('unit.min') }), t('dock.addAria', { dur: g.durLong(900) })],
+        [3600, t('dock.add', { n: 1, unit: t('unit.hour') }), t('dock.addAria', { dur: g.durLong(3600) })],
       ];
   const p = PRIMARY[st];
   const Icon = p.icon;
   const blocked = st === 'blocked';
   const key = phone ? 52 : 56;
-  const name = faceLabel(g.face);
+  const name = g.faceName(g.face);
   return (
     <motion.div
       role="toolbar"
       aria-label={t('dock.label')}
-      aria-hidden={hidden || undefined}
+      inert={hidden}
+      data-rests=""
       initial={{ opacity: 0, y: 16, x: '-50%' }}
       animate={{ opacity: hidden ? 0 : 1, y: hidden ? 16 : 0, x: '-50%' }}
       transition={{ duration: 0.45, ease: EASE }}
@@ -70,7 +72,6 @@ export function Dock() {
       )}
       style={{
         bottom: phone ? 16 : 28,
-        pointerEvents: hidden ? 'none' : undefined,
         boxShadow: 'var(--tg-shadow), inset 0 1px 0 var(--tg-inset-hi)',
       }}
     >
@@ -128,6 +129,8 @@ export function Dock() {
         <button
           type="button"
           onClick={() => g.a.open('faces')}
+          onPointerEnter={warmPanels}
+          onFocus={warmPanels}
           aria-label={t('dock.faceAria', { face: name })}
           className={cn(KEY, 'justify-start gap-2.5 rounded-[18px] pl-1.5', desk ? 'pr-4' : 'pr-1.5')}
           style={{ height: key }}
@@ -151,21 +154,23 @@ export function Dock() {
             </span>
           ) : null}
         </button>
-        <button
-          type="button"
-          onClick={() => g.a.fullscreen()}
-          aria-label={g.fullscreen ? t('dock.exitFull') : t('dock.full')}
-          aria-keyshortcuts="Shift+F"
-          className={cn(KEY, 'rounded-[18px]')}
-          style={{ width: key, height: key }}
-        >
-          {g.fullscreen ? (
-            <Minimize className="size-[18px]" strokeWidth={2} aria-hidden="true" />
-          ) : (
-            <Maximize className="size-[18px]" strokeWidth={2} aria-hidden="true" />
-          )}
-        </button>
+        {g.canFullscreen ? (
+          <button
+            type="button"
+            onClick={() => g.a.fullscreen()}
+            aria-label={g.fullscreen ? t('dock.exitFull') : t('dock.full')}
+            aria-keyshortcuts="Shift+F"
+            className={cn(KEY, 'rounded-[18px]')}
+            style={{ width: key, height: key }}
+          >
+            {g.fullscreen ? (
+              <Minimize className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+            ) : (
+              <Maximize className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+            )}
+          </button>
+        ) : null}
       </div>
     </motion.div>
   );
-}
+});
