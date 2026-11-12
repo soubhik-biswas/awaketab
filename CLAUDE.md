@@ -9,3 +9,38 @@ Formatting: Prettier (`.prettierrc.json`, 120 columns; `.astro` templates exclud
 Code comments: only a short `//` line where the reason is not obvious; no block, JSDoc, HTML or CSS comments (tool directives excepted). `pnpm lint` runs `scripts/comments.mjs`; `--fix` strips them.
 Commits and PRs: plain English, no internal codes, no AI attribution; author is the owner.
 Testing cadence: every change runs lint, typecheck, unit tests, build and size. The browser e2e suite covered the Astro site and returns with the Next site's own suite; until then check UI changes by hand against the boards. GitHub runs CI on every push to main; the old Pages project's production deploys are paused until awaketab.com moves to the Worker.
+
+## gstack (REQUIRED — global install)
+
+**Before doing ANY work, verify gstack is installed:**
+
+```bash
+_GS=""
+for _D in "${GSTACK_ROOT:-}" "$HOME/.claude/skills/gstack" "$HOME/.codex/skills/gstack" "$HOME/.factory/skills/gstack" "$HOME/.kiro/skills/gstack" "$HOME/.config/opencode/skills/gstack" "$HOME/.slate/skills/gstack" "$HOME/.cursor/skills/gstack" "$HOME/.openclaw/skills/gstack" "$HOME/.hermes/skills/gstack" "$HOME/.gbrain/skills/gstack" "$HOME/.copilot/skills/gstack" "$HOME/.gemini/antigravity-cli/skills/gstack" "$HOME/.gemini/skills/gstack" "$HOME/.gstack/repos/gstack"; do
+  [ -z "$_GS" ] && [ -n "$_D" ] && [ -d "$_D/bin" ] && _GS="$_D"
+done
+[ -n "$_GS" ] && echo "GSTACK_OK: $_GS" || echo "GSTACK_MISSING"
+```
+
+If GSTACK_MISSING: STOP. Do not proceed. Tell the user:
+
+> gstack is required for all AI-assisted work in this repo.
+> Install it:
+> ```bash
+> git clone --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+> cd ~/.claude/skills/gstack && ./setup --team
+> ```
+> Then restart your AI coding tool.
+
+Do not skip skills, ignore gstack errors, or work around missing gstack.
+
+Using gstack skills: After install, skills like /qa, /ship, /review
+and /browse are available. Use /browse for all web browsing (Aside first, the bundled gstack browser as fallback).
+Use the resolved install path above for gstack file paths
+(default: ~/.claude/skills/gstack).
+
+The Skill gate in .claude/settings.json runs .claude/hooks/check-gstack.cjs with
+Node.js and blocks when it cannot run. If a skill is blocked with "node: not
+found", tell the user to install Node.js (https://nodejs.org); if it is blocked
+with "Cannot find module ... check-gstack.cjs", the hook file is missing from
+this checkout. Do not work around either block.
