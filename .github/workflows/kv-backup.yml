@@ -1,4 +1,4 @@
-# Weekly encrypted export of the Workers KV namespaces (docs/14-devops.md §11).
+# Weekly encrypted export of the Workers KV namespaces (docs/14-devops.md §7).
 #
 # Repository secrets (Settings → Secrets and variables → Actions):
 #   CLOUDFLARE_API_TOKEN     API token with Account → Workers KV Storage → Read only
@@ -45,10 +45,10 @@ jobs:
             [ -n "${!name}" ] || missing+=("$name")
           done
           if [ "${#missing[@]}" -eq "${#required[@]}" ]; then
-            echo "::notice title=KV backup skipped::No backup secrets are configured in this repository, so nothing was exported. Add ${required[*]} (docs/14-devops.md §11)."
+            echo "::notice title=KV backup skipped::No backup secrets are configured in this repository, so nothing was exported. Add ${required[*]} (docs/14-devops.md §7)."
             echo "enabled=false" >> "$GITHUB_OUTPUT"
           elif [ "${#missing[@]}" -gt 0 ]; then
-            echo "::error title=KV backup misconfigured::Missing repository secrets: ${missing[*]} (docs/14-devops.md §11)."
+            echo "::error title=KV backup misconfigured::Missing repository secrets: ${missing[*]} (docs/14-devops.md §7)."
             exit 1
           else
             echo "enabled=true" >> "$GITHUB_OUTPUT"

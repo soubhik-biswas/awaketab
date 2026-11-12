@@ -1,17 +1,15 @@
 name: Lighthouse
 
 # One config (lighthouserc.cjs) for both modes:
-# - a deployed Cloudflare Pages preview (deployment_status from the Pages GitHub integration, or a manual
-#   run with a base URL) → LHCI_BASE_URL is set and nothing is built or served here;
-# - a pull request without a preview → build and let LHCI start `pnpm --filter web preview` on 127.0.0.1:4321.
+# - a manual run with a base URL (e.g. https://play.awaketab.com) audits that origin and builds nothing;
+# - a pull request builds the site here and LHCI starts the Next server on localhost:4173.
 
 on:
   pull_request:
-  deployment_status:
   workflow_dispatch:
     inputs:
       base_url:
-        description: 'Origin to audit, e.g. https://abc123.awaketab.pages.dev (empty = local preview build)'
+        description: 'Origin to audit, e.g. https://play.awaketab.com (empty = build and audit locally)'
         required: false
         default: ''
 
@@ -20,14 +18,15 @@ permissions:
 
 jobs:
   audit:
-    # deployment_status fires for every state; only audit successful deployments.
-    if: github.event_name != 'deployment_status' || github.event.deployment_status.state == 'success'
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     env:
-      LHCI_BASE_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url || inputs.base_url || '' }}
+      LHCI_BASE_URL: ${{ inputs.base_url || '' }}
       LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: pnpm/action-setup@v6
         with:
           version: 12.17.0
@@ -36,7 +35,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Build (local preview mode only)
+      - name: Build (local mode only)
         if: env.LHCI_BASE_URL == ''
         run: pnpm build
       - name: Lighthouse CI

@@ -1,9 +1,8 @@
 const LOCAL = 'http://localhost:4173';
 const base = (process.env.LHCI_BASE_URL || LOCAL).replace(/\/+$/u, '');
 const remote = base !== LOCAL;
-// Play and every *.pages.dev host send `X-Robots-Tag: noindex` (docs/14 §1).
-const noindexHost =
-  remote && (new URL(base).hostname === 'play.awaketab.com' || /\.pages\.dev$/u.test(new URL(base).hostname));
+// The preview Worker sends `X-Robots-Tag: noindex` and disallows every crawler (docs/DEPLOYMENT.md).
+const noindexHost = remote && new URL(base).hostname === 'play.awaketab.com';
 
 // docs/19 §E: /, /30m, one /for page, one /guides page, /es/.
 const PATHS = ['/', '/30m', '/for/cooking', '/guides/lock-screen-vs-sleep', '/es/'];

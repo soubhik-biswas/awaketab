@@ -14,6 +14,7 @@
     "test": "vitest run",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "deploy:preview": "CLOUDFLARE_ENV=preview NEXT_PUBLIC_DEPLOY_ENV=play NEXT_PUBLIC_POLAR_SERVER=sandbox opennextjs-cloudflare build --env preview && wrangler d1 migrations apply AUTH_DB --remote --env preview && opennextjs-cloudflare deploy --env preview",
     "db:migrate": "wrangler d1 migrations apply AUTH_DB --remote",
     "db:migrate:local": "wrangler d1 migrations apply AUTH_DB --local"
   },
