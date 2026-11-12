@@ -56,7 +56,7 @@ Automated tests establish browser API behavior and accessibility checks. They do
 
 In the publisher dashboard, verify the signed-in account is the owner's authorized publisher account, developer registration, contact verification, 2-Step Verification and existing item/draft status. Confirm the public homepage, privacy policy and help centre work. Upload the correct ZIP, select the current matching productivity/tools category, complete disclosures from the actual implementation, choose distribution and inspect every dashboard warning. Do not infer registration, mailbox delivery, trader status, submission or approval from repository files.
 
-After store approval and publication, put the exact item ID in `apps/web/src/lib/extension.ts` and enable the real store link. Prepare Edge submission separately against its current dashboard requirements.
+After store approval and publication, put the exact store URLs in `STORE` in `apps/site/app/[locale]/(site)/extension/page.tsx` and set `LISTED` to `true` there. Prepare Edge submission separately against its current dashboard requirements.
 
 ## Official requirements
 

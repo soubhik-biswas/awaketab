@@ -5,7 +5,7 @@ Every design and product decision taken during the Clear Night redesign, newest 
 ## Decided
 | # | Date | Decision | Why | Where |
 |---|---|---|---|---|
-| D-R01 | 26 Sep 2026 | Stay on Astro (no Next.js); zero hydration stays | The design is achievable in CSS; the JS budget has about 1 KB of headroom | docs/03 ADR-013 |
+| D-R01 | 26 Sep 2026 | Stay on Astro (no Next.js); zero hydration stays (superseded 30 Oct 2026 by the Next.js stack decision below) | The design is achievable in CSS; the JS budget has about 1 KB of headroom | docs/03 ADR-013 |
 | D-R02 | 26 Sep 2026 | Direction **Version D**: B's pill tabs, A's Ring clock, C's Bold clock and phone layout, plus a living Horizon face | Owner picked the pieces from A, B and C | canvas, DESIGN.md |
 | D-R03 | 26 Sep 2026 | Palette **"Clear Night"**: night ink ground, aqua lamp = awake, amber = paused, red = blocked | Owner rejected amber/beige. Blue-amber is colour-blind safe and far from Teams green | DESIGN.md §2 |
 | D-R04 | 26 Sep 2026 | Logo: ring with a gap and a lit bead; the bead shows the current state colour | Brand mark doubles as a status light | DESIGN.md §2.3 |
@@ -245,7 +245,7 @@ The owner delegated all open questions to the lead ("you take the decision"). Pr
 
 The final design handoff (`awaketab-handoff.zip`, spec now replaced by Volt in `docs/redesign/volt/`) replaces Clear Night everywhere: tool, faces, content site, Pro, extension, embed, kiosk, PiP, emails and brand.
 
-- **Stack (owner, revised 30 Oct 9:00 PM).** Build exactly as the handoff says: Next.js 16 App Router, Tailwind 4, shadcn/ui, TypeScript, next-themes, lucide-react 0.460, in a new `apps/site`. This supersedes the earlier Astro decision; Astro-specific entries below apply to `apps/web` only, which stays live until `apps/site` reaches parity. The zero-hydration contract (ADR-013) is retired with Astro; performance budgets are re-set for the Next app.
+- **Stack (owner, revised 30 Oct 9:00 PM).** Build exactly as the handoff says: Next.js 16 App Router, Tailwind 4, shadcn/ui, TypeScript, next-themes, lucide-react 0.460, in a new `apps/site`. This supersedes the earlier Astro decision; Astro-specific entries below applied to `apps/web` only, which was removed in November 2026. The zero-hydration contract (ADR-013) is retired with Astro; performance budgets are re-set for the Next app.
 - **Fidelity (owner).** Pixel-for-pixel match with the boards in light, dark and OLED, every state reachable. The board source (`prototype/*.dc.html`, `renderVals()`) is the measure; when docs and boards disagree, the boards win.
 - **Tokens.** Solar Green values sit on the existing `--at-*` names (the contract), with new roles added: `--at-primary` (orange, act), `--at-info`, `--at-ended`, `--at-link`, `--at-surface-2/3`, the soft fills, `--at-elev-2/3`, `--at-pop`, `--at-sheet`, `--at-field`, `--at-face-*`. `--at-accent` is the green lamp; shadcn `--primary` is now orange. Radii become 6 · 10 · 14 · 20 · 28 · 999; control heights 36 · 44 · 52 · 64; weights 300 to 800 allowed by the type tokens.
 - **Lamp colour choice retired.** Aqua, violet, mint and sky lamps (`data-accent`) are removed: green always means awake. Face studio (Pro) changes only the face accent and glow.

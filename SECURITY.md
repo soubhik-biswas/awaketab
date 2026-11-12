@@ -33,18 +33,18 @@ There is no paid bug bounty.
 
 | Area | Where it lives |
 | --- | --- |
-| The website and the tool at awaketab.pages.dev (and awaketab.com once that domain is attached) | `apps/web` |
-| Pages Functions: the licence API (`/api/license/activate`, `/validate`, `/deactivate`), the checkout webhook, embed configuration (`/api/embed/config`), and the event, rating and CSP report endpoints | `apps/web/functions` |
+| The website and the tool at awaketab.com (and the preview at play.awaketab.com) | `apps/site` |
+| The site's API routes: sign-in, the licence API (`/api/license/activate`, `/validate`, `/deactivate`), checkout and its webhook, embed configuration (`/api/embed/config`), and the event, rating, feedback and CSP report endpoints | `apps/site/app/api`, `apps/site/lib/server` |
 | The AwakeTab for Chrome extension | `apps/extension` |
 | The `@awaketab/wake` library and the `@awaketab/core` session engine, including licence token verification | `packages/wake`, `packages/core` |
-| The embeddable Cook Mode widget (`/embed.js` and `/embed/cook`) | `apps/web/src/tool/embed` |
+| The embeddable Cook Mode widget (`/embed.js` and `/embed/cook`) | `apps/site/lib/embed`, `apps/site/components/embed` |
 
 Examples of what matters most: a way to unlock Pro features without a valid licence token, reading or changing another person's licence activations, script injection through URL parameters or the embed, the extension gaining access it did not ask for, or the status pill claiming the screen is awake when it is not.
 
 ## Out of scope
 
 - Services AwakeTab relies on but does not run, such as Cloudflare, Polar (checkout) and the Chrome Web Store. Please report those to their owners.
-- The development licence signing key in `apps/web/.dev.vars.example`. It is public on purpose and is only trusted by sandbox builds.
+- The development licence signing key in `scripts/dev-license-key.json`. It is public on purpose and is only trusted by sandbox builds.
 - Purchases in the Polar sandbox. Checkout currently runs in test mode.
 - Missing security headers or best-practice findings without a way to exploit them.
 - Self-XSS, clickjacking on pages without sensitive actions, and attacks that need a compromised device or browser.

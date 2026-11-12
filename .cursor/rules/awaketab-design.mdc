@@ -1,6 +1,6 @@
 ---
-description: AwakeTab UI/UX design system (Clear Night, version D). Apply to any UI, styling, copy or layout change in apps/web, apps/extension or the embed.
-globs: apps/web/src/**/*.{astro,ts,tsx,css},apps/extension/**/*.{ts,tsx,html,css},DESIGN.md,PRODUCT.md
+description: AwakeTab UI/UX design system (Clear Night, version D). Apply to any UI, styling, copy or layout change in apps/site, apps/extension or the embed.
+globs: apps/site/**/*.{ts,tsx,css},apps/extension/**/*.{ts,tsx,html,css},DESIGN.md,PRODUCT.md
 alwaysApply: false
 ---
 
@@ -20,11 +20,10 @@ Start at `docs/redesign/DECISIONS.md`, the canvas links in `docs/redesign/CANVAS
   - animate transform, opacity, clip-path and stroke-dasharray only;
   - everything stops under `prefers-reduced-motion`.
 - **Markup and CSS:**
-  - Zero hydration; shadcn is build-time only.
   - System fonts on tool pages; use `--at-*` tokens and never hard-code colours.
   - Logical CSS properties only.
   - Real buttons and links; targets ≥ 44 px.
   - Inline panels before modals.
 - **Budgets:** tool JS ≤ 15 KB critical / 40 KB total gz (almost no headroom), CSS ≤ 20 KB gz, CLS 0, LCP ≤ 1.2 s.
 - **Copy:** plain, honest, no em dashes in new copy, and no ads on the awake screen.
-- **Before any push:** keep all gates green (`pnpm test`, `pnpm test:e2e`, `pnpm build && pnpm test:seo`). `main` auto-deploys.
+- **Before any push:** keep all gates green (`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm size`). `main` auto-deploys.

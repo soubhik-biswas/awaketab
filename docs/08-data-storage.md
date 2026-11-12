@@ -114,7 +114,7 @@ export interface ISession {
 ```
 
 ```ts
-// cook mode kitchen timers — session.modeState.cookTimers (apps/web/src/tool/ambient/logic.ts)
+// cook mode kitchen timers — session.modeState.cookTimers (the embed's copy: apps/site/lib/embed/timers.ts)
 export interface ICookTimer {
   id: string;               // 8-char random id
   name: string;             // ≤ 20 code points, NFC, control/format chars stripped; default 'Timer N'

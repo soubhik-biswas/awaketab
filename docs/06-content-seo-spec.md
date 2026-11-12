@@ -6,6 +6,8 @@ Status: v1.0 · 2026-09-07 · Owner: Soubhik
 
 **Related docs.** `00-conventions.md` §7 (routes, slugs, locales) · `05-frontend-spec.md` (tool embed, layout, `data-preset`/`data-mode`) · `07-i18n.md` (translated slugs, string files, translation workflow) · `09-monetization-impl.md` (ad slots on content pages, gates G1–G4) · `13-testing-strategy.md` (SEO checks in CI) · `14-devops.md` (build, IndexNow key, Search Console) · `awaketab-blueprint.md` §02, §04, §08.
 
+> **Implementation note.** This spec was first built in the Astro site (`apps/web`), removed in November 2026; the live site is Next.js in `apps/site` on Cloudflare Workers (`03-architecture.md` ADR-015). Paths under `apps/web` or its `src/`, `.astro` components, Pages Functions and `pnpm -F web` commands below describe that old implementation; the behaviour, identifiers and copy they specify still apply. Content now lives in `apps/site/content` with its schema in `apps/site/content-collections.ts`; metadata, JSON-LD and sitemaps come from `apps/site/lib/seo.ts`, `apps/site/app/sitemap.ts` and `apps/site/app/robots.ts`.
+
 ---
 
 ## 1. Information architecture

@@ -8,6 +8,8 @@ Related docs: `00-conventions.md` §7, §8, §9, §13.10 · `04-engine-spec.md` 
 
 **Clear Night (B8, 2026-09-27).** Two redesign decisions are built and folded into the sections below: **O-58**, the compact size is 320 × 104 (at 96 px the Start button and the pill could not both keep 44 px targets with 16 px padding), and **O-47**, the credit sits outside the widget, as a `nofollow` link in the host page's own HTML that the loader inserts after the iframe (§1, §11.2). Design boards: `EmbedWidget`, `EmbedCook*`, `EmbedCompactLight`, `EmbedFullDark`, `EmbedEdge*` and `EmbedShowcase*` (Embed, kiosk & library canvas, `redesign/CANVASES.md`).
 
+> **Implementation note.** This spec was first built in the Astro site (`apps/web`), removed in November 2026; the live site is Next.js in `apps/site` on Cloudflare Workers (`03-architecture.md` ADR-015). Paths under `apps/web` or its `src/`, `.astro` components, Pages Functions and `pnpm -F web` commands below describe that old implementation; the behaviour, identifiers and copy they specify still apply. The widget now lives in `apps/site/lib/embed`, `apps/site/components/embed`, `apps/site/app/[locale]/(bare)/embed/cook/page.tsx`, `apps/site/app/embed.js/route.ts` and `apps/site/app/api/embed/config/route.ts`.
+
 ---
 
 ## 1. Integration

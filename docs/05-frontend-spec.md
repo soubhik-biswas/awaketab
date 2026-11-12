@@ -6,6 +6,8 @@ Status: v1.2 · 2026-09-26 · Owner: Soubhik
 
 **Related docs.** `00-conventions.md` (identifiers) · `04-engine-spec.md` (lock state machine, session timing, `@awaketab/wake`, `@awaketab/core`) · `06-content-seo-spec.md` (page templates around the tool) · `07-i18n.md` (string keys, formatting) · `08-data-storage.md` (`ISettings`, `ISession`, `IStats` schemas) · `09-monetization-impl.md` (Pro card, sponsor card, licence UI) · `13-testing-strategy.md` (a11y and e2e coverage) · `awaketab-blueprint.md` §01–§06 (why the UI is honest first).
 
+> **Implementation note.** This spec was first built in the Astro site (`apps/web`), removed in November 2026; the live site is Next.js in `apps/site` on Cloudflare Workers (`03-architecture.md` ADR-015). Paths under `apps/web` or its `src/`, `.astro` components, Pages Functions and `pnpm -F web` commands below describe that old implementation; the behaviour, identifiers and copy they specify still apply. The tool is now a React component tree in `apps/site/components/tool`, the faces are in `apps/site/components/face` and the shared UI is shadcn/ui in `apps/site/components/ui`; the zero-hydration rules in §1.5 and §13 retired with the Astro site.
+
 ---
 
 ## 1. Design tokens

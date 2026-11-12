@@ -34,7 +34,7 @@
 
 **Explore:** [Demo](#see-it-in-action) · [Features](#features) · [Ways to use it](#choose-how-to-use-it) · [Quick start](#quick-start) · [Development](#development-commands) · [Deployment](#environments-and-deployment) · [Codebase](#architecture-and-repository-map) · [Help](#troubleshooting)
 
-The active Next.js website lives in `apps/site`. See [Next.js deployment](docs/DEPLOYMENT.md) for the production and `play` Worker pipelines; older Pages deployment instructions apply to `apps/web`.
+The Next.js website lives in `apps/site`. See [Next.js deployment](docs/DEPLOYMENT.md) for the production and preview Worker pipelines.
 
 ## See it in action
 
@@ -142,7 +142,7 @@ Install the resulting `.tgz` in your project. Inside this monorepo use `"@awaket
 
 ## Quick start
 
-Install **Git** and **Node.js 22**. Setup checks the Node version, prepares **pnpm 9.15.9** through Corepack when needed, installs dependencies and copies sandbox example settings without overwriting an existing file.
+Install **Git** and **Node.js 22**. Setup checks the Node version, prepares **pnpm 12.17.0** through Corepack when needed, installs dependencies and copies the site's example settings to `apps/site/.dev.vars` without overwriting an existing file.
 
 ```bash
 git clone https://github.com/soubhik-biswas/awaketab.git
@@ -159,7 +159,7 @@ With nvm, run `nvm install` and `nvm use` in the repository to select [`.nvmrc`]
 
 ## Development commands
 
-Run these from the **repository root**, unless a command changes directory. A workspace is a package inside this repository; `-F site` or `-F extension` selects one. `-F web` selects the previous Astro site.
+Run these from the **repository root**, unless a command changes directory. A workspace is a package inside this repository; `-F site` or `-F extension` selects one.
 
 | Command | Purpose |
 | --- | --- |
@@ -170,41 +170,39 @@ Run these from the **repository root**, unless a command changes directory. A wo
 | `pnpm -F site start` | Serve the built Next.js website locally. |
 | `pnpm format` | Format repository files. |
 | `pnpm lint` | Check formatting, unused code, source rules and styles. |
-| `pnpm typecheck` | Check TypeScript in the active workspaces. |
+| `pnpm typecheck` | Check TypeScript in every workspace. |
 | `pnpm test` | Run shared-package, extension and Next.js site tests. |
-| `pnpm test:seo` | Check the previous Astro site's built output; build `apps/web` first. |
-| `pnpm test:e2e --project=chromium` | Run browser journeys against a built site. |
 | `pnpm test:e2e:ext` | Run extension browser journeys. |
 | `pnpm size` | Check package and website bundle budgets after building. |
 | `pnpm lighthouse` | Run configured Lighthouse audits. |
 
-Use **`pnpm run setup`**, not `pnpm setup`: the latter is pnpm's own command. [`package.json`](package.json) and [`apps/site/package.json`](apps/site/package.json) are the active script reference.
+Use **`pnpm run setup`**, not `pnpm setup`: the latter is pnpm's own command. [`package.json`](package.json) and [`apps/site/package.json`](apps/site/package.json) are the script reference.
 
 ## Environments and deployment
 
-Cloudflare Workers builds the Next.js site; Cloudflare manages DNS. `main` targets `awaketab-site` and `play` targets the separate `awaketab-site-preview` Worker. See [Next.js deployment](docs/DEPLOYMENT.md) for the exact build commands and rollout checks.
+Cloudflare Workers runs the Next.js site; Cloudflare manages DNS. `main` deploys to `awaketab-site`, and the owner can deploy any branch to the separate `awaketab-site-preview` Worker with a manually run workflow. See [Next.js deployment](docs/DEPLOYMENT.md) for the exact build commands and rollout checks.
 
 | Environment | URL / source | Payments and service data |
 | --- | --- | --- |
 | Local | `http://localhost:3000`, working tree | Sandbox defaults; no live credentials needed for the timer |
-| **Testing** | **[play.awaketab.com](https://play.awaketab.com/)**, `play` | Polar sandbox; Preview licence storage and event dataset; ads off |
+| **Testing** | **[play.awaketab.com](https://play.awaketab.com/)**, any branch the owner deploys | Polar sandbox; Preview licence storage and event dataset; ads off |
 | **Production** | **[awaketab.com](https://awaketab.com/)**, `main` | Free tool live; purchases disabled; separate production storage and credentials |
 
 Testing sends **`X-Robots-Tag: noindex`**. This asks search engines not to index it; it does **not** restrict access. Canonical URLs intentionally remain on `awaketab.com`.
 
-1. Develop on `play`, or send a focused feature pull request into it.
-2. Run checks, push and verify the preview Worker at `play.awaketab.com`.
-3. Test affected flows using sandbox payments and Preview bindings.
-4. Promote through a **pull request from `play` to `main`** after review and passing checks.
-5. Verify production, then update `play` from `main` before the next change.
+1. Send a focused pull request into `main`; CI runs the checks on it.
+2. When a change needs a live check, the owner deploys its branch to `play.awaketab.com`.
+3. Test affected flows there using sandbox payments and Preview bindings.
+4. Merge into `main` after review and passing checks; `main` deploys to production.
+5. Verify production.
 
 The Workers build root is `/apps/site`, using Node.js 22 and OpenNext. There is no root `deploy` script. Production and preview have separate D1 databases, secrets and bindings. Preview maps `LICENSES` to `LICENSES_PREVIEW` and `EVENTS` to `awaketab_events_preview`; production has its own resources.
 
-The previous Pages build (`pnpm -F web build`, output `apps/web/dist`) is retained for rollback; its historical setup is in [DevOps and hosting](docs/14-devops.md). Keep production purchases disabled until real checkout links, signing keys and payment services are ready.
+Keep production purchases disabled until real checkout links, signing keys and payment services are ready.
 
 ## Architecture and repository map
 
-AwakeTab is a **monorepo**: applications and shared packages developed together. The active Next.js application lives in `apps/site`; the Astro application in `apps/web` is retained as the previous implementation. Clock faces, sounds, notes and other feature packs load when used.
+AwakeTab is a **monorepo**: applications and shared packages developed together. The Next.js application lives in `apps/site`. Clock faces, sounds, notes and other feature packs load when used.
 
 - **`@awaketab/wake`** requests a lock, handles release events and exposes seven lock states.
 - **`@awaketab/core`** manages sessions, durations, local storage, statistics, capabilities and licence verification.
@@ -214,66 +212,58 @@ AwakeTab is a **monorepo**: applications and shared packages developed together.
 ```text
 awaketab/
 ├── apps/
-│   ├── site/                Active Next.js routes, tool UI and Worker configuration
-│   ├── web/
-│   │   ├── src/pages/       Website routes and tool pages
-│   │   ├── src/content/     Guides and articles in eight languages
-│   │   ├── src/tool/        Timer UI, ambient views and feature packs
-│   │   ├── functions/       Cloudflare Pages API handlers
-│   │   ├── public/          Fonts, icons and generated assets
-│   │   └── test/            UI, browser, SEO and script tests
+│   ├── site/
+│   │   ├── app/             Next.js routes, tool pages and API route handlers
+│   │   ├── content/         Guides and articles in eight languages
+│   │   ├── components/      Tool UI, clock faces, site shell and shadcn/ui primitives
+│   │   ├── lib/             Server code, embed widget, SEO and shared helpers
+│   │   ├── public/          Fonts, icons and static assets
+│   │   └── wrangler.jsonc   Worker bindings for production and preview
 │   └── extension/           WXT extension, popup and background worker
 ├── packages/
 │   ├── wake/               Lock engine, fallback and adapters
 │   └── core/               Sessions, storage and shared logic
 ├── docs/                   Product and engineering references
-├── scripts/                Setup and repository tooling
+├── scripts/                Setup, licence keys, KV backups and lint helpers
 └── .github/                Workflows, issue forms and README media
 ```
 
-The active stack centres on Next.js, TypeScript, Tailwind CSS, Cloudflare Workers and WXT. [Architecture](docs/03-architecture.md) retains the earlier Astro design; [Next.js deployment](docs/DEPLOYMENT.md) covers current hosting, and [the engine specification](docs/04-engine-spec.md) describes state transitions.
+The stack centres on Next.js, TypeScript, Tailwind CSS, Cloudflare Workers and WXT. [Architecture](docs/03-architecture.md) describes the design; [Next.js deployment](docs/DEPLOYMENT.md) covers hosting, and [the engine specification](docs/04-engine-spec.md) describes state transitions.
 
 ## Configuration
 
-**Basic local tool:** run setup; no real secrets are required. Current Next.js settings are listed in [`apps/site/.env.example`](apps/site/.env.example). The following settings and sandbox build example belong to the previous `apps/web` implementation:
+**Basic local tool:** run setup; no real secrets are required. Every setting is listed with its purpose in [`apps/site/.env.example`](apps/site/.env.example). The ones that change what a build offers:
 
 | Setting | Effect |
 | --- | --- |
-| `PUBLIC_SITE_URL=https://awaketab.com` | Canonical URLs and generated links, including on Preview |
+| `PUBLIC_SITE_URL=https://awaketab.com` | Sign-in and checkout return links |
 | `PUBLIC_POLAR_SERVER=sandbox` | Sandbox checkout and development-key trust; production uses `production` |
-| `PUBLIC_PAYMENTS_ENABLED=0` | Remove checkout destinations and disable purchase controls |
-| `PUBLIC_ADS_ENABLED=0` | Disable the content-page ad loader |
-| `PUBLIC_SPONSOR_ENABLED=0` | Disable sponsor placements |
+| `NEXT_PUBLIC_DEPLOY_ENV=play` | Marks the preview build: robots.txt, page metadata and a header keep it out of search |
+| `NEXT_PUBLIC_PRO_ENABLED=0` | Keeps Pro (sync, sign-in, checkout) switched off |
+| `NEXT_PUBLIC_ADS_ENABLED=0` | Disables the content-page ad slots |
 
-For a sandbox web build with purchases closed, on macOS or Linux:
-
-```bash
-PUBLIC_POLAR_SERVER=sandbox PUBLIC_PAYMENTS_ENABLED=0 pnpm -F web build
-```
-
-Build switches come from the build process environment. `.dev.vars` configures the local Functions runtime; it does not automatically set all build variables. On Windows, use your shell's variable-setting syntax before the build command.
+`NEXT_PUBLIC_*` switches are read when the site is built, so set them in the build environment. Server settings and secrets reach the Worker at runtime; locally they come from `apps/site/.dev.vars`.
 
 <details>
 <summary><b>Server integrations and credentials</b></summary>
 
-Licence activation, webhooks and remote widget configuration need runtime bindings and secrets. Start from [`.dev.vars.example`](apps/web/.dev.vars.example), keeping real secrets in an ignored local file or Cloudflare settings. Never put private keys or access tokens in `PUBLIC_*` variables.
+Licence activation, webhooks and remote widget configuration need runtime bindings and secrets. Start from [`apps/site/.env.example`](apps/site/.env.example), keeping real secrets in an ignored local file or Cloudflare settings. Never put private keys or access tokens in `PUBLIC_*` or `NEXT_PUBLIC_*` variables.
 
-Keep Production and Preview credentials, signing keys, licence storage and analytics separate. The example development key is deliberately public; production must not trust it. Build checks enforce that boundary.
+Keep Production and Preview credentials, signing keys, licence storage and analytics separate. The development key in [`scripts/dev-license-key.json`](scripts/dev-license-key.json) is deliberately public; production must not trust it. Build checks enforce that boundary.
 
-References: [configuration and secrets](docs/03-architecture.md#7-environments-configuration-and-secrets), [payments and licences](docs/09-monetization-impl.md), and [hosting setup](docs/14-devops.md#2-cloudflare-setup-one-time).
+References: [configuration and secrets](docs/03-architecture.md#7-environments-configuration-and-secrets), [payments and licences](docs/09-monetization-impl.md), and [hosting setup](docs/DEPLOYMENT.md).
 
 </details>
 
 ## Testing and quality
 
-`pnpm test` covers shared packages, the extension and the active Next.js site. Pages Functions, Astro browser journeys and built-site SEO checks below belong to the retained `apps/web` implementation and need that workspace's own build.
+`pnpm test` covers shared packages, the scripts, the extension and the Next.js site.
 
 | Check | What it verifies |
 | --- | --- |
 | Unit and UI | Lock transitions, timers, storage, feature gates, parsers and UI behaviour with controlled inputs |
-| Pages Functions | API handlers with in-memory storage, event and payment-service fakes; no production calls |
-| Browser journeys | Real browser engines running user flows, with fixtures for permission and release scenarios; axe checks accessibility |
-| Built-site SEO | Metadata, internal URLs, served paths and other rules against `apps/web/dist` |
+| Route handlers | Site API handlers with in-memory storage, event and payment-service fakes; no production calls |
+| Extension journeys | The built extension in Chromium, with axe accessibility checks |
 | Size and Lighthouse | Bundle budgets and selected performance/accessibility audits |
 | Manual devices | Physical power and display behaviour that simulated locks cannot establish |
 
@@ -289,9 +279,9 @@ pnpm size
 pnpm test:e2e:ext
 ```
 
-For changes to `apps/web`, also run `pnpm -F web build`, `pnpm test:seo` and `pnpm test:e2e --project=chromium`. That browser suite starts `astro preview`; it does not verify deployed Cloudflare headers or live API bindings. A fake wake lock can test transitions, but cannot prove a phone stayed lit.
+The website has no browser end-to-end suite yet, so check visible changes by hand. A fake wake lock can test transitions, but cannot prove a phone stayed lit.
 
-CI checks `main`, `play` and pull requests. Extension Chromium journeys run on pull requests, and dependency auditing runs nightly. The previous site's browser matrix is paused until the Next.js site's own end-to-end suite returns. See [the testing strategy](docs/13-testing-strategy.md), [workflows](.github/workflows) and [how we tested](https://awaketab.com/learn/how-we-tested).
+CI checks `main` and pull requests. Extension Chromium journeys run on pull requests, and dependency auditing runs nightly. See [the testing strategy](docs/13-testing-strategy.md), [workflows](.github/workflows) and [how we tested](https://awaketab.com/learn/how-we-tested).
 
 ## Troubleshooting
 
@@ -299,25 +289,25 @@ CI checks `main`, `play` and pull requests. Extension Chromium journeys run on p
 | --- | --- |
 | Setup reports the wrong Node version | Select Node.js 22, then rerun setup. Other major versions are outside the declared range. |
 | `pnpm setup` does something unexpected | Run `pnpm run setup` for the project's script. |
-| Corepack is missing or cannot prepare pnpm | Follow setup's error message. Installing `pnpm@9.15.9` globally is an alternative. |
+| Corepack is missing or cannot prepare pnpm | Follow setup's error message. Installing `pnpm@12.17.0` globally is an alternative. |
 | The status changes when I switch tabs | This is the web lock lifecycle. Return to the visible tab; use the unpacked extension for background operation. |
 | Ready, blocked or fallback appears | Tap the main control and open **How do we know?** Check browser support, site settings and iframe permission. Use HTTPS or localhost. |
 | The device still sleeps or locks | Check device settings and the status explanation. Wake lock cannot override a deliberate lock, lid closure or every power policy. |
-| The local timer works but `/api/*` does not | Astro dev does not run Pages Functions. Use the API test harness or configure the Functions runtime in the hosting docs. |
-| Browser tests cannot find Chromium | Run `node scripts/setup.mjs --with-browsers`, build, then retry. |
+| The local timer works but `/api/*` does not | The route handlers need their secrets in `apps/site/.dev.vars` and the local bindings from `apps/site/wrangler.jsonc`. Fill in the values for the service you are testing, or use the route-handler tests. |
+| Extension tests cannot find Chromium | Run `node scripts/setup.mjs --with-browsers`, build, then retry. |
 | A production build fails a key or checkout check | Check production settings and the payment flag. Keep dummy keys out and purchases closed until checkout is configured. |
 
 More help: [browser support](https://awaketab.com/support-matrix), [device guides](https://awaketab.com/on), [existing issues](https://github.com/soubhik-biswas/awaketab/issues).
 
 ## Contributing
 
-A small documentation correction, accessibility improvement or reproducible bug is a useful first contribution. Read [Contributing](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md), then follow the current `play` promotion flow above.
+A small documentation correction, accessibility improvement or reproducible bug is a useful first contribution. Read [Contributing](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md), then open a pull request against `main`.
 
 - **Bug:** use the [issue forms](https://github.com/soubhik-biswas/awaketab/issues/new/choose). Include the URL, browser, OS, exact status text, reproduction steps and expected result. Leave out private data and licence keys.
 - **Feature:** describe the problem and who it helps before starting a large change.
 - **Pull request:** keep one topic, explain the change, list checks run, and include real screenshots for visible changes. Use plain-English commits without attribution trailers.
 
-For branch routing, follow [the current Play workflow](docs/14-devops.md#testing-changes-on-play-before-production); the contribution guide covers formatting and review rules.
+The contribution guide covers branches, formatting and review rules.
 
 ## Project status and roadmap
 
@@ -340,8 +330,8 @@ This is a snapshot, not a delivery promise. Follow [open issues](https://github.
 | [Frontend](docs/05-frontend-spec.md) · [Design](DESIGN.md) | UI contracts, accessibility and design system |
 | [Data and storage](docs/08-data-storage.md) | Local and server persistence |
 | [Extension](docs/10-extension-spec.md) · [Embed](docs/11-embed-spec.md) · [Library](packages/wake/README.md) | Integration references |
-| [Next.js deployment](docs/DEPLOYMENT.md) | Current Worker branches, domains, commands and preview isolation |
-| [Testing](docs/13-testing-strategy.md) · [DevOps](docs/14-devops.md) | Test strategy and historical Pages operations, backups and recovery |
+| [Next.js deployment](docs/DEPLOYMENT.md) | Worker environments, domains, commands and preview isolation |
+| [Testing](docs/13-testing-strategy.md) · [DevOps](docs/14-devops.md) | Test strategy, operations, backups and recovery |
 
 ## Support, security and licence
 

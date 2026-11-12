@@ -6,7 +6,7 @@ This guide covers setup, how to send a change, the house rules and where the doc
 
 ## Set up
 
-You need Node.js 22 and pnpm 9.15.9. The setup script checks both and does the rest:
+You need Node.js 22 and pnpm 12.17.0. The setup script checks both and does the rest:
 
 ```bash
 git clone https://github.com/soubhik-biswas/awaketab.git
@@ -15,9 +15,9 @@ node scripts/setup.mjs            # or, once pnpm is installed: pnpm run setup
 pnpm dev                          # http://localhost:3000
 ```
 
-The script checks for Node.js 22 and tells you how to switch with nvm or fnm if needed. It enables pnpm 9.15.9 through Corepack, runs `pnpm install` and creates `apps/web/.dev.vars` from `apps/web/.dev.vars.example` (an existing file is never overwritten). Add `--with-browsers` to also install Playwright Chromium for the end-to-end tests, or `--dry-run` to see what it would do.
+The script checks for Node.js 22 and tells you how to switch with nvm or fnm if needed. It enables pnpm 12.17.0 through Corepack, runs `pnpm install` and creates `apps/site/.dev.vars` from `apps/site/.env.example` (an existing file is never overwritten). Add `--with-browsers` to also install Playwright Chromium for the extension's end-to-end tests, or `--dry-run` to see what it would do.
 
-The active website is `apps/site`; its service settings are in [`apps/site/.env.example`](apps/site/.env.example). Site-specific Astro paths and zero-hydration rules below describe the retained `apps/web` implementation. See [Next.js deployment](docs/DEPLOYMENT.md) for current hosting and branch settings.
+The website is `apps/site`; its service settings are in [`apps/site/.env.example`](apps/site/.env.example). See [Next.js deployment](docs/DEPLOYMENT.md) for hosting and branch settings.
 
 Use `pnpm run setup`, not `pnpm setup`. `pnpm setup` is a built-in pnpm command that configures `PNPM_HOME`, and it wins over the package script.
 
@@ -25,22 +25,20 @@ Useful commands:
 
 | Command                 | What it does                                                          |
 | ----------------------- | --------------------------------------------------------------------- |
-| `pnpm dev`              | Next.js dev server for the active website and tool                    |
+| `pnpm dev`              | Next.js dev server for the website and tool                           |
 | `pnpm -F extension dev` | The Chrome extension in development mode (WXT)                        |
 | `pnpm format`           | Prettier over the repository                                          |
 | `pnpm lint`             | Comment rule, Prettier check, Knip, ESLint and Stylelint              |
 | `pnpm knip`             | Unused files, exports and dependencies (Knip, `knip.json`)            |
-| `pnpm typecheck`        | TypeScript in active workspaces                                      |
+| `pnpm typecheck`        | TypeScript in every workspace                                         |
 | `pnpm test`             | Shared-package, extension and Next.js site tests (Vitest)             |
 | `pnpm build`            | Builds every package, the site and the extension                      |
-| `pnpm test:seo`         | Checks the previous Astro build (build `apps/web` first)              |
 | `pnpm size`             | Bundle size budgets                                                   |
-| `pnpm test:e2e`         | Playwright end-to-end tests for the site (needs a build and Chromium) |
 | `pnpm test:e2e:ext`     | Playwright tests for the extension                                    |
 
 ## Branches and pull requests
 
-- Use `play` for testing and `main` for production. Contributions target `play`; the owner promotes tested changes through a PR from `play` to `main`. Use descriptive branches in your fork.
+- Contributions target `main`, which is production. Use descriptive branches in your fork. When a change needs checking on a live deployment first, the owner deploys its branch to the preview at play.awaketab.com.
 - `main` deploys the website automatically, so it only takes changes through pull requests.
 - Only `soubhik-biswas` may approve an issue by applying `approved`. Link approved work in your PR using `Closes #123` or `Tracks: #123`.
 - Keep a pull request to one topic. Fill in the template: what changed, why, and how you checked it. See the [task lifecycle guide](.github/COMMUNITY_WORKFLOW.md).
@@ -51,7 +49,7 @@ Useful commands:
 
 **Commits.** Use [Conventional Commits](https://www.conventionalcommits.org/) in plain English that a new teammate understands: `fix: keep the pill paused while the tab is hidden`, `docs: explain the embed credit line`. Describe the change itself. Do not use internal ticket or decision codes in commit messages, branch names, code or docs you add. Do not add AI attribution lines (no "Co-Authored-By" for tools, no "Generated with" footers).
 
-**Formatting.** Run `pnpm format` before every commit. Prettier uses 120 columns. Astro templates are excluded because their whitespace is page text.
+**Formatting.** Run `pnpm format` before every commit. Prettier uses 120 columns.
 
 **Comments.** Only a short `//` line where the reason is not obvious. No block comments, JSDoc, or HTML and CSS comments (tool directives such as `eslint-disable` are fine). `pnpm lint` runs `scripts/comments.mjs` to check this, and `node scripts/comments.mjs --fix` strips them.
 
@@ -60,13 +58,13 @@ Useful commands:
 **Tests.**
 
 - Before every commit: `pnpm lint`, `pnpm typecheck` and `pnpm test`.
-- Before pushing: `pnpm build` and `pnpm size`; changes to the previous Astro site also need `pnpm -F web build` followed by `pnpm test:seo`.
-- Extension Chromium end-to-end tests run in CI on every pull request; nightly runs dependency auditing. The previous site's browser matrix is paused until the Next.js site's own end-to-end suite returns. For changes to `apps/web`, run `pnpm -F web build` and `pnpm test:e2e --project=chromium` locally.
+- Before pushing: `pnpm build` and `pnpm size`.
+- Extension Chromium end-to-end tests (`pnpm test:e2e:ext`) run in CI on every pull request; nightly runs dependency auditing. The website has no browser end-to-end suite yet, so check visible changes by hand.
 
 **Design.** AwakeTab has one design system, Clear Night. Read [PRODUCT.md](PRODUCT.md) and [DESIGN.md](DESIGN.md) before touching anything visible.
 
-- Use the `--at-*` tokens from `apps/web/src/styles/tokens.css` for colour, type, spacing, radius and size. Never add raw values.
-- Reuse the shell components in `apps/web/src/components/shell/` (header, footer, status pill, buttons, logo).
+- Use the design tokens in `apps/site/app/globals.css` (through their Tailwind names) for colour, type, spacing, radius and size; the extension uses the `--at-*` tokens in `apps/extension/src/styles/tokens.css`. Never add raw values.
+- Reuse the shared components in `apps/site/components/site/` (header, footer, page shell) and `apps/site/components/ui/` (shadcn/ui primitives such as buttons).
 - Every screen works in light and dark, from 320 px phones to large desktops, and every animation stops under `prefers-reduced-motion`.
 - Amber always means paused and red always means blocked.
 
@@ -77,8 +75,7 @@ Useful commands:
 - routes and slugs;
 - ad placement rules;
 - performance budgets;
-- the `--at-*` tokens;
-- zero hydration on tool pages.
+- the `--at-*` tokens.
 
 `CLAUDE.md` lists where each one is specified. Update `docs/00-conventions.md` first for any identifier.
 
