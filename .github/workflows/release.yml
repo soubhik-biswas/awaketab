@@ -1,10 +1,10 @@
 name: Release
 
-# docs/12 §7, docs/14 §6. On every push to main:
+# docs/12 §7. On every push to main:
 #   1. changesets/action opens (or updates) a "version packages" PR while changesets are pending;
 #   2. once none are pending AND the repository variable NPM_PUBLISH_ENABLED is 'true', the publish job
 #      publishes @awaketab/wake if its package.json version is not on npm yet — `npm publish --provenance --access public` from this workflow (GitHub OIDC). Nothing else in
-#      the monorepo is published (web, extension and @awaketab/core are private / changeset-ignored).
+#      the monorepo is published (the site, the extension and @awaketab/core are private or changeset-ignored).
 # Auth: prefer npm trusted publishing (npmjs.com → @awaketab/wake → Settings → Trusted publisher →
 # GitHub Actions, repo SoubhikBiswas-gitHub/awaketab, workflow release.yml), which needs npm ≥ 11.5.1 and no secret.
 # Until that is configured, an automation token in the NPM_TOKEN secret works too (provenance still applies).
@@ -26,11 +26,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # LAUNCH-AUDIT N-03: the release gate for the web app and the extension. Fails (no waiver) while
-  # @awaketab/core has no production licence key or a production checkout link is still a placeholder. It does
-  # not block publish-wake: the npm library contains no licence code. It runs once the owner starts the launch
-  # (repository variable LAUNCH_READY=true) or on a manual run; before that it could only fail, and the
-  # production-mode build refuses the same problems on its own (scripts/check-keys.mts).
+  # The release gate for the site and the extension: fails while @awaketab/core has no production licence key
+  # or a production checkout link is still a placeholder (scripts/check-keys.mts). It does not block publish-wake,
+  # since the npm library has no licence code. It runs once the owner sets LAUNCH_READY=true, or on a manual run;
+  # before that it could only fail.
   launch-guard:
     if: vars.LAUNCH_READY == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
