@@ -1,9 +1,8 @@
-const LOCAL = 'http://127.0.0.1:4321';
+const LOCAL = 'http://localhost:4173';
 const base = (process.env.LHCI_BASE_URL || LOCAL).replace(/\/+$/u, '');
 const remote = base !== LOCAL;
-// Play and every *.pages.dev host send `X-Robots-Tag: noindex` (docs/14 §1).
-const noindexHost =
-  remote && (new URL(base).hostname === 'play.awaketab.com' || /\.pages\.dev$/u.test(new URL(base).hostname));
+// The preview Worker sends `X-Robots-Tag: noindex` and disallows every crawler (docs/DEPLOYMENT.md).
+const noindexHost = remote && new URL(base).hostname === 'play.awaketab.com';
 
 // docs/19 §E: /, /30m, one /for page, one /guides page, /es/.
 const PATHS = ['/', '/30m', '/for/cooking', '/guides/lock-screen-vs-sleep', '/es/'];
@@ -28,8 +27,8 @@ module.exports = {
       ...(remote
         ? {}
         : {
-            startServerCommand: 'pnpm --filter web preview',
-            startServerReadyPattern: 'Local',
+            startServerCommand: 'pnpm --filter site start --hostname localhost --port 4173',
+            startServerReadyPattern: 'Ready',
             startServerReadyTimeout: 60000,
           }),
       url: PATHS.map((p) => `${base}${p}`),
@@ -45,10 +44,6 @@ module.exports = {
         },
         // Headless in CI and locally; --no-sandbox is required on GitHub's Ubuntu runners.
         chromeFlags: '--headless=new --no-sandbox',
-        // `astro preview` serves no Pages Functions, so the first-party beacon (/api/e) would 404 and fail
-        // `errors-in-console` locally only. Blocked requests log ERR_BLOCKED_BY_CLIENT.Inspector, which that
-        // audit ignores by default. On a deployed preview the real functions answer and nothing is blocked.
-        ...(remote ? {} : { blockedUrlPatterns: ['*/api/*'] }),
       },
     },
     assert: {
@@ -70,7 +65,7 @@ module.exports = {
           : [
               {
                 // Indexable URLs: SEO 100.
-                matchingUrlPattern: '^(?!.*/es/$).*$',
+                matchingUrlPattern: '^(?!.*/es/?$).*$',
                 assertions: {
                   'categories:seo': ['error', { minScore: 1 }],
                 },
@@ -78,7 +73,7 @@ module.exports = {
             ]),
         {
           // /es/ (noindex until native review) and every URL on a noindex host: every SEO audit except is-crawlable.
-          matchingUrlPattern: noindexHost ? '.*' : '/es/$',
+          matchingUrlPattern: noindexHost ? '.*' : '/es/?$',
           assertions: Object.fromEntries(SEO_AUDITS_EXCEPT_CRAWLABLE.map((id) => [id, ['error', { minScore: 1 }]])),
         },
         {
