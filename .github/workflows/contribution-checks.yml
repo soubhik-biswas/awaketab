@@ -3,7 +3,7 @@ name: Contribution checks
 on:
   pull_request:
   push:
-    branches: [main, play]
+    branches: [main]
 
 permissions:
   contents: read

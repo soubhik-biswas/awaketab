@@ -7,8 +7,8 @@
 1. A contributor submits a bug, feature or documentation issue.
 2. Only `soubhik-biswas` may apply `approved`. The workflow verifies who last added that label using issue-event history. Approval from another account is removed and creates no task.
 3. The approved issue is added to the board as **Approved**. The owner can use `ready`, `in-progress`, `blocked`, `needs-information` or `not-planned` to change its stage.
-4. Contributors open focused PRs against `play`, linking approved issues using `Closes #123` or `Tracks: #123`. A draft means **In Progress**, a ready PR means **In review**, and owner-requested revisions mean **Changes requested**.
-5. A PR merged into `play` means **In testing**. The owner promotes tested changes from `play` to `main`; the promotion PR must list every delivered issue. Production merge means **Merged**.
+4. Contributors open focused PRs against `main`, linking approved issues using `Closes #123` or `Tracks: #123`. A draft means **In Progress**, a ready PR means **In review**, and owner-requested revisions mean **Changes requested**.
+5. Before merging, the owner can deploy any branch to the preview at play.awaketab.com with a manually run workflow and set **In testing** by hand while it is checked there. A PR merged into `main` means **Merged**.
 6. A successful production deployment for that exact merge revision means **Deployed**. Preview deployment, skipped deployment and passing validation alone cannot complete a task. Failure means **Deployment failed**.
 
 The complete board vocabulary is Inbox, Needs information, Approved, Ready, In Progress, In review, Changes requested, Blocked, In testing, Merged, Deploying, Deployment failed, Deployed and Not planned. Owners may use Inbox for triage; unapproved issues are not automatically added to the board. Removing `approved` returns an existing task to Inbox and stops subsequent automatic updates until the owner approves it again.
