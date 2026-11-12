@@ -7,33 +7,94 @@ labels:
 body:
   - type: markdown
     attributes:
-      value: Please search existing issues first. Use examples and remove passwords, tokens and personal data. Only
-        the repository owner can approve work.
+      value: Thanks for taking the time to report this. Please search existing issues first, and remove passwords,
+        licence keys, tokens and personal data. Questions are best asked in
+        [Discussions](https://github.com/soubhik-biswas/awaketab/discussions/categories/q-a), and security problems
+        must be [reported privately](https://github.com/soubhik-biswas/awaketab/security/advisories/new). Only the
+        repository owner can approve work.
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where did it happen?
+      options:
+        - Website (awaketab.com)
+        - Chrome or Edge extension
+        - Website widget (embed)
+        - npm library (@awaketab/wake or @awaketab/core)
+        - Not sure
+    validations:
+      required: true
   - type: input
     id: page
     attributes:
-      label: Page or component
-      description: 'Include the URL, branch or component. Production: https://awaketab.com; testing: https://play.awaketab.com.'
+      label: Page, version or component
+      description: The URL, the extension version, or the library version and function.
+      placeholder: https://awaketab.com/30m
     validations:
-      required: true
-  - type: textarea
-    id: problem
+      required: false
+  - type: dropdown
+    id: pill
     attributes:
-      label: What went wrong?
-      description: Describe the observed result and the expected behavior.
+      label: What did the status pill show?
+      description: The exact text helps most. Pick the closest one, or "Other or none" and write it below.
+      options:
+        - Ready
+        - Starting…
+        - Screen awake
+        - Paused — tab hidden
+        - Blocked — here's the fix
+        - Tap to use the fallback
+        - Awake via video fallback
+        - System awake (extension)
+        - Other or none
+        - Not applicable (library)
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      label: How can we reproduce it?
-      description: Give numbered steps and a minimal example.
+      label: Steps to reproduce
+      description: Numbered steps from opening the page or extension, with a minimal example if you can.
+      placeholder: |
+        1. Open https://awaketab.com/30m
+        2. Switch to another tab for a minute
+        3. Come back
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+      description: Include any other text on screen, and whether the screen actually dimmed or locked.
     validations:
       required: true
   - type: input
-    id: environment
+    id: browser
     attributes:
-      label: Browser, device and operating system
+      label: Browser and version
+      description: Find it in the browser's About page.
+      placeholder: Chrome 131.0.6778.86
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system and version
+      placeholder: Windows 11 24H2, macOS 15.1, iOS 18.1, Android 15
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      description: The model, and whether it was on battery, plugged in or in a power-saving mode.
+      placeholder: iPad Air (5th generation), on battery, Low Power Mode on
     validations:
       required: true
   - type: dropdown
@@ -51,7 +112,7 @@ body:
     id: evidence
     attributes:
       label: Evidence
-      description: Screenshots, redacted logs or a short recording.
+      description: Screenshots, redacted console logs or a short recording.
     validations:
       required: false
   - type: checkboxes
@@ -61,5 +122,6 @@ body:
       options:
         - label: I searched existing issues and removed sensitive information.
           required: true
-    validations:
-      required: false
+        - label: I checked the [browser support matrix](https://awaketab.com/learn/browser-support-matrix) and
+            [honest limits](https://awaketab.com/learn/honest-limits).
+          required: false
