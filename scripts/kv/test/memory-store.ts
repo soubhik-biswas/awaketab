@@ -1,7 +1,5 @@
-// In-memory KV for the ops-script tests. Not the functions harness `MemoryKv`
-// (apps/web/test/functions/harness.ts): that fakes the Workers *binding* and keeps neither metadata nor
-// expirations in its listing, while the ops scripts talk to the REST-shaped `IKvStore` and must round-trip
-// both. Enforces the same KV write rule that matters here (absolute expiration ≥ 60 s ahead).
+// In-memory REST-shaped KV for the ops-script tests: it keeps metadata and expirations, and refuses writes that
+// expire less than 60 s ahead, as KV does.
 import type { IKvRecord } from '../lib/format.ts';
 import type { IKvListPage, IKvStore } from '../lib/store.ts';
 

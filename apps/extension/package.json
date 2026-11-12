@@ -8,7 +8,7 @@
     "dev": "wxt",
     "build": "wxt build",
     "build:test": "AT_EXT_TEST=1 wxt build",
-    "zip": "PUBLIC_POLAR_SERVER=production pnpm exec tsx ../web/scripts/check-keys.mts && PUBLIC_POLAR_SERVER=production wxt build && PUBLIC_POLAR_SERVER=production pnpm exec tsx ../web/scripts/check-keys.mts --dist .output/chrome-mv3 && node scripts/zip.mjs",
+    "zip": "PUBLIC_POLAR_SERVER=production pnpm exec tsx ../../scripts/check-keys.mts && PUBLIC_POLAR_SERVER=production wxt build && PUBLIC_POLAR_SERVER=production pnpm exec tsx ../../scripts/check-keys.mts --dist .output/chrome-mv3 && node scripts/zip.mjs",
     "zip:check": "node scripts/reproducible.mjs",
     "publish:package": "node --import tsx scripts/publish-package.mts",
     "typecheck": "wxt prepare && tsc --noEmit"

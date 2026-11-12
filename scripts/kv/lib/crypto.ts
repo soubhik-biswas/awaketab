@@ -3,8 +3,7 @@
 // 1. Backup envelope (BACKUP_ENCRYPTION_KEY): MAGIC (8 bytes) ‖ IV (12) ‖ ciphertext+tag, MAGIC as AAD.
 //    Binary, written as `*.jsonl.enc`. A backup therefore never exists as plain text outside memory.
 // 2. `keyEnc` on `lic:*` records (LICENSE_KEY_ENC_KEY): base64(IV (12) ‖ ciphertext+tag). This mirrors
-//    `encryptUtf8` / `decryptUtf8` in apps/web/functions/_lib/license.ts byte for byte; the interop test in
-//    apps/web/functions/_lib/kv-ops-interop.test.ts keeps the two in step.
+//    `encryptUtf8` / `decryptUtf8` in apps/site/lib/server/license.ts byte for byte (scripts/kv/test/interop.test.ts).
 
 const MAGIC = new TextEncoder().encode('ATKVBK01');
 const IV_BYTES = 12;

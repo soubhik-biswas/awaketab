@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  // Tests sign tokens with the dev pair (apps/web/.dev.vars.example), so they build like a sandbox bundle.
+  // Tests sign tokens with the dev pair (scripts/dev-license-key.json), so they build like a sandbox bundle.
   define: {
     __AT_POLAR_SERVER__: JSON.stringify('sandbox'),
     __AT_LICENSE_DEV_KEY__: 'true',
@@ -16,7 +16,7 @@ export default defineConfig({
     },
   },
   test: {
-    include: ['packages/*/test/**/*.test.ts', 'apps/extension/test/**/*.test.ts'],
+    include: ['packages/*/test/**/*.test.ts', 'apps/extension/test/**/*.test.ts', 'scripts/**/*.test.ts'],
     environment: 'happy-dom',
     setupFiles: ['./vitest.setup.ts'],
     environmentMatchGlobs: [['packages/wake/test/ssr.test.ts', 'node']],

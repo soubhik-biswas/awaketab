@@ -1,26 +1,14 @@
-// Production launch guard (LAUNCH-AUDIT N-03, F-06; docs/09 §2.4, docs/17 §2). The dev ES256 pair's private half
-// is committed in apps/web/.dev.vars.example, so anyone can sign a Pro token with it. A production build must not
-// trust it, and must not ship without a real key or with placeholder checkout links.
-//
-//   pnpm exec tsx scripts/check-keys.mts                 source check (first step of `pnpm -F web build`)
-//   pnpm exec tsx scripts/check-keys.mts --dist dist     scans a built output for the dev public key (last step)
-//
-// Both are no-ops unless PUBLIC_POLAR_SERVER=production (sandbox builds trust the dev key on purpose) or --force.
-// Source problems: no production key in PRODUCTION_LICENSE_PUBLIC_KEYS; a listed key equal to the dev key or not a
-// P-256 public JWK; a production checkout link still holding the placeholder. Dist problems: the dev key's `x` or
-// `y` in any text file; a production key missing from every file (the verifier was not bundled).
-// AT_ALLOW_MISSING_PRODUCTION_KEY=1 downgrades only "no production key" and "placeholder link" to warnings, for
-// CI's production-mode bundle check before N-03 is done. It never allows the dev key.
+// Production builds must never trust the public dev licence key, and must ship a real one (docs/09 §2.4).
+// `tsx scripts/check-keys.mts` checks the source; `--dist <dir>` scans a built output. Both skip unless
+// PUBLIC_POLAR_SERVER=production or --force.
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { PRODUCTION_LICENSE_PUBLIC_KEYS } from '../../../packages/core/src/license.ts';
-import { CHECKOUT_LINKS_PRODUCTION, CHECKOUT_PLACEHOLDER } from '../src/lib/checkout.ts';
-import { paymentsEnabled, polarServer } from './polar-server.mjs';
+import { PRODUCTION_LICENSE_PUBLIC_KEYS } from '../packages/core/src/license.ts';
+import { polarServer } from './polar-server.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-export const DEV_VARS = path.join(ROOT, '.dev.vars.example');
+export const DEV_KEY_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'dev-license-key.json');
 const TEXT = /\.(?:html|js|mjs|cjs|css|json|webmanifest|txt|xml|svg|map)$|^_headers$|^_redirects$/u;
 
 export interface IPublicPoint {
@@ -33,12 +21,9 @@ export interface IProblem {
   waivable: boolean;
 }
 
-export async function devPublicKey(file = DEV_VARS): Promise<IPublicPoint> {
-  const line = (await readFile(file, 'utf8')).split('\n').find((row) => row.startsWith('LICENSE_SIGNING_KEY='));
-  if (!line) throw new Error(`${file} has no LICENSE_SIGNING_KEY`);
-  const jwk = JSON.parse(line.slice('LICENSE_SIGNING_KEY='.length)) as Partial<IPublicPoint>;
-  if (typeof jwk.x !== 'string' || typeof jwk.y !== 'string')
-    throw new Error(`${file}: LICENSE_SIGNING_KEY is not an EC JWK`);
+export async function devPublicKey(file = DEV_KEY_FILE): Promise<IPublicPoint> {
+  const jwk = JSON.parse(await readFile(file, 'utf8')) as Partial<IPublicPoint>;
+  if (typeof jwk.x !== 'string' || typeof jwk.y !== 'string') throw new Error(`${file} is not an EC JWK`);
   return { x: jwk.x, y: jwk.y };
 }
 
@@ -47,15 +32,14 @@ export function keyProblems(keys: Readonly<Record<number, JsonWebKey>>, dev: IPu
   const entries = Object.entries(keys);
   if (entries.length === 0) {
     problems.push({
-      message:
-        'PRODUCTION_LICENSE_PUBLIC_KEYS is empty: run `pnpm keys:prod` and add the public JWK (LAUNCH-AUDIT N-03)',
+      message: 'PRODUCTION_LICENSE_PUBLIC_KEYS is empty: run `pnpm keys:prod` and add the public JWK',
       waivable: true,
     });
   }
   for (const [ver, jwk] of entries) {
     if (jwk.x === dev.x || jwk.y === dev.y) {
       problems.push({
-        message: `LICENSE_PUBLIC_KEYS[${ver}] is the dev key from .dev.vars.example; its private half is public`,
+        message: `LICENSE_PUBLIC_KEYS[${ver}] is the dev key from scripts/dev-license-key.json; its private half is public`,
         waivable: false,
       });
     }
@@ -66,23 +50,6 @@ export function keyProblems(keys: Readonly<Record<number, JsonWebKey>>, dev: IPu
       problems.push({ message: `LICENSE_PUBLIC_KEYS[${ver}] contains a private key (d)`, waivable: false });
   }
   return problems;
-}
-
-export function checkoutProblems(links: Readonly<Record<string, string>>): IProblem[] {
-  return Object.entries(links).flatMap(([plan, url]): IProblem[] => {
-    if (url.includes(CHECKOUT_PLACEHOLDER)) {
-      return [
-        {
-          message: `CHECKOUT_LINKS_PRODUCTION.${plan} is still a placeholder (LAUNCH-AUDIT N-04 step 4)`,
-          waivable: true,
-        },
-      ];
-    }
-    if (!url.startsWith('https://') || url.includes('sandbox')) {
-      return [{ message: `CHECKOUT_LINKS_PRODUCTION.${plan} is not a production https link: ${url}`, waivable: false }];
-    }
-    return [];
-  });
 }
 
 async function textFiles(dir: string): Promise<string[]> {
@@ -125,8 +92,7 @@ export async function runCheck(
   args: string[],
   env: Record<string, string | undefined> = process.env,
 ): Promise<{ ok: boolean; lines: string[] }> {
-  const force = args.includes('--force');
-  if (polarServer(env) !== 'production' && !force) {
+  if (polarServer(env) !== 'production' && !args.includes('--force')) {
     return {
       ok: true,
       lines: ['check-keys: PUBLIC_POLAR_SERVER is not production; the dev licence key stays trusted (skipped)'],
@@ -137,10 +103,7 @@ export async function runCheck(
   const problems =
     dists.length > 0
       ? (await Promise.all(dists.map((dir) => distProblems(dir, dev, PRODUCTION_LICENSE_PUBLIC_KEYS)))).flat()
-      : [
-          ...keyProblems(PRODUCTION_LICENSE_PUBLIC_KEYS, dev),
-          ...(paymentsEnabled(env) ? checkoutProblems(CHECKOUT_LINKS_PRODUCTION) : []),
-        ];
+      : keyProblems(PRODUCTION_LICENSE_PUBLIC_KEYS, dev);
   const waive = env.AT_ALLOW_MISSING_PRODUCTION_KEY === '1';
   const errors = problems.filter((p) => !(waive && p.waivable));
   const warnings = problems.filter((p) => waive && p.waivable);

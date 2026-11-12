@@ -51,7 +51,7 @@ describe('manifest (the store listing permissions)', () => {
   });
 
   it('takes the minimum Chrome version from support-matrix.json', async () => {
-    const matrix = JSON.parse(await readFile(path.resolve('apps/web/src/data/support-matrix.json'), 'utf8')) as {
+    const matrix = JSON.parse(await readFile(path.resolve('apps/extension/data/support-matrix.json'), 'utf8')) as {
       extension: { minimumChromeVersion: string };
     };
     expect(manifest.minimum_chrome_version).toBe(matrix.extension.minimumChromeVersion);

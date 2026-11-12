@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'wxt';
-import { polarDefines } from '../web/scripts/polar-server.mjs';
+import { polarDefines } from '../../scripts/polar-server.mjs';
 import { awaketabExtension, localeMessages } from './scripts/i18n.mjs';
 
 const TEST_BUILD = process.env.AT_EXT_TEST === '1';
@@ -9,7 +9,7 @@ const here = (relative: string) => fileURLToPath(new URL(relative, import.meta.u
 const { version } = JSON.parse(readFileSync(here('package.json'), 'utf8')) as { version: string };
 
 // The minimum version comes from the one support data file.
-const matrix = JSON.parse(readFileSync(here('../web/src/data/support-matrix.json'), 'utf8')) as {
+const matrix = JSON.parse(readFileSync(here('data/support-matrix.json'), 'utf8')) as {
   extension: { minimumChromeVersion: string };
 };
 

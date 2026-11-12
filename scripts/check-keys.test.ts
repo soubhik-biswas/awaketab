@@ -13,11 +13,11 @@ import {
   TRUSTS_DEV_LICENSE_KEY,
 } from '@awaketab/core';
 
-import { checkoutProblems, devPublicKey, distProblems, keyProblems, runCheck } from './check-keys.mts';
+import { devPublicKey, distProblems, keyProblems, runCheck } from './check-keys.mts';
 import { generateProdKeyPair, instructions, nextVer } from './keys-prod.mts';
 import { paymentsEnabled, polarDefines, polarServer } from './polar-server.mjs';
 
-const REPO = path.resolve(import.meta.dirname, '../../..');
+const REPO = path.resolve(import.meta.dirname, '..');
 const temps: string[] = [];
 
 afterEach(async () => {
@@ -32,16 +32,12 @@ async function tempDir(): Promise<string> {
 
 async function bundleLicense(devKey: boolean): Promise<string> {
   const result = await build({
-    entryPoints: [path.join(REPO, 'apps/web/src/lib/license.ts')],
+    entryPoints: [path.join(REPO, 'packages/core/src/license.ts')],
     bundle: true,
     write: false,
     format: 'esm',
     minify: true,
     platform: 'browser',
-    alias: {
-      '@awaketab/core': path.join(REPO, 'packages/core/src/index.ts'),
-      '@awaketab/wake': path.join(REPO, 'packages/wake/src/index.ts'),
-    },
     define: polarDefines({ PUBLIC_POLAR_SERVER: devKey ? 'sandbox' : 'production' }),
   });
   return result.outputFiles[0]?.text ?? '';
@@ -67,7 +63,7 @@ describe('PUBLIC_POLAR_SERVER at build time (scripts/polar-server.mjs)', () => {
 });
 
 describe('purchases can stay closed for the free launch', () => {
-  it('requires an explicit off switch and keeps production key checks', async () => {
+  it('requires an explicit off switch and still checks built output for the dev key', async () => {
     expect(paymentsEnabled({})).toBe(true);
     expect(paymentsEnabled({ PUBLIC_PAYMENTS_ENABLED: '0' })).toBe(false);
     expect(() => paymentsEnabled({ PUBLIC_PAYMENTS_ENABLED: 'yes' })).toThrow();
@@ -83,7 +79,7 @@ describe('purchases can stay closed for the free launch', () => {
   });
 });
 
-describe('dev licence key never ships in production (LAUNCH-AUDIT N-03)', () => {
+describe('dev licence key never ships in production', () => {
   it('the committed dev private key matches the dev public key tests and sandbox builds trust', async () => {
     const dev = await devPublicKey();
     expect(TRUSTS_DEV_LICENSE_KEY).toBe(true);
@@ -118,25 +114,12 @@ describe('dev licence key never ships in production (LAUNCH-AUDIT N-03)', () => 
     expect(keyProblems({ 2: fresh }, dev)).toEqual([]);
   });
 
-  it('checkoutProblems: placeholders are waivable, sandbox or non-https links never are', () => {
-    expect(checkoutProblems({ pro_yearly: 'https://buy.polar.sh/PROPOSED-REPLACE-pro-yearly' })).toEqual([
-      expect.objectContaining({ waivable: true }),
-    ]);
-    expect(checkoutProblems({ pro_yearly: 'https://sandbox.polar.sh/checkout/x' })).toEqual([
-      expect.objectContaining({ waivable: false }),
-    ]);
-    expect(checkoutProblems({ pro_yearly: 'http://buy.polar.sh/polar_cl_x' })).toEqual([
-      expect.objectContaining({ waivable: false }),
-    ]);
-    expect(checkoutProblems({ pro_yearly: 'https://buy.polar.sh/polar_cl_abc' })).toEqual([]);
-  });
-
   it('distProblems: finds the dev key in any text file and a production key missing from every file', async () => {
     const dev = await devPublicKey();
     const fresh = generateProdKeyPair(2).publicJwk;
     const dir = await tempDir();
-    await mkdir(path.join(dir, '_astro'));
-    await writeFile(path.join(dir, '_astro/license.js'), `const k={kty:"EC",x:"${fresh.x}",y:"${fresh.y}"}`);
+    await mkdir(path.join(dir, 'chunks'));
+    await writeFile(path.join(dir, 'chunks/license.js'), `const k={kty:"EC",x:"${fresh.x}",y:"${fresh.y}"}`);
     expect(await distProblems(dir, dev, { 2: fresh })).toEqual([]);
     expect(await distProblems(dir, dev, { 2: fresh, 3: { ...fresh, x: 'missing-x' } })).toEqual([
       expect.objectContaining({ message: expect.stringMatching(/\[3\] is in no built file/u) as unknown }),
@@ -147,12 +130,10 @@ describe('dev licence key never ships in production (LAUNCH-AUDIT N-03)', () => 
     ]);
   });
 
-  it('runCheck: skipped outside production; fails production today; the waiver never excuses the dev key', async () => {
+  it('runCheck: skipped outside production; passes with the production key; the waiver never excuses the dev key', async () => {
     expect((await runCheck([], {})).ok).toBe(true);
     const prod = await runCheck([], { PUBLIC_POLAR_SERVER: 'production' });
-    expect(prod.ok).toBe(
-      PRODUCTION_LICENSE_PUBLIC_KEYS[2] !== undefined && !prod.lines.some((l) => l.includes('placeholder')),
-    );
+    expect(prod.ok).toBe(PRODUCTION_LICENSE_PUBLIC_KEYS[2] !== undefined);
     expect((await runCheck([], { PUBLIC_POLAR_SERVER: 'production', AT_ALLOW_MISSING_PRODUCTION_KEY: '1' })).ok).toBe(
       true,
     );

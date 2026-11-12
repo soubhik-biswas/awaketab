@@ -1,9 +1,4 @@
-// F-06 / docs/09 §1: `PUBLIC_POLAR_SERVER` (`sandbox` | `production`, default `sandbox`) is the one switch between
-// Polar sandbox and production. The same Cloudflare Pages variable is read twice:
-//   - at build time, here, from the process environment (Pages build variables; `.env` files are not read), and
-//     handed to the bundles through `define` — it picks CHECKOUT_LINKS (src/lib/checkout.ts) and whether the
-//     bundle trusts the dev licence key (`__AT_LICENSE_DEV_KEY__`, @awaketab/core);
-//   - at run time by the Pages Functions (`functions/_lib/polar.ts` picks the Polar API base from it).
+// PUBLIC_POLAR_SERVER (sandbox | production, default sandbox) picks Polar and whether a bundle trusts the dev licence key.
 
 export const POLAR_SERVERS = ['sandbox', 'production'];
 
