@@ -1,6 +1,5 @@
 node_modules/
 dist/
-.astro/
 .wxt/
 .output/
 coverage/
@@ -12,14 +11,7 @@ test-results/
 !.env.example
 *.log
 .DS_Store
-apps/web/.lighthouseci/
 .lighthouseci/
-apps/web/.build-lock
-apps/web/dist-*
-# Copied from packages/wake/dist at build (scripts/library.mjs)
-apps/web/public/library/
-# Built by scripts/embed-loader.mjs (the /embed/cook iframe app bundle)
-apps/web/public/embed/
 apps/extension/.output-test/
 apps/extension/.publish-package.lock
 # Output of pnpm kv:backup (encrypted, but never committed)

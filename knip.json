@@ -5,10 +5,7 @@
       "entry": ["scripts/*.mjs", "lighthouserc.cjs"],
       "project": ["*.{ts,mjs,cjs}", "scripts/**/*.mjs"],
       "vitest": {
-        "config": ["vitest.config.ts", "vitest.functions.config.ts", "vitest.seo.config.ts"]
-      },
-      "playwright": {
-        "config": ["playwright.config.ts"]
+        "config": ["vitest.config.ts"]
       }
     },
     "apps/extension": {
@@ -57,6 +54,5 @@
         "components/ui/*.tsx": ["exports", "types"]
       }
     }
-  },
-  "ignoreWorkspaces": ["apps/web"]
+  }
 }

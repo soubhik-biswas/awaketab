@@ -1,6 +1,4 @@
-apps/web/public/
 **/dist/
-**/.astro/
 **/.wxt/
 **/.output/
 **/.output-test/
@@ -19,8 +17,6 @@ docs/
 .claude/
 .cursor/
 .gstack/
-# Astro templates: formatting whitespace changes the rendered page text.
-*.astro
 **/next-env.d.ts
 apps/site/public/serwist/
 .impeccable/

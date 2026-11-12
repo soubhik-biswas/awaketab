@@ -139,8 +139,8 @@ function install() {
 }
 
 function copyDevVars() {
-  const from = path.join(ROOT, 'apps', 'web', '.dev.vars.example');
-  const to = path.join(ROOT, 'apps', 'web', '.dev.vars');
+  const from = path.join(ROOT, 'apps', 'site', '.env.example');
+  const to = path.join(ROOT, 'apps', 'site', '.dev.vars');
   const shown = path.relative(ROOT, to);
   step(`Local secrets file ${shown}`);
   if (existsSync(to)) {
@@ -157,11 +157,11 @@ function copyDevVars() {
   }
   // COPYFILE_EXCL makes the copy fail rather than overwrite a file created in the meantime.
   copyFileSync(from, to, constants.COPYFILE_EXCL);
-  log(`  created: ${shown} from the example (sandbox-only dummy values)`);
+  log(`  created: ${shown} from the example (fill in only the values you need)`);
 }
 
 function installBrowsers() {
-  step('Playwright Chromium (for pnpm test:e2e)');
+  step('Playwright Chromium (for pnpm test:e2e:ext)');
   if (!WITH_BROWSERS) {
     log('  skipped: add --with-browsers to install it');
     return;
@@ -178,7 +178,7 @@ function installBrowsers() {
 
 if (ARGS.has('--help') || ARGS.has('-h')) {
   log('Usage: node scripts/setup.mjs [--with-browsers] [--dry-run]');
-  log('  --with-browsers  also install Playwright Chromium for the end-to-end tests');
+  log('  --with-browsers  also install Playwright Chromium for the extension end-to-end tests');
   log('  --dry-run        print the commands instead of running them');
   process.exit(0);
 }
@@ -191,7 +191,9 @@ copyDevVars();
 installBrowsers();
 
 log('\nDone. Next:');
-log('  pnpm dev          start the site at http://localhost:4321');
-log('  pnpm test         unit and Pages Functions tests');
-log('  pnpm build        build every package and the site');
-log(`  pnpm test:e2e     end-to-end tests${WITH_BROWSERS ? '' : ' (run the setup with --with-browsers first)'}`);
+log('  pnpm dev           start the site at http://localhost:3000');
+log('  pnpm test          unit and site tests');
+log('  pnpm build         build every package, the site and the extension');
+log(
+  `  pnpm test:e2e:ext  extension end-to-end tests${WITH_BROWSERS ? '' : ' (run the setup with --with-browsers first)'}`,
+);

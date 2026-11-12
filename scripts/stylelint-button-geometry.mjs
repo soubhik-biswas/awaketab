@@ -12,10 +12,10 @@ const OWN = /^at-(?:button|btn)(?:-(?:sm|lg|cook|primary|stop|quiet|secondary|la
 const SIZED =
   /^(?:(?:min-|max-)?(?:block-size|height)|padding(?:-[a-z]+)*|font|font-size|line-height|border-radius|border(?:-[a-z]+)*-radius)$/u;
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const SOURCES = ['apps/web/src', 'apps/extension/entrypoints', 'apps/extension/src'];
-const MARKUP = new Set(['.astro', '.html', '.ts', '.tsx']);
+const SOURCES = ['apps/extension/entrypoints', 'apps/extension/src'];
+const MARKUP = new Set(['.html', '.ts', '.tsx']);
 
-// Classes that sit on a button next to at-button / at-btn (or on a <Button>) must not resize it either.
+// Classes that sit on a button next to at-button / at-btn must not resize it either.
 function companions() {
   const found = new Set();
   const take = (list) => {
@@ -29,7 +29,6 @@ function companions() {
         const src = readFileSync(path, 'utf8');
         for (const m of src.matchAll(/["'`]([^"'`\n]*(?<![\w-])at-(?:button|btn)(?![\w-])[^"'`\n]*)["'`]/gu))
           take(m[1]);
-        for (const m of src.matchAll(/<Button\b[^>]*?\bclass="([^"]*)"/gu)) take(m[1]);
       }
     }
   };
