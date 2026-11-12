@@ -24,6 +24,8 @@ export interface IToolSettings {
   motion: TVibeMotion;
   ambientOn: boolean;
   keepControls: boolean;
+  // Open the mini clock when the person leaves the tab during a session, where the browser allows it.
+  autoMini: boolean;
 }
 
 export const SETTINGS_KEY = 'at.v1.settings';
@@ -44,6 +46,7 @@ const TOOL_DEFAULTS: IToolSettings = {
   motion: 'calm',
   ambientOn: false,
   keepControls: false,
+  autoMini: true,
 };
 
 const PRESET_SEC: Record<Exclude<TPresetId, 'custom' | 'until'>, number> = {
@@ -68,6 +71,7 @@ type TStored = ISettings & {
   vibeMotion?: TVibeMotion;
   ambientOn?: boolean;
   keepControls?: boolean;
+  autoMini?: boolean;
 };
 
 function fromStored(raw: unknown): { stored: TStored | null; tool: IToolSettings } {
@@ -101,6 +105,7 @@ function fromStored(raw: unknown): { stored: TStored | null; tool: IToolSettings
       motion: MOTIONS.find((v) => v === String(loose.vibeMotion)) ?? 'calm',
       ambientOn: loose.ambientOn === true,
       keepControls: loose.keepControls === true,
+      autoMini: loose.autoMini !== false,
     },
   };
 }
@@ -147,6 +152,7 @@ function toStored(tool: IToolSettings): Omit<TStored, 'telemetry'> & { telemetry
     vibeMotion: tool.motion,
     ambientOn: tool.ambientOn,
     keepControls: tool.keepControls,
+    autoMini: tool.autoMini,
     ...(typeof asked === 'boolean' ? { telemetry: asked } : {}),
   };
 }

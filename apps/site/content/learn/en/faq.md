@@ -32,7 +32,7 @@ rows:
     - title: "Every face and background"
       text: "All 46 clock faces and the six living backgrounds, in light, dark and OLED."
     - title: "Sound"
-      text: "The chime at the end, and an ambient mixer of rain, café, fireplace and brown noise."
+      text: "The chime at the end, and ambient sound: seventeen layers of nature, places, noise and music made live in your browser, with eight one-tap scenes."
     - title: "Presets and history"
       text: "Presets you save, your session history and the \"This week\" card, kept in this browser."
     - title: "Languages and install"
@@ -114,7 +114,7 @@ Yes. **Vibe** (`V`) sets one of six living backgrounds: Aurora, Night sky, Rain 
 
 ### Does the ambient sound keep the screen awake?
 
-No. Sound never keeps the screen awake; the pill is still the only sign that it is. Open **Settings → Ambient sound** to mix rain, café, fireplace and brown noise. They are made live in your browser, nothing plays or downloads until you ask, and the mix stops when the session ends.
+No. Sound never keeps the screen awake; the pill is still the only sign that it is. Open **Settings → Ambient sound** to pick a scene such as Deep focus or Rainy café, or mix your own from rain, ocean, café, fireplace, noise and four kinds of music. Every sound is made live in your browser, nothing plays or downloads until you ask, and the mix fades out when you pause or the session ends.
 
 ## The video fallback and battery
 

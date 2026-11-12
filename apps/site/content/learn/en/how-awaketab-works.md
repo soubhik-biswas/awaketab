@@ -122,7 +122,7 @@ AwakeTab does not hide this. The tab title changes to "Paused", and the end time
 
 ## What else can the screen show?
 
-The wake lock is the core, and everything else sits around it without touching it. **Faces** (`F`) holds 46 clock faces, grouped as Featured, Digital, Analog and Ambient; Ring is the one you start with, and tapping a tile applies it straight away. **Vibe** (`V`) sets one of six living backgrounds: Aurora, Night sky, Rain on glass, Sunset, Lava lamp or Calm, each at Still, Calm or Lively motion. **Settings** (`,`) has the theme (System, Light, Dark or OLED), the 12-hour clock, the chime, Face studio for your own accent colour, and an ambient mixer of rain, café, fireplace and brown noise.
+The wake lock is the core, and everything else sits around it without touching it. **Faces** (`F`) holds 46 clock faces, grouped as Featured, Digital, Analog and Ambient; Ring is the one you start with, and tapping a tile applies it straight away. **Vibe** (`V`) sets one of six living backgrounds: Aurora, Night sky, Rain on glass, Sunset, Lava lamp or Calm, each at Still, Calm or Lively motion. **Settings** (`,`) has the theme (System, Light, Dark or OLED), the 12-hour clock, the chime, Face studio for your own accent colour, and ambient sound: seventeen layers of nature, places, noise and live music, with eight one-tap scenes.
 
 **Recents** (`R`) keeps your presets and history, with a "This week" card for the time you kept a screen awake. On a desktop browser, the palette's **Open the mini clock** floats a small clock above your other windows while a session runs.
 

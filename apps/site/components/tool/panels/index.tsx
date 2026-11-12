@@ -5,12 +5,13 @@ import { isDrawerPanel, type TDrawerPanel } from '@/lib/tool/ui';
 import { useGlance } from '../context';
 import { FacesStore } from './faces';
 import { FeedbackPanel } from './feedback';
-import { SoundPanel, StudioPanel, VibesPanel } from './look';
+import { StudioPanel, VibesPanel } from './look';
 import { ClearPanel, HelpPanel, LanguagePanel, SharePanel } from './misc';
 import { DevicesPanel, PlanPanel, ProDonePanel, ProPanel } from './pro';
 import { RecentsPanel } from './recents';
 import { SettingsPanel } from './settings';
 import { PanelShell } from './shell';
+import { SoundPanel } from './sound';
 
 const BODIES: Record<TDrawerPanel, () => ReactNode> = {
   recents: RecentsPanel,

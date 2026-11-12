@@ -1,6 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import { DEFAULT_SETTINGS } from '@awaketab/core';
-import { SETTINGS_KEY } from '@/lib/tool/settings';
+import { DEFAULT_SOUND, getSound, setLayer, subscribeSound } from '@/lib/tool/sound-mix';
 import { isRecord } from '@/lib/tool/store';
 import type { TDeviceKind, TDeviceStatus, TIdentity } from '@/components/product/device-presence';
 
@@ -61,7 +60,6 @@ export const STUDIO_KEY = 'at.v1.studio';
 export const MIX_KEYS: readonly TMixKey[] = ['rain', 'cafe', 'fire', 'brown'];
 
 const DEFAULT_STUDIO: IStudioSettings = { lamp: '', glow: 70 };
-const DEFAULT_MIX: TSoundMix = { rain: 40, cafe: 0, fire: 25, brown: 0 };
 
 function readJson(key: string): unknown {
   try {
@@ -87,29 +85,6 @@ function readStudio(): IStudioSettings {
   return { lamp, glow: Number.isFinite(glow) ? Math.min(100, Math.max(0, Math.round(glow / 5) * 5)) : 70 };
 }
 
-// The mixer levels live in at.v1.settings.focusSound.mix (0–1), where the old sound pack kept them.
-function readMix(): TSoundMix {
-  const raw = readJson(SETTINGS_KEY);
-  const fs = isRecord(raw) && isRecord(raw.focusSound) ? raw.focusSound : null;
-  if (!fs || !isRecord(fs.mix)) return { ...DEFAULT_MIX };
-  const mix = fs.mix;
-  const out = { ...DEFAULT_MIX };
-  for (const k of MIX_KEYS) {
-    const v = Number(mix[k]);
-    out[k] = Number.isFinite(v) && v >= 0 && v <= 1 ? Math.round(v * 20) * 5 : 0;
-  }
-  return out;
-}
-
-function writeMix(mix: TSoundMix) {
-  const raw = readJson(SETTINGS_KEY);
-  const base = isRecord(raw) ? raw : { ...DEFAULT_SETTINGS };
-  const fs = isRecord(base.focusSound) ? base.focusSound : DEFAULT_SETTINGS.focusSound;
-  const m: Record<string, number> = {};
-  for (const k of MIX_KEYS) if (mix[k] > 0) m[k] = mix[k] / 100;
-  writeJson(SETTINGS_KEY, { ...DEFAULT_SETTINGS, ...base, focusSound: { ...fs, mix: m } });
-}
-
 function createPlaceholder(): IProSource {
   const subs = new Set<() => void>();
   let snap: IProSnapshot | null = null;
@@ -121,7 +96,7 @@ function createPlaceholder(): IProSource {
       devices: [],
       maxDevices: 5,
       studio: typeof window === 'undefined' ? DEFAULT_STUDIO : readStudio(),
-      mix: typeof window === 'undefined' ? DEFAULT_MIX : readMix(),
+      mix: getSound().mix,
     };
     return snap;
   };
@@ -145,9 +120,7 @@ function createPlaceholder(): IProSource {
       return Promise.resolve();
     },
     setMix(key, value) {
-      const mix = { ...load().mix, [key]: Math.min(100, Math.max(0, Math.round(value / 5) * 5)) };
-      writeMix(mix);
-      set({ mix });
+      setLayer(key, value);
     },
     addDevice: () => Promise.resolve(),
     signOut: () => Promise.resolve(),
@@ -176,7 +149,8 @@ export const pro = {
   setStudio: (patch: Partial<IStudioSettings>) => source.setStudio(patch),
   // Face studio is free: the look is saved on this device whatever the plan.
   saveStudio: () => writeJson(STUDIO_KEY, { v: 1, ...source.getSnapshot().studio }),
-  setMix: (key: TMixKey, value: number) => source.setMix(key, value),
+  // Every layer of the mix, the newer ones too, is kept by the sound store; the snapshot below mirrors it.
+  setMix: (key: TMixKey, value: number) => setLayer(key, value),
   addDevice: () => source.addDevice(),
   signOut: () => source.signOut(),
   deleteAccount: () => source.deleteAccount(),
@@ -191,10 +165,22 @@ const SERVER: IProSnapshot = {
   devices: [],
   maxDevices: 5,
   studio: DEFAULT_STUDIO,
-  mix: DEFAULT_MIX,
+  mix: DEFAULT_SOUND.mix,
 };
 
+let seen: IProSnapshot | null = null;
+let merged: IProSnapshot | null = null;
+
+function snapshot(): IProSnapshot {
+  const base = source.getSnapshot();
+  const mix = getSound().mix;
+  if (!merged || base !== seen || merged.mix !== mix) merged = { ...base, mix };
+  seen = base;
+  return merged;
+}
+
 function subscribe(cb: () => void) {
+  const offSound = subscribeSound(cb);
   let off = source.subscribe(cb);
   const onSwap = () => {
     off();
@@ -205,13 +191,10 @@ function subscribe(cb: () => void) {
   return () => {
     swaps.delete(onSwap);
     off();
+    offSound();
   };
 }
 
 export function usePro(): IProSnapshot {
-  return useSyncExternalStore(
-    subscribe,
-    () => source.getSnapshot(),
-    () => SERVER,
-  );
+  return useSyncExternalStore(subscribe, snapshot, () => SERVER);
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Globe, Headphones, MessageCircle, Share, Sparkle, Trash2, User, type LucideIcon } from 'lucide-react';
 import { RadioGroup, ToggleGroup } from 'radix-ui';
+import { MiniSetting } from '@/components/pip/mini-setting';
 import { BorderBeam } from '@/components/ui-effects/border-beam';
 import { cn } from '@/lib/utils';
 import { priceLabel } from '@/lib/pro/plans';
@@ -148,6 +149,7 @@ export function SettingsPanel() {
           checked={settings.keepControls}
           onChange={(keepControls) => g.a.update({ keepControls })}
         />
+        <MiniSetting />
       </Group>
       <SecLabel>{t('settings.clock')}</SecLabel>
       <Group>

@@ -215,17 +215,6 @@ function FirstCard() {
   );
 }
 
-// The progress orbit follows the time left, so it is drawn on its own each second.
-function StageOrbit() {
-  const g = useGlance();
-  const { st, phone, total } = g;
-  const frac = useTickValue((tick) =>
-    st === 'idle' ? 1 : st === 'ended' ? 0 : total ? Math.max(0, Math.min(1, tick.remain / total)) : 1,
-  );
-  const opacity = phone ? 0 : st === 'running' ? 0.6 : st === 'paused' ? 0.3 : st === 'idle' ? 0.15 : 0;
-  return <Orbit frac={frac} opacity={opacity} />;
-}
-
 // The face is the one timer on the stage: its name says which face it is, the state and the time left. The drawing
 // is hidden from assistive technology, which reads the name instead.
 function StageFace({ px }: { px: number }) {
@@ -310,18 +299,23 @@ export const Stage = memo(function Stage() {
             className="relative flex flex-none items-center justify-center"
             style={{ width: px, height: h }}
           >
-            <div
-              aria-hidden="true"
-              className={cn('pointer-events-none absolute top-1/2 left-1/2 -translate-1/2', g.still && 'tg-still')}
-              style={{
-                width: rings,
-                height: rings,
-                maskImage: 'radial-gradient(circle closest-side, #000 62%, transparent 100%)',
-                opacity: `calc(var(--vibe-opacity) * ${(hidden ? 0.55 : 1) * soft})`,
-              }}
-            >
-              <StageOrbit />
-            </div>
+            {g.settings.vibe === 'aurora' || g.settings.vibe === 'night' ? (
+              <div
+                aria-hidden="true"
+                className={cn(
+                  'pointer-events-none absolute top-1/2 left-1/2 -translate-1/2',
+                  (g.still || g.settings.motion === 'still') && 'tg-still',
+                )}
+                style={{
+                  width: rings,
+                  height: rings,
+                  maskImage: 'radial-gradient(circle closest-side, #000 74%, transparent 100%)',
+                  opacity: `calc(var(--vibe-opacity) * ${(hidden ? 0.55 : 1) * soft})`,
+                }}
+              >
+                <Orbit px={px} rings={rings} />
+              </div>
+            ) : null}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute top-1/2 left-1/2 -translate-1/2 rounded-full"

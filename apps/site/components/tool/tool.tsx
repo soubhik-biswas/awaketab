@@ -421,10 +421,12 @@ function ToolApp({ lang, frame, root, initialView, readQuery, qa }: IAppProps) {
     wasPro.current = pro.isPro;
   }, [pro.isPro]);
 
-  const awake = isAwake(st);
+  // Sound keeps playing while a hidden tab waits for its tap: the session is still running, and the mini clock that
+  // opens over other windows controls it.
+  const sounding = isAwake(st) || st === 'needsyou';
   useEffect(() => {
-    setAmbient(pro.mix, awake && settings.ambientOn);
-  }, [awake, pro.mix, settings.ambientOn]);
+    setAmbient(pro.mix, sounding && settings.ambientOn);
+  }, [sounding, pro.mix, settings.ambientOn]);
 
   // What a screen reader hears when the session changes.
   const lastAnnounce = useRef(0);
@@ -509,8 +511,6 @@ function ToolApp({ lang, frame, root, initialView, readQuery, qa }: IAppProps) {
   return (
     <ToolContext.Provider value={g}>
       <Backdrop
-        W={W}
-        H={H}
         night={night}
         narrow={narrow}
         topH={g.topH}

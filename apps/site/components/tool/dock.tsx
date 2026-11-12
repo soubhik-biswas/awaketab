@@ -1,9 +1,21 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useSyncExternalStore } from 'react';
 import { motion } from 'motion/react';
-import { Maximize, Minimize, Pause, Play, RotateCcw, Square, TriangleAlert, type LucideIcon } from 'lucide-react';
+import {
+  Maximize,
+  Minimize,
+  Pause,
+  PictureInPicture2,
+  Play,
+  RotateCcw,
+  Square,
+  TriangleAlert,
+  type LucideIcon,
+} from 'lucide-react';
 import { Face } from '@/components/face';
+import { PIP_EVENT } from '@/components/pip/pip-launcher';
+import { pipSupport } from '@/lib/surfaces/pip';
 import { cn } from '@/lib/utils';
 import type { TWakeState } from '@/lib/wake';
 import { useGlance, type IGlance } from './context';
@@ -29,6 +41,11 @@ const PRIMARY: Record<TWakeState, IPrimary> = {
   idle: { label: 'dock.again', icon: Play, filled: true, go: (g) => g.a.start() },
 };
 
+const subscribeNever = () => () => undefined;
+// Only a window that stays on top earns a dock button, and not on the phone layout, where the dock has no room; the
+// popup other browsers get, and narrow windows, keep it in the command palette.
+const onTopMini = () => pipSupport() === 'document';
+
 const KEY =
   'tg-btn inline-flex flex-none items-center justify-center border border-(--tg-border) bg-(--tg-s1) text-(--tg-text)';
 
@@ -37,6 +54,7 @@ const KEY =
 export const Dock = memo(function Dock() {
   const g = useGlance();
   const { t, phone, desk, st, hidden } = g;
+  const canMini = useSyncExternalStore(subscribeNever, onTopMini, () => false);
   if (g.isSet || g.panel === 'faces') return null;
   const ended = st === 'ended';
   const chips: Array<[number, string, string]> = ended
@@ -157,6 +175,18 @@ export const Dock = memo(function Dock() {
             </span>
           ) : null}
         </button>
+        {canMini && !phone ? (
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event(PIP_EVENT))}
+            aria-label={t('pal.pip')}
+            title={t('pal.pip')}
+            className={cn(KEY, 'rounded-[18px]')}
+            style={{ width: key, height: key }}
+          >
+            <PictureInPicture2 className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+          </button>
+        ) : null}
         {g.canFullscreen ? (
           <button
             type="button"

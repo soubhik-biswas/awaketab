@@ -16,56 +16,39 @@ function ticks() {
 }
 
 const TICKS = ticks();
-const CIRC = 2 * Math.PI * 340;
+// The face box is px wide and 0.875 px tall, so its corners sit 0.664 px from the centre; rings keep 0.05 px more.
+const CORNER = 0.714;
 
-// The time orbit around the clock: 120 ticks turning once in 240 s, a dashed and a plain ring turning back in
-// 360 s, and the progress orbit (volt to violet) whose glowing dot marks the time left.
-export const Orbit = memo(function Orbit({ frac, opacity }: { frac: number; opacity: number }) {
-  const ang = frac * 2 * Math.PI;
+// The time orbit behind the clock: 120 ticks turning once in 240 s and a dashed ring turning back in 360 s. A ring
+// is drawn only when it clears the corners of the face's box, so it never crosses a wide face; the face alone
+// shows the time left.
+export const Orbit = memo(function Orbit({ px, rings }: { px: number; rings: number }) {
+  const clear = rings > 0 ? (CORNER * px * 1000) / rings : 1000;
+  const tick = clear <= 470;
+  const dash = clear <= 430;
+  if (!tick && !dash) return null;
   return (
     <>
-      <svg className="tg-orb absolute inset-0" viewBox="0 0 1000 1000" width="100%" height="100%">
-        <circle cx="500" cy="500" r="496" fill="none" style={{ stroke: 'var(--tg-orbit-line)' }} strokeWidth="1.2" />
-        <path d={TICKS.minor} style={{ stroke: 'var(--tg-orbit-tick)' }} strokeWidth="2" strokeLinecap="round" />
-        <path d={TICKS.major} style={{ stroke: 'var(--tg-orbit-tick-hi)' }} strokeWidth="3" strokeLinecap="round" />
-      </svg>
-      <svg className="tg-orbR absolute inset-0" viewBox="0 0 1000 1000" width="100%" height="100%">
-        <circle
-          cx="500"
-          cy="500"
-          r="400"
-          fill="none"
-          style={{ stroke: 'var(--tg-orbit-line)' }}
-          strokeWidth="1"
-          strokeDasharray="2 10"
-        />
-        <circle cx="500" cy="500" r="330" fill="none" style={{ stroke: 'var(--tg-orbit-line)' }} strokeWidth="1" />
-      </svg>
-      <svg className="absolute inset-0" viewBox="0 0 1000 1000" width="100%" height="100%">
-        <defs>
-          <linearGradient id="tg-arc" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" style={{ stopColor: 'var(--tg-volt)' }} />
-            <stop offset="1" style={{ stopColor: 'var(--tg-violet)' }} />
-          </linearGradient>
-        </defs>
-        <circle
-          cx="500"
-          cy="500"
-          r="340"
-          fill="none"
-          stroke="url(#tg-arc)"
-          strokeWidth="3"
-          strokeLinecap="round"
-          transform="rotate(-90 500 500)"
-          style={{ strokeDasharray: `${(CIRC * Math.max(0.0001, frac)).toFixed(1)} ${CIRC.toFixed(1)}`, opacity }}
-        />
-        <circle
-          cx={(500 + Math.sin(ang) * 340).toFixed(1)}
-          cy={(500 - Math.cos(ang) * 340).toFixed(1)}
-          r="7"
-          style={{ opacity, fill: 'var(--tg-volt)' }}
-        />
-      </svg>
+      {tick ? (
+        <svg className="tg-orb absolute inset-0" viewBox="0 0 1000 1000" width="100%" height="100%">
+          <circle cx="500" cy="500" r="496" fill="none" style={{ stroke: 'var(--tg-orbit-line)' }} strokeWidth="1.2" />
+          <path d={TICKS.minor} style={{ stroke: 'var(--tg-orbit-tick)' }} strokeWidth="2" strokeLinecap="round" />
+          <path d={TICKS.major} style={{ stroke: 'var(--tg-orbit-tick-hi)' }} strokeWidth="3" strokeLinecap="round" />
+        </svg>
+      ) : null}
+      {dash ? (
+        <svg className="tg-orbR absolute inset-0" viewBox="0 0 1000 1000" width="100%" height="100%">
+          <circle
+            cx="500"
+            cy="500"
+            r="430"
+            fill="none"
+            style={{ stroke: 'var(--tg-orbit-line)' }}
+            strokeWidth="1"
+            strokeDasharray="2 10"
+          />
+        </svg>
+      ) : null}
     </>
   );
 });
