@@ -1,5 +1,5 @@
 import type { IEnv, IKv } from './env';
-import { jsonOk } from './http';
+import { jsonOk, unavailable } from './http';
 import { encryptUtf8, sha256Hex, type ILicenseRecord, type TLicenseStatus, type TPlanId } from './license';
 import {
   applyIds,
@@ -97,9 +97,7 @@ function statusChange(type: string, data: IPolarData): IStatusChange | null {
     case 'benefit_grant.revoked':
       return { next: 'revoked' };
     case 'order.refunded':
-      // Sent for full and partial refunds; the policy (docs/09 §2.11) is that a refund ends the licence, and a
-      // partial refund is a goodwill credit. A partial refund that should end access revokes the benefit, which
-      // arrives as `refund.*` with `revoke_benefits` and as `benefit_grant.revoked`.
+      // A full refund ends the licence; a partial refund is a goodwill credit and keeps it (docs/09 §2.11).
       return data.status === 'partially_refunded' ? null : { next: 'refunded' };
     case 'refund.created':
     case 'refund.updated':
@@ -201,36 +199,23 @@ async function resolveTargets(kv: IKv, found: IEventIds, keyHash: string): Promi
   return { keyHashes: await byCustomer(kv, found), pending: [] };
 }
 
-// Licence bookkeeping only: AwakeTab sends no mail of its own, and Polar sends the receipts.
-export async function polarWebhookRoute(request: Request, env: IEnv): Promise<Response> {
-  const raw = await request.text();
-  const headerId = request.headers.get('webhook-id');
-  const ts = Number(request.headers.get('webhook-timestamp') ?? NaN);
-  if (!headerId || !request.headers.get('webhook-signature') || !Number.isFinite(ts)) {
-    return new Response('missing headers', { status: 400 });
-  }
-  if (Math.abs(Date.now() / 1000 - ts) > WINDOW_S) return new Response('stale', { status: 400 });
-  const secret = env.POLAR_WEBHOOK_SECRET ?? '';
-  // Polar's SDK checks the Standard Webhooks signature and timestamp; a signed event of a type it does not list
-  // yet is acknowledged and ignored, so Polar does not retry it forever.
-  let payload: IPolarWebhook;
-  try {
-    payload = (await webhooks.validateEvent(raw, Object.fromEntries(request.headers), secret)) as IPolarWebhook;
-  } catch (err) {
-    if (err instanceof webhooks.PolarWebhookUnknownTypeError) return jsonOk({ ok: true, ignored: true });
-    if (err instanceof webhooks.PolarWebhookVerificationError) return new Response('unauthorized', { status: 401 });
-    return jsonOk({ ok: true });
-  }
-  const kv = env.LICENSES;
-  if (!kv) return jsonOk({ ok: true });
-  const eventId = headerId;
-  if (await kv.get(`wh:${eventId}`)) return jsonOk({ ok: true, duplicate: true });
+class WebhookSetupError extends Error {}
 
+// Polar sends an event again after any answer that is not 2xx. 503 asks for that when this Worker could not
+// check or store the event, so a missing secret or a refused KV write delays an event instead of losing it.
+function retryLater(error: 'webhook_unconfigured' | 'webhook_failed'): Response {
+  return unavailable(error, 'The event was not handled. Send it again.');
+}
+
+async function applyEvent(kv: IKv, env: IEnv, payload: IPolarWebhook): Promise<void> {
   const type = payload.type ?? '';
   const data: IPolarData = payload.data && typeof payload.data === 'object' ? payload.data : {};
   const key = data.license_key?.key?.trim().toUpperCase();
   const keyHash = key ? await sha256Hex(key) : '';
   const found = eventIds(type, data);
+  const creates = (type === 'order.created' || type === 'benefit_grant.created') && Boolean(key);
+  // Checked before the first write, so the retry starts from a clean slate.
+  if (creates && !env.LICENSE_KEY_ENC_KEY) throw new WebhookSetupError('LICENSE_KEY_ENC_KEY');
 
   if ((type === 'order.created' || type === 'order.paid') && found.orderId) {
     await mergeOrder(kv, found.orderId, {
@@ -244,13 +229,7 @@ export async function polarWebhookRoute(request: Request, env: IEnv): Promise<Re
 
   // Create only: a record that already exists (activated from the checkout page, or revoked) must keep its
   // activations and status when a late or duplicate create event arrives under a different webhook-id.
-  if (
-    (type === 'order.created' || type === 'benefit_grant.created') &&
-    keyHash &&
-    key &&
-    env.LICENSE_KEY_ENC_KEY &&
-    !(await kv.get(`lic:${keyHash}`))
-  ) {
+  if (creates && key && env.LICENSE_KEY_ENC_KEY && !(await kv.get(`lic:${keyHash}`))) {
     const plan = data.metadata?.plan ?? 'pro_yearly';
     const record: ILicenseRecord = {
       plan,
@@ -306,8 +285,41 @@ export async function polarWebhookRoute(request: Request, env: IEnv): Promise<Re
     for (const target of targets.keyHashes) await updateStatus(kv, target, change);
     for (const lkId of targets.pending) await linkLicenseKey(kv, lkId, { pending: change.next });
   }
+}
 
-  // Mark the event only after it was handled: if a write above throws, Polar retries and the retry must run.
-  await kv.put(`wh:${eventId}`, JSON.stringify({ at: Date.now() }), { expirationTtl: 30 * 86_400 });
+// Licence bookkeeping only: AwakeTab sends no mail of its own, and Polar sends the receipts.
+// 200 means handled, handled before or ignored on purpose; 400 and 401 a request that is malformed or not Polar's.
+export async function polarWebhookRoute(request: Request, env: IEnv): Promise<Response> {
+  const raw = await request.text();
+  const eventId = request.headers.get('webhook-id');
+  const ts = Number(request.headers.get('webhook-timestamp') ?? NaN);
+  if (!eventId || !request.headers.get('webhook-signature') || !Number.isFinite(ts)) {
+    return new Response('missing headers', { status: 400 });
+  }
+  if (Math.abs(Date.now() / 1000 - ts) > WINDOW_S) return new Response('stale', { status: 400 });
+  const secret = env.POLAR_WEBHOOK_SECRET;
+  if (!secret) return retryLater('webhook_unconfigured');
+  // Polar's SDK checks the Standard Webhooks signature and timestamp; a signed event of a type it does not list
+  // yet is acknowledged and ignored, so Polar does not retry it forever.
+  let payload: IPolarWebhook;
+  try {
+    payload = (await webhooks.validateEvent(raw, Object.fromEntries(request.headers), secret)) as IPolarWebhook;
+  } catch (err) {
+    if (err instanceof webhooks.PolarWebhookUnknownTypeError) return jsonOk({ ok: true, ignored: true });
+    if (err instanceof webhooks.PolarWebhookVerificationError) return new Response('unauthorized', { status: 401 });
+    // The signature held but the body is not an event; the same bytes would fail again.
+    if (err instanceof webhooks.PolarWebhookError) return new Response('bad payload', { status: 400 });
+    return retryLater('webhook_failed');
+  }
+  const kv = env.LICENSES;
+  if (!kv) return retryLater('webhook_unconfigured');
+  try {
+    if (await kv.get(`wh:${eventId}`)) return jsonOk({ ok: true, duplicate: true });
+    await applyEvent(kv, env, payload);
+    // Mark the event only after it was handled: if a write above throws, Polar retries and the retry must run.
+    await kv.put(`wh:${eventId}`, JSON.stringify({ at: Date.now() }), { expirationTtl: 30 * 86_400 });
+  } catch (err) {
+    return retryLater(err instanceof WebhookSetupError ? 'webhook_unconfigured' : 'webhook_failed');
+  }
   return jsonOk({ ok: true });
 }

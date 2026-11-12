@@ -4,8 +4,8 @@ import { longDate, planOf, priceLabel, yearlySaving } from './plans';
 describe('Pro plans', () => {
   it('shows the real yearly price and keeps the unset monthly price a placeholder', () => {
     expect(priceLabel('yearly')).toBe('$12');
-    expect(priceLabel('monthly')).toBe('[PRICE]');
-    expect(yearlySaving()).toBe('[NUMBER]');
+    expect(priceLabel('monthly')).toBe('—');
+    expect(yearlySaving()).toBe('—');
   });
 
   it('reads yearly unless monthly is asked for', () => {

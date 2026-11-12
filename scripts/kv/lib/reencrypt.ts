@@ -1,21 +1,11 @@
-// LICENSE_KEY_ENC_KEY rotation (docs/14-devops.md §10): re-encrypt `keyEnc` on every `lic:*` record.
-//
-// Idempotent and resumable without a state file: each record is first tried with the NEW key; if that
-// works it is already rotated and skipped. Otherwise the OLD key must open it, and the record is written
-// back with only `keyEnc` changed (same key, same expiration, same metadata, every other field untouched).
-// A record neither key opens is reported and never written. Re-running after an interruption, or after
-// the functions started writing new-key records, therefore only touches what is left.
-//
-// Lost-update guard: just before a batch is written the values are read again, and a record that changed
-// since it was read (a webhook or activation landed in between) is skipped and counted as `changed`. The
-// run exits non-zero so the operator runs it again; the next pass sees the fresh value.
+// Re-encrypts `keyEnc` on every `lic:*` record for a LICENSE_KEY_ENC_KEY rotation; safe to re-run (docs/14 §6).
 import { encryptKeyEnc, parseAesKey, tryDecryptKeyEnc } from './crypto.ts';
 import type { IKvRecord } from './format.ts';
 import { isExpiredForWrite, listPages, readPage, type IKvStore } from './store.ts';
 
 const LICENSE_PREFIX = 'lic:';
 
-export interface IReencryptOptions {
+interface IReencryptOptions {
   oldKey: string;
   newKey: string;
   apply: boolean;
@@ -23,7 +13,7 @@ export interface IReencryptOptions {
   onProgress?: (summary: IReencryptSummary) => void;
 }
 
-export interface IReencryptSummary {
+interface IReencryptSummary {
   apply: boolean;
   scanned: number;
   rotated: number;

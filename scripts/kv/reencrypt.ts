@@ -1,4 +1,4 @@
-// pnpm kv:reencrypt — see lib/cli.ts for usage and docs/14-devops.md §10 for the rotation runbook.
+// pnpm kv:reencrypt: the rotation runbook is in docs/14-devops.md §6.
 import { runReencrypt } from './lib/cli.ts';
 import { nodeDeps } from './lib/node-deps.ts';
 

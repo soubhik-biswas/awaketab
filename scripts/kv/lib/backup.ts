@@ -10,7 +10,7 @@ import {
 } from './format.ts';
 import { readAll, type IKvStore } from './store.ts';
 
-export interface IExportOptions {
+interface IExportOptions {
   namespace: string;
   namespaceId: string;
   encryptionKey: string;
@@ -19,7 +19,7 @@ export interface IExportOptions {
   onProgress?: (read: number) => void;
 }
 
-export interface IExportResult {
+interface IExportResult {
   bytes: Uint8Array;
   backup: IBackup;
 }

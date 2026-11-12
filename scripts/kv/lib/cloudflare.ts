@@ -1,15 +1,4 @@
-// Workers KV over the Cloudflare REST API (https://developers.cloudflare.com/api/resources/kv/).
-// Plain `fetch`, no wrangler: the scripts need five endpoints, and a pinned wrangler would add ~100 MB of
-// install to every CI run for them. Endpoints used:
-//
-//   GET  /accounts/{a}/storage/kv/namespaces/{n}                     namespace title (production guard)
-//   GET  /accounts/{a}/storage/kv/namespaces/{n}/keys?prefix&cursor   listing with expiration + metadata
-//   POST /accounts/{a}/storage/kv/namespaces/{n}/bulk/get             up to 100 values per request
-//   GET  /accounts/{a}/storage/kv/namespaces/{n}/values/{key}         fallback when bulk/get is unavailable
-//   PUT  /accounts/{a}/storage/kv/namespaces/{n}/bulk                 up to 10,000 writes per request
-//
-// Every call retries 429 / 5xx / network errors with backoff (the API allows 1,200 requests per 5 min) and
-// any other failure throws with the API's error message, so a scheduled backup fails loudly.
+// Workers KV over the Cloudflare REST API with plain fetch; 429, 5xx and network errors are retried with backoff.
 import type { IKvRecord } from './format.ts';
 import type { IKvListPage, IKvStore } from './store.ts';
 
@@ -18,7 +7,7 @@ const LIST_LIMIT = 1000;
 const BULK_GET_LIMIT = 100;
 const BULK_PUT_LIMIT = 1000;
 
-export interface ICloudflareKvOptions {
+interface ICloudflareKvOptions {
   accountId: string;
   namespaceId: string;
   apiToken: string;

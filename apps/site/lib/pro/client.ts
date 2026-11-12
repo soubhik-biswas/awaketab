@@ -3,6 +3,7 @@
 import { DEFAULT_SETTINGS } from '@awaketab/core';
 import { identityFor } from '@/components/product/device-presence';
 import { authClient, signOutEverywhere } from '@/lib/auth/client';
+import { PRO_ENABLED } from '@/lib/features';
 import { SETTINGS_KEY } from '@/lib/tool/settings';
 import { isRecord } from '@/lib/tool/store';
 import {
@@ -167,8 +168,10 @@ export function createProSource(): IProSource {
         window.addEventListener('storage', onStorage);
         window.addEventListener('at:license', onLicense);
         window.addEventListener('at:account', onAccount);
-        refreshDevices();
-        void refreshSession();
+        if (PRO_ENABLED) {
+          refreshDevices();
+          void refreshSession();
+        }
       }
       return () => {
         subs.delete(cb);

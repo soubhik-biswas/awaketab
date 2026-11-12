@@ -2,7 +2,7 @@
 // (the scripts run outside a Worker, so there is no binding); tests use an in-memory implementation.
 import type { IKvRecord } from './format.ts';
 
-export interface IKvKeyInfo {
+interface IKvKeyInfo {
   name: string;
   expiration?: number;
   metadata?: unknown;

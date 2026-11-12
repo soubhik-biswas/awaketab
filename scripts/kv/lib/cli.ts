@@ -1,11 +1,4 @@
-// The three KV ops commands as testable functions. The entry files (../backup.ts, ../restore.ts,
-// ../reencrypt.ts) only wire in the real environment, file system and Cloudflare client.
-//
-//   pnpm kv:backup    [--out <dir>]
-//   pnpm kv:restore   <file> [--namespace-id <id>] [--prefix <p>]… [--apply] [--overwrite] [--yes-production]
-//   pnpm kv:reencrypt --namespace-id <id> [--apply] [--yes-production]
-//
-// Exit codes: 0 ok · 1 the operation failed or left work to redo · 2 usage or configuration error.
+// The three KV commands as testable functions; usage and exit codes are in docs/14-devops.md §6 and §7.
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { parseArgs } from 'node:util';

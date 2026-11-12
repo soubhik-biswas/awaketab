@@ -1,17 +1,21 @@
-// KV backup file format (docs/14-devops.md §11): JSON Lines, one header line then one record per line.
-//
-//   {"format":"awaketab-kv-backup","version":1,"namespace":"LICENSES","namespaceId":"…","createdAt":"…","prefixes":[…],"count":2}
-//   {"key":"lic:…","value":"{…}","expiration":1790000000}
-//   {"key":"cus:…","value":"[…]","metadata":{…}}
-//
-// `value` is the raw KV string; `expiration` (absolute Unix seconds) and `metadata` are copied from the
-// KV key listing so a restore writes the key back exactly as it was. The file is never stored in plain
-// text: `crypto.ts` wraps it in AES-256-GCM before it leaves the machine or the CI runner.
+// KV backup file format: JSON Lines, one header line then one record per line (docs/14-devops.md §7).
 
 export const BACKUP_FORMAT = 'awaketab-kv-backup';
 export const BACKUP_VERSION = 1;
 
-export const BACKUP_PREFIXES = ['lic:', 'cus:', 'embed:', 'ord:', 'lk:', 'grant:', 'sub:', 'rating:'] as const;
+// Ratings and feedback live nowhere else, so they are backed up with the licences. `wh:` keys are left out: they
+// only stop a webhook from running twice and expire after 30 days.
+export const BACKUP_PREFIXES = [
+  'lic:',
+  'cus:',
+  'embed:',
+  'ord:',
+  'lk:',
+  'grant:',
+  'sub:',
+  'rating:',
+  'feedback:',
+] as const;
 
 export interface IKvRecord {
   key: string;
