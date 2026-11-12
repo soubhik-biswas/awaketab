@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # One manifest at the root covers the whole pnpm workspace (pnpm-lock.yaml).
+  # One manifest at the root covers the whole pnpm workspace.
   - package-ecosystem: npm
     directory: /
     schedule:
@@ -8,11 +8,16 @@ updates:
       day: monday
     open-pull-requests-limit: 3
     versioning-strategy: increase
+    # pnpm refuses releases younger than its minimum release age, so wait before proposing them.
+    cooldown:
+      default-days: 14
+    labels:
+      - dependencies
+    commit-message:
+      prefix: chore(deps)
     groups:
       minor-and-patch:
         update-types: [minor, patch]
-    commit-message:
-      prefix: chore(deps)
 
   - package-ecosystem: github-actions
     directory: /
@@ -20,8 +25,11 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 2
-    groups:
-      actions:
-        update-types: [minor, patch]
+    labels:
+      - dependencies
+      - github_actions
     commit-message:
       prefix: ci(deps)
+    groups:
+      actions:
+        patterns: ['*']

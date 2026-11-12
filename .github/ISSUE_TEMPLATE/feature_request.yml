@@ -7,13 +7,37 @@ labels:
 body:
   - type: markdown
     attributes:
-      value: Please search existing issues first. Use examples and remove passwords, tokens and personal data. Only
-        the repository owner can approve work.
+      value: Please search existing issues first, and read the
+        [scope in the roadmap](https://github.com/soubhik-biswas/awaketab/blob/main/ROADMAP.md#scope). Ideas that are
+        still taking shape are welcome in [Discussions](https://github.com/soubhik-biswas/awaketab/discussions). Remove
+        passwords, tokens and personal data. Only the repository owner can approve work.
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Which part of AwakeTab?
+      options:
+        - Website and tool
+        - Chrome or Edge extension
+        - Website widget (embed)
+        - npm library
+        - Documentation
+        - Not sure
+    validations:
+      required: true
   - type: textarea
     id: problem
     attributes:
       label: What problem should this solve?
       description: Describe the situation and who is affected.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: How does it fit the scope?
+      description: AwakeTab keeps a screen awake from a browser tab and reports the real lock state. It deliberately
+        does not fake input, keep chat presence green or override power policy. Explain how this request fits the
+        scope in ROADMAP.md and keeps the status honest.
     validations:
       required: true
   - type: textarea
@@ -33,7 +57,7 @@ body:
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternatives and scope
+      label: Alternatives and limits
       description: What do you use today? What should remain outside this request?
     validations:
       required: false

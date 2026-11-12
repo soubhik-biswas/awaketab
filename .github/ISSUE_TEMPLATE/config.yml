@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Ask a question
+    url: https://github.com/soubhik-biswas/awaketab/discussions/categories/q-a
+    about: Questions about using or building with AwakeTab go to Discussions, where answers help the next person too.
   - name: Report a security vulnerability privately
     url: https://github.com/soubhik-biswas/awaketab/security/advisories/new
     about: Keep exploit details, credentials and personal data out of public issues.
-  - name: Use AwakeTab
-    url: https://awaketab.com
-    about: Open the production website.
+  - name: Where to get help
+    url: https://github.com/soubhik-biswas/awaketab/blob/main/SUPPORT.md
+    about: Guides, response times and what is out of scope.

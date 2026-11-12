@@ -36,7 +36,13 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at [support@awaketab.com](mailto:support@awaketab.com). All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement. AwakeTab's community leader is its lead maintainer, Soubhik Biswas. Please report privately through GitHub:
+
+* Contact the maintainer through the options on their GitHub profile, [github.com/soubhik-biswas](https://github.com/soubhik-biswas). Please do not report conduct issues in a public issue, pull request or discussion.
+* For anything security-related, open a [private security advisory](https://github.com/soubhik-biswas/awaketab/security/advisories/new) instead.
+* Content that breaks GitHub's own rules can also be reported to GitHub with the **Report content** option on any comment.
+
+All complaints will be reviewed and investigated promptly and fairly, with a first response within three days. Reports are kept confidential.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident.
 
