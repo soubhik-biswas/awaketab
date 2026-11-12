@@ -1,6 +1,4 @@
-// Extension strings live in locales/<locale>.json, one catalog per locale with only `ext.*` keys. This module picks
-// what the pages and the worker ship and writes the `_locales/<lang>/messages.json` files Chrome needs for the
-// manifest name, description and command.
+// Picks the `ext.*` strings each page ships and writes the `_locales/<lang>/messages.json` files Chrome needs.
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

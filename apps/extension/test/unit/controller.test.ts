@@ -162,6 +162,67 @@ describe('background controller — service-worker lifecycle', () => {
     expect(fake.badge.text).toBe('20');
   });
 
+  it('a session paused and resumed is still running after a restart past its first end time', async () => {
+    const fake = createFakeChrome();
+    const t0 = Date.parse('2026-10-31T10:00:00Z');
+    let now = t0;
+    const first = wired(fake, { now: () => now });
+    await first.onMessage({ type: 'start', presetId: 'p30' });
+    now = t0 + 10 * 60_000;
+    await first.onMessage({ type: 'pause' });
+    now = t0 + 70 * 60_000;
+    const resumed = await first.onMessage({ type: 'resume' });
+    expect(resumed?.session?.endsAt).toBe(t0 + 90 * 60_000);
+    expect(fake.alarms.get(ALARMS.end)?.scheduledTime).toBe(t0 + 90 * 60_000);
+    await flush();
+    first.dispose();
+
+    now = t0 + 80 * 60_000;
+    fake.power.length = 0;
+    const second = track(wired(fake, { now: () => now }));
+    await second.onAlarm(ALARMS.tick);
+    expect(session(fake)?.status).toBe('active');
+    expect(second.state().view).toBe('awake');
+    expect(second.state().lock).toBe('held');
+    expect(fake.power[0]).toEqual({ call: 'request', level: 'display' });
+    expect(fake.badge.text).toBe('10');
+    expect(fake.alarms.get(ALARMS.end)?.scheduledTime).toBe(t0 + 90 * 60_000);
+
+    now = t0 + 90 * 60_000 + 20_000;
+    second.dispose();
+    const third = track(wired(fake, { now: () => now }));
+    await third.onAlarm(ALARMS.end);
+    expect(session(fake)?.status).toBe('completed');
+    expect(session(fake)?.endedAt).toBe(t0 + 90 * 60_000);
+  });
+
+  it('a session saved with the first end time and a paused total is not ended early by the update', async () => {
+    const fake = createFakeChrome();
+    const t0 = Date.parse('2026-10-31T10:00:00Z');
+    fake.local.data.set(STORAGE_KEYS.session, {
+      v: 1,
+      id: 'before-update',
+      plan: { type: 'duration', ms: 30 * 60_000 },
+      presetId: 'p30',
+      mode: 'standard',
+      startedAt: t0,
+      endsAt: t0 + 30 * 60_000,
+      status: 'active',
+      pausedAt: null,
+      pausedMs: 60 * 60_000,
+      endedAt: null,
+      endReason: null,
+      awakeSeconds: 600,
+      modeState: { origin: 'user' },
+      source: 'ext',
+    });
+    const ctl = track(wired(fake, { now: () => t0 + 80 * 60_000 }));
+    await ctl.onAlarm(ALARMS.tick);
+    expect(ctl.state().view).toBe('awake');
+    expect(ctl.state().session?.id).toBe('before-update');
+    expect(fake.badge.text).toBe('10');
+  });
+
   it('finalises a session that ended while the worker slept', async () => {
     const fake = createFakeChrome();
     let now = Date.parse('2026-10-31T08:00:00Z');
@@ -192,6 +253,28 @@ describe('background controller — service-worker lifecycle', () => {
     expect(fake.power.at(-1)).toEqual({ call: 'release' });
     expect(fake.badge.text).toBe('');
     expect(fake.offscreen).toEqual([`${OFFSCREEN_PAGE}?kind=bell&volume=0.4`]);
+  });
+
+  it('plays the two tones when they are chosen', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    const fake = createFakeChrome();
+    fake.local.data.set(STORAGE_KEYS.settings, { sound: { id: 'chime', volume: 0.6 } });
+    const ctl = track(wired(fake));
+    await ctl.onMessage({ type: 'start', presetId: 'p15' });
+    await vi.advanceTimersByTimeAsync(15 * 60_000 + 1_000);
+    await flush(30);
+    expect(fake.offscreen).toEqual([`${OFFSCREEN_PAGE}?kind=two&volume=0.6`]);
+  });
+
+  it('stays silent on a new install, where no chime was chosen', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    const fake = createFakeChrome();
+    const ctl = track(wired(fake));
+    await ctl.onMessage({ type: 'start', presetId: 'p15' });
+    await vi.advanceTimersByTimeAsync(15 * 60_000 + 1_000);
+    await flush(30);
+    expect(ctl.state().session?.status).toBe('completed');
+    expect(fake.offscreen).toEqual([]);
   });
 
   it('stays silent when the sound is off', async () => {

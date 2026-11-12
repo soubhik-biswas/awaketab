@@ -65,6 +65,49 @@
   color: var(--at-text-2);
 }
 
+.xo-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--at-s-14);
+  min-height: 64px;
+  padding-block: var(--at-s-12);
+  padding-inline: var(--at-s-18);
+  border-block-start: var(--at-border) solid var(--at-line);
+}
+
+.xo-seg {
+  display: flex;
+  flex: none;
+  gap: var(--at-s-4);
+  padding-block: var(--at-s-4);
+  padding-inline: var(--at-s-4);
+  border-radius: var(--at-r-14);
+  background: var(--at-fill);
+  border: var(--at-border) solid var(--at-line);
+}
+
+.xo-seg-item {
+  height: 44px;
+  padding-block: 0;
+  padding-inline: var(--at-s-14);
+  border-radius: var(--at-r-12);
+  font: var(--at-type-chip);
+  color: var(--at-text-2);
+  transition:
+    background-color 0.2s var(--at-ease),
+    color 0.2s var(--at-ease);
+}
+
+.xo-seg-item:hover {
+  color: var(--at-text);
+}
+
+.xo-seg-item[data-state="on"] {
+  color: var(--at-text);
+  background: var(--at-fill-sel);
+}
+
 .xo-sites {
   display: flex;
   flex-direction: column;

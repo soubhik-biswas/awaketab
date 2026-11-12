@@ -2,9 +2,9 @@ import type { ISession } from '@awaketab/core';
 import { describe, expect, it } from 'vitest';
 import { BG_PREFIX, LOCALES, readCatalog } from '../../scripts/i18n.mjs';
 import { readChime } from '../../src/chime';
-import { format, resolveLocale } from '../../src/i18n';
+import { clockTime, dialOf, format, resolveLocale } from '../../src/i18n';
 import { parseRequest } from '../../src/messages';
-import { matchSite, normalizeHost, readExt, readSettings } from '../../src/settings';
+import { chimeOf, isExtChime, matchSite, normalizeHost, readExt, readSettings } from '../../src/settings';
 import { BADGE, badgeOf, pillCopy, viewOf } from '../../src/status';
 
 const live = (patch: Partial<ISession>): ISession => ({
@@ -81,6 +81,28 @@ describe('settings and auto-wake matcher', () => {
     expect(readSettings(undefined).defaultPreset).toBe('p60');
     expect(readSettings({ defaultPreset: 'p45' }).defaultPreset).toBe('p60');
     expect(readSettings({ defaultPreset: 'pinf' }).defaultPreset).toBe('pinf');
+  });
+
+  it('is silent until a chime is chosen, and reads the three choices Options offers', () => {
+    expect(readSettings(undefined).sound.id).toBe('none');
+    expect(chimeOf(readSettings(undefined))).toBe('none');
+    expect(chimeOf(readSettings({ sound: { id: 'chime', volume: 0.6 } }))).toBe('chime');
+    expect(chimeOf(readSettings({ sound: { id: 'bell', volume: 0.6 } }))).toBe('bell');
+    expect(chimeOf(readSettings({ sound: { id: 'birds', volume: 0.6 } }))).toBe('chime');
+    expect(isExtChime('bell')).toBe(true);
+    expect(isExtChime('birds')).toBe(false);
+  });
+
+  it('writes the clock the way each language does', () => {
+    const at = new Date(2026, 9, 31, 14, 5).getTime();
+    expect(clockTime(at, 'en')).toBe('2:05 PM');
+    expect(clockTime(at, 'en', true)).toBe('14:05');
+    expect(clockTime(at, 'de')).toBe('14:05');
+    expect(clockTime(at, 'ja')).toBe('午後2:05');
+    expect(clockTime(at, 'zh')).toBe('下午2:05');
+    expect(dialOf('en', null)).toBe(12);
+    expect(dialOf('en', true)).toBe(24);
+    expect(dialOf('fr', null)).toBe(24);
   });
 
   it('normalises pasted sites and refuses anything that is not an https host', () => {

@@ -1,251 +1,177 @@
 # 10 · Browser extension specification — AwakeTab — Keep your screen awake
 
-Status: v1.2 · 2026-09-27 (Clear Night redesign, B9: §14) · Owner: Soubhik
+Status: v2.0 · 2026-11-13 (the Glance extension as it is in `apps/extension`) · Owner: Soubhik
 
-> **Glance rebuild (31 October 2026) supersedes the sections below wherever they differ.** The extension follows the Glance brief §9f and the extension board: the popup is the logo, the status pill, the user's Glance face at 220 px, four lengths (15m · 30m · 1h · ∞), one primary action (Keep this tab awake · Pause · Resume with Stop · See the fix) and "Works in any tab" / "Open full app ↗"; the toolbar badge is none, volt minutes, amber II or red !; the options page has the badge timer, auto-wake on chosen sites with "Add this site", and release when the tab is hidden. Permissions are exactly `power`, `alarms`, `storage`, `offscreen` (end chime) and `activeTab` (Add this site), plus optional site access one site at a time. Everything is free. Removed: the System level, until-time, add-time chips, schedules, browser-start auto-start, end notifications, telemetry, licence-key entry, the welcome page, the tips card and the store-image renderer. Identifiers: `00-conventions.md` (extension tables). Decisions: `docs/redesign/DECISIONS.md` → "Glance (31 Oct 2026)".
+**Purpose.** A web page can keep a screen awake only while its tab is visible: the browser takes the wake lock back when the tab is hidden. The extension is the honest answer to that limit. It asks Chrome itself, through `chrome.power`, to keep the display awake from a background service worker, so it works in any tab and while other apps are in front, and it never claims more than it does. It follows the Glance brief (`docs/plan/glance/AGENT_PROMPT.md` §9f); where the product differs from it, the reason is in `docs/redesign/DECISIONS.md` under "Extension".
 
-**Purpose.** The web tool cannot keep a screen awake once its tab is hidden — the browser releases the wake lock. The extension is the honest answer to that limitation: it uses `chrome.power` to hold a display or system wake lock from a background service worker, shares the web app's vocabulary, settings and Pro licence, and never claims more than it does. This document specifies it for implementation with WXT (Manifest V3).
-
-Related docs: `00-conventions.md` §5, §6, §8, §9 · `04-engine-spec.md` (session layer reused) · `08-data-storage.md` §3 · `09-monetization-impl.md` §2 (licence reuse) · `13-testing-strategy.md` §7 · `17-launch-checklist.md` (store submission).
-
-> **Implementation note.** §13 and §14 describe the extension while it read tokens, strings and fonts from the Astro site (`apps/web`), which was removed in November 2026. Since the Volt rebuild (§15) the extension is self-contained.
+Related docs: `00-conventions.md` (extension tables: identifiers, storage keys, badge colours) · `04-engine-spec.md` (the session layer it reuses) · `08-data-storage.md` · `13-testing-strategy.md`.
 
 ---
 
 ## 1. Scope and non-goals
 
-**In scope (v1):** Chromium browsers — Chrome, Edge, Brave, Arc, Opera (Chrome Web Store + Edge Add-ons). Display or system keep-awake, presets and until-time, schedules and auto-start rules (Pro), badge and keyboard command, Pro licence reuse, opt-in anonymous analytics.
+**In scope:** Chrome and Edge on desktop, version 116 or later (Chrome Web Store and Edge Add-ons). Keeping the display awake for 15 minutes, 30 minutes, 1 hour or with no end; Pause, Resume and Stop; the time left on the toolbar badge; one keyboard command; auto-wake on sites the user picks; release when the session's tab is hidden; an optional end chime. Everything is free and nothing needs an account.
 
-**Out of scope, stated on the listing:** Firefox and Safari (no `power` API — the web app + floating window is the alternative); preventing lid-close sleep; keeping Teams/Slack/Zoom "Available" (presence follows input, which the extension never simulates); running when the browser is closed.
+**Out of scope, and said so on the listing and in the reviewer notes:** Firefox and Safari (no `power` API for extensions; the web app is the alternative); stopping sleep when a laptop lid closes; overriding a locked device or a work or system power policy; keeping Teams, Slack or Zoom "Available" (presence follows input, which the extension never simulates); running while the browser is closed.
 
 ---
 
-## 2. Manifest (WXT `wxt.config.ts` → `manifest`)
+## 2. Manifest (`wxt.config.ts`)
 
 ```json
 {
   "manifest_version": 3,
-  "name": "AwakeTab: Keep Screen Awake",
+  "name": "AwakeTab — Keep your screen awake",
   "short_name": "AwakeTab",
-  "description": "Keep your screen (or your whole computer) awake from a click — with an honest status you can trust.",
-  "version": "1.0.0",
+  "description": "Keep your screen on with one click. A calm clock shows the time left. 46 faces, all free — no account, no tracking.",
+  "default_locale": "en",
+  "version": "1.0.1",
   "minimum_chrome_version": "116",
-  "permissions": ["power", "storage", "alarms"],
-  "optional_permissions": ["notifications"],
-  "host_permissions": [],
+  "permissions": ["power", "alarms", "storage", "offscreen", "activeTab"],
   "optional_host_permissions": ["https://*/*"],
-  "action": { "default_popup": "popup.html", "default_title": "AwakeTab" },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "AwakeTab",
+    "default_icon": { "16": "icons/extension-16.png", "32": "icons/extension-32.png" }
+  },
   "options_page": "options.html",
   "background": { "service_worker": "background.js", "type": "module" },
-  "commands": { "toggle": { "suggested_key": { "default": "Alt+Shift+A" }, "description": "Toggle keep-awake" } },
-  "icons": { "16": "icon-16.png", "32": "icon-32.png", "48": "icon-48.png", "128": "icon-128.png" }
+  "commands": { "toggle": { "suggested_key": { "default": "Alt+Shift+A" }, "description": "Start or stop keeping the screen awake" } },
+  "icons": { "16": "icons/extension-16.png", "32": "icons/extension-32.png", "48": "icons/extension-48.png", "128": "icons/extension-128.png" }
 }
 ```
 
-`optional_host_permissions` are requested only when the user enables auto-start rules for specific sites (Pro `ext.autostart`); the permission prompt names the site. No remote code; all scripts bundled.
+- The name, description and command text are `__MSG_ext_name__`, `__MSG_ext_description__` and `__MSG_ext_command_toggle__`; the block shows their English text. The name stays in English in every locale, because it is a product name. The short name is "AwakeTab". On the website and in running text the product is "AwakeTab for Chrome".
+- The version comes from `apps/extension/package.json`, the minimum Chrome version from `apps/extension/data/support-matrix.json` (`extension.minimumChromeVersion`).
+- Permissions are exactly these five. `power` keeps the display awake; `alarms` ends the session on time and refreshes the badge; `storage` keeps settings and the session; `offscreen` plays the end chime; `activeTab` lets "Add this site" read the site the user was on. Site access is optional and asked for one site at a time, only for sites added to auto-wake; the prompt names the site and page content is never read.
+- No content scripts, no `externally_connectable`, no remote code, the default Manifest V3 content security policy.
+- The icons are the design's exported files in `public/icons/`, used unchanged.
 
 ---
 
-## 3. States and vocabulary
+## 3. Views, pill and badge
 
-The extension has three keep-awake levels, mapped onto the shared pill vocabulary so the UI copy and analytics line up with the web app:
+The popup, the pill and the toolbar badge say one of four things (`TExtView`, from `viewOf(lock, session)` in `src/status.ts`):
 
-| Extension level | `chrome.power` call | Pill (reuses `tool.pill.*`) | Badge |
+| View | When | Pill (`ext.pill.*`) | Badge |
 |---|---|---|---|
-| `off` | `releaseKeepAwake()` | `idle` → "Ready" | none |
-| `display` | `requestKeepAwake('display')` | `held` → "Screen awake" | `ON`, Aqua `#087B87` |
-| `system` | `requestKeepAwake('system')` | `held`, shown as `ext.pill.systemHeld` "System awake" + secondary line `ext.pill.system` "Screen may dim or lock" | `SYS`, indigo `#2B3A67` |
+| `ready` | no live session | "Ready" (hollow dot) | none |
+| `awake` | the keep-awake is held and the session is active | "Awake · 38 min", or "Awake · no end" | minutes left on volt `#3DF58E` with ink `#04140A`: `38`, `2h` from 100 minutes, `∞` with no end, `ON` when the badge timer is off |
+| `paused` | the session is paused | "Paused · 57 min left", "Paused" with no end, or "Paused · tab hidden" when release-when-hidden paused it | `II` on amber `#FFC53D` with ink `#1A1200` |
+| `blocked` | Chrome refused the request, or has no `power` API | "Blocked", or "Not supported" | `!` on red `#FF6B81` with ink `#1A0509` |
 
-**System level never says "Screen awake"** (decided 2026-09-26, LAUNCH-AUDIT D-02; docs/19 B1, B7). At `system` level `chrome.power` keeps the computer awake but the display may still dim, turn off or lock, so the shared `held` copy "Screen awake" would overclaim. The lock state is still `held` (the seven states of `00-conventions.md` §5.1 are unchanged; `data-lock="held"`, same colour token); only the extension popup's display copy differs: the pill text is the extension-only key `ext.pill.systemHeld` ("System awake") and the secondary line is `ext.pill.system` ("Screen may dim or lock"). The badge tooltip reads "AwakeTab — System awake · Screen may dim or lock". The web tool has no system level and is unaffected. `status.ts` `pillTextKey(lock, level)` picks the key; unit and e2e tests assert that "Screen awake" never shows at system level.
+Status is always words and shape as well as colour. The toolbar tooltip is `AwakeTab — {pill}`. `chrome.power` gives no battery-saver signal, so the blocked pill names no cause.
 
-Because `chrome.power` cannot fail asynchronously the way the web API does, the only error states are `unsupported` (API missing — some Chromium forks) and `denied` (enterprise policy). Both use the shared advice codes (`unsupported_browser`, `permissions_policy`). The extension has no video fallback, so an `unsupported` lock reads as Blocked with the fix (`tool.pill.denied`, "Blocked — here's the fix") rather than the web's fallback offer; `data-lock` keeps `unsupported` (B9, ExtEdge canvas).
-
-The session layer is `@awaketab/core` unchanged: plans, presets, `endBehaviour`, stats and the `ISession` shape (`source:'ext'`). Timer end → `releaseKeepAwake()` → optional notification (`chrome.notifications`, only if the optional permission was granted) → extend prompt inside the popup or notification buttons (+30 min / Stop).
-
----
-
-## 4. Background service worker
-
-- Holds the keep-awake and the session; MV3 workers can be terminated, so the session is persisted to `chrome.storage.local['at.v1.session']` and re-hydrated on wake; the keep-awake request is re-issued on `onStartup`, `onInstalled` and on every alarm tick if a session is `active`.
-- Ticks via `chrome.alarms` (minimum period 30 s in MV3; use `periodInMinutes: 0.5`) — the popup renders its own 1 s timer from `endsAt` when open, so coarse background ticks are fine.
-- `chrome.commands.onCommand('toggle')` → start with `settings.defaultPreset` or stop.
-- `chrome.idle` is **not** used to fake activity; it may be read (Pro, opt-in) only to show "You've been idle for 20 min — still need this?" after 2 h, never to act.
-- Battery auto-stop uses `navigator.getBattery()` from the popup/offscreen document when available (Chromium), mirroring the web setting.
-- Schedules (Pro `ext.schedules`): `{ days: [1..5], start: '09:00', end: '18:00', level: 'display' }` → two `chrome.alarms` per schedule; DST handled by recomputing at each fire.
-- Auto-start rules (Pro `ext.autostart`): `chrome.tabs.onUpdated` filtered to granted hosts → if a matching tab is active, start `display` for the configured duration; stop when the last matching tab closes.
+The lock itself keeps the seven states of `00-conventions.md` §5.1: `src/power.ts` wraps `chrome.power` as the wake-lock handle the session engine expects (`requestKeepAwake('display')` → `held`; a missing API → `unsupported`; a request that throws → `denied`). There is no video fallback and no system-only level.
 
 ---
 
-## 5. Popup UI (360 wide, content height; see §14)
+## 4. Background service worker (`entrypoints/background.ts`, `src/controller.ts`)
 
-Mirrors the web tool at small scale: `StatusPill`, level toggle (Screen / System with a one-line explanation of the difference), preset chips `p15`–`pinf` + Until…, timer, "Open AwakeTab" link to `https://awaketab.com/?source=ext`, Settings gear. Keyboard: `Space` toggle, `1`–`6` presets, `Esc` closes. Colours and tokens from `05-frontend-spec.md` (`--at-*`), dark/light following the browser. The Clear Night layout and every state are in §14.
+- **Session.** `createSession()` from `@awaketab/core` with `channel: null`, `source: 'ext'` and `resumeIndefiniteMs: Infinity`, because the worker restarts many times during one session. `ISession.modeState` carries `{ origin, tabId?, windowId?, hidden? }`; the origin is `user`, `command` or `autostart`. Every event handler runs one at a time through a promise queue, so a popup click, an alarm and a tab event cannot interleave.
+- **Keep-awake.** `chrome.power.requestKeepAwake('display')` on start and resume, `releaseKeepAwake()` on stop, pause and end. The request is re-issued on `onStartup`, `onInstalled` and every tick while a session is active. With no live session the worker releases defensively on start.
+- **Alarms.** `at.tick` every half minute while a session runs (none while paused), `at.end` at the session's end so it completes on time even if the worker slept, and `at.license` every hour (see Licence below). Alarms an older build set for schedules (`at.sched.*`) are cleared on start.
+- **Restarts.** A live session is resumed; a timed session whose end passed while the worker slept is finished as completed; a paused session stays in storage, out of the engine, until Resume, which folds the pause into the end time first.
+- **Starting.** The popup sends `start { presetId, tab? }`; the worker remembers the length as `settings.defaultPreset`, so the popup opens on the length used last. Starting while a session runs replaces its plan with one lock. With no `power` API nothing is started and the view is `blocked`.
+- **Command.** `Alt+Shift+A` (`toggle`) stops an active session, resumes a paused one, and otherwise starts the last length. Chrome's shortcut settings can change the keys.
+- **Auto-wake.** With the switch on, a tab that finishes loading on a chosen site starts a session with origin `autostart` if nothing is live: no end, or the site's own length. When no tab on a chosen site is left open, that session stops. Without site access Chrome withholds `tab.url`, so other tabs' events are dropped before any work. Site names are never sent anywhere.
+- **Release when hidden.** The session belongs to the tab it was started from. With the option on, another tab in front in that window, or a minimised window, pauses it with `hidden: true` ("Paused · tab hidden"); coming back resumes it; closing that tab stops it. The option is off by default, so the extension works in any tab.
+- **End chime.** When a timed session completes and a chime is chosen, the worker opens `offscreen.html?kind=two|bell&volume=<0–1>` (reason `AUDIO_PLAYBACK`), which plays two synthesised tones or a bell, and closes it after 3 seconds. `settings.sound.id` `none` is silent, and it is the default: a new install makes no sound.
+- **Licence.** Everything is free and nothing reads a licence. If an earlier build stored one, it is checked against `https://awaketab.com/api/license/validate` about once a day and dropped when revoked. With none stored, the extension makes no network request at all.
 
----
-
-## 6. Options page
-
-Sections (B9, ExtOptions canvas): Defaults (level, default duration) · When time is up (end behaviour, notifications (request permission here), end sound) · Look and language (theme, language) · Keyboard · Schedules (Pro) · Auto-start (Pro; requests host permission per site) · Pro licence (enter key / manage devices / open `https://awaketab.com/pro/activate?ext=1`) · Privacy (telemetry toggle, "what we store") · About (version, changelog link). Battery auto-stop is not shown: it cannot work from an MV3 worker (§13), and a control that does nothing is not offered.
-
-Storage: `chrome.storage.local` for `at.v1.settings`, `at.v1.session`, `at.v1.license`, `at.v1.meta`; `chrome.storage.sync` for `ISettings` plus schedules and auto-start domains (≤ 100 KB total, ≤ 8 KB per item). The licence token is never synced.
-
----
-
-## 7. Pro licence reuse
-
-1. User pastes the key in Options, or clicks "Activate in extension" on `/pro/activate?ext=1` (the page shows the key with a copy button; there is no cross-origin hand-off because extensions cannot read the page without host permission). As built (2026-09-26): with `ext=1` the page does **not** activate the browser — it checks the key's shape client-side (or resolves `checkout_id` through the non-activating lookup, `09-monetization-impl.md` §2.3a) and only shows the copy panel, so the extension's own activation in step 2 is the only one spent.
-2. Options calls `POST https://awaketab.com/api/license/activate` with `{ key, deviceId, deviceLabel: 'Chrome extension on <OS>' }`; `deviceId` is a UUID generated once per browser profile and stored in `chrome.storage.local`. This counts as one of the five activations.
-3. Token verified offline with `verifyLicenseToken()` from `@awaketab/core` (`LICENSE_PUBLIC_KEYS`), stored in `at.v1.license`; features read via `hasFeature()`.
-4. Re-validation cadence and grace identical to the web (`08-data-storage.md` §2.4). Offline → features stay on until `exp`.
+Messages from the pages (`TExtRequest`): `state` · `start` · `stop` · `pause` · `resume` · `toggle`. Only the extension's own pages are answered.
 
 ---
 
-## 8. Analytics (opt-in)
+## 5. Popup (`entrypoints/popup/`, 360 wide)
 
-Off by default in the extension (store review friendliness); the Options toggle enables the same first-party beacon to `POST /api/e` with `source: 'ext'`. Events: `session_start`, `session_end`, `pro_activated`, `client_error`. No URLs, no tab titles, no hostnames — auto-start rules are matched locally and never reported.
+Top to bottom:
+
+1. **Header:** the mark, the "AwakeTab" wordmark and the status pill (`role="status"`, `aria-live="polite"`).
+2. **Face:** the website's own `Face` component at 220 px, bare, over a soft glow in the view's colour. It draws the face in `settings.face`, Ring unless another is stored. The words on the face and its clock follow the popup's language: 12-hour with AM/PM in English, a 24-hour dial in German, Spanish, French and Portuguese, and the day words of Japanese, Chinese and Hindi (`clockTime()` and `dialOf()` in `src/i18n.ts`, `ext.face.*`).
+3. **Lengths:** four chips, 15m · 30m · 1h · ∞, with a sliding thumb; 1h is the default. Each chip's hit area is the full 48 px row. While awake, or blocked, picking a chip starts with that length.
+4. **Primary action:** "Keep this tab awake" when ready; "Pause" while awake; "Resume" with a round Stop button beside it while paused; "See the fix" in red when blocked, which opens `https://awaketab.com/help?source=ext`.
+5. **Footer:** "Works in any tab" and "Open full app ↗" (`https://awaketab.com/?source=ext`).
+
+If the worker does not answer, a line says "AwakeTab didn’t answer. Close this popup and open it again." The popup follows `settings.theme`; Auto follows the system setting live.
+
+---
+
+## 6. Options page (`entrypoints/options/`)
+
+One card, "AwakeTab extension · Options" (also the tab's title), with:
+
+- **Show time left on the icon** ("The badge counts down in minutes"), on by default. Off, the awake badge reads `ON`.
+- **Wake automatically on chosen sites** ("Starts when one of the sites below opens"), on by default.
+- **Release when the tab is hidden** ("Saves battery; resumes when you come back"), off by default.
+- **Chime when time is up** ("Plays once when a timed session ends"): None, Two tones or Bell. None is the default.
+- **Always keep these sites awake:** a chip per site (pressing it removes the site and its permission) and "+ Add this site". `activeTab` shows a site only after a toolbar click, so the page reads the most recent https tab Chrome lets it see and asks for that one origin; with none it says "Click the AwakeTab icon while you are on the site, then add it here.", and a refusal says so.
+
+The three switches are real switches (`role="switch"`), the chime is a radio group, and every target is at least 44 px.
+
+---
+
+## 7. Storage and sync
+
+All in `chrome.storage.local`, under the keys of `00-conventions.md`:
+
+| Key | What |
+|---|---|
+| `at.v1.settings` | The shared `ISettings`, with the extension's defaults: telemetry and notifications off, `defaultPreset` `p60`, `sound.id` `none` |
+| `at.v1.ext` | `IExtSettings { v: 1, badge, releaseHidden, autostart: { on, sites[] } }`; a site is `{ host, durationMin }`, at most 50. Records from older builds read as the defaults |
+| `at.v1.session`, `at.v1.stats`, `at.v1.meta` | The session engine's records |
+| `at.v1.device` | `{ v: 1, id }`, a random id per browser profile |
+| `at.v1.license` | Only if an earlier build stored one |
+
+`at.v1.settings` and `at.v1.ext` are mirrored to `chrome.storage.sync` two seconds after a change, and a fresh profile is seeded from it. The licence, the device id, the session and the totals never sync. The engine's once-a-second session writes are batched to one every 10 seconds when only the awake time moved.
+
+---
+
+## 8. Languages, type and tokens
+
+- **Strings.** `apps/extension/locales/<locale>.json` is the only catalog: `ext.*` keys, the same keys and placeholders in all eight locales (en, es, pt-br, de, fr, ja, zh, hi). `scripts/i18n.mjs` gives each page its catalog on demand, gives the worker the `ext.pill.*` keys for the tooltip, and writes `_locales/{en,es,pt_BR,de,fr,ja,zh_CN,hi}/messages.json` for the manifest. The language is `settings.locale`, else the browser's. No user-facing text is written in the source.
+- **Fonts.** Inter and Bricolage Grotesque (variable, through Fontsource), IBM Plex Serif 300 for the faces that draw with it, Geist Mono and Archivo from `public/fonts` with their OFL licences. No page requests a font server.
+- **Tokens.** `src/styles/tokens.css` holds the Glance `--at-*` colours for dark (the default), light and OLED, the type roles, radii and spacing; `data-theme` is set from `settings.theme`. The stylesheets take every colour, radius, gap and type role from a token; `pnpm lint` runs stylelint over them.
+- **Motion.** The chip thumb glides for 350 ms and the options card arrives in 420 ms, both ease-out; `prefers-reduced-motion` stops all of it.
 
 ---
 
 ## 9. Store listing
 
-**Title:** AwakeTab: Keep Screen Awake (the manifest name, `ext.name`, kept in English in every locale; Chrome Web Store and Edge Add-ons both show it) · **Short description (≤ 132):** Keep your screen or computer awake with one click, a timer, or a schedule. Honest status, no tracking, no mouse jiggling. · **Category:** Productivity → Tools.
+The listing text is `apps/extension/store/listing.md`: the listing copy of the design (`docs/plan/glance/LISTING_COPY.md`), changed only where the first release differs from it (the popup's four lengths, written as "15 min, 30 min, 1 hour or no end"; the eight languages; the real help and privacy addresses; and no paid plan wording while Pro is switched off).
 
-**Screenshots (1280×800) and promo tile (440×280):** drawn from the design canvas board `StoreAssets` (the Store 1–5 boards and the small promo tile, dark theme): 1 the popup over a page, held, with the `44m` toolbar badge · 2 Screen or System, two held popups · 3 the five toolbar badge states · 4 lengths: a 2 h session and an end time past midnight · 5 Pro auto-start: the options page's Auto-start and Pro licence cards. Each shot has the board's copy column (the AwakeTab wordmark, kicker, headline, one line of detail and the honest limit). The promo tile is the logo, "AwakeTab" and "Keep your screen or computer awake". The art never shows the store name; the listing title does.
+**Title:** AwakeTab — Keep your screen awake (33 of 75 characters; Chrome Web Store and Edge Add-ons both show the manifest name) · **Summary (115 of 132):** Keep your screen on with one click. A calm clock shows the time left. 46 faces, all free — no account, no tracking. (`ext.description`; each translation carries the same claim within 132 characters) · **Category:** Productivity → Tools · **Languages:** the eight in the package.
 
-**Permission justifications (required by CWS):** `power` — hold the display/system wake lock; `storage` — save settings and session; `alarms` — timers and schedules while the service worker sleeps; `notifications` (optional) — tell you when the timer ends; host permissions (optional, per site) — start automatically on sites you choose.
+**Screenshots (1280×800), promo tiles and icons:** the design's exported files, used unchanged. They live only in `apps/extension/store/glance/chrome-web-store/`: `cws-01.png` … `cws-05.png` in that order, `promo-small-440x280.png`, `promo-marquee-1400x560.png`, `icon-128.png` and `edge-logo-300.png`. Nothing in the package renders them.
 
-**Privacy policy URL:** `https://awaketab.com/privacy#extension`. **Single purpose statement:** "Prevent the device from sleeping for a chosen time." Data disclosure: no user data collected by default; optional anonymous usage statistics.
+**Permission justifications:** one line each for `power`, `alarms`, `storage`, `offscreen`, `activeTab` and the optional site access, in `listing.md`.
 
-Edge Add-ons: same package, listing copied; Edge reviews are typically slower — submit in the same week.
+**Privacy policy URL:** `https://awaketab.com/privacy#extension`. **Help:** `https://awaketab.com/help`. **Single purpose statement:** "Keeps the computer's display awake for a length of time the user chooses, and shows how much time is left." Data disclosure: nothing is collected by default; the extension has no usage statistics. The facts behind the privacy form are in `apps/extension/store/privacy-disclosures.md`, the reviewer's walk-through in `reviewer-instructions.md`, and the release steps in `PUBLISHING.md`.
+
+Edge Add-ons: the same package and listing, submitted separately.
 
 ---
 
 ## 10. Compliance
 
-- No remote code, no eval, no analytics SDKs, no ads (Google forbids ads in extensions; we have none anyway).
-- No synthetic input events, no `chrome.idle.setDetectionInterval` tricks, no "appear online" claims anywhere in the listing or UI.
-- Content Security Policy: WXT default MV3 CSP; no inline scripts.
-- Accessibility: popup fully keyboard-operable; pill has `aria-live`; contrast AA in both themes.
-- Versioning: semver; changelog entries flow into `/changelog` under an "Extension" heading.
+- No remote code, no `eval`, no analytics, no ads.
+- No synthetic input, no idle-detection tricks, no "appear online" claim anywhere in the listing or the UI.
+- Accessibility: the popup and options work by keyboard alone; the pill is a live region; contrast is AA in dark, light and OLED; focus rings are sky, 2 px, 3 px offset.
+- Versioning: semver, from `apps/extension/package.json`.
 
 ---
 
-## 11. Test plan pointers
+## 11. Build, package and tests
 
-Unit: level mapping, schedule → alarms conversion (incl. DST), auto-start matcher. Integration (Playwright with the extension loaded, `chrome.power` mocked via a test build flag): start/stop from popup and command, session persistence across service-worker restart (force via `chrome://serviceworker-internals` in manual runs), licence activation against a mocked API, badge text. Manual: real `chrome.power` on Windows and macOS with display sleep set to 1 minute; verify display stays on for `display`, and that `system` lets the screen dim but not the machine sleep. Results feed `/learn/how-we-tested`.
+- `pnpm -F extension dev` · `pnpm -F extension build` · `pnpm -F extension zip` (a deterministic zip, `.output/awaketab-chrome-<version>.zip`: sorted entries, fixed timestamps and modes) · `pnpm -F extension zip:check` (builds twice and compares hashes) · `pnpm -F extension publish:package` (the release package, `store/PUBLISHING.md`).
+- The build compiles `@awaketab/core`, `@awaketab/wake` and the site's `Face` from source; `next/font/google` is aliased to `src/next-font.ts`, because the faces' fonts are bundled here.
+- Unit tests (`apps/extension/test/unit`, run by `pnpm test`): the controller against a fake `chrome` (`fake-chrome.ts`), settings, the site matcher, the badge and pill, the catalogs, the manifest, tokens and fonts.
+- Browser tests (`pnpm test:e2e:ext`): the built extension in Chromium. `AT_EXT_TEST=1` builds into `.output-test/` with `chrome.power` replaced by a recorder (`src/test-hooks.ts`, log in `chrome.storage.session['at.test.power']`; `at.test.deny` makes requests throw like a policy block). The release build contains none of it.
+- These tests show the browser API calls and the pages; they do not show that a real display stayed lit. Before a submission, check that by hand on a target machine, with the end chime and the shortcut (`store/PUBLISHING.md`).
 
 ---
 
 ## 12. Open items
 
-- Whether to ship a Firefox version that opens the web app in a pinned tab with `?source=ext` — decide after launch based on requests.
-- Offscreen document for battery reading vs. reading only when the popup is open — measure battery-stop reliability first.
-
----
-
-## 13. As built (M7, 2026-09-26)
-
-Where the implementation settles something this spec left open, or differs from it. Identifiers are listed in `00-conventions.md` §13.9.
-
-**Layout.** `apps/extension/entrypoints/{background.ts, popup/, options/}` are thin; the logic lives in `apps/extension/src/`: `controller.ts` (the worker: session, alarms, badge, schedules, auto-start, sync mirror, notifications), `power.ts` (`IWakeLockHandle` over `chrome.power`), `storage.ts` (the `IStorageAdapter` over `chrome.storage.local`), `settings.ts` (extension settings, host normaliser, auto-start matcher), `schedules.ts`, `status.ts` (level ↔ pill/badge), `license.ts`, `telemetry.ts`, `messages.ts` (popup ↔ worker protocol), `page.ts` (shared page boot), `api.ts` (the narrow `chrome.*` surface; unit tests run against `test/unit/fake-chrome.ts`).
-
-**Session engine.** `createSession()` from `@awaketab/core` with `channel: null`, `source: 'ext'` and `resumeIndefiniteMs: Infinity` (a core option added in M7: the worker restarts many times per session, so the web's 12 h resume window does not apply). The core `channel: null` handling was fixed in the same change — it previously still opened `BroadcastChannel('awaketab')`. The level and the origin of a session are kept in `ISession.modeState` (`{ level, origin }`, origin `user | command | schedule | autostart | startup`), so no extra storage key is needed for them. All worker event handlers run one at a time (a promise queue), so a popup click, an alarm and a tab event cannot interleave half-started sessions.
-
-**Storage (docs/08 §3).** The core layer reads storage synchronously, so `storage.ts` loads every `at.*` key once per worker start and keeps a write-through cache; values are stored as objects. The engine's once-per-second session writes are coalesced to one write per `SESSION_COALESCE_MS` (10 s) when only `awakeSeconds` moved; status, plan and level changes are written at once. Two new local keys: `at.v1.ext` (`IExtSettings`: default `level`, `schedules[]`, `autostart { browserStart, sites[] }`) and `at.v1.device` (`{ v, id }`, random UUID per profile). `at.v1.settings` and `at.v1.ext` are mirrored to `chrome.storage.sync` (2 s debounce; a fresh profile is seeded from sync; remote changes are adopted). `at.v1.license`, `at.v1.device`, `at.v1.session` and `at.v1.stats` are never synced (asserted in unit and e2e tests). Extension defaults differ from the web: `telemetry: false`, `notifications: false`.
-
-**Lifecycle.** Every start of the worker loads storage, verifies the licence offline and re-hydrates: a live session is resumed (keep-awake re-issued); a finite session whose end passed while the worker slept is finalised as `completed` and announced only if it ended < 5 min ago; with no live session `releaseKeepAwake()` is called defensively. `onStartup`, `onInstalled` and every `at.tick` alarm (0.5 min, only while a session is live) re-issue `requestKeepAwake(level)`. `at.end` fires at the session end so completion happens on time even if the worker slept. Stats undercount time while the worker is stopped (the engine only counts seconds while alive); the extension does not show stats.
-
-**Badge.** Only while the lock is `held`: `ON` (display) / `SYS` (system) for ∞, otherwise minutes left (`25m`, `3h` from 100 minutes up). Aqua `#087B87` for display (5.0:1 with white; amber means paused, `DESIGN.md` §2.1), night indigo `#2B3A67` for system, white text; the tooltip (`action.setTitle`) spells out the pill text and time left (at system level "System awake · Screen may dim or lock", §3), so the level is not conveyed by colour alone.
-
-**Popup.** Ring, pill (`tool.pill.*`, or `ext.pill.systemHeld` "System awake" for a held system lock, §3; `aria-live`), timer from `endsAt` and `Date.now()` (runs only while `held`), secondary line `ext.pill.system` "Screen may dim or lock" for a held system lock and `ext.origin.*` for schedule/auto-start/startup sessions, Start/Stop, Screen/System switch with a one-line explanation, chips `p15`…`p240` + ∞ + Until…, the extend prompt (+15/+30/+1 h/Stop) for 5 min after a user session completes with `prompt_extend`. Keyboard: `Space`, `1`–`6`, `0`, `U`, `Esc` (single-key shortcuts follow `settings.keyboardShortcuts`). The pill shows `requesting` until the worker answers; it never shows `held` on the button's say-so. Measured first render ≈ 50 ms after navigation start in headless Chromium (`data-ready` on `<html>`).
-
-**Unsupported / denied.** No `chrome.power` → `unsupported` lock (shown as Blocked, §3), Start disabled, no session is created. A throwing `requestKeepAwake` → `denied` + `ext.advice.denied`. Popup copy for both: §14.
-
-**Notifications and sound.** `chrome.notifications` only when `settings.notifications` is on and the optional permission is granted (requested from the Options checkbox gesture). Id `at-end`; buttons `+30 min` / `Stop` when `endBehaviour` is `prompt_extend`. The extension has no audio of its own: "End sound" maps to the notification's system sound (`none` → `silent: true`).
-
-**Battery auto-stop — deferred.** `navigator.getBattery()` does not exist in service workers and the `offscreen` permission is not in the permission list, so M7 showed the setting disabled; since B9 the Options page leaves it out (no dead control). §12 stays open.
-
-**Schedules (Pro `ext.schedules`).** Weekly windows `{ id, days (0 = Sun … 6 = Sat), start, end, level }`, ≤ 20; overnight windows end the next day; overlapping or touching windows merge, and a merged window uses `display` if any part does. Two alarms per schedule (`at.sched.<id>.start` / `.end`) recomputed on every fire, on licence/settings change and on every worker start (DST-safe: wall times are rebuilt with `Date#setHours`). A window in progress starts an `until` session with origin `schedule` unless a user session is live; stopping it by hand suppresses that window. Without the feature no schedule alarm exists.
-
-**Auto-start (Pro `ext.autostart`).** "Keep awake whenever Chrome starts" starts the default preset on `runtime.onStartup` (FR-EXT-04). Sites: the Options form normalises the input to an https host (`docs.example.com` or `*.example.com`) and calls `chrome.permissions.request({ origins: ['https://<host>/*'] })` inside the submit gesture; removing a site removes the permission. Without the host permission Chrome withholds `tab.url`, so unrelated tab events are dropped before any work. A matching tab that finishes loading starts `pinf` (or the chosen 30/60/120/240 min) with origin `autostart` if nothing is live; when no matching tab remains open the auto-start session stops. Hostnames are never reported.
-
-**Licence.** Options → "Activate" posts `{ key, deviceId: at.v1.device.id, deviceLabel: 'AwakeTab for Chrome · <OS>' }` to `https://awaketab.com/api/license/activate`, verifies the token offline (`verifyLicenseToken`, device hash checked) and stores the `ILicenseRecord` in `chrome.storage.local`. `/pro/activate?ext=1` is linked as "Find your key on awaketab.com". Re-validation follows `needsRevalidation()` on start and hourly (`at.license`); `revoked` drops the record, network failures keep the token until `exp`. "Remove from this browser" calls `/api/license/deactivate` and removes the record even offline (then says so). The extension calls the API cross-origin without host permissions, so `apps/web/functions/api/_middleware.ts` answers CORS for `chrome-extension://<32 a–p>` origins on `/api/e` and `/api/license/{activate,validate,deactivate}` only (no credentials).
-
-**Telemetry.** Off by default; when on, each allow-listed event (`session_start`, `session_end`, `pro_activated`, `client_error`) is posted immediately to `/api/e` with `source: 'ext'`, `path: '/ext'` (`/ext/options` from the options page), `viewport: 'ext'`, a per-worker random `sid`, and only the documented parameters.
-
-**i18n.** No extension string lives in the extension. `scripts/i18n.mjs` picks the needed keys from `apps/web/src/i18n/<locale>.json` into per-locale chunks (`virtual:at-catalog/<locale>`, loaded on demand) and a small worker catalog (`virtual:at-catalogs-bg`), and writes `_locales/{en,es,pt_BR,de,fr,ja,zh_CN,hi}/messages.json` for the manifest name, description and command (`__MSG_ext_name__`, …). The language follows `settings.locale`, else the browser UI language. `--at-*` tokens come from `apps/web/src/styles/tokens.css` (`virtual:at-tokens.css`, the plain-CSS part after the Tailwind preamble). Since B9 the extension also has its own catalog for copy that exists nowhere on the web (§14).
-
-**Manifest.** As §2, plus `default_locale: 'en'`, localised name/description/command, `action.default_icon`, and `minimum_chrome_version` read from `support-matrix.json` → `extension.minimumChromeVersion`. No `content_scripts`, no `externally_connectable`, default MV3 CSP.
-
-**Build, zip, tests.** `pnpm -F extension build` (icons are rasterised in plain JS, `scripts/icons.mjs`), `pnpm -F extension zip` (deterministic zip writer `scripts/zip.mjs`: sorted entries, 1980-01-01 timestamps, fixed modes), `pnpm -F extension zip:check` (builds twice into temp dirs, compares SHA-256; also a unit test). The Playwright suite (`pnpm test:e2e:ext`) builds with `AT_EXT_TEST=1` into `.output-test/`: `__AT_TEST__` swaps `chrome.power` for a recorder (`src/test-hooks.ts`, log in `chrome.storage.session['at.test.power']`); the production bundle contains none of it. Store copy and permission justifications: `apps/extension/store/listing.md`; images `apps/extension/store/images/` from `pnpm -F extension store:assets` (satori + resvg resolved from `apps/web`, byte-reproducible; see §14 "Store images"). Privacy statement: `/privacy#extension`.
-
----
-
-## 14. Clear Night redesign (B9, 2026-09-27)
-
-Built from the canvas boards `ExtPopup`, `ExtEdge`, `ExtOptions`, `ExtBadges` and `Welcome` (Chrome extension canvas, `redesign/CANVASES.md`) and `DESIGN.md` §2, §3, §11, §12. Identifiers: `00-conventions.md` §13.9 (B9 rows).
-
-**Look.** One stylesheet for the three pages, `src/styles/base.css`: Clear Night `--at-*` tokens from `apps/web/src/styles/tokens.css` (`virtual:at-tokens.css`, one source, DESIGN.md §12.1), extension-local `--ext-*` values for the ground lift, halo and elevation (themselves mapped to `--at-lift`, `--at-ground-end` and `--at-elev`), and Geist and Geist Mono bundled in `public/fonts` with the OFL licence and metric-matched fallbacks (D-R26; MV3 pages load no remote font). Motion is slow and ease-out (16 s sweep, 3.4 s tip halo, 26 s aura, 0.6 s indicators) and stops under reduced motion. Theme follows `settings.theme` (`auto` follows the system live). The four stylesheets (`base.css`, `popup.css`, `options.css`, `welcome.css`) hold no raw lengths or colours in their rules: spacing, radii, control heights, icon sizes, borders and type come from the `--at-*` tokens, and a value with no token is named once at the top of its file (`--at-ext-*` for sizes, colours and the toolbar-mock palette, `--at-type-ext-*` for type roles such as the ring digits). Only media query widths stay literal, since CSS cannot read custom properties there. `pnpm lint` runs stylelint over `apps/extension/**/*.css` with the same strict token rules as the web's rebuilt stylesheets.
-
-**Popup (a fixed 360 × 600 frame, 12 px between blocks, 8 px below the last row).** Chrome caps a popup at 600 px and scrolls anything taller, so the frame is always exactly 600 tall (`--at-ext-popup-h`) and states swap content inside it; the window never resizes when a state changes. The boards' last row ends at y = 591 (Ready with the Pro row, first-open tips); the bottom padding is 8 px so that row never makes the frame scroll (the boards' 12 px runs 3 px past their own clipped frame). In English every state fits without scrolling (an e2e test checks each one); a longer translation scrolls inside the frame rather than being cut off. Header 60: logo lockup whose bead takes the state tone, the "New in {major.minor}" chip after an update (`at.v1.meta.lastSeenVersion`; "New in 1.1" for 1.1.0), Settings. Status row: a 124 px ring (60 ticks, track, depleting lamp arc with glow and tip halo, slow sweep while held) with digits per `DESIGN.md` §4 (MM:SS; H:MM:SS at 20 px from an hour; `1d` over HH:MM:SS from a day; ∞ counts up as "Awake for" with "since"), and the S pill (32 tall, 14/600, tone 12 % fill + 38 % border; glyph: hollow dot idle/starting, glowing dot held, half dot for System, triangle for Blocked). Under the digits, one caption (`data-caption`), with the "Awake for" kicker above the digits only for a no-limit session: Ready "ends 5:30 PM" (`ext.popup.ends`; "ends 1:15 AM tomorrow" past midnight) or "until you stop" for ∞; Starting "Starting" over the requested length; held with an end "Until 5:30 PM" (`tool.timer.until`), or "Time left" from a day; held with no end "Awake for" + "since 8:02 AM" (`ext.popup.since`), except an auto-start or Chrome-start session, which reads "Elapsed" with no kicker; Time's up "Session complete" on 00:00; Blocked "Not running". Under the pill, in order: "Screen may dim or lock" (`data-pill-extra`, held at System), the origin line with its icon ("Started by your schedule", "Started by an auto-start site", "Started when Chrome opened"), then the meta line (`data-meta`) and an optional second line (`data-meta2`):
-
-| State | Meta line | Second line |
-|---|---|---|
-| Ready | The honest limits: "Works while Chrome is running, even with the tab hidden or the window minimised. It can’t stop sleep when you close the lid." | — |
-| Ready, within 5 min of a session ending | The receipt: "Held 42 min, 9:12 to 9:54 PM." (`ext.popup.receipt`; the shared AM/PM is written once, so a span across it reads "11:50 PM to 1:00 AM") | — |
-| Starting | "Asking Chrome…" | — |
-| Held, under a day | "Started 8:02 AM" (`ext.popup.started`; "yesterday 11:40 PM" or "Tuesday 9:00 AM" when it began on an earlier day) | — |
-| Held, a day or more | "Until Sunday, 27 September · 10:00 PM" (`tool.timer.until` with `ext.time.full`) | — |
-| Held, no end | "No end time. Stop when you are done." (`ext.popup.noEnd`) | — |
-| Held, auto-start or Chrome start with no end | "Since 8:02 AM" (`ext.popup.sinceMeta`) | — |
-| Held by a schedule | "Scheduled until 6:00 PM" (`ext.schedule.until`) | Its days: "Weekdays" for Mon–Fri, otherwise the day list |
-| Held at System with no origin line | Hidden: "Screen may dim or lock" is the line | — |
-| Time's up | "Time's up. Keep going?" (emphasised) | "Held 9:12 to 9:54 PM" (`ext.popup.heldSpan`) |
-| Blocked, `denied` | "Chrome refused the request." (emphasised) | "Nothing is keeping this device awake.", or "Asking again…" while Retry runs |
-| Blocked, `unsupported` | "No power API in this browser." (emphasised) | As `denied` |
-
-Times follow the extension clock setting (12-hour with AM/PM in English, `00-conventions.md` extension times row). States (`<main data-mode>`):
-- **Starting (`requesting`, until Chrome answers):** what was asked for, before it is confirmed: Stop (raised), the picked chip pressed (or the Until chip showing its time), its length on the digits with the caption "Starting", pill "Starting…" and meta "Asking Chrome…". The once-a-second redraw keeps this view until the worker replies.
-- **Ready:** full arc at 45 %, the default length on the digits with "ends {time}" (or ∞ "until you stop"), lamp CTA "Start · {length}", level switch with its help line, chips (the default length selected), the Pro row for free users (opens an inline panel, never a modal, with the price line "$12 a year, or $19 once: launch price for the first 90 days, then $29. 5 devices, 14-day refund." from `PLAN_PRICES` and `lifetimePrice()` in `apps/web/src/lib/license.ts`, the same source as /pro; the launch wording switches off by itself at `PRO_LAUNCH_END`, while a change to the prices themselves needs an extension release), and the first-open tips ("Good to know": the real shortcut as keycaps and "Pin it to see time left", dismissed into `at.v1.onboarding.dismissedTips`).
-- **Held:** +15 / +30 / +1 h add to the running session (`extend` → `addTime`); Stop is the raised neutral (D-R20). Schedule sessions show the schedule card (days, range, level, Edit → options#schedules), "Stop for today" with "Skips the rest of this window. It starts again {when}.", no chips, and the level help says the schedule keeps its level. Chrome-start sessions note "Auto-start runs this whenever Chrome opens." with Change → options#autostart.
-- **Time's up (`extend`):** the card with +15 / +30 / +1 h, Stop (dismiss) and "Offered until {time}"; meta "Time's up. Keep going?" and "Held {span}".
-- **Blocked (`denied` / `unsupported`):** the ring shrinks to red dots, pill "Blocked — here's the fix", "Chrome refused the request." / "No power API in this browser." and "Nothing is keeping this device awake.", a fix card, then Retry + Open AwakeTab (denied) or "Open AwakeTab in a tab" (unsupported). No chips, no level switch.
-- **Until panel:** replaces the chips and the whole primary block (Start and its gap) in place, so "Keep awake" sits 12 px under the status row: a 15-minute stepper (up to 24 h ahead), the summary line ("Tomorrow at 12:15 AM, in 1 h 15 min", `ext.until.summary`), Cancel / Start.
-- **Private window:** when the popup runs in Incognito (`extension.inIncognitoContext`), a note that it is the same session everywhere; no add-time row (the ExtEdge incognito board), so the chips and level switch still fit.
-- **No answer:** when the service worker does not answer a request (on open or after an action), the meta lines give way to `data-fail` (`role="alert"`, `ext.popup.noAnswer`: "AwakeTab didn't answer. Close this popup and open it again.") in ink with a neutral info glyph, never the red of Blocked, since nothing was refused. The pill keeps the last state the worker reported; the next answer clears the line.
-- **Focus and pointer:** when an action hides the control that had focus (Until's Start, the Time's up card), focus moves to the primary button (or Retry); Escape on the Pro panel returns focus to the Pro row. The header icon and the options steppers draw their focus ring inset, since their edge sits against a clipping box. Starting shows the ring sweep, as the state map asks (`DESIGN.md` §2.3). Hover states apply only on `(hover: hover)`: neutral buttons and add-time buttons take the raised-over-ink mix the web uses, chips and the Pro row a `line-strong` border with ink text, lamp buttons keep their fill.
-
-**Options (header 60/68, side nav from 1024 px with a sliding indicator, one column below).** Cards with 1 px dividers: level cards with radio marks; default duration as a 7-item segmented bar; end behaviour, theme (Auto / Light / Dark / OLED black) and schedule level as segmented bars; switches (52 × 32 in a 60 × 44 target; real checkboxes with `role="switch"`); the Language row opens inline radio rows (Browser language + the 8 locales in their native names, "Current", "Translation in review") stored as `settings.locale`, and the page switches language in place; the shortcut as keycaps with Change shortcut; Schedules with a week preview (screen blocks solid, system hatched, the unsaved draft dashed, a now marker, one faint noon tick per row), the list, and a new-schedule form (day toggles, From / To steppers in 30 min with 44 px buttons, level, Add schedule; Days, From and To share one row when the column has room, otherwise From and To wrap together under Days, and the day toggles go 4 + 3 in a narrow column); Auto-start (browser-start switch, sites in mono, host + duration form); licence ("AwakeTab Pro · Chrome on macOS", `ext.license.device`, with Manage devices as a quiet button); privacy; about; the shared footer. A "Saved" pill confirms each change.
-
-**Welcome page (`welcome.html`, O-25).** Opened once on install. Hero with the version kicker and the pin steps next to an interactive Chrome toolbar mock (an illustration: an extension cannot pin itself), three moments, Screen or System with the real badge colours and pill copy, the shortcut, what it can't do and what it can see, then Open settings / Open AwakeTab (full width, stacked, under 600 px) and the footer. The shortcut card spells the chord with a muted "+" between keycaps, macOS glyph shortcuts included. Light / Dark / Auto switch in the header (the same setting as Options).
-
-**i18n.** New copy lives in `apps/extension/locales/<locale>.json` (`ext.*`, all 8 locales, merged under the web keys by `scripts/i18n.mjs`); a unit test keeps it disjoint from the web catalog and identical in keys and placeholders across locales. The welcome page names the extension by its real manifest name (`ext.name`).
-
-**Tests.** Unit: `format.test.ts` (digits, words, tomorrow / weekday / full date, spans, keycaps), controller (add time to a live session, welcome on install, `lastSeenVersion`), the `unsupported` pill mapping, catalog and font checks. E2E (`pnpm test:e2e:ext`): Ready copy, ∞ and finite sessions, System (D-02), the popup frame in every state (first open, Ready with the Pro row, the Pro panel, Until, Starting, held, System, ∞, the receipt, Blocked, the update chip, a private window, Time's up: 600 tall, nothing past it, no scroll), Starting's optimistic view, the until stepper, +15 min, Blocked + Retry (test hook `at.test.deny`), first-open tips and the Pro row, the welcome page on install, options gates and default duration, the language row, licence activation, axe in light and dark (popup Ready / held / until, options with the language list open, welcome, Blocked).
-
-**Store name.** The manifest name is `ext.name` "AwakeTab: Keep Screen Awake" in all 8 web catalogs (English everywhere: it is a product name), so the Chrome extensions menu, the store title and the welcome page (menu mock, pin step, pin button label) show it. The store screenshots follow the `StoreAssets` board, which draws the "AwakeTab" wordmark and never the store name. The website and running text keep the product name "AwakeTab for Chrome" (`docs/00`): the `/extension` heading, breadcrumb, comparison table and structured data use it. The short name stays "AwakeTab", and the licence device label stays "AwakeTab for Chrome · {OS}" because activations already stored on the server carry it and `/pro/manage` recognises the extension by it. The options and welcome headers keep the "AwakeTab" wordmark with a "for Chrome" tag, as in the design canvas.
-
-**Store images.** `scripts/store-assets.mts` rebuilds the five screenshots and the promo tile from the `StoreAssets` board (§9). Colours are read from the dark block of the extension's own `src/styles/tokens.css`, badge colours from `src/status.ts`, and text is set in the repo's own Geist and Geist Mono from `apps/web/public/fonts`: `scripts/fonts.mts` unpacks the variable WOFF2 files to TrueType and pins each weight with HarfBuzz's subsetter (satori's own dependency), so no font is downloaded and no dependency is added. The ∞ chip falls back to Noto Sans JP, as it does along `--at-font` on the pages, because the latin Geist subset has no ∞. The popups show a session frozen at 9:45:42 PM, so the images do not depend on the clock, and `test/build/store-assets.test.ts` regenerates them byte for byte. The Chrome Web Store takes 24-bit PNG without alpha (or JPEG), so resvg renders onto `--at-ground` and the script writes the pixels as RGB PNG (colour type 2) with fflate, satori's own pure-JS zlib, so the bytes are the same on every machine; the test checks the colour type too. What differs from a live render of the board is only the clock (the board uses the current time) and the animation phase of the ring sweep and the aura.
-
-**Follow-ups.** Icons: see §15.
-
----
-
-## 15. Volt redesign (31 Oct 2026)
-
-Built from the extension board of the Volt handoff (install → pin → popup → badge, the notification and the store assets), carrying over the Solar Green rework of the same board; decisions are in `docs/redesign/DECISIONS.md` under Volt. The extension no longer reads anything from the website's code.
-
-**Self-contained.** Tokens: `src/styles/tokens.css` holds every `--at-*` token the pages use, in Volt values (light porcelain `#F5F5FA` with `#D9D9E5` lines, midnight dark, OLED), plus the welcome scene palette (`--at-scene-*`) and the app tile (`--at-app-*`). Strings: `locales/shared/<locale>.json` holds the strings shared with the website's tool (pill copy, presets, settings, Pro), `locales/<locale>.json` the extension's own `ext.*` copy; `scripts/i18n.mjs` merges them as before. Mark: `src/mark.ts` (64 grid, r 21, 70° gap, 84° small cut), painted into `[data-mark-slot]` (`data-size`, `data-state`, `data-glow="0"`, `data-small`). Icons: Lucide 0.460 inlined from the extension's own `lucide-static`. The locale list and Pro prices come from `apps/site` (`i18n/locales.ts`, `lib/pro/plans.ts`). Shared build inputs live outside the website: the Polar build switch in `scripts/polar-server.mjs` and the support matrix in `apps/extension/data/support-matrix.json` (both read by `wxt.config.ts`), and the key check `scripts/check-keys.mts`, which `zip` runs.
-
-**Type.** Geist for UI and digits, Geist Mono for kickers, Archivo (variable, wdth 62–125, self-hosted with its OFL licence) at 112 % width for the wordmark (800, −2 %), the welcome headline (60 / 1.02, 800, −4 %), section heads and the options title. No page requests a font server.
-
-**Colour roles.** Act = electric violet (`#6633F5` light, `#9F7BFF` dark, glow `0 10px 26px` at 28 / 35 %); lamp = `#117A3B` / `#3DF58E`; ended = neutral `#4B5165` / `#C9D1E0`; System awake = sky. Status is always icon or dot plus words.
-
-**Popup (360 × 600).** Header (14 / 16 px padding, 10 px gaps): the mark as the small optical cut (stroke 10, lamp 6.2) with a filled grey lamp at rest, the lamp colour while awake, sky at System, neutral at time's up, hollow red when blocked; the Archivo 15 / 800 wordmark; the 28 px pill (dot while awake or starting, power / pause / warning icon otherwise). Body (16 px padding, 14 px gaps): the meta lines (13 px), the private-window card, the ring row (72 px ring, 7 px stroke, 34 px digits, "left · until {time}", while starting, awake and at time's up), the blocked and time's-up cards, the Screen / System switch, the presets (4 columns, 44 px, the selected one lamp-soft with a 2 px lamp border), the Until… stepper, the primary button (48 px, violet, or an outlined Stop while live), +15 / +30 / +1 h, the schedule card, the Pro row and panel, and the first-open tips. Footer: "Open full timer" and "Settings" as link buttons with the update chip between them. The primary button reads `ext.popup.startWith` "Keep awake · {length}" (the website tool's `tool.cta.keep` in every locale) and `ext.popup.startInf` "Keep awake until I stop". Footer links 14 / 600 in the link colour.
-
-**Toolbar icon and badge.** Manifest icons are the board's store icon: the midnight tile (radial `#0D3B22` → `#070B16`, radius 28/128) with the light ring and the volt lamp (`public/icon.svg`). The action starts on `icon-off-*.png` (hollow lamp) and the worker switches to `icon-*.png` while a session holds the device awake (`action.setIcon`, with the badge render). Badge: Screen `#117A3B`, System `#1C64B8`, white text, unchanged text and tooltip. `scripts/icons.mjs` renders all PNGs from the three SVGs.
-
-**Notification.** "Time's up", `end.notify.body`, +15 min and Dismiss; the icon is `icon-ended-128.png` (the mark with the ended lamp on porcelain).
-
-**Welcome.** Hero as drawn: mono kicker 14 px / +12 % in the lamp colour, Archivo headline, 19 px intro, I've pinned it (violet, 22 px side padding) and Skip for now (outlined), the note and the welcome scene (one SVG on scene tokens, light and dark).
-
-**Motion.** Hover and press 80 ms, toggles, chips and switches 120 ms (`--at-ease-glide`), status 180 ms, arrivals 520 ms; `prefers-reduced-motion` stops all of it.
+- A Firefox version that opens the web app in a pinned tab: decide after launch, from requests.
+- Stopping on low battery: a service worker cannot read the battery level, so the extension offers no such option.

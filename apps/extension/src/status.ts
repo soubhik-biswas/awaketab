@@ -31,13 +31,14 @@ export function viewOf(lock: TLockState, session: ISession | null | undefined): 
   return 'ready';
 }
 
+// The end time already includes every finished pause; a duration plan that is paused stands where the pause began.
 export function remainingMs(session: ISession, now: number): number | null {
   if (session.endsAt === null) return null;
-  if (session.plan.type === 'duration') {
-    const pausedNow = session.status === 'paused' && session.pausedAt !== null ? now - session.pausedAt : 0;
-    return Math.max(0, session.endsAt - now + session.pausedMs + pausedNow);
-  }
-  return Math.max(0, session.endsAt - now);
+  const at =
+    session.plan.type === 'duration' && session.status === 'paused' && session.pausedAt !== null
+      ? session.pausedAt
+      : now;
+  return Math.max(0, session.endsAt - at);
 }
 
 export function totalMs(session: ISession): number | null {

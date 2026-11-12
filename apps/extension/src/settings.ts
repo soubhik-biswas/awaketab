@@ -31,6 +31,8 @@ const EXT_DEFAULT_SETTINGS: ISettings = {
   telemetry: false,
   notifications: false,
   defaultPreset: 'p60',
+  // The end chime is a choice made in Options, so a new install is silent.
+  sound: { ...DEFAULT_SETTINGS.sound, id: 'none' },
 };
 
 // The popup's four length chips, in their order.
@@ -43,6 +45,19 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 export function isExtPreset(value: unknown): value is TExtPreset {
   return typeof value === 'string' && (EXT_PRESETS as readonly string[]).includes(value);
+}
+
+// The end chimes Options offers, by their `settings.sound.id`: silent, the two tones, the bell.
+export const EXT_CHIMES = ['none', 'chime', 'bell'] as const;
+export type TExtChime = (typeof EXT_CHIMES)[number];
+
+export function isExtChime(value: unknown): value is TExtChime {
+  return typeof value === 'string' && (EXT_CHIMES as readonly string[]).includes(value);
+}
+
+export function chimeOf(settings: ISettings): TExtChime {
+  const id = settings.sound.id;
+  return id === 'none' || id === 'bell' ? id : 'chime';
 }
 
 export function readSettings(raw: unknown): ISettings {

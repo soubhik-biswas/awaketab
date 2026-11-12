@@ -1,6 +1,4 @@
-// Builds the extension twice from the same sources into two fresh output folders, zips each and compares
-// the SHA-256 of the zips. Exit 1 when they differ. Used by `pnpm -F extension zip:check` and
-// test/build/reproducible.test.ts.
+// Builds and zips the extension twice and exits 1 when the two SHA-256 hashes differ.
 import { spawnSync } from 'node:child_process';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';

@@ -1,12 +1,24 @@
 import { Mark, mount } from '../../src/ui';
 import './options.css';
-import { Switch } from 'radix-ui';
+import { STORAGE_KEYS } from '@awaketab/core';
+import { Switch, ToggleGroup } from 'radix-ui';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { browser } from 'wxt/browser';
 import type { IExtApi, ITab } from '../../src/api';
 import { loadPage, watchTheme, type IPageContext } from '../../src/page';
-import { EXT_KEYS, normalizeHost, originPattern, readExt, type IExtSettings } from '../../src/settings';
+import {
+  chimeOf,
+  EXT_CHIMES,
+  EXT_KEYS,
+  isExtChime,
+  normalizeHost,
+  originPattern,
+  readExt,
+  readSettings,
+  type IExtSettings,
+  type TExtChime,
+} from '../../src/settings';
 
 type TNote = { key: 'ext.options.noSite' } | { key: 'ext.options.denied'; site: string } | null;
 
@@ -40,6 +52,7 @@ function Options({ ctx, first }: { ctx: IPageContext; first: IExtSettings }) {
   const { api, t } = ctx;
   const reducedMotion = useReducedMotion();
   const [ext, setExt] = useState<IExtSettings>(first);
+  const [chime, setChime] = useState<TExtChime>(chimeOf(ctx.settings));
   const [seen, setSeen] = useState<string[]>([]);
   const [note, setNote] = useState<TNote>(null);
 
@@ -52,6 +65,15 @@ function Options({ ctx, first }: { ctx: IPageContext; first: IExtSettings }) {
     },
     [api],
   );
+
+  const pickChime = async (value: string) => {
+    if (!isExtChime(value)) return;
+    setChime(value);
+    // Read the settings again first: the popup may have saved a new length since this page opened.
+    const stored = await api.storage.local.get(STORAGE_KEYS.settings);
+    const settings = readSettings(stored[STORAGE_KEYS.settings]);
+    await api.storage.local.set({ [STORAGE_KEYS.settings]: { ...settings, sound: { ...settings.sound, id: value } } });
+  };
 
   const look = useCallback(async () => {
     try {
@@ -132,6 +154,31 @@ function Options({ ctx, first }: { ctx: IPageContext; first: IExtSettings }) {
           checked={ext.releaseHidden}
           onChange={(on) => save({ ...ext, releaseHidden: on })}
         />
+        <div className="xo-pick">
+          <span className="xo-text">
+            <strong id="xo-chime-h" className="xo-title">
+              {t('ext.options.chime')}
+            </strong>
+            <span id="xo-chime-d" className="xo-desc">
+              {t('ext.options.chime.desc')}
+            </span>
+          </span>
+          <ToggleGroup.Root
+            type="single"
+            value={chime}
+            onValueChange={(value) => void pickChime(value)}
+            aria-labelledby="xo-chime-h"
+            aria-describedby="xo-chime-d"
+            className="xo-seg"
+            data-chime
+          >
+            {EXT_CHIMES.map((id) => (
+              <ToggleGroup.Item key={id} value={id} className="xo-seg-item" data-chime-id={id}>
+                {t(`ext.options.chime.${id}`)}
+              </ToggleGroup.Item>
+            ))}
+          </ToggleGroup.Root>
+        </div>
         <div className="xo-sites" role="group" aria-labelledby="xo-sites-h">
           <strong id="xo-sites-h" className="xo-title">
             {t('ext.options.sites')}
@@ -179,6 +226,7 @@ function Options({ ctx, first }: { ctx: IPageContext; first: IExtSettings }) {
 async function boot(): Promise<void> {
   const api = browser as unknown as IExtApi;
   const [ctx, stored] = await Promise.all([loadPage(api), api.storage.local.get(EXT_KEYS.ext)]);
+  document.title = ctx.t('ext.options.title');
   mount(<Options ctx={ctx} first={readExt(stored[EXT_KEYS.ext])} />);
 }
 

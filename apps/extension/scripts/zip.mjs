@@ -1,6 +1,4 @@
-// Reproducible store zip (docs/19 M7 exit: "zip builds reproducibly"). Same directory contents → the same
-// bytes: entries sorted by path, fixed DOS timestamp (1980-01-01 00:00), fixed permissions, no extra
-// fields, deflate at a fixed level. Node's zlib is deterministic for identical input and level.
+// Writes the store zip reproducibly: sorted entries, a fixed timestamp and permissions, a fixed deflate level.
 import { createHash } from 'node:crypto';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
