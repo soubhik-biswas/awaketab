@@ -125,7 +125,7 @@
     "preact": "10.29.8",
     "vue": "3.5.42",
     "tsup": "8.5.1",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   },
   "size-limit": [
     {
