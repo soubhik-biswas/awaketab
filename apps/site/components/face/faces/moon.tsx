@@ -10,8 +10,8 @@ const ART = {
     sky: 'radial-gradient(circle at 50% 120%, rgba(17,122,59,.10), transparent 55%), radial-gradient(circle at 50% 30%, #FFFFFF 0%, #EEF1F8 58%, #DFE4F0 100%)',
     shadow: `0 18px 36px ${NAVY(0.18)}, 0 0 0 1px #D9D9E5`,
     track: NAVY(0.1),
-    dark: NAVY(0.07),
-    edge: NAVY(0.16),
+    dark: NAVY(0.1),
+    edge: NAVY(0.22),
     lit: ['#FFFDF6', '#E9E1C9', '#B9AD8E'],
   },
   night: {
@@ -23,6 +23,11 @@ const ART = {
     lit: ['#FFFDF6', '#ECE5D0', '#C8BFA6'],
   },
 };
+// True black around the moonlight on OLED.
+const OLED = {
+  sky: 'radial-gradient(circle at 50% 30%, rgba(255,240,205,.08), transparent 46%), #000000',
+  shadow: '0 0 0 1px #1A2236',
+};
 const GLOW = 'radial-gradient(circle, rgba(255,246,220,.30), rgba(255,246,220,0) 66%)';
 const CRATER = (a: number) => `rgba(60,50,30,${a})`;
 const STAR_SKY = '#A9D0FF';
@@ -33,10 +38,10 @@ const STARS: readonly TStar[] = [
   [252, 96, 2],
   [30, 140, 2],
   [262, 160, 3],
-  [214, 26, 2],
+  [206, 34, 2],
   [96, 22, 2],
   [24, 196, 2],
-  [270, 210, 2],
+  [258, 204, 2],
   [120, 260, 2],
   [180, 270, 2],
   [60, 230, 3],
@@ -65,13 +70,14 @@ export function moonPath(mk: number): string {
   return `M${MCX} ${MCY - MR} A${MR} ${MR} 0 0 1 ${MCX} ${MCY + MR} A${rx} ${MR} 0 0 ${mk < 0.5 ? 0 : 1} ${MCX} ${MCY - MR} Z`;
 }
 
+// With no end there is nothing to wane toward, so the moon stays full and names no share.
 const phase = (m: TFaceModel): string =>
-  m.st === 'up' ? 'New moon' : m.st === 'idle' ? 'Full moon' : `${Math.round(m.ringFrac * 100)}% lit`;
+  m.st === 'up' ? 'New moon' : m.st === 'idle' || m.indef ? 'Full moon' : `${Math.round(m.ringFrac * 100)}% lit`;
 
 // The moon wanes from full to new as the session runs down: a night sky in dark, a pale daytime sky in light.
 export default function Moon({ m }: IDrawProps) {
   const gid = `af-moon-${useId().replace(/[^a-zA-Z0-9_-]/gu, '')}`;
-  const lit = moonPath(m.ringFrac);
+  const lit = moonPath(m.indef ? 1 : m.ringFrac);
   const a = m.night ? ART.night : ART.light;
   return (
     <>
@@ -85,8 +91,8 @@ export default function Moon({ m }: IDrawProps) {
           height: 292,
           borderRadius: '50%',
           overflow: 'hidden',
-          background: a.sky,
-          boxShadow: a.shadow,
+          background: m.theme === 'oled' ? OLED.sky : a.sky,
+          boxShadow: m.theme === 'oled' ? OLED.shadow : a.shadow,
         }}
       >
         {m.night && <Stars pts={STARS} colors={STAR_COLOURS} />}

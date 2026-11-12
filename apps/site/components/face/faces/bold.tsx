@@ -1,6 +1,9 @@
+import { Fragment, type CSSProperties } from 'react';
 import { column, EndLine, type IDrawProps, Kicker } from '../kit';
 
 const NS = 30;
+// Every colon stands alone, so the hour colon is drawn the same as the blinking one instead of the font's in-number form.
+const colon: CSSProperties = { margin: '0 2px' };
 
 // Heavy display digits for across-the-room reading, with a slim progress rail.
 export default function Bold({ m }: IDrawProps) {
@@ -14,16 +17,22 @@ export default function Bold({ m }: IDrawProps) {
           display: 'flex',
           alignItems: 'baseline',
           fontWeight: 800,
-          fontSize: m.long ? 76 : 100,
+          // A hundred hours or more (sessions run up to a week) steps down again so the reading stays inside the face.
+          fontSize: m.digits.length > 8 ? 64 : m.long ? 76 : 100,
           lineHeight: 0.86,
           letterSpacing: '-0.06em',
           fontVariantNumeric: 'tabular-nums',
         }}
       >
-        <span>{m.dL}</span>
+        {m.dL.split(':').map((part, i) => (
+          <Fragment key={i}>
+            {i > 0 && <span style={colon}>:</span>}
+            <span>{part}</span>
+          </Fragment>
+        ))}
         {m.dR && (
           <>
-            <span className="afx-blink" style={{ color: accent, margin: '0 2px' }}>
+            <span className="afx-blink" style={{ ...colon, color: accent }}>
               :
             </span>
             <span>{m.dR}</span>

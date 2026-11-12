@@ -259,8 +259,9 @@ export function faceModel(p: IFaceProps, opts: IFaceOptions = {}) {
   const nowSec = p.nowSec ?? FACE_DEFAULTS.nowSec;
   const t0 = opts.t0 ?? nowSec;
   const fmt = p.fmt === 24 ? 24 : 12;
-  // 240 px and up keep every label at 12 px or more on screen; below 200 px the face is compact, as the boards draw it.
-  const LMIN = size >= 240 && size < 360 ? (12 * 360) / size : 0;
+  // 240 px and up keep every label at 12 px or more on screen, 200 to 240 px at 10 px (never larger on the artboard than
+  // at 240 px, so nothing crowds more); below 200 px the face is compact, as the boards draw it.
+  const LMIN = size >= 240 && size < 360 ? (12 * 360) / size : size >= 200 && size < 240 ? (10 * 360) / size : 0;
   const bare = p.bare === true;
   const framed = p.framed === true;
   const night = theme !== 'light';

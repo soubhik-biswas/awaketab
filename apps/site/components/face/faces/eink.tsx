@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { SERIF } from '../fonts';
-import { card, digitSize, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
+import { card, digitSize, fit, type IDrawProps, L, lmin, MONO, PLATE } from '../kit';
 import type { TFaceModel } from '../model';
 
 const PAPER = '#E8E6DF';
@@ -9,23 +9,29 @@ const NIGHT_PAPER = '#31302B';
 const BEZEL = '#D9D6CD';
 const INK = '#1E1E1C';
 
+// The state in words (paper has no colour to spare): left, paused, not awake, starting.
 const line = (m: TFaceModel): string =>
   m.st === 'up'
     ? 'finished — the screen may sleep'
     : m.st === 'idle'
-      ? `ready when you are · ${m.endLine}`
-      : `left · ${m.endLine}`;
+      ? `ready · ${m.endLine}`
+      : m.indef && m.awake
+        ? m.endLine
+        : `${m.topWord} · ${m.endLine}`;
 
 // Paper-like and calm, with serif digits and a faint ghost; dark themes turn it into night paper.
 export default function Eink({ m }: IDrawProps) {
+  const size = fit(m, digitSize(m, 'big'), 58);
   const digits: CSSProperties = {
     position: 'absolute',
     left: 0,
     width: 332,
-    top: 74,
+    // Centred between the header rule and the status line whatever the reading's size.
+    top: 118 - size / 2,
     textAlign: 'center',
+    whiteSpace: 'nowrap',
     fontFamily: SERIF,
-    fontSize: digitSize(m, 'big'),
+    fontSize: size,
     fontWeight: 300,
     lineHeight: 1,
     fontVariantNumeric: 'tabular-nums',
@@ -81,6 +87,7 @@ export default function Eink({ m }: IDrawProps) {
             fontFamily: SERIF,
             fontStyle: 'italic',
             fontWeight: 400,
+            whiteSpace: 'nowrap',
             fontSize: lmin(15),
           }}
         >
@@ -100,10 +107,18 @@ export default function Eink({ m }: IDrawProps) {
             fontSize: lmin(12),
           }}
         >
-          <div style={{ flex: 1, height: 8, border: `1.5px solid ${INK}`, borderRadius: 2, padding: 1 }}>
-            <div style={{ height: '100%', width: m.fracPct, background: INK }} />
+          <div
+            style={{
+              flex: 1,
+              height: 8,
+              border: `1.5px ${m.indef ? 'dashed' : 'solid'} ${INK}`,
+              borderRadius: 2,
+              padding: 1,
+            }}
+          >
+            {!m.indef && <div style={{ height: '100%', width: m.fracPct, background: INK }} />}
           </div>
-          <span>{m.pctLabel}</span>
+          <span>{m.indef ? 'no end' : m.pctLabel}</span>
         </div>
       </div>
     </div>

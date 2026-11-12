@@ -1,7 +1,7 @@
 import { SUB_DIAL } from '../art';
-import { alpha, sectorPath, ticks } from '../geometry';
+import { alpha, ticks } from '../geometry';
 import { D, DialLabel, hand, type IDrawProps, L, lmin, MONO, Svg, windowAt } from '../kit';
-import { minutesSpan } from './analog-dial';
+import { band, minutesSpan } from './analog-dial';
 
 const MINOR = ticks(126, 132, 60, (i) => i % 5 !== 0);
 const MAJOR = ticks(120, 132, 60, (i) => i % 5 === 0 && i !== 0);
@@ -20,7 +20,7 @@ export default function Pilot({ m }: IDrawProps) {
         <path d="M180 30 L170 48 H190 Z" style={{ fill: t.ink }} />
         <circle cx="166" cy="34" r="2.6" style={{ fill: accent }} />
         <circle cx="194" cy="34" r="2.6" style={{ fill: accent }} />
-        <path d={sectorPath(96, 134, m.minDeg, m.minDeg + spanN)} style={{ fill: alpha(accent, 0x26) }} />
+        <path d={band(96, 134, m.minDeg, spanN)} style={{ fill: alpha(accent, 0x26) }} />
       </Svg>
       {Array.from({ length: 11 }, (_, k) => (
         <DialLabel

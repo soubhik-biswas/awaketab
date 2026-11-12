@@ -324,6 +324,9 @@ importers:
       '@polar-sh/sdk':
         specifier: 1.0.2
         version: 1.0.2
+      '@pqina/flip':
+        specifier: 1.8.4
+        version: 1.8.4
       '@serwist/turbopack':
         specifier: 9.5.13
         version: 9.5.13(@swc/helpers@0.5.23)(esbuild@0.28.2)(next@16.4.3(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@22.20.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(typescript@5.9.3)
@@ -2443,6 +2446,9 @@ packages:
 
   '@poppinss/exception@1.2.3':
     resolution: {integrity: sha512-dCED+QRChTVatE9ibtoaxc+WkdzOSjYTKi/+uacHWIsfodVfpsueo3+DKpgU5Px8qXjgmXkSvhXvSCz3fnP9lw==}
+
+  '@pqina/flip@1.8.4':
+    resolution: {integrity: sha512-vOOGo23t0egDHOhnNeDwHdSQVT1p8l+MetwpZPd+5xEYjvZR6FNUaWYqLki3XFfMijro9YpYuljInCaLhO62dQ==}
 
   '@puppeteer/browsers@3.2.6':
     resolution: {integrity: sha512-MJP29gVoHznmqmwhH1tlZqzfeQ3aylTpSSa6WKZXtkwYUH02i9imBmWGTyZrbnAou5paX78SE4jMAUqnEPf8ug==}
@@ -9574,6 +9580,8 @@ snapshots:
       supports-color: 10.2.2
 
   '@poppinss/exception@1.2.3': {}
+
+  '@pqina/flip@1.8.4': {}
 
   '@puppeteer/browsers@3.2.6(proxy-agent@6.5.0(supports-color@10.2.2))(yauzl@2.10.0)':
     dependencies:

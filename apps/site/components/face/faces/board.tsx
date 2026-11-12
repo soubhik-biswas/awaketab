@@ -40,6 +40,10 @@ const keyStyle = (a: TArt): CSSProperties => ({
   color: a.lab,
 });
 
+const CELLS = 8;
+// Every row reads from its first tile, like a station board's columns.
+const tiles = (text: string): string => text.padEnd(CELLS, ' ').slice(0, CELLS);
+
 interface IRow {
   a: TArt;
   k: string;
@@ -50,7 +54,9 @@ interface IRow {
 }
 
 function Row({ a, k, text, color, flap, live }: IRow) {
-  const cells = text.split('');
+  const cells = tiles(text).split('');
+  // The tile that changes every second: the last digit of the reading.
+  const tick = flap ? text.search(/\d\D*$/u) : -1;
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <span className={L} style={keyStyle(a)}>
@@ -58,15 +64,13 @@ function Row({ a, k, text, color, flap, live }: IRow) {
       </span>
       <div style={{ display: 'flex', gap: 3 }}>
         {cells.map((ch, i) => {
-          const flaps = flap && i === cells.length - 3;
+          const glyph = ch === ' ' ? '' : ch;
           return (
             <span
               key={i}
               style={{
                 position: 'relative',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: 'block',
                 width: 26,
                 height: 38,
                 borderRadius: 4,
@@ -75,24 +79,33 @@ function Row({ a, k, text, color, flap, live }: IRow) {
                 fontFamily: MONO,
                 fontSize: 24,
                 fontWeight: 500,
+                lineHeight: '38px',
+                textAlign: 'center',
                 overflow: 'hidden',
+                perspective: 90,
               }}
             >
-              <span style={{ position: 'relative', zIndex: 1 }}>{ch === ' ' ? '' : ch}</span>
-              <span style={{ position: 'absolute', left: 0, right: 0, top: '50%', height: 1, background: a.split }} />
-              <span
-                className={flaps ? 'afx-flap' : undefined}
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  height: '50%',
-                  background: a.flap,
-                  transformOrigin: '50% 100%',
-                  opacity: flaps && live ? 1 : 0,
-                }}
-              />
+              {glyph}
+              {i === tick && (
+                // The top half of the tile falls each second, carrying the top of its character.
+                <span
+                  className="afx-flap"
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    width: 26,
+                    height: 19,
+                    overflow: 'hidden',
+                    background: a.cell,
+                    transformOrigin: '50% 100%',
+                    opacity: live ? 1 : 0,
+                  }}
+                >
+                  {glyph}
+                </span>
+              )}
+              <span style={{ position: 'absolute', left: 0, right: 0, top: 18.5, height: 1, background: a.split }} />
             </span>
           );
         })}
@@ -105,10 +118,11 @@ function Row({ a, k, text, color, flap, live }: IRow) {
 export default function Board({ m }: IDrawProps) {
   const acc = m.accent;
   const a = m.night ? ART.night : ART.light;
-  const left = m.digits.length <= 5 ? ` ${m.digits}  `.slice(0, 8) : m.digits.slice(0, 8).padEnd(8, ' ');
-  const ends = m.endShort.replace(' ', '').padEnd(8, ' ').slice(0, 8);
+  const left = m.digits === '∞' ? '--:--' : m.digits;
+  // 12:30 PM is exactly eight tiles; a no-end session has no end time to post.
+  const ends = m.indef ? 'NO END' : m.endShort;
   const ink = m.night ? SNOW : '#0B1020';
-  const done = `${Math.round(100 * (1 - m.frac))}%`;
+  const done = m.indef ? '0%' : `${Math.round(100 * (1 - m.frac))}%`;
   return (
     <div
       className={PLATE}
@@ -143,14 +157,7 @@ export default function Board({ m }: IDrawProps) {
       </div>
       <Row a={a} k="LEFT" text={left} color={ink} flap live={m.live} />
       <Row a={a} k="ENDS" text={ends} color={ink} flap={false} live={m.live} />
-      <Row
-        a={a}
-        k="STATE"
-        text={(m.needs ? NEEDS_WORD : WORD[m.st]).padEnd(8, ' ').slice(0, 8)}
-        color={acc}
-        flap={false}
-        live={m.live}
-      />
+      <Row a={a} k="STATE" text={m.needs ? NEEDS_WORD : WORD[m.st]} color={acc} flap={false} live={m.live} />
       <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
         <span className={L} style={keyStyle(a)}>
           DONE
@@ -160,9 +167,17 @@ export default function Board({ m }: IDrawProps) {
         </div>
         <span
           className={L}
-          style={{ fontFamily: MONO, fontSize: lmin(12), color: a.pct, fontVariantNumeric: 'tabular-nums' }}
+          style={{
+            flex: 'none',
+            minWidth: 36,
+            textAlign: 'right',
+            fontFamily: MONO,
+            fontSize: lmin(12),
+            color: a.pct,
+            fontVariantNumeric: 'tabular-nums',
+          }}
         >
-          {done}
+          {m.indef ? '—' : done}
         </span>
       </div>
     </div>

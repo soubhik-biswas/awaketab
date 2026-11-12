@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { BLACK, NAVY, WHITE } from '../art';
 import { alpha } from '../geometry';
-import { EndLine, type IDrawProps } from '../kit';
+import { EndLine, type IDrawProps, L, mono } from '../kit';
 
 // Frosted tubes on a pale base by day, smoked glass on a dark base at night.
 const ART = {
@@ -12,6 +12,7 @@ const ART = {
     ghost: NAVY(0.06),
     base: 'linear-gradient(180deg, #ECEEF4, #CDD2DD)',
     baseShadow: NAVY(0.12),
+    baseInk: '#4B5165',
   },
   night: {
     tube: '#0A0D12',
@@ -20,6 +21,7 @@ const ART = {
     ghost: WHITE(0.05),
     base: 'linear-gradient(180deg, #2A3140, #12161E)',
     baseShadow: BLACK(0.35),
+    baseInk: '#A9B3C7',
   },
 };
 const glow = (light: boolean, c: string): string =>
@@ -31,9 +33,9 @@ const glyph: CSSProperties = {
   position: 'absolute',
   left: 0,
   right: 0,
-  top: 32,
+  top: 28,
   textAlign: 'center',
-  fontSize: 96,
+  fontSize: 88,
   lineHeight: '110px',
   fontWeight: 200,
 };
@@ -43,13 +45,17 @@ export default function Nixie({ m }: IDrawProps) {
   const { accent } = m;
   const a = m.night ? ART.night : ART.light;
   const ink = m.st === 'idle' ? m.t.ink2 : accent;
+  // Time's up leaves the cathodes cold; no end before it starts leaves the tubes dark, with only their ghost 8s.
+  const shadow = m.st === 'up' ? 'none' : glow(!m.night, accent);
+  const dark = m.digits === '∞';
+  const units = dark ? 'NO END' : m.h > 0 ? 'HR · MIN' : 'MIN · SEC';
   const colonDot: CSSProperties = {
     display: 'block',
     width: 8,
     height: 8,
     borderRadius: '50%',
     background: accent,
-    boxShadow: `0 0 10px ${accent}`,
+    boxShadow: m.st === 'up' ? 'none' : `0 0 10px ${accent}`,
   };
   return (
     <div
@@ -67,8 +73,6 @@ export default function Nixie({ m }: IDrawProps) {
         {m.four.map((d, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div
-              className="afx-flick"
-              data-delay={i * 1.3}
               style={{
                 position: 'relative',
                 width: 66,
@@ -82,13 +86,15 @@ export default function Nixie({ m }: IDrawProps) {
             >
               <span style={{ ...glyph, color: a.ghost }}>8</span>
               <span
+                className="afx-flick"
+                data-delay={i * 1.3}
                 style={{
                   ...glyph,
                   color: ink,
-                  textShadow: glow(!m.night, accent),
+                  textShadow: shadow,
                 }}
               >
-                {d}
+                {dark ? '' : d}
               </span>
               <div
                 style={{
@@ -121,6 +127,19 @@ export default function Nixie({ m }: IDrawProps) {
           boxShadow: `inset 0 1px 0 ${WHITE(0.12)}, 0 8px 18px ${a.baseShadow}`,
         }}
       >
+        <span
+          className={L}
+          style={{
+            position: 'absolute',
+            left: 14,
+            top: 0,
+            lineHeight: '22px',
+            whiteSpace: 'nowrap',
+            ...mono(12, '.16em', a.baseInk),
+          }}
+        >
+          {units}
+        </span>
         <span
           className="afx-breath"
           style={{

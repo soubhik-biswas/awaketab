@@ -25,7 +25,8 @@ export default function Dots({ m }: IDrawProps) {
               width: sz,
               height: sz,
               borderRadius: '50%',
-              background: on ? c : m.t.track,
+              // Spent minutes stay visible as empty sockets on every plate.
+              background: on ? c : m.t.line,
               boxShadow: on && bigDot ? `0 0 10px ${alpha(c, 0x88)}` : undefined,
             }}
           />

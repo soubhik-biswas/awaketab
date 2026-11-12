@@ -53,28 +53,34 @@ const GROUND = {
 };
 const OFF = { light: 'rgba(11,16,32,.16)', night: 'rgba(238,242,250,.15)' };
 
-// The words the grid lights for the time left: "about forty minutes left", "under one minute left".
+// The words the grid lights for the time left: "about forty minutes left", "under one minute left". With no end it
+// lights the time awake without "left", and nothing before the start.
 export function gridWords(m: TFaceModel): string[] {
   const mm = m.shownSec / 60;
   const wl: string[] = [];
-  if (m.st === 'up') return wl;
-  if (mm >= 57.5) {
-    const hr = Math.max(1, Math.round(mm / 60));
-    if (Math.abs(mm - hr * 60) > 0.5) wl.push('ABOUT');
-    wl.push(NUMW[Math.min(hr, 5)] ?? 'FIVE', hr > 1 ? 'HOURS' : 'HOUR', 'LEFT');
-  } else if (mm < 1) wl.push('UNDER', 'ONE', 'MINUTE', 'LEFT');
+  if (m.st === 'up' || (m.indef && m.st === 'idle')) return wl;
+  const hr = Math.max(1, Math.round(mm / 60));
+  // The grid spells one to five and ten: six to nine hours read "under ten", past ten just "hours".
+  if (mm >= 57.5 && hr > 10) wl.push('HOURS');
+  else if (mm >= 57.5 && hr > 5 && mm < 570) wl.push('UNDER', 'TEN', 'HOURS');
+  else if (mm >= 57.5) {
+    const n = hr > 5 ? 10 : hr;
+    if (Math.abs(mm - n * 60) > 0.5) wl.push('ABOUT');
+    wl.push(NUMW[n] ?? 'TEN', n > 1 ? 'HOURS' : 'HOUR');
+  } else if (mm < 1) wl.push('UNDER', 'ONE', 'MINUTE');
   else if (mm < 4.5) {
     const n = Math.round(mm);
     if (Math.abs(mm - n) > 0.01) wl.push('ABOUT');
-    wl.push(NUMW[n] ?? '', n > 1 ? 'MINUTES' : 'MINUTE', 'LEFT');
+    wl.push(NUMW[n] ?? '', n > 1 ? 'MINUTES' : 'MINUTE');
   } else {
     const r5 = Math.round(mm / 5) * 5;
     if (Math.abs(mm - r5) > 0.01) wl.push('ABOUT');
     const w = NUMW[r5];
     if (w) wl.push(w);
     else wl.push(NUMW[Math.floor(r5 / 10) * 10] ?? '', 'FIVE');
-    wl.push('MINUTES', 'LEFT');
+    wl.push('MINUTES');
   }
+  if (!m.indef) wl.push('LEFT');
   return wl;
 }
 
@@ -149,17 +155,25 @@ export default function WordGrid({ m }: IDrawProps) {
         className={L}
         style={{
           position: 'absolute',
-          left: 16,
-          top: 248,
-          width: 328,
+          left: 28,
+          top: 240,
+          width: 304,
+          height: 38,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           textAlign: 'center',
+          textWrap: 'balance',
+          lineHeight: 1.2,
           fontFamily: MONO,
           fontSize: lmin(13),
           color: t.ink2,
           fontVariantNumeric: 'tabular-nums',
         }}
       >
-        <span style={{ color: t.ink, fontWeight: 600 }}>{m.digits}</span> · {m.endLine}
+        <span>
+          <span style={{ color: t.ink, fontWeight: 600 }}>{m.digits}</span> · {m.endLine}
+        </span>
       </span>
     </>
   );

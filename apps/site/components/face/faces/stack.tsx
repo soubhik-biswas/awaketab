@@ -4,8 +4,11 @@ import { type IDrawProps, L, lmin, MONO } from '../kit';
 // Minutes over seconds in a tight editorial stack, end time underneath.
 export default function Stack({ m }: IDrawProps) {
   const { t, accent } = m;
+  // Heavy digits advance about 0.58 em and the h 0.54 em; the column is 220 px wide before the rail.
+  const em = m.h > 0 ? String(m.h).length * 0.58 + 0.54 : 1.16;
+  const fs = Math.min(m.h > 9 ? 116 : 150, Math.floor(220 / em));
   const line = (weight: number, color?: string) => ({
-    fontSize: m.h > 9 ? 116 : 150,
+    fontSize: fs,
     fontWeight: weight,
     letterSpacing: '-0.08em',
     lineHeight: 0.8,
@@ -38,7 +41,10 @@ export default function Stack({ m }: IDrawProps) {
       >
         <span style={line(800)}>{m.h > 0 ? `${m.h}h` : pad(m.m)}</span>
         <span style={line(200, accent)}>{m.h > 0 ? pad(m.m) : pad(m.s)}</span>
-        <span className={L} style={{ marginTop: 14, fontSize: lmin(14), color: t.ink2 }}>
+        <span
+          className={L}
+          style={{ marginTop: 14, fontSize: lmin(14), lineHeight: 1.25, color: t.ink2, textWrap: 'balance' }}
+        >
           {m.endLine}
         </span>
       </div>

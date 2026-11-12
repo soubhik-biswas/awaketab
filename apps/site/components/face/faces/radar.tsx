@@ -40,7 +40,8 @@ export default function Radar({ m }: IDrawProps) {
             position: 'absolute',
             inset: 0,
             borderRadius: '50%',
-            background: `conic-gradient(from 0deg, ${a3} 0deg, ${a1} 40deg, transparent 90deg 360deg)`,
+            // The bright edge leads the clockwise sweep and the trail fades out behind it.
+            background: `conic-gradient(from 270deg, transparent 0deg, ${a1} 50deg, ${a3} 89.5deg, transparent 90deg 360deg)`,
             opacity: m.awake || m.st === 'idle' ? 1 : 0.35,
             transform: `rotate(${(360 * (1 - m.frac)).toFixed(1)}deg)`,
           }}
@@ -73,6 +74,7 @@ export default function Radar({ m }: IDrawProps) {
       >
         <span
           style={{
+            color: m.t.ink,
             fontSize: 26,
             fontWeight: 500,
             letterSpacing: '-0.03em',
@@ -83,7 +85,7 @@ export default function Radar({ m }: IDrawProps) {
           {m.digits}
         </span>
         <span className={L} style={mono(12, '.08em', accent)}>
-          {m.endShort}
+          {m.indef ? 'NO END' : m.endShort}
         </span>
       </div>
     </>

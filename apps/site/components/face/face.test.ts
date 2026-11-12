@@ -174,11 +174,13 @@ describe('faceModel', () => {
     expect(ring({ state: 'up' }).aria).toBe("Time's up, Ended 10:47 AM");
   });
 
-  it('scales labels to 12 px on screen from 240 px, goes compact below 200 px and thumbnail at 64 px', () => {
+  it('scales labels to 12 px on screen from 240 px, 10 px from 200 px, goes compact below 200 px and thumbnail at 64 px', () => {
     expect(ring({ size: 250 }).LMIN).toBeCloseTo(17.28, 2);
     expect(ring({ size: 240 }).LMIN).toBe(18);
     expect(ring({ size: 360 }).LMIN).toBe(0);
-    expect(ring({ size: 200 }).LMIN).toBe(0);
+    expect(ring({ size: 200 }).LMIN).toBe(18);
+    expect(ring({ size: 225 }).LMIN).toBe(16);
+    expect(ring({ size: 199 }).LMIN).toBe(0);
     expect(ring({ size: 199 }).compact).toBe(true);
     expect(ring({ size: 200 }).compact).toBe(false);
     expect(ring({ size: 64 }).thumb).toBe(true);
@@ -335,7 +337,6 @@ describe('<Face>', () => {
 
   it('gives every face a true light version instead of a dark slab', () => {
     const night: Partial<Record<TFaceId, string>> = {
-      flip: '#252935',
       nixie: '#0A0D12',
       board: '#0B0F18',
       neon: '#0C080E',
@@ -350,6 +351,11 @@ describe('<Face>', () => {
       expect(html({ face, theme: 'dark' }), face).toContain(ground);
       expect(html({ face, theme: 'light' }), face).not.toContain(ground);
     }
+    // Flip ships one card sheet for every theme and the face's own theme class picks the set.
+    const flip = html({ face: 'flip', theme: 'light' });
+    expect(flip).toMatch(/class="af\b[^"]*\blight\b/u);
+    expect(flip).toMatch(/\.af\.light \.af-flip\{[^}]*--fc-top:[^;]*#FFFFFF/u);
+    expect(html({ face: 'flip', theme: 'dark' })).not.toMatch(/class="af\b[^"]*\blight\b/u);
     expect(html({ face: 'eink', theme: 'dark' })).toContain('invert(.93)');
     expect(html({ face: 'eink', theme: 'light' })).not.toContain('invert(');
     // LCD and Diver keep their dark bezel, like the real objects.

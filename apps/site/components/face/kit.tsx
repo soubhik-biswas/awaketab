@@ -59,9 +59,20 @@ export function Svg({ children }: { children: ReactNode }) {
   );
 }
 
+// Wide tracking and capitals suit Latin letters only; they break joined scripts such as Devanagari and crowd CJK.
+const LATIN = /^[\p{Script=Latin}\p{N}\p{P}\p{Zs}]*$/u;
+
 export function Kicker({ m, color, style }: IDrawProps & { color?: string; style?: CSSProperties }) {
+  const latin = LATIN.test(m.topWord);
   return (
-    <span className={L} style={{ ...mono(12, '.16em', color ?? m.t.ink2), textTransform: 'uppercase', ...style }}>
+    <span
+      className={L}
+      style={{
+        ...mono(12, latin ? '.16em' : '0', color ?? m.t.ink2),
+        textTransform: latin ? 'uppercase' : 'none',
+        ...style,
+      }}
+    >
       {m.topWord}
     </span>
   );

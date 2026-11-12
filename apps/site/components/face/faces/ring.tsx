@@ -52,14 +52,33 @@ export default function Ring({ m }: IDrawProps) {
           top: 43,
           width: 224,
           height: 224,
-          borderRadius: '50%',
-          background: `conic-gradient(from 0deg, transparent 0deg 290deg, ${alpha(accent, 0x99)} 360deg)`,
-          WebkitMaskImage: MASK,
-          maskImage: MASK,
           opacity: m.liveOp,
           ...sweep(m),
         }}
-      />
+      >
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: '50%',
+            background: `conic-gradient(from 0deg, transparent 0deg 300deg, ${alpha(accent, 0xb3)} 360deg)`,
+            WebkitMaskImage: MASK,
+            maskImage: MASK,
+          }}
+        />
+        <span
+          style={{
+            position: 'absolute',
+            left: 109,
+            top: -1.75,
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            background: accent,
+            boxShadow: `0 0 8px ${alpha(accent, 0x99)}`,
+          }}
+        />
+      </div>
       <div style={column(6)}>
         <Kicker m={m} />
         <span style={big(m.long ? 52 : 72)}>{m.digits}</span>

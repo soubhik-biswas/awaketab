@@ -2,18 +2,24 @@ import { alpha, arc, dash, f1, P } from '../geometry';
 import { big, column, EndLine, type IDrawProps, Kicker, Stars, type TStar, Svg, sweep } from '../kit';
 
 const C134 = 2 * Math.PI * 134;
-const STARS: readonly TStar[] = [
-  [118, 70, 2],
-  [240, 76, 3],
-  [92, 150, 2],
-  [262, 190, 2],
-  [140, 232, 3],
-  [226, 236, 2],
-  [200, 50, 2],
-  [70, 112, 2],
-  [286, 120, 2],
-  [110, 200, 2],
-];
+// Placed by angle and radius in the clear bands between the orbits (92 to 104 and 116 to 128), never on a line.
+const STARS: readonly TStar[] = (
+  [
+    [22, 122, 2],
+    [62, 98, 3],
+    [104, 124, 2],
+    [148, 97, 2],
+    [194, 122, 3],
+    [236, 98, 2],
+    [278, 123, 2],
+    [318, 96, 2],
+    [342, 125, 2],
+    [176, 100, 2],
+  ] as const
+).map(([deg, rr, d]) => {
+  const [x, y] = P(rr, deg);
+  return [Math.round(x - d / 2), Math.round(y - d / 2), d] as const;
+});
 const MOON_MASK = 'radial-gradient(circle, transparent 0 86px, #000 86.5px 89.5px, transparent 90px)';
 
 // Three orbits: the session in green, minutes in sky, a violet moon sweeping the seconds.
@@ -99,7 +105,7 @@ export default function Orbit({ m }: IDrawProps) {
           }}
         />
       </div>
-      <div style={column(5)}>
+      <div style={{ ...column(5), paddingBottom: 8 }}>
         <Kicker m={m} />
         <span style={big(m.long ? 36 : 48)}>{m.digits}</span>
         <EndLine m={m} px={13} />

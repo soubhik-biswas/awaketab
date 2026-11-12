@@ -47,7 +47,12 @@ const BLANK_DIGIT = JOIN.map(() => [BLANK, BLANK] as const);
 export const clockHands = (four: readonly number[]): readonly (readonly (readonly number[])[])[] =>
   four.map((d, i) => (i === 0 && d === 0 ? BLANK_DIGIT : digitHands(d)));
 
-const BASE_X = [14, 95, 192, 273];
+// Cells of 33 on a 34 step: four digits and the colon span x 27–333, inside the card at 10–350.
+const CELL = 33;
+const STEP = 34;
+const HAND = 15;
+const TOP = 82;
+const BASE_X = [27, 102, 191, 266];
 const GROUND = {
   light: 'linear-gradient(180deg, #FFFFFF, #F1F1F7)',
   dark: 'linear-gradient(180deg, #14161D, #0A0B10)',
@@ -61,10 +66,10 @@ const MINI = {
 
 const handStyle = (deg: number, color: string, opacity: number): CSSProperties => ({
   position: 'absolute',
-  left: 15.5,
-  top: 1,
+  left: CELL / 2 - 2.5,
+  top: CELL / 2 - HAND,
   width: 5,
-  height: 17,
+  height: HAND,
   borderRadius: 3,
   background: color,
   opacity,
@@ -92,9 +97,9 @@ export default function Clocks({ m }: IDrawProps) {
         className={PLATE}
         style={{
           position: 'absolute',
-          left: 0,
+          left: 10,
           top: 36,
-          width: 360,
+          width: 340,
           height: 240,
           borderRadius: 26,
           background: GROUND[m.theme],
@@ -112,10 +117,10 @@ export default function Clocks({ m }: IDrawProps) {
               key={`${di}-${ci}`}
               style={{
                 position: 'absolute',
-                left: (BASE_X[di] ?? 0) + (ci % 2) * 37,
-                top: 80 + Math.floor(ci / 2) * 37,
-                width: 36,
-                height: 36,
+                left: (BASE_X[di] ?? 0) + (ci % 2) * STEP,
+                top: TOP + Math.floor(ci / 2) * STEP,
+                width: CELL,
+                height: CELL,
                 borderRadius: '50%',
                 background: MINI[m.theme],
                 boxShadow: `inset 0 1px 0 ${WHITE(0.06)}, 0 0 0 1px ${t.line}`,
@@ -132,8 +137,8 @@ export default function Clocks({ m }: IDrawProps) {
               <span
                 style={{
                   position: 'absolute',
-                  left: 14,
-                  top: 14,
+                  left: CELL / 2 - 4,
+                  top: CELL / 2 - 4,
                   width: 8,
                   height: 8,
                   borderRadius: '50%',
@@ -145,13 +150,13 @@ export default function Clocks({ m }: IDrawProps) {
           );
         }),
       )}
-      <span className="afx-blink" style={colon(110)} />
-      <span className="afx-blink" style={colon(148)} />
+      <span className="afx-blink" style={colon(TOP + STEP + CELL / 2 - STEP / 2 - 4)} />
+      <span className="afx-blink" style={colon(TOP + 2 * STEP + CELL / 2 - STEP / 2 - 4)} />
       <div
         style={{
           position: 'absolute',
           left: 40,
-          top: 214,
+          top: 206,
           width: 280,
           height: 4,
           borderRadius: 2,
@@ -161,7 +166,7 @@ export default function Clocks({ m }: IDrawProps) {
       >
         <div className="af-tr" style={{ height: 4, width: m.fracPct, borderRadius: 2, background: heatBar }} />
       </div>
-      <EndLine m={m} px={14} style={{ position: 'absolute', left: 0, top: 230, width: 360, textAlign: 'center' }} />
+      <EndLine m={m} px={14} style={{ position: 'absolute', left: 20, top: 222, width: 320, textAlign: 'center' }} />
     </>
   );
 }
