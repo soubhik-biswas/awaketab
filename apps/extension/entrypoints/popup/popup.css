@@ -20,6 +20,7 @@ body {
 }
 
 .xp-word {
+  margin: 0;
   font: var(--at-type-word);
   letter-spacing: -0.02em;
 }

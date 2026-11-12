@@ -34,6 +34,8 @@
 
 **Explore:** [Demo](#see-it-in-action) · [Features](#features) · [Ways to use it](#choose-how-to-use-it) · [Quick start](#quick-start) · [Development](#development-commands) · [Deployment](#environments-and-deployment) · [Codebase](#architecture-and-repository-map) · [Help](#troubleshooting)
 
+The active Next.js website lives in `apps/site`. See [Next.js deployment](docs/DEPLOYMENT.md) for the production and `play` Worker pipelines; older Pages deployment instructions apply to `apps/web`.
+
 ## See it in action
 
 [![Animated walkthrough of AwakeTab: choosing a duration, confirming Screen awake, and stopping the session](.github/readme/session-demo.gif)](.github/readme/awaketab-product-demo.mp4)
@@ -149,69 +151,70 @@ node scripts/setup.mjs
 pnpm dev
 ```
 
-Open **[http://localhost:4321](http://localhost:4321)**. Choose a duration and start. Keep the terminal open while developing; **Ctrl+C** stops the server.
+Open **[http://localhost:3000](http://localhost:3000)**. Choose a duration and start. Keep the terminal open while developing; **Ctrl+C** stops the server.
 
-**The local timer needs no account, payment credentials or Cloudflare login.** `pnpm dev` serves the website, not the Pages Functions API. Licence activation, checkout and other server integrations need their own service setup or test harness. The example settings contain dummy sandbox values.
+**The local timer needs no account, payment credentials or Cloudflare login.** `pnpm dev` serves the Next.js website and its route handlers. Licence activation, checkout and other server integrations need their own service setup or test harness; see [`apps/site/.env.example`](apps/site/.env.example).
 
 With nvm, run `nvm install` and `nvm use` in the repository to select [`.nvmrc`](.nvmrc). See [Contributing](CONTRIBUTING.md#set-up) for setup options and platform guidance.
 
 ## Development commands
 
-Run these from the **repository root**, unless a command changes directory. A workspace is a package inside this repository; `-F web` or `-F extension` selects one.
+Run these from the **repository root**, unless a command changes directory. A workspace is a package inside this repository; `-F site` or `-F extension` selects one. `-F web` selects the previous Astro site.
 
 | Command | Purpose |
 | --- | --- |
 | `pnpm run setup` | Repeat setup safely; use `node scripts/setup.mjs` before pnpm exists. |
-| `pnpm dev` | Start the website with automatic reload at port 4321. |
+| `pnpm dev` | Start the Next.js website with automatic reload at port 3000. |
 | `pnpm -F extension dev` | Develop the extension with WXT. |
 | `pnpm build` | Build shared packages, website and extension. |
-| `pnpm -F web preview` | Serve the built website locally, without Pages Functions. |
+| `pnpm -F site start` | Serve the built Next.js website locally. |
 | `pnpm format` | Format repository files. |
 | `pnpm lint` | Check formatting, unused code, source rules and styles. |
-| `pnpm typecheck` | Check TypeScript across workspaces and Pages Functions. |
-| `pnpm test` | Run unit and Pages Functions tests. |
-| `pnpm test:seo` | Check metadata, URLs and other rules against the built website. |
+| `pnpm typecheck` | Check TypeScript in the active workspaces. |
+| `pnpm test` | Run shared-package, extension and Next.js site tests. |
+| `pnpm test:seo` | Check the previous Astro site's built output; build `apps/web` first. |
 | `pnpm test:e2e --project=chromium` | Run browser journeys against a built site. |
 | `pnpm test:e2e:ext` | Run extension browser journeys. |
 | `pnpm size` | Check package and website bundle budgets after building. |
 | `pnpm lighthouse` | Run configured Lighthouse audits. |
 
-Use **`pnpm run setup`**, not `pnpm setup`: the latter is pnpm's own command. [`package.json`](package.json) and [`apps/web/package.json`](apps/web/package.json) are the script reference.
+Use **`pnpm run setup`**, not `pnpm setup`: the latter is pnpm's own command. [`package.json`](package.json) and [`apps/site/package.json`](apps/site/package.json) are the active script reference.
 
 ## Environments and deployment
 
-Cloudflare Pages builds the web app; Cloudflare manages DNS. `main` is production and `play` is persistent testing.
+Cloudflare Workers builds the Next.js site; Cloudflare manages DNS. `main` targets `awaketab-site` and `play` targets the separate `awaketab-site-preview` Worker. See [Next.js deployment](docs/DEPLOYMENT.md) for the exact build commands and rollout checks.
 
 | Environment | URL / source | Payments and service data |
 | --- | --- | --- |
-| Local | `http://localhost:4321`, working tree | Sandbox defaults; no live credentials needed for the timer |
+| Local | `http://localhost:3000`, working tree | Sandbox defaults; no live credentials needed for the timer |
 | **Testing** | **[play.awaketab.com](https://play.awaketab.com/)**, `play` | Polar sandbox; Preview licence storage and event dataset; ads off |
 | **Production** | **[awaketab.com](https://awaketab.com/)**, `main` | Free tool live; purchases disabled; separate production storage and credentials |
 
 Testing sends **`X-Robots-Tag: noindex`**. This asks search engines not to index it; it does **not** restrict access. Canonical URLs intentionally remain on `awaketab.com`.
 
 1. Develop on `play`, or send a focused feature pull request into it.
-2. Run checks, push and verify the Pages Preview at `play.awaketab.com`.
+2. Run checks, push and verify the preview Worker at `play.awaketab.com`.
 3. Test affected flows using sandbox payments and Preview bindings.
 4. Promote through a **pull request from `play` to `main`** after review and passing checks.
 5. Verify production, then update `play` from `main` before the next change.
 
-The Pages build command is `pnpm -F web build`; output is `apps/web/dist`, with Node.js 22. There is no root `deploy` script. Production and Preview have separate secrets and bindings. Preview maps `LICENSES` to `LICENSES_PREVIEW` and `EVENTS` to `awaketab_events_preview`; production has its own resources.
+The Workers build root is `/apps/site`, using Node.js 22 and OpenNext. There is no root `deploy` script. Production and preview have separate D1 databases, secrets and bindings. Preview maps `LICENSES` to `LICENSES_PREVIEW` and `EVENTS` to `awaketab_events_preview`; production has its own resources.
 
-See [DevOps and hosting](docs/14-devops.md) for setup, API bindings, backups and the proxied CNAME from `play.awaketab.com` to `play.awaketab.pages.dev`. Keep production purchases disabled until real checkout links, signing keys and payment services are ready.
+The previous Pages build (`pnpm -F web build`, output `apps/web/dist`) is retained for rollback; its historical setup is in [DevOps and hosting](docs/14-devops.md). Keep production purchases disabled until real checkout links, signing keys and payment services are ready.
 
 ## Architecture and repository map
 
-AwakeTab is a **monorepo**: applications and shared packages developed together. Astro builds static HTML; a TypeScript module in the browser runs the timer. Clock faces, sounds, notes and other feature packs load when used.
+AwakeTab is a **monorepo**: applications and shared packages developed together. The active Next.js application lives in `apps/site`; the Astro application in `apps/web` is retained as the previous implementation. Clock faces, sounds, notes and other feature packs load when used.
 
 - **`@awaketab/wake`** requests a lock, handles release events and exposes seven lock states.
 - **`@awaketab/core`** manages sessions, durations, local storage, statistics, capabilities and licence verification.
 - **The web tool and extension** reuse these packages. The extension supplies a browser power-API adapter.
-- **Pages Functions** serve licence, widget-config and event endpoints, backed by Cloudflare KV and Analytics Engine. The basic timer runs in the browser.
+- **Next.js route handlers** serve licence, widget-config and event endpoints on Workers, with D1, Cloudflare KV and Analytics Engine bindings. The basic timer runs in the browser.
 
 ```text
 awaketab/
 ├── apps/
+│   ├── site/                Active Next.js routes, tool UI and Worker configuration
 │   ├── web/
 │   │   ├── src/pages/       Website routes and tool pages
 │   │   ├── src/content/     Guides and articles in eight languages
@@ -228,11 +231,11 @@ awaketab/
 └── .github/                Workflows, issue forms and README media
 ```
 
-The stack centres on Astro, TypeScript, Tailwind CSS, Cloudflare Pages and WXT. Read [Architecture](docs/03-architecture.md) for data flow and design decisions, or [the engine specification](docs/04-engine-spec.md) for state transitions.
+The active stack centres on Next.js, TypeScript, Tailwind CSS, Cloudflare Workers and WXT. [Architecture](docs/03-architecture.md) retains the earlier Astro design; [Next.js deployment](docs/DEPLOYMENT.md) covers current hosting, and [the engine specification](docs/04-engine-spec.md) describes state transitions.
 
 ## Configuration
 
-**Basic local tool:** run setup; no real secrets are required. These optional build settings are safe examples:
+**Basic local tool:** run setup; no real secrets are required. Current Next.js settings are listed in [`apps/site/.env.example`](apps/site/.env.example). The following settings and sandbox build example belong to the previous `apps/web` implementation:
 
 | Setting | Effect |
 | --- | --- |
@@ -263,6 +266,8 @@ References: [configuration and secrets](docs/03-architecture.md#7-environments-c
 
 ## Testing and quality
 
+`pnpm test` covers shared packages, the extension and the active Next.js site. Pages Functions, Astro browser journeys and built-site SEO checks below belong to the retained `apps/web` implementation and need that workspace's own build.
+
 | Check | What it verifies |
 | --- | --- |
 | Unit and UI | Lock transitions, timers, storage, feature gates, parsers and UI behaviour with controlled inputs |
@@ -280,15 +285,13 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
-pnpm test:seo
 pnpm size
-pnpm test:e2e --project=chromium
 pnpm test:e2e:ext
 ```
 
-Build before SEO, size or browser checks. The default web suite starts `astro preview`; it does not verify deployed Cloudflare headers or live API bindings. A fake wake lock can test transitions, but cannot prove a phone stayed lit.
+For changes to `apps/web`, also run `pnpm -F web build`, `pnpm test:seo` and `pnpm test:e2e --project=chromium`. That browser suite starts `astro preview`; it does not verify deployed Cloudflare headers or live API bindings. A fake wake lock can test transitions, but cannot prove a phone stayed lit.
 
-CI checks `main`, `play` and pull requests. Chromium and extension journeys run on pull requests; Firefox and WebKit run nightly. See [the testing strategy](docs/13-testing-strategy.md), [workflows](.github/workflows) and [how we tested](https://awaketab.com/learn/how-we-tested).
+CI checks `main`, `play` and pull requests. Extension Chromium journeys run on pull requests, and dependency auditing runs nightly. The previous site's browser matrix is paused until the Next.js site's own end-to-end suite returns. See [the testing strategy](docs/13-testing-strategy.md), [workflows](.github/workflows) and [how we tested](https://awaketab.com/learn/how-we-tested).
 
 ## Troubleshooting
 
@@ -337,7 +340,8 @@ This is a snapshot, not a delivery promise. Follow [open issues](https://github.
 | [Frontend](docs/05-frontend-spec.md) · [Design](DESIGN.md) | UI contracts, accessibility and design system |
 | [Data and storage](docs/08-data-storage.md) | Local and server persistence |
 | [Extension](docs/10-extension-spec.md) · [Embed](docs/11-embed-spec.md) · [Library](packages/wake/README.md) | Integration references |
-| [Testing](docs/13-testing-strategy.md) · [DevOps](docs/14-devops.md) | Checks, hosting, environments, backups and recovery |
+| [Next.js deployment](docs/DEPLOYMENT.md) | Current Worker branches, domains, commands and preview isolation |
+| [Testing](docs/13-testing-strategy.md) · [DevOps](docs/14-devops.md) | Test strategy and historical Pages operations, backups and recovery |
 
 ## Support, security and licence
 

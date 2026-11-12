@@ -1,5 +1,7 @@
 # 14 · DevOps, hosting and operations
 
+> The active Next.js site in `apps/site` uses Cloudflare Workers. See [Next.js deployment](DEPLOYMENT.md) for current branch, domain and build settings. The Pages instructions below describe the previous `apps/web` deployment and its rollback setup.
+
 Status: v1.2 · 2026-09-26 · Owner: Soubhik
 
 **Purpose.** How AwakeTab is built, deployed, secured, monitored and recovered — on Cloudflare Pages with Pages Functions, KV and Workers Analytics Engine, from a GitHub monorepo. Written for one operator who also writes the code.

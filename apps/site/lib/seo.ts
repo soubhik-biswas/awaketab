@@ -102,6 +102,7 @@ export interface IPageMeta {
 }
 
 export function pageMetadata(meta: IPageMeta): Metadata {
+  const noindex = meta.noindex || process.env.NEXT_PUBLIC_DEPLOY_ENV === 'play';
   const locale = meta.locale ?? 'en';
   const canonical = `${SITE}${meta.path === '/' ? '/' : meta.path}`;
   const alternates =
@@ -117,14 +118,14 @@ export function pageMetadata(meta: IPageMeta): Metadata {
   return {
     title: { absolute: meta.title },
     description: meta.description,
-    robots: meta.noindex
+    robots: noindex
       ? { index: false, follow: true }
       : meta.article
         ? { 'max-image-preview': 'large' }
         : { index: true, follow: true },
     alternates: {
       canonical,
-      ...(meta.noindex
+      ...(noindex
         ? {}
         : {
             languages: {
@@ -137,7 +138,7 @@ export function pageMetadata(meta: IPageMeta): Metadata {
       type: meta.article ? 'article' : 'website',
       siteName: 'AwakeTab',
       locale: LOCALE_META[locale].htmlLang.replace('-', '_'),
-      ...(meta.noindex
+      ...(noindex
         ? {}
         : {
             alternateLocale: alternates

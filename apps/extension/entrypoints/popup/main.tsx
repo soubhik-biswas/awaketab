@@ -123,7 +123,7 @@ function Popup({ ctx, first }: { ctx: IPageContext; first: IExtState | null }) {
     <main className="xp" data-view={view} data-root>
       <header className="xp-head">
         <Mark size={24} />
-        <strong className="xp-word">AwakeTab</strong>
+        <h1 className="xp-word">AwakeTab</h1>
         <span className="xp-pill-slot">
           <span className="at-pill" data-view={view} role="status" aria-live="polite" data-pill>
             <span className="at-dot" aria-hidden="true" />

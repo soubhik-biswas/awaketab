@@ -36,7 +36,8 @@ test('popup opens Ready: the face, four lengths with 1h picked, and "Keep this t
   await expect(pill(page)).toHaveText('Ready');
   await expect(pill(page)).toHaveAttribute('data-view', 'ready');
   await expect(page.locator('[data-chips] [data-preset]')).toHaveCount(4);
-  await expect(page.locator('[data-preset="p60"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('radio')).toHaveCount(4);
+  await expect(page.locator('[data-preset="p60"]')).toHaveAttribute('aria-checked', 'true');
   await expect(primary(page)).toHaveText('Keep this tab awake');
   await expect(page.locator('[role="timer"]')).toBeVisible();
   await expect(page.getByText('Works in any tab')).toBeVisible();
@@ -53,7 +54,8 @@ test('awake: the badge counts the minutes; Pause shows II and releases; Resume a
 }) => {
   const page = await openPopup(context, extensionId);
   await page.locator('[data-preset="p30"]').click();
-  await expect(page.locator('[data-preset="p30"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('[data-preset="p30"]')).toHaveAttribute('aria-checked', 'true');
+  await expect(page.locator('[data-preset="p60"]')).toHaveAttribute('aria-checked', 'false');
   await primary(page).click();
   await expect(pill(page)).toHaveText(/^Awake · (30|29) min$/u);
   await expect(primary(page)).toHaveText('Pause');
@@ -160,6 +162,31 @@ test('options: three switches that save and sync, and an honest note when no sit
   );
 });
 
+test('options skip entry motion when reduced motion is requested', async ({ context, extensionId }) => {
+  const page = await context.newPage();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.addInitScript(() => {
+    const hiddenEntries: string[] = [];
+    Object.defineProperty(window, 'hiddenEntries', { value: hiddenEntries });
+    new MutationObserver(() => {
+      document.querySelectorAll<HTMLElement>('.xo-card, .xo-note').forEach((entry) => {
+        if (entry.style.opacity === '0' || entry.style.transform.includes('translate')) {
+          hiddenEntries.push(entry.className);
+        }
+      });
+    }).observe(document, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+  });
+  await page.goto(`chrome-extension://${extensionId}/options.html`);
+  await expect(page.locator('.xo-card')).toBeVisible();
+  await expect(page.locator('.xo-card')).not.toHaveAttribute('style', /opacity: 0|translate/u);
+  await page.locator('[data-add]').click();
+  await expect(page.getByRole('status')).toHaveText(
+    'Click the AwakeTab icon while you are on the site, then add it here.',
+  );
+  await expect(page.getByRole('status')).not.toHaveAttribute('style', /opacity: 0|translate/u);
+  expect(await page.evaluate(() => Reflect.get(window, 'hiddenEntries') as string[])).toEqual([]);
+});
+
 for (const theme of ['light', 'dark', 'oled'] as const) {
   test(`axe: popup and options have no violations (${theme})`, async ({ context, extensionId }) => {
     const popup = await openPopup(context, extensionId);
@@ -179,6 +206,7 @@ for (const theme of ['light', 'dark', 'oled'] as const) {
     await options.evaluate((value) => {
       document.documentElement.dataset.theme = value;
     }, theme);
+    await expect(options.locator('.xo-card')).toHaveCSS('opacity', '1');
     expect((await new AxeBuilder({ page: options }).analyze()).violations).toEqual([]);
   });
 }

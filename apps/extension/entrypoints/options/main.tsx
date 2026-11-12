@@ -1,7 +1,7 @@
 import { Mark, mount } from '../../src/ui';
 import './options.css';
 import { Switch } from 'radix-ui';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { browser } from 'wxt/browser';
 import type { IExtApi, ITab } from '../../src/api';
@@ -38,6 +38,7 @@ function readableSites(tabs: ITab[]): string[] {
 
 function Options({ ctx, first }: { ctx: IPageContext; first: IExtSettings }) {
   const { api, t } = ctx;
+  const reducedMotion = useReducedMotion();
   const [ext, setExt] = useState<IExtSettings>(first);
   const [seen, setSeen] = useState<string[]>([]);
   const [note, setNote] = useState<TNote>(null);
@@ -105,9 +106,9 @@ function Options({ ctx, first }: { ctx: IPageContext; first: IExtSettings }) {
     <main className="xo" data-root>
       <motion.section
         className="xo-card"
-        initial={{ opacity: 0, y: 14 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={ARRIVE}
+        transition={reducedMotion ? { duration: 0 } : ARRIVE}
       >
         <header className="xo-head">
           <Mark size={28} />
@@ -160,10 +161,10 @@ function Options({ ctx, first }: { ctx: IPageContext; first: IExtSettings }) {
                 key={note?.key}
                 className="xo-note"
                 role="status"
-                initial={{ opacity: 0, y: 6 }}
+                initial={reducedMotion ? false : { opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                transition={ARRIVE}
+                transition={reducedMotion ? { duration: 0 } : ARRIVE}
               >
                 {noteText}
               </motion.p>
