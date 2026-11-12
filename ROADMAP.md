@@ -31,7 +31,6 @@ Proposals that fall outside this scope are usually closed with `not-planned` and
 
 Work in progress or next in line:
 
-- **Move awaketab.com to the new site.** The redesigned Next.js site in `apps/site` replaces the older Astro site in `apps/web`, which is then retired.
 - **Bring back the browser test suite** for the new site, so user journeys are checked in real browsers on every change.
 - **Keep the free tool honest and fast:** fix reported bugs, and refresh the [browser support matrix](https://awaketab.com/learn/browser-support-matrix) after each major browser release.
 

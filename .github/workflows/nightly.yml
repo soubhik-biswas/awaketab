@@ -9,7 +9,6 @@ permissions:
   contents: read
 
 jobs:
-  # The browser matrix and visual tests covered the retiring Astro site; they return with the Next site's own e2e suite.
   audit:
     runs-on: ubuntu-24.04
     steps:

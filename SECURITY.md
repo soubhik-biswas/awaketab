@@ -6,8 +6,7 @@ AwakeTab is maintained by one person. Reports are welcome and read carefully, an
 
 Please report security problems privately, not in a public issue.
 
-- **Email:** [support@awaketab.com](mailto:support@awaketab.com) with "Security" in the subject.
-- **Optional:** if it is enabled for this repository, you can also use GitHub's private vulnerability reporting ("Report a vulnerability" under the Security tab).
+Use GitHub's [private vulnerability reporting](https://github.com/soubhik-biswas/awaketab/security/advisories/new) ("Report a vulnerability" under the Security tab). The report and any draft fix stay private until an advisory is published.
 
 Useful things to include:
 
@@ -22,10 +21,10 @@ Please do not access other people's data, run denial-of-service tests, or use au
 
 These are aims, not guarantees:
 
-- a reply confirming the report within about a week;
-- an assessment and a plan once the problem is reproduced;
-- a fix released as soon as is reasonable for its severity, with a note in the changelog;
-- credit for your report in the changelog if you want it.
+- an acknowledgement within **3 days**;
+- an assessment (confirmed or not, and how severe) within **7 days** of the acknowledgement;
+- a fix for a critical or high-severity problem within **30 days**, and for others within **90 days**;
+- public disclosure through a GitHub security advisory and a changelog note once the fix is released, with credit for your report if you want it.
 
 There is no paid bug bounty.
 
@@ -50,6 +49,14 @@ Examples of what matters most: a way to unlock Pro features without a valid lice
 - Self-XSS, clickjacking on pages without sensitive actions, and attacks that need a compromised device or browser.
 - Denial-of-service and volumetric attacks.
 - Operating system or browser limits that AwakeTab already reports, for example a wake lock refused by a site setting.
+
+## If an incident happens
+
+1. **Contain:** turn off the affected feature or endpoint, or roll back the deployment.
+2. **Rotate:** replace any exposed secret or signing key, and revoke tokens that may be affected.
+3. **Fix:** ship and verify a fix on `main`, with a test that would have caught it.
+4. **Tell people:** publish an advisory and a changelog entry saying what happened, who was affected and what to do.
+5. **Learn:** write down the cause and what changes to stop it happening again.
 
 ## Supported versions
 

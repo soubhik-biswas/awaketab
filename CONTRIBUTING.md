@@ -4,6 +4,35 @@ Thanks for helping. AwakeTab is a browser tab that keeps your screen awake and t
 
 This guide covers setup, how to send a change, the house rules and where the docs live. By taking part you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
+## What we accept
+
+AwakeTab does one job: it keeps a screen awake from a browser tab and says honestly whether that is working. Contributions that make that job more reliable, more accessible, faster or easier to understand are the most welcome: bug fixes with a reproduction, accessibility fixes, translations, documentation and tests.
+
+Some things are out of scope on purpose, such as faking mouse or keyboard input, keeping chat presence green or overriding power policy. Read the [scope in the roadmap](ROADMAP.md#scope) before proposing a feature, and open an issue before starting anything larger than a small fix, so no one spends a weekend on work that cannot be merged.
+
+## Response times
+
+The maintainer works on AwakeTab a few hours a week. Expect a first response to issues and pull requests within **7 days**, and to security reports within **3 days**. If a thread has waited longer, a polite reminder is welcome. See [GOVERNANCE.md](GOVERNANCE.md).
+
+## Your first contribution
+
+Look for issues labelled [`good first issue`](https://github.com/soubhik-biswas/awaketab/labels/good%20first%20issue) or [`help wanted`](https://github.com/soubhik-biswas/awaketab/labels/help%20wanted). Issues labelled `first-timers-only` are kept for people who have never contributed to open source. Comment on the issue to say you are taking it, and ask questions there if anything is unclear.
+
+## AI-assisted contributions
+
+You may use AI tools to help write code or docs, on these conditions:
+
+- You understand every line you submit and can explain why it is there.
+- You have run and tested it yourself; the checks in this guide apply in full.
+- You say in the pull request description which parts were generated or heavily assisted.
+- The commit messages and comments still follow the house rules: no attribution trailers, no generated filler.
+
+Pull requests that look generated but untested, that do not match the issue, or whose author cannot answer review questions will be closed.
+
+## When the answer is no
+
+Sometimes a good idea still does not fit. The maintainer will say so quickly and kindly rather than leaving a thread open: the issue gets the `not-planned` label and a short reason, usually pointing to the scope in the roadmap or the maintenance cost. A pull request that cannot be merged is closed with a thank-you and an explanation. A no is about the change, not about you, and it can be revisited if something changes. Because AwakeTab is MIT-licensed, you are always free to build it in a fork.
+
 ## Set up
 
 You need Node.js 22 and pnpm 12.17.0. The setup script checks both and does the rest:

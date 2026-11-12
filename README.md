@@ -309,6 +309,22 @@ A small documentation correction, accessibility improvement or reproducible bug 
 
 The contribution guide covers branches, formatting and review rules.
 
+## Community
+
+<p>
+  <a href="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml"><img src="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml/badge.svg?branch=main" alt="Main branch CI status"></a>
+  <a href="https://scorecard.dev/viewer/?uri=github.com/soubhik-biswas/awaketab"><img src="https://api.scorecard.dev/projects/github.com/soubhik-biswas/awaketab/badge" alt="OpenSSF Scorecard"></a>
+</p>
+
+AwakeTab is maintained by one person, a few hours a week. Everyone is welcome to ask, report and contribute.
+
+- **[Getting help](SUPPORT.md):** questions go to [Discussions](https://github.com/soubhik-biswas/awaketab/discussions), bugs to the [issue forms](https://github.com/soubhik-biswas/awaketab/issues/new/choose).
+- **[Contributing](CONTRIBUTING.md):** setup, house rules and how pull requests are reviewed. Look for [good first issues](https://github.com/soubhik-biswas/awaketab/labels/good%20first%20issue).
+- **[Roadmap](ROADMAP.md):** what AwakeTab is, what it deliberately is not, and what comes next.
+- **[Governance](GOVERNANCE.md):** who decides, how decisions are recorded, and response times.
+- **[Code of Conduct](CODE_OF_CONDUCT.md):** how we treat each other, and how to report a problem privately.
+- **[Security policy](SECURITY.md):** report vulnerabilities privately, never in a public issue.
+
 ## Project status and roadmap
 
 | Status | Scope |
@@ -335,6 +351,6 @@ This is a snapshot, not a delivery promise. Follow [open issues](https://github.
 
 ## Support, security and licence
 
-Use [GitHub issues](https://github.com/soubhik-biswas/awaketab/issues) for ordinary questions and bugs. Report vulnerabilities privately to [support@awaketab.com](mailto:support@awaketab.com), with **Security** in the subject, as described in [SECURITY.md](SECURITY.md). Do not post security reports in public issues.
+Ask questions in [Discussions](https://github.com/soubhik-biswas/awaketab/discussions) and report bugs with the [issue forms](https://github.com/soubhik-biswas/awaketab/issues/new/choose); [SUPPORT.md](SUPPORT.md) says what goes where. Report vulnerabilities through GitHub's [private vulnerability reporting](https://github.com/soubhik-biswas/awaketab/security/advisories/new), as described in [SECURITY.md](SECURITY.md). Do not post security reports in public issues.
 
 Released under the **[MIT License](LICENSE)**. © 2026 Soubhik Biswas. The hosted product has its own [privacy information](https://awaketab.com/privacy) and [terms](https://awaketab.com/terms).
