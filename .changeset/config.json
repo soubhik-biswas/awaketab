@@ -6,5 +6,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["web", "extension", "@awaketab/core"]
+  "ignore": ["site", "extension", "@awaketab/core"]
 }
