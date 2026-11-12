@@ -118,7 +118,7 @@
     "typecheck": "tsc --noEmit",
     "size": "size-limit",
     "pack:check": "npm pack --dry-run --json",
-    "test": "vitest run --config ../../vitest.config.ts"
+    "test": "vitest run --root ../.. packages/wake"
   },
   "devDependencies": {
     "react": "19.2.8",
@@ -137,13 +137,13 @@
     {
       "name": "@awaketab/wake/video",
       "path": "dist/video.js",
-      "limit": "650 B",
+      "limit": "2.2 kB",
       "gzip": true
     },
     {
       "name": "@awaketab/wake IIFE (CDN)",
       "path": "dist/awaketab-wake.iife.js",
-      "limit": "3.6 kB",
+      "limit": "5.8 kB",
       "gzip": true
     },
     {

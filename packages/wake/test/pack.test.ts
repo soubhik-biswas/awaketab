@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-// E12-T03 / docs/13 M8: what `npm publish` would upload for @awaketab/wake, checked with `npm pack --dry-run`.
+// What `npm publish` would upload for @awaketab/wake, checked with `npm pack --dry-run`.
 const PKG = path.resolve('packages/wake');
 const REPO = path.resolve('.');
 

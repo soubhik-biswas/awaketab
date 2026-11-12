@@ -1,4 +1,4 @@
-import { classifyDenial, isTransientAdvice } from './classify.js';
+import { classifyDenial, isTransientAdvice, policyBlocks } from './classify.js';
 import { createEmitter } from './emitter.js';
 import { createFallbackVideo, type IFallbackHandle } from './fallback.js';
 import type {
@@ -25,8 +25,6 @@ export type {
   IWakeLockSentinelLike,
 } from './types.js';
 export { classifyDenial } from './classify.js';
-export { createEmitter } from './emitter.js';
-export { next } from './machine.js';
 
 const DEFAULT_RETRY = { attempts: 3, baseMs: 500 };
 
@@ -97,20 +95,40 @@ export function createWakeLock(options: IWakeLockOptions = {}): IWakeLockHandle 
   let advice: TAdviceCode | null = api ? null : 'unsupported_browser';
   let sentinel: IWakeLockSentinelLike | null = null;
   let video: IFallbackHandle | null = null;
-  const flags: { destroyed: boolean; cancelled: boolean; releasing: boolean } = {
-    destroyed: false,
-    cancelled: false,
-    releasing: false,
-  };
+  let destroyed = false;
+  // True from request() until release(): what the caller last asked for, whatever the browser has done since.
+  let wanted = false;
   let attempt = 0;
-  let inflight: Promise<TLockState> | null = null;
+  let pending: Promise<TLockState> | null = null;
   let retryTimer: ReturnType<typeof setTimeout> | null = null;
   let visibleReleases: number[] = [];
+  const jobs: Array<() => Promise<void>> = [];
+  let draining = false;
+
+  // Requests and releases run one at a time, in the order they were called; the first starts in the caller's own
+  // call stack so the video fallback can play inside the tap.
+  function serial<T>(task: () => Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      jobs.push(() => task().then(resolve, reject));
+      if (!draining) void drain();
+    });
+  }
+
+  async function drain() {
+    draining = true;
+    for (let job = jobs.shift(); job; job = jobs.shift()) await job();
+    draining = false;
+  }
+
+  const stopped = () => !wanted || destroyed;
+  const again = () => void serial(() => nativeRequest('retry'));
+
   const onRelease = () => {
-    if (flags.releasing || flags.destroyed) return;
+    if (destroyed) return;
     const hidden = doc?.visibilityState === 'hidden';
-    transition('lost', hidden ? 'released_hidden' : 'released_platform', hidden ? 'hidden_document' : advice);
+    sentinel?.removeEventListener('release', onRelease);
     sentinel = null;
+    transition('lost', hidden ? 'released_hidden' : 'released_platform', hidden ? 'hidden_document' : advice);
     if (!hidden) {
       const now = Date.now();
       visibleReleases = visibleReleases.filter((t) => now - t < 10_000);
@@ -120,37 +138,47 @@ export function createWakeLock(options: IWakeLockOptions = {}): IWakeLockHandle 
         scheduleRetry();
         return;
       }
-      void nativeRequest('retry');
+      again();
     }
   };
 
+  // A sentinel the browser released without the event reaching the page is still a loss.
+  const missed = () => {
+    if (state === 'held' && sentinel?.released) onRelease();
+  };
+
+  const onStall = () => {
+    if (state !== 'fallback') return;
+    video?.unwatch();
+    video?.pause();
+    transition('lost', 'released_platform', 'unsupported_browser');
+  };
+
   const onVis = () => {
-    if (flags.destroyed) return;
-    const hidden = doc?.visibilityState === 'hidden';
-    if (hidden) {
+    if (destroyed) return;
+    if (doc?.visibilityState === 'hidden') {
       if (state === 'fallback') {
+        video?.unwatch();
         video?.pause();
-        video?.stopNudge();
         transition('lost', 'released_hidden', 'hidden_document');
       }
       return;
     }
+    missed();
     if (state === 'lost' && reacquire) {
-      if (mode === 'video') void fallbackRequest('retry');
-      else void nativeRequest('retry');
+      again();
     } else if (state === 'denied' && advice === 'hidden_document') {
       attempt = 0;
-      void nativeRequest('retry');
+      again();
     }
   };
 
+  // While held, a fullscreen change asks for nothing: a second request would leave a second sentinel alive, and a
+  // lock the browser dropped for the change arrives as a release event anyway.
   const onFs = () => {
-    if (flags.destroyed) return;
-    if (state === 'held') {
-      void nativeRequest('retry');
-    } else if (state === 'denied') {
-      void nativeRequest('retry');
-    }
+    if (destroyed) return;
+    missed();
+    if (state === 'denied') again();
   };
 
   if (doc) {
@@ -162,13 +190,13 @@ export function createWakeLock(options: IWakeLockOptions = {}): IWakeLockHandle 
     to: TLockState,
     reason: IChangeEvent['reason'],
     nextAdvice?: TAdviceCode | null,
-    extra?: { error?: unknown; silent?: boolean },
+    extra?: { error?: unknown },
   ) {
     const from = state;
     state = to;
     if (nextAdvice !== undefined) advice = nextAdvice;
     if (to === 'held' || to === 'fallback') advice = null;
-    if (!extra?.silent && from !== to) {
+    if (from !== to) {
       const event: IChangeEvent = { from, to, reason, at: Date.now() };
       if (advice) event.advice = advice;
       if (extra?.error !== undefined) event.error = extra.error;
@@ -184,14 +212,14 @@ export function createWakeLock(options: IWakeLockOptions = {}): IWakeLockHandle 
   }
 
   function scheduleRetry() {
-    if (flags.cancelled || flags.destroyed) return;
+    if (stopped()) return;
     if (retryOpt.attempts <= 0 || attempt + 1 >= retryOpt.attempts) return;
     if (doc?.visibilityState === 'hidden') return;
     const delay = retryOpt.baseMs * 2 ** attempt;
     retryTimer = setTimeout(() => {
       retryTimer = null;
       attempt += 1;
-      void nativeRequest('retry');
+      again();
     }, delay);
   }
 
@@ -208,23 +236,34 @@ export function createWakeLock(options: IWakeLockOptions = {}): IWakeLockHandle 
     return window.isSecureContext;
   }
 
-  function abortRequested(): boolean {
-    return flags.cancelled || flags.destroyed;
+  // Lets go of the stored sentinel. Its listener goes first, so this release is never read as the browser's.
+  function drop(): Promise<void> | undefined {
+    const old = sentinel;
+    sentinel = null;
+    if (!old) return undefined;
+    old.removeEventListener('release', onRelease);
+    return old.released ? undefined : old.release().catch(() => undefined);
+  }
+
+  function dropVideo() {
+    video?.remove();
+    video = null;
   }
 
   async function nativeRequest(reason: 'request' | 'retry'): Promise<TLockState> {
-    if (abortRequested()) return 'idle';
+    if (stopped()) return state;
     if (!api) return fallbackRequest(reason);
     clearRetry();
-    flags.cancelled = false;
+    if (sentinel && !sentinel.released) return state;
     transition('requesting', reason);
     try {
       const next = await api.request('screen');
-      if (abortRequested()) {
+      if (stopped()) {
         await next.release().catch(() => undefined);
-        if (!flags.destroyed) transition('idle', 'user_release');
+        if (!destroyed) transition('idle', 'user_release');
         return state;
       }
+      await drop();
       sentinel = next;
       next.addEventListener('release', onRelease);
       mode = 'native';
@@ -232,7 +271,10 @@ export function createWakeLock(options: IWakeLockOptions = {}): IWakeLockHandle 
       transition('held', 'acquired', null);
       return state;
     } catch (error) {
-      if (abortRequested()) return 'idle';
+      if (stopped()) {
+        if (!destroyed) transition('idle', 'user_release');
+        return state;
+      }
       const name = error instanceof Error ? error.name : '';
       if (name === 'SecurityError') {
         transition('unsupported', 'unsupported', 'insecure_context', { error });
@@ -244,6 +286,7 @@ export function createWakeLock(options: IWakeLockOptions = {}): IWakeLockHandle 
         secure: secure(),
         inIframe: inIframe(),
         ua,
+        policyBlocks: policyBlocks(doc),
       });
       transition('denied', 'denied', code, { error });
       emitter.emit('error', { error, at: Date.now(), state, advice: code });
@@ -255,34 +298,45 @@ export function createWakeLock(options: IWakeLockOptions = {}): IWakeLockHandle 
   }
 
   async function fallbackRequest(reason: 'request' | 'retry'): Promise<TLockState> {
-    if (abortRequested()) return 'idle';
+    if (stopped()) return state;
     if (fallbackMode !== 'video' || !doc) {
       transition('unsupported', 'unsupported', secure() ? 'unsupported_browser' : 'insecure_context');
       emitter.emit('error', { error: new Error('unsupported'), at: Date.now(), state, advice });
       return state;
     }
+    if (state === 'fallback') return state;
     transition('requesting', reason);
-    if (!video) video = createFallbackVideo(doc, options.videoSources);
+    video ??= createFallbackVideo(doc, options.videoSources);
+    const mine = video;
     try {
-      await video.play();
-      if (abortRequested()) {
-        video.pause();
-        transition('idle', 'user_release');
-        return state;
-      }
-      if (video.el.paused) {
-        throw new DOMException('paused', 'NotAllowedError');
-      }
+      // Resolves only once the clip is seen to be playing, so `fallback` is never reported on a refused or stalled one.
+      await mine.play();
+      if (stopped()) throw new Error('stopped');
       mode = 'video';
-      video.startNudge(nudgeMs);
+      mine.watch(nudgeMs, onStall);
       transition('fallback', 'fallback_started', null);
       return state;
     } catch (error) {
-      video.remove();
-      video = null;
+      if (destroyed) return state;
+      mine.remove();
+      if (video === mine) video = null;
+      if (!wanted) {
+        transition('idle', 'user_release');
+        return state;
+      }
       transition('unsupported', 'unsupported', 'unsupported_browser', { error });
       emitter.emit('error', { error, at: Date.now(), state, advice });
       return state;
+    }
+  }
+
+  async function releaseNow(): Promise<void> {
+    clearRetry();
+    await drop();
+    dropVideo();
+    // keep denied/unsupported so the pill can show the fix (docs/04 §3 row 20 is user idle only from held/lost)
+    if (state !== 'idle' && state !== 'denied' && state !== 'unsupported') {
+      transition('idle', 'user_release');
     }
   }
 
@@ -303,49 +357,38 @@ export function createWakeLock(options: IWakeLockOptions = {}): IWakeLockHandle 
       return advice;
     },
     request() {
-      if (flags.destroyed) return Promise.resolve('idle' as const);
-      flags.cancelled = false;
-      if (inflight && state === 'requesting') return inflight;
-      attempt = 0;
-      clearRetry();
-      inflight = (api ? nativeRequest('request') : fallbackRequest('request')).finally(() => {
-        inflight = null;
+      if (destroyed) return Promise.resolve('idle' as const);
+      wanted = true;
+      if (pending) return pending;
+      const mine = serial(async () => {
+        attempt = 0;
+        return nativeRequest('request');
+      }).finally(() => {
+        if (pending === mine) pending = null;
       });
-      return inflight;
+      pending = mine;
+      return mine;
     },
-    async release() {
-      if (flags.destroyed) return;
-      flags.cancelled = true;
-      flags.releasing = true;
+    release() {
+      if (destroyed) return Promise.resolve();
+      wanted = false;
+      pending = null;
       clearRetry();
-      if (sentinel) {
-        sentinel.removeEventListener('release', onRelease);
-        await sentinel.release().catch(() => undefined);
-        sentinel = null;
-      }
-      video?.pause();
-      video?.stopNudge();
-      if (state === 'fallback') {
-        video?.remove();
-        video = null;
-      }
-      // keep denied/unsupported so the pill can show the fix (docs/04 §3 row 20 is user idle only from held/lost)
-      if (state !== 'idle' && state !== 'denied' && state !== 'unsupported') {
-        transition('idle', 'user_release');
-      }
-      flags.releasing = false;
+      // A video request still waiting on the browser is abandoned at once, so Stop never waits behind it.
+      if (state === 'requesting') dropVideo();
+      return serial(releaseNow);
     },
     on(event, cb) {
       if (event === 'change') return emitter.on('change', cb as (e: IChangeEvent) => void);
       return emitter.on('error', cb as (e: IErrorEvent) => void);
     },
     destroy() {
-      flags.destroyed = true;
-      flags.cancelled = true;
+      if (destroyed) return;
+      wanted = false;
       clearRetry();
-      void handle.release();
-      video?.remove();
-      video = null;
+      void drop();
+      dropVideo();
+      destroyed = true;
       if (doc) {
         doc.removeEventListener('visibilitychange', onVis);
         doc.removeEventListener('fullscreenchange', onFs);

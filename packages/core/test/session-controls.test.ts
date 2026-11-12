@@ -40,7 +40,7 @@ function setup(opts: { now?: { t: number }; settings?: ISettings; channel?: Broa
   return { engine, lock, storage, fake };
 }
 
-describe('session engine — M6 additions', () => {
+describe('session engine: pause, add time, updates and tab messages', () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.unstubAllGlobals();
@@ -93,8 +93,8 @@ describe('session engine — M6 additions', () => {
     engine.addTime(15 * 60_000);
     const s = engine.session;
     expect(s?.plan.type).toBe('duration');
-    // remaining = endsAt - now + pausedMs for duration plans
-    expect((s?.endsAt ?? 0) - now.t + (s?.pausedMs ?? 0)).toBe(endsAt + 15 * 60_000 - now.t);
+    expect(s?.endsAt).toBe(endsAt + 15 * 60_000);
+    expect(s?.plan).toEqual({ type: 'duration', ms: 75 * 60_000 });
     engine.destroy();
   });
 

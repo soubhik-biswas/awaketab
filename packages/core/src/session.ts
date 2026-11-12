@@ -67,13 +67,15 @@ export function planUntil(wall: string, now = Date.now()): TPlan {
   return { type: 'until', endsAt: d.getTime(), wall };
 }
 
+// endsAt is the real end of a running session: resume() moves it forward by each pause. While a duration plan is
+// paused its clock stands where the pause began; an until plan keeps counting to its wall-clock time.
 function remainingMs(session: ISession, now: number): number | null {
   if (session.endsAt === null) return null;
-  if (session.plan.type === 'duration') {
-    const pauseNow = session.status === 'paused' && session.pausedAt !== null ? now - session.pausedAt : 0;
-    return Math.max(0, session.endsAt - now + session.pausedMs + pauseNow);
-  }
-  return Math.max(0, session.endsAt - now);
+  const at =
+    session.plan.type === 'duration' && session.status === 'paused' && session.pausedAt !== null
+      ? session.pausedAt
+      : now;
+  return Math.max(0, session.endsAt - at);
 }
 
 export function createSession(opts: ISessionOptions): ISessionEngine {
@@ -351,7 +353,11 @@ export function createSession(opts: ISessionOptions): ISessionEngine {
     async resume() {
       if (destroyed || !session || session.status !== 'paused') return opts.lock.state;
       const now = nowFn();
-      if (session.pausedAt !== null) session.pausedMs += now - session.pausedAt;
+      if (session.pausedAt !== null) {
+        const gap = now - session.pausedAt;
+        session.pausedMs += gap;
+        if (session.plan.type === 'duration' && session.endsAt !== null) session.endsAt += gap;
+      }
       session.pausedAt = null;
       if (session.plan.type === 'until' && session.endsAt !== null && now >= session.endsAt) {
         finish('completed', now);
@@ -392,10 +398,10 @@ export function createSession(opts: ISessionOptions): ISessionEngine {
       const remaining = remainingMs(session, nowFn()) ?? 0;
       if (remaining + ms > CUSTOM_MAX_MS) return;
       if (session.plan.type === 'until') {
-        // An until target that moved is no longer a wall-clock target; keep the same deadline as a duration.
-        // Duration remaining is endsAt - now + pausedMs, so fold pausedMs out of the new span.
-        session.plan = { type: 'duration', ms: session.plan.endsAt + ms - session.startedAt - session.pausedMs };
-        session.endsAt = session.startedAt + session.plan.ms;
+        // An until target that moved is no longer a wall-clock target; keep the same deadline as a duration, whose
+        // span leaves the paused time out.
+        session.endsAt = session.plan.endsAt + ms;
+        session.plan = { type: 'duration', ms: session.endsAt - session.startedAt - session.pausedMs };
       } else if (session.plan.type === 'duration') {
         session.plan = { type: 'duration', ms: session.plan.ms + ms };
         session.endsAt += ms;
@@ -415,12 +421,10 @@ export function createSession(opts: ISessionOptions): ISessionEngine {
       if (!stored) return null;
       const now = nowFn();
       if (stored.status !== 'active' && stored.status !== 'paused') return null;
-      const okEnds =
-        stored.endsAt === null
-          ? stored.plan.type === 'indefinite' && now - stored.startedAt < resumeIndefiniteMs
-          : stored.endsAt > now;
-      if (okEnds) return stored;
-      return null;
+      const left = remainingMs(stored, now);
+      const live =
+        left === null ? stored.plan.type === 'indefinite' && now - stored.startedAt < resumeIndefiniteMs : left > 0;
+      return live ? stored : null;
     },
     async resumeSession() {
       const stored = engine.getResumable();

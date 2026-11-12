@@ -15,7 +15,7 @@ import {
 } from './types.js';
 import { computeStreaks, exportStatsCsv, pruneDays } from './stats.js';
 
-// Renamed Clear Night ids, and the faces Glance retired (31 Oct 2026) with the closest face that stays.
+// Ids that were renamed, and the faces Glance retired (31 Oct 2026) with the closest face that stays.
 const OLD_FACES: Readonly<Record<string, TFace>> = {
   word: 'words',
   matrix: 'lcd',
@@ -31,6 +31,26 @@ export function migrateFace(face: unknown, styles?: unknown): TFace {
   if (typeof face !== 'string') return 'ring';
   if ((FACE_IDS as readonly string[]).includes(face)) return face as TFace;
   return OLD_FACES[face] ?? 'ring';
+}
+
+const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
+const isTime = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+
+// A stored session the engine can run, or null: a session whose plan or times are not real is dropped rather than
+// left to stall a clock.
+function readSession(v: unknown): ISession | null {
+  if (!isRecord(v) || !isRecord(v.plan)) return null;
+  const { startedAt, endsAt, pausedAt } = v;
+  const { type, ms, wall } = v.plan;
+  const pausedMs = isTime(v.pausedMs) ? v.pausedMs : 0;
+  if (!isTime(startedAt) || (endsAt !== null && !isTime(endsAt)) || (pausedAt !== null && !isTime(pausedAt)))
+    return null;
+  if (type === 'duration' ? !isTime(ms) : type === 'until' && typeof wall !== 'string') return null;
+  v.pausedMs = pausedMs;
+  if (!isRecord(v.modeState)) v.modeState = {};
+  // Sessions saved before the end time moved with each pause kept the first end time and the paused total beside it.
+  if (isTime(ms) && endsAt !== null && pausedMs > 0 && endsAt === startedAt + ms) v.endsAt = endsAt + pausedMs;
+  return v as unknown as ISession;
 }
 
 export interface IStorageAdapter {
@@ -98,16 +118,19 @@ export function createStorage(adapter?: IStorageAdapter): {
   }
   const a = used;
 
-  function read<T>(key: string, fallback: T): T {
+  // Whatever is stored under a key, or null when it is missing or not JSON.
+  function parse(key: string): unknown {
     try {
       const raw = a.get(key);
-      if (!raw) return structuredClone(fallback);
-      const parsed = JSON.parse(raw) as T;
-      if (!parsed || typeof parsed !== 'object') return structuredClone(fallback);
-      return { ...fallback, ...parsed };
+      return raw ? JSON.parse(raw) : null;
     } catch {
-      return structuredClone(fallback);
+      return null;
     }
+  }
+
+  function read<T extends object>(key: string, fallback: T): T {
+    const parsed = parse(key);
+    return isRecord(parsed) ? { ...structuredClone(fallback), ...parsed } : structuredClone(fallback);
   }
 
   function write(key: string, value: unknown) {
@@ -134,24 +157,17 @@ export function createStorage(adapter?: IStorageAdapter): {
     writeSettings: (s) => {
       write(STORAGE_KEYS.settings, s);
     },
-    session: () => {
-      try {
-        const raw = a.get(STORAGE_KEYS.session);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw) as ISession;
-        return typeof parsed === 'object' ? parsed : null;
-      } catch {
-        return null;
-      }
-    },
+    session: () => readSession(parse(STORAGE_KEYS.session)),
     writeSession: (s) => {
       write(STORAGE_KEYS.session, s);
     },
     stats: () => {
       const { daySessions, dayFocus, ...rest }: IStats = read(STORAGE_KEYS.stats, DEFAULT_STATS);
       const s: IStats = rest;
-      s.days = pruneDays(s.days);
-      // Optional per-day counters (M6 follow-ups): absent in older data, pruned with `days`, dropped if corrupt.
+      s.days = pruneDays(isRecord(s.days) ? s.days : {});
+      if (!isTime(s.totalMinutes)) s.totalMinutes = 0;
+      if (!isTime(s.sessions)) s.sessions = 0;
+      // Optional per-day counters: absent in older data, pruned with `days`, dropped if corrupt.
       if (daySessions && typeof daySessions === 'object') s.daySessions = pruneDays(daySessions);
       if (dayFocus && typeof dayFocus === 'object') s.dayFocus = pruneDays(dayFocus);
       const streaks = computeStreaks(s.days);
@@ -162,15 +178,7 @@ export function createStorage(adapter?: IStorageAdapter): {
     writeStats: (s) => {
       write(STORAGE_KEYS.stats, s);
     },
-    license: () => {
-      try {
-        const raw = a.get(STORAGE_KEYS.license);
-        if (!raw) return null;
-        return JSON.parse(raw) as ILicenseRecord;
-      } catch {
-        return null;
-      }
-    },
+    license: () => parse(STORAGE_KEYS.license) as ILicenseRecord | null,
     writeLicense: (s) => {
       write(STORAGE_KEYS.license, s);
     },

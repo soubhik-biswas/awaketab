@@ -62,20 +62,39 @@ describe('session engine', () => {
     s.destroy();
   });
 
-  it('user pause freezes duration remaining without shifting endsAt', async () => {
+  it('user pause freezes the clock, and resume moves the end time forward by the pause', async () => {
     const start = 1_000_000;
     const now = { t: start };
     const s = engine(now);
+    const left: Array<number | null> = [];
+    s.on('tick', (e) => left.push(e.remainingMs));
     await s.start({ type: 'duration', ms: 20 * 60_000 }, { presetId: 'custom', mode: 'standard' });
     const ends = s.session?.endsAt ?? 0;
-    expect(ends).toBeGreaterThan(0);
+    expect(ends).toBe(start + 20 * 60_000);
     now.t = start + 60_000;
     s.pause();
     now.t = start + 6 * 60_000;
     expect(s.session?.endsAt).toBe(ends);
     await s.resume();
-    expect(s.session?.endsAt).toBe(ends);
+    expect(s.session?.endsAt).toBe(ends + 5 * 60_000);
     expect(s.session?.pausedMs).toBe(5 * 60_000);
+    expect(s.session?.plan).toEqual({ type: 'duration', ms: 20 * 60_000 });
+    expect((s.session?.endsAt ?? 0) - now.t).toBe(19 * 60_000);
+    s.destroy();
+  });
+
+  it('an until plan keeps its wall-clock end through a pause', async () => {
+    const start = Date.parse('2026-09-08T15:00:00.000Z');
+    const now = { t: start };
+    const s = engine(now);
+    const endsAt = start + 60 * 60_000;
+    await s.start({ type: 'until', endsAt, wall: '16:00' }, { presetId: 'until', mode: 'standard' });
+    now.t += 10 * 60_000;
+    s.pause();
+    now.t += 20 * 60_000;
+    await s.resume();
+    expect(s.session?.endsAt).toBe(endsAt);
+    expect(s.session?.pausedMs).toBe(20 * 60_000);
     s.destroy();
   });
 
