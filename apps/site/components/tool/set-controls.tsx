@@ -84,8 +84,8 @@ function Lengths() {
 }
 
 // One violet pill per screen: shine sweep and a border beam (Magic UI), spinner while the browser is asked. The
-// beam's frame clips, so it carries the focus ring for the button inside it; its 1.5 px sit around the button, so the
-// button itself is the full 350 px on phone.
+// frame paints the pill and the button inside it is clear, so the beam's 1.5 px rim is the pill's own edge and no
+// seam shows. The frame clips, so it carries the focus ring for the button; the button is the full 350 px on phone.
 function Cta() {
   const g = useGlance();
   const { t, phone } = g;
@@ -95,7 +95,10 @@ function Cta() {
   return (
     <div
       className={cn('tg-field relative overflow-hidden rounded-full p-[1.5px]', phone && 'w-[353px] max-w-full')}
-      style={{ boxShadow: '0 18px 50px var(--tg-cta-glow)' }}
+      style={{
+        background: 'linear-gradient(180deg, var(--tg-cta-top) 0%, var(--tg-violet) 45%, var(--tg-violet2) 100%)',
+        boxShadow: '0 18px 50px var(--tg-cta-glow), inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 0 rgba(0,0,0,.12)',
+      }}
     >
       <BorderBeam
         size={phone ? 140 : 120}
@@ -116,8 +119,7 @@ function Cta() {
           height: phone ? 60 : 64,
           paddingInline: phone ? 20 : 34,
           fontSize: phone ? 18 : 19,
-          background: 'linear-gradient(180deg, var(--tg-cta-top) 0%, var(--tg-violet) 45%, var(--tg-violet2) 100%)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 0 rgba(0,0,0,.12)',
+          background: 'transparent',
         }}
       >
         <ShineSweep />
