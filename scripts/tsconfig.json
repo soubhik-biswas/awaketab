@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["**/*.ts", "**/*.mts", "../vitest.config.ts", "../vitest.setup.ts"],
+  // This test imports the site's licence code, which the site's own typecheck covers.
+  "exclude": ["kv/test/interop.test.ts"]
+}

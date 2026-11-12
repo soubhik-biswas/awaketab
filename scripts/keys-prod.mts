@@ -44,7 +44,7 @@ export function instructions(pair: IProdKeyPair): string {
     `## 3. Worker secret LICENSE_SIGNING_VER (Production) = ${String(ver)}`,
     '',
     '## 4. Store the private line in your password manager, then clear this terminal (e.g. `clear && printf "\\033[3J"`).',
-    '##    Ship the app with the new public key before switching the secrets (docs/14 §10).',
+    '##    Ship the app with the new public key before switching the secrets (docs/14-devops.md §6).',
   ].join('\n');
 }
 

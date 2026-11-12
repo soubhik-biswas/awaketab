@@ -1,6 +1,4 @@
-// Production builds must never trust the public dev licence key, and must ship a real one (docs/09 §2.4).
-// `tsx scripts/check-keys.mts` checks the source; `--dist <dir>` scans a built output. Both skip unless
-// PUBLIC_POLAR_SERVER=production or --force.
+// A production build must ship a real licence key and never trust the public dev one (docs/09 §2.4).
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

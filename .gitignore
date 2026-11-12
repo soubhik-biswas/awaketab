@@ -13,11 +13,15 @@ test-results/
 .DS_Store
 .lighthouseci/
 apps/extension/.output-test/
+apps/site/e2e/__screens__/
 apps/extension/.publish-package.lock
 # Output of pnpm kv:backup (encrypted, but never committed)
 kv-backups/
 *.jsonl.enc
 
-# Python workflow caches
-__pycache__/
 .impeccable/
+
+# Local-only tooling and design sources
+.claude/settings.local.json
+.claude/hooks/
+.design-local/

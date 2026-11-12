@@ -1,15 +1,5 @@
-# Weekly encrypted export of the Workers KV namespaces (docs/14-devops.md §7).
-#
-# Repository secrets (Settings → Secrets and variables → Actions):
-#   CLOUDFLARE_API_TOKEN     API token with Account → Workers KV Storage → Read only
-#   CLOUDFLARE_ACCOUNT_ID    Cloudflare account id
-#   KV_LICENSES_ID           id of the production LICENSES namespace
-#   KV_LICENSES_PREVIEW_ID   optional: id of LICENSES_PREVIEW (exported too when set)
-#   BACKUP_ENCRYPTION_KEY    `openssl rand -base64 32`; keep a copy in the password manager —
-#                            without it no backup can be restored
-#
-# With none of the required secrets set (forks, a fresh clone) the job logs a notice and succeeds.
-# With only some of them set it fails: a half-configured backup must not look green.
+# Weekly encrypted export of the Workers KV namespaces.
+# The secrets it needs and how to restore a backup are in docs/14-devops.md §7.
 name: KV backup
 
 on:
@@ -56,6 +46,8 @@ jobs:
 
       - if: steps.config.outputs.enabled == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - if: steps.config.outputs.enabled == 'true'
         uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
@@ -68,8 +60,7 @@ jobs:
       - if: steps.config.outputs.enabled == 'true'
         run: pnpm install --frozen-lockfile
 
-      # Lists lic:*, cus:*, embed:*, ord:*, lk:*, grant:*, sub:*, rating:*, encrypts (AES-256-GCM) and verifies each file decrypts
-      # back to the same records before writing it. Any API error exits non-zero and fails the run.
+      # Each file is checked to decrypt back to the same records before it is written; any API error fails the run.
       - if: steps.config.outputs.enabled == 'true'
         run: pnpm kv:backup --out kv-backups
 
