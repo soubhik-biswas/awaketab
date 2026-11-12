@@ -1,6 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "awaketab-site",
+  // Only the custom domains serve the site, so no second indexable copy exists on workers.dev.
+  "workers_dev": false,
+  "preview_urls": false,
   "routes": [
     { "pattern": "awaketab.com", "custom_domain": true },
     { "pattern": "www.awaketab.com", "custom_domain": true },
@@ -30,6 +33,8 @@
   "env": {
     "preview": {
       "name": "awaketab-site-preview",
+      "workers_dev": false,
+      "preview_urls": false,
       "routes": [{ "pattern": "play.awaketab.com", "custom_domain": true }],
       "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "awaketab-site-preview" }],
       "vars": {
