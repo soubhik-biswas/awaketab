@@ -1,166 +1,256 @@
-import { Github, MessageCircle, Play, Rss, X } from 'lucide-react';
+import { ArrowUpRight, Github, MessageCircle, Play, Rss } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import type { ReactNode } from 'react';
 import { Mark } from '@/components/brand/mark';
 import type { TLocale } from '@/i18n/locales';
-import { panelHref, ROUTES, SITE, SOURCE_URL, toolHref } from '@/lib/routes';
-import { cn } from '@/lib/utils';
+import { MAKER_URL, panelHref, ROUTES, SOURCE_URL, toolHref } from '@/lib/routes';
 import { Accent } from './accent';
-import { GridPattern } from '@/components/ui-effects/grid-pattern';
+import { FooterLanguage } from './footer/footer-language';
+import { FooterStatus } from './footer/footer-status';
+import { footGroups, supportLink } from './footer/links';
+import { Maker, MAKER } from './footer/maker';
+import { WordmarkLight } from './footer/wordmark-light';
 import { FooterTheme } from './footer-theme';
-import { LangMenu } from './header-client';
-import { display, pad } from './styles';
-import { PRO_ENABLED } from '@/lib/features';
 
-// The same build that announces a maintenance window on /status also turns the footer pill amber.
-const maintenance = (process.env.NEXT_PUBLIC_MAINTENANCE_UNTIL?.trim() ?? '') !== '';
+const WORD = 'AwakeTab';
+const VIEW = '0.5 -140 828.2 140';
+const FRAME = { x: -20, y: -170, width: 870, height: 200 };
+const GLOW = { filterUnits: 'userSpaceOnUse', x: -40, y: -190, width: 910, height: 240 } as const;
+const HEART =
+  'M14.2 23.2C13 21 11.2 18.6 8.9 16.4C6.6 14.3 3.4 13 2.3 9.9C1.3 7.3 2.6 4 5.6 2.9C8 1.9 10.4 3.1 11.9 5.1C12.7 6.2 13.1 7.3 13.4 8.6C13.6 7.1 15 5.5 17.2 5.3C19.9 4.9 22.1 7 21.7 9.7C21.3 12.2 18.7 13.6 16.2 15.2C13.6 16.9 10.6 19.7 7.8 23.3';
 
-interface IFootLink {
-  label: string;
-  href: string;
-  tag?: string;
-  // English-only pages, so a translated footer marks where its links lead.
-  en?: boolean;
+// The word is stretched to one fixed length, so its outline is the same whichever font file has arrived.
+function Word({ className }: { className: string }) {
+  return (
+    <text className={className} x={0} y={0} textLength={827.09} lengthAdjust="spacingAndGlyphs">
+      {WORD}
+    </text>
+  );
 }
 
-// The footer of the home page and every website page, always graphite whatever the page theme (home board).
+function Sheet({ children }: { children: ReactNode }) {
+  return (
+    <svg className="site-foot-giant-svg" viewBox={VIEW} focusable="false">
+      {children}
+    </svg>
+  );
+}
+
+// The outlined wordmark at rest, and the three lit copies the pointer's light shows through.
+function WordmarkArt() {
+  const mask = { maskUnits: 'userSpaceOnUse', ...FRAME } as const;
+  return (
+    <>
+      <Sheet>
+        <defs>
+          <linearGradient id="site-foot-giant-rest" gradientUnits="userSpaceOnUse" x1={0} y1={-139} x2={0} y2={0}>
+            <stop offset={0} stopColor="#f2f4fa" stopOpacity={0.5} />
+            <stop offset={0.72} stopColor="#f2f4fa" stopOpacity={0.3} />
+            <stop offset={1} stopColor="#f2f4fa" stopOpacity={0.3} />
+          </linearGradient>
+          <linearGradient id="site-foot-giant-hue" gradientUnits="userSpaceOnUse" x1={0} y1={0} x2={828} y2={0}>
+            <stop offset={0} stopColor="#3df58e" />
+            <stop offset={0.3} stopColor="#6fd6d0" />
+            <stop offset={0.55} stopColor="#7cbbff" />
+            <stop offset={1} stopColor="#9f7bff" />
+          </linearGradient>
+          <filter id="site-foot-giant-glow-wash" {...GLOW}>
+            <feGaussianBlur in="SourceGraphic" stdDeviation={6} result="soft" />
+            <feMerge>
+              <feMergeNode in="soft" />
+              <feMergeNode in="soft" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="site-foot-giant-glow-beam" {...GLOW}>
+            <feGaussianBlur in="SourceGraphic" stdDeviation={9} result="wide" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation={4} result="mid" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation={1.6} result="near" />
+            <feMerge>
+              <feMergeNode in="wide" />
+              <feMergeNode in="wide" />
+              <feMergeNode in="mid" />
+              <feMergeNode in="mid" />
+              <feMergeNode in="near" />
+              <feMergeNode in="near" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="site-foot-giant-glow-hot" {...GLOW}>
+            <feGaussianBlur in="SourceGraphic" stdDeviation={10} result="wide" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation={3} result="near" />
+            <feMerge>
+              <feMergeNode in="wide" />
+              <feMergeNode in="wide" />
+              <feMergeNode in="near" />
+              <feMergeNode in="near" />
+              <feMergeNode in="near" />
+            </feMerge>
+          </filter>
+          <mask id="site-foot-giant-outline" {...mask}>
+            <Word className="site-foot-giant-edge" />
+            <Word className="site-foot-giant-core" />
+          </mask>
+          <mask id="site-foot-giant-outline-lit" {...mask}>
+            <Word className="site-foot-giant-edge site-foot-giant-edge-lit" />
+            <Word className="site-foot-giant-core" />
+          </mask>
+          <mask id="site-foot-giant-fill" {...mask}>
+            <Word className="site-foot-giant-body" />
+          </mask>
+        </defs>
+        <rect
+          className="site-foot-giant-ink"
+          {...FRAME}
+          fill="url(#site-foot-giant-rest)"
+          mask="url(#site-foot-giant-outline)"
+        />
+      </Sheet>
+      <div className="site-foot-giant-lights">
+        <div className="site-foot-giant-win site-foot-giant-wash">
+          <div className="site-foot-giant-art">
+            <Sheet>
+              <rect
+                {...FRAME}
+                fill="url(#site-foot-giant-hue)"
+                mask="url(#site-foot-giant-outline)"
+                filter="url(#site-foot-giant-glow-wash)"
+              />
+            </Sheet>
+          </div>
+        </div>
+        <div className="site-foot-giant-win site-foot-giant-beam">
+          <div className="site-foot-giant-art">
+            <Sheet>
+              <rect {...FRAME} fill="url(#site-foot-giant-hue)" fillOpacity={0.07} mask="url(#site-foot-giant-fill)" />
+              <rect
+                {...FRAME}
+                fill="url(#site-foot-giant-hue)"
+                mask="url(#site-foot-giant-outline-lit)"
+                filter="url(#site-foot-giant-glow-beam)"
+              />
+            </Sheet>
+          </div>
+        </div>
+        <div className="site-foot-giant-win site-foot-giant-hot">
+          <div className="site-foot-giant-art">
+            <Sheet>
+              <rect
+                {...FRAME}
+                fill="url(#site-foot-giant-hue)"
+                mask="url(#site-foot-giant-outline-lit)"
+                filter="url(#site-foot-giant-glow-hot)"
+              />
+              <rect {...FRAME} fill="#f6fffb" mask="url(#site-foot-giant-outline-lit)" />
+            </Sheet>
+          </div>
+        </div>
+      </div>
+      <div className="site-foot-giant-shelf">
+        <span className="site-foot-giant-land">
+          <span />
+        </span>
+      </div>
+    </>
+  );
+}
+
+// A hand-drawn heart that keeps drawing itself; the word it stands for is read out in its place.
+function Heart({ children }: { children: ReactNode }) {
+  return (
+    <>
+      <svg className="site-foot-heart" viewBox="0.6 1.2 22.8 22.6" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="site-foot-heart-stroke" gradientUnits="userSpaceOnUse" x1={2} y1={4} x2={22} y2={20}>
+            <stop offset={0} stopColor="#3df58e" />
+            <stop offset={1} stopColor="#9f7bff" />
+          </linearGradient>
+        </defs>
+        <path pathLength={1} d={HEART} stroke="url(#site-foot-heart-stroke)" />
+      </svg>
+      <span className="sr-only">{children}</span>
+    </>
+  );
+}
+
+// The footer of the home page and every website page, always graphite whatever the page theme.
 export async function SiteFooter({ locale }: { locale: TLocale }) {
   const t = await getTranslations({ locale, namespace: 'site.foot' });
-  const tf = await getTranslations({ locale, namespace: 'footer' });
   const english = locale === 'en';
-  const cols: ReadonlyArray<{ h: string; links: readonly IFootLink[] }> = [
-    {
-      h: t('product'),
-      links: [
-        { label: t('timer'), href: toolHref(locale) },
-        { label: t('faces'), href: panelHref('faces', locale), tag: t('new') },
-        { label: t('vibes'), href: panelHref('vibes', locale), tag: t('new') },
-        ...(PRO_ENABLED ? [{ label: t('pro'), href: ROUTES.pro, en: true }] : []),
-      ],
-    },
-    {
-      h: t('uses'),
-      links: [
-        { label: t('cooking'), href: '/for/cooking', en: true },
-        { label: t('presenting'), href: ROUTES.presenting, en: true },
-        { label: t('dashboards'), href: '/for/dashboards', en: true },
-        { label: t('nightdesk'), href: '/for/night-clock', en: true },
-      ],
-    },
-    {
-      h: t('learn'),
-      links: [
-        { label: t('help'), href: ROUTES.help, en: true },
-        { label: t('support'), href: ROUTES.support, en: true },
-        { label: t('guides'), href: ROUTES.guides, en: true },
-        { label: t('changelog'), href: ROUTES.changelog, en: true },
-      ],
-    },
-    {
-      h: t('company'),
-      links: [
-        { label: t('about'), href: ROUTES.about, en: true },
-        { label: tf('privacy'), href: ROUTES.privacy, en: true },
-        { label: tf('terms'), href: ROUTES.terms, en: true },
-        { label: t('statusLink'), href: ROUTES.status, en: true },
-      ],
-    },
-  ];
-  const social = [
-    { label: t('social.github'), href: SOURCE_URL, Icon: Github },
-    { label: t('social.x'), href: `https://x.com/intent/post?url=${encodeURIComponent(SITE)}`, Icon: X },
-    { label: t('social.rss'), href: ROUTES.rss, Icon: Rss },
-  ];
+  const foreign = (onlyEnglish?: boolean) => (onlyEnglish && !english ? 'en' : undefined);
+  const support = supportLink(locale);
   return (
-    <footer
-      className={cn(
-        'dark relative isolate flex flex-col gap-10 overflow-hidden bg-[#05060A] pt-12 pb-6 font-sans text-[#F2F4FA] min-[700px]:gap-14 min-[700px]:pt-[72px] min-[700px]:pb-7',
-        pad,
-      )}
-    >
-      <div aria-hidden="true" className="site-foot-glow absolute -z-10" />
-      <GridPattern width={56} height={56} className="site-mask-top -z-10 stroke-white/[.04]" />
-      <div aria-hidden="true" className="site-foot-line absolute inset-x-0 top-0 h-px" />
-      <div className="site-foot-cta flex flex-col items-start justify-between gap-6 rounded-[28px] p-[22px] min-[700px]:px-8 min-[700px]:py-7 min-[1100px]:flex-row min-[1100px]:items-center">
-        <div className="flex min-w-0 flex-col gap-2">
-          <span className="font-mono text-[12px] tracking-[0.16em] text-[#3DF58E]">{t('kicker')}</span>
-          <strong
-            className={cn(display, 'text-[26px] leading-[1.08] font-bold tracking-[-0.035em] min-[700px]:text-[34px]')}
-          >
-            {t('ctaH')} <Accent night>{t('ctaAccent')}</Accent>
+    <footer className="site-foot dark">
+      <div className="site-foot-glow" aria-hidden="true" />
+      <div className="site-foot-glow-b" aria-hidden="true" />
+      <div className="site-foot-grid" aria-hidden="true" />
+      <div className="site-foot-line" aria-hidden="true" />
+
+      <div className="site-foot-cta">
+        <div className="site-foot-cta-text">
+          <span className="site-foot-kicker">{t('kicker')}</span>
+          <strong className="site-foot-cta-h">
+            {t.rich('headline', { accent: (chunks) => <Accent night>{chunks}</Accent> })}
           </strong>
-          <span className="max-w-[420px] text-[15px] leading-[1.55] text-[#A6AFC2]">{t('ctaLine')}</span>
+          <span className="site-foot-cta-line">{t('ctaLine')}</span>
         </div>
-        <div className="flex flex-none flex-wrap gap-2.5">
-          <a
-            href={toolHref(locale)}
-            className="site-foot-act inline-flex h-[52px] items-center gap-2.5 rounded-full px-[22px] text-[16px] font-bold no-underline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#7CBBFF]"
-          >
-            <Play className="size-[18px] fill-current" strokeWidth={0} aria-hidden="true" />
-            {t('timer')}
+        <div className="site-foot-cta-acts">
+          <a className="site-foot-act" href={toolHref(locale)}>
+            <Play className="site-foot-i site-foot-i-fill" aria-hidden="true" />
+            {t('links.timer')}
           </a>
-          <a
-            href={panelHref('feedback', locale)}
-            className="inline-flex h-[52px] items-center gap-2.5 rounded-full border border-white/[.14] bg-white/5 px-5 text-[16px] font-semibold text-[#F2F4FA] no-underline hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#7CBBFF]"
-          >
-            <MessageCircle className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+          <a className="site-foot-ghost" href={panelHref('feedback', locale)}>
+            <MessageCircle className="site-foot-i" aria-hidden="true" />
             {t('feedback')}
           </a>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-9 min-[700px]:gap-12 min-[1100px]:grid-cols-[1.1fr_1.9fr]">
-        <div className="flex flex-col items-start gap-4">
-          <span className="flex items-center gap-2.5">
+
+      <div className="site-foot-main">
+        <div className="site-foot-brand">
+          <span className="site-foot-lockup">
             <Mark size={30} tone="dark" label="" />
-            <strong className={cn(display, 'text-[24px] font-bold tracking-[-0.03em]')}>AwakeTab</strong>
+            <strong>{WORD}</strong>
           </span>
-          <span className="max-w-[420px] text-[15px] leading-[1.55] text-[#A6AFC2]">{t('tagline')}</span>
-          <a
-            href={ROUTES.status}
-            hrefLang={english ? undefined : 'en'}
-            className={cn(
-              'relative inline-flex h-9 items-center gap-2.5 rounded-full border pr-3.5 pl-3 text-[13px] font-semibold no-underline after:absolute after:inset-x-0 after:-inset-y-1 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#7CBBFF]',
-              maintenance
-                ? 'border-[#FFC53D]/25 bg-[#FFC53D]/[.08] text-[#FFC53D]'
-                : 'border-[#3DF58E]/25 bg-[#3DF58E]/[.08] text-[#3DF58E]',
-            )}
-          >
-            <span
-              aria-hidden="true"
-              className={cn('size-2 rounded-full', maintenance ? 'bg-[#FFC53D]' : 'site-pulse bg-[#3DF58E]')}
-              style={{ ['--pulse' as string]: 'rgba(61,245,142,.5)' }}
-            />
-            {maintenance ? t('statusDown') : t('status')}
-          </a>
-          <div className="flex gap-2">
-            {social.map(({ label, href, Icon }) => (
-              <a
-                key={label}
-                href={href}
-                aria-label={label}
-                {...(href.startsWith('http') ? { rel: 'noopener' } : {})}
-                className="inline-flex size-11 items-center justify-center rounded-[14px] border border-white/[.09] bg-white/[.04] text-[#D5DAE6] hover:bg-white/[.08] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#7CBBFF]"
-              >
-                <Icon className="size-[18px]" strokeWidth={2} aria-hidden="true" />
-              </a>
-            ))}
+          <span className="site-foot-tagline">{t('tagline')}</span>
+          <FooterStatus
+            href={support.href}
+            hrefLang={foreign(support.english)}
+            native={t('status.native')}
+            fallback={t('status.fallback')}
+          />
+          <div className="site-foot-social">
+            <a href={SOURCE_URL} rel="noopener" target="_blank" aria-label={`${t('social.github')} (${t('newTab')})`}>
+              <Github className="site-foot-i" aria-hidden="true" />
+            </a>
+            <a href={ROUTES.rss} aria-label={t('social.rss')}>
+              <Rss className="site-foot-i" aria-hidden="true" />
+            </a>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-7 min-[700px]:grid-cols-4 min-[700px]:gap-6">
-          {cols.map((col) => (
-            <nav key={col.h} aria-label={col.h} className="flex flex-col gap-0.5">
-              <span className="mb-2 font-mono text-[12px] tracking-[0.14em] text-[#8A93A8] uppercase">{col.h}</span>
-              {col.links.map((l) => (
+
+        <div className="site-foot-cols">
+          {footGroups(locale).map((group) => (
+            <nav
+              key={group.id}
+              className={`site-foot-col site-foot-col-${group.id}`}
+              aria-labelledby={`site-foot-${group.id}`}
+            >
+              <h2 id={`site-foot-${group.id}`}>{t(`groups.${group.id}`)}</h2>
+              {group.links.map((link) => (
                 <a
-                  key={l.href}
-                  href={l.href}
-                  hrefLang={l.en && !english ? 'en' : undefined}
-                  className="relative inline-flex min-h-10 items-center gap-2 text-[15px] text-[#E6E9F2] no-underline after:absolute after:inset-x-0 after:-inset-y-0.5 hover:underline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#7CBBFF]"
+                  key={link.id}
+                  href={link.href}
+                  hrefLang={foreign(link.english)}
+                  {...(link.external ? { rel: 'noopener', target: '_blank' } : {})}
                 >
-                  {l.label}
-                  {l.tag && (
-                    <span className="rounded-full bg-[#3DF58E]/10 px-[7px] py-0.5 font-mono text-[12px] text-[#3DF58E]">
-                      {l.tag}
-                    </span>
+                  <span className="site-foot-lbl">{t(`links.${link.id}`)}</span>
+                  {link.fresh && <span className="site-foot-tag">{t('new')}</span>}
+                  {link.external && (
+                    <>
+                      <ArrowUpRight className="site-foot-i" aria-hidden="true" />
+                      <span className="sr-only"> ({t('newTab')})</span>
+                    </>
                   )}
                 </a>
               ))}
@@ -168,19 +258,30 @@ export async function SiteFooter({ locale }: { locale: TLocale }) {
           ))}
         </div>
       </div>
-      <div aria-hidden="true" className={cn(display, 'site-giant pointer-events-none relative text-center font-bold')}>
-        AwakeTab
-      </div>
-      <div className="relative flex flex-wrap items-center justify-between gap-4 border-t border-white/[.08] pt-5 text-[13px] text-[#8A93A8]">
-        <span>{t('copyright')}</span>
-        <span className="flex flex-wrap items-center gap-3.5">
-          <span>{t('cookies')}</span>
+
+      <div className="site-foot-end">
+        <WordmarkLight>
+          <WordmarkArt />
+        </WordmarkLight>
+        <div className="site-foot-bar">
+          <span className="site-foot-legal">
+            <span className="site-foot-copy">{t('copyright', { year: String(new Date().getFullYear()) })}</span>
+            <span className="site-foot-made">
+              <span className="site-foot-made-in">
+                {t.rich('made', {
+                  heart: (chunks) => <Heart>{chunks}</Heart>,
+                  name: () => <Maker url={MAKER_URL} label={t('makerLink', { name: MAKER })} />,
+                })}
+              </span>
+            </span>
+          </span>
+          <span className="site-foot-promise">{t('cookies')}</span>
           <FooterTheme
             label={t('theme.label')}
             names={{ system: t('theme.system'), light: t('theme.light'), dark: t('theme.dark') }}
           />
-          <LangMenu locale={locale} label={tf('language._')} variant="pill" />
-        </span>
+          <FooterLanguage locale={locale} label={t('language')} />
+        </div>
       </div>
     </footer>
   );
