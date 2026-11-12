@@ -30,7 +30,7 @@ Please search existing issues and discussions first; adding detail to an existin
 
 ## A good bug report
 
-The single most useful detail is the exact text the status pill showed, for example "Paused — tab hidden". Also include:
+The single most useful detail is the exact text the status pill showed, for example "Tap to resume · tab was hidden" or "Not awake · the browser said no". Also include:
 
 - where it happened: the website, the Chrome or Edge extension, the website widget, or the npm library;
 - your browser and its version, your operating system, and the device;

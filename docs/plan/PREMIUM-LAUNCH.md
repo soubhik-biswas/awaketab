@@ -9,6 +9,7 @@ AwakeTab launches with everything free and no account. Pro (sync across screens,
 - `/pro`, `/pro/checkout`, `/pro/activate`, `/pro/manage`, `/signin` and `/signin/expired` answer 404 (their `layout.tsx` checks the flag), and `/api/checkout` answers 404.
 - The header has no Pro link and no Sign in button, the footer has no Pro link, the sitemap leaves out `/pro`, and the help centre leaves out billing help.
 - In the tool, Settings shows no Account section and no Pro card, the "You've made it yours" nudge never appears, and `/?open=pro` does not open the Pro panel.
+- The extension's store listing and the launch copy say nothing about a paid plan (`apps/extension/store/listing.md`).
 - Nothing is removed: the Pro panels, licence API, Polar webhook, Better Auth, passkeys and the D1 tables stay deployed and tested.
 
 ## 1. Accounts and secrets (Cloudflare Worker `awaketab-site`)
@@ -19,7 +20,7 @@ Set with `pnpm -F site exec wrangler secret put <NAME>` (and `--env preview` for
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` — a Google OAuth web client with redirect `https://awaketab.com/api/auth/callback/google` (add the preview host too).
 - `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` — a GitHub OAuth app with callback `https://awaketab.com/api/auth/callback/github`.
 - Passkeys need no keys, but they only work on the real host, so the site must be served from `awaketab.com` first. The passkey table already exists in both D1 databases (migration `0002_passkey.sql`).
-- Licence keys: `LICENSE_SIGNING_KEY`, `LICENSE_SIGNING_VER`, `LICENSE_KEY_ENC_KEY` — the same values the old Pages project uses, so existing licences stay valid. `RATE_LIMIT_SALT` as before.
+- Licence keys: `LICENSE_SIGNING_KEY`, `LICENSE_SIGNING_VER`, `LICENSE_KEY_ENC_KEY` (how to make and rotate them: `../14-devops.md` §6) and `RATE_LIMIT_SALT`. The licence routes and checkout are limited to 10 requests a minute per caller by the `RL_LICENSE` rate limit binding, which is already in `wrangler.jsonc` and needs no setup.
 
 ## 2. Payments (Polar)
 
@@ -31,8 +32,7 @@ Set with `pnpm -F site exec wrangler secret put <NAME>` (and `--env preview` for
 
 ## 3. Copy and prices
 
-- Replace `[PRICE]` (monthly) and `[NUMBER]` (the yearly saving) once the monthly price exists; the saving computes itself from the two prices.
-- Replace `[PAYMENT PROVIDER]` with "Polar" in the Pro offer and checkout copy if the brand should be named.
+- Set the monthly price in `apps/site/lib/pro/plans.ts`. Until it exists the monthly price and the yearly saving show a dash; the saving computes itself from the two prices.
 - Review the Pro page copy (Free: "Everything AwakeTab does, on this screen, for good"; Pro: sync up to 5 screens, start or stop every screen from one, cross-device history, priority help, early faces).
 
 ## 4. Product decisions still open
@@ -42,7 +42,8 @@ Set with `pnpm -F site exec wrangler secret put <NAME>` (and `--env preview` for
 
 ## 5. Switch it on
 
-1. Set `NEXT_PUBLIC_PRO_ENABLED=1` in the build environment (it is read at build time) and in `.env` for local work.
-2. Run the full gates (`pnpm lint && pnpm typecheck && pnpm test:unit && pnpm test:site && pnpm build`).
-3. Deploy (`pnpm -F site run deploy`), then check `/pro`, checkout with a Polar sandbox card, sign-in with Google, GitHub and a passkey, the Settings account card signed out and signed in, Manage plan and Your screens.
-4. Add a changelog fragment announcing Pro.
+1. Set `NEXT_PUBLIC_PRO_ENABLED=1` where the site is built, because it is read at build time: as a build variable of `awaketab-site` in Workers Builds (Cloudflare dashboard → the Worker → Settings → Build) for production, and in `apps/site/.env.local` for local work.
+2. Run the full gates (`pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm size`).
+3. Try it on the preview first: set the same build variable on `awaketab-site-preview` and merge the feature branch into `play`, which deploys it to `play.awaketab.com` (or deploy by hand with `NEXT_PUBLIC_PRO_ENABLED=1 pnpm -F site run deploy:preview`). Then check `/pro`, checkout with a Polar sandbox card, sign-in with Google, GitHub and a passkey, the Settings account card signed out and signed in, Manage plan and Your screens on `play.awaketab.com`.
+4. Merge the same feature branch into `main`; `play` itself is never merged into `main`. Workers Builds builds and deploys production with the new variable (`../DEPLOYMENT.md`); repeat the checks on `awaketab.com`.
+5. Add a changelog fragment announcing Pro.

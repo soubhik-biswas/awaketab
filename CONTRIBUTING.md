@@ -59,7 +59,7 @@ Useful commands:
 | `pnpm format`           | Prettier over the repository                                          |
 | `pnpm lint`             | Comment rule, Prettier check, Knip, ESLint and Stylelint              |
 | `pnpm knip`             | Unused files, exports and dependencies (Knip, `knip.json`)            |
-| `pnpm typecheck`        | TypeScript in every workspace                                         |
+| `pnpm typecheck`        | TypeScript in every workspace and the root scripts                    |
 | `pnpm test`             | Shared-package, extension and Next.js site tests (Vitest)             |
 | `pnpm build`            | Builds every package, the site and the extension                      |
 | `pnpm size`             | Bundle size budgets                                                   |
@@ -67,8 +67,8 @@ Useful commands:
 
 ## Branches and pull requests
 
-- Contributions target `main`, which is production. Use descriptive branches in your fork. When a change needs checking on a live deployment first, the owner deploys its branch to the preview at play.awaketab.com.
-- `main` deploys the website automatically, so it only takes changes through pull requests.
+- Cut a descriptive feature branch from the latest `main` and open your pull request against `main`. Before it is merged, the maintainer merges the same branch into `play`, which deploys it to the internal preview at play.awaketab.com, and tests it there. `play` is never merged into `main`.
+- `main` deploys the website automatically, so contributions reach it only through reviewed pull requests.
 - Only `soubhik-biswas` may approve an issue by applying `approved`. Link approved work in your PR using `Closes #123` or `Tracks: #123`.
 - Keep a pull request to one topic. Fill in the template: what changed, why, and how you checked it. See the [task lifecycle guide](.github/COMMUNITY_WORKFLOW.md).
 - For anything people can see, add screenshots in light and dark.
@@ -90,7 +90,7 @@ Useful commands:
 - Before pushing: `pnpm build` and `pnpm size`.
 - Extension Chromium end-to-end tests (`pnpm test:e2e:ext`) run in CI on every pull request; nightly runs dependency auditing. The website has no browser end-to-end suite yet, so check visible changes by hand.
 
-**Design.** AwakeTab has one design system, Clear Night. Read [PRODUCT.md](PRODUCT.md) and [DESIGN.md](DESIGN.md) before touching anything visible.
+**Design.** AwakeTab has one design system, Glance. Read [PRODUCT.md](PRODUCT.md) and [DESIGN.md](DESIGN.md) before touching anything visible.
 
 - Use the design tokens in `apps/site/app/globals.css` (through their Tailwind names) for colour, type, spacing, radius and size; the extension uses the `--at-*` tokens in `apps/extension/src/styles/tokens.css`. Never add raw values.
 - Reuse the shared components in `apps/site/components/site/` (header, footer, page shell) and `apps/site/components/ui/` (shadcn/ui primitives such as buttons).
@@ -104,7 +104,7 @@ Useful commands:
 - routes and slugs;
 - ad placement rules;
 - performance budgets;
-- the `--at-*` tokens.
+- the design tokens (the shadcn variables in `apps/site/app/globals.css` and the extension's `--at-*` tokens).
 
 `CLAUDE.md` lists where each one is specified. Update `docs/00-conventions.md` first for any identifier.
 
@@ -122,8 +122,8 @@ Useful commands:
 | [docs/11-embed-spec.md](docs/11-embed-spec.md)                                    | The Cook Mode embed widget                                              |
 | [docs/12-library-spec.md](docs/12-library-spec.md)                                | The `@awaketab/wake` library                                            |
 | [docs/13-testing-strategy.md](docs/13-testing-strategy.md)                        | What each test suite proves                                             |
-| [docs/redesign/DECISIONS.md](docs/redesign/DECISIONS.md)                          | Design decisions of the Clear Night redesign                            |
-| [DESIGN.md](DESIGN.md) and [docs/redesign/CANVASES.md](docs/redesign/CANVASES.md) | The Clear Night design system and links to its 12 design canvases       |
+| [docs/redesign/DECISIONS.md](docs/redesign/DECISIONS.md)                          | Design and product decisions                                            |
+| [DESIGN.md](DESIGN.md) and [docs/plan/glance](docs/plan/glance)                   | The Glance design system, its brief and its design boards               |
 
 ## Reporting bugs
 
@@ -137,4 +137,8 @@ Please do not report security problems in public issues. See [SECURITY.md](SECUR
 
 ## Licence
 
-By contributing you agree that your contributions are licensed under the [MIT License](LICENSE).
+By contributing you agree that your contributions are licensed under the licence of the part you change: the [GNU AGPL 3.0](LICENSE) for the website, the extension and the session engine, and the [MIT License](packages/wake/LICENSE) for `@awaketab/wake`.
+
+You keep the copyright in what you write. So that the project can keep offering its paid plan and can change its licence terms later without tracking down every contributor, you also grant the maintainer, Soubhik Biswas, a perpetual, worldwide, non-exclusive, royalty-free right to use, modify and distribute your contribution under other licence terms as well, including commercial ones. This does not change the licence anyone else receives the public code under. If you cannot agree to this, for example because your employer owns your work, say so in the pull request before it is merged.
+
+The AwakeTab name and logo are not covered by either licence; see [TRADEMARKS.md](TRADEMARKS.md).

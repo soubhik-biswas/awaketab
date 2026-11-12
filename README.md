@@ -22,7 +22,7 @@
 <p align="center">
   <a href="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml"><img src="https://github.com/soubhik-biswas/awaketab/actions/workflows/ci.yml/badge.svg?branch=main" alt="Main branch CI status"></a>
   <a href="https://scorecard.dev/viewer/?uri=github.com/soubhik-biswas/awaketab"><img src="https://api.scorecard.dev/projects/github.com/soubhik-biswas/awaketab/badge" alt="OpenSSF Scorecard"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0B7A3B" alt="MIT licence"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-0B7A3B" alt="GNU AGPL 3.0 licence"></a>
   <a href=".nvmrc"><img src="https://img.shields.io/badge/Node.js-22-0B7A3B" alt="Development requires Node.js 22"></a>
 </p>
 
@@ -167,18 +167,18 @@ Use **`pnpm run setup`**, not `pnpm setup`: the latter is pnpm's own command. [`
 
 ## Environments and deployment
 
-Cloudflare Workers runs the Next.js site; Cloudflare manages DNS. Cloudflare's own GitHub connection builds and deploys `main`, so no deploy token is stored in GitHub. See [Deployment](docs/DEPLOYMENT.md) for the exact settings, commands and rollback steps.
+Cloudflare Workers runs the Next.js site; Cloudflare manages DNS. Cloudflare's own GitHub connection builds and deploys both branches, so no deploy token is stored in GitHub. See [Deployment](docs/DEPLOYMENT.md) for the exact settings, commands and rollback steps.
 
 | Environment | URL / source | Payments and service data |
 | --- | --- | --- |
 | Local | `http://localhost:3000`, working tree | Sandbox defaults; no credentials needed for the timer |
-| **Preview** | **[play.awaketab.com](https://play.awaketab.com/)**, any branch the maintainer deploys by hand | Sandbox payments; separate database, storage and event dataset; kept out of search |
+| **Preview** | **[play.awaketab.com](https://play.awaketab.com/)**, every push to `play` (internal testing) | Sandbox payments; separate database, storage and event dataset; kept out of search |
 | **Production** | **[awaketab.com](https://awaketab.com/)**, every push to `main` | The free tool; purchases switched off; its own database, storage and credentials |
 
-1. Send a focused pull request into `main`; CI runs the checks on it.
-2. When a change needs a live check, the maintainer deploys its branch to the preview with `pnpm -F site run deploy:preview`.
-3. Merge into `main` after review and passing checks.
-4. Cloudflare runs the same checks again, applies database migrations and deploys. A failing check stops the deploy.
+1. Cut a feature branch from the latest `main` and open a pull request into `main`; CI runs the checks on it.
+2. The maintainer merges the branch into `play`. Cloudflare deploys it to the preview, where it is tested.
+3. When it passes, the same branch is merged into `main`. `play` is never merged into `main`.
+4. On each of those deploys Cloudflare runs the same checks again and applies database migrations. A failing check stops the deploy.
 
 The preview sends `X-Robots-Tag: noindex`, which keeps it out of search engines but does not restrict access.
 
@@ -326,8 +326,18 @@ This is a snapshot, not a delivery promise. The [roadmap](ROADMAP.md) says what 
 | [Deployment](docs/DEPLOYMENT.md) | Worker environments, domains, commands, rollback and preview isolation |
 | [Testing](docs/13-testing-strategy.md) · [DevOps](docs/14-devops.md) | Test strategy, operations, backups and recovery |
 
-## Support, security and licence
+## Support and security
 
 Ask questions in [Discussions](https://github.com/soubhik-biswas/awaketab/discussions) and report bugs with the [issue forms](https://github.com/soubhik-biswas/awaketab/issues/new/choose); [SUPPORT.md](SUPPORT.md) says what goes where. Report vulnerabilities through GitHub's [private vulnerability reporting](https://github.com/soubhik-biswas/awaketab/security/advisories/new), as described in [SECURITY.md](SECURITY.md). Do not post security reports in public issues.
 
-Released under the **[MIT License](LICENSE)**. © 2026 Soubhik Biswas. The hosted product has its own [privacy information](https://awaketab.com/privacy) and [terms](https://awaketab.com/terms).
+## Licence
+
+Copyright © 2026 Soubhik Biswas.
+
+- **The website, the extension and the session engine** (`apps/site`, `apps/extension`, `packages/core`) are licensed under the **[GNU Affero General Public License v3.0](LICENSE)**. You may use, study, change and share them. If you distribute a modified version, or run one as a service for other people, you must make your source available under the same licence.
+- **The `@awaketab/wake` library** (`packages/wake`) is licensed under the **[MIT License](packages/wake/LICENSE)**, so you can use it in any project.
+- **The AwakeTab name and logo** are not covered by either licence. See [TRADEMARKS.md](TRADEMARKS.md).
+
+Releases published before 13 November 2026 were under the MIT License, and stay under it.
+
+The hosted product has its own [privacy information](https://awaketab.com/privacy) and [terms](https://awaketab.com/terms).

@@ -1,105 +1,92 @@
 # AwakeTab design system — "Glance"
 
-Status: **current design (v3.1, 31 October 2026), being implemented.** It replaces Volt and Solar Green. The build brief is `docs/plan/glance/AGENT_PROMPT.md` (it wins over every older doc and over old code); store and share copy is `docs/plan/glance/LISTING_COPY.md`; reference tokens are `docs/plan/glance/reference-tokens.css`. The visual source of truth is the handoff bundle (`awaketab-glance-handoff.zip`: `prototype/Tool.dc.html`, `Site.dc.html`, `Page.dc.html`, `Face.dc.html`, `Scene.dc.html` and boards G00–G15, plus `assets/marketing/`).
+Status: **current design (v3.1, 31 October 2026).** The build brief is `docs/plan/glance/AGENT_PROMPT.md` (it wins over this file and over code where they disagree, except for the decisions listed below); store and share copy is `docs/plan/glance/LISTING_COPY.md`; reference tokens are `docs/plan/glance/reference-tokens.css`. The boards and prototypes the brief names are not kept in this repository, so the code is the reference for exact values. Product context lives in `PRODUCT.md`; every deliberate difference between the brief and the product is recorded, with its reason, in `docs/redesign/DECISIONS.md`.
 
-Decisions that differ from the brief are recorded in `docs/redesign/DECISIONS.md` under "Glance (31 Oct 2026)".
+People touch AwakeTab for three seconds and look at it for an hour. Every choice serves two jobs: start in one tap, and be calm, beautiful and readable from across the room.
 
----
-
-The sections below describe Volt and are kept for history until the Glance build replaces them.
-
-# AwakeTab design system — "Volt"
-
-Status: **approved final design (31 October 2026), being implemented.** It replaces Solar Green (30 October), which replaced Clear Night. The full spec is `docs/redesign/volt/HANDOFF.md`; the build brief is `docs/redesign/volt/BRIEF.md`; the reference tokens are `docs/redesign/volt/reference-tokens.css`. The visual source of truth is the handoff bundle (`awaketab-volt-handoff.zip`: `prototype/*.dc.html` with their `renderVals()` logic, and `html/*.html`, a static snapshot of every board). Product context lives in `PRODUCT.md`; decisions in `docs/redesign/DECISIONS.md` (Volt section, then Solar Green and Next.js build).
-
-**Match the boards pixel for pixel.** Every size, gap, radius, weight, colour and string comes from the board source. When the board and this file disagree, the board wins and this file is fixed.
-
-Stack: **Next.js 16 (App Router) + Tailwind CSS 4 + shadcn/ui + TypeScript** in `apps/site`, `next-themes` with `light`, `dark`, `oled` and system, fonts via `next/font/google`, `lucide-react` 0.460.
+Stack: Next.js 16 (App Router), Tailwind CSS 4, shadcn/ui and TypeScript in `apps/site`; `next-themes` with `light`, `dark`, `oled` and the system setting; fonts through `next/font/google`; Motion for transitions; `lucide-react` icons.
 
 ---
 
 ## 1. Brand
 
-- **Mark:** a progress ring with a lit lamp at its tip. Grid 64 × 64, ring radius 21, stroke 9, round caps, a 70° gap from 12 o'clock back to 10:40. Lamp Ø 11.2 at −125°, highlight Ø 3.2, halo Ø 22 at 28 % on dark grounds only. 16 px optical cut: gap 84°, stroke 10, lamp Ø 12.4. Source: `prototype/Mark.dc.html`; code: `apps/site/components/brand/mark.tsx`.
-- **Wordmark:** Archivo 800 "Awake" + 500 "Tab", width 112 %, tracking −2 %, minimum lockup height 24 px.
-- **Rules:** the lamp is never removed, never violet, never rotated away from 11 o'clock. Its colour follows the session state.
-- **Loud vs quiet:** glow and the volt → violet aurora appear only behind display type, the mark, hero scenes and the clock. Once a session runs, the chrome goes quiet.
+- **Mark:** a progress ring, read like the clock. The bold arc (300°, clockwise from 12 o'clock) is the time left; a faint full track at 22 % ink is the time used; a green bead on the end of the arc means now. On a 32 grid: ring radius 11, stroke 4, round caps, bead radius 4.6. Code: `apps/site/components/brand/mark.tsx`.
+- **Wordmark:** Bricolage Grotesque, "Awake" 700 and "Tab" 500. Clear space is the bead's diameter.
+- **Bead colour:** `#3DF58E` on dark, `#117A3B` on light.
+- **Approved grounds:** graphite, porcelain, one-colour green and one-colour violet.
 
 ## 2. Colour roles (one job each)
 
-| Role | Token | Light (porcelain) | Dark (midnight) |
-|---|---|---|---|
-| Stage / page | `--background` | `#F5F5FA` | `#070B16` (OLED `#000`) |
-| Card | `--card` | `#FFFFFF` | `#0E1424` (OLED `#05070C`) |
-| Surface 2 · 3 | `--secondary`, `--surface-3` | `#ECECF4` · `#E3E3EE` | `#151D31` · `#1D273F` |
-| Line · input line | `--border`, `--input` | `#D9D9E5` · `#878AA0` | `#26314A` · `#6B7894` |
-| Text · 2 · 3 | `--foreground`, `--muted-foreground-strong`, `--muted-foreground` | `#0B1020` · `#4B5165` · `#626777` | `#EEF2FA` · `#A9B3C7` · `#8E99AE` |
-| Green = awake / live | `--lamp` | `#117A3B` | `#3DF58E` (volt) |
-| Electric violet = act (Keep awake, extend, share, Pro) | `--primary` | `#6633F5` | `#9F7BFF` |
-| Amber = paused | `--warning` | `#8A5A00` | `#FFC53D` |
-| Red = blocked | `--destructive` | `#C21D3E` | `#FF6B81` |
-| Sky = needs you, info, focus ring | `--info`, `--ring` | `#1C64B8` | `#7CBBFF` |
-| Neutral pearl = ended (calm, never a warning) | `--ended` | `#4B5165` | `#C9D1E0` |
-| Link | `--link` | `#117A3B` | `#7CF0AE` |
+| Role | Token | Light (porcelain) | Dark (graphite) | OLED |
+|---|---|---|---|---|
+| Page | `--background` | `#F4F4F9` | `#05060A` | `#000000` |
+| Surface | `--card` | `#FFFFFF` | `#0E1016` | `#05060A` |
+| Surface 2 · 3 | `--secondary`, `--surface-3` | `#ECECF4` · `#E3E3EE` | `#15171E` · `#1C1F29` | `#0E1016` · `#15171E` |
+| Line · strong line | `--border`, `--border-hi` | ink at 9 % · 18 % | white at 9 % · 18 % | as dark |
+| Text · 2 · 3 | `--foreground`, `--muted-foreground-strong`, `--muted-foreground` | `#0B1020` · `#4B5165` · `#5C6275` | `#F2F4FA` · `#A6AFC2` · `#99A1B5` | as dark |
+| Green (`volt`) = awake, live only | `--lamp` | `#117A3B` | `#3DF58E` | as dark |
+| Violet = the button, act | `--primary` | `#6633F5`, white text | `#9F7BFF`, `#0B0718` text | as dark |
+| Amber = paused, needs a tap | `--warning` | `#8A5A00` | `#FFC53D` | as dark |
+| Red = blocked, danger | `--destructive` | `#C21D3E` | `#FF6B81` | as dark |
+| Sky = focus ring, info | `--info`, `--ring` | `#1C64B8` | `#7CBBFF` | as dark |
+| Panel | `--panel` | white at 90 % | `rgba(13,16,30,.86)` | `rgba(6,7,12,.94)` |
+| Glass fill | `--glass` | `#FFFFFF` | white at 4 % | white at 3.5 % |
 
-Soft fills: `--primary-soft`, `--accent` (lamp soft), `--warning-soft`, `--destructive-soft`, `--info-soft`, `--ended-soft`. Hover and press ramps: `--primary-hover/-press`, `--lamp-hover/-press`, `--destructive-hover/-press`. Elevation: `--shadow-e1/e2/e3`; in dark mode height means a lighter surface plus a stronger line. Glows `--halo`, `--primary-glow`; scrim `--scrim`; surfaces `--pop`, `--sheet`, `--field`.
+Glass is the fill, a 1 px line and `backdrop-filter: blur(20px) saturate(1.4)`. OLED is a real theme: a pure black page, the living background at 30 % and faces in their OLED drawing. All values live in `apps/site/app/globals.css` (shadcn names, exposed to Tailwind through `@theme inline`); the tool's own palette is `--tg-*` in `apps/site/components/tool/glance.css`, and the faces draw with the face palette. Every text pair is at least 4.5:1, every border, icon and face fill at least 3:1.
 
-Face spectrum (clock faces only, only while awake): `--face-{sky,violet,lime,amber,ember}` for text and `--face-fill-*` for fills; layered information uses volt · sky · lilac. Heat scale for time left: > 50 % green, 25–50 % lime, 8–25 % amber, last 8 % ember. Every other state uses its single status colour.
-
-All values live in `apps/site/app/globals.css` (shadcn names, exposed to Tailwind through `@theme inline`). Every text pair ≥ 4.5:1, every border, icon and face fill ≥ 3:1.
+Faces show one heat colour for the time left while awake (green, then lime, amber and ember); every other state uses its single status colour, which overrides any accent.
 
 ## 3. Type
 
-Archivo (variable width, set at 112–118 %) for display only: headings, the wordmark, arrival moments (`font-display` + `font-stretch: 112%`). Geist for every word of UI and the clock digits, Geist Mono for labels, keys and code. JA / ZH / HI fall back to Noto Sans JP / SC / Devanagari. Faces also use IBM Plex Serif (Luxe, Words) and DotGothic16 (LED), loaded only with those faces.
+Bricolage Grotesque 700 for display only (headlines, panel and card titles, the wordmark), tracking −3.5 % to −4.5 %. Inter for every word of UI and the clock digits (Inter Light, tabular figures). Instrument Serif italic for one accent word per headline, at 1.08em with the green → mint → violet gradient, in Latin scripts only. Geist Mono for eyebrows, labels, keys and counts. Japanese and Chinese use the device's own fonts, with no web font to download; Hindi falls back to Noto Sans Devanagari. Faces keep their own character type (Archivo, IBM Plex Serif), loaded only with those faces.
 
-| Token | Spec |
-|---|---|
-| display-2xl | Archivo 112 % · 96 / .96 / −4 % / 800, page hero (tablet 68–80, phone 46) |
-| display-xl | Archivo 112 % · 68 / .98 / −3.5 % / 800, the tool hero (tablet 56–60, phone 34) |
-| display-lg | Archivo 112 % · 52 / 1.04 / −3.5 % / 800, section heads (tablet 42, phone 32) |
-| display-md | Archivo 112 % · 28 / 1.1 / −2.5 % / 800, sheet and dialog titles (phone 24) |
-| count-xl | Geist 96 / 1 / −3 % / 300, tabular figures (inside faces) |
-| lead | Geist 22 / 1.5 (phone 18); tool subline 19 / 16 |
-| h3 | Archivo 112 % · 24 / 1.15 / −2 % / 800, card titles (phone 21) |
-| body-lg · body · small | 18 / 1.6 · 17 / 1.55 (phone 16) · 14 / 1.5; controls and chips 16 |
-| meta | Geist Mono 12 / 1.4 / +8 % / 500 |
-| code | Geist Mono 14 / 1.6 |
+| Use | Spec | Smaller screens |
+|---|---|---|
+| Page hero | Bricolage 700, 96 / .96, −4.5 % | tablet 68–80, phone 46 |
+| Tool headline | Bricolage 700, 64 / .98, −4 % | tablet 52–60, phone 36 |
+| Section heads | 52 | tablet 46, phone 34 |
+| Panel titles | 30 | phone 26 |
+| Card titles | 24 | phone 21 |
+| Body | 15–17 | |
+| Meta | Geist Mono 12–13, uppercase, wide tracking | |
 
-Nothing renders under 12 px. Times are full 12-hour in English (`11:42 AM`); other locales use their own clock.
+Nothing renders under 12 px, and weights stop at 700. Times are full 12-hour in English (`11:42 AM`). German, Spanish, French and Portuguese show a 24-hour clock until the person turns on the 12-hour clock in Settings, which every language follows; Japanese and Chinese write 午前 / 午後 and 上午 / 下午, and Hindi names four parts of the day (सुबह, दोपहर, शाम, रात). Dates are written in full.
 
 ## 4. Space, shape, size
 
-- Space: 4 px grid — 4, 8, 12, 16, 20, 24, 32, 40, 48, 72.
-- Radius: xs 6 (kbd, tags) · sm 10 (inputs, tabs) · md 14 (buttons, menus) · lg 20 (cards, sheets) · xl 28 (stage, dialogs) · full (pills, status, presets).
-- Buttons: sm 36 · default 44 · lg 52 · xl 64 · icon 44. Variants primary (violet), lamp (green), secondary, outline, ghost, destructive, link.
-- Focus ring: 2 px `--ring` with a 2 px offset. Every target is 44 px or has a 44 px hit area.
-- **Tool layout (every device):** header (logo · status pill · Menu), the clock fills the stage, ONE floating control bar at the bottom (Length, or Extend while running · main action · Face · Fullscreen). Tools rise as one floating sheet above the bar (600 wide; faces 860); Menu opens as a 400-wide list under the header. No sidebar, tab bar or header dock. Desktop 1440 × 900 and tablet landscape 1194 × 834 share the layout (header 64); tablet portrait 834 × 1194 uses compact chips (15m · 30m · 1h · 2h · ∞) and a face thumbnail; phone 390 × 844 has a 56 header, the pill above the clock, a two-row bar in the thumb zone and classic bottom sheets.
-- Face sizes: desktop 480 · tablet landscape 440 · tablet portrait 600 · phone 336 · fullscreen 72 % of the short side (86 % on phone).
-- **Website tiers:** phone < 700 (one column, 20 px margins), tablet portrait 700–1099 (40 px, two-column grids, stacked hero), tablet landscape 1100–1299 (64 px), desktop ≥ 1300 (96 px).
+- Space: a 4 px grid — 4, 8, 12, 16, 20, 24, 32, 48.
+- Radius: 12 (controls, chips) · 18 (rows, dock, tiles) · 24–28 (panels, cards) · full (pills, the primary button).
+- Focus ring: 2 px sky with a 3 px offset. Every target is at least 44 px.
+- **Tool layout:** logo and status pill on the left of the top bar, one glass capsule on the right (Search, Vibe, Faces, Recents, Settings); the clock fills the stage; one glass dock at the bottom in Glance mode. Panels open as a right drawer on desktop and tablet landscape and as a bottom sheet on phone and tablet portrait. No sidebar and no menu.
+- **Footer:** the same on every page and always dark (graphite), whatever the page theme. It carries the wordmark as an outline that a spotlight under the pointer lights up, a hand-drawn heart, and a status pill that says what this browser can really do: keep the screen awake itself, or through the video.
+- Face sizes (the largest; the stage gives way to a short or narrow window): Set mode 380 · 340 · 480 · 296, Glance mode 560 · 470 · 640 · 340, for desktop, tablet landscape, tablet portrait and phone.
+- **Tiers:** phone < 700, tablet portrait 700–1099, tablet landscape 1100–1299, desktop ≥ 1300.
 
 ## 5. Motion
 
-| Token | Value | Use |
-|---|---|---|
-| instant | 0 ms | theme switch, reduced motion |
-| glide | 80 ms `cubic-bezier(.2,0,0,1)` | hover, press |
-| fast | 120 ms, same curve | toggles, chips, tab underline |
-| base | 180 ms `cubic-bezier(.2,.8,.2,1)` | status pill, toasts |
-| panel | 240 ms spring(1, 260, 26) | sheets, drawer, palette |
-| arrive | 520 ms `cubic-bezier(.16,1,.3,1)` | lamp lights, success, face swap |
-| ambient | 4 s loop, ease-in-out | lamp halo, hero float |
-| face-live | 1 s steps / 60 s linear | faces while awake |
+| Name | Spec |
+|---|---|
+| arrive | 420 ms `cubic-bezier(.16,1,.3,1)`, fade plus a 14 px rise |
+| drawer | 360 ms slide |
+| segmented thumb | 350 ms |
+| face size change | 500 ms |
+| controls rest | after 5 s idle while awake, 450 ms fade; never while "Keep controls visible" is on |
+| shine sweep · border beam | 3.6 s · 5–6 s |
+| living backgrounds | 16–22 s |
+| live dot pulse | 2 s |
 
-On the work path only the clock moves. `prefers-reduced-motion` stops every decorative loop and makes state changes instant; digits still tick.
+Motion is slow, calm and purposeful. `prefers-reduced-motion` stops every decorative loop; digits still tick. Living backgrounds also stop on Still and when the battery is low and unplugged.
 
 ## 6. Icons
 
-Lucide 0.460 (ISC): 16 / 2 inline, 18 / 2 chips and menus, 20 / 1.75 buttons, 24 / 1.5 toolbar and empty states. Every icon sits next to a word or has an `aria-label`. Board 09 lists the 95 icons.
+`lucide-react`. Every icon sits next to a word or has an `aria-label`.
 
 ## 7. States and copy
 
-Nine session states, always icon + words + a solid or hollow dot, never colour alone: Not keeping awake · Starting… · Awake · until 11:42 AM · Needs you · tap to resume · Awake · video fallback (dashed) · Paused · tab hidden · Blocked · battery saver · Ended at 11:42 AM · Not supported here. A hidden tab never says "Awake". The end time appears wherever a duration does (`38:12 left · until 11:42 AM`).
+Nine session states, always words, a glyph of its own shape and a colour, never colour alone: Not keeping awake · Asking the browser… · Awake · until 11:42 AM · Awake via video · until 11:42 AM · Paused · 57 min left · Tap to resume · tab was hidden · Not awake · battery saver · No wake lock in this browser · Time’s up · it slept at 11:42 AM. The full table is `docs/00-conventions.md` §5.1.
 
-## 8. Components, faces, screens, accessibility
+Paused is only the person's own Pause. A hidden tab that lost the lock needs a tap; it is never called paused and its clock keeps running. A warning shows only while the browser is really refusing the lock.
 
-See `docs/redesign/volt/HANDOFF.md` §6 (components), §7 (the 49 faces and the `Face` props), §8 (screens, states and boards), §9 (emails), §10 (keyboard map, screen readers, zoom, focus) and §11 (copy rules).
+## 8. Living backgrounds, faces, screens
+
+Six vibes (Aurora, Night sky, Rain on glass, Sunset, Lava lamp, Calm) with Still, Calm and Lively motion; 46 clock faces, all free, each in light, dark and OLED. A face is not clipped to a rectangle, so its glow and hands are drawn whole, and a reading of ten hours or more uses smaller numerals so it stays inside its dial or card. Screens, panels and their copy are in the brief (§3–§9) and specified for code in `docs/05-frontend-spec.md`.
