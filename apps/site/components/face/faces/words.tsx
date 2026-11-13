@@ -1,5 +1,6 @@
+import type { CSSProperties } from 'react';
 import { SERIF } from '../fonts';
-import { type IDrawProps, Kicker } from '../kit';
+import { D, type IDrawProps, L, mono } from '../kit';
 import type { TFaceModel, TFaceState } from '../model';
 
 const ONES = [
@@ -34,6 +35,7 @@ export const num = (n: number): string =>
       ? (ONES[n] ?? '')
       : `${TENS[Math.floor(n / 10)] ?? ''}${n % 10 ? `-${ONES[n % 10] ?? ''}` : ''}`;
 const hourWord = (x: number): string => ONES[x % 12 || 12] ?? '';
+const QUARTERS = ['25%', '50%', '75%'] as const;
 const cap = (x: string): string => x.charAt(0).toUpperCase() + x.slice(1);
 
 // The face's sentence in three parts: the lamp-coloured lead, the rest of the line and the italic second line.
@@ -90,13 +92,27 @@ export function sentence(m: TFaceModel): readonly [string, string, string] {
   return (m.indef && open[m.st]) || W[m.st];
 }
 
-// Time in a sentence, with a blinking cursor and a hairline of time left.
+// Time in a sentence, with a blinking cursor and a hairline from the start to the end, lit from now on.
 export default function Words({ m }: IDrawProps) {
   const { t, accent } = m;
   const [a, b, c] = sentence(m);
-  // Plex Serif Light averages about 0.47 em a character: longer sentences step down so they stay in three lines.
+  // Plex Serif Light averages about 0.46 em a character: longer sentences step down so they stay in three lines.
   const n = a.length + b.length + 1;
-  const fs = n <= 32 ? 38 : n <= 46 ? 32 : 28;
+  const fs = n <= 24 ? 42 : n <= 32 ? 38 : n <= 46 ? 32 : 28;
+  // Display sizes of a text face want tighter tracking.
+  const track = `${(-(fs - 20) / 1000).toFixed(3)}em`;
+  const now = `${((1 - m.frac) * 100).toFixed(2)}%`;
+  const dot: CSSProperties = {
+    position: 'absolute',
+    top: -3,
+    left: now,
+    width: 8,
+    height: 8,
+    marginLeft: -4,
+    borderRadius: '50%',
+    background: accent,
+  };
+  const stamp = { ...mono(12, '.04em', t.ink2), lineHeight: 1, fontVariantNumeric: 'tabular-nums' as const };
   return (
     <div
       style={{
@@ -108,18 +124,16 @@ export default function Words({ m }: IDrawProps) {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        gap: 18,
       }}
     >
-      <Kicker m={m} />
       <p
         style={{
           margin: 0,
           fontFamily: SERIF,
           fontWeight: 300,
           fontSize: fs,
-          lineHeight: 1.12,
-          letterSpacing: '-0.01em',
+          lineHeight: 1.1,
+          letterSpacing: track,
           textWrap: 'balance',
         }}
       >
@@ -128,34 +142,58 @@ export default function Words({ m }: IDrawProps) {
           className="afx-blink"
           style={{
             display: 'inline-block',
-            width: 3,
-            height: Math.round(fs * 0.79),
+            width: 2,
+            height: Math.round(fs * 0.8),
             marginLeft: 6,
-            verticalAlign: -3,
+            verticalAlign: -Math.round(fs * 0.1),
+            borderRadius: 1,
             background: accent,
             opacity: m.liveOp,
           }}
         />
       </p>
-      <p
-        style={{
-          margin: 0,
-          fontFamily: SERIF,
-          fontStyle: 'italic',
-          fontWeight: 300,
-          fontSize: 20,
-          lineHeight: 1.3,
-          color: t.ink2,
-        }}
-      >
-        {c}
-      </p>
-      <div style={{ position: 'relative', height: 2, borderRadius: 1, background: t.track }}>
-        <div
-          className="af-tr"
-          style={{ position: 'absolute', left: 0, top: 0, height: 2, width: m.fracPct, background: accent }}
-        />
+      {c && (
+        <p
+          style={{
+            margin: '12px 0 0',
+            fontFamily: SERIF,
+            fontStyle: 'italic',
+            fontWeight: 300,
+            fontSize: 20,
+            lineHeight: 1.3,
+            letterSpacing: '-0.004em',
+            color: t.ink2,
+            textWrap: 'pretty',
+          }}
+        >
+          {c}
+        </p>
+      )}
+      <div style={{ position: 'relative', marginTop: 26, height: 2, borderRadius: 1, background: t.track }}>
+        {!m.indef && (
+          <>
+            {QUARTERS.map((q) => (
+              <span
+                key={q}
+                className={D}
+                style={{ position: 'absolute', left: q, top: 4, width: 1, height: 4, background: t.line }}
+              />
+            ))}
+            <div
+              className="af-tr"
+              style={{ position: 'absolute', right: 0, top: 0, height: 2, width: m.fracPct, background: accent }}
+            />
+            <span className="af-tr" style={dot} />
+            <span className="afx-pulse-d" style={{ ...dot, opacity: m.haloOp }} />
+          </>
+        )}
       </div>
+      {!m.indef && (
+        <div className={L} style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12 }}>
+          <span style={stamp}>{m.startShort}</span>
+          <span style={{ ...stamp, color: t.ink }}>{m.endShort}</span>
+        </div>
+      )}
     </div>
   );
 }
