@@ -6,7 +6,7 @@ export type TMiniSize = 'compact' | 'expanded';
 // Content sizes of the floating window: a slim pill, or the face with its controls.
 export const MINI_SIZE: Record<TMiniSize, { width: number; height: number }> = {
   compact: { width: 300, height: 84 },
-  expanded: { width: 288, height: 340 },
+  expanded: { width: 288, height: 400 },
 };
 const PIP_POPUP_NAME = 'awaketab-pip';
 const AUTO_ACTION = 'enterpictureinpicture';

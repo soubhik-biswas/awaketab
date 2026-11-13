@@ -774,7 +774,30 @@
   }
 }
 
+@keyframes tg-eq {
+  from {
+    transform: scaleY(0.3);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.tg-eq > span {
+  transform-origin: 50% 100%;
+  animation: tg-eq 0.9s ease-in-out infinite alternate;
+}
+.tg-eq > span:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.tg-eq > span:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .tg-eq > span {
+    animation: none;
+    transform: scaleY(0.7);
+  }
   [data-slot="tool"] :is(.tg-orb, .tg-orbR, .tg-pulse) {
     animation: none;
   }

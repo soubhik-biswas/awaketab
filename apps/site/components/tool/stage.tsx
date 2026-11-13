@@ -12,7 +12,9 @@ import { isLive } from '@/lib/wake';
 import { useGlance, useTick, useTickValue, type IGlance, type ITick } from './context';
 import { FACE_FLOOR, FACE_RATIO, setFit, STAGE_BOTTOM, type ISetFit } from './fit';
 import { EASE } from './kit';
+import { DOCK_BOTTOM } from './dock';
 import { Orbit } from './orbit';
+import { HINT_BOTTOM } from './overlays';
 import { SetControls } from './set-controls';
 import { Headline } from './shell';
 import { FACE_STATE, pillText, StatusPill } from './status-pill';
@@ -57,7 +59,11 @@ function stageFit(g: IGlance, showFirst: boolean, over: number): IFit {
   const { W, H, phone, narrow, hidden, isSet, device } = g;
   const gap = phone ? 14 : 20;
   const top = hidden ? 24 : g.topH;
-  const bottom = isSet ? STAGE_BOTTOM : hidden ? 24 + HINT_H + 14 : g.dockH + (phone ? 16 : 28);
+  const bottom = isSet
+    ? STAGE_BOTTOM
+    : hidden
+      ? (phone ? HINT_BOTTOM.phone : HINT_BOTTOM.wide) + HINT_H + 14
+      : g.dockH + (phone ? DOCK_BOTTOM.phone : DOCK_BOTTOM.wide);
   const pad = !hidden && g.banner && g.panel === 'none' ? (phone ? 96 : 72) : 0;
   const set = isSet ? setFit(W, H, device, pad + over) : null;
   const above = set ? set.above : narrow && !hidden ? PILL_H + gap : 0;

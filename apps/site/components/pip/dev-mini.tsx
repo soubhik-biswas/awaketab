@@ -78,7 +78,7 @@ function DevBox({ cfg }: { cfg: IDevMini & { size: TMiniSize } }) {
   const settings = useToolSettings();
   const theme = useFaceTheme();
   const sound = useMiniSound();
-  const [size, setSize] = useState<TMiniSize>(cfg.size);
+  const size = cfg.size;
   const lang = miniLang(locale);
   const fmt = miniDial(settings, lang);
   const view = surfaceView({ ...snap, now }, { locale, fmt });
@@ -97,7 +97,6 @@ function DevBox({ cfg }: { cfg: IDevMini & { size: TMiniSize } }) {
         fmt={fmt}
         now={now}
         size={size}
-        onSize={setSize}
         actions={{
           pause: () => wake.pause(),
           resume: () => wake.resume(),
@@ -105,7 +104,6 @@ function DevBox({ cfg }: { cfg: IDevMini & { size: TMiniSize } }) {
           stop: () => wake.stop(),
           start: () => wake.start(settings.totalSec),
           retry: () => wake.resume(),
-          back: () => undefined,
           sound,
         }}
       />

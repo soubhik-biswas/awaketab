@@ -11,7 +11,8 @@ import { MINI_CLOSE_MS, MiniView, type IMiniActions, type IMiniSound } from '@/c
 import type { TLocale } from '@/i18n/locales';
 import { cn } from '@/lib/utils';
 import { localeDial } from '@/lib/clock-format';
-import { usePro } from '@/lib/tool/pro';
+import { LAYERS, setMix, useSound, type TMix } from '@/lib/tool/sound-mix';
+import { SCENES, sceneOf } from '@/lib/tool/sound-scenes';
 import { updateSettings, useToolSettings, type IToolSettings } from '@/lib/tool/settings';
 import { isToolLang, type TToolLang } from '@/lib/tool/strings';
 import { useFaceTheme, useMounted, useWindowNow } from '@/lib/surfaces/hooks';
@@ -19,16 +20,12 @@ import { hostMirror } from '@/lib/surfaces/mirror';
 import { holdOwnLock, type TOwnLock } from '@/lib/surfaces/own-lock';
 import {
   dressWindow,
-  focusTab,
   miniTier,
   openDocumentPip,
   openPopup,
   pipSupport,
   readMiniSize,
-  resizeMini,
-  saveMiniSize,
   watchAutoPip,
-  type TMiniSize,
 } from '@/lib/surfaces/pip';
 import { EXTEND_SEC, surfaceView } from '@/lib/surfaces/session';
 import { isAwake, isLive, useWake, wake, type TWakeState } from '@/lib/wake';
@@ -88,40 +85,41 @@ export function useCloseOnStop(state: TWakeState, close: () => void): void {
   }, [state, close]);
 }
 
-// The focus sound, when a mix is set up: on or off, and the loudest layers by name.
-export function useMiniSound(): IMiniSound | null {
-  const { mix } = usePro();
+// The focus sound: what plays, on or off, and a step through the scenes. Playing with every layer off starts Deep
+// focus, so the button always makes a sound.
+export function useMiniSound(): IMiniSound {
+  const { mix } = useSound();
   const { ambientOn } = useToolSettings();
   const t = useTranslations('tool.glance.sound');
-  const layers = Object.entries(mix)
-    .filter(([, v]) => v > 0)
-    .sort((x, y) => y[1] - x[1])
-    .map(([k]) => k as 'rain');
-  if (!layers.length) return null;
-  const name = layers
-    .filter((k) => t.has(k))
-    .slice(0, 2)
-    .map((k) => t(k))
-    .join(' + ');
-  return { on: ambientOn, name, toggle: () => updateSettings({ ambientOn: !ambientOn }) };
+  const layers = LAYERS.filter((k) => mix[k] > 0).sort((x, y) => mix[y] - mix[x]);
+  const silent = layers.length === 0;
+  const scene = silent ? 'focus' : sceneOf(mix);
+  const name = scene
+    ? t(`mix.${scene}`)
+    : layers
+        .slice(0, 2)
+        .map((k) => t(k))
+        .join(' + ');
+  const play = (next: TMix | null) => {
+    if (next) setMix(next);
+    if (!ambientOn) updateSettings({ ambientOn: true });
+  };
+  return {
+    on: ambientOn && !silent,
+    name,
+    scene,
+    toggle: () =>
+      ambientOn && !silent ? updateSettings({ ambientOn: false }) : play(silent ? (SCENES[0]?.[1] ?? null) : null),
+    step: (dir) => {
+      const at = SCENES.findIndex(([n]) => n === scene);
+      const to = at < 0 ? (dir > 0 ? 0 : SCENES.length - 1) : (at + dir + SCENES.length) % SCENES.length;
+      play(SCENES[to]?.[1] ?? null);
+    },
+  };
 }
 
 // The mini clock inside the floating window: the tool's own session, with a wake lock held by that window.
-function FloatingClock({
-  win,
-  size,
-  onSize,
-  onClose,
-  onBack,
-  leaving,
-}: {
-  win: Window;
-  size: TMiniSize;
-  onSize: (size: TMiniSize) => void;
-  onClose: () => void;
-  onBack: () => void;
-  leaving: boolean;
-}) {
+function FloatingClock({ win, onClose, leaving }: { win: Window; onClose: () => void; leaving: boolean }) {
   const snap = useWake();
   const now = useWindowNow(win);
   const locale = useLocale();
@@ -149,7 +147,6 @@ function FloatingClock({
           wake.resume();
         }
       : undefined,
-    back: onBack,
     sound,
   };
   return (
@@ -160,8 +157,7 @@ function FloatingClock({
       lang={lang}
       fmt={fmt}
       now={now}
-      size={size}
-      onSize={onSize}
+      size="expanded"
       actions={actions}
       leaving={leaving}
       className="h-dvh w-screen"
@@ -191,11 +187,9 @@ export function PipLauncher({ className, style, label, hideButton = false, inToo
   const state = useWake().state;
   const live = isLive(state);
   const [open, setOpen] = useState<TPipOpen>(null);
-  const [size, setSize] = useState<TMiniSize>(() => (typeof window === 'undefined' ? 'expanded' : readMiniSize()));
   const [leaving, setLeaving] = useState(false);
   const [chip, setChip] = useState<Exclude<TMiniChip, 'open'> | null>(null);
   const current = useRef<TPipOpen>(null);
-  const sizeRef = useRef(size);
   const undress = useRef<(() => void) | null>(null);
   const backAt = useRef(0);
   const support = mounted ? pipSupport() : 'none';
@@ -224,19 +218,6 @@ export function PipLauncher({ className, style, label, hideButton = false, inToo
     setLeaving(true);
     cur.win.setTimeout(close, MINI_CLOSE_MS);
   }, [close]);
-
-  const onSize = useCallback((next: TMiniSize) => {
-    sizeRef.current = next;
-    setSize(next);
-    saveMiniSize(next);
-    const cur = current.current;
-    if (cur && !cur.win.closed) resizeMini(cur.win, next);
-  }, []);
-
-  const onBack = useCallback(() => {
-    focusTab(window);
-    closeCalm();
-  }, [closeCalm]);
 
   useEffect(() => {
     if (open?.kind !== 'popup') return;
@@ -273,7 +254,7 @@ export function PipLauncher({ className, style, label, hideButton = false, inToo
     if (cur && !cur.win.closed) return;
     const asked = Date.now();
     if (support === 'document') {
-      const win = await openDocumentPip(sizeRef.current);
+      const win = await openDocumentPip(readMiniSize());
       if (win) {
         undress.current?.();
         undress.current = dressWindow(win);
@@ -387,17 +368,7 @@ export function PipLauncher({ className, style, label, hideButton = false, inToo
         <MiniChip kind={shownChip} onOpen={() => void pop(false)} onDismiss={() => setChip(null)} onClose={closeCalm} />
       ) : null}
       {open?.kind === 'document'
-        ? createPortal(
-            <FloatingClock
-              win={open.win}
-              size={size}
-              onSize={onSize}
-              onClose={closeCalm}
-              onBack={onBack}
-              leaving={leaving}
-            />,
-            open.win.document.body,
-          )
+        ? createPortal(<FloatingClock win={open.win} onClose={closeCalm} leaving={leaving} />, open.win.document.body)
         : null}
     </>
   );

@@ -6,7 +6,6 @@ import {
   AudioLines,
   AudioWaveform,
   Bell,
-  Brain,
   CloudLightning,
   CloudRain,
   Coffee,
@@ -32,11 +31,12 @@ import { RadioGroup, Slider } from 'radix-ui';
 import { cn } from '@/lib/utils';
 import { previewAmbient } from '@/lib/tool/sound';
 import { setLayer, setMaster, setMix, useSound, type TLayer, type TMix } from '@/lib/tool/sound-mix';
-import { GROUPS, SCENES, sceneOf, shuffleMix, type TScene } from '@/lib/tool/sound-scenes';
+import { GROUPS, SCENES, sceneOf, shuffleMix } from '@/lib/tool/sound-scenes';
 import { isAwake } from '@/lib/wake';
 import { useGlance } from '../context';
 import { SecLabel } from '../kit';
 import { PanelBody } from './shell';
+import { SCENE_ICON } from '../sound-icons';
 
 const LAYER_ICON: Record<TLayer, LucideIcon> = {
   rain: CloudRain,
@@ -56,17 +56,6 @@ const LAYER_ICON: Record<TLayer, LucideIcon> = {
   keys: Piano,
   drone: Endless,
   bells: Bell,
-};
-
-const SCENE_ICON: Record<TScene, LucideIcon> = {
-  focus: Brain,
-  rainy: Coffee,
-  train: TrainFront,
-  ocean: Waves,
-  fire: Flame,
-  keys: Piano,
-  storm: CloudLightning,
-  night: MoonStar,
 };
 
 const RANGE = 'absolute h-full rounded-full bg-[linear-gradient(90deg,var(--tg-violet),#C1B1FE)]';

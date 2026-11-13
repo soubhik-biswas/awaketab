@@ -3,8 +3,11 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import {
   ArrowUpLeft,
+  ChevronLeft,
+  ChevronRight,
   Maximize2,
   Minimize2,
+  Music2,
   Pause,
   Play,
   Plus,
@@ -22,11 +25,15 @@ import { clockUntil } from '@/lib/tool/clock';
 import type { TToolLang } from '@/lib/tool/strings';
 import type { TMiniSize } from '@/lib/surfaces/pip';
 import { digits, type ISurfaceView } from '@/lib/surfaces/session';
+import type { TScene } from '@/lib/tool/sound-scenes';
+import { SCENE_ICON } from '@/components/tool/sound-icons';
 
 export interface IMiniSound {
   on: boolean;
   name: string;
+  scene: TScene | null;
   toggle: () => void;
+  step: (dir: 1 | -1) => void;
 }
 
 // What the window that shows the view can do; a missing action hides its button.
@@ -217,6 +224,80 @@ function Btn({
   );
 }
 
+const SOUND_KEY =
+  'tg-btn inline-flex h-10 flex-none items-center justify-center rounded-[12px] border-0 bg-transparent text-(--tg-t2) hover:text-(--tg-text)';
+
+// The focus sound has its own row: what plays, a play button that also starts it, and a step through the scenes.
+function SoundCard({ sound }: { sound: IMiniSound }) {
+  const t = useTranslations('surfaces');
+  const Icon = sound.scene ? SCENE_ICON[sound.scene] : Music2;
+  return (
+    <div
+      role="group"
+      aria-label={t('pip.soundName')}
+      className="flex items-center gap-0.5 rounded-[16px] border border-(--tg-border) bg-(--tg-s1) p-1"
+    >
+      <span
+        aria-hidden="true"
+        className={cn(
+          'flex size-10 flex-none items-center justify-center rounded-[12px] transition-colors duration-500',
+          sound.on
+            ? 'bg-[color-mix(in_srgb,var(--tg-violet)_20%,transparent)] text-(--tg-violet)'
+            : 'bg-(--tg-s2) text-(--tg-t2)',
+        )}
+      >
+        <Icon className="size-[18px]" strokeWidth={2} />
+      </span>
+      <div className="flex min-w-0 flex-1 flex-col gap-1 px-2">
+        <span className="flex items-center gap-1.5 text-[11px] leading-none font-semibold text-(--tg-t2)">
+          {sound.on ? (
+            <span aria-hidden="true" className="tg-eq flex h-2.5 items-end gap-[2px]">
+              <span className="h-full w-[2px] rounded-full bg-(--tg-violet)" />
+              <span className="h-full w-[2px] rounded-full bg-(--tg-violet)" />
+              <span className="h-full w-[2px] rounded-full bg-(--tg-violet)" />
+            </span>
+          ) : null}
+          {sound.on ? t('pip.soundOn') : t('pip.soundOff')}
+        </span>
+        <Fit base={14} min={12} className="leading-[1.2] font-bold">
+          {sound.name}
+        </Fit>
+      </div>
+      <button
+        type="button"
+        onClick={() => sound.step(-1)}
+        aria-label={t('pip.soundPrev')}
+        title={t('pip.soundPrev')}
+        className={cn(SOUND_KEY, 'w-8')}
+      >
+        <ChevronLeft className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        onClick={sound.toggle}
+        aria-label={sound.on ? t('pip.soundPause') : t('pip.soundPlay')}
+        title={sound.on ? t('pip.soundPause') : t('pip.soundPlay')}
+        className="tg-btn inline-flex size-10 flex-none items-center justify-center rounded-full border border-(--tg-border-hi) bg-(--tg-s2) text-(--tg-text)"
+      >
+        {sound.on ? (
+          <Pause className="size-4" fill="currentColor" strokeWidth={0} aria-hidden="true" />
+        ) : (
+          <Play className="ml-0.5 size-4" fill="currentColor" strokeWidth={0} aria-hidden="true" />
+        )}
+      </button>
+      <button
+        type="button"
+        onClick={() => sound.step(1)}
+        aria-label={t('pip.soundNext')}
+        title={t('pip.soundNext')}
+        className={cn(SOUND_KEY, 'w-8')}
+      >
+        <ChevronRight className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
+
 // The mini clock's content, for the floating window, the popup and the dev preview. Compact is a slim pill (state,
 // time left, end time); expanded adds the face and the controls. Either reflows to the window it is given.
 export function MiniView({
@@ -296,14 +377,17 @@ export function MiniView({
   const stop: IAct | null =
     a.stop && stopping ? { key: 'stop', label: t('widgets.stop'), icon: Square, run: () => setAsking(true) } : null;
   const sound = a.sound && stopping ? a.sound : null;
-  const soundAct: IAct | null = sound
-    ? {
-        key: 'sound',
-        label: sound.name ? t('pip.soundLabel', { name: sound.name }) : t('pip.soundName'),
-        icon: sound.on ? Volume2 : VolumeX,
-        run: sound.toggle,
-      }
-    : null;
+  // With room, the sound gets its own row; a short window keeps it as one button beside the controls.
+  const card = sound !== null && h >= 300;
+  const soundAct: IAct | null =
+    sound && !card
+      ? {
+          key: 'sound',
+          label: sound.name ? t('pip.soundLabel', { name: sound.name }) : t('pip.soundName'),
+          icon: sound.on ? Volume2 : VolumeX,
+          run: sound.toggle,
+        }
+      : null;
   const sizeAct: IAct | null = onSize
     ? layout === 'compact'
       ? { key: 'bigger', label: t('pip.bigger'), icon: Maximize2, run: () => onSize('expanded') }
@@ -463,6 +547,7 @@ export function MiniView({
               ) : null}
             </div>
           )}
+          {card ? <SoundCard sound={sound} /> : null}
         </Fade>
       )}
     </div>
