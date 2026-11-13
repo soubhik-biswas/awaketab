@@ -3,6 +3,7 @@
 import { memo, useId, type CSSProperties } from 'react';
 import { Meteors } from '@/components/ui-effects/meteors';
 import { cn } from '@/lib/utils';
+import { ShaderScene } from './vibe-gl/shader-scene';
 import type { TVibe, TVibeMotion } from '@/lib/tool/settings';
 
 type TVars = CSSProperties & Record<`--${string}`, string | number>;
@@ -1061,12 +1062,22 @@ export const VibeScene = memo(function VibeScene({
       )}
       style={{ containerType: 'size' }}
     >
-      {vibe === 'aurora' ? <Aurora night={night} /> : null}
-      {vibe === 'night' ? <Night night={night} narrow={narrow} topH={topH} /> : null}
-      {vibe === 'rain' ? <Rain night={night} /> : null}
-      {vibe === 'sunset' ? <Sunset night={night} /> : null}
-      {vibe === 'lava' ? <Lava night={night} /> : null}
-      {vibe === 'calm' ? <Calm night={night} /> : null}
+      <ShaderScene
+        vibe={vibe}
+        night={night}
+        motion={motion}
+        still={still}
+        fallback={
+          <>
+            {vibe === 'aurora' ? <Aurora night={night} /> : null}
+            {vibe === 'night' ? <Night night={night} narrow={narrow} topH={topH} /> : null}
+            {vibe === 'rain' ? <Rain night={night} /> : null}
+            {vibe === 'sunset' ? <Sunset night={night} /> : null}
+            {vibe === 'lava' ? <Lava night={night} /> : null}
+            {vibe === 'calm' ? <Calm night={night} /> : null}
+          </>
+        }
+      />
       <div
         className="absolute inset-0"
         style={{

@@ -334,7 +334,7 @@ export const FACES: readonly IFaceInfo[] = [
     id: 'poster',
     num: '40',
     name: 'Poster',
-    blurb: 'Giant cropped minutes in Archivo Expanded, editorial and bold.',
+    blurb: 'Giant minutes in Archivo Expanded on a poster grid, the seconds printed in a disc.',
     kind: 'digital',
     featured: true,
   },

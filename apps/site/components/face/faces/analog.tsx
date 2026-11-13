@@ -1,5 +1,5 @@
 import { alpha } from '../geometry';
-import { type IDrawProps, L, lmin } from '../kit';
+import { type IDrawProps, L, lmin, MONO } from '../kit';
 import { AnalogDial } from './analog-dial';
 
 // Real time on the hands; the lamp arc on the bezel runs to the end time.
@@ -17,27 +17,53 @@ export default function Analog({ m }: IDrawProps) {
           ? `Ready · ${span}`
           : `${span} left`;
   return (
-    <AnalogDial m={m} luxe={false}>
-      <span style={{ position: 'absolute', left: 0, width: 360, top: 196, display: 'flex', justifyContent: 'center' }}>
+    <AnalogDial
+      m={m}
+      over={
         <span
-          className={L}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            height: 28,
-            padding: '0 12px',
-            borderRadius: 999,
-            background: alpha(m.accent, 0x26),
-            color: m.accent,
-            fontSize: lmin(14),
-            fontWeight: 600,
-            fontVariantNumeric: 'tabular-nums',
-            whiteSpace: 'nowrap',
-          }}
+          style={{ position: 'absolute', left: 0, width: 360, top: 195, display: 'flex', justifyContent: 'center' }}
         >
-          {label}
+          <span
+            className={L}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              height: 30,
+              padding: '0 14px',
+              borderRadius: 999,
+              background: alpha(m.accent, 0x26),
+              boxShadow: `inset 0 0 0 1px ${alpha(m.accent, 0x47)}`,
+              color: m.accent,
+              fontSize: lmin(15),
+              fontWeight: 600,
+              letterSpacing: '-0.01em',
+              fontVariantNumeric: 'tabular-nums',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {label}
+          </span>
         </span>
+      }
+    >
+      <span
+        className={L}
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: 86,
+          width: 360,
+          textAlign: 'center',
+          fontFamily: MONO,
+          fontSize: lmin(9),
+          fontWeight: 500,
+          letterSpacing: '.32em',
+          paddingLeft: '.32em',
+          color: m.t.ink2,
+        }}
+      >
+        AWAKETAB
       </span>
     </AnalogDial>
   );

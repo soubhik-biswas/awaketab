@@ -1,6 +1,7 @@
-import { WHITE } from '../art';
+import type { CSSProperties } from 'react';
+import { BLACK, NAVY, WHITE } from '../art';
 import { alpha } from '../geometry';
-import { card, cardColumn, digitSize, DISPLAY, fit, type IDrawProps, L, lmin, PLATE } from '../kit';
+import { card, D, digitSize, DISPLAY, fit, type IDrawProps, L, lmin, PLATE } from '../kit';
 import type { TFaceState } from '../model';
 
 // A white-washed brick wall by day, with the tube glow in the deep accent; a dark wall at night.
@@ -14,8 +15,6 @@ const bricks = (c: string): string =>
     `<svg xmlns='http://www.w3.org/2000/svg' width='56' height='48'><path d='M0 .5H56M0 24.5H56M.5 0V24M28.5 24V48' stroke='${c}' fill='none'/></svg>`,
   )}")`;
 const VIOLET = { light: '#6633F5', night: '#9F7BFF' };
-const SIGN_INK = '#F1E8FF';
-const INK = { live: '#F4FFF8', still: '#E9ECF2' };
 // The sign: AWAKE only while the screen is held, PAUSED only when the person paused.
 const WORD: Readonly<Record<TFaceState, string>> = {
   idle: 'READY',
@@ -27,85 +26,146 @@ const WORD: Readonly<Record<TFaceState, string>> = {
   unsupported: 'NO LOCK',
   up: 'GOOD NIGHT',
 };
+// The clear acrylic backing plate the tubes are mounted on, held off the wall by four standoffs.
+const PW = 296;
+const PH = 202;
+const SCREWS = [
+  [12, 12],
+  [PW - 20, 12],
+  [12, PH - 20],
+  [PW - 20, PH - 20],
+] as const;
 
-// A neon sign on a wall, with a humming flicker while awake.
+type TLevel = 'full' | 'low' | 'off';
+
+// A lit tube: a pale core, the gas colour around it, then a soft halo; by day the tube also casts a shadow on the plate.
+const tube = (level: TLevel, light: boolean, c: string, cold: string): CSSProperties => {
+  const cast = `3px 7px 6px ${NAVY(0.12)}`;
+  if (level === 'off') return { color: cold, textShadow: light ? cast : `0 1px 1px ${BLACK(0.8)}` };
+  if (light)
+    return {
+      color: c,
+      textShadow:
+        level === 'full'
+          ? `0 0 1px ${c}, 0 0 6px ${alpha(c, 0x66)}, 0 0 16px ${alpha(c, 0x2e)}, ${cast}`
+          : `0 0 1px ${c}, 0 0 6px ${alpha(c, 0x40)}, ${cast}`,
+    };
+  return level === 'full'
+    ? {
+        color: `color-mix(in srgb, ${c} 40%, #FFFFFF)`,
+        textShadow: `0 0 1px ${c}, 0 0 3px ${c}, 0 0 8px ${alpha(c, 0xb3)}, 0 0 18px ${alpha(c, 0x80)}, 0 0 34px ${alpha(c, 0x40)}`,
+      }
+    : {
+        color: `color-mix(in srgb, ${c} 72%, #FFFFFF)`,
+        textShadow: `0 0 2px ${c}, 0 0 7px ${alpha(c, 0x80)}, 0 0 18px ${alpha(c, 0x33)}`,
+      };
+};
+
+// A neon sign on an acrylic plate on a brick wall, with a humming flicker while awake.
 export default function Neon({ m }: IDrawProps) {
   const light = !m.night;
   const acc = m.accent;
   const wall = light ? WALL.light : WALL.night;
   const sign = m.multi ? VIOLET[light ? 'light' : 'night'] : acc;
   // The tubes burn full while awake, hum low while held or waiting, and go cold when time is up.
-  const off = m.st === 'up';
-  const low = !m.multi && !off;
-  const ink = light ? acc : off ? m.t.ink2 : m.live ? INK.live : INK.still;
-  const signInk = m.multi ? (light ? VIOLET.light : SIGN_INK) : acc;
-  const signGlow = off
-    ? 'none'
-    : light
-      ? `0 0 10px ${alpha(sign, 0x55)}`
-      : low
-        ? `0 0 3px ${sign}, 0 0 14px ${alpha(sign, 0x88)}`
-        : `0 0 4px #FFFFFF, 0 0 12px ${sign}, 0 0 28px ${sign}`;
-  const glow = off
-    ? 'none'
-    : light
-      ? low
-        ? `0 0 1px ${acc}, 0 0 12px ${alpha(acc, 0x40)}`
-        : `0 0 1px ${acc}, 0 0 12px ${alpha(acc, 0x55)}, 0 0 26px ${alpha(acc, 0x2a)}`
-      : low
-        ? `0 0 3px ${acc}, 0 0 14px ${alpha(acc, 0x99)}, 0 0 30px ${alpha(acc, 0x55)}`
-        : `0 0 4px #FFFFFF, 0 0 10px ${acc}, 0 0 22px ${acc}, 0 0 40px ${alpha(acc, 0xcc)}, 0 0 60px ${alpha(acc, 0x66)}`;
+  const level: TLevel = m.st === 'up' ? 'off' : m.multi ? 'full' : 'low';
+  const lit = level !== 'off';
+  const spill = lit
+    ? `radial-gradient(70% 60% at 50% 48%, ${alpha(acc, level === 'low' ? 0x1a : 0x2e)}, transparent 70%), `
+    : '';
+  const room = light
+    ? `linear-gradient(155deg, ${WHITE(0.7)}, transparent 45%), radial-gradient(130% 100% at 50% 45%, transparent 55%, ${NAVY(0.06)})`
+    : `radial-gradient(130% 100% at 50% 45%, transparent 50%, ${BLACK(0.5)})`;
+  const plate: CSSProperties = light
+    ? {
+        background: `linear-gradient(155deg, ${WHITE(0.92)}, ${WHITE(0.6)} 60%, ${WHITE(0.5)})`,
+        boxShadow: `inset 0 1px 0 #FFFFFF, inset 0 0 0 1px ${WHITE(0.6)}, 0 0 0 1px ${NAVY(0.07)}, 0 14px 28px ${NAVY(0.1)}, 0 2px 5px ${NAVY(0.06)}`,
+      }
+    : {
+        background: `linear-gradient(155deg, ${WHITE(0.07)}, ${WHITE(0.02)} 38%, ${WHITE(0.012)})`,
+        // Lit from inside, the acrylic's cut edge and face pick up the tube colour.
+        boxShadow: `${lit ? `inset 0 0 26px ${alpha(acc, level === 'low' ? 0x0f : 0x1c)}, inset 0 0 0 1px ${alpha(acc, 0x2a)}, ` : ''}inset 0 1px 0 ${WHITE(0.12)}, inset 0 0 0 1px ${WHITE(0.05)}, 0 0 0 1px ${BLACK(0.4)}, 0 20px 34px ${BLACK(0.5)}`,
+      };
+  const screw = light
+    ? {
+        background: 'radial-gradient(circle at 35% 30%, #FFFFFF, #C4C9D4 60%, #8A90A0)',
+        boxShadow: `0 1px 2px ${NAVY(0.25)}`,
+      }
+    : {
+        background: 'radial-gradient(circle at 35% 30%, #C9CED8, #6B7280 60%, #3A3F4A)',
+        boxShadow: `0 1px 2px ${BLACK(0.6)}`,
+      };
   return (
     <div
       className={PLATE}
       style={card(m, {
         backgroundColor: wall.bg,
-        backgroundImage: `${off ? '' : `radial-gradient(70% 60% at 50% 45%, ${alpha(acc, low ? 0x1f : 0x33)}, transparent 70%), `}${bricks(wall.brick)}`,
+        backgroundImage: `${spill}${room}, ${bricks(wall.brick)}`,
         backgroundPosition: 'center',
       })}
     >
-      <div style={cardColumn(8)}>
-        <span
-          className={`afx-flick ${L}`}
+      <div
+        style={{
+          position: 'absolute',
+          left: (332 - PW) / 2,
+          top: (282 - PH) / 2,
+          width: PW,
+          height: PH,
+          borderRadius: 18,
+          ...plate,
+        }}
+      >
+        {SCREWS.map(([x, y]) => (
+          <span
+            key={`${x}-${y}`}
+            className={D}
+            style={{ position: 'absolute', left: x, top: y, width: 8, height: 8, borderRadius: '50%', ...screw }}
+          />
+        ))}
+        <div
           style={{
-            fontFamily: DISPLAY,
-            fontStretch: '125%',
-            fontSize: lmin(15),
-            fontWeight: 700,
-            letterSpacing: '.3em',
-            textTransform: 'uppercase',
-            whiteSpace: 'nowrap',
-            color: signInk,
-            textShadow: signGlow,
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 10,
           }}
         >
-          {m.needs ? m.topWord : WORD[m.st]}
-        </span>
-        <span
-          style={{
-            fontSize: fit(m, digitSize(m, 'big'), 56),
-            whiteSpace: 'nowrap',
-            fontWeight: 300,
-            letterSpacing: '-0.02em',
-            lineHeight: 1,
-            fontVariantNumeric: 'tabular-nums',
-            color: ink,
-            textShadow: glow,
-          }}
-        >
-          {m.digits}
-        </span>
-        <span
-          className={L}
-          style={{
-            fontSize: lmin(14),
-            whiteSpace: 'nowrap',
-            color: ink,
-            ...(light || off ? null : { opacity: 0.8, textShadow: `0 0 8px ${acc}` }),
-          }}
-        >
-          {m.endLine}
-        </span>
+          <span
+            className={`afx-flick ${L}`}
+            style={{
+              fontFamily: DISPLAY,
+              fontStretch: '125%',
+              fontSize: lmin(15),
+              fontWeight: 600,
+              letterSpacing: '.3em',
+              textIndent: '.3em',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+              ...tube(level, light, sign, m.t.ink2),
+            }}
+          >
+            {m.needs ? m.topWord : WORD[m.st]}
+          </span>
+          <span
+            style={{
+              fontSize: fit(m, digitSize(m, 'big'), 56),
+              whiteSpace: 'nowrap',
+              fontWeight: 300,
+              letterSpacing: '-0.02em',
+              lineHeight: 1,
+              fontVariantNumeric: 'tabular-nums',
+              ...tube(level, light, acc, m.t.ink2),
+            }}
+          >
+            {m.digits}
+          </span>
+          <span className={L} style={{ fontSize: lmin(14), whiteSpace: 'nowrap', color: m.t.ink2 }}>
+            {m.endLine}
+          </span>
+        </div>
       </div>
     </div>
   );
