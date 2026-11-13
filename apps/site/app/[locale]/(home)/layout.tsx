@@ -27,7 +27,7 @@ export default async function HomeLayout({
           <Tool lang={toolLang(locale)} className="h-full" />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 bottom-[18px] hidden justify-center font-mono text-[12px] tracking-[0.12em] text-muted-foreground-strong uppercase min-[700px]:flex"
+            className="pointer-events-none absolute inset-x-0 bottom-3 hidden justify-center font-mono text-[12px] tracking-[0.12em] text-muted-foreground-strong uppercase min-[700px]:flex"
           >
             {t('cue')}
           </span>

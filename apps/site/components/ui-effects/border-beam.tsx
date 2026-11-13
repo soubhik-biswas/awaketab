@@ -1,71 +1,110 @@
 'use client';
 
-import { motion, useReducedMotion, type MotionStyle, type Transition } from 'motion/react';
-import { cn } from '@/lib/utils';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
-// Border Beam from Magic UI (magicui.design, MIT), restyled to the tool's tokens and stopped under reduced motion.
 interface IBorderBeamProps {
   size?: number;
   duration?: number;
   delay?: number;
   colorFrom?: string;
   colorTo?: string;
-  transition?: Transition;
-  className?: string;
-  style?: React.CSSProperties;
-  reverse?: boolean;
-  initialOffset?: number;
   borderWidth?: number;
 }
 
+interface IBox {
+  w: number;
+  h: number;
+  r: number;
+}
+
+// The parent's real outline: its size and its corner radius, capped the way the browser caps a pill's.
+function useOutline(el: SVGSVGElement | null): IBox | null {
+  const [box, setBox] = useState<IBox | null>(null);
+  useLayoutEffect(() => {
+    const host = el?.parentElement;
+    const win = el?.ownerDocument.defaultView;
+    if (!host || !win) return;
+    const read = () => {
+      const w = host.clientWidth;
+      const h = host.clientHeight;
+      const r = Math.min(parseFloat(win.getComputedStyle(host).borderTopLeftRadius) || 0, w / 2, h / 2);
+      setBox((b) => (b && b.w === w && b.h === h && b.r === r ? b : { w, h, r }));
+    };
+    read();
+    const ro = new win.ResizeObserver(read);
+    ro.observe(host);
+    return () => ro.disconnect();
+  }, [el]);
+  return box;
+}
+
+// A light that runs along the element's own rounded edge at an even speed: a bright head with a fading tail, drawn
+// as dashes on one stroke so it never leaves the outline. It rests in place under reduced motion.
 export function BorderBeam({
-  className,
-  size = 50,
-  delay = 0,
+  size = 120,
   duration = 6,
+  delay = 0,
   colorFrom = 'var(--tg-volt)',
   colorTo = 'var(--tg-violet)',
-  transition,
-  style,
-  reverse = false,
-  initialOffset = 0,
-  borderWidth = 1,
+  borderWidth = 1.5,
 }: IBorderBeamProps) {
-  const reduced = useReducedMotion();
+  const [el, setEl] = useState<SVGSVGElement | null>(null);
+  const box = useOutline(el);
+  const half = borderWidth / 2;
+  const perimeter = box ? 2 * (box.w + box.h) - (8 - 2 * Math.PI) * Math.max(0, box.r - half) : 0;
+  const tail = perimeter ? Math.min(45, (size / perimeter) * 100) : 0;
+
+  useEffect(() => {
+    const win = el?.ownerDocument.defaultView;
+    if (!el || !win || !tail || win.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const runs = Array.from(el.querySelectorAll<SVGRectElement>('rect'), (rect) => {
+      const from = Number(rect.dataset.from);
+      return rect.animate([{ strokeDashoffset: String(from) }, { strokeDashoffset: String(from - 100) }], {
+        duration: duration * 1000,
+        delay: -delay * 1000,
+        iterations: Infinity,
+        easing: 'linear',
+      });
+    });
+    return () => runs.forEach((run) => run.cancel());
+  }, [el, tail, duration, delay]);
+
+  const layers: Array<[number, string, number]> = [
+    [tail, colorTo, 0.35],
+    [tail * 0.55, colorTo, 0.8],
+    [tail * 0.22, colorFrom, 1],
+  ];
   return (
-    <div
+    <svg
+      ref={setEl}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 rounded-[inherit] border-(length:--border-beam-width) border-transparent mask-[linear-gradient(transparent,transparent),linear-gradient(#000,#000)] mask-intersect [mask-clip:padding-box,border-box]"
-      style={{ '--border-beam-width': `${borderWidth}px` } as React.CSSProperties}
+      className="pointer-events-none absolute inset-0 size-full overflow-visible"
+      width={box?.w}
+      height={box?.h}
     >
-      <motion.div
-        className={cn(
-          'absolute aspect-square bg-linear-to-l from-(--color-from) via-(--color-to) to-transparent',
-          className,
-        )}
-        style={
-          {
-            width: size,
-            offsetPath: `rect(0 auto auto 0 round ${size}px)`,
-            '--color-from': colorFrom,
-            '--color-to': colorTo,
-            ...style,
-          } as MotionStyle
-        }
-        initial={{ offsetDistance: `${initialOffset}%` }}
-        animate={
-          reduced
-            ? { offsetDistance: `${initialOffset}%` }
-            : {
-                offsetDistance: reverse
-                  ? [`${100 - initialOffset}%`, `${-initialOffset}%`]
-                  : [`${initialOffset}%`, `${100 + initialOffset}%`],
-              }
-        }
-        transition={
-          reduced ? { duration: 0 } : { repeat: Infinity, ease: 'linear', duration, delay: -delay, ...transition }
-        }
-      />
-    </div>
+      {box && tail
+        ? layers.map(([len, color, opacity], i) => {
+            const from = len - tail;
+            return (
+              <rect
+                key={i}
+                data-from={from}
+                x={half}
+                y={half}
+                width={Math.max(0, box.w - borderWidth)}
+                height={Math.max(0, box.h - borderWidth)}
+                rx={Math.max(0, box.r - half)}
+                pathLength={100}
+                fill="none"
+                strokeWidth={borderWidth}
+                strokeLinecap="round"
+                strokeDasharray={`${len} ${100 - len}`}
+                strokeDashoffset={from}
+                style={{ stroke: color, opacity }}
+              />
+            );
+          })
+        : null}
+    </svg>
   );
 }

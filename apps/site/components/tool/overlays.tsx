@@ -9,6 +9,8 @@ import { useGlance } from './context';
 import { EASE } from './kit';
 
 const TOASTER = 'tool';
+// The resting hint sits where the dock was, clear of the home page's scroll cue on wider screens.
+export const HINT_BOTTOM = { phone: 24, wide: 40 } as const;
 
 // While the controls rest, a small pill says how to bring them back; a full-size catcher takes the tap.
 export const ControlsHint = memo(function ControlsHint() {
@@ -23,7 +25,8 @@ export const ControlsHint = memo(function ControlsHint() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.42, ease: EASE }}
-            className="tg-glass absolute inset-x-0 bottom-6 z-[4] mx-auto flex h-[34px] w-max items-center gap-2 rounded-full px-3.5 text-[13px] whitespace-nowrap text-(--tg-t2)"
+            className="tg-glass absolute inset-x-0 z-[4] mx-auto flex h-[34px] w-max items-center gap-2 rounded-full px-3.5 text-[13px] whitespace-nowrap text-(--tg-t2)"
+            style={{ bottom: g.phone ? HINT_BOTTOM.phone : HINT_BOTTOM.wide }}
           >
             <MousePointer2 className="size-3.5" strokeWidth={2} aria-hidden="true" />
             {g.touch ? g.t('hint.tap') : g.t('hint.move')}

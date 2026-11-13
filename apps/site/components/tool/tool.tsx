@@ -38,7 +38,7 @@ import {
   type TBannerKind,
   type TT,
 } from './context';
-import { Dock } from './dock';
+import { Dock, DOCK_BOTTOM, DOCK_H } from './dock';
 import { deviceFor } from './fit';
 import { useFrame, useFullscreen, useIdle, useLowBattery, useWakeStill, useWakeValue, type TWakeStill } from './hooks';
 import { useKeys } from './keys';
@@ -487,7 +487,7 @@ function ToolApp({ lang, frame, root, initialView, readQuery, qa }: IAppProps) {
     reason,
     banner,
     topH: phone ? 64 : 76,
-    dockH: phone ? 136 : 80,
+    dockH: phone ? DOCK_H.phone : DOCK_H.wide,
     root,
     time,
     until,
@@ -529,7 +529,7 @@ function ToolApp({ lang, frame, root, initialView, readQuery, qa }: IAppProps) {
       {nudge ? (
         <Nudge sessions={ui.qa.nudge ? 12 : journey.sessions} presets={ui.qa.nudge ? 2 : presets.length} />
       ) : null}
-      <ToolToaster bottom={g.dockH + (phone ? 28 : 44)} />
+      <ToolToaster bottom={g.dockH + (phone ? DOCK_BOTTOM.phone + 12 : DOCK_BOTTOM.wide + 16)} />
       <LazyPanels />
       <LazyPalette />
       <Surfaces />

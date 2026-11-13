@@ -46,6 +46,10 @@ const subscribeNever = () => () => undefined;
 // popup other browsers get, and narrow windows, keep it in the command palette.
 const onTopMini = () => pipSupport() === 'document';
 
+// Desktop and tablet lift the dock clear of the home page's scroll cue; phone has no cue.
+export const DOCK_BOTTOM = { phone: 16, wide: 40 } as const;
+export const DOCK_H = { phone: 136, wide: 68 } as const;
+
 const KEY =
   'tg-btn inline-flex flex-none items-center justify-center border border-(--tg-border) bg-(--tg-s1) text-(--tg-text)';
 
@@ -71,7 +75,7 @@ export const Dock = memo(function Dock() {
   const p = PRIMARY[st];
   const Icon = p.icon;
   const blocked = st === 'blocked';
-  const key = phone ? 52 : 56;
+  const key = phone ? 52 : 48;
   const name = g.faceName(g.face);
   return (
     <motion.div
@@ -83,20 +87,20 @@ export const Dock = memo(function Dock() {
       animate={{ opacity: hidden ? 0 : 1, y: hidden ? 16 : 0, x: '-50%' }}
       transition={{ duration: 0.45, ease: EASE }}
       className={cn(
-        'tg-hair absolute left-1/2 z-[5] flex p-2',
+        'tg-hair absolute left-1/2 z-[5] flex',
         phone
-          ? 'w-[358px] max-w-[calc(100%-16px)] flex-col items-stretch gap-2 rounded-[28px]'
-          : 'items-center gap-1.5 rounded-[26px]',
+          ? 'w-[358px] max-w-[calc(100%-16px)] flex-col items-stretch gap-2 rounded-[28px] p-2'
+          : 'items-center gap-1.5 rounded-[22px] p-1.5',
       )}
       style={{
-        bottom: phone ? 16 : 28,
+        bottom: phone ? DOCK_BOTTOM.phone : DOCK_BOTTOM.wide,
         boxShadow: 'var(--tg-shadow), inset 0 1px 0 var(--tg-inset-hi)',
       }}
     >
       <div
         role="group"
         aria-label={t('dock.addTime')}
-        className="flex items-center gap-0.5 rounded-[18px] bg-(--tg-s1) p-1"
+        className={cn('flex items-center gap-0.5 bg-(--tg-s1) p-1', phone ? 'rounded-[18px]' : 'rounded-[16px]')}
       >
         {chips.map(([sec, label, aria]) => (
           <button
@@ -105,8 +109,10 @@ export const Dock = memo(function Dock() {
             onClick={() => g.a.extend(sec)}
             aria-label={aria}
             className={cn(
-              'tg-btn rounded-[14px] border-0 bg-transparent text-[15px] font-semibold whitespace-nowrap text-(--tg-text)',
-              phone ? 'h-11 flex-1 basis-0 px-2.5' : 'h-12 px-4',
+              'tg-btn border-0 bg-transparent font-semibold whitespace-nowrap text-(--tg-text)',
+              phone
+                ? 'h-11 flex-1 basis-0 rounded-[14px] px-2.5 text-[15px]'
+                : 'h-10 rounded-[12px] px-3.5 text-[14px]',
             )}
           >
             {label}
@@ -118,8 +124,10 @@ export const Dock = memo(function Dock() {
           type="button"
           onClick={() => p.go(g)}
           className={cn(
-            'tg-btn inline-flex items-center justify-center gap-2.5 rounded-[18px] border-0 px-6 text-[17px] font-bold whitespace-nowrap',
-            phone ? 'flex-auto' : 'min-w-[168px]',
+            'tg-btn inline-flex items-center justify-center border-0 font-bold whitespace-nowrap',
+            phone
+              ? 'flex-auto gap-2.5 rounded-[18px] px-6 text-[17px]'
+              : 'min-w-[132px] gap-2 rounded-[16px] px-5 text-[15px]',
             blocked ? 'text-(--tg-on-red)' : 'text-(--tg-on-violet)',
           )}
           style={{
@@ -128,7 +136,12 @@ export const Dock = memo(function Dock() {
             boxShadow: `0 10px 28px color-mix(in srgb, ${blocked ? 'var(--tg-red)' : 'var(--tg-violet)'} 33%, transparent), inset 0 1px 0 rgba(255,255,255,.3)`,
           }}
         >
-          <Icon className="size-5" strokeWidth={2} fill={p.filled ? 'currentColor' : 'none'} aria-hidden="true" />
+          <Icon
+            className={phone ? 'size-5' : 'size-[18px]'}
+            strokeWidth={2}
+            fill={p.filled ? 'currentColor' : 'none'}
+            aria-hidden="true"
+          />
           <span>{t(p.label)}</span>
         </button>
         {!ended ? (
@@ -136,10 +149,15 @@ export const Dock = memo(function Dock() {
             type="button"
             onClick={() => g.a.stop()}
             aria-label={t('dock.stopAria')}
-            className={cn(KEY, 'gap-2 rounded-[18px] text-[15px] font-semibold', desk ? 'px-[18px]' : 'px-0')}
+            className={cn(
+              KEY,
+              'gap-2 font-semibold',
+              phone ? 'rounded-[18px] text-[15px]' : 'rounded-[16px] text-[14px]',
+              desk ? 'px-4' : 'px-0',
+            )}
             style={{ height: key, minWidth: key }}
           >
-            <Square className="size-4" fill="currentColor" strokeWidth={0} aria-hidden="true" />
+            <Square className="size-3.5" fill="currentColor" strokeWidth={0} aria-hidden="true" />
             {desk ? <span>{t('dock.stop')}</span> : null}
           </button>
         ) : null}
@@ -150,12 +168,20 @@ export const Dock = memo(function Dock() {
           onPointerEnter={warmPanels}
           onFocus={warmPanels}
           aria-label={t('dock.faceAria', { face: name })}
-          className={cn(KEY, 'justify-start gap-2.5 rounded-[18px] pl-1.5', desk ? 'pr-4' : 'pr-1.5')}
+          className={cn(
+            KEY,
+            'justify-start gap-2.5 pl-1.5',
+            phone ? 'rounded-[18px]' : 'rounded-[16px]',
+            desk ? 'pr-4' : 'pr-1.5',
+          )}
           style={{ height: key }}
         >
           <span
             aria-hidden="true"
-            className="flex h-[39px] w-11 flex-none items-center justify-center overflow-hidden rounded-[12px]"
+            className={cn(
+              'flex flex-none items-center justify-center overflow-hidden',
+              phone ? 'h-[39px] w-11 rounded-[12px]' : 'h-[34px] w-[38px] rounded-[10px]',
+            )}
           >
             <Face
               face={g.face}
@@ -164,13 +190,13 @@ export const Dock = memo(function Dock() {
               remain={2292}
               total={3600}
               nowSec={39828}
-              size={44}
+              size={phone ? 44 : 38}
               bare
               motion="off"
             />
           </span>
           {desk ? (
-            <span className="max-w-[130px] overflow-hidden text-[15px] font-bold text-ellipsis whitespace-nowrap">
+            <span className="max-w-[130px] overflow-hidden text-[14px] font-bold text-ellipsis whitespace-nowrap">
               {name}
             </span>
           ) : null}
@@ -181,10 +207,10 @@ export const Dock = memo(function Dock() {
             onClick={() => window.dispatchEvent(new Event(PIP_EVENT))}
             aria-label={t('pal.pip')}
             title={t('pal.pip')}
-            className={cn(KEY, 'rounded-[18px]')}
+            className={cn(KEY, 'rounded-[16px]')}
             style={{ width: key, height: key }}
           >
-            <PictureInPicture2 className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+            <PictureInPicture2 className="size-[17px]" strokeWidth={2} aria-hidden="true" />
           </button>
         ) : null}
         {g.canFullscreen ? (
@@ -193,13 +219,13 @@ export const Dock = memo(function Dock() {
             onClick={() => g.a.fullscreen()}
             aria-label={g.fullscreen ? t('dock.exitFull') : t('dock.full')}
             aria-keyshortcuts="Shift+F"
-            className={cn(KEY, 'rounded-[18px]')}
+            className={cn(KEY, phone ? 'rounded-[18px]' : 'rounded-[16px]')}
             style={{ width: key, height: key }}
           >
             {g.fullscreen ? (
-              <Minimize className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+              <Minimize className="size-[17px]" strokeWidth={2} aria-hidden="true" />
             ) : (
-              <Maximize className="size-[18px]" strokeWidth={2} aria-hidden="true" />
+              <Maximize className="size-[17px]" strokeWidth={2} aria-hidden="true" />
             )}
           </button>
         ) : null}
