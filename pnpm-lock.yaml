@@ -168,7 +168,7 @@ overrides:
   minimatch@>=7.0.0 <11.0.1: 11.0.5
   brace-expansion@<1.1.21: 1.1.21
   brace-expansion@>=4.0.0 <5.0.12: 5.0.12
-  basic-ftp@<6.2.1: 6.2.1
+  basic-ftp@<6.2.4: 6.2.4
   source-map-js@<1.2.2: 1.2.2
   shell-quote@<1.11.0: 1.11.0
   launch-editor@<2.14.2: 2.14.2
@@ -4302,8 +4302,8 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  basic-ftp@6.2.1:
-    resolution: {integrity: sha512-bK67isD+lKq46AU8vNtjvMaT2ZqAOAmNCbxUHlFBRD4k15NWxyEjmaKtZPlgce58So4BNTjITGQOVTjL9y0ECA==}
+  basic-ftp@6.2.4:
+    resolution: {integrity: sha512-6ACKOQxSlv5xka4i03ujfncNr9qp5yZNK3u0+yUFTAU4HfG5AeztCC9+R1I9dm8oq+1vt4RZ7cIRTBrdHqL2mw==}
     engines: {node: '>=10.0.0'}
 
   better-auth@1.7.14:
@@ -11405,7 +11405,7 @@ snapshots:
 
   baseline-browser-mapping@2.11.34: {}
 
-  basic-ftp@6.2.1: {}
+  basic-ftp@6.2.4: {}
 
   better-auth@1.7.14(@opentelemetry/api@1.10.0)(next@16.4.3(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@22.20.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(vitest@5.1.0(@opentelemetry/api@1.10.0)(@types/node@22.20.1)(happy-dom@21.0.4)(vite@6.4.6(@types/node@22.20.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.36.0)(tsx@4.23.13)(yaml@2.9.1)))(vue@3.5.42(typescript@5.9.3)):
     dependencies:
@@ -12423,7 +12423,7 @@ snapshots:
 
   get-uri@6.0.5(supports-color@10.2.2):
     dependencies:
-      basic-ftp: 6.2.1
+      basic-ftp: 6.2.4
       data-uri-to-buffer: 6.0.2
       debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
